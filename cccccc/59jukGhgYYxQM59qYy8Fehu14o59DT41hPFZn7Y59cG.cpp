@@ -1,298 +1,323 @@
 
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Converts TF_DataType to the corresponding numpy type.
-Status TF_DataType_to_PyArray_TYPE(TF_DataType tf_datatype,
-                                   int* out_pyarray_type);
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
-}
-    
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/lib/core/status.h'
-    
-    #include <Python.h>
-    
-    // FFT support interface -- this can be derived from a GPU executor when the
-// underlying platform has an FFT library implementation available. See
-// StreamExecutor::AsFft().
-//
-// This support interface is not generally thread-safe; it is only thread-safe
-// for the CUDA platform (cuFFT) usage; host side FFT support is known
-// thread-compatible, but not thread-safe.
-class FftSupport {
- public:
-  virtual ~FftSupport() {}
+        
+        namespace caffe {
     }
     
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    
-    {}  // namespace atom
-
-    
-    #include 'atom/browser/api/event_emitter.h'
+    // gflags 2.1 issue: namespace google was changed to gflags without warning.
+// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
+// 2.1. If yes, we will add a temporary solution to redirect the namespace.
+// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
+// remove the following hack.
+#ifndef GFLAGS_GFLAGS_H_
+namespace gflags = google;
+#endif  // GFLAGS_GFLAGS_H_
     
      protected:
-  RenderProcessPreferences(
-      v8::Isolate* isolate,
-      const atom::RenderProcessPreferences::Predicate& predicate);
-  ~RenderProcessPreferences() override;
+  /**
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the predictions @f$ x @f$, a Blob with values in
+   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
+   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
+   *      label @f$ \hat{l}_n @f$ given by its maximal index:
+   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
+   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+   *      the labels @f$ l @f$, an integer-valued Blob with values
+   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
+   *      indicating the correct class label among the @f$ K @f$ classes
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      the computed accuracy: @f$
+   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
+   *      @f$, where @f$
+   *      \delta\{\mathrm{condition}\} = \left\{
+   *         \begin{array}{lr}
+   *            1 & \mbox{if condition} \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-      // Removes this instance from the weak map.
-  void RemoveFromWeakMap() {
-    if (weak_map_ && weak_map_->Has(weak_map_id()))
-      weak_map_->Remove(weak_map_id());
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
+    }
+    
+    class PARA_LIST;
+class ParagraphModel;
+    
+    // ReadNextBox factors out the code to interpret a line of a box
+// file so that applybox and unicharset_extractor interpret the same way.
+// This function returns the next valid box file utf8 string and coords
+// and returns true, or false on eof (and closes the file).
+// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
+// for valid utf-8 and allows space or tab between fields.
+// utf8_str is set with the unichar string, and bounding box with the box.
+// If there are page numbers in the file, it reads them all.
+bool ReadNextBox(int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+// As ReadNextBox above, but get a specific page number. (0-based)
+// Use -1 to read any page number. Files without page number all
+// read as if they are page 0.
+bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+    
+      void DeleteUnusedObjects() {
+    mu_.Lock();
+    for (int i = cache_.size() - 1; i >= 0; i--) {
+      if (cache_[i].count <= 0) {
+        delete cache_[i].object;
+        cache_.remove(i);
+      }
+    }
+    mu_.Unlock();
   }
     
-    #include 'content/public/browser/javascript_dialog_manager.h'
-    
-      AtomQuotaPermissionContext();
-    
-    #if defined(OS_LINUX)
-#include 'atom/browser/lib/power_observer_linux.h'
-#else
-#include 'base/power_monitor/power_observer.h'
-#endif  // defined(OS_LINUX)
-    
-    // --------------------------- Typedefs ---------------------------
-    
-    AboutProtocolHandler::AboutProtocolHandler() {}
-    
-    void URLRequestAboutJob::Kill() {
-  weak_ptr_factory_.InvalidateWeakPtrs();
-  URLRequestJob::Kill();
-}
-    
-      if (up_in_image.x() == 0.0F) {
-    if (up_in_image.y() > 0.0F) {
-      *orientation = ORIENTATION_PAGE_UP;
-    } else {
-      *orientation = ORIENTATION_PAGE_DOWN;
-    }
-  } else if (up_in_image.x() > 0.0F) {
-    *orientation = ORIENTATION_PAGE_RIGHT;
-  } else {
-    *orientation = ORIENTATION_PAGE_LEFT;
-  }
-    
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
-    
-    // A floating-point version of WordFeature, used as an intermediate during
-// scaling.
-struct FloatWordFeature {
-  static void FromWordFeatures(const GenericVector<WordFeature>& word_features,
-                               GenericVector<FloatWordFeature>* float_features);
-  // Sort function to sort first by x-bucket, then by y.
-  static int SortByXBucket(const void*, const void*);
+        void NDArrayView::SetValue(double value)
+    {
+        if (IsSparse())
+            LogicError('NDArrayView::SetValue: Setting a NDArrayView contents to a scalar is only allowed for objects with dense storage format.');
     }
     
-      double m() const;  // get gradient
-  double c(double m) const;            // get constant
-  double rms(double m, double c) const;            // get error
-  double pearson() const;  // get correlation coefficient.
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
-    
-    TEST(DBTest, StillReadSST) {
-  ASSERT_OK(Put('foo', 'bar'));
-  ASSERT_EQ('bar', Get('foo'));
-    }
-    
-    // Return the name of the info log file for 'dbname'.
-std::string InfoLogFileName(const std::string& dbname);
-    
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
-    
-          case kEof:
-        if (in_fragmented_record) {
-          // This can be caused by the writer dying immediately after
-          // writing a physical record but before completing the next; don't
-          // treat it as a corruption, just ignore the entire logical record.
-          scratch->clear();
+            NDArrayViewPtr Data() const override
+        {
+            Unpack();
+            return Value::Data();
         }
-        return false;
     
-    
-    {  // Write the header and the payload
-  Status s = dest_->Append(Slice(buf, kHeaderSize));
-  if (s.ok()) {
-    s = dest_->Append(Slice(ptr, n));
-    if (s.ok()) {
-      s = dest_->Flush();
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
     }
-  }
-  block_offset_ += kHeaderSize + n;
-  return s;
+    
+    
+    {        if (aliasInfo.releaseCount == aliasInfo.totalCount)
+        {
+            RequestRelease((shared_ptr<Matrix<ElemType>>*)aliasInfo.pMatrixPtr);
+            aliasInfo.pMatrixPtr = nullptr;
+        }
+    }
+    
+    // This constructor helps with BrainScript integration
+template<class ElemType>
+OptimizedRNNStackNode<ElemType>::OptimizedRNNStackNode(const ScriptableObjects::IConfigRecordPtr configp)
+    : Base(configp->Get(L'deviceId'), L'<placeholder>'), 
+    m_rnnAttributes(configp->Get(L'bidirectional'), configp->Get(L'numLayers'), configp->Get(L'hiddenDims'), configp->Get(L'recurrentOp'), configp->Get(L'axis')),
+    m_BackwardDataCalledYet(false)
+{
+    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
 }
     
+        Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
     
-    {  // No copying allowed
-  Writer(const Writer&);
-  void operator=(const Writer&);
-};
+    INarratorAnnouncementHost^ NarratorAnnouncementHostFactory::MakeHost()
+{
+    if (NarratorAnnouncementHostFactory::s_hostProducer == nullptr)
+    {
+        assert(false && L'No host producer has been assigned.');
+        return nullptr;
+    }
+    }
     
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
+            static property Windows::UI::Xaml::DependencyProperty^ AnnouncementProperty
+        {
+            Windows::UI::Xaml::DependencyProperty^ get()
+            {
+                return s_announcementProperty;
+            }
+        }
+    
+        case CustomPeers::AutomationNotificationProcessing::CurrentThenMostRecent:
+        return StandardPeers::AutomationNotificationProcessing::CurrentThenMostRecent;
+    
+    using namespace CalculatorApp;
+using namespace Platform;
+using namespace Windows::Networking::Connectivity;
+    
+        // output changed array
+    std::cout << array << '\n';
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+    
+    
+    {}  //  namespace rocksdb
+
+    
+    CompactionPressureToken::~CompactionPressureToken() {
+  controller_->total_compaction_pressure_--;
+  assert(controller_->total_compaction_pressure_ >= 0);
 }
     
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
+    #include <cstdio>
+#include <string>
+    
+      // Builds an openable snapshot of RocksDB on the same disk, which
+  // accepts an output directory on the same disk, and under the directory
+  // (1) hard-linked SST files pointing to existing live SST files
+  // SST files will be copied if output directory is on a different filesystem
+  // (2) a copied manifest files and other files
+  // The directory should not already exist and will be created by this API.
+  // The directory will be an absolute path
+  // log_size_for_flush: if the total log file size is equal or larger than
+  // this value, then a flush is triggered for all the column families. The
+  // default value is 0, which means flush is always triggered. If you move
+  // away from the default, the checkpoint may not contain up-to-date data
+  // if WAL writing is not always enabled.
+  // Flush will always trigger if it is 2PC.
+  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
+                                  uint64_t log_size_for_flush = 0);
+    
+    // Options to control the behavior of a database (passed to
+// DB::Open). A LevelDBOptions object can be initialized as though
+// it were a LevelDB Options object, and then it can be converted into
+// a RocksDB Options object.
+struct LevelDBOptions {
+  // -------------------
+  // Parameters that affect behavior
+    }
+    
+    #include 'rocksdb/cache.h'
+#include 'rocksdb/db.h'
+    
+    NS_CC_END
+    
+        /** Returns a clone of action.
+     *
+     * @return A clone action.
+     */
+    virtual Action* clone() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    
+    void PointArray::replaceControlPoint(const Vec2& controlPoint, ssize_t index)
+{
+    _controlPoints.at(index) = controlPoint;
 }
     
-    TEST_F(RouteSegmentsTest, Stitch) {
-  auto lane1 = hdmap_.GetLaneById(hdmap::MakeMapId('9_1_-1'));
-  auto lane2 = hdmap_.GetLaneById(hdmap::MakeMapId('13_1_-1'));
-  {
-    RouteSegments seg1;
-    RouteSegments seg2;
-    seg1.emplace_back(lane1, 10, 20);
-    seg1.emplace_back(lane2, 10, 15);
-    seg2.emplace_back(lane2, 15, 20);
-    seg2.emplace_back(lane2, 20, 30);
-    EXPECT_TRUE(seg1.Stitch(seg2));
-    EXPECT_EQ(3, seg1.size());
-    EXPECT_EQ(lane1, seg1[0].lane);
-    EXPECT_FLOAT_EQ(10, seg1[0].start_s);
-    EXPECT_FLOAT_EQ(20, seg1[0].end_s);
-    EXPECT_EQ(lane2, seg1[1].lane);
-    EXPECT_FLOAT_EQ(10, seg1[1].start_s);
-    EXPECT_FLOAT_EQ(20, seg1[1].end_s);
-    EXPECT_EQ(lane2, seg1[2].lane);
-    EXPECT_FLOAT_EQ(20, seg1[2].start_s);
-    EXPECT_FLOAT_EQ(30, seg1[2].end_s);
-  }
-  {
-    RouteSegments seg1;
-    RouteSegments seg2;
-    seg1.emplace_back(lane1, 10, 20);
-    seg1.emplace_back(lane2, 10, 15);
-    seg2.emplace_back(lane2, 15, 20);
-    seg2.emplace_back(lane2, 20, 30);
-    EXPECT_TRUE(seg2.Stitch(seg1));
-    EXPECT_EQ(3, seg2.size());
-    EXPECT_EQ(lane1, seg2[0].lane);
-    EXPECT_FLOAT_EQ(10, seg2[0].start_s);
-    EXPECT_FLOAT_EQ(20, seg2[0].end_s);
-    EXPECT_EQ(lane2, seg2[1].lane);
-    EXPECT_FLOAT_EQ(10, seg2[1].start_s);
-    EXPECT_FLOAT_EQ(20, seg2[1].end_s);
-    EXPECT_EQ(lane2, seg2[2].lane);
-    EXPECT_FLOAT_EQ(20, seg2[2].start_s);
-    EXPECT_FLOAT_EQ(30, seg2[2].end_s);
-  }
+    EaseBezierAction* EaseBezierAction::reverse() const
+{
+    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
+    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
+    return reverseAction;
 }
     
-      const auto mat = kernel.kernel_matrix() / (2.0 * 1.0 / std::pow(0.1, 4));
-  const auto offset = kernel.offset_matrix();
+    void AccelAmplitude::update(float time)
+{
+    ((AccelAmplitude*)(_other))->setAmplitudeRate(powf(time, _rate));
+    _other->update(time);
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCGRID3D_ACTION_H__
+#define __ACTION_CCGRID3D_ACTION_H__
     
     
     {
-    {}  // namespace prediction
-}  // namespace apollo
-
-    
-    namespace {
+    {
+    {                if (action->getTag() == (int)tag)
+                {
+                    return action;
+                }
+            }
+        }
     }
     
-    using namespace folly;
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    #include <iostream>
+        for (unsigned int i = 0; i < _tilesCount; ++i)
+    {
+        _tilesOrder[i] = i;
+    }
     
-      ~VirtualExecutor() override {
-    joinKeepAlive();
-  }
+        
+    // Overrides
+    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual Texture2D* getTexture() const override;
+    virtual void setTexture(Texture2D *texture) override;
+    virtual bool isOpacityModifyRGB() const override;
+    virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
+    virtual const Color3B& getColor(void) const override;
+    virtual void setColor(const Color3B& color) override;
+    virtual void setOpacity(GLubyte opacity) override;
+    /**
+    * @code
+    * When this function bound into js or lua,the parameter will be changed
+    * In js: var setBlendFunc(var src, var dst)
+    * @endcode
+    * @lua NA
+    */
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    /**
+    * @lua NA
+    */
+    virtual const BlendFunc& getBlendFunc() const override;
+    
+        /**
+     * get vertex count
+     * @return number of vertices
+     */
+    unsigned int getVertCount() const;
     
     /**
- * This functions is an extension point when FOLLY_HAVE_WEAK_SYMBOLS is true.
- * There is a default no-op implementation provided which can be overrided by
- * linking in a library which provides its own definition.
- *
- * @param codecType   The type of the codec for this counter.
- * @param codecName   The name of the codec for this counter. If the codecName
- *                    is empty it should be defaulted using the codecType.
- * @param level       Optionally the level used to construct the codec.
- * @param key         The key of the counter.
- * @param counterType The type of the counter.
- * @returns           A function to increment the counter for the given key and
- *                    type. It may be an empty folly::Function.
- */
-folly::Function<void(double)> makeCompressionCounterHandler(
-    folly::io::CodecType codecType,
-    folly::StringPiece codecName,
-    folly::Optional<int> level,
-    CompressionCounterKey key,
-    CompressionCounterType counterType);
-    
-    template <typename T>
-typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
-prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  prefix = Endian::little(prefix);
-  std::string result;
-  result.resize(n);
-  memcpy(&result[0], &prefix, n);
-  return result;
-}
+     * get triangles count
+     * @return number of triangles
+     */
+    unsigned int getTrianglesCount() const;
