@@ -1,294 +1,224 @@
 
         
-        
-@pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
+            def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
+    
+        def get_person(self, person_id):
+        person_server = self.lookup[person_id]
+        return person_server.people[person_id]
+    
+        # First, reshape path_freq to the same shape of distributions
+    self.path_freq = tf.tile(tf.expand_dims(self.path_counts, -1),
+                             [1, self.hparams.num_classes])
+    
+      if bidx is not None:
+    data_nxt = data_bxtxn[bidx,:,:].T
+    params_nxt = model_vals['output_dist_params'][bidx,:,:].T
+  else:
+    data_nxt = np.mean(data_bxtxn, axis=0).T
+    params_nxt = np.mean(model_vals['output_dist_params'], axis=0).T
+  if output_dist == 'poisson':
+    means_nxt = params_nxt
+  elif output_dist == 'gaussian': # (means+vars) x time
+    means_nxt = np.vsplit(params_nxt,2)[0] # get means
+  else:
+    assert 'NIY'
+    
+      Args:
+    x_k - k -dimensional list of arguments to log_sum_exp.
+    
+      def _load_random_shard(self):
+    '''Randomly select a file and read it.'''
+    return self._load_shard(random.choice(self._all_shards))
+    
+      # Question is correctly answered only if
+  # all predictions of the same question_id is correct
+  num_correct_answer = 0
+  previous_qid = None
+  correctly_answered = False
+  for predict, qid in zip(prediction_correctness, question_ids):
+    if qid != previous_qid:
+      previous_qid = qid
+      num_correct_answer += int(correctly_answered)
+      correctly_answered = True
+    correctly_answered = correctly_answered and predict
+  num_correct_answer += int(correctly_answered)
+    
+    EOS_INDEX = 88892
     
     
-def dump_request(kwargs):
-    sys.stderr.write('\n>>> requests.request(**%s)\n\n'
-                     % repr_dict_nice(kwargs))
+def create_gen_train_op(hparams, learning_rate, gen_loss, global_step, mode):
+  '''Create Generator train op.'''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
+    else:
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('Optimizing Generator vars.')
+    for v in gen_vars:
+      print(v)
+    if mode == 'MINIMIZE':
+      gen_grads = tf.gradients(gen_loss, gen_vars)
+    elif mode == 'MAXIMIZE':
+      gen_grads = tf.gradients(-gen_loss, gen_vars)
+    else:
+      raise ValueError('Must be one of 'MINIMIZE' or 'MAXIMIZE'')
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    gen_train_op = gen_optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    return gen_train_op, gen_grads_clipped, gen_vars
     
-        # Adapters
-    def get_transport_plugins(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, TransportPlugin)]
+        im_results = np.vstack([cls_boxes[j] for j in range(1, num_classes)])
+    boxes = im_results[:, :-1]
+    scores = im_results[:, -1]
+    return scores, boxes, cls_boxes
+    
+        os.environ['CITYSCAPES_DATASET'] = get_raw_dir(json_dataset.name)
+    os.environ['CITYSCAPES_RESULTS'] = output_dir
+    
+    
+def evaluate_boxes(
+    json_dataset,
+    all_boxes,
+    output_dir,
+    use_salt=True,
+    cleanup=True,
+    use_matlab=False
+):
+    salt = '_{}'.format(str(uuid.uuid4())) if use_salt else ''
+    filenames = _write_voc_results_files(json_dataset, all_boxes, salt)
+    _do_python_eval(json_dataset, salt, output_dir)
+    if use_matlab:
+        _do_matlab_eval(json_dataset, salt, output_dir)
+    if cleanup:
+        for filename in filenames:
+            shutil.copy(filename, output_dir)
+            os.remove(filename)
+    return None
+    
+    ... -> RoI ----\                               /-> box cls output -> cls loss
+                -> RoIFeatureXform -> box head
+... -> Feature /                               \-> box reg output -> reg loss
+       Map
+    
+    
+def add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale):
+    '''Add RPN outputs to a single scale model (i.e., no FPN).'''
+    anchors = generate_anchors(
+        stride=1. / spatial_scale,
+        sizes=cfg.RPN.SIZES,
+        aspect_ratios=cfg.RPN.ASPECT_RATIOS
+    )
+    num_anchors = anchors.shape[0]
+    dim_out = dim_in
+    # RPN hidden representation
+    model.Conv(
+        blob_in,
+        'conv_rpn',
+        dim_in,
+        dim_out,
+        kernel=3,
+        pad=1,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    model.Relu('conv_rpn', 'conv_rpn')
+    # Proposal classification scores
+    model.Conv(
+        'conv_rpn',
+        'rpn_cls_logits',
+        dim_in,
+        num_anchors,
+        kernel=1,
+        pad=0,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    # Proposal bbox regression deltas
+    model.Conv(
+        'conv_rpn',
+        'rpn_bbox_pred',
+        dim_in,
+        4 * num_anchors,
+        kernel=1,
+        pad=0,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    
+        shape = (sampled_fg_rois.shape[0] * cfg.KRCNN.NUM_KEYPOINTS, 1)
+    heats = heats.reshape(shape)
+    weights = weights.reshape(shape)
+    
+        return mask_targets
 
     
-        '''
-    return path.replace('\\', '\\\\\\')
     
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
-
-    
-        def test_request_body_from_file_by_path_no_field_name_allowed(
-            self, httpbin):
-        env = MockEnvironment(stdin_isatty=True)
-        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
-                 env=env, error_exit_ok=True)
-        assert 'perhaps you meant --form?' in r.stderr
-    
-    
-class BaseConfigDict(dict):
-    
-            '''
-        # Ask the server not to encode the content so that we can resume, etc.
-        request_headers['Accept-Encoding'] = 'identity'
-        if self._resume:
-            bytes_have = os.path.getsize(self._output_file.name)
-            if bytes_have:
-                # Set ``Range`` header to resume the download
-                # TODO: Use 'If-Range: mtime' to make sure it's fresh?
-                request_headers['Range'] = 'bytes=%d-' % bytes_have
-                self._resumed_from = bytes_have
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
-    
-        def test_lower_items(self):
-        assert list(self.case_insensitive_dict.lower_items()) == [('accept', 'application/json')]
-    
-    # Check imported dependencies for compatibility.
-try:
-    check_compatibility(urllib3.__version__, chardet.__version__)
-except (AssertionError, ValueError):
-    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
-                  'version!'.format(urllib3.__version__, chardet.__version__),
-                  RequestsDependencyWarning)
-    
-        def items(self):
-        '''Dict-like items() that returns a list of name-value tuples from the
-        jar. Allows client-code to call ``dict(RequestsCookieJar)`` and get a
-        vanilla python dict of key value pairs.
-    
+def get_minibatch_blob_names(is_training=True):
+    '''Return blob names in the order in which they are read by the data loader.
     '''
-requests.hooks
-~~~~~~~~~~~~~~
+    # data blob: holds a batch of N images, each with 3 channels
+    blob_names = ['data']
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster R-CNN
+        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
+    elif cfg.RETINANET.RETINANET_ON:
+        blob_names += retinanet_roi_data.get_retinanet_blob_names(
+            is_training=is_training
+        )
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    return blob_names
+    
+            if check_grad:
+            gc = gradient_checker.GradientChecker(
+                stepsize=0.1,
+                threshold=0.001,
+                device_option=core.DeviceOption(caffe2_pb2.CUDA, 0)
+            )
+    
+          # We set up a fake response.
+      with patch( 'ycm.client.base_request._JsonFromFuture',
+                  side_effect = response_method ):
+        yield
     
     
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+def _assert_accepts( filter, text ):
+  _assert_accept_equals( filter, text, True )
     
-        close_server = threading.Event()
-    server = Server(response_handler, wait_to_close_event=close_server)
+                f = _base.Future()
+            w = _WorkItem(f, fn, args, kwargs)
     
-        def test_server_finishes_on_error(self):
-        '''the server thread exits even if an exception exits the context manager'''
-        server = Server.basic_response_server()
-        with pytest.raises(Exception):
-            with server:
-                raise Exception()
+    try:
+    import queue
+except ImportError:
+    import Queue as queue
     
-            :param url: URL for the new :class:`Request` object.
-        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-            object to send in the body of the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
-        :rtype: requests.Response
-        '''
-    
-        if hasattr(o, '__len__'):
-        total_length = len(o)
-    
-            if is_stream:
-            body = data
-    
-        if dataset_name == 'SA':
-        lb = LabelBinarizer()
-        x1 = lb.fit_transform(X[:, 1].astype(str))
-        x2 = lb.fit_transform(X[:, 2].astype(str))
-        x3 = lb.fit_transform(X[:, 3].astype(str))
-        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
-        y = (y != b'normal.').astype(int)
-    
-        for n_samples in sample_sizes:
-        X = random_state.rand(n_samples, 300)
-    
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
-    
-    
-def plot_influence(conf, mse_values, prediction_times, complexities):
-    '''
-    Plot influence of model complexity on both accuracy and latency.
-    '''
-    plt.figure(figsize=(12, 6))
-    host = host_subplot(111, axes_class=Axes)
-    plt.subplots_adjust(right=0.75)
-    par1 = host.twinx()
-    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
-    y1_label = conf['prediction_performance_label']
-    y2_label = 'Time (s)'
-    host.set_ylabel(y1_label)
-    par1.set_ylabel(y2_label)
-    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
-    p2, = par1.plot(complexities, prediction_times, 'r-',
-                    label='latency')
-    host.legend(loc='upper right')
-    host.axis['left'].label.set_color(p1.get_color())
-    par1.axis['right'].label.set_color(p2.get_color())
-    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
-    plt.show()
-    
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
-    
-    data, rows, columns = make_biclusters(
-    shape=(300, 300), n_clusters=5, noise=5,
-    shuffle=False, random_state=0)
-    
-    # To apply a classifier on this data, we need to flatten the image, to
-# turn the data in a (samples, feature) matrix:
-n_samples = len(digits.images)
-data = digits.images.reshape((n_samples, -1))
-    
-    
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
-    
-    X_restored = agglo.inverse_transform(X_reduced)
-images_restored = np.reshape(X_restored, images.shape)
-plt.figure(1, figsize=(4, 3.5))
-plt.clf()
-plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
-for i in range(4):
-    plt.subplot(3, 4, i + 1)
-    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
-    plt.xticks(())
-    plt.yticks(())
-    if i == 1:
-        plt.title('Original data')
-    plt.subplot(3, 4, 4 + i + 1)
-    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
-               interpolation='nearest')
-    if i == 1:
-        plt.title('Agglomerated data')
-    plt.xticks(())
-    plt.yticks(())
-    
-    # equal bins face
-regular_values = np.linspace(0, 256, n_clusters + 1)
-regular_labels = np.searchsorted(regular_values, face) - 1
-regular_values = .5 * (regular_values[1:] + regular_values[:-1])  # mean
-regular_face = np.choose(regular_labels.ravel(), regular_values, mode='clip')
-regular_face.shape = face.shape
-plt.figure(3, figsize=(3, 2.2))
-plt.imshow(regular_face, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
-    
-    n_samples = 1500
-noisy_circles = datasets.make_circles(n_samples=n_samples, factor=.5,
-                                      noise=.05)
-noisy_moons = datasets.make_moons(n_samples=n_samples, noise=.05)
-blobs = datasets.make_blobs(n_samples=n_samples, random_state=8)
-no_structure = np.random.rand(n_samples, 2), None
-    
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
-    
-    # A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
-    
-    AUTOHSTS_FREQ = 172800
-'''Minimum time since last increase to perform a new one: 48h'''
-    
-        def test_include_fullpath(self):
-        self.verify_fnmatch(os.path.join(self.config_path,
-                                         'test_fnmatch.conf'))
-    
-        def test_repr(self):
-        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
-    
-    # General information about the project.
-project = u'certbot-apache'
-copyright = u'2014-2015, Let\'s Encrypt Project'
-author = u'Certbot Project'
-    
-            # XXX: Deleting all of this is kind of scary unless the test
-        #      instances really each have a complete configuration!
-        shutil.rmtree('/etc/nginx')
-        shutil.copytree(server_root, '/etc/nginx', symlinks=True)
-    
-            self.events.append((frameno, event, ident(frame)))
-    
-    class BokeCC(VideoExtractor):
-    name = 'BokeCC'
-    
-        def __init__(self):
-        super().__init__()
-        self.api_data = None
-    
-        @classmethod
-    def dec_playinfo(cls, info, coeff):
-        res = None
-        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
-        if cls.checksum(clear):
-            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
-        else:
-            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
-            if cls.checksum(clear):
-                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
-        return res
-    
-        with open(temp_filepath, open_mode) as output:
-        before_this_uri = received
-# received - before_this_uri is size of the buf we get from one uri
-        while True:
-            update_bs = 256 * 1024
-            left_bytes = total_size - received
-            to_read = left_bytes if left_bytes <= update_bs else update_bs
-# calc the block size to read -- The server can fail to send an EOF
-            buffer = response.read(to_read)
-            if not buffer:
-                logging.debug('Got EOF from server')
-                break
-            output.write(buffer)
-            received += len(buffer)
-            bar.update_received(len(buffer))
-            if received >= total_size:
-                break
-            if max_size and (received - before_this_uri) >= max_size:
-                url = dyn_update_url(received)
-                before_this_uri = received
-                response = urlopen_with_retry(request.Request(url, headers=headers))
+            self.assertFalse(f6.cancel())
+        self.assertEqual(f6._state, FINISHED)
