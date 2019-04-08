@@ -1,15 +1,31 @@
 
         
-            close_server = threading.Event()
-    server = Server(digest_response_handler, wait_to_close_event=close_server)
+        
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
     
-    >>> requests.codes['temporary_redirect']
-307
->>> requests.codes.teapot
-418
->>> requests.codes['\o/']
-200
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
-    	return memo[m][m-1]
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
     
-        return res
+    
+def x_robots_tag(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        response = func(request, *args, **kwargs)
+        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
+        return response
+    return inner
