@@ -1,146 +1,92 @@
 
         
-            auto_json = args.data and not args.form
-    if args.json or auto_json:
-        default_headers['Accept'] = JSON_ACCEPT
-        if args.json or (auto_json and args.data):
-            default_headers['Content-Type'] = JSON_CONTENT_TYPE
+        
+class Vehicle(metaclass=ABCMeta):
     
-        def iter_body(self):
-        # Read the whole body before prettifying it,
-        # but bail out immediately if the body is binary.
-        converter = None
-        body = bytearray()
+    from mrjob.job import MRJob
+    
+    python_2 = (u'thefuck/python2-bash',
+            u'FROM python:2',
+            u'sh')
     
     
-ENTRY_POINT_NAMES = [
-    'httpie.plugins.auth.v1',
-    'httpie.plugins.formatter.v1',
-    'httpie.plugins.converter.v1',
-    'httpie.plugins.transport.v1',
-]
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-        def test_GET_no_data_no_auto_headers(self, httpbin):
-        # https://github.com/jakubroztocil/httpie/issues/62
-        r = http('GET', httpbin.url + '/headers')
-        assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == '*/*'
-        assert 'Content-Type' not in r.json['headers']
+        assert not match(command)
     
     
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
-    
-        def test_request_body_from_file_by_path_no_field_name_allowed(
-            self, httpbin):
-        env = MockEnvironment(stdin_isatty=True)
-        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
-                 env=env, error_exit_ok=True)
-        assert 'perhaps you meant --form?' in r.stderr
-    
-        def delete(self):
-        try:
-            os.unlink(self.path)
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
-    
-        '''
-    from .client import get_requests_kwargs, dump_request
-    if os.path.sep in session_name:
-        path = os.path.expanduser(session_name)
-    else:
-        hostname = (args.headers.get('Host', None)
-                    or urlsplit(args.url).netloc.split('@')[-1])
-        if not hostname:
-            # HACK/FIXME: httpie-unixsocket's URLs have no hostname.
-            hostname = 'localhost'
-    
-        msg = Message('Content-Disposition: %s' % content_disposition)
-    filename = msg.get_filename()
-    if filename:
-        # Basic sanitation.
-        filename = os.path.basename(filename).lstrip('.').strip()
-        if filename:
-            return filename
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
-    
-                gc.collect()
-            print('- benchmarking SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.01, power_t=0.25, tol=1e-3)
-    
-        try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
+@pytest.fixture
+def set_help(mocker):
+    mock = mocker.patch('subprocess.Popen')
     
     
-def generate_data(case, sparse=False):
-    '''Generate regression/classification data.'''
-    bunch = None
-    if case == 'regression':
-        bunch = datasets.load_boston()
-    elif case == 'classification':
-        bunch = datasets.fetch_20newsgroups_vectorized(subset='all')
-    X, y = shuffle(bunch.data, bunch.target)
-    offset = int(X.shape[0] * 0.8)
-    X_train, y_train = X[:offset], y[:offset]
-    X_test, y_test = X[offset:], y[offset:]
-    if sparse:
-        X_train = csr_matrix(X_train)
-        X_test = csr_matrix(X_test)
-    else:
-        X_train = np.array(X_train)
-        X_test = np.array(X_test)
-    y_test = np.array(y_test)
-    y_train = np.array(y_train)
-    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
-            'y_test': y_test}
-    return data
-    
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
-    
-    print('consensus score: {:.3f}'.format(score))
+def test_match():
+    assert match(Command('apt list --upgradable', match_output))
+    assert match(Command('sudo apt list --upgradable', match_output))
     
     
-X, y = nudge_images(X, y)
+misspelled_subcommand_with_multiple_options = '''\
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
     
-    *References:
-http://stackoverflow.com/questions/1514120/python-implementation-of-the-object-pool-design-pattern
-https://sourcemaking.com/design_patterns/object_pool
     
-        def test_extended_properties(self):
-        print(u'John's relatives: {0}'.format(self.John.relatives))
-        self.assertDictEqual(
-            {'name': 'John', 'occupation': 'Coder', 'relatives': 'Many relatives.', 'call_count2': 0},
-            self.John.__dict__,
-        )
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
-        # if not sample_queue.empty():
+        return rabinMiller(num)
+    
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
+    
+    __all__ = ['giphy_download']
+    
+        if page is None:
+        page = get_content(url)
+    seq_num = int(re.search(patt, page).group(1)) - 1
+    course_main_title = get_course_title(url, 'public', page)
+    return '{}_第{}讲_{}'.format(course_main_title, seq_num+1, public_course_playlist(url, page)[seq_num][1])
+    
+            # Blur the face image
+        face_image = cv2.GaussianBlur(face_image, (99, 99), 30)
+    
+        pil_image.show()
 
     
-        def test_human_adapter_shall_make_noise(self):
-        human = Human()
-        human_adapter = Adapter(human, make_noise=human.speak)
-        noise = human_adapter.make_noise()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
+        # Use the KNN model to find the best matches for the test face
+    closest_distances = knn_clf.kneighbors(faces_encodings, n_neighbors=1)
+    are_matches = [closest_distances[0][i][0] <= distance_threshold for i in range(len(X_face_locations))]
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
+    
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
+    
+        # Let's trace out each facial feature in the image with a line!
+    for facial_feature in face_landmarks.keys():
+        d.line(face_landmarks[facial_feature], width=5)
+    
+            if match[0]:
+            name = 'Barack Obama'
