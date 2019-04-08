@@ -1,238 +1,144 @@
 
         
-            void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vqadd(v_src0, v_src1);
-    }
+        			if(mip == 0)
+			{
+				pImageData = a_pafSourceRGBA;
+			}
+			else
+			{
+				pMipImage = new float[mipWidth*mipHeight*4];
+				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
+				{
+					pImageData = pMipImage;
+				}
+			}
     
-        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
-                     uint8x8_t & v_dst) const
-    {
-        v_dst = vand_u8(v_src0, v_src1);
-    }
+    	private:
     
-    #ifdef CAROTENE_NEON
+    		Block4x4		*m_pblockParent;
+		ColorFloatRGBA	*m_pafrgbaSource;
     
-    namespace CAROTENE_NS {
-    }
+    		typedef struct
+		{
+			unsigned originGreen1 : 1;
+			unsigned originRed : 6;
+			unsigned detect1 : 1;
+			//
+			unsigned originBlue1 : 1;
+			unsigned originGreen2 : 6;
+			unsigned detect2 : 1;
+			//
+			unsigned originBlue3 : 2;
+			unsigned detect4 : 1;
+			unsigned originBlue2 : 2;
+			unsigned detect3 : 3;
+			//
+			unsigned horizRed2 : 1;
+			unsigned diff : 1;
+			unsigned horizRed1 : 5;
+			unsigned originBlue4 : 1;
+			//
+			unsigned horizBlue1: 1;
+			unsigned horizGreen : 7;
+			//
+			unsigned vertRed1 : 3;
+			unsigned horizBlue2 : 5;
+			//
+			unsigned vertGreen1 : 5;
+			unsigned vertRed2 : 3;
+			//
+			unsigned vertBlue : 6;
+			unsigned vertGreen2 : 2;
+		} Planar;
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-    }
+    #include 'afhints.h'
     
-            if (s[0] < 0 || s[1] < 0)//saturate in case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-        result += (s[0] += s[1]);
-        if (s[0] < 0 || result < 0)
-        {
-            return 0x7fFFffFF;
-        }
+    #define MIN16(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 16-bit value.   */
+#define MAX16(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 16-bit value.   */
+#define MIN32(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 32-bit value.   */
+#define MAX32(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 32-bit value.   */
+#define IMIN(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum int value.   */
+#define IMAX(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum int value.   */
+#define UADD32(a,b) ((a)+(b))
+#define USUB32(a,b) ((a)-(b))
     
-    void fillMinMaxLocs(const Size2D & size,
-                    const u16 * srcBase, ptrdiff_t srcStride,
-                    u16 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
-                    u16 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
+    /*
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q16
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-            for(int i = 0 ; i < nums.size() ; i ++)
-            for(int j = i + 1 ; j < nums.size() ; j ++)
-                if(nums[i] + nums[j] == target){
-                    int res[] = {i, j};
-                    return vector<int>(res, res + 2);
-                }
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-#include <unordered_map>
-    
-        deleteLinkedList(head);
-    
-                    if( stack.size() == 0 )
-                    return false;
-    
-    
-int main() {
-    }
-    
-            stack<TreeNode*> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-    }
-    
-    
-    {    return 0;
+  int res;
+  __asm__(
+      '#MULT16_32_Q16\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b),'r'(a)
+  );
+  return res;
 }
-
+#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
     
-            vector<int> res;
-        if(root == NULL)
-            return res;
+    /* Step up function, converts reflection coefficients to prediction coefficients */
+void silk_k2a_Q16(
+    opus_int32                  *A_Q24,             /* O    Prediction coefficients [order] Q24                         */
+    const opus_int32            *rc_Q16,            /* I    Reflection coefficients [order] Q16                         */
+    const opus_int32            order               /* I    Prediction order                                            */
+);
     
-            case URX_STO_INP_LOC:
-            {
-                U_ASSERT(opValue >= 0 && opValue < fFrameSize);
-                fp->fExtra[opValue] = fp->fInputIdx;
-            }
-            break;
     
-    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
+    {} // namespace aria2
+    
+    TEST(EsdCanClientTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::ESD_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
     }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            appendTo.append(fBeginMarkup);
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getEndIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(fEndMarkup);
-            break;
-        default:
-            break;
-        }
-    }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
+    
+    
+    {  ::apollo::canbus::ChassisDetail chassis_detail;
+  chassis_detail.set_car_type(::apollo::canbus::ChassisDetail::QIRUI_EQ_15);
+  EXPECT_EQ(manager.GetSensorData(&chassis_detail), ErrorCode::OK);
+  EXPECT_EQ(manager.GetSensorData(nullptr), ErrorCode::CANBUS_ERROR);
 }
     
-    // SharedBreakIterator encapsulates a shared BreakIterator. Because
-// BreakIterator has mutable semantics, clients must ensure that all uses
-// of a particular shared BreakIterator is protected by the same mutex
-// ensuring that only one thread at a time gets access to that shared
-// BreakIterator. Clients can accomplish this by creating a mutex for all
-// uses of break iterator within a particular class. Then objects of that
-// class may then freely share break iterators among themselves. However,
-// these shared break iterators must never be exposed outside of that class.
-class U_I18N_API SharedBreakIterator : public SharedObject {
-public:
-    SharedBreakIterator(BreakIterator *biToAdopt);
-    virtual ~SharedBreakIterator();
-    }
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-    #include 'utypeinfo.h'  // for 'typeid' to work
+    using apollo::drivers::canbus::Byte;
     
-        case UDAT_DOW_LOCAL_FIELD:
-        if (gotNumber) // i.e., e or ee
-        {
-            // [We computed 'value' above.]
-            cal.set(UCAL_DOW_LOCAL, value);
-            return pos.getIndex();
-        }
-        // else for eee-eeeee fall through to handling of EEE-EEEEE
-        // fall through, do not break here
-        U_FALLTHROUGH;
-    case UDAT_DAY_OF_WEEK_FIELD:
-        {
-            // Want to be able to parse both short and long forms.
-            // Try count == 4 (EEEE) wide first:
-            int32_t newStart = 0;
-            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
-                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                          fSymbols->fWeekdays, fSymbols->fWeekdaysCount, NULL, cal)) > 0)
-                    return newStart;
-            }
-            // EEEE wide failed, now try EEE abbreviated
-            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
-                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                       fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, NULL, cal)) > 0)
-                    return newStart;
-            }
-            // EEE abbreviated failed, now try EEEEEE short
-            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 6) {
-                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                       fSymbols->fShorterWeekdays, fSymbols->fShorterWeekdaysCount, NULL, cal)) > 0)
-                    return newStart;
-            }
-            // EEEEEE short failed, now try EEEEE narrow
-            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 5) {
-                if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
-                                       fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
-                    return newStart;
-            }
-            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status) || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
-                return newStart;
-            // else we allowing parsing as number, below
-        }
-        break;
+    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
     
-        // are we comparing different lengths?
-    int32_t minLength = getLength();
-    int32_t targetLength = target.getLength();
-    if (minLength < targetLength) {
-        result = UCOL_LESS;
-    } else if (minLength == targetLength) {
-        result = UCOL_EQUAL;
-    } else {
-        minLength = targetLength;
-        result = UCOL_GREATER;
-    }
     
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword
-     */
-    static Form fromString(const char *keyword, UErrorCode &errorCode) {
-        return static_cast<Form>(indexFromString(keyword, errorCode));
-    }
-    
-    /**
- * UnicodeReplacer API
- */
-int32_t StringMatcher::replace(Replaceable& text,
-                               int32_t start,
-                               int32_t limit,
-                               int32_t& /*cursor*/) {
-    
-    int32_t outLen = 0;
-    
-    // Copy segment with out-of-band data
-    int32_t dest = limit;
-    // If there was no match, that means that a quantifier
-    // matched zero-length.  E.g., x (a)* y matched 'xy'.
-    if (matchStart >= 0) {
-        if (matchStart != matchLimit) {
-            text.copy(matchStart, matchLimit, dest);
-            outLen = matchLimit - matchStart;
-        }
-    }
-    
-    text.handleReplaceBetween(start, limit, UnicodeString()); // delete original text
-    
-    return outLen;
+    {  MatrixXd bd_golden(10, 1);
+  bd_golden << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  EXPECT_EQ(bd, bd_golden);
 }
+    
+    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
+  spline_func_ = spline_func;
+  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
+  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
+  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
+}
+    
+    void Brakemotorrpt170::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_motor_current(
+      motor_current(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_shaft_position(
+      shaft_position(bytes, length));
+}
+    
+    // config detail: {'name': 'commanded_value', 'enum': {0:
+// 'COMMANDED_VALUE_HEADLIGHTS_OFF', 1: 'COMMANDED_VALUE_LOW_BEAMS', 2:
+// 'COMMANDED_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
+// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 15, 'type': 'enum',
+// 'order': 'motorola', 'physical_unit': ''}
+Headlight_rpt_77::Commanded_valueType Headlightrpt77::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
