@@ -1,91 +1,139 @@
 
         
-          it 'no errors without a user' do
-    expect(-> { GivenDailyLike.increment_for(nil) }).not_to raise_error
-    expect(-> { GivenDailyLike.decrement_for(nil) }).not_to raise_error
+          it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-        group.remove(moderator)
-    group.save
+        it 'returns a label 'No' if any falsy value is given' do
+      [false, nil].each { |value|
+        label = yes_no(value)
+        expect(label).to be_html_safe
+        expect(Nokogiri(label).text).to eq 'No'
+      }
+    end
+  end
     
-            it 'supports autocorrect mode option' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              mode: :autocorrect
-            )
-          end').runner.execute(:test)
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
     
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+        it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
+    end
     
-    shelljoin_testcases = [
-  {
-    'it' => '(#1) on array with entry with space',
-    'it_result' => {
-      'windows' => 'wraps this entry in double quotes',
-      'other'   => 'escapes the space in this entry'
-    },
-    'input' => ['a', 'b c', 'd'],
-    'expect' => {
-      'windows' => 'a 'b c' d',
-      'other'   => 'a b\ c d'
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
+    end
+  end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
     }
-  },
-  {
-    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
-    'it_result' => {
-      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
-      'other'   => 'escapes the double quotes and escapes the space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a '''b'' c' d',
-      'other'   => 'a \'b\'\ c d'
-    }
-  },
-  {
-    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
-    'it_result' => {
-      'windows' => 'no changes',
-      'other'   => 'escapes the single quotes and space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a \''b' c\' d',
-      'other'   => 'a \\'b\\'\\ c d'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
-  {
-    'it' => '(#4) on array with entry that is `$$`',
-    'it_result' => {
-      'windows' => 'the result includes the process id',
-      'other'   => 'the result includes the process id'
-    },
-    'input' => ['ps', '-p', $$],
-    'expect' => {
-      'windows' => 'ps -p #{$$}',
-      'other'   => 'ps -p #{$$}'
-    }
-  }
-]
+  end
     
-                k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-            k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+    end
+  end
     
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
     
-          private
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
     
-              # @!attribute type
-          #   @return [Integer] The type of value
-          attr_accessor :type
-          # @!attribute value
-          #   @return [Time] the time of the last request
-          attr_accessor :value
+          def format
+        @format = (@page.format || false) if @format.nil?
+        @format.to_s.downcase
+      end
+    end
+  end
+end
+
     
-          def header_string(e, line_offset)
-        unless e.is_a?(Sass::SyntaxError) && e.sass_line && e.sass_template
-          return '#{e.class}: #{e.message}'
-        end
+        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
+    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
+    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
+    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
+    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
+    
+      s.summary     = 'A simple, Git-powered wiki.'
+  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
+    
+    def ask(message, valid_options)
+  if valid_options
+    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
+  else
+    answer = get_stdin(message)
+  end
+  answer
+end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+    require 'stringex'
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+      # Checks for excerpts (helpful for template conditionals)
+  def has_excerpt(input)
+    input =~ /<!--\s*more\s*-->/i ? true : false
+  end
