@@ -1,219 +1,247 @@
 
         
-          // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
+        // hidden_ops should be a list of Op names that should get a leading _
+// in the output. Prints the output to stdout.
+// Optional fourth argument is the name of the original C++ source file
+// where the ops' REGISTER_OP() calls reside.
+void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
+                    const std::vector<string>& hidden_ops, bool require_shapes,
+                    const string& source_file_name = '');
     
-      /// @brief Scale the blob data by a constant factor.
-  void scale_data(Dtype scale_factor);
-  /// @brief Scale the blob diff by a constant factor.
-  void scale_diff(Dtype scale_factor);
-    
-      /**
-   * Caffe's thread local state will be initialized using the current
-   * thread values, e.g. device id, solver index etc. The random seed
-   * is initialized using caffe_rng_rand.
-   */
-  void StartInternalThread();
-    
-    #include 'caffe/layers/loss_layer.hpp'
-    
-      // algorithms for forward and backwards convolutions
-  cudnnConvolutionFwdAlgo_t *fwd_algo_;
-  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
-  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
-    
-    REGISTER_CPU_OPERATOR(
-    MergeSingleListFeatureTensors,
-    MergeSingleListFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleListFeatureTensors)
-    .SetDoc(
-        'Merge given single-feature tensors with list features into one '
-        'multi-feature tensor.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
-    .NumOutputs(4)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_values', '.values')
-    .Input(2, 'in1_presence', '.presence')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values_lengths', '.values.lengths')
-    .Output(3, 'out_values_values', '.values.values')
-    .Arg('feature_ids', 'feature ids');
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    
-    {        Clear();
+    // Converts a Python object to a bfloat16 value. Returns true on success,
+// returns false and reports a Python error on failure.
+bool AsBfloat16(PyObject* arg, bfloat16* output) {
+  if (PyBfloat16_Check(arg)) {
+    *output = PyBfloat16_Bfloat16(arg);
+    return true;
+  }
+  if (PyFloat_Check(arg)) {
+    double d = PyFloat_AsDouble(arg);
+    if (PyErr_Occurred()) {
+      return false;
     }
-    
-                // The assumption here is that a sequence always start at 0 (no invaid mark at the beginning),
-            // and ends at the first invalid mask. 
-            // Therefore, no need to check NDMask again.
-            // And the sequences has been resized to match the number of sequences and the length of each sequence in the Value object.
-    
-        Constant Constant::CloneAs(DataType dataType) const
-    {
-        if (dataType != DataType::Double)
-            InvalidArgument('Constant::Clone: Cannot clone Constant '%S' with DataType '%s' to DataType '%s'.', AsString().c_str(), DataTypeName(GetDataType()), DataTypeName(dataType));
+    // TODO(phawkins): check for overflow
+    *output = bfloat16(d);
+    return true;
+  }
+  if (TfPyInt_Check(arg)) {
+    long l = TfPyInt_AsLong(arg);  // NOLINT
+    if (PyErr_Occurred()) {
+      return false;
     }
-    
-    // Rand based on Mersenne Twister.
-// We use our own distribution in order to match baselines between different operating systems,
-// because uniform_distribution is not guaranteed to provide the same numbers on different platforms.
-// TODO: Switching to Boost would eliminate this problem.
-static inline size_t RandMT(const size_t begin, const size_t end, std::mt19937_64& rng)
-{
-    const size_t randomNumber = rng();
-    return begin + randomNumber % (end - begin);
+    // TODO(phawkins): check for overflow
+    *output = bfloat16(static_cast<float>(l));
+    return true;
+  }
+  if (PyArray_IsScalar(arg, Float)) {
+    float f;
+    PyArray_ScalarAsCtype(arg, &f);
+    *output = bfloat16(f);
+    return true;
+  }
+  PyErr_Format(PyExc_TypeError, 'expected number, got %s',
+               arg->ob_type->tp_name);
+  return false;
 }
     
-        deque<ComputationNodeBasePtr> workList;
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/core/platform/logging.h'
     
-    
-    {        // resize the temporaries to their proper size
-        size_t cols = Input(0)->Value().GetNumCols();
-        m_maxIndexes0->Resize(1, cols);
-        m_maxIndexes1->Resize(1, cols);
-        m_maxValues->Resize(1, cols);
-    }
-    
-            // This changes the data from 'minibatch paking' in InputRef(0).Value() to 'dense CuDNN packing' in m_transposedInput
-        this->PackSequencesForCuDNN(InputRef(1).Value(), *m_transposedInput, numSequencesForFrame);
-    
-    #include <vector>
-#include <memory>
-    
-          X_form_t x_formater {{
-                            rc,
-                            xop,
-                            static_cast<uint32_t>(rb),
-                            static_cast<uint32_t>(ra),
-                            static_cast<uint32_t>(rt),
-                            op
-                          }};
-    
-      if (UNLIKELY(m_arrayHandle->kind() == APCKind::SerializedVec ||
-               m_arrayHandle->kind() == APCKind::SerializedDict)) {
-    return createFromSerialized(m_colType, m_arrayHandle);
-  }
-    
-      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                           const std::string &filename, bool constants_only,
-                           bool is_system);
-    
-    #include <folly/ScopeGuard.h>
-    
-    #ifndef HPHP_DATA_STREAM_WRAPPER_H
-#define HPHP_DATA_STREAM_WRAPPER_H
-    
-    
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
-  }
-};
-    
-    #endif
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
 
     
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
     
-    {  StructuredLogEntry cols;
-  fillCols(cols);
-  cols.setStr('event_name', event);
-  cols.setInt('priority', priority);
-  StructuredLog::log('hhvm_perf_warning', cols);
-}
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    namespace HPHP {
+    // Indicates a set of options for a device's usage, which generally must be
+// provided at StreamExecutor device-initialization time.
+//
+// These are intended to be useful-but-not-mandatorily-supported options for
+// using devices on the underlying platform. Presently, if the option requested
+// is not available on the target platform, a warning will be emitted.
+struct DeviceOptions {
+ public:
+  // When it is observed that more memory has to be allocated for thread stacks,
+  // this flag prevents it from ever being deallocated. Potentially saves
+  // thrashing the thread stack memory allocation, but at the potential cost of
+  // some memory space.
+  static const unsigned kDoNotReclaimStackAllocation = 0x1;
     }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+      // Computes complex-to-real FFT in inverse direction.
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<std::complex<float>> &input,
+                     DeviceMemory<float> *output) = 0;
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<std::complex<double>> &input,
+                     DeviceMemory<double> *output) = 0;
+    
+    // A class for indicating whether an assertion was successful.  When
+// the assertion wasn't successful, the AssertionResult object
+// remembers a non-empty message that describes how it failed.
+//
+// To create an instance of this class, use one of the factory functions
+// (AssertionSuccess() and AssertionFailure()).
+//
+// This class is useful for two purposes:
+//   1. Defining predicate functions to be used with Boolean test assertions
+//      EXPECT_TRUE/EXPECT_FALSE and their ASSERT_ counterparts
+//   2. Defining predicate-format functions to be
+//      used with predicate assertions (ASSERT_PRED_FORMAT*, etc).
+//
+// For example, if you define IsEven predicate:
+//
+//   testing::AssertionResult IsEven(int n) {
+//     if ((n % 2) == 0)
+//       return testing::AssertionSuccess();
+//     else
+//       return testing::AssertionFailure() << n << ' is odd';
+//   }
+//
+// Then the failed expectation EXPECT_TRUE(IsEven(Fib(5)))
+// will print the message
+//
+//   Value of: IsEven(Fib(5))
+//     Actual: false (5 is odd)
+//   Expected: true
+//
+// instead of a more opaque
+//
+//   Value of: IsEven(Fib(5))
+//     Actual: false
+//   Expected: true
+//
+// in case IsEven is a simple Boolean predicate.
+//
+// If you expect your predicate to be reused and want to support informative
+// messages in EXPECT_FALSE and ASSERT_FALSE (negative assertions show up
+// about half as often as positive ones in our tests), supply messages for
+// both success and failure cases:
+//
+//   testing::AssertionResult IsEven(int n) {
+//     if ((n % 2) == 0)
+//       return testing::AssertionSuccess() << n << ' is even';
+//     else
+//       return testing::AssertionFailure() << n << ' is odd';
+//   }
+//
+// Then a statement EXPECT_FALSE(IsEven(Fib(6))) will print
+//
+//   Value of: IsEven(Fib(6))
+//     Actual: true (8 is even)
+//   Expected: false
+//
+// NB: Predicates that support negative Boolean assertions have reduced
+// performance in positive ones so be careful not to use them in tests
+// that have lots (tens of thousands) of positive Boolean assertions.
+//
+// To use this class with EXPECT_PRED_FORMAT assertions such as:
+//
+//   // Verifies that Foo() returns an even number.
+//   EXPECT_PRED_FORMAT1(IsEven, Foo());
+//
+// you need to define:
+//
+//   testing::AssertionResult IsEven(const char* expr, int n) {
+//     if ((n % 2) == 0)
+//       return testing::AssertionSuccess();
+//     else
+//       return testing::AssertionFailure()
+//         << 'Expected: ' << expr << ' is even\n  Actual: it's ' << n;
+//   }
+//
+// If Foo() returns 5, you will see the following message:
+//
+//   Expected: Foo() is even
+//     Actual: it's 5
+//
+class GTEST_API_ AssertionResult {
+ public:
+  // Copy constructor.
+  // Used in EXPECT_TRUE/FALSE(assertion_result).
+  AssertionResult(const AssertionResult& other);
+  // Used in the EXPECT_TRUE/FALSE(bool_expression).
+  explicit AssertionResult(bool success) : success_(success) {}
     }
     
+      tuple(const tuple& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_), f3_(t.f3_),
+      f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_), f8_(t.f8_) {}
     
-void printVec(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
+      const size_t len = strlen(a_c_string);
+  char* const clone = new char[ len + 1 ];
+  memcpy(clone, a_c_string, len + 1);
+    
+    
+    {  // Can we set the MyString to NULL?
+  s.Set(NULL);
+  EXPECT_STREQ(NULL, s.c_string());
 }
+
     
-    
-void printArr(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
-}
-    
-    int main() {
+        m_destPoly.clear();
+    if (len == 1)
+    {
+      if (node.m_jointype == jtRound)
+      {
+        double X = 1.0, Y = 0.0;
+        for (cInt j = 1; j <= steps; j++)
+        {
+          m_destPoly.push_back(IntPoint(
+            Round(m_srcPoly[0].X + X * delta),
+            Round(m_srcPoly[0].Y + Y * delta)));
+          double X2 = X;
+          X = X * m_cos - m_sin * Y;
+          Y = X2 * m_sin + Y * m_cos;
+        }
+      }
+      else
+      {
+        double X = -1.0, Y = -1.0;
+        for (int j = 0; j < 4; ++j)
+        {
+          m_destPoly.push_back(IntPoint(
+            Round(m_srcPoly[0].X + X * delta),
+            Round(m_srcPoly[0].Y + Y * delta)));
+          if (X < 0) X = 1;
+          else if (Y < 0) Y = 1;
+          else X = -1;
+        }
+      }
+      m_destPolys.push_back(m_destPoly);
+      continue;
     }
+    //build m_normals ...
+    m_normals.clear();
+    m_normals.reserve(len);
+    for (int j = 0; j < len - 1; ++j)
+      m_normals.push_back(GetUnitNormal(m_srcPoly[j], m_srcPoly[j + 1]));
+    if (node.m_endtype == etClosedLine || node.m_endtype == etClosedPolygon)
+      m_normals.push_back(GetUnitNormal(m_srcPoly[len - 1], m_srcPoly[0]));
+    else
+      m_normals.push_back(DoublePoint(m_normals[len - 2]));
     
-    #ifndef V8_HEAP_STORE_BUFFER_INL_H_
-#define V8_HEAP_STORE_BUFFER_INL_H_
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
     
-    void StoreBuffer::DeleteDuringGarbageCollection(StoreBuffer* store_buffer,
-                                                Address start, Address end) {
-  // In GC the store buffer has to be empty at any time.
-  DCHECK(store_buffer->Empty());
-  DCHECK(store_buffer->mode() != StoreBuffer::NOT_IN_GC);
-  Page* page = Page::FromAddress(start);
-  if (end) {
-    RememberedSet<OLD_TO_NEW>::RemoveRange(page, start, end,
-                                           SlotSet::PREFREE_EMPTY_BUCKETS);
-  } else {
-    RememberedSet<OLD_TO_NEW>::Remove(page, start);
-  }
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(IterabilityTask);
-};
-    
-    
-    {  // Caller SP-relative.
-  static constexpr int kParam0Offset = -2 * kSystemPointerSize;
-  static constexpr int kReceiverOffset = -1 * kSystemPointerSize;
-};
-    
-    #define SSSE3_INSTRUCTION_LIST(V) \
-  V(phaddd, 66, 0F, 38, 02)       \
-  V(phaddw, 66, 0F, 38, 01)       \
-  V(pshufb, 66, 0F, 38, 00)       \
-  V(psignb, 66, 0F, 38, 08)       \
-  V(psignw, 66, 0F, 38, 09)       \
-  V(psignd, 66, 0F, 38, 0A)
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
