@@ -1,267 +1,260 @@
 
         
         
-def test_app_tearing_down_with_handled_exception_by_except_block(app):
-    cleanup_stuff = []
+class ArrayMinLengthValidator(MinLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
+        'limit_value')
     
-        proc.sendline(u'ehco test')
-    
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-     update - update list of available packages
-    
-    no_match_output = '''
-Listing... Done
-'''
-    
-    
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
-    
-    \tDid you mean `build`?
-'''
-    
+            r = None
         try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
+    
+        def create(self):
+        # Because a cache can fail silently (e.g. memcache), we don't know if
+        # we are failing to create a new session because of a key collision or
+        # because the cache is missing. So we try for a (large) number of times
+        # and then raise an exception. That's the risk you shoulder if using
+        # cache backing.
+        for i in range(10000):
+            self._session_key = self._get_new_session_key()
+            try:
+                self.save(must_create=True)
+            except CreateError:
+                continue
+            self.modified = True
+            return
+        raise RuntimeError(
+            'Unable to create a new session key. '
+            'It is likely that the cache is unavailable.')
     
         def delete(self, session_key=None):
         if session_key is None:
             if self.session_key is None:
                 return
             session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
-    
-    
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
-    
-        lastmod = None
-    all_sites_lastmod = True
-    urls = []
-    for site in maps:
         try:
-            if callable(site):
-                site = site()
-            urls.extend(site.get_urls(page=page, site=req_site,
-                                      protocol=req_protocol))
-            if all_sites_lastmod:
-                site_lastmod = getattr(site, 'latest_lastmod', None)
-                if site_lastmod is not None:
-                    site_lastmod = (
-                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
-                        else site_lastmod.timetuple()
-                    )
-                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
-                else:
-                    all_sites_lastmod = False
-        except EmptyPage:
-            raise Http404('Page %s empty' % page)
-        except PageNotAnInteger:
-            raise Http404('No page '%s'' % page)
-    response = TemplateResponse(request, template_name, {'urlset': urls},
-                                content_type=content_type)
-    if all_sites_lastmod and lastmod is not None:
-        # if lastmod is defined for all sites, set header so as
-        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
-        response['Last-Modified'] = http_date(timegm(lastmod))
-    return response
-
-    
-    :copyright: (c) 2017 by Kenneth Reitz.
-:license: Apache 2.0, see LICENSE for more details.
-'''
-    
-    import sys
+            self.model.objects.get(session_key=session_key).delete()
+        except self.model.DoesNotExist:
+            pass
     
     
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+class BaseSessionManager(models.Manager):
+    def encode(self, session_dict):
+        '''
+        Return the given session dictionary serialized and encoded as a string.
+        '''
+        session_store_class = self.model.get_session_store_class()
+        return session_store_class().encode(session_dict)
     
-            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
+        For example, ``headers['content-encoding']`` will return the
+    value of a ``'Content-Encoding'`` response header, regardless
+    of how the header name was originally stored.
+    
+        return inner
+    
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    
+        if cryptography_version < [1, 3, 4]:
+        warning = 'Old version of cryptography ({}) may cause slowdown.'.format(cryptography_version)
+        warnings.warn(warning, RequestsDependencyWarning)
+    
+            KD = lambda s, d: hash_utf8('%s:%s' % (s, d))
+    
+    #: Python 2.x?
+is_py2 = (_ver[0] == 2)
+    
+            with Server(handler) as (host, port):
             sock = socket.socket()
             sock.connect((host, port))
-            sock.sendall(b'send something')
-            time.sleep(2.5)
-            sock.sendall(b'still alive')
-            block_server.set()  # release server block
+            sock.sendall(question)
+            text = sock.recv(1000)
+            assert text == answer
+            sock.close()
+    
+            self._content_consumed = True
+        # don't need to release the connection; that's been handled by urllib3
+        # since we exhausted the data.
+        return self._content
+    
+        # Client Error.
+    400: ('bad_request', 'bad'),
+    401: ('unauthorized',),
+    402: ('payment_required', 'payment'),
+    403: ('forbidden',),
+    404: ('not_found', '-o-'),
+    405: ('method_not_allowed', 'not_allowed'),
+    406: ('not_acceptable',),
+    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
+    408: ('request_timeout', 'timeout'),
+    409: ('conflict',),
+    410: ('gone',),
+    411: ('length_required',),
+    412: ('precondition_failed', 'precondition'),
+    413: ('request_entity_too_large',),
+    414: ('request_uri_too_large',),
+    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
+    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
+    417: ('expectation_failed',),
+    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
+    421: ('misdirected_request',),
+    422: ('unprocessable_entity', 'unprocessable'),
+    423: ('locked',),
+    424: ('failed_dependency', 'dependency'),
+    425: ('unordered_collection', 'unordered'),
+    426: ('upgrade_required', 'upgrade'),
+    428: ('precondition_required', 'precondition'),
+    429: ('too_many_requests', 'too_many'),
+    431: ('header_fields_too_large', 'fields_too_large'),
+    444: ('no_response', 'none'),
+    449: ('retry_with', 'retry'),
+    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
+    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
+    499: ('client_closed_request',),
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
-    
-        def describe(self):
-        '''Returns the existing details of the rule in AWS'''
-        try:
-            rule_info = self.client.describe_rule(Name=self.name)
-        except botocore.exceptions.ClientError as e:
-            error_code = e.response.get('Error', {}).get('Code')
-            if error_code == 'ResourceNotFoundException':
-                return {}
-            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
-        except botocore.exceptions.BotoCoreError as e:
-            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
-        return self._snakify(rule_info)
-    
-    EXAMPLES = '''
-# Simple snapshot of volume using volume_id
-- ec2_snapshot:
-    volume_id: vol-abcdef12
-    description: snapshot of /data from DB123 taken 2013/11/28 12:18:32
-    
-        if not region:
-        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
-    
-    RETURN = '''
-server_certificate_id:
-    description: The 21 character certificate id
-    returned: success
-    type: str
-    sample: 'ADWAJXWTZAXIPIMQHMJPO'
-certificate_body:
-    description: The asn1der encoded PEM string
-    returned: success
-    type: str
-    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
-server_certificate_name:
-    description: The name of the server certificate
-    returned: success
-    type: str
-    sample: 'server-cert-name'
-arn:
-    description: The Amazon resource name of the server certificate
-    returned: success
-    type: str
-    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
-path:
-    description: The path of the server certificate
-    returned: success
-    type: str
-    sample: '/'
-expiration:
-    description: The date and time this server certificate will expire, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2017-06-15T12:00:00+00:00'
-upload_date:
-    description: The date and time this server certificate was uploaded, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2015-04-25T00:36:40+00:00'
+DOCUMENTATION = '''
+---
+module: elasticache_subnet_group
+version_added: '2.0'
+short_description: manage Elasticache subnet groups
+description:
+     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
+options:
+  state:
+    description:
+      - Specifies whether the subnet should be present or absent.
+    required: true
+    default: present
+    choices: [ 'present' , 'absent' ]
+  name:
+    description:
+      - Database subnet group identifier.
+    required: true
+  description:
+    description:
+      - Elasticache subnet group description. Only set when a new group is added.
+  subnets:
+    description:
+      - List of subnet IDs that make up the Elasticache subnet group.
+author: 'Tim Mahoney (@timmahoney)'
+extends_documentation_fragment:
+    - aws
+    - ec2
 '''
     
+        lambda_facts = dict()
+    
     RETURN = '''
-state:
-    description: The state of the instance or database. Value will be either 'absent' or 'present'.
-    returned: Always
-    type: str
-    sample: 'present'
+monitoring_policy:
+    description: Information about the monitoring policy that was processed
+    type: dict
+    sample: '{'id': '92B74394A397ECC3359825C1656D67A6', 'name': 'Default Policy'}'
+    returned: always
+'''
     
-    - oneandone_firewall_policy:
-    auth_token: oneandone_private_api_key
-    name: ansible-firewall-policy
-    description: Testing creation of firewall policies with ansible
-    rules:
-     -
-       protocol: TCP
-       port_from: 80
-       port_to: 80
-       source: 0.0.0.0
-    wait: true
-    wait_timeout: 500
+    # Ensure rule with certain limitations
+- ipa_hbacrule:
+    name: allow_all_developers_access_to_db
+    description: Allow all developers to access any database from any host
+    hostgroup:
+    - db-server
+    usergroup:
+    - developers
+    state: present
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
     
-            elif desired_state == 'enabled':
-            if current_state == HOST_ABSENT:
-                self.allocate_host()
-                host = self.get_host_by_name(host_name)
-                self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-            elif current_state in [HOST_STATES.DISABLED, HOST_STATES.OFFLINE]:
-                if one.host.status(host.ID, HOST_STATUS.ENABLED):
-                    self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not enable host')
-            elif current_state in [HOST_STATES.MONITORED]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to enable' % current_state_name)
+        # Insert state-specific attributes to body
+    if state == 'started':
+        for k in ('source_system', 'env', 'owner', 'description'):
+            v = module.params[k]
+            if v is not None:
+                body[k] = v
     
-        # Build the deployment object we return
-    deployment = dict(token=token, url=url)
-    deployment.update(body)
-    if 'errorMessage' in deployment:
-        message = deployment.pop('errorMessage')
-        deployment['message'] = message
+        params = {}
+    params['revision_id'] = revision_id
+    params['deployed_by'] = deployed_by
+    if deployed_to:
+        params['deployed_to'] = deployed_to
+    if repository:
+        params['repository'] = repository
     
-        try:
-        data = urlencode(params)
-        response, info = fetch_url(module, url, data=data)
-    except Exception as e:
-        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
-    else:
-        if info['status'] == 201:
-            module.exit_json(changed=True)
-        else:
-            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
-    
-    
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-    
-    # (c) 2013, Darryl Stoflet <stoflet@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-    
-    class ScrapyClientTLSOptions(ClientTLSOptions):
         '''
-        SSL Client connection creator ignoring certificate verification errors
-        (for genuinely invalid certificates or bugs in verification code).
+    return_vars = {}
+    # Get list of words in the variable
+    a_opts = util.get_var_from_file(varname, filepath).split()
+    for i, v in enumerate(a_opts):
+        # Handle Define statements and make sure it has an argument
+        if v == '-D' and len(a_opts) >= i+2:
+            var_parts = a_opts[i+1].partition('=')
+            return_vars[var_parts[0]] = var_parts[2]
+        elif len(v) > 2 and v.startswith('-D'):
+            # Found var with no whitespace separator
+            var_parts = v[2:].partition('=')
+            return_vars[var_parts[0]] = var_parts[2]
+    return return_vars
+    
+        def test_rollback_checkpoints(self):
+        mock_load = mock.Mock()
+        self.config.aug.load = mock_load
+    
+        @mock.patch('certbot_apache.display_ops.display_util')
+    @certbot_util.patch_get_utility()
+    @mock.patch('certbot_apache.display_ops.logger')
+    def test_small_display(self, mock_logger, mock_util, mock_display_util):
+        mock_display_util.WIDTH = 20
+        mock_util().menu.return_value = (display_util.OK, 0)
+        self._call(self.vhosts)
+    
+    # -- Options for LaTeX output ---------------------------------------------
+    
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
     
     
-def _split_aug_path(vhost_path):
-    '''Splits an Augeas path into a file path and an internal path.
+class FixFutureImports(fixer_base.BaseFix):
+    BM_compatible = True
     
-    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
-               'Upgrade-Insecure-Requests': UIR_ARGS}
+    For each function or class described in `tornado.platform.interface`,
+the appropriate platform-specific implementation exists in this module.
+Most code that needs access to this functionality should do e.g.::
+    
+        def _sock_state_cb(self, fd: int, readable: bool, writable: bool) -> None:
+        state = (IOLoop.READ if readable else 0) | (IOLoop.WRITE if writable else 0)
+        if not state:
+            self.io_loop.remove_handler(fd)
+            del self.fds[fd]
+        elif fd in self.fds:
+            self.io_loop.update_handler(fd, state)
+            self.fds[fd] = state
+        else:
+            self.io_loop.add_handler(fd, self._handle_events, state)
+            self.fds[fd] = state
+    
+        def test_twitter_show_user(self):
+        response = self.fetch('/twitter/client/show_user?name=somebody')
+        response.rethrow()
+        self.assertEqual(
+            json_decode(response.body), {'name': 'Somebody', 'screen_name': 'somebody'}
+        )
