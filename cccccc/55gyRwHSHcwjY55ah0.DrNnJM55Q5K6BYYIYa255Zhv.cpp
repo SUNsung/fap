@@ -1,265 +1,213 @@
 
         
-        #undef cv_hal_cvtBGRtoBGR
-#define cv_hal_cvtBGRtoBGR TEGRA_CVTBGRTOBGR
-#undef cv_hal_cvtBGRtoBGR5x5
-#define cv_hal_cvtBGRtoBGR5x5 TEGRA_CVTBGRTOBGR565
-#undef cv_hal_cvtBGRtoGray
-#define cv_hal_cvtBGRtoGray TEGRA_CVTBGRTOGRAY
-#undef cv_hal_cvtGraytoBGR
-#define cv_hal_cvtGraytoBGR TEGRA_CVTGRAYTOBGR
-#undef cv_hal_cvtBGRtoYUV
-#define cv_hal_cvtBGRtoYUV TEGRA_CVTBGRTOYUV
-#undef cv_hal_cvtBGRtoHSV
-#define cv_hal_cvtBGRtoHSV TEGRA_CVTBGRTOHSV
-#undef cv_hal_cvtTwoPlaneYUVtoBGR
-#define cv_hal_cvtTwoPlaneYUVtoBGR TEGRA_CVT2PYUVTOBGR
+        #include 'atom/browser/native_window_views.h'
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            internal::prefetch(dst + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vld1q_s16(dst + j), v_dst1 = vld1q_s16(dst + j + 8);
-            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-    }
+    #include 'atom/browser/api/event_emitter.h'
+#include 'atom/common/key_weak_map.h'
+#include 'base/bind.h'
+#include 'base/memory/weak_ptr.h'
+#include 'native_mate/object_template_builder.h'
     
-            std::swap(lanea, laneA);
-        std::swap(laneb, laneB);
-    }
-    //last line
-    if(i < size.height)
+    #include 'base/memory/weak_ptr.h'
+#include 'net/url_request/url_request_job.h'
+    
+    
+    {  base::Process process = base::LaunchProcess(argv, options);
+  return process.IsValid() ? 0 : 1;
+}
+    
+    #include 'ui/gfx/image/image.h'
+    
+    
+    {b2PolyNode* b2PolyNode::GetRightestConnection(b2Vec2& incomingDir){
+	b2Vec2 diff = position-incomingDir;
+	b2PolyNode temp(diff);
+	b2PolyNode* res = GetRightestConnection(&temp);
+	b2Assert(res);
+	return res;
+}
+}
+
+    
+    			float fDRed = a_frgbaDecodedColor.fR - a_frgbaSourcePixel.fR;
+			float fDGreen = a_frgbaDecodedColor.fG - a_frgbaSourcePixel.fG;
+			float fDBlue = a_frgbaDecodedColor.fB - a_frgbaSourcePixel.fB;
+			float fDAlpha = a_fDecodedAlpha - a_frgbaSourcePixel.fA;
+    
+    
+    {}
+
+    
+    
+    {			fLeftGrayErrorSum += fLeftGrayError;
+			fRightGrayErrorSum += fRightGrayError;
+			fTopGrayErrorSum += fTopGrayError;
+			fBottomGrayErrorSum += fBottomGrayError;
+		}
+    
+    
+    {  if (horzEdge->NextInLML)
+  {
+    if(horzEdge->OutIdx >= 0)
     {
-        //vertical convolution
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+      op1 = AddOutPt( horzEdge, horzEdge->Top);
+      UpdateEdgeIntoAEL(horzEdge);
+      if (horzEdge->WindDelta == 0) return;
+      //nb: HorzEdge is no longer horizontal here
+      TEdge* ePrev = horzEdge->PrevInAEL;
+      TEdge* eNext = horzEdge->NextInAEL;
+      if (ePrev && ePrev->Curr.X == horzEdge->Bot.X &&
+        ePrev->Curr.Y == horzEdge->Bot.Y && ePrev->WindDelta != 0 &&
+        (ePrev->OutIdx >= 0 && ePrev->Curr.Y > ePrev->Top.Y &&
+        SlopesEqual(*horzEdge, *ePrev, m_UseFullRange)))
+      {
+        OutPt* op2 = AddOutPt(ePrev, horzEdge->Bot);
+        AddJoin(op1, op2, horzEdge->Top);
+      }
+      else if (eNext && eNext->Curr.X == horzEdge->Bot.X &&
+        eNext->Curr.Y == horzEdge->Bot.Y && eNext->WindDelta != 0 &&
+        eNext->OutIdx >= 0 && eNext->Curr.Y > eNext->Top.Y &&
+        SlopesEqual(*horzEdge, *eNext, m_UseFullRange))
+      {
+        OutPt* op2 = AddOutPt(eNext, horzEdge->Bot);
+        AddJoin(op1, op2, horzEdge->Top);
+      }
+    }
+    else
+      UpdateEdgeIntoAEL(horzEdge); 
+  }
+  else
+  {
+    if (horzEdge->OutIdx >= 0) AddOutPt(horzEdge, horzEdge->Top);
+    DeleteFromAEL(horzEdge);
+  }
+}
+//------------------------------------------------------------------------------
+    
+    #endif
+
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        const Locale &locale,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
+}
     
     
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1q_u8(srcv + sj + 16);
-            v_dst.val[3] = v_y.val[1];
-            vst4q_u8(dst + dj + 64, v_dst);
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+        /**
+     * Sets minimum significant digits. 0 or negative means no minimum.
+     */
+    void setMin(int32_t count) {
+        fMin = count <= 0 ? 0 : count;
+    }
+    
+    void 
+SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth, 
+                             int32_t time, TimeMode mode, UErrorCode& status) 
+{
+    setStartRule(month, dayOfMonth, 0, time, mode, status);
+}
+    
+    static int32_t
+computeHashCode(const uint8_t *key, int32_t  length) {
+    const char *s = reinterpret_cast<const char *>(key);
+    int32_t hash;
+    if (s == NULL || length == 0) {
+        hash = kEmptyHashCode;
+    } else {
+        hash = ustr_hashCharsN(s, length);
+        if (hash == kInvalidHashCode || hash == kBogusHashCode) {
+            hash = kEmptyHashCode;
         }
+    }
+    return hash;
+}
+    
+        for (int32_t i=0; i<output.length(); ++i) {
+        if (hasCursor && i == cursor) {
+            ICU_Utility::appendToRule(rule, (UChar)0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        UChar c = output.charAt(i); // Ok to use 16-bits here
+    }
+    
+        // Helpers to retrieve list of common Unicode ranges (2 value per range, values are inclusive, zero-terminated list)
+    // NB: Make sure that your string are UTF-8 and NOT in your local code page. In C++11, you can create UTF-8 string literal using the u8'Hello world' syntax. See FAQ for details.
+    // NB: Consider using ImFontGlyphRangesBuilder to build glyph ranges from textual data.
+    IMGUI_API const ImWchar*    GetGlyphRangesDefault();                // Basic Latin, Extended Latin
+    IMGUI_API const ImWchar*    GetGlyphRangesKorean();                 // Default + Korean characters
+    IMGUI_API const ImWchar*    GetGlyphRangesJapanese();               // Default + Hiragana, Katakana, Half-Width, Selection of 1946 Ideographs
+    IMGUI_API const ImWchar*    GetGlyphRangesChineseFull();            // Default + Half-Width + Japanese Hiragana/Katakana + full set of about 21000 CJK Unified Ideographs
+    IMGUI_API const ImWchar*    GetGlyphRangesChineseSimplifiedCommon();// Default + Half-Width + Japanese Hiragana/Katakana + set of 2500 CJK Unified Ideographs for common simplified Chinese
+    IMGUI_API const ImWchar*    GetGlyphRangesCyrillic();               // Default + about 400 Cyrillic characters
+    IMGUI_API const ImWchar*    GetGlyphRangesThai();                   // Default + Thai characters
+    IMGUI_API const ImWchar*    GetGlyphRangesVietnamese();             // Default + Vietname characters
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2019-02-11: OpenGL: Projecting clipping rectangles correctly using draw_data->FramebufferScale to allow multi-viewports for retina display.
+//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
+//  2018-08-03: OpenGL: Disabling/restoring GL_LIGHTING and GL_COLOR_MATERIAL to increase compatibility with legacy OpenGL applications.
+//  2018-06-08: Misc: Extracted imgui_impl_opengl2.cpp/.h away from the old combined GLFW/SDL+OpenGL2 examples.
+//  2018-06-08: OpenGL: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL2_RenderDrawData() in the .h file so you can call it yourself.
+//  2017-09-01: OpenGL: Save and restore current polygon mode.
+//  2016-09-10: OpenGL: Uploading font texture as RGBA32 to increase compatibility with users shaders (not ideal).
+//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
+// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
+// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
+#pragma comment(lib, 'legacy_stdio_definitions')
 #endif
     
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
-    {    void operator() (const T * src0, const T * src1, u8 * dst) const
-    {
-        dst[0] = src0[0] > src1[0] ? 255 : 0;
-    }
-};
+    static int stb__window = 0x40000; // 256K
     
-            if (cpolicy == CONVERT_POLICY_SATURATE)
-        {
-            for (; j < roiw16; j += 16)
-            {
-                internal::prefetch(src + j);
-                int16x8_t v_src0 = vld1q_s16(src + j), v_src1 = vld1q_s16(src + j + 8);
-                uint8x16_t v_dst = vcombine_u8(vqmovun_s16(v_src0), vqmovun_s16(v_src1));
-                vst1q_u8(dst + j, v_dst);
-            }
-            for (; j < roiw8; j += 8)
-            {
-                int16x8_t v_src = vld1q_s16(src + j);
-                vst1_u8(dst + j, vqmovun_s16(v_src));
-            }
-    }
+        // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL2_Init();
     
-            size_t i = 0;
-        uint64x2_t ws = vmovq_n_u64(0);
-    
-        u8 threshold_tab[512];
-    for( i = -255; i <= 255; i++ )
-        threshold_tab[i+255] = (u8)(i < -threshold ? 1 : i > threshold ? 2 : 0);
-    
-                vst1q_u8((u8 *)&mask[0], v_mask);
-    
-        if (func == NULL)
-        return;
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    
-    {  shared_ptr<boost::thread> thread_;
-};
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/data_transformer.hpp'
-#include 'caffe/internal_thread.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/blocking_queue.hpp'
-    
-    
-    {  // extra temporarary variables is used to carry out sums/broadcasting
-  // using BLAS
-  Blob<Dtype> batch_sum_multiplier_;
-  Blob<Dtype> num_by_chans_;
-  Blob<Dtype> spatial_sum_multiplier_;
-};
-    
-      virtual inline const char* type() const { return 'Bias'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MaxBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusClientCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusClientCallData : public CallData {
- public:
-  // Maximum size of trace context is sent on the wire.
-  static constexpr uint32_t kMaxTraceContextLen = 64;
-  // Maximum size of tags that are sent on the wire.
-  static constexpr uint32_t kMaxTagsLen = 2048;
-    }
-    
-    
-    {}  // namespace grpc
-    
-    Status ProtoServerReflection::GetFileContainingSymbol(
-    ServerContext* context, const grpc::string& symbol,
-    ServerReflectionResponse* response) {
-  if (descriptor_pool_ == nullptr) {
-    return Status::CANCELLED;
-  }
-    }
-    
-    
-    {
-    {}  // namespace reflection
-}  // namespace grpc
-
-    
-    namespace grpc {
-namespace load_reporter {
-    }
-    }
-    
-      void branchFar(CodeAddress c, BranchParams bp,
-                 ImmType immt = ImmType::TocOnly,
-                 bool immMayChange = false) {
-    LinkReg lr = (bp.savesLR()) ? LinkReg::Save : LinkReg::DoNotTouch;
-    branchFar(c, static_cast<BranchConditions>(bp), lr, immt, immMayChange);
-  }
-    
-      char* comma = (char*)memchr(data, ',', data_len);
-  if (comma == nullptr) {
-    raise_warning('rfc2397: missing comma');
-    return nullptr;
-  }
-    
-    
-    {  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-};
-    
-    #include 'hphp/util/stack-trace.h'
-    
-            const float char_width = ((int)c < IndexAdvanceX.Size ? IndexAdvanceX.Data[c] : FallbackAdvanceX) * scale;
-        if (line_width + char_width >= max_width)
-        {
-            s = prev_s;
-            break;
-        }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-        // Main loop
-    while (true)
-    {
-        if (s3eDeviceCheckQuitRequest())
-            break;
-    }
-    
-    int main(int, char**)
-{
-    // Setup SDL
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0)
-    {
-        printf('Error: %s\n', SDL_GetError());
-        return -1;
-    }
-    }
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2019-03-12: Misc: Preserve DisplayFramebufferScale when main window is minimized.
+//  2018-12-21: Inputs: Workaround for Android/iOS which don't seem to handle focus related calls.
+//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
+//  2018-11-14: Changed the signature of ImGui_ImplSDL2_ProcessEvent() to take a 'const SDL_Event*'.
+//  2018-08-01: Inputs: Workaround for Emscripten which doesn't seem to handle focus related calls.
+//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
+//  2018-06-08: Misc: Extracted imgui_impl_sdl.cpp/.h away from the old combined SDL2+OpenGL/Vulkan examples.
+//  2018-06-08: Misc: ImGui_ImplSDL2_InitForOpenGL() now takes a SDL_GLContext parameter.
+//  2018-05-09: Misc: Fixed clipboard paste memory leak (we didn't call SDL_FreeMemory on the data returned by SDL_GetClipboardText).
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+//  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
+//  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes.
+//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
+//  2018-01-19: Inputs: When available (SDL 2.0.4+) using SDL_CaptureMouse() to retrieve coordinates outside of client area when dragging. Otherwise (SDL 2.0.3 and before) testing for SDL_WINDOW_INPUT_FOCUS instead of SDL_WINDOW_MOUSE_FOCUS.
+//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
+//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
+//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
