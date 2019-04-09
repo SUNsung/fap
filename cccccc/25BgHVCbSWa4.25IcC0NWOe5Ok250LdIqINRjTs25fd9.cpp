@@ -1,313 +1,436 @@
 
         
-        #ifndef ATOM_APP_COMMAND_LINE_ARGS_H_
-#define ATOM_APP_COMMAND_LINE_ARGS_H_
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+        
+    {}  // namespace atom
     
     
     {}  // namespace atom
     
-    #include 'atom/browser/api/event_emitter.h'
-#include 'native_mate/handle.h'
-#include 'ui/display/display_observer.h'
-#include 'ui/display/screen.h'
+    namespace gfx {
+class Point;
+class Rect;
+class Screen;
+}  // namespace gfx
     
-    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-    
-    #include 'base/macros.h'
-    
-    void URLRequestAboutJob::Start() {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
-                                weak_ptr_factory_.GetWeakPtr()));
+    #if !defined(OS_MACOSX) || defined(MAS_BUILD)
+std::string AutoUpdater::GetFeedURL() {
+  return '';
 }
     
-    #include <sys/event.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
+    
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
+    
+      base::WeakPtrFactory<URLRequestAboutJob> weak_ptr_factory_;
     
     
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(ViewsDelegateMac);
+    {  callback_.Run(rect, *bitmap_);
+}
+    
+    #include 'base/files/file_util.h'
+#include 'base/logging.h'
+#include 'base/mac/mac_logging.h'
+#include 'base/posix/eintr_wrapper.h'
+#include 'base/process/launch.h'
+#include 'base/strings/sys_string_conversions.h'
+    
+    #include 'ui/views/view.h'
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8 * src0 = internal::getRowPtr(src0Base, src0Stride, i);
+        const s16 * src1 = internal::getRowPtr(src1Base, src1Stride, i);
+        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
+    
+    void bitwiseOr(const Size2D &size,
+               const u8 *src0Base, ptrdiff_t src0Stride,
+               const u8 *src1Base, ptrdiff_t src1Stride,
+               u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseOr());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[8]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[7]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[6]);
+    
+                uint32x4_t s1 = vmovq_n_u32(0);
+            uint32x4_t s2 = vmovq_n_u32(0);
+    
+    template <typename T>
+void process(const T * src, size_t j0, size_t j1, size_t i,
+             T minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
+             T maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
+{
+    for (size_t j = j0; j < j1; ++j)
+    {
+        T val = src[j];
+    }
+    }
+    
+    
+    {            u32 buf[8];
+            vst1_u32(buf, vget_low_u32(el8shr01l));
+            vst1_u32(buf+2, el2l);
+            vst1_u32(buf+4, el2hl);
+            vst1_u32(buf+6, el2hh);
+            for(u32 k=0; k < 8; k++)
+                sqsum[j+k] = prev + prevSqSum[j+k] + buf[k];
+            prev += buf[7];
+        }
+    
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
+ *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
+ *        nodes, outgoing nodes, or their average.
+ *
+ * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
+ * accounts for ReLU nonlinearities.
+ *
+ * Aside: for another perspective on the scaling factor, see the derivation of
+ * [Saxe, McClelland, and Ganguli 2013 (v3)].
+ *
+ * It fills the incoming matrix by randomly sampling Gaussian data with std =
+ * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
+ * the variance_norm option. You should make sure the input blob has shape (num,
+ * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
+ * is currently not the case for inner product layers.
+ */
+template <typename Dtype>
+class MSRAFiller : public Filler<Dtype> {
+ public:
+  explicit MSRAFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    int fan_in = blob->count() / blob->shape(0);
+    // Compatibility with ND blobs
+    int fan_out = blob->num_axes() > 1 ?
+                  blob->count() / blob->shape(1) :
+                  blob->count();
+    Dtype n = fan_in;  // default to fan_in
+    if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_AVERAGE) {
+      n = (fan_in + fan_out) / Dtype(2);
+    } else if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_FAN_OUT) {
+      n = fan_out;
+    }
+    Dtype std = sqrt(Dtype(2) / n);
+    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
+        blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
 };
     
-      if (conformanceSig) {
-    for (auto &rawReq : conformanceSig->getRequirements()) {
-      if (auto req = rawReq.subst(conformanceToSyntheticTypeFn,
-                                  conformanceToSyntheticConformanceFn))
-        builder.addRequirement(*req, source, nullptr);
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
+    
+    #include <vector>
+    
+    #include <vector>
+    
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #endif  // CAFFE_CUDNN_CONV_LAYER_HPP_
+
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      int num_words;
+  TBOX lword_box;     // in normalized (horiz text rows) space
+  TBOX rword_box;     // in normalized (horiz text rows) space
+    
+    class BLOCK;
+class WERD;
+    
+    
+// Returns the median value of the vector, given that the values are
+// circular, with the given modulus. Values may be signed or unsigned,
+// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
+// NOTE that the array is shuffled, but the time taken is linear.
+// An assumption is made that most of the values are spread over no more than
+// half the range, but wrap-around is accounted for if the median is near
+// the wrap-around point.
+// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
+// T must be an integer or float/double type.
+template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
+  LLSQ stats;
+  T halfrange = static_cast<T>(modulus / 2);
+  int num_elements = v->size();
+  for (int i = 0; i < num_elements; ++i) {
+    stats.add((*v)[i], (*v)[i] + halfrange);
+  }
+  bool offset_needed = stats.y_variance() < stats.x_variance();
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] += halfrange;
     }
   }
+  int median_index = v->choose_nth_item(num_elements / 2);
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] -= halfrange;
+    }
+  }
+  return (*v)[median_index];
+}
+    
+    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    
+    #include <memory>
+#include 'bits16.h'
+#include 'errcode.h'
+#include 'params.h'
+    
+    namespace CNTK
+{
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
+    }
+    }
+    
+        // Make sure that the dictionary contains all required keys, and if it does, return version value
+    // from the dictionary.
+    template <typename T>
+    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
+    { 
+        const auto& version = GetVersion(dict);
+    }
+    
+            ValuePtr DeepClone(bool readOnly) const override
+        {
+            if (m_isPacked)
+            {
+                std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> packedLayoutCopy;
+                if (m_packedDataLayout)
+                {
+                    packedLayoutCopy = std::make_shared<Microsoft::MSR::CNTK::MBLayout>();
+                    packedLayoutCopy->CopyFrom(m_packedDataLayout);
+                }
+                return MakeSharedObject<PackedValue>(m_sampleShape, m_sampleDynamicAxes, m_packedData->DeepClone(readOnly), packedLayoutCopy, readOnly);
+            }
+            else
+                return Value::DeepClone(readOnly);
+        }
+    
+                // Validate that each of the dynamic axes are unique
+            std::unordered_set<Axis> uniqueDynamicAxis;
+            for (auto& currentDynamicAxis : dynamicAxes)
+            {
+                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
+                if (!retVal.second)
+                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
+            }
+    
+    // some older code uses this namespace
+namespace DebugUtil
+{
+    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+    }
+    
+    ScriptableObjects::ConfigurableRuntimeTypeRegister::AddFloatDouble<ComputationNetworkFromFile<float>, ComputationNetworkFromFile<double>> registerComputationNetworkFromFile(L'ComputationNetworkFromFile');
     
     
-    {  cache_t *cache_out = nullptr;
-  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
-  assert(cache_out);
-  return cache_out;
+    {        inputGradientValues.Reshape(rows1, cols1);
+        gradientValues.Reshape(rowsp, colsp);
+    }
+    
+    
+    {        AliasInfo(size_t total = 0)
+            : pMatrixPtr(nullptr), totalCount(total), releaseCount(0)
+        {
+        }
+    };
+    unordered_map<AliasNodePtr, AliasInfo> m_aliasGroups;
+    unordered_map<AliasNodePtr, AliasNodePtr> m_aliasLookup;
+    
+    
+    {
+    {}}
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
+  } else {
+    decoded = url_decode(data, data_len);
+  }
+  return req::make<MemFile>(decoded.data(), decoded.size());
 }
     
     
-    {    // Must be 'const' or nothing.
-    clang::Qualifiers quals = pointee.getQualifiers();
-    bool isConst = quals.hasConst();
-    quals.removeConst();
-    if (quals.empty()) {
-      if (auto record = pointee->getAs<clang::RecordType>()) {
-        auto recordDecl = record->getDecl();
-        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return forRecord(isConst, record->getDecl());
-        }
-      } else if (pointee->isVoidType()) {
-        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return isConst ? forConstVoid() : forVoid();
-        }
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    /*
+ * Attempt to log an entry to the perf warning service.
+ *
+ * If StructuredLog::enabled() returns false or this event is discarded by the
+ * effective sample rate, nothing will be logged. If both of those checks pass,
+ * fillCols will be passed a StructuredLogEntry& to populate, which will then
+ * be logged. The column names 'event_name' and 'priority' are reserved and
+ * will be overwritten is fillCols() sets them.
+ *
+ * The effective sample rate is determined by Eval.PerfWarningSampleRate * rate
+ * (or kDefaultPerfWarningRate for the overloads that don't take a rate). If
+ * the effective sample rate is 0, all events will be discarded.
+ */
+template<typename F>
+void logPerfWarning(folly::StringPiece event, F fillCols);
+template<typename F>
+void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols);
+    
+    #include 'hphp/runtime/base/plain-file.h'
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/execution-context.h'
+#include 'hphp/runtime/base/request-event-handler.h'
+    
+    #pragma once
+    
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
+    }
+    
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
+    } else {
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
       }
     }
   }
     
-    void BackendJobAction::anchor() {}
+     private:
+  uint64_t NowMicrosMonotonic(Env* env);
     
-        ~reverse_lock() {
-        templock.lock();
-        templock.swap(lock);
-    }
+    std::string kDBPath = '/tmp/rocksdb_column_families_example';
     
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
-    }
+      // Set a snapshot at start of transaction by setting set_snapshot=true
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
     
-        // Other valid inputs
-    CheckParseTorReplyMapping(
-        'Foo=Bar=Baz Spam=Eggs', {
-            {'Foo', 'Bar=Baz'},
-            {'Spam', 'Eggs'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar=Baz\'', {
-            {'Foo', 'Bar=Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
+      // Approximate size of user data packed per block.  Note that the
+  // block size specified here corresponds to uncompressed data.  The
+  // actual size of the unit read from disk may be smaller if
+  // compression is enabled.  This parameter can be changed dynamically.
+  //
+  // Default: 4K
+  size_t block_size;
     
+      static Status Open(const DBOptions& db_options, const std::string& dbname,
+                     const std::vector<ColumnFamilyDescriptor>& column_families,
+                     std::vector<ColumnFamilyHandle*>* handles,
+                     OptimisticTransactionDB** dbptr);
     
-    {} // namespace tinyformat
+    CC_CONSTRUCTOR_ACCESS:
+    ResizeBy() {}
+    virtual ~ResizeBy() {}
     
-    struct FilterCtx
+    /** initializes the action */
+    bool initWithDuration(float duration, const cocos2d::Size& deltaSize);
+    
+    bool WavesTiles3D::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude)
 {
-    CAROTENE_NS::Size2D ksize;
-    CAROTENE_NS::s16* kernel_data;
-    CAROTENE_NS::BORDER_MODE border;
-};
-inline int TEGRA_FILTERINIT(cvhalFilter2D **context, uchar *kernel_data, size_t kernel_step, int kernel_type, int kernel_width, int kernel_height,
-                            int max_width, int max_height, int src_type, int dst_type, int borderType, double delta, int anchor_x, int anchor_y, bool allowSubmatrix, bool allowInplace)
-{
-    if(!context || !kernel_data || allowSubmatrix || allowInplace ||
-       src_type != CV_8UC1 || dst_type != CV_8UC1 ||
-       delta != 0 || anchor_x != kernel_width / 2 || anchor_y != kernel_height / 2 )
-        return CV_HAL_ERROR_NOT_IMPLEMENTED;
-    }
-    
-    
-    {        vs1 = vmlaq_f32(vgamma, vs1, valpha);
-        vs1 = vmlaq_f32(vs1, vs2, vbeta);
-        v_dst = vcvtq_s32_f32(vs1);
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
+    if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
+    }
     }
     
-    
-    {            vst1q_s32(lanea + x, w);
-        }
-        if(x < colsn)
-        {
-            x = colsn-4;
-            goto box3x3s32_vert_ll;
-        }
-    
-        size_t maxsize = std::max<size_t>( 1u << 10, size.width * size.height / 10 );
-    std::vector<u8*> stack( maxsize );
-    u8 **stack_top = &stack[0];
-    u8 **stack_bottom = &stack[0];
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
+    ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
+{
+    ActionTween* ret = new (std::nothrow) ActionTween();
+    if (ret && ret->initWithDuration(duration, key, from, to))
+    {
+        ret->autorelease();
+        return ret;
     }
     
-                s32 val = 0;
-            for (s32 _y = 0; _y < 3; ++_y)
-                val += prevx[_y] * kernelBase[(2 - _y) * 3 + 2] +
-                       currx[_y] * kernelBase[(2 - _y) * 3 + 1] +
-                       nextx[_y] * kernelBase[(2 - _y) * 3 + 0];
-    
-                s32 val = (prevx + currx + nextx) - 9 * srow1[x];
-            drow[x] = internal::saturate_cast<u8>((s32)val);
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-      // Returns a copy of the FilePath with the case-insensitive extension removed.
-  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
-  // FilePath('dir/file'). If a case-insensitive extension is not
-  // found, returns a copy of the original FilePath.
-  FilePath RemoveExtension(const char* extension) const;
-    
-    // Creates a new TestInfo object and registers it with Google Test;
-// returns the created object.
-//
-// Arguments:
-//
-//   test_case_name:   name of the test case
-//   name:             name of the test
-//   type_param        the name of the test's type parameter, or NULL if
-//                     this is not a typed or a type-parameterized test.
-//   value_param       text representation of the test's value parameter,
-//                     or NULL if this is not a type-parameterized test.
-//   fixture_class_id: ID of the test fixture class
-//   set_up_tc:        pointer to the function that sets up the test case
-//   tear_down_tc:     pointer to the function that tears down the test case
-//   factory:          pointer to the factory that creates a test object.
-//                     The newly created TestInfo instance will assume
-//                     ownership of the factory object.
-GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
-    const char* test_case_name,
-    const char* name,
-    const char* type_param,
-    const char* value_param,
-    TypeId fixture_class_id,
-    SetUpTestCaseFunc set_up_tc,
-    TearDownTestCaseFunc tear_down_tc,
-    TestFactoryBase* factory);
-    
-      // Leave whatever circle we're part of.  Returns true if we were the
-  // last member of the circle.  Once this is done, you can join() another.
-  bool depart()
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26>
-struct Templates26 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates25<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26> Tail;
-};
-    
-    namespace {
-    }
-    
-      s.Set(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-    
-      // Gets the first element of the queue, or NULL if the queue is empty.
-  QueueNode<E>* Head() { return head_; }
-  const QueueNode<E>* Head() const { return head_; }
-    
-    #include <grpc/grpc_security.h>
-    
-    #include 'src/cpp/ext/filters/census/context.h'
-    
-    #include <grpc/status.h>
-#include 'absl/memory/memory.h'
-#include 'absl/strings/string_view.h'
-#include 'absl/strings/strip.h'
-#include 'opencensus/trace/span.h'
-#include 'opencensus/trace/span_context.h'
-#include 'opencensus/trace/trace_params.h'
-#include 'src/core/lib/slice/slice_internal.h'
-#include 'src/cpp/common/channel_filter.h'
-#include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    class DynamicThreadPool final : public ThreadPoolInterface {
- public:
-  explicit DynamicThreadPool(int reserve_threads);
-  ~DynamicThreadPool();
-    }
-    
-    // Given a map from type K to a set of value type V, removes the given key and
-// the associated set, and returns the set. Returns an empty set if the key is
-// not found.
-template <typename K, typename V>
-std::set<V> UnorderedMapOfSetExtract(std::unordered_map<K, std::set<V>>& map,
-                                     const K& key) {
-  auto it = map.find(key);
-  if (it != map.end()) {
-    auto set = std::move(it->second);
-    map.erase(it);
-    return set;
-  }
-  return {};
-};
-    
-    #ifndef GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
-#define GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
-    
-    #include 'utypeinfo.h'  // for 'typeid' to work
-    
-    class Calendar;
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-    
-    {    return *this;
+    delete ret;
+    return nullptr;
 }
     
-    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    /**
+ * @addtogroup actions
+ * @{
+ */
+    }
     
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
+        /**
+     * get vertex count
+     * @return number of vertices
+     */
+    unsigned int getVertCount() const;
+    
+    /**
+     * get triangles count
+     * @return number of triangles
+     */
+    unsigned int getTrianglesCount() const;
