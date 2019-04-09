@@ -1,226 +1,160 @@
 
         
-            const auto* shapes_and_types = c.output_handle_shapes_and_types(i);
-    if (shapes_and_types != nullptr) {
-      auto* out_handle_data = out.mutable_handle_data();
-      out_handle_data->set_is_set(true);
-      for (const auto& p : *shapes_and_types) {
-        auto* out_shape_and_type = out_handle_data->add_shape_and_type();
-        ProtoFromShapeHandle(p.shape, &c, out_shape_and_type->mutable_shape());
-        out_shape_and_type->set_dtype(p.dtype);
-      }
-    }
-    
-    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-
-    
-    
-    {}  // namespace tensorflow
-
-    
-    
-    {}  // namespace tensorflow
-
-    
-      // Return the current record contents.  Only valid after the preceding call
-  // to GetNext() returned true
-  string record() const { return record_; }
-  // Return the current offset in the file.
-  uint64 offset() const { return offset_; }
-    
-      Entry* entry = nullptr;
-  {
-    mutex_lock lock{mutex_};
-    entry = &cache_[config.ordinal];
-    // Release the map lock; the address of 'entry' is stable because
-    // std::map guarantees reference stability.
-  }
-    
-        void split2(const Size2D &size,
-                const s64 * srcBase, ptrdiff_t srcStride,
-                s64 * dst0Base, ptrdiff_t dst0Stride,
-                s64 * dst1Base, ptrdiff_t dst1Stride);
-    
-    
-    {
-    {        for (; j < size.width; j++)
-            dst[j] = (u16)src0[j] + (u16)src1[j];
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    void bitwiseOr(const Size2D &size,
-               const u8 *src0Base, ptrdiff_t src0Stride,
-               const u8 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseOr());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
+            if (borderType == BORDER_MODE_CONSTANT)
+        for (s32 k = 0; k < cn; ++k)
+        {
+            lanea[-cn+k] = borderValue;
+            lanea[colsn+k] = borderValue;
+            laneA[-cn+k] = borderValue;
+            laneA[colsn+k] = borderValue;
+            laneb[-cn+k] = borderValue;
+            laneb[colsn+k] = borderValue;
+            laneB[-cn+k] = borderValue;
+            laneB[colsn+k] = borderValue;
+        }
     
             result += (double)vget_lane_s64(vadd_s64(vget_low_s64(ws), vget_high_s64(ws)), 0);
     
-                    uint8x16_t c0 = vmovq_n_u8(0);
-                uint8x16_t c1 = vmovq_n_u8(0);
-                uint8x16_t max0 = vmovq_n_u8(0);
-                uint8x16_t max1 = vmovq_n_u8(0);
-                for( k = 0; k < N; k++ )
-                {
-                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
-                    m0 = vcgtq_s8(x, v2);
-                    m1 = vcgtq_s8(v1, x);
-    }
+                    uint16x8_t vSum_0_4  = vaddq_u16(vLane0.val[0], vLane2.val[0]);
+                uint16x8_t vSum_1_5  = vaddq_u16(vLane0.val[1], vLane2.val[1]);
+                uint16x8_t vSum_2_6  = vaddq_u16(vLane0.val[2], vLane2.val[2]);
+                uint16x8_t vSum_3_7  = vaddq_u16(vLane0.val[3], vLane2.val[3]);
     
-    template <typename T, int elsize> struct vtail
+    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
+inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
+inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    
+    void integral(const Size2D &size,
+              const u8 * srcBase, ptrdiff_t srcStride,
+              u32 * sumBase, ptrdiff_t sumStride)
 {
-    static inline void inRange(const T *, const T *, const T *,
-                               u8 *, size_t &, size_t)
-    {
-        //do nothing since there couldn't be enough data
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    uint32x4_t v_zero = vmovq_n_u32(0u);
     }
-};
-template <typename T> struct vtail<T, 2>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
-        if( x + 8 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1(dst + x, internal::vmovn(vd));
-            x+=8;
-        }
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
     }
-};
-template <typename T> struct vtail<T, 1>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<T>::vec64 vec64;
-        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1q(dst + x, vd);
-            x+=16;
-        }
-        if( x + 8 < width)
-        {
-             vec64  vs = internal::vld1( src + x);
-             vec64 vr1 = internal::vld1(rng1 + x);
-             vec64 vr2 = internal::vld1(rng2 + x);
-            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
-            internal::vst1(dst + x, vd);
-            x+=8;
-        }
-    }
-};
     
-    /////////////// Custom NEON intrinsics ///////////////////
-    
-    	if (cmderOptions.registerApp == true)
-	{
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-	}
-	else if (cmderOptions.unRegisterApp == true)
-	{
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_BACKGROUND);
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_LISTITEM);
-	}
-	else if (cmderOptions.error == true)
-	{
-		return 1;
-	}
-	else
-	{
-		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot, cmderOptions.cmderUserCfg);
-	}
-    
-    
-    {
-    {        // For now reusing the shim to allow prefetch.
-        // Please only use a subset of the shim interface that includes
-        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
-        // Shim will be deleted in the future versions.
-        std::shared_ptr<ReaderShim<float>> m_shim;
-        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
-    };
-}
+    #endif  // PLUGIN_CAFFE_CAFFE_COMMON_H_
 
     
-            ValidateType<T>(dict, typeValue, currentVersion);
     
-    using namespace std;
-    
-    
-    {    ~ScopeTimer()
     {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
+    {
+    {  /*!
+   * \brief Worker threads.
+   */
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
 };
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
+
     
+    template<typename xpu>
+void Quantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                              const float threshold) {
+  mxnet::op::mxnet_op::Kernel<quantize_2bit, xpu>
+    ::Launch(s,
+            inputs[2].Size(),         // compressed array size
+            inputs[0].Size(),         // original size
+            inputs[2].dptr<float>(),  // compressed array
+            inputs[0].dptr<float>(),  // original array
+            inputs[1].dptr<float>(),  // residual array
+            -1 *threshold,            // negative threshold
+            threshold);               // positive threshold
+}
     
-    {            for (size_t i = 0; i < 2; i++)
-                Input(i)->Gradient().TransferToDeviceIfNotThere(m_deviceId, true);
-        }
-        catch (...)
-        {
-            fprintf(stderr, 'LookupTableNode unit test is not passed!');
-            return false;
-        }
-    
-        template <class ElemType>
-    void RequestAliasedRelease(AliasNodePtr node)
-    {
-        const auto iter = m_aliasLookup.find(node);
-        if (iter == m_aliasLookup.end())
-            LogicError('node not aliased');
+    class GradientCompression {
+ public:
+  GradientCompression();
     }
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file crop.cc
+ * \brief
+ * \author Wei Wu
+*/
+    
+    MXNET_REGISTER_OP_PROPERTY(_NDArray, NDArrayOpProp)
+.describe('Stub for implementing an operator implemented in native frontend language with ndarray.')
+.add_argument('data', 'NDArray-or-Symbol[]', 'Input data for the custom operator.')
+.add_arguments(NDArrayOpParam::__FIELDS__());
+    
+      /**
+   * Use the Iterate method for iterating over options that are stored as
+   * objects in runtime options (e.g. FilesMatch). This function iterates over
+   * the settings passed as ini/hdf, calls back to, generally, the constructor
+   * of the object in question.
+   *
+   * Note: For now, we are not `ini_get()` enabling these type of options as
+   * it is not trivial to come up with a non-hacky and workable way to store
+   * the data correctly. Also, as usual, Hdf takes priority.
+   */
+  static void Iterate(std::function<void (const IniSettingMap&,
+                                          const Hdf&,
+                                          const std::string&)> cb,
+                      const IniSettingMap &ini, const Hdf& config,
+                      const std::string &name, const bool prepend_hhvm = true);
+    
+      path_str += strlen(prefix);
+  path_len -= strlen(prefix);
+    
+    #include 'hphp/util/perf-event.h'
+    
+    namespace HPHP {
+    }
+    
+    #include 'hphp/util/stack-trace.h'
+    
+    #include 'hphp/runtime/base/perf-warning-inl.h'
+    
+    #endif // incl_HPHP_PIPE_H_
+
+    
+    #pragma once
+    
+    #pragma once
+    
+    class DHTBucket;
+class DHTPingReplyMessage;
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+      virtual ~DHTTaskQueueImpl();
+    
+    #include <cstring>
+#include <cstdlib>
