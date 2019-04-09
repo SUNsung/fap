@@ -1,78 +1,97 @@
 
         
-                  def hidden_field_for_checkbox(options)
-            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          #
+  # Parses a CGI query string into the var/val combinations.
+  #
+  def parse_cgi_qstring(str)
+    qstring = {}
+    
+          when IAX_CTRL_RINGING
+        dprint('RINGING')
+        self.client.send_ack(self)
+    
+                int
           end
+    
+              # Decodes the flags field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_flags(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+                res = ''
+            case etype
+            when RSA_MD5
+              res = checksum_rsa_md5(data)
+            else
+              raise ::NotImplementedError, 'EncryptedData schema is not supported'
+            end
+    
+              # Decodes the enc_part
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_part(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
+          end
+        end
       end
     end
   end
 end
-
     
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
+              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
+            end
+    
+      def update
+    @organization_obj = current_user.organizations_scope.find(organization.id)
+    if @organization_obj.update(params.require(:organization).permit(:name, :time_zone))
+      redirect_to_with_json organization_settings_path(@organization_obj), :notice => 'Settings for #{@organization_obj.name} have been saved successfully.'
+    else
+      render_form_errors 'edit', @organization_obj
     end
-    
-    # All Devise controllers are inherited from here.
-class DeviseController < Devise.parent_controller.constantize
-  include Devise::Controllers::ScopedViews
-    
-          private
-    
-        def initialize(machine, guests, capabilities)
-      @capabilities = capabilities
-      @guests       = guests
-      @machine      = machine
-    end
-    
-              # Go through each VM and yield it!
-          vms.each do |old_vm|
-            # We get a new VM from the environment here to avoid potentially
-            # stale VMs (if there was a config reload on the environment
-            # or something).
-            vm = @env.vms[old_vm.name]
-            yield vm
-          end
-        end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
-    
-            # This contains all the registered guest capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :guest_capabilities
-    
-            # Initialize the provider to represent the given machine.
-        #
-        # @param [Vagrant::Machine] machine The machine that this provider
-        #   is responsible for.
-        def initialize(machine)
-        end
-    
-        # pad out the result
-    ret = pad_string_to(ret, TAR_CHUNK_SIZE)
-    return ret
   end
     
-          scripts_path(filename).tap do |pkgscript|
-        logger.info('Writing pkg script', :source => filename, :target => pkgscript)
-        File.write(pkgscript, script(scriptname))
-        # scripts are required to be executable
-        File.chmod(0755, pkgscript)
-      end
+      def create_with_token
+    result = JWT.decode(params[:token], Postal.signing_key.to_s, 'HS256')[0]
+    if result['timestamp'] > 1.minute.ago.to_f
+      login(User.find(result['user'].to_i))
+      redirect_to root_path
+    else
+      destroy
     end
-  end # def write_scripts
+  rescue JWT::VerificationError
+    destroy
+  end
     
-        File.write(build_path('build-info'), `pkg_info -X pkg_install | egrep '^(MACHINE_ARCH|OPSYS|OS_VERSION|PKGTOOLS_VERSION)'`)
+      def create
+    @track_domain = @server.track_domains.build(params.require(:track_domain).permit(:name, :domain_id, :track_loads, :track_clicks, :excluded_click_domains, :ssl_enabled))
+    if @track_domain.save
+      redirect_to_with_json [:return_to, [organization, @server, :track_domains]]
+    else
+      render_form_errors 'new', @track_domain
+    end
+  end
+    
+    end
