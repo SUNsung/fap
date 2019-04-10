@@ -1,226 +1,163 @@
 
         
-            def _find_available_spot(self, vehicle):
-        '''Find an available spot where vehicle can fit, or return None'''
-        pass
+            def syntax(self):
+        return '[options] <spider_file>'
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
         else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
-    
-    
-class Page(object):
-    
-            flash(error)
-    
-    
-@bp.route('/')
-def index():
-    '''Show all the posts, most recent first.'''
-    db = get_db()
-    posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    return render_template('blog/index.html', posts=posts)
-    
-        .. versionchanged:: 0.10
-       This function's return value is now always safe for HTML usage, even
-       if outside of script tags or if used in XHTML.  This rule does not
-       hold true when using this function in HTML attributes that are double
-       quoted.  Always single quote attributes if you use the ``|tojson``
-       filter.  Alternatively use ``|tojson|forceescape``.
-    '''
-    rv = dumps(obj, **kwargs) \
-        .replace(u'<', u'\\u003c') \
-        .replace(u'>', u'\\u003e') \
-        .replace(u'&', u'\\u0026') \
-        .replace(u''', u'\\u0027')
-    if not _slash_escape:
-        rv = rv.replace('\\/', '/')
-    return rv
-    
-            # If the request method is HEAD and we don't have a handler for it
-        # retry with GET.
-        if meth is None and request.method == 'HEAD':
-            meth = getattr(self, 'get', None)
-    
-        rv = parse_changelog()
-    
-    
-def test_request_context_means_app_context(app):
-    with app.test_request_context():
-        assert flask.current_app._get_current_object() == app
-    assert flask._app_ctx_stack.top is None
-    
-        def render(self, request):
-        now = time()
-        delta = now - self.lasttime
-    
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
-    
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
-    
+            _S3Connection = _get_boto_connection()
             try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
+        def connectionMade(self):
+        self.headers = Headers() # bucket for response headers
     
     
-class ReturnsContract(Contract):
-    ''' Contract to check the output of a callback
+class CookiesMiddleware(object):
+    '''This middleware enables working with sites that need cookies'''
     
-    # This is the file name suffix for HTML files (e.g. '.xhtml').
-# html_file_suffix = None
-    
-            resp = requests.get(BASE_API_URL, params=data, timeout=5)
-        if (resp.status_code != 200) or (resp.status_code != 201):
-            _LOGGER.error('Error %s : %s', resp.status_code, resp.text)
-
-    
-    CONF_COLOR = 'color'
-CONF_NOTIFY = 'notify'
-CONF_FORMAT = 'format'
-    
-    # There are two options for replacing |today|: either, you set today to
-# some non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
-    
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+        if sys.platform == 'win32':
+        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
+        sys.path.append(win32_lib)
+    elif sys.platform.startswith('linux'):
+        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
+        sys.path.append(linux_lib)
+    elif sys.platform == 'darwin':
+        darwin_lib = os.path.abspath( os.path.join(python_path, 'lib', 'darwin'))
+        sys.path.append(darwin_lib)
+        extra_lib = '/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'
+        sys.path.append(extra_lib)
     
     
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # Check if a valid image file was uploaded
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-# See http://pillow.readthedocs.io/ for more about PIL/Pillow
-pil_image = Image.fromarray(unknown_image)
-# Create a Pillow ImageDraw Draw instance to draw with
-draw = ImageDraw.Draw(pil_image)
-    
-            self.assertEqual(result.exit_code, 0)
-        self.assertTrue(target_string in result.output)
-    
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
-    
-            if file and allowed_file(file.filename):
-            # 图片上传成功，检测图片中的人脸
-            return detect_faces_in_image(file)
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        '''A simple localizer a la gettext'''
-    
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 10)
-        self.blackboard.common_state['suggestions'] += random.randint(1, 10)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(1, 2)
-    
-    *References:
-https://sourcemaking.com/design_patterns/facade
-https://fkromer.github.io/python-pattern-references/design/#facade
-http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+        for k, v in inputs.items():
+        workspace.FeedBlob(core.ScopedName(k), v)
+    workspace.RunNet(model.mask_net.Proto().name)
     
     
-class TestData(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+def add_bbox_regression_targets(roidb):
+    '''Add information needed to train bounding-box regressors.'''
+    for entry in roidb:
+        entry['bbox_targets'] = compute_bbox_regression_targets(entry)
     
     
-if __name__ == '__main__':
-    main()
-
+def _write_voc_results_files(json_dataset, all_boxes, salt):
+    filenames = []
+    image_set_path = voc_info(json_dataset)['image_set_path']
+    assert os.path.exists(image_set_path), \
+        'Image set path does not exist: {}'.format(image_set_path)
+    with open(image_set_path, 'r') as f:
+        image_index = [x.strip() for x in f.readlines()]
+    # Sanity check that order of images in json dataset matches order in the
+    # image set
+    roidb = json_dataset.get_roidb()
+    for i, entry in enumerate(roidb):
+        index = os.path.splitext(os.path.split(entry['image'])[1])[0]
+        assert index == image_index[i]
+    for cls_ind, cls in enumerate(json_dataset.classes):
+        if cls == '__background__':
+            continue
+        logger.info('Writing VOC results for: {}'.format(cls))
+        filename = _get_voc_results_file_template(json_dataset,
+                                                  salt).format(cls)
+        filenames.append(filename)
+        assert len(all_boxes[cls_ind]) == len(image_index)
+        with open(filename, 'wt') as f:
+            for im_ind, index in enumerate(image_index):
+                dets = all_boxes[cls_ind][im_ind]
+                if type(dets) == list:
+                    assert len(dets) == 0, \
+                        'dets should be numpy.ndarray or empty list'
+                    continue
+                # the VOCdevkit expects 1-based indices
+                for k in range(dets.shape[0]):
+                    f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
+                            format(index, dets[k, -1],
+                                   dets[k, 0] + 1, dets[k, 1] + 1,
+                                   dets[k, 2] + 1, dets[k, 3] + 1))
+    return filenames
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
+        k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    assert len(blobs_in) == k_max - k_min + 1
+    for lvl in range(k_min, k_max + 1):
+        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
+        sc = spatial_scales[k_max - lvl]  # in reversed order
+        slvl = str(lvl)
     
-        for i in range(1, num_tests + 1):
-        logging.info('running test case %d', i)
-        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
-        test_ws = yield websocket_connect(url, None, compression_options={})
-        while True:
-            message = yield test_ws.read_message()
-            if message is None:
-                break
-            test_ws.write_message(message, binary=isinstance(message, bytes))
+        return model.Relu(s, s)
     
-                with mock.patch.object(options.mockable(), 'name', value):
-                assert options.name == value
-        '''
-        return _Mockable(self)
+    
+# ---------------------------------------------------------------------------- #
+# Keypoint heads
+# ---------------------------------------------------------------------------- #
+    
+    
+def _build_forward_graph(model, single_gpu_build_func):
+    '''Construct the forward graph on each GPU.'''
+    all_loss_gradients = {}  # Will include loss gradients from all GPUs
+    # Build the model on each GPU with correct name and device scoping
+    for gpu_id in range(cfg.NUM_GPUS):
+        with c2_utils.NamedCudaScope(gpu_id):
+            all_loss_gradients.update(single_gpu_build_func(model))
+    return all_loss_gradients
+    
+        # Generate canonical proposals from shifted anchors
+    # Enumerate all shifted positions on the (H, W) grid
+    fpn_max_size = cfg.FPN.COARSEST_STRIDE * np.ceil(
+        cfg.TRAIN.MAX_SIZE / float(cfg.FPN.COARSEST_STRIDE)
+    )
+    field_size = int(np.ceil(fpn_max_size / float(stride)))
+    shifts = np.arange(0, field_size) * stride
+    shift_x, shift_y = np.meshgrid(shifts, shifts)
+    shift_x = shift_x.ravel()
+    shift_y = shift_y.ravel()
+    shifts = np.vstack((shift_x, shift_y, shift_x, shift_y)).transpose()
+    
+        kp_fg_rois_per_this_image = np.minimum(fg_rois_per_image, kp_fg_inds.size)
+    if kp_fg_inds.size > kp_fg_rois_per_this_image:
+        kp_fg_inds = np.random.choice(
+            kp_fg_inds, size=kp_fg_rois_per_this_image, replace=False
+        )
+    
+    
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--num-batches', dest='num_batches',
+        help='Number of minibatches to run',
+        default=200, type=int)
+    parser.add_argument(
+        '--sleep', dest='sleep_time',
+        help='Seconds sleep to emulate a network running',
+        default=0.1, type=float)
+    parser.add_argument(
+        '--cfg', dest='cfg_file', help='optional config file', default=None,
+        type=str)
+    parser.add_argument(
+        '--x-factor', dest='x_factor', help='simulates x-factor more GPUs',
+        default=1, type=int)
+    parser.add_argument(
+        '--profiler', dest='profiler', help='profile minibatch load time',
+        action='store_true')
+    parser.add_argument(
+        'opts', help='See detectron/core/config.py for all options', default=None,
+        nargs=argparse.REMAINDER)
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+    args = parser.parse_args()
+    return args
