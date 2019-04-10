@@ -1,14 +1,17 @@
 
         
-        UserOption.where(user_id: -1).update_all(
-  email_private_messages: false,
-  email_direct: false
-)
+            # Extract the command string
+    self.cmd_string = header.slice!(/.+\r\n/)
     
-        Thread.pass until running
-    Thread.pass while t.status and t.status != 'sleep'
+        # /%3faaa=bbbbb
+    # which could possibly decode to '/?aaa=bbbbb', which if the IDS normalizes first, then splits the URI on ?, then it can be bypassed
+    if self.junk_param_start
+      str.sub!(/\//, '/%3f' + Rex::Text.rand_text_alpha(rand(5) + 1) + '=' + Rex::Text.rand_text_alpha(rand(10) + 1) + '/../')
+    end
     
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
-  end
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
+          end
