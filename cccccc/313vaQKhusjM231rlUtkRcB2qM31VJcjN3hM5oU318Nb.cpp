@@ -1,147 +1,716 @@
 
         
-        UBool SearchIterator::operator==(const SearchIterator &that) const
-{
-    if (this == &that) {
-        return TRUE;
-    }
-    return (m_breakiterator_            == that.m_breakiterator_ &&
-            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
-            m_search_->isOverlap        == that.m_search_->isOverlap &&
-            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
-            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
-            m_search_->matchedLength    == that.m_search_->matchedLength &&
-            m_search_->textLength       == that.m_search_->textLength &&
-            getOffset() == that.getOffset() &&
-            (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(UChar)) == 0));
+          base::FilePath root_path(work_path);
+  MakePathAbsolute(&root_path);
+  base::FileEnumerator enumerator(root_path,
+                                  true, /* recursive */
+                                  base::FileEnumerator::FILES);
+  // First discover all the file paths and put them in a sorted set.
+  SortedFilePathSet paths;
+  for (;;) {
+    base::FilePath full_path = enumerator.Next();
+    if (full_path.empty())
+      break;
+    paths.insert(full_path);
+  }
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+    
+    Clipboard::~Clipboard() {
 }
     
-    SelectFormat::~SelectFormat() {
+    void MenuItem::Destroy() {
 }
     
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
-};
-    
-    U_NAMESPACE_END
-    
-    UnicodeString &
-SmallIntFormatter::format(
-        int32_t smallPositiveValue,
-        const IntDigitCountRange &range,
-        UnicodeString &appendTo) {
-    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
+        bool Write(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return WriteText(data);
+        break;
+        case TYPE_HTML:
+        return WriteHTML(data);
+        break;
+        case TYPE_RTF:
+        return WriteRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return WriteImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;
     }
     
-    ExitConstrDeleteAll: // Remove all sets and return error
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
+            if (std::find(extent.begin(), extent.end(), 0) != extent.end())
+            InvalidArgument('NDArrayView::SliceView: Specified slice extent is zero along at least one of the axes.');
     
-        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+        // TODO: This could actually be strided?
+    const MaskKind* NDMask::DataBuffer() const
     {
-#if defined(__clang__)
-        // Clang cannot allocate eax:edx register pairs but it has sync intrinsics
-        storage_type old_val = storage;
-        while (true)
-        {
-            storage_type val = __sync_val_compare_and_swap(&storage, old_val, v);
-            if (val == old_val)
-                return val;
-            old_val = val;
-        }
-#elif !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-        uint32_t scratch;
-        __asm__ __volatile__
-        (
-            'movl %%ebx, %[scratch]\n\t'
-            'movl %%eax, %%ebx\n\t'
-            'movl %%edx, %%ecx\n\t'
-            'movl %[dest], %%eax\n\t'
-            'movl 4+%[dest], %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b %[dest]\n\t'
-            'jne 1b\n\t'
-            'movl %[scratch], %%ebx\n\t'
-            : '+A' (v), [scratch] '=m' (scratch), [dest] '+o' (storage)
-            :
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
-        );
-        return v;
-#else // defined(__PIC__)
-        __asm__ __volatile__
-        (
-            'movl %[dest], %%eax\n\t'
-            'movl 4+%[dest], %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b %[dest]\n\t'
-            'jne 1b\n\t'
-            : '=A' (v), [dest] '+o' (storage)
-            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
-        return v;
-#endif // defined(__PIC__)
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-        uint32_t scratch;
-        __asm__ __volatile__
-        (
-            'movl %%ebx, %[scratch]\n\t'
-            'movl %%eax, %%ebx\n\t'
-            'movl %%edx, %%ecx\n\t'
-            'movl 0(%[dest]), %%eax\n\t'
-            'movl 4(%[dest]), %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-            'movl %[scratch], %%ebx\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-            : '+A,A' (v), [scratch] '=m,m' (scratch)
-            : [dest] 'D,S' (&storage)
-#else
-            : '+A' (v), [scratch] '=m' (scratch)
-            : [dest] 'D' (&storage)
-#endif
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
-        );
-        return v;
-#else // defined(__PIC__)
-        __asm__ __volatile__
-        (
-            'movl 0(%[dest]), %%eax\n\t'
-            'movl 4(%[dest]), %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-            : '=A,A' (v)
-            : 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
-#else
-            : '=A' (v)
-            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
-#endif
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
-        return v;
-#endif // defined(__PIC__)
-#endif
+        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return (const MaskKind*)(matrix->Data());
     }
     
-        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3A, 8.1.1. Guaranteed Atomic Operations:
-    //
-    // The Pentium processor (and newer processors since) guarantees that the following additional memory operations will always be carried out atomically:
-    // * Reading or writing a quadword aligned on a 64-bit boundary
-    //
-    // Luckily, the memory is almost always 8-byte aligned in our case because atomic<> uses 64 bit native types for storage and dynamic memory allocations
-    // have at least 8 byte alignment. The only unfortunate case is when atomic is placed on the stack and it is not 8-byte aligned (like on 32 bit Windows).
+            if (!m_modelParametersNotCoveredByLearners.empty())
+            fprintf(stderr, '[Note:] Trainer ctor: %d of the model parameters are not covered by any of the specified Learners; these parameters will not be learned\n', (int)m_modelParametersNotCoveredByLearners.size());
     
-    #endif // BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+    
+    {
+    {        mutable bool m_isPacked;
+        mutable NDArrayViewPtr m_packedData;
+        mutable std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> m_packedDataLayout;
+    };
+}
+
+    
+        void Variable::SetOwner(const std::weak_ptr<Function>& ownerFunction)
+    {
+        if (Kind() != VariableKind::Output)
+            LogicError('Variable '%S' SetOwner: Owner can only be set for Output Variables', AsString().c_str());
+    }
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+        // ComputationNode derived classes are guaranteed to have a MBLayout
+    if (isFinalValidationPass && !HasMBLayout())
+        InvalidArgument('%ls: Input [%s] must operate on minibatches.', NodeDescription().c_str(), string(shapeB).c_str());
+    
+        /**
+     * ICU 'poor man's RTTI', returns a UClassID for this class.
+     */
+    U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+    
+        if (U_FAILURE(status)) {return FALSE;}
+    
+    int32_t SearchIterator::previous(UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        int32_t offset;
+        if (m_search_->reset) {
+            offset                       = m_search_->textLength;
+            m_search_->isForwardSearching = FALSE;
+            m_search_->reset              = FALSE;
+            setOffset(offset, status);
+        }
+        else {
+            offset = getOffset();
+        }
+        
+        int32_t matchindex = m_search_->matchedIndex;
+        if (m_search_->isForwardSearching == TRUE) {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setOffset has been called or that next ran off the text
+            // string. the iterator would have been set to offset textLength if 
+            // a match is not found.
+            m_search_->isForwardSearching = FALSE;
+            if (matchindex != USEARCH_DONE) {
+                return matchindex;
+            }
+        }
+        else {
+            if (offset == 0 || matchindex == 0) {
+                // not enough characters to match
+                setMatchNotFound();
+                return USEARCH_DONE; 
+            }
+        }
+    }
+    }
+    
+    class PluralRules;
+    
+    #include 'unicode/uobject.h'
+#include 'unicode/utypes.h'
+    
+        UErrorCode status = U_ZERO_ERROR;
+    checkTransitionRules(status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+        /**
+     * Returns TRUE if this class can format positiveValue using
+     * the given range of digit counts.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UBool canFormat(
+            int32_t positiveValue, const IntDigitCountRange &range);
+    
+    // Bitwise comparison for the collation keys.
+UCollationResult
+CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
+{
+  if(U_SUCCESS(status)) {
+    const uint8_t *src = getBytes();
+    const uint8_t *tgt = target.getBytes();
+    }
+    }
+    
+    int32_t StandardPlural::indexFromString(const char *keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
+    }
+}
+    
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword
+     */
+    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+    
+    
+    {    redisAsyncCommand(m_ctx, NULL, NULL, 'SET key %s', m_value);
+    redisAsyncCommand(m_ctx, getCallback, this, 'GET key');
+}
+    
+    
+    {
+    {        pool->free(pool, recv_pkg.ptr);
+        recv_count++;
+    }
+}
+
+    
+    #include <list>
+    
+    using namespace std;
+using namespace swoole;
