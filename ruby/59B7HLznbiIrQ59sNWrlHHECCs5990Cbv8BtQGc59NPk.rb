@@ -1,28 +1,101 @@
 
         
-          it 'correctly sets notification level' do
-    moderator = Fabricate(:moderator)
-    
-        it 'generates the aspects_manage fixture', :fixture => true do
-      get :index, params: {a_id: @aspect.id}
-      save_fixture(html_for('body'), 'aspects_manage')
-    end
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
-    
-        context 'on my own post' do
-      before do
-        aspect_to_post = alice.aspects.where(:name => 'generic').first
-        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
+                  def field_type
+            self.class.field_type
+          end
       end
-    
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
+    end
   end
 end
+
+    
+          def raise_or_wait_for_rate_limit
+        rate_limit_counter.increment
+    
+    module Gitlab
+  module GithubImport
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
+    
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+      end
+    end
+  end
+end
+
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+            # Generate a token checking if one does not already exist in the database.
+        def remember_token #:nodoc:
+          loop do
+            token = Devise.friendly_token
+            break token unless to_adapter.find_first({ remember_token: token })
+          end
+        end
+    
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+        <div id='cookies'>
+      <h3 id='cookie-info'>COOKIES</h3>
+      <% unless req.cookies.empty? %>
+        <table class='req'>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+          </tr>
+          <% req.cookies.each { |key, val| %>
+            <tr>
+              <td><%=h key %></td>
+              <td class='code'><div><%=h val.inspect %></div></td>
+            </tr>
+          <% } %>
+        </table>
+      <% else %>
+        <p class='no-data'>No cookie data.</p>
+      <% end %>
+      <div class='clear'></div>
+    </div> <!-- /COOKIES -->
+    
+          def csp_policy
+        directives = []
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
+    
+          check_class_collision suffix: 'Worker'
     
         module PsychAutoload
       def resolve_class(klass_name)
@@ -31,24 +104,12 @@ end
         names = klass_name.split('::')
         names.shift if names.empty? || names.first.empty?
     
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
-      end
+        def watchdog(last_words)
+      yield
+    rescue Exception => ex
+      handle_exception(ex, { context: last_words })
+      raise ex
     end
     
-        # This reopens ALL logfiles in the process that have been rotated
-    # using logrotate(8) (without copytruncate) or similar tools.
-    # A +File+ object is considered for reopening if it is:
-    #   1) opened with the O_APPEND and O_WRONLY flags
-    #   2) the current open file handle does not match its original open path
-    #   3) unbuffered (as far as userspace buffering goes, not O_SYNC)
-    # Returns the number of files reopened
-    def self.reopen_logs
-      to_reopen = []
-      append_flags = File::WRONLY | File::APPEND
+        def _erb(file, locals)
+      locals.each {|k, v| define_singleton_method(k){ v } unless (singleton_methods.include? k)} if locals
