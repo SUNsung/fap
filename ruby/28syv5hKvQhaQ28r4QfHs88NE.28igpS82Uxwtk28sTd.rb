@@ -1,89 +1,84 @@
 
         
-                def render
-          options = @options.stringify_keys
-          options['type']     = 'checkbox'
-          options['value']    = @checked_value
-          options['checked'] = 'checked' if input_checked?(options)
-    
-              def initialize(template_object, object_name, method_name, object,
-                         sanitized_attribute_name, text, value, input_html_options)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @sanitized_attribute_name = sanitized_attribute_name
-            @text = text
-            @value = value
-            @input_html_options = input_html_options
-          end
-    
-      #
-  # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
-  #    'can't add a new key into hash during iteration'
-  #
-  def each(&block)
-    list = []
-    self.keys.sort.each do |sidx|
-      list << [sidx, self[sidx]]
-    end
-    list.each(&block)
-  end
-    
-    # Default timings
-IAX_DEFAULT_REG_REFRESH = 60
-IAX_DEFAULT_TIMEOUT     = 10
-    
-                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
-    
-              # Encodes the pvno field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_pvno
-            bn = OpenSSL::BN.new(pvno.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Rex::Proto::Kerberos::Model::EncKdcResponse encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'EncKdcResponse encoding not supported'
-          end
-    
-              # Decodes the options field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_options(input)
-            input.value[0].value.unpack('N')[0]
-          end
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+          describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
     end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+    
+            context 'when the schema_version is less than 1' do
+          before do
+            valid_parsed_weather_agent_data[:keep_events_for] = 2
+            valid_parsed_data.delete(:schema_version)
+          end
+    
+        it 'for the afternoon' do
+      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
     end
   end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+        def initialize(filters = nil)
+      @filters = filters ? filters.dup : []
+    end
+    
+        attr_accessor :name, :type, :path
+    
+          def process_url?(url)
+        base_urls.any? { |base_url| base_url.contains?(url) }
+      end
+    
+            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
+          node.css('> li > h3').each do |h3|
+            next if h3.content.present?
+            h3.content = h3.next_element.content
+            h3.next_element.remove
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+    Given(/^I make (\d+) deployments$/) do |count|
+  step 'all linked files exists in shared path'
+    
+      def vagrant_cli_command(command)
+    puts '[vagrant] #{command}'
+    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
+      Open3.capture3('#{VAGRANT_BIN} #{command}')
+    end
+    
+          def print_deprecation_warnings_if_applicable
+        if using_default_scm?
+          warn_add_git_to_capfile unless scm_plugin_installed?
+        elsif built_in_scm_name?
+          warn_set_scm_is_deprecated
+        elsif third_party_scm_name?
+          warn_third_party_scm_must_be_upgraded
+        end
+      end
+    
+    set_if_empty :pty, false
