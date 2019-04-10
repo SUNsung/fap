@@ -1,155 +1,180 @@
 
         
-        from ..common import *
-import urllib.parse
+            plt.clf()
+    xx = range(0, n * step, step)
+    plt.title('Lasso regression on sample dataset (%d features)' % n_features)
+    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
+    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
+    plt.legend()
+    plt.xlabel('number of samples to classify')
+    plt.ylabel('Time (s)')
+    plt.show()
     
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
-
+    ###############################################################################
+clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
+                   tol=None)
+clf.fit(X_train, y_train)
+print('model sparsity: %f' % sparsity_ratio(clf.coef_))
     
-        def get_actiontec_data(self):
-        '''Retrieve data from Actiontec MI424WR and return parsed result.'''
-        try:
-            telnet = telnetlib.Telnet(self.host)
-            telnet.read_until(b'Username: ')
-            telnet.write((self.username + '\n').encode('ascii'))
-            telnet.read_until(b'Password: ')
-            telnet.write((self.password + '\n').encode('ascii'))
-            prompt = telnet.read_until(
-                b'Wireless Broadband Router> ').split(b'\n')[-1]
-            telnet.write('firewall mac_cache_dump\n'.encode('ascii'))
-            telnet.write('\n'.encode('ascii'))
-            telnet.read_until(prompt)
-            leases_result = telnet.read_until(prompt).split(b'\n')[1:-1]
-            telnet.write('exit\n'.encode('ascii'))
-        except EOFError:
-            _LOGGER.exception('Unexpected response from router')
-            return
-        except ConnectionRefusedError:
-            _LOGGER.exception('Connection refused by router. Telnet enabled?')
-            return None
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
     
-            # parsing response
-        for info in result:
-            mac = info['macAddr']
-            name = info['hostName']
-            # No address = no item :)
-            if mac is None:
-                continue
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
     
+    estimators = [('k_means_iris_8', KMeans(n_clusters=8)),
+              ('k_means_iris_3', KMeans(n_clusters=3)),
+              ('k_means_iris_bad_init', KMeans(n_clusters=3, n_init=1,
+                                               init='random'))]
     
-class ThomsonDeviceScanner(DeviceScanner):
-    '''This class queries a router running THOMSON firmware.'''
+            # catch warnings related to kneighbors_graph
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                'ignore',
+                message='the number of connected components of the ' +
+                'connectivity matrix is [0-9]{1,2}' +
+                ' > 1. Completing it to avoid stopping the tree early.',
+                category=UserWarning)
+            algorithm.fit(X)
     
-    _LOGGER = logging.getLogger(__name__)
+                elif opt in ('-V', '--version'):
+                # Display version.
+                log.println('you-get:', log.BOLD)
+                log.println('    version:  {}'.format(__version__))
+                if head is not None:
+                    log.println('    branch:   {}\n    commit:   {}'.format(*head))
+                else:
+                    log.println('    branch:   {}\n    commit:   {}'.format('(stable)', '(tag v{})'.format(__version__)))
     
-    
-class DemoNotificationService(BaseNotificationService):
-    '''Implement demo notification service.'''
-    
-    _LOGGER = logging.getLogger(__name__)
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_APP_NAME, default=DEFAULT_APP_NAME): cv.string,
-    vol.Optional(CONF_APP_ICON): vol.Url,
-    vol.Optional(CONF_HOSTNAME, default=DEFAULT_HOST): cv.string,
-    vol.Optional(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-})
-    
-        #Writing names of all directories inside 'pages' to a list
-    for os_dir in os.listdir(loc):
-        oslist.append(os_dir)
-    
-    
-def basic_gn_shortcut(model, prefix, blob_in, dim_in, dim_out, stride):
-    if dim_in == dim_out:
-        return blob_in
-    
-            kernel_size = up_scale * 2
-        bil_filt = upsample_filt(kernel_size)
-    
-    '''Handle mapping from old network building function names to new names.
-    
-    
-def get_retinanet_bias_init(model):
-    '''Initialize the biases for the conv ops that predict class probabilities.
-    Initialization is performed such that at the start of training, all
-    locations are predicted to be background with high probability
-    (e.g., ~0.99 = 1 - cfg.RETINANET.PRIOR_PROB). See the Focal Loss paper for
-    details.
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
     '''
-    prior_prob = cfg.RETINANET.PRIOR_PROB
-    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
-    aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
-    if cfg.RETINANET.SOFTMAX:
-        # Multiclass softmax case
-        bias = np.zeros((model.num_classes, 1), dtype=np.float32)
-        bias[0] = np.log(
-            (model.num_classes - 1) * (1 - prior_prob) / (prior_prob)
-        )
-        bias = np.vstack(
-            [bias for _ in range(scales_per_octave * aspect_ratios)]
-        )
-        bias_init = (
-            'GivenTensorFill', {
-                'values': bias.astype(dtype=np.float32)
-            }
-        )
-    else:
-        # Per-class sigmoid (binary classification) case
-        bias_init = (
-            'ConstantFill', {
-                'value': -np.log((1 - prior_prob) / prior_prob)
-            }
-        )
-    return bias_init
     
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
+        title = match1(html, r'&title=([^&]+)')
     
-        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
-                               interested in regressing on fg bboxes which are
-                               M in number and the output prediction of the network
-                               is of shape N x (A * 4) x H x W
-                               (in case of non class-specific bbox), so we
-                               store the locations of positive fg boxes in this
-                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
-                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
-    '''
-    # im_info: (height, width, image scale)
-    blob_names = ['im_info']
-    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
-    # Same format as RPN blobs, but one per FPN level
-    if is_training:
-        blob_names += ['retnet_fg_num', 'retnet_bg_num']
-        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
-            suffix = 'fpn{}'.format(lvl)
-            blob_names += [
-                'retnet_cls_labels_' + suffix,
-                'retnet_roi_bbox_targets_' + suffix,
-                'retnet_roi_fg_bbox_locs_' + suffix,
-            ]
-    return blob_names
+    pattern_url_photoset = r'https?://www\.flickr\.com/photos/.+/(?:(?:sets)|(?:albums))?/([^/]+)'
+pattern_url_photostream = r'https?://www\.flickr\.com/photos/([^/]+)(?:/|(?:/page))?$'
+pattern_url_single_photo = r'https?://www\.flickr\.com/photos/[^/]+/(\d+)'
+pattern_url_gallery = r'https?://www\.flickr\.com/photos/[^/]+/galleries/(\d+)'
+pattern_url_group = r'https?://www\.flickr\.com/groups/([^/]+)'
+pattern_url_favorite = r'https?://www\.flickr\.com/photos/([^/]+)/favorites'
+    
+        print_info(site_info, title, 'm3u8', float('inf'))
+    
+        def extract(self, **kwargs):
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            i = kwargs['stream_id']
+            if 'size' not in self.streams[i]:
+                self.streams[i]['size'] = urls_size(self.streams[i]['src'])
+    
+    # If true, '()' will be appended to :func: etc. cross-reference text.
+#add_function_parentheses = True
+    
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
+    
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+    
+            if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return detect_faces_in_image(file)
+    
+        # Quit when the input video file ends
+    if not ret:
+        break
+    
+        # Find all the faces and face enqcodings in the frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+        # Loop over each face found in the frame to see if it's someone we know.
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+            if len(encodings) > 1:
+            click.echo('WARNING: More than one face found in {}. Only considering the first face.'.format(file))
+    
+    for face_landmarks in face_landmarks_list:
+    
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+    
+def cityscapes_to_coco(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: 1,  # person
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (-1 means rand init)
+    }
+    return lookup[cityscapes_id]
+    
+    from detectron.core.config import cfg
+from detectron.modeling.generate_anchors import generate_anchors
+from detectron.utils.c2 import const_fill
+from detectron.utils.c2 import gauss_fill
+from detectron.utils.net import get_group_gn
+import detectron.modeling.ResNet as ResNet
+import detectron.utils.blob as blob_utils
+import detectron.utils.boxes as box_utils
+    
+    # Verify that we compute the same anchors as Shaoqing's matlab implementation:
+#
+#    >> load output/rpn_cachedir/faster_rcnn_VOC2007_ZF_stage1_rpn/anchors.mat
+#    >> anchors
+#
+#    anchors =
+#
+#       -83   -39   100    56
+#      -175   -87   192   104
+#      -359  -183   376   200
+#       -55   -55    72    72
+#      -119  -119   136   136
+#      -247  -247   264   264
+#       -35   -79    52    96
+#       -79  -167    96   184
+#      -167  -343   184   360
+    
+    from detectron.datasets import json_dataset
+from detectron.datasets import roidb as roidb_utils
+from detectron.utils import blob as blob_utils
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+    
+    
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
