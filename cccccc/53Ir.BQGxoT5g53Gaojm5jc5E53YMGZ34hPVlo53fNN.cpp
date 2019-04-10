@@ -1,324 +1,290 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-    ExtensionFunction::ResponseAction
-NwAppQuitFunction::Run() {
-  ExtensionService* service =
-    ExtensionSystem::Get(browser_context())->extension_service();
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&NwAppQuitFunction::DoJob,
-                   service,
-                   extension_id()));
-  return RespondNow(NoArguments());
-}
-    
-    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
- public:
-  NwAppSetProxyConfigFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
-}
-    
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
-   */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    #endif  // CAFFE_CONV_LAYER_HPP_
+        #endif  // ATOM_APP_UV_TASK_RUNNER_H_
 
     
-      int size_, pre_pad_;
-  Dtype alpha_, beta_, k_;
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {}  // namespace api
     
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    
+    {}  // namespace atom
+
+    
+    #endif  // ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+
+    
+    void URLRequestAboutJob::Start() {
+  base::ThreadTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
+                                weak_ptr_factory_.GetWeakPtr()));
+}
+    
+    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
+  gfx::Rect rect = damage_rect;
+  if (!pending_damage_rect_.IsEmpty()) {
+    rect.Union(pending_damage_rect_);
+    pending_damage_rect_.SetRect(0, 0, 0, 0);
+  }
+    }
+    
+    class RootViewMac : public views::View {
  public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+  explicit RootViewMac(NativeWindow* window);
+  ~RootViewMac() override;
     }
     
     
-    {		case Image::Format::R11:
-		case Image::Format::SIGNED_R11:
-			m_pencoding = new Block4x4Encoding_R11;
-			break;
-		case Image::Format::RG11:
-		case Image::Format::SIGNED_RG11:
-			m_pencoding = new Block4x4Encoding_RG11;
-			break;
-		default:
-			assert(0);
-			break;
-		}
+    {}  // namespace atom
     
+    #ifndef BITCOIN_QT_OPENURIDIALOG_H
+#define BITCOIN_QT_OPENURIDIALOG_H
     
-  typedef struct  AF_LatinMetricsRec_
-  {
-    AF_StyleMetricsRec  root;
-    FT_UInt             units_per_em;
-    AF_LatinAxisRec     axis[AF_DIMENSION_MAX];
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    // Constants:
-//  for (int i = 1; i< 32; ++i)
-//    printf('static const int cospi_%d_64 = %.0f;\n', i,
-//           round(16384 * cos(i*M_PI/64)));
-// Note: sin(k*Pi/64) = cos((32-k)*Pi/64)
-static const tran_high_t cospi_1_64  = 16364;
-static const tran_high_t cospi_2_64  = 16305;
-static const tran_high_t cospi_3_64  = 16207;
-static const tran_high_t cospi_4_64  = 16069;
-static const tran_high_t cospi_5_64  = 15893;
-static const tran_high_t cospi_6_64  = 15679;
-static const tran_high_t cospi_7_64  = 15426;
-static const tran_high_t cospi_8_64  = 15137;
-static const tran_high_t cospi_9_64  = 14811;
-static const tran_high_t cospi_10_64 = 14449;
-static const tran_high_t cospi_11_64 = 14053;
-static const tran_high_t cospi_12_64 = 13623;
-static const tran_high_t cospi_13_64 = 13160;
-static const tran_high_t cospi_14_64 = 12665;
-static const tran_high_t cospi_15_64 = 12140;
-static const tran_high_t cospi_16_64 = 11585;
-static const tran_high_t cospi_17_64 = 11003;
-static const tran_high_t cospi_18_64 = 10394;
-static const tran_high_t cospi_19_64 = 9760;
-static const tran_high_t cospi_20_64 = 9102;
-static const tran_high_t cospi_21_64 = 8423;
-static const tran_high_t cospi_22_64 = 7723;
-static const tran_high_t cospi_23_64 = 7005;
-static const tran_high_t cospi_24_64 = 6270;
-static const tran_high_t cospi_25_64 = 5520;
-static const tran_high_t cospi_26_64 = 4756;
-static const tran_high_t cospi_27_64 = 3981;
-static const tran_high_t cospi_28_64 = 3196;
-static const tran_high_t cospi_29_64 = 2404;
-static const tran_high_t cospi_30_64 = 1606;
-static const tran_high_t cospi_31_64 = 804;
-    
-    namespace ClipperLib {
+    void test_ecdsa_recovery_api(void) {
+    /* Setup contexts that just count errors */
+    secp256k1_context *none = secp256k1_context_create(SECP256K1_CONTEXT_NONE);
+    secp256k1_context *sign = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    secp256k1_context *vrfy = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY);
+    secp256k1_context *both = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
+    secp256k1_pubkey pubkey;
+    secp256k1_pubkey recpubkey;
+    secp256k1_ecdsa_signature normal_sig;
+    secp256k1_ecdsa_recoverable_signature recsig;
+    unsigned char privkey[32] = { 1 };
+    unsigned char message[32] = { 2 };
+    int32_t ecount = 0;
+    int recid = 0;
+    unsigned char sig[74];
+    unsigned char zero_privkey[32] = { 0 };
+    unsigned char over_privkey[32] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
     }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    BOOST_AUTO_TEST_SUITE_END()
+
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    #include <boost/test/unit_test.hpp>
     
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
+    #endif // TINYFORMAT_H_INCLUDED
+
+    
+        std::map<std::string, UniValue::VType> objTypes;
+    objTypes['age'] = UniValue::VNUM;
+    objTypes['first'] = UniValue::VSTR;
+    objTypes['last'] = UniValue::VSTR;
+    objTypes['distance'] = UniValue::VNUM;
+    objTypes['time'] = UniValue::VNUM;
+    objTypes['calories'] = UniValue::VNUM;
+    objTypes['temperature'] = UniValue::VNUM;
+    objTypes['moon'] = UniValue::VBOOL;
+    objTypes['spoon'] = UniValue::VBOOL;
+    objTypes['cat1'] = UniValue::VNUM;
+    objTypes['cat2'] = UniValue::VNUM;
+    BOOST_CHECK(obj.checkObject(objTypes));
+    
+    REGISTER_CPU_OPERATOR(
+    MergeMultiScalarFeatureTensorsGradient,
+    MergeMultiScalarFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiScalarFeatureTensorsGradient)
+    .SetDoc(
+        'Explode given multi-feature tensors with scalar features into many.' +
+        doc)
+    .NumInputs([](int n) { return n >= 2; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'out_values_grad', '.values_grad')
+    .Output(0, 'in1_values_grad', '.values_grad');
+REGISTER_GRADIENT(
+    MergeMultiScalarFeatureTensors,
+    GetMergeMultiScalarFeatureTensorsGradient);
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
-    
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
-    }
-    
-    static void InitTypeCrc(uint32_t* type_crc) {
-  for (int i = 0; i <= kMaxRecordType; i++) {
-    char t = static_cast<char>(i);
-    type_crc[i] = crc32c::Value(&t, 1);
   }
 }
     
+    #include <cstdint>  // for int16_t
     
-    {}  // namespace leveldb
+    struct OSBestResult {
+  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
+                   oconfidence(0.0) {}
+  int orientation_id;
+  int script_id;
+  float sconfidence;
+  float oconfidence;
+};
+    
+     private:
+  // Sets the value of total_pages_ behind a mutex.
+  void set_total_pages(int total) {
+    SVAutoLock lock(&general_mutex_);
+    total_pages_ = total;
+  }
+  void set_memory_used(int64_t memory_used) {
+    SVAutoLock lock(&general_mutex_);
+    memory_used_ = memory_used;
+  }
+  // Locks the pages_mutex_ and Loads as many pages can fit in max_memory_
+  // starting at index pages_offset_.
+  bool ReCachePages();
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    #endif
 
     
     
-    {#if !defined(NDEBUG)
-  SnapshotList* list_ = nullptr;
-#endif  // !defined(NDEBUG)
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
 };
     
-        ListNode* head = new ListNode(arr[0]);
-    ListNode* curNode = head;
-    for(int i = 1 ; i < n ; i ++){
-        curNode->next = new ListNode(arr[i]);
-        curNode = curNode->next;
-    }
+    #include 'hphp/runtime/base/perf-warning.h'
     
-            vector<int> res;
-        if( root == NULL )
-            return res;
-    
-    int main() {
-    }
+      // overriding ResourceData
+  const String& o_getClassNameHook() const override { return classnameof(); }
     
     
-    {
-    {                if(prev->right == NULL){
-                    prev->right = cur;
-                    cur = cur->left;
-                }
-                else{
-                    prev->right = NULL;
-                    res.push_back(cur->val);
-                    cur = cur->right;
-                }
-            }
+//--------------------------------------------------------------------------
+//
+//   Clone
+//
+//--------------------------------------------------------------------------
+RegexPattern  *RegexPattern::clone() const {
+    RegexPattern  *copy = new RegexPattern(*this);
+    return copy;
+}
+    
+        UBool numeric = settings->isNumeric();
+    if(equalPrefixLength > 0) {
+        UBool unsafe = FALSE;
+        if(equalPrefixLength != leftLength) {
+            int32_t i = equalPrefixLength;
+            UChar32 c;
+            U8_NEXT_OR_FFFD(left, i, leftLength, c);
+            unsafe = data->isUnsafeBackward(c, numeric);
         }
-    
-            queue<TreeNode*> q;
-        q.push(root);
-        int level_num = 1;
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    }
-    
-    private:
-    struct Command{
-        string s;   // go, print
-        TreeNode* node;
-        Command(string s, TreeNode* node): s(s), node(node){}
-    };
-    
-            vector<int> res;
-        if(root == NULL)
-            return res;
-    
-    public:
-    vector<int> postorderTraversal(TreeNode* root) {
+        if(!unsafe && equalPrefixLength != rightLength) {
+            int32_t i = equalPrefixLength;
+            UChar32 c;
+            U8_NEXT_OR_FFFD(right, i, rightLength, c);
+            unsafe = data->isUnsafeBackward(c, numeric);
+        }
+        if(unsafe) {
+            // Identical prefix: Back up to the start of a contraction or reordering sequence.
+            UChar32 c;
+            do {
+                U8_PREV_OR_FFFD(left, 0, equalPrefixLength, c);
+            } while(equalPrefixLength > 0 && data->isUnsafeBackward(c, numeric));
+        }
+        // See the notes in the UTF-16 version.
     }
     
-            stack<TagNode> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-    }
+        UBool operator == (const ScriptSet &other) const;
+    ScriptSet & operator = (const ScriptSet &other);
     
-    #include <iostream>
-#include <vector>
-#include <stack>
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
     
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+    U_NAMESPACE_END
     
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
+    #ifndef __SHARED_PLURALRULES_H__
+#define __SHARED_PLURALRULES_H__
+    
+    
+SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+}
+    
+    U_NAMESPACE_BEGIN
