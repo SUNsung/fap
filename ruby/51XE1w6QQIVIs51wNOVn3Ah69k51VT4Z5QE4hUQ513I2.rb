@@ -1,68 +1,81 @@
 
         
-          it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
+              if (md = vv.match(/(.+?)=(.*)/))
+        var = md[1]
+        val = md[2]
+      end
     
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
+    module Rex
+module Proto
+module IPMI
+  require 'rex/proto/ipmi/channel_auth_reply'
+  require 'rex/proto/ipmi/open_session_reply'
+  require 'rex/proto/ipmi/rakp2'
     
-                expect(trigger_agent.sources).to eq([weather_agent])
-            expect(weather_agent.controllers.to_a).to eq([trigger_agent])
-            expect(trigger_agent.control_targets.to_a).to eq([weather_agent])
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
           end
     
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-          Utils.sort_tuples!(tuples, orders)
-      expect(tuples).to eq expected
-    end
+              # Decodes the Rex::Proto::Kerberos::Model::KdcRequestBody attributes from input
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcRequestBody, invalid input'
+            end
     
-        it 'requires an agent' do
-      @log.agent = nil
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:agent)
-    end
+              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_pvno(input)
+            input.value[0].value.to_i
+          end
     
-          stdout.empty? && status.success?
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
+  end
+end
+
     
-      describe '#merge' do
-    it 'returns itself' do
-      expect(env.merge([])).to be env
+    RSpec::Matchers.define :have_value do |expected|
+  match do |actual|
+    await_condition { actual.value && actual.value.include?(expected) }
+  end
+    
+    module Workers
+  class PublishToHub < Base
+    def perform(*_args)
+      # don't publish to pubsubhubbub in cucumber
     end
   end
     
-      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
-  name 'Adobe Photoshop Lightroom'
-  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
+        File.write(build_path('comment'),  self.description + '\n')
     
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
-    
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
-    
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for tar.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
     end
