@@ -1,490 +1,514 @@
 
         
-        
-    {}  // namespace
-    
-    namespace atom {
-    }
-    
-    #include 'atom/browser/api/event_emitter.h'
-    
-    namespace api {
-    }
-    
-    namespace in_app_purchase {
-    }
-    
-      // Downloadable Content Information
-  bool downloadable = false;
-    
-    #include <sstream>
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+        private:
+    Ui::SignVerifyMessageDialog *ui;
+    WalletModel *model;
+    const PlatformStyle *platformStyle;
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_enum_field.h>
-#include <google/protobuf/compiler/java/java_extension.h>
-#include <google/protobuf/compiler/java/java_extension_lite.h>
-#include <google/protobuf/compiler/java/java_field.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_message.h>
-#include <google/protobuf/compiler/java/java_message_lite.h>
-#include <google/protobuf/compiler/java/java_service.h>
-    
-    string ClassNameResolver::GetJavaImmutableClassName(
-    const EnumDescriptor* descriptor) {
-  return GetJavaClassFullName(
-      ClassNameWithoutPackage(descriptor, true),
-      descriptor->file(), true);
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    #include <google/protobuf/io/strtod.h>
+    void test_ecdh_api(void) {
+    /* Setup context that just counts errors */
+    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    secp256k1_pubkey point;
+    unsigned char res[32];
+    unsigned char s_one[32] = { 0 };
+    int32_t ecount = 0;
+    s_one[31] = 1;
+    }
     
-    /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
+    // Namespace alias to encourage brevity
+namespace tfm = tinyformat;
     
-    #include <mxnet/op_attr_types.h>
-#include <mxnet/graph_attr_types.h>
-#include <mxnet/c_api.h>
-#include <nnvm/symbolic.h>
-#include <nnvm/op.h>
-#include <nnvm/graph.h>
-#include <vector>
-#include <atomic>
-#include <utility>
-#include <string>
-#include <unordered_map>
     
-    #if DMLC_USE_CXX11
-// OperatorProperty allows C++11, while Operator do not rely on it.
-/*!
- * \brief OperatorProperty is a object that stores all information about Operator.
- * It also contains method to generate context(device) specific operators.
- *
- * It also contains various functions that can be optimally overriden to
- * provide optimization chance for computation engine.
- */
-class OperatorProperty {
- public:
-  /*!
-   * \brief virtual destructor
-   */
-  virtual ~OperatorProperty() {}
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief Get a map representation of internal parameters.
-   *  This can be used by Init to recover the state of OperatorProperty.
-   */
-  virtual std::map<std::string, std::string> GetParams() const = 0;
-  /*!
-   * \brief Get input arguments of the Operator.
-   * \return vector of arguments.
-   */
-  virtual std::vector<std::string> ListArguments() const {
-    return {'data'};
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
   }
-  /*!
-   * \brief Get name of output values of Operator
-   * \return name of output values.
-   */
-  virtual std::vector<std::string> ListOutputs() const {
-    return {'output'};
-  }
-  /*!
-   * \brief Get name of auxiliary states of Operator
-   * \return name of return values.
-   */
-  virtual std::vector<std::string> ListAuxiliaryStates() const {
-    return {};
-  }
-  /*! \return number of real return values of the Operator */
-  virtual int NumOutputs() const {
-    return this->ListOutputs().size();
-  }
-  /*!
-   * \brief get number of visible return values during Symbol creation.
-   *  If NumVisibleOutputs() = k, and NumOutputs() = n.
-   *  The first k returns will be presented in the resulting symbol.
-   *
-   *  The rest of the returns can be used for auxiliary states for Backward.
-   *  For example, Dropout will return [data, mask], with NumVisibleOutputs() == 1.
-   *  So when user call sym = Dropout(input), only data is presented in sym.
-   *  But all the returns will be presented in out_data parameter of Backward if requested.
-   *
-   * \return number of default return values
-   */
-  virtual int NumVisibleOutputs() const {
-    return NumOutputs();
-  }
-  /*!
-   * \brief infer the shapes of outputs and unknown input arguments
-   * \param in_shape the shape of input arguments of the operator
-   *     this should be of same length as the vector returned by DescribeArgs
-   *     in_shape allows unknown elements, which are checked by shape.ndim() == 0.
-   *     For unknown shapes, InferShape will try to fill in the correct Shape in in_shape
-   *     For known shapes, InferShape will check shape consistency
-   *
-   *     common practice: set the shape of data input, and usually weight's shape can be inferred
-   *
-   * \param out_shape the shape of outputs of the operator
-   *     InferShape will modify the vector to fill output TShape
-   * \param aux_shape the shape of auxiliary states of the operator
-   *     InferShape will modify the vector to fill output TShape
-   * \return true if the shape inference is successful, false if there is not enough information.
-   * \throws dmlc::Error if the known arg_shapes are inconsistent.
-   */
-  virtual bool InferShape(std::vector<TShape> *in_shape,
-                          std::vector<TShape> *out_shape,
-                          std::vector<TShape> *aux_shape) const = 0;
-  /*!
-   * \brief infer the data types of outputs and unknown input arguments
-   * \param in_type the type of input arguments of the operator
-   *     this should be of same length as the vector returned by DescribeArgs
-   *     in_type allows unknown elements, which are checked by type.ndim() == 0.
-   *     For unknown types, Infertype will try to fill in the correct type in in_type
-   *     For known types, Infertype will check type consistency
-   *
-   *     common practice: set the type of data input, and usually weight's type can be inferred
-   *
-   * \param out_type the type of outputs of the operator
-   *     Infertype will modify the vector to fill output Ttype
-   * \param aux_type the type of auxiliary states of the operator
-   *     Infertype will modify the vector to fill output Ttype
-   * \return true if the type inference is successful, false if there is not enough information.
-   * \throws dmlc::Error if the known arg_types are inconsistent.
-   */
-  virtual bool InferType(std::vector<int> *in_type,
-                          std::vector<int> *out_type,
-                          std::vector<int> *aux_type) const {
-    CHECK_LE(in_type->size(), this->ListArguments().size());
-    int n_in = this->ListArguments().size();
-    for (unsigned i = 0; i < in_type->size(); ++i) {
-      CHECK(in_type->at(i) == mshadow::default_type_flag ||
-            in_type->at(i) == -1) << 'Unsupported data type ' << in_type->at(i);
-    }
-    in_type->clear();
-    for (int i = 0; i < n_in; ++i ) in_type->push_back(mshadow::default_type_flag);
-    }
-    }
-    
-    /*!
- * \brief Shape inference function to get the correct shape given source shapes.
- * \param lhs The shape of left operand.
- * \param rhs The shape of right operand.
- * \param env The Environment arguments.
- * \return The inferred result shape.
- */
-typedef TShape (*BinaryShapeFunction)(const TShape& lhs,
-                                      const TShape& rhs,
-                                      const EnvArguments& env);
-/*!
- * \brief Gradient function that takes only output gradient and computes gradient wrt to input.
- *  We support total gradient as a whole to make it easy to combine a few ops.
- * \param out_grad the gradient wrt to output of the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT0)(const OutputGrad& out_grad,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-/*!
- * \brief Gradient function that takes inputs of function anod computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param lhs The left operand to the function.
- * \param rhs The right operand to the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT1)(const OutputGrad& out_grad,
-                                     const Input0& lhs,
-                                     const Input1& rhs,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-    
-    #include <vector>
-#include <string>
-#include <memory>
-#include <utility>
-#include <unordered_map>
-#include <unordered_set>
-#include './ndarray.h'
-    
-    #include <cstddef>
-#include <cstdlib>
-#include <sstream>
-#include <limits>
-#include <map>
-#include <set>
-#include <typeinfo>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <utility>
-    
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
-
-    
-    #include <mxnet/io.h>
-#include <mxnet/base.h>
-#include <dmlc/logging.h>
-#include <mshadow/tensor.h>
-#include <utility>
-#include <vector>
-#include <string>
-#include './inst_vector.h'
-#include './image_iter_common.h'
-    
-     protected:
-  /*! \brief prefetcher parameters */
-  PrefetcherParam param_;
-  /*! \brief backend thread */
-  dmlc::ThreadedIter<DataBatch> iter;
-  /*! \brief internal batch loader */
-  std::unique_ptr<IIterator<TBlobBatch> > loader_;
-    
-    void swap(InternalOptionInfo &a, InternalOptionInfo &b) {
-  using ::std::swap;
-  swap(a.value, b.value);
-  swap(a.default_value, b.default_value);
-  swap(a.type, b.type);
-  swap(a.__isset, b.__isset);
-}
-    
-    class InternalExtensionInfo : public virtual ::apache::thrift::TBase {
- public:
-    }
-    
-      std::string q4 =
-      R'(DELETE FROM test_table WHERE username = 'matt' AND age = 27)';
-  QueryData d4;
-  Row row4_1;
-  row4_1['username'] = 'mike';
-  row4_1['age'] = '23';
-  d4.push_back(row4_1);
-  Row row4_2;
-  row4_2['username'] = 'joe';
-  row4_2['age'] = '25';
-  d4.push_back(row4_2);
-  results.push_back(std::make_pair(q4, d4));
-    
-    // getSerializedQueryLogItem() return an std::pair where pair->first
-// is a string which should serialize to pair->second. pair->second
-// should deserialize to pair->first
-std::pair<JSON, QueryLogItem> getSerializedQueryLogItem();
-std::pair<std::string, QueryLogItem> getSerializedQueryLogItemJSON();
-    
-    #include <osquery/tables.h>
-    
-    namespace osquery {
-    }
-    
-    
-    {} // namespace
-    
-    template <typename ToType>
-inline typename std::enable_if<std::is_same<ToType, PosixError>::value,
-                               PosixError>::type
-to(int from_errno) {
-  return impl::toPosixSystemError(from_errno);
-}
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      virtual Status Read(uint64_t offset, size_t n, Slice* result,
-                      char* scratch) const override;
-    
-    
-    {    std::vector<std::string> input_file_names;
-    for (auto level : cf_meta.levels) {
-      for (auto file : level.files) {
-        if (file.being_compacted) {
-          return nullptr;
-        }
-        input_file_names.push_back(file.name);
-      }
-    }
-    return new CompactionTask(
-        db, this, cf_name, input_file_names,
-        options_.num_levels - 1, compact_options_, false);
-  }
-    
-      {
-    PinnableSlice pinnable_val;
-    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-    assert(pinnable_val == 'value');
-  }
-    
-    Status GetPlainTableOptionsFromString(
-    const PlainTableOptions& table_options,
-    const std::string& opts_str,
-    PlainTableOptions* new_table_options);
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-      // number of bytes that has been written.
-  uint64_t bytes_written;
-  // number of bytes that has been read.
-  uint64_t bytes_read;
-    
-      virtual ~PersistentCache() {}
-    
-        //
-    // Override
-    //
-    virtual Speed* clone() const override;
-    virtual Speed* reverse() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void stop() override;
-    /**
-     * @param dt in seconds.
-     */
-    virtual void step(float dt) override;
-    /** Return true if the action has finished.
-     *
-     * @return Is true if the action has finished.
-     */
-    virtual bool isDone() const  override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Speed();
-    virtual ~Speed(void);
-    /** Initializes the action. */
-    bool initWithAction(ActionInterval *action, float speed);
-    
-    /**
- *@brief Base class for Camera actions.
- *@ingroup Actions
- */
-class CC_DLL ActionCamera : public ActionInterval
-{
-public:
-    /**
-     * @js ctor
-     * @lua new
-     */
-    ActionCamera();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~ActionCamera(){};
-    }
-    
-        /** Get the value of a controlPoint at a given index.
-     *
-     * @js NA
-     * @param index Get the point in index.
-     * @return A Vec2.
-     */
-    const Vec2& getControlPointAtIndex(ssize_t index) const;
-    
-    class CC_DLL __CCCallFuncO : public CallFunc
-{
-public:
-    /** Creates the action with the callback.
-        typedef void (Ref::*SEL_CallFuncO)(Ref*);
-     *
-     * @param target    A certain target.
-     * @param selector  The callback need to be executed.
-     * @param object    An object as the callback's first argument.
-     * @return An autoreleased __CCCallFuncO object.
-     */
-    CC_DEPRECATED_ATTRIBUTE static __CCCallFuncO * create(Ref* target, SEL_CallFuncO selector, Ref* object);
-    //
-    // Overrides
-    //
-    virtual __CCCallFuncO* clone() const override;
-    virtual void execute() override;
-    
-    Ref* getObject() const;
-    void setObject(Ref* obj);
-    
-CC_CONSTRUCTOR_ACCESS:
-    __CCCallFuncO();
-    virtual ~__CCCallFuncO();
-    /** initializes the action with the callback
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
-    
-    Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithSpriteFrames(frames, delay, loops);
-    animation->autorelease();
-    }
-    
-    
-    {    /** how many times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... */
-    unsigned int _loops;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Animation);
 };
     
+    OPERATOR_SCHEMA(GivenTensorIntFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
     
-    {    // special opacity for premultiplied textures
-    if( _isOpacityModifyRGB )
-        this->setColor(_colorUnmodified);
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
+
+    
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to $maxtuple arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+    
+    #include 'gtest/gtest.h'
+    
+    
+#endif  // GTEST_SAMPLES_SAMPLE2_H_
+
+    
+    				if (szArgList[i + 1] != NULL && szArgList[i + 1][0] != '/')
+				{
+					cmderOptions.cmderCfgRoot = szArgList[i + 1];
+					i++;
+				}
+			}
+			else if (_wcsicmp(L'/start', szArgList[i]) == 0)
+			{
+				int len = wcslen(szArgList[i + 1]);
+				if (wcscmp(&szArgList[i + 1][len - 1], L'\'') == 0)
+				{
+					szArgList[i + 1][len - 1] = '\0';
+				}
+    
+    // Same as above but with additional information about required streams.
+void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, const std::unordered_set<InputStreamDescription>& streamDescriptions, size_t requestedEpochSamples)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, streamDescriptions, requestedEpochSamples);
 }
+    
+    
+    {
+    {
+    {}}}
+
+    
+        virtual bool OutputUsedInComputingInputNodesGradients() const override { return false; }
+    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override { return false; }
+    
+    template <class ElemType>
+class EnvironmentInputNode : public ComputationNodeNonLooping<ElemType>, public NumInputs<0>
+{
+    typedef ComputationNodeNonLooping<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'EnvironmentInput'; }
+    }
+    
+    #pragma once
+#include 'INarratorAnnouncementHost.h'
+    
+            virtual bool IsHostAvailable();
+        virtual INarratorAnnouncementHost^ MakeHost();
+    
+    #pragma once
+    
+            static Windows::Foundation::Collections::IIterable<Platform::String^>^ GetLanguageIdentifiers();
+    
+      static bool isInitialized6() { return data6_.initialized; }
+    
+    class DHTResponseMessage : public DHTAbstractMessage {
+protected:
+  virtual std::string toStringOptional() const { return A2STR::NIL; }
+    }
+    
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
+{
+  dht::findClosestKNodes(nodes, root_.get(), key);
+}
+    
+    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
+{
+  factory_ = factory;
+}
+    
+      DHTMessageFactory* factory_;
+    
+    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+    
+      DHTTaskExecutor immediateTaskQueue_;
+    
+    void DNSCache::remove(const std::string& hostname, uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  entries_.erase(target);
+}
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    TEST(ProtocolDataTest, CheckSum) {
+  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
+  const uint8_t result =
+      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
+  EXPECT_EQ(0xE7, result);
+}
+    
+    
+    {  double ret = x * OBJECT_AREL_RES + OBJECT_AREL_LONG_MIN;
+  return ret;
+}
+    
+    
+    {  switch (x) {
+    case 0x0:
+      return RCS_THRESHOLD_STANDARD;
+    case 0x1:
+      return RCS_THRESHOLD_HIGH_SENSITIVITY;
+    default:
+      return RCS_THRESHOLD_ERROR;
+  }
+}
+    
+    
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
+    
+    void Brakemotorrpt271::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()
+      ->mutable_brake_motor_rpt_2_71()
+      ->set_encoder_temperature(encoder_temperature(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_motor_temperature(
+      motor_temperature(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_angular_speed(
+      angular_speed(bytes, length));
+}
+    
+    #include 'glog/logging.h'
+    
+    Action::~Action()
+{
+    CCLOGINFO('deallocing Action: %p - tag: %i', this, _tag);
+}
+    
+    void Lens3D::update(float /*time*/)
+{
+    if (_dirty)
+    {
+        int i, j;
+        
+        for (i = 0; i < _gridSize.width + 1; ++i)
+        {
+            for (j = 0; j < _gridSize.height + 1; ++j)
+            {
+                Vec3 v = getOriginalVertex(Vec2(i, j));
+                Vec2 vect = _position - Vec2(v.x, v.y);
+                float r = vect.getLength();
+                
+                if (r < _radius)
+                {
+                    r = _radius - r;
+                    float pre_log = r / _radius;
+                    if ( pre_log == 0 ) 
+                    {
+                        pre_log = 0.001f;
+                    }
+    }
+    }
+    }
+    }
+    }
+    
+                    if (_currentTarget->currentActionSalvaged)
+                {
+                    // The currentAction told the node to remove it. To prevent the action from
+                    // accidentally deallocating itself before finishing its step, we retained
+                    // it. Now that step is done, it's safe to release it.
+                    _currentTarget->currentAction->release();
+                } else
+                if (_currentTarget->currentAction->isDone())
+                {
+                    _currentTarget->currentAction->stop();
+    }
+    
+    
+    {
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
+    }
+}
+    
+    #endif /* __CCACTIONTWEEN_H__ */
+    
+        const Rect& getRect() const { return _rect; }
+    void setRect(const Rect& rect) { _rect = rect; }
+    const std::string& getFilename() const { return _filename; }
+    void setFilename(const std::string& filename ) { _filename = filename; }
