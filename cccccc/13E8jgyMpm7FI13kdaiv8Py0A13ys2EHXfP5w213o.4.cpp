@@ -1,276 +1,297 @@
 
         
-         protected:
-  explicit Net(v8::Isolate* isolate);
-  ~Net() override;
+            typedef int8_t   s8;
+    typedef uint8_t  u8;
+    typedef int16_t  s16;
+    typedef uint16_t u16;
+    typedef int32_t  s32;
+    typedef uint32_t u32;
+    typedef float    f32;
+    typedef int64_t  s64;
+    typedef uint64_t u64;
+    typedef double   f64;
     
-      gfx::Point GetCursorScreenPoint();
-  display::Display GetPrimaryDisplay();
-  std::vector<display::Display> GetAllDisplays();
-  display::Display GetDisplayNearestPoint(const gfx::Point& point);
-  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+    #include 'common.hpp'
+#include 'vtransform.hpp'
     
-    namespace mate {
-class Arguments;
-class Dictionary;
-}  // namespace mate
+            for (; j < roiw32; j += 32)
+        {
+            internal::prefetch(src + j);
+            uint8x16_t v_src0 = vld1q_u8(src + j), v_src1 = vld1q_u8(src + j + 16);
+            uint8x16_t v_dst0 = vmvnq_u8(v_src0), v_dst1 = vmvnq_u8(v_src1);
+            vst1q_u8(dst + j, v_dst0);
+            vst1q_u8(dst + j + 16, v_dst1);
+        }
+        for (; j < roiw8; j += 8)
+        {
+            uint8x8_t v_src = vld1_u8(src + j);
+            uint8x8_t v_dst = vmvn_u8(v_src);
+            vst1_u8(dst + j, v_dst);
+        }
+    
+    void combineYUYV(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
     
-    {    T* self = nullptr;
-    mate::ConvertFromV8(isolate, object.ToLocalChecked(), &self);
-    return self;
+    {
+    {         vst1q_u16(_dst + i, vcombine_u16(vline1_u16, vline2_u16));
+     }
+})
+#endif
+    
+    
+    {                continue;
+            }
+    
+    #define DOT_FLOAT_BLOCKSIZE (1 << 13)
+    f64 result = 0.0;
+    for (size_t row = 0; row < size.height; ++row)
+    {
+        const f32 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
+        const f32 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
+    }
+    
+        //fin
+    int16x8_t q = vmaxq_s16(q0, vsubq_s16(vmovq_n_s16(0), q1));
+    int16x4_t q2 = vmax_s16(vget_low_s16(q), vget_high_s16(q));
+    int32x4_t q2w = vmovl_s16(q2);
+    int32x2_t q4 = vmax_s32(vget_low_s32(q2w), vget_high_s32(q2w));
+    int32x2_t q8 = vmax_s32(q4, vreinterpret_s32_s64(vshr_n_s64(vreinterpret_s64_s32(q4), 32)));
+    
+    #ifdef CAROTENE_NEON
+    
+            uint8x8_t vsrc = vld1_u8(src + j);
+    
+    inline float32x4_t vrsqrtq_f32(float32x4_t val)
+{
+    float32x4_t e = vrsqrteq_f32(val);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    return e;
+}
+    
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
   }
-    
-    
-    {}  // namespace atom
-
-    
-    #if defined(OS_LINUX)
-typedef PowerObserverLinux PowerObserver;
-#else
-typedef base::PowerObserver PowerObserver;
-#endif  // defined(OS_LINUX)
-    
-    #include <string>
-    
-    
-    {}  // namespace atom
-
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  for (auto& thread : workers_) {
+    thread->join();
   }
 }
     
-    // Helper for CollectMinimalFileDepsContainingExtensions.
-void CollectMinimalFileDepsContainingExtensionsWorker(
-    const FileDescriptor* file,
-    std::vector<const FileDescriptor*>* files,
-    std::set<const FileDescriptor*>* files_visited) {
-  if (files_visited->find(file) != files_visited->end()) {
-    return;
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
   }
-  files_visited->insert(file);
-    }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
     
-    void MapLiteTestUtil::ExpectMapFieldsSetInitialized(
-    const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsSetInitialized<unittest::MapEnumLite,
-                                                 unittest::MAP_ENUM_FOO_LITE>(
-      message);
-}
     
-      while (true) {
-    const void* inptr;
-    int inlen;
-    bool ok;
-    ok = in.Next(&inptr, &inlen);
-    if (!ok) {
-      break;
+    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
     }
-    if (inlen > 0) {
-      int err = write(STDOUT_FILENO, inptr, inlen);
-      if (err != inlen) {
-        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
-        return 1;
+    const RType begin = src.data[0].rmax;
+    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
+    const size_t n = maxsize - 1;
+    data[0] = src.data[0];
+    this->size = 1;
+    // lastidx is used to avoid duplicated records
+    size_t i = 1, lastidx = 0;
+    for (size_t k = 1; k < n; ++k) {
+      RType dx2 =  2 * ((k * range) / n + begin);
+      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
+      while (i < src.size - 1
+             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+      CHECK(i != src.size - 1);
+      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+        if (i != lastidx) {
+          data[size++] = src.data[i]; lastidx = i;
+        }
+      } else {
+        if (i + 1 != lastidx) {
+          data[size++] = src.data[i + 1]; lastidx = i + 1;
+        }
       }
     }
+    if (lastidx != src.size - 1) {
+      data[size++] = src.data[src.size - 1];
+    }
   }
+  /*!
+   * \brief set current summary to be merged summary of sa and sb
+   * \param sa first input summary to be merged
+   * \param sb second input summary to be merged
+   */
+  inline void SetCombine(const WQSummary &sa,
+                         const WQSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0);
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    // extended rmin value
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      // duplicated value entry
+      if (a->value == b->value) {
+        *dst = Entry(a->rmin + b->rmin,
+                     a->rmax + b->rmax,
+                     a->wmin + b->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        bprev_rmin = b->RMinNext();
+        ++dst; ++a; ++b;
+      } else if (a->value < b->value) {
+        *dst = Entry(a->rmin + bprev_rmin,
+                     a->rmax + b->RMaxPrev(),
+                     a->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        ++dst; ++a;
+      } else {
+        *dst = Entry(b->rmin + aprev_rmin,
+                     b->rmax + a->RMaxPrev(),
+                     b->wmin, b->value);
+        bprev_rmin = b->RMinNext();
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType brmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType armax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    this->size = dst - data;
+    const RType tol = 10;
+    RType err_mingap, err_maxgap, err_wgap;
+    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
+    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
+      LOG(INFO) << 'mingap=' << err_mingap
+                << ', maxgap=' << err_maxgap
+                << ', wgap=' << err_wgap;
+    }
+    CHECK(size <= sa.size + sb.size) << 'bug in combine';
+  }
+  // helper function to print the current content of sketch
+  inline void Print() const {
+    for (size_t i = 0; i < this->size; ++i) {
+      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
+                   << ', rmax=' << data[i].rmax
+                   << ', wmin=' << data[i].wmin
+                   << ', v=' << data[i].value;
+    }
+  }
+  // try to fix rounding error
+  // and re-establish invariance
+  inline void FixError(RType *err_mingap,
+                       RType *err_maxgap,
+                       RType *err_wgap) const {
+    *err_mingap = 0;
+    *err_maxgap = 0;
+    *err_wgap = 0;
+    RType prev_rmin = 0, prev_rmax = 0;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin < prev_rmin) {
+        data[i].rmin = prev_rmin;
+        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
+      } else {
+        prev_rmin = data[i].rmin;
+      }
+      if (data[i].rmax < prev_rmax) {
+        data[i].rmax = prev_rmax;
+        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
+      }
+      RType rmin_next = data[i].RMinNext();
+      if (data[i].rmax < rmin_next) {
+        data[i].rmax = rmin_next;
+        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
+      }
+      prev_rmax = data[i].rmax;
+    }
+  }
+  // check consistency of the summary
+  inline bool Check(const char *msg) const {
+    const float tol = 10.0f;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
+          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
+        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
+        this->Print();
+        return false;
+      }
+    }
+    return true;
+  }
+};
     
-    b2Triangle::~b2Triangle(){
-	delete[] x;
-	delete[] y;
+    template<typename DType>
+inline void CompressArray<DType>::InitCompressChunks(size_t chunk_size, size_t max_nchunk) {
+  raw_chunks_.clear();
+  raw_chunks_.push_back(0);
+  size_t min_chunk_size = data.size() / max_nchunk;
+  chunk_size = std::max(min_chunk_size, chunk_size);
+  size_t nstep = data.size() / chunk_size;
+  for (size_t i = 0; i < nstep; ++i) {
+    raw_chunks_.push_back(raw_chunks_.back() + chunk_size);
+    CHECK_LE(raw_chunks_.back(), data.size());
+  }
+  if (nstep == 0) raw_chunks_.push_back(0);
+  raw_chunks_.back() = data.size();
+  CHECK_GE(raw_chunks_.size(), 2);
+  out_buffer_.resize(raw_chunks_.size() - 1);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
+  }
 }
-    
-    	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
-    
-    	class Block4x4
-	{
-	public:
-    }
-    
-    		typedef enum
-		{
-			MODE_UNKNOWN,
-			//
-			MODE_ETC1,
-			MODE_T,
-			MODE_H,
-			MODE_PLANAR,
-			MODE_R11,
-			MODE_RG11,
-			//
-			MODES
-		} Mode;
-    
-    		typedef struct
-		{
-			unsigned green1a : 3;
-			unsigned red1 : 4;
-			unsigned detect1 : 1;
-			//
-			unsigned blue1b : 2;
-			unsigned detect3 : 1;
-			unsigned blue1a : 1;
-			unsigned green1b : 1;
-			unsigned detect2 : 3;
-			//
-			unsigned green2a : 3;
-			unsigned red2 : 4;
-			unsigned blue1c : 1;
-			//
-			unsigned db : 1;
-			unsigned diff : 1;
-			unsigned da : 1;
-			unsigned blue2 : 4;
-			unsigned green2b : 1;
-			//
-			unsigned int selectors;
-		} H;
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// find the best selector for each pixel based on a particular basecolor and CW that have been previously set
-	// calculate the selectors for each half of the block separately
-	// set the block error as the sum of each half's error
-	//
-	void Block4x4Encoding_ETC1::CalculateSelectors()
-	{
-		if (m_boolFlip)
-		{
-			CalculateHalfOfTheSelectors(0, s_auiTopPixelMapping);
-			CalculateHalfOfTheSelectors(1, s_auiBottomPixelMapping);
-		}
-		else
-		{
-			CalculateHalfOfTheSelectors(0, s_auiLeftPixelMapping);
-			CalculateHalfOfTheSelectors(1, s_auiRightPixelMapping);
-		}
-    }
-    
-    #define AF_LATIN_HINTS_HORZ_SNAP    ( 1U << 0 ) /* stem width snapping  */
-#define AF_LATIN_HINTS_VERT_SNAP    ( 1U << 1 ) /* stem height snapping */
-#define AF_LATIN_HINTS_STEM_ADJUST  ( 1U << 2 ) /* stem width/height    */
-                                                /* adjustment           */
-#define AF_LATIN_HINTS_MONO         ( 1U << 3 ) /* monochrome rendering */
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(a)
-  );
-  return res<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
-    
-    /** Add two 16-bit values */
-#define ADD16(a,b) ((opus_val16)((opus_val16)(a)+(opus_val16)(b)))
-/** Subtract two 16-bit values */
-#define SUB16(a,b) ((opus_val16)(a)-(opus_val16)(b))
-/** Add two 32-bit values */
-#define ADD32(a,b) ((opus_val32)(a)+(opus_val32)(b))
-/** Subtract two 32-bit values */
-#define SUB32(a,b) ((opus_val32)(a)-(opus_val32)(b))
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    
-    {}  // namespace mxnet
-    
-    /*! \brief override type_name for caffe::LayerParameter */
-namespace dmlc {
-  DMLC_DECLARE_TYPE_NAME(::caffe::LayerParameter, 'caffe-layer-parameter');
-}
-    
-      // override set_default
-  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
-    }
-    
-    #if MXNET_USE_DIST_KVSTORE
-#include './kvstore_dist.h'
-std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
-#endif  // MXNET_USE_DIST_KVSTORE
-#if MXNET_USE_NCCL
-#include './kvstore_nccl.h'
-#endif  // MXNET_USE_NCCL
-    
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file ndarray_function-inl.h
- * \brief The real implementation of NDArray functions.
- */
-#ifndef MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
-#define MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
-    
-    /*!
- *  Copyright (c) 2017 by Contributors
- *  \file krprod.h
- *  \brief Core function for Khatri-Rao product
- *  \author Jencir Lee, Chris Swierczewski
- */
-#ifndef MXNET_OPERATOR_CONTRIB_KRPROD_H_
-#define MXNET_OPERATOR_CONTRIB_KRPROD_H_
-#include <algorithm>
-#include <utility>
-#include <vector>
-#include 'mshadow/tensor.h'
-#include '../operator_common.h'
-#include '../c_lapack_api.h'
-    
-    MXNET_REGISTER_OP_PROPERTY(_Native, NativeOpProp)
-.describe('Stub for implementing an operator implemented in native frontend language.')
-.add_argument('data', 'NDArray-or-Symbol[]', 'Input data for the custom operator.')
-.add_arguments(NativeOpParam::__FIELDS__());
-    
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
