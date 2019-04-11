@@ -1,226 +1,367 @@
 
         
-        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
-    }
-    
-    void CacheImpl::removeAll() {
-  cache_remove_all(static_cast<cache_t*>(Impl));
+        TEST(MovableMessageTest, Noexcept) {
+  EXPECT_TRUE(
+      std::is_nothrow_move_constructible<protobuf_unittest::TestAllTypes>());
+  EXPECT_TRUE(std::is_nothrow_move_assignable<protobuf_unittest::TestAllTypes>());
 }
     
-    #include 'swift/Demangling/Demangle.h'
-#include 'swift/Demangling/Demangler.h'
-#include <cstdio>
+    #include <google/protobuf/stubs/common.h>
+#include <gtest/gtest.h>
     
     
-    {  return encodeToUTF8(OutCodePoints, OutUTF8);
-}
+    {
+    {
+    {
+}  // namespace internal
+}  // namespace protobuf
+}  // namespace google
     
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
-#else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
+    #ifdef _WIN32
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
 #endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO 1
+#endif
+#endif
+    
+        std::vector<std::pair<string,string>> option_pairs;
+    ParseGeneratorParameter(parameter, &option_pairs);
+    
+    
+    {
+    {    cout << 'Is this a mobile, home, or work phone? ';
+    string type;
+    getline(cin, type);
+    if (type == 'mobile') {
+      phone_number->set_type(tutorial::Person::MOBILE);
+    } else if (type == 'home') {
+      phone_number->set_type(tutorial::Person::HOME);
+    } else if (type == 'work') {
+      phone_number->set_type(tutorial::Person::WORK);
+    } else {
+      cout << 'Unknown phone type.  Using default.' << endl;
     }
-    }
-    }
-    
-    void WritePropertyDocComment(io::Printer* printer, const FieldDescriptor* field) {
-    WriteDocCommentBody(printer, field);
-}
-    
-    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_enum.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-    
-    string ClassNameResolver::GetDescriptorClassName(
-    const FileDescriptor* descriptor) {
-  return GetFileImmutableClassName(descriptor);
-}
-    
-      printer->Print(
-    'com.google.protobuf.Descriptors.FileDescriptor.'
-    'InternalDescriptorAssigner assigner =\n'
-    '    new com.google.protobuf.Descriptors.FileDescriptor.'
-    '    InternalDescriptorAssigner() {\n'
-    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
-    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
-    '        descriptor = root;\n'
-    // Custom options will be handled when immutable messages' outer class is
-    // loaded. Here we just return null and let custom options be unknown
-    // fields.
-    '        return null;\n'
-    '      }\n'
-    '    };\n');
-    
-      desired_output_for_decode = '_AbcdefghIJ';
-  expected = string('\xCA\x0', 2);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
-    
-    void OneofGenerator::GenerateCaseEnum(io::Printer* printer) {
-  printer->Print(
-      variables_,
-      'typedef GPB_ENUM($enum_name$) {\n');
-  printer->Indent();
-  printer->Print(
-      variables_,
-      '$enum_name$_GPBUnsetOneOfCase = 0,\n');
-  string enum_name = variables_['enum_name'];
-  for (int j = 0; j < descriptor_->field_count(); j++) {
-    const FieldDescriptor* field = descriptor_->field(j);
-    string field_name = FieldNameCapitalized(field);
-    printer->Print(
-        '$enum_name$_$field_name$ = $field_number$,\n',
-        'enum_name', enum_name,
-        'field_name', field_name,
-        'field_number', SimpleItoa(field->number()));
   }
-  printer->Outdent();
-  printer->Print(
-      '};\n'
-      '\n');
+  *person->mutable_last_updated() = TimeUtil::SecondsToTimestamp(time(NULL));
 }
     
-    namespace google {
-namespace protobuf {
-namespace io {
-    }
-    }
-    }
+    #ifndef B2_TRIANGLE_H
+#define B2_TRIANGLE_H
     
-    void MapLiteTestUtil::ExpectClear(const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectClear(message);
-}
+    		Image				*m_pimageSource;
+		unsigned int		m_uiSourceH;
+		unsigned int		m_uiSourceV;
+		ErrorMetric			m_errormetric;
+		ColorFloatRGBA		m_afrgbaSource[PIXELS];		// vertical scan
     
-    #include 'absl/strings/str_cat.h'
-#include 'absl/strings/string_view.h'
-#include 'opencensus/stats/stats.h'
-#include 'src/core/lib/surface/call.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
-#include 'src/cpp/ext/filters/census/measures.h'
+    		m_pblockParent = a_pblockParent;
     
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
+      The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
     
-    #include 'src/cpp/server/dynamic_thread_pool.h'
     
-        private:
-        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
-        {
-            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
-            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
-            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
-            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
-            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
-        }
-    
-                    // Sequence dynamic axes are 'Ordered' as opposed to the batch axis which is unordered.
-                bool hasSequenceAxis = (std::find_if(sampleDynamicAxes.begin(), sampleDynamicAxes.end(), [](const Axis& axis) {return axis.IsOrdered(); }) != sampleDynamicAxes.end());
-                if (hasSequenceAxis)
-                    unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumTimeSteps() });
-                else if ((packedDataLayout->GetNumTimeSteps() != 1) || packedDataLayout->HasSequenceBeyondBegin())
-                    LogicError('A PackedValue object with no sequence dynamic axis, must have a layout with exactly one time step and no sequences beginning in the past.');
-    
-        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
-    // function waits until mutex is released
-    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
-    bool Acquire(bool wait)
-    {
-        assert(m_handle == NULL);
-        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
-        if (m_handle == NULL)
-        {
-            if (!wait)
-                return false;   // can't lock due to access permissions: lock already exists, consider not available
-            else
-                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
-        }
-    }
-    
-    template <typename TVector>
-inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
 {
-    foreach_index(currentLocation, v)
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+            virtual Dictionary GetCheckpointState() const override;
+        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
+    
+    size_t DataReader::GetCurrentSamplePosition()
+{
+    // BUGBUG: composition of old readers is not supported.
+    // Returning just for the last reader.
+    return m_dataReaders[m_ioNames.back()]->GetCurrentSamplePosition();
+}
+    
+    // TODO: can this be static?
+template <class ElemType>
+void Microsoft::MSR::CNTK::UpdateRunningAverage(ComputationNode<ElemType>& newInput,
+                                                TensorView<ElemType>& runningAverage, size_t& runningCount)
+{
+    FrameRange fr(newInput.GetMBLayout());
+    // Set gaps to zero, since we are reducing in time.
+    newInput.MaskMissingValueColumnsToZero(fr);
+    }
+    
+        template <class ElemType>
+    MemRequestInfo<ElemType>* GetMemInfo(shared_ptr<Matrix<ElemType>> *pMatrixPtr)
     {
-        // Pick a random location and swap with current one
-        const size_t randomLocation = RandMT(0, v.size(), rng);
-        std::swap(v[currentLocation], v[randomLocation]);
+        vector<MemRequestInfo<ElemType>>& memInfoVec = GetMemRequestInfoVec<ElemType>();
+        // iterate through the vector and find the pointer memInfo
+        for (auto& memInfo : memInfoVec)
+        {
+            if (memInfo.pMatrixPtrs[0] == pMatrixPtr)
+                return &memInfo;
+        }
+        return nullptr;
+    }
+    
+    #include 'unicode/utypes.h'
+    
+        UBool      test(UScriptCode script, UErrorCode &status) const;
+    ScriptSet &Union(const ScriptSet &other);
+    ScriptSet &set(UScriptCode script, UErrorCode &status);
+    ScriptSet &reset(UScriptCode script, UErrorCode &status);
+    ScriptSet &intersect(const ScriptSet &other);
+    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
+    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
+    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
+    
+    void SearchIterator::setAttribute(USearchAttribute       attribute,
+                                  USearchAttributeValue  value,
+                                  UErrorCode            &status)
+{
+    if (U_SUCCESS(status)) {
+        switch (attribute)
+        {
+        case USEARCH_OVERLAP :
+            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_CANONICAL_MATCH :
+            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_ELEMENT_COMPARISON :
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                m_search_->elementComparisonType = (int16_t)value;
+            } else {
+                m_search_->elementComparisonType = 0;
+            }
+            break;
+        default:
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
     
-    public:
-    DeclareConstructorFromConfigWithNumInputs(SumColumnElementsNode);
-    SumColumnElementsNode(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name)
-    {
-    }
+    Format* SelectFormat::clone() const
+{
+    return new SelectFormat(*this);
+}
+    
+    SharedBreakIterator::SharedBreakIterator(
+        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
     
     
-    {public:
-    SparseInputValue(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name, true, L'')
-    {
-    }
-    SparseInputValue(DEVICEID_TYPE deviceId, const wstring& name, const wstring& dynamicAxisName)
-        : Base(deviceId, name, true, dynamicAxisName)
-    {
-    }
-    SparseInputValue(DEVICEID_TYPE deviceId, const wstring& name, size_t rows, const wstring& dynamicAxisName)
-        : Base(deviceId, name, rows, true, dynamicAxisName)
-    {
-    }
-    SparseInputValue(DEVICEID_TYPE deviceId, const wstring& name, const TensorShape& imageLayout, const wstring& dynamicAxisName)
-        : Base(deviceId, name, imageLayout, true, dynamicAxisName)
-    {
-    }
-    SparseInputValue(const ScriptableObjects::IConfigRecordPtr configp)
-        : Base(configp, true)
-    {
-    }
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
 };
     
-    template <class ElemType>
-void EpochAccumulatorNode<ElemType>::OnEpochStart()
-{
-    Reset();
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+        /**
+     * Get maximum significant digits. 0 means no minimum.
+     */
+    int32_t getMin() const {
+        return fMin;
+    }
+    
+    int32_t 
+SmallIntFormatter::estimateDigitCount(
+        int32_t positiveValue, const IntDigitCountRange &range) {
+    if (positiveValue >= gMaxFastInt) {
+        return range.getMax();
+    }
+    return range.pin(gDigitCount[positiveValue]);
 }
     
-    class osqueryConstants {
- public:
-  osqueryConstants();
-    }
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
     
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
+    /**
+ * UnicodeFunctor API
+ */
+void StringReplacer::setData(const TransliterationRuleData* d) {
+    data = d;
+    int32_t i = 0;
+    while (i<output.length()) {
+        UChar32 c = output.char32At(i);
+        UnicodeFunctor* f = data->lookup(c);
+        if (f != NULL) {
+            f->setData(data);
+        }
+        i += U16_LENGTH(c);
     }
+}
+    
+    
+  virtual ~Extension_shutdown_presult() throw();
+    
+    
+    {};
+    
+    class ExtensionException;
+    
+    
+    {
+    {
+    {  for (const auto& share_line : osquery::split(content, '\n')) {
+    genNFSShare(share_line, results);
   }
+  return results;
+}
+}
+}
+
     
-      // Join results..
-  for (auto& entry : hw_info) {
-    bool matched = false;
-    for (auto& row : results) {
-      auto serial = row.find('serial_number');
-      if (serial == row.end()) {
-        continue;
-      }
+    /*
+** This routine reads a line of text from FILE in, stores
+** the text in memory obtained from malloc() and returns a pointer
+** to the text.  NULL is returned at end of file, or if malloc()
+** fails.
+**
+** If zLine is not NULL then it is a malloced buffer returned from
+** a previous call to this routine that may be reused.
+*/
+static char* local_getline(char* zLine, FILE* in) {
+  int nLine = ((zLine == nullptr) ? 0 : 100);
+  int n = 0;
+    }
+    
+    #include <osquery/core.h>
+#include <osquery/utils/expected/expected.h>
+#include <osquery/utils/status/status.h>
+    
+    namespace osquery {
+namespace table_tests {
     }
     }
+    
+    class kernelExtensions : public testing::Test {
+ protected:
+  void SetUp() override {
+    setUpEnvironment();
+  }
+};
+    
+    // Sanity check integration test for kernel_integrity
+// Spec file: specs/linux/kernel_integrity.table
+    
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+        /**
+    @brief Create an action with duration, grid size.
+    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
+    */
+    static PageTurn3D* create(float duration, const Size& gridSize);
+    
+    // implementation of SplitCols
+    
+    
+    {    frame->autorelease();
+    return frame;
+}
+    
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+    NS_CC_BEGIN
