@@ -1,125 +1,64 @@
 
         
-            # Some actions have special handling in fast_file.rb, that means we can't directly call the action
-    # but we have to use the same logic that is in fast_file.rb instead.
-    # That's where this switch statement comes into play
-    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
-      action_return = nil
-      closure_argument_value = nil # only used if the action uses it
+            group.add(moderator)
+    group.save
     
-          context 'with valid path to compile_commands.json' do
-        context 'with no path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
     
-        it 'adds an environment Hash at the beginning' do
-      message = 'A message'
-      command = command_from_args({ 'PATH' => '/usr/local/bin' }, 'git', 'commit', '-m', message)
-      expect(command).to eq('PATH=/usr/local/bin git commit -m #{message.shellescape}')
-    end
-    
-        # Creates a new option
-    # @param key (Symbol) the key which is used as command parameters or key in the fastlane tools
-    # @param env_name (String) the name of the environment variable, which is only used if no other values were found
-    # @param description (String) A description shown to the user
-    # @param short_option (String) A string of length 1 which is used for the command parameters (e.g. -f)
-    # @param default_value the value which is used if there was no given values and no environment values
-    # @param default_value_dynamic (Boolean) Set if the default value is generated dynamically
-    # @param verify_block an optional block which is called when a new value is set.
-    #   Check value is valid. This could be type checks or if a folder/file exists
-    #   You have to raise a specific exception if something goes wrong. Append .red after the string
-    # @param is_string *DEPRECATED: Use `type` instead* (Boolean) is that parameter a string? Defaults to true. If it's true, the type string will be verified.
-    # @param type (Class) the data type of this config item. Takes precedence over `is_string`. Use `:shell_string` to allow types `String`, `Hash` and `Array` that will be converted to shell-escaped strings
-    # @param skip_type_validation (Boolean) is false by default. If set to true, type of the parameter will not be validated.
-    # @param optional (Boolean) is false by default. If set to true, also string values will not be asked to the user
-    # @param conflicting_options ([]) array of conflicting option keys(@param key). This allows to resolve conflicts intelligently
-    # @param conflict_block an optional block which is called when options conflict happens
-    # @param deprecated (Boolean|String) Set if the option is deprecated. A deprecated option should be optional and is made optional if the parameter isn't set, and fails otherwise
-    # @param sensitive (Boolean) Set if the variable is sensitive, such as a password or API token, to prevent echoing when prompted for the parameter
-    # @param display_in_shell (Boolean) Set if the variable can be used from shell
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(key: nil,
-                   env_name: nil,
-                   description: nil,
-                   short_option: nil,
-                   default_value: nil,
-                   default_value_dynamic: false,
-                   verify_block: nil,
-                   is_string: true,
-                   type: nil,
-                   skip_type_validation: false,
-                   optional: nil,
-                   conflicting_options: nil,
-                   conflict_block: nil,
-                   deprecated: nil,
-                   sensitive: nil,
-                   code_gen_sensitive: false,
-                   code_gen_default_value: nil,
-                   display_in_shell: true)
-      UI.user_error!('key must be a symbol') unless key.kind_of?(Symbol)
-      UI.user_error!('env_name must be a String') unless (env_name || '').kind_of?(String)
-    
-          it 'should not be fooled by 10 local code signing identities available' do
-        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
-        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
-        expect(FastlaneCore::UI).not_to(receive(:error))
-    
-              it 'throws an error if it's invalid' do
-            expect do
-              @config.set(:output, 132)
-            end.to raise_error(''output' value must be a String! Found #{123.class} instead.')
-            expect do
-              @config.set(:wait_processing_interval, -1)
-            end.to raise_error('Please enter a valid positive number of seconds')
-          end
-    
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
+      def test_font_helper_with_suffix_sharp
+    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
   end
     
-      it 'creates a public method in TOPLEVEL_BINDING' do
-    eval @code, TOPLEVEL_BINDING
-    Object.should have_method :boom
-  end
+    When /^I fill out forgot password form with '([^']*)'$/ do |email|
+  fill_forgot_password_form(email)
+end
     
-      def index
-    @address_endpoints = @server.address_endpoints.order(:address).to_a
-  end
-    
-      before_action do
-    if params[:server_id]
-      @server = organization.servers.present.find_by_permalink!(params[:server_id])
-      params[:id] && @ip_pool_rule = @server.ip_pool_rules.find_by_uuid!(params[:id])
-    else
-      params[:id] && @ip_pool_rule = organization.ip_pool_rules.find_by_uuid!(params[:id])
-    end
-  end
-    
-      def create
-    @server = organization.servers.build(safe_params(:permalink))
-    if @server.save
-      redirect_to_with_json organization_server_path(organization, @server)
-    else
-      render_form_errors 'new', @server
-    end
-  end
-    
-        def delete(name, **opts)
-      options = opts.merge(value: 'deleted', expires: Time.at(0))
-      self.[]=(name, options)
-    end
+    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
+  with_scope('.info-bar') do
+    find('h5', text: title).click
   end
 end
 
     
-            # All available content types.
-        def content_types
-          c_types = namespace_stackable_with_hash(:content_types)
-          Grape::ContentTypes.content_types_for c_types
+    RSpec::Matchers.define :have_path_in do |expected|
+  match do |actual|
+    await_condition { expected.include? actual.current_path }
+  end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
+      super
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
+    end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
         end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
