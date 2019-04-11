@@ -1,247 +1,215 @@
 
         
-              it 'adds docset_feed_formats param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_feed_formats: 'atom'
-          )
-        end').runner.execute(:test)
+              def self.example_code
+        [
+          'add_git_tag # simple tag with default values',
+          'add_git_tag(
+            grouping: 'fastlane-builds',
+            prefix: 'v',
+            postfix: '-RC1',
+            build_number: 123
+          )',
+          '# Alternatively, you can specify your own tag. Note that if you do specify a tag, all other arguments are ignored.
+          add_git_tag(
+            tag: 'my_custom_tag'
+          )'
+        ]
+      end
     
-          it 'Only include merge commits if merge_commit_filtering is only_include_merges' do
+          it 'updates with a single dependency' do
         result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(merge_commit_filtering: 'only_include_merges')
-        end').runner.execute(:test)
-    
-              result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              quiet: true
+            carthage(
+              command: 'update',
+              dependencies: ['TestDependency']
             )
           end').runner.execute(:test)
     
-        context 'with a postfix block' do
-      it 'yields the status, result and command' do
-        expect_command('ls', '-la')
-        Fastlane::Actions.sh('ls', '-la') do |status, result, command|
-          expect(status.exitstatus).to eq(0)
-          expect(result).to be_empty
-          expect(command).to eq('ls -la')
-        end
+          it 'shellescapes the exclude_dirs correctly' do
+        directory = 'My Dir'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
       end
     
-              expect(value).to eq(hash)
-        end
-    
-        os = 'windows'
-    shellescape_testcases.each do |testcase|
-      it testcase['it'] + ': ' + testcase['it_result'][os] do
-        str = testcase['str'].to_s
-        expect_correct_implementation_to_be_called(str, :shellescape, os)
-        escaped = str.shellescape
-        expect(escaped).to eq(testcase['expect'][os])
+          it 'cannot have both path and pathspec parameters' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'myfile.txt', pathspec: '*.txt')
+          end').runner.execute(:test)
+        end.to raise_error(FastlaneCore::Interface::FastlaneError)
       end
     end
-  end
-    
-            c.action do |args, options|
-          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
-          Cert::Runner.new.launch
-        end
-      end
-    
-      def page_params
-    { page: true, max_id: params[:max_id], min_id: params[:min_id] }.compact
   end
 end
 
     
-          if new_email != @user.email
-        @user.update!(
-          unconfirmed_email: new_email,
-          # Regenerate the confirmation token:
-          confirmation_token: nil
-        )
+              result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              strict: true,
+              executable: '#{CUSTOM_EXECUTABLE_NAME}'
+            )
+          end').runner.execute(:test)
     
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
-  end
+        # Make sure, the value is valid (based on the verify block)
+    # Raises an exception if the value is invalid
+    def valid?(value)
+      # we also allow nil values, which do not have to be verified.
+      return true if value.nil?
     
-      def hub_topic_params
-    @_hub_topic_params ||= Rails.application.routes.recognize_path(hub_topic_uri.path)
-  end
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
     
-      def payload
-    @_payload ||= request.body.read
-  end
+    tool_name = File.basename($0)
     
-      # Handling incoming control packets
-  # TODO: Enforce sequence order to prevent duplicates from breaking our state
-  def handle_control(pkt)
-    src_call, dst_call, tstamp, out_seq, inp_seq, itype = pkt.unpack('nnNCCC')
+          def api_endpoint
+        custom_api_endpoint || default_api_endpoint
+      end
     
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
     
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-            # Decodes a Kerberos response
+            # Builds a diff note from a GitHub API response.
         #
-        # @param data [String] the raw response message
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
-        # @raise [RuntimeError] if the response can't be processed
-        def decode_kerb_response(data)
-          asn1 = OpenSSL::ASN1.decode(data)
-          msg_type = asn1.value[0].value[1].value[0].value
+        # note - An instance of `Sawyer::Resource` containing the note details.
+        def self.from_api_response(note)
+          matches = note.html_url.match(NOTEABLE_ID_REGEX)
     
-              # Encodes the pvno field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_pvno
-            bn = OpenSSL::BN.new(pvno.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+      end
+    end
+  end
+end
+
     
-              # Decodes the last_req from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Rex::Proto::Kerberos::Model::LastRequest>]
-          def decode_last_req(input)
-            last_requests = []
-            input.value[0].value.each do |last_request|
-              last_requests << Rex::Proto::Kerberos::Model::LastRequest.decode(last_request)
-            end
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
     
-              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
-          def decode_asn1_pa_data(input)
-            pre_auth = []
-            input.value[0].value.each do |pre_auth_data|
-              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
-            end
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
+    end
     
-              # Decodes the realm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_realm(input)
-            input.value[0].value
+          # Sign out a given user or scope. This helper is useful for signing out a user
+      # after deleting accounts. Returns true if there was a logout and false if there
+      # is no user logged in on the referred scope
+      #
+      # Examples:
+      #
+      #   sign_out :user     # sign_out(scope)
+      #   sign_out @user     # sign_out(resource)
+      #
+      def sign_out(resource_or_scope=nil)
+        return sign_out_all_scopes unless resource_or_scope
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
+    
+          def extract_path_from_location(location)
+        uri = parse_uri(location)
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
+        end
+      METHOD
+    end
+    
+          def rememberable_value
+        if respond_to?(:remember_token)
+          remember_token
+        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
+          salt
+        else
+          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
+            'In order to use rememberable, you must ensure a password is always set ' \
+            'or have a remember_token column in your model or implement your own ' \
+            'rememberable_value in the model with custom logic.'
+        end
+      end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
           end
-    
-          # Calls the given block for each `pair` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_pair
-        return each_child_node(:pair).to_enum unless block_given?
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
+        end
       end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+    end
+    
+          def views
+        @views ||= VIEWS
+      end
+    
+        def copy_in_scss_files
+      FileUtils.cp_r(all_stylesheets, install_path)
+    end
+    
+          expect('.border-style-explicit').to have_rule(rule)
     end
   end
-end
-
     
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
-      end
-      alias rest_argument? splat_argument?
-    
-          def spree_icon(icon_name)
-        icon_name ? content_tag(:i, '', class: icon_name) : ''
-      end
-    
-        it 'is able to apply a ransack filter by clicking a quickfilter icon', js: true do
-      label_pending = page.find '.badge-pending'
-      parent_td = label_pending.find(:xpath, '..')
-    
-          within_row(2) { click_icon :split }
-      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
-      click_icon :save
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
+          expect('.position-explicit').to have_ruleset(ruleset)
     end
   end
-end
-
     
-              can_event = 'can_#{@event}?'
-    
-              respond_with(@line_item, status: 204)
+              it 'doesn't raise an integrity error' do
+            is_expected.to_not raise_error
+          end
         end
     
-    end
-
-    
-      def admin_required
-    if logged_in?
-      unless current_user.admin?
-        render :text => 'Not permitted'
+        def uploaders
+      @uploaders ||= read_identifiers.map do |identifier|
+        uploader = blank_uploader
+        uploader.retrieve_from_store!(identifier) if identifier.present?
+        uploader
       end
-    else
-      redirect_to login_path(:return_to => request.fullpath)
     end
-  end
     
-      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
-  before_action { params[:id] && @route = @server.routes.find_by_uuid!(params[:id]) }
-    
-    end
-
-    
-      def index
-    @webhooks = @server.webhooks.order(:url).to_a
-  end
+        ##
+    # This file serves mostly as a specification for Storage engines. There is no requirement
+    # that storage engines must be a subclass of this class.
+    #
+    class Abstract
