@@ -1,173 +1,163 @@
 
         
-        #include 'tensorflow/core/framework/op.h'
+        #define ETCCOMP_MIN_EFFORT_LEVEL (0.0f)
+#define ETCCOMP_DEFAULT_EFFORT_LEVEL (40.0f)
+#define ETCCOMP_MAX_EFFORT_LEVEL (100.0f)
     
-    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result) {
-  int size = 1;
-  for (int i = 0; i < dim_size; ++i) {
-    size *= dims[i];
-  }
-  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
-    return errors::FailedPrecondition(
-        'Cannot convert strings, resources, or empty Tensors.');
-  }
+    		// copy source to consecutive memory locations
+		// convert from image horizontal scan to block vertical scan
+		unsigned int uiPixel = 0;
+		for (unsigned int uiBlockPixelH = 0; uiBlockPixelH < Block4x4::COLUMNS; uiBlockPixelH++)
+		{
+			unsigned int uiSourcePixelH = m_uiSourceH + uiBlockPixelH;
     }
     
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
+    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
+#undef MULT32_32_Q31
+#define MULT32_32_Q31(a,b) (opus_val32)((((opus_int64)(a)) * ((opus_int64)(b)))>>31)
     
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
     
-    // Opaque and unique identifier for the cuda platform.
-// This is needed so that plugins can refer to/identify this platform without
-// instantiating a CudaPlatform object.
-// This is broken out here to avoid a circular dependency between CudaPlatform
-// and CudaExecutor.
-extern const Platform::Id kCudaPlatformId;
+    {
+    {			char      *lPr = (char *)malloc(MAX_PATH);
+			char      *pR = (char *)malloc(MAX_PATH);
+			size_t i;
+			wcstombs_s(&i, lPr, (size_t)MAX_PATH,
+				legacyUserAliasesPath, (size_t)MAX_PATH);
+			wcstombs_s(&i, pR, (size_t)MAX_PATH,
+				userAliasesPath, (size_t)MAX_PATH);
+			rename(lPr, pR);
+		}
+	}
     
-      // Factory for the default set of device options.
-  static DeviceOptions Default() { return DeviceOptions(0); }
     
-      Entry* entry = nullptr;
-  {
-    mutex_lock lock{mutex_};
-    entry = &cache_[config.ordinal];
-    // Release the map lock; the address of 'entry' is stable because
-    // std::map guarantees reference stability.
-  }
+    {};
     
-        /** Colorize an image (given filename) with the icon color */
-    QImage SingleColorImage(const QString& filename) const;
+    #include 'osquery_types.h'
     
-    #include <QDialog>
     
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
+namespace osquery {
+namespace tables {
     }
-    
-    
-    {        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, y, sizeof(y));
-        secp256k1_sha256_write(&sha, x, sizeof(x));
-        secp256k1_sha256_finalize(&sha, result);
-        ret = 1;
     }
-    
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; void sha256_sse4(void *input_data, UINT32 digest[8], UINT64 num_blks)
-;; arg 1 : pointer to input data
-;; arg 2 : pointer to digest
-;; arg 3 : Num blocks
-section .text
-global sha256_sse4
-align 32
-sha256_sse4:
-    push	rbx
-%ifndef LINUX
-    push	rsi
-    push	rdi
-%endif
-    push	rbp
-    push	r13
-    push	r14
-    push	r15
-    
-    
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
-    
-    
-  /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    for (int i = 0; i < propagate_down.size(); ++i) {
-      if (propagate_down[i]) { NOT_IMPLEMENTED; }
-    }
-  }
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
     
     /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
+ * @brief Intel HECI GUID for the update application.
+ *
+ * This GUID can be used on every OS over the HECI protocol to inspect the
+ * FW version.
  */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
- public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
-};
-#endif
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-      /**
-   * Returns a map of those support bits. Tells caller which function can be
-   * called.
-   */
-  virtual int debuggerSupport() {
-    return 0;
-  }
-    
-    
-    { private:
-  int mkdir_recursive(const String& path, int mode);
+const std::vector<uint8_t> kMEIUpdateGUID{
+    232, 205, 157, 48, 177, 204, 98, 64, 143, 120, 96, 1, 21, 163, 67, 39,
 };
     
-    #ifndef incl_HPHP_OUTPUT_FILE_H_
-#define incl_HPHP_OUTPUT_FILE_H_
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
+    TEST_F(kernelExtensions, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from kernel_extensions');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'idx', IntType}
+  //      {'refs', IntType}
+  //      {'size', IntType}
+  //      {'name', NormalType}
+  //      {'version', NormalType}
+  //      {'linked_against', NormalType}
+  //      {'path', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
 }
+    
+    
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
+    
+    namespace osquery {
+namespace table_tests {
+    }
+    }
+    
+        // out_of_range.403
+    try
+    {
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create string from std::string
+    std::string s_stdstring = 'The quick brown fox jumps over the lazy dog.';
+    json j_stdstring(s_stdstring);
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    using apollo::common::ErrorCode;
+    
+    double ClusterGeneralInfo701::longitude_dist(const std::uint8_t* bytes,
+                                             int32_t length) const {
+  Byte t0(bytes + 1);
+  uint32_t x = t0.get_byte(0, 8);
+    }
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/cluster_quality_info_702.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    
+    {  switch (x) {
+    case 0x0:
+      return OUTPUT_TYPE_NONE;
+    case 0x1:
+      return OUTPUT_TYPE_OBJECTS;
+    case 0x2:
+      return OUTPUT_TYPE_CLUSTERS;
+    default:
+      return OUTPUT_TYPE_ERROR;
+  }
+}
+    
+        auto it_lower = std::lower_bound(
+        speed_limit_.speed_limit_points().begin(),
+        speed_limit_.speed_limit_points().end(), s,
+        [](const std::pair<double, double>& point, const double curr_s) {
+          return point.first < curr_s;
+        });
+    
+      Byte t2(bytes + 2);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    // config detail: {'name': 'angular_speed', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
+// 'bit': 39, 'type': 'double', 'order': 'motorola', 'physical_unit': 'rev/s'}
+double Brakemotorrpt271::angular_speed(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    TEST(Brake61Test, General) {
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
+    }
