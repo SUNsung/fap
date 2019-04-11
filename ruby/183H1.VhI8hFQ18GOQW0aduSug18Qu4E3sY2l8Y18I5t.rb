@@ -1,159 +1,219 @@
-              accept = if current_value.respond_to?(:call)
-                current_value.call(item)
-              else
-                Array(current_value).map(&:to_s).include?(value.to_s)
-              end
+
+        
+            Group.refresh_automatic_groups!(:moderators)
+    gu = GroupUser.find_by(user_id: moderator.id, group_id: Group::AUTO_GROUPS[:moderators])
     
-          dt = Date.today
-      freeze_time dt
-    
+        def base_url
+      context[:base_url]
     end
+    
+            doc
+      end
+    end
+  end
+end
 
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --merges'
-        expect(result).to eq(pseudocommand)
+            css('.note h3', '.warning h3').each do |node|
+          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+        end
+    
+      until to_boolean(IS_EMPTY[proc])
+    array.push(FIRST[proc])
+    proc = REST[proc]
+  end
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
+        end
+      end
+    end
+  end
+    
+    namespace :bower do
+    
+      # Generate digests for assets URLs.
+  config.assets.digest = true
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
+    
+        # Pulled from Rack::ShowExceptions in order to override TEMPLATE.
+    # If Rack provides another way to override, this could be removed
+    # in the future.
+    def pretty(env, exception)
+      req = Rack::Request.new(env)
+    
+          def encrypt(value)
+        options[:encryptor].hexdigest value.to_s
       end
     
-          it 'shellescapes the exclude_dirs correctly' do
-        directory = 'My Dir'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
+    
+        # test `get %r{/(.+?)/([0-9a-f]{40})} do` in app.rb
+    get '/' + page_c.escaped_url_path + '/' + page_c.version.to_s
+    assert last_response.ok?
+    assert_match /create_msg/, last_response.body
+    
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
+    
+    ## -- Rsync Deploy config -- ##
+# Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
+ssh_user       = 'user@domain.com'
+ssh_port       = '22'
+document_root  = '~/website.com/'
+rsync_delete   = false
+rsync_args     = ''  # Any extra arguments to pass to rsync
+deploy_default = 'rsync'
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+    module OctopressFilters
+  def self.pre_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      input = BacktickCodeBlock::render_code_block(page.content)
+      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
+        TemplateWrapper::safe_wrap($1)
       end
+    end
+  end
+  def self.post_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      page.output = TemplateWrapper::unwrap(page.output)
+    end
+  end
     
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+        execute 'restart-sidekiq' do 
+      command %Q{ 
+        echo 'sleep 20 && monit -g #{app}_sidekiq restart all' | at now 
+      }
+    end
+  end 
 end
+
     
-        attr_accessor :name, :type, :path
-    
-        def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
-    end
-    
-            css('pre[language]').each do |node|
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip
-          node['data-language'] = 'html' if node.content.start_with?('<')
-          node.remove_attribute('language')
-          node.remove_attribute('format')
-        end
-    
-          def session?(env)
-        env.include? options[:session_key]
+          def create_worker_spec
+        template_file = File.join(
+            'spec/workers',
+            class_path,
+            '#{file_name}_worker_spec.rb'
+        )
+        template 'worker_spec.rb.erb', template_file
       end
     
-            DIRECTIVES.each do |d|
-          if options.key?(d)
-            directives << '#{d.to_s.sub(/_/, '-')} #{options[d]}'
-          end
-        end
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-        def self.clear
-      instance.clear
-    end
-    
-        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension. If the extension is empty, no dot is added.
-    def dotextension attachment, style_name
-      ext = extension(attachment, style_name)
-      ext.empty? ? ext : '.#{ext}'
-    end
-    
-      config.vm.define 'freebsd10' do |freebsd10|
-    freebsd10.vm.box = 'tjay/freebsd-10.1'
-  end
-    
-        # data tar.
-    tar_path(staging_path(''), datatar_path)
-    
-        # The only way to get npm to respect the 'prefix' setting appears to
-    # be to set the --global flag.
-    #install_args << '--global'
-    install_args += npm_flags
-    
-        # Publish the package.
-    repo_path = build_path('#{name}_repo')
-    safesystem('pkgrepo', 'create', repo_path)
-    safesystem('pkgrepo', 'set', '-s', repo_path, 'publisher/prefix=#{attributes[:p5p_publisher]}')
-    safesystem('pkgsend', '-s', repo_path,
-      'publish', '-d', '#{staging_path}', '#{build_path}/#{name}.p5m')
-    safesystem('pkgrecv', '-s', repo_path, '-a',
-      '-d', build_path('#{name}.p5p'), name)
-    
-        logger.info('Installing pear package', :package => input_package,
-                  :directory => staging_path)
-    ::Dir.chdir(staging_path) do
-      safesystem('pear', '-c', config, 'install', '-n', '-f', input_package)
-    end
-    
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
-    
-      # Helper for group lookup
-  def gid2group(gid)
-    begin
-      grent = Etc.getgrgid(gid)
-      return grent.name
-    rescue ArgumentError => e
-      # Invalid user id? No user? Return the uid.
-      logger.warn('Failed to find group for gid #{gid}')
-      return gid.to_s
-    end
-  end # def uid2user
-end # class FPM::Target::Puppet
-    
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
-    
-    
-  def copy_entry(src, dst, preserve=false, remove_destination=false)
-    case File.ftype(src)
-    when 'fifo', 'characterSpecial', 'blockSpecial', 'socket'
-      st = File.stat(src)
-      rc = mknod_w(dst, st.mode, st.dev)
-      raise SystemCallError.new('mknod error', FFI.errno) if rc == -1
-    when 'directory'
-      FileUtils.mkdir(dst) unless File.exists? dst
-    else
-      # if the file with the same dev and inode has been copied already -
-      # hard link it's copy to `dst`, otherwise make an actual copy
-      st = File.lstat(src)
-      known_entry = copied_entries[[st.dev, st.ino]]
-      if known_entry
-        FileUtils.ln(known_entry, dst)
+        def match(request_method, path)
+      case matcher
+      when String
+        {} if path == matcher
       else
-        FileUtils.copy_entry(src, dst, preserve, false,
-                             remove_destination)
-        copied_entries[[st.dev, st.ino]] = dst
+        if path_match = path.match(matcher)
+          Hash[path_match.names.map(&:to_sym).zip(path_match.captures)]
+        end
       end
-    end # else...
-  end # def copy_entry
+    end
+  end
+end
+
+    
+          # Parse through mail to get the from/sender headers
+      mail = Mail.new(raw_message.split('\r\n\r\n', 2).first)
+      from_headers = {'from' => mail.from, 'sender' => mail.sender}
+      authenticated_domain = identity.server.find_authenticated_domain_from_headers(from_headers)
+    
+      def flash_now(type, message, options = {})
+    respond_to do |wants|
+      wants.html do
+        flash.now[type] = message
+        if options[:render_action]
+          render options[:render_action]
+        end
+      end
+      wants.json { render :json => {:flash => {type => message}} }
+    end
+  end
+    
+      def check
+    if @domain.check_dns(:manual)
+      redirect_to_with_json [organization, @server, :domains], :notice => 'Your DNS records for #{@domain.name} look good!'
+    else
+      redirect_to_with_json [:setup, organization, @server, @domain], :alert => 'There seems to be something wrong with your DNS records. Check below for information.'
+    end
+  end
+    
+      def new
+    @http_endpoint = @server.http_endpoints.build
+  end
+    
+      def safe_params
+    params.require(:ip_pool).permit(:name, :default)
+  end
+    
+      def deliveries
+    render :json => {:html => render_to_string(:partial => 'deliveries', :locals => {:message => @message})}
+  end
+    
+          organization_domains = server.organization.domains.verified.order(:name)
+      unless organization_domains.empty?
+        s << '<optgroup label='Organization Domains'>'
+        for domain in organization_domains
+          selected = domain == selected_domain ? 'selected='selected'' : ''
+          s << '<option value='#{domain.id}' #{selected}>#{domain.name}</option>'
+        end
+        s << '</optgroup>'
+      end
