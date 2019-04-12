@@ -1,161 +1,174 @@
-    def can_fit_in_spot(self, spot):
-        return spot.size in (VehicleSize.LARGE, VehicleSize.COMPACT)
-    
-        def override_category_budget(self, category, amount):
-        self.categories_to_budget_map[category] = amount
 
+        
+        
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
     
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-        def append_to_front(self, node):
-        ...
-    
-        def iter_lines(self, chunk_size):
-        return ((line, b'\n') for line in self._orig.iter_lines(chunk_size))
-    
-    from httpie.plugins import plugin_manager
-from httpie.context import Environment
-    
-    from httpie.compat import str
-from httpie.context import Environment
-from httpie.models import HTTPRequest, HTTPResponse
-from httpie.input import (OUT_REQ_BODY, OUT_REQ_HEAD,
-                          OUT_RESP_HEAD, OUT_RESP_BODY)
-from httpie.output.processing import Formatting, Conversion
-    
-    
-# noinspection PyAbstractClass
-class BuiltinAuthPlugin(AuthPlugin):
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-def test_unicode_headers_verbose(httpbin):
-    # httpbin doesn't interpret utf8 headers
-    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-        kwargs = get_requests_kwargs(args, base_headers=session.headers)
-    if args.debug:
-        dump_request(kwargs)
-    session.update_headers(kwargs['headers'])
-    
-        Uses threading to periodically update the status (speed, ETA, etc.).
-    
-        for n_samples in sample_sizes:
-        X = random_state.rand(n_samples, 300)
-    
-    
-def bench_scikit_tree_classifier(X, Y):
-    '''Benchmark with scikit-learn decision tree classifier'''
-    
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
-    
-    fignum = 1
-titles = ['8 clusters', '3 clusters', '3 clusters, bad initialization']
-for name, est in estimators:
-    fig = plt.figure(fignum, figsize=(4, 3))
-    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-    est.fit(X)
-    labels = est.labels_
-    
-    plt.figure(1)
-plt.clf()
-    
-    In Python, the interface we use is simply a callable, which is 'builtin' interface
-in Python, and in normal circumstances we can simply use the class itself as
-that callable, because classes are first class objects in Python.
+    with open('devscripts/lazy_load_template.py', 'rt') as f:
+    module_template = f.read()
     
     '''
-*What is this pattern about?
-The Borg pattern (also known as the Monostate pattern) is a way to
-implement singleton behavior, but instead of having only one instance
-of a class, there are multiple instances that share the same state. In
-other words, the focus is on sharing state instead of sharing instance
-identity.
     
-    https://en.wikipedia.org/wiki/Lazy_evaluation
     
-    *What does this example do?
-In this example queue.Queue is used to create the pool (wrapped in a
-custom ObjectPool object to use with the with statement), and it is
-populated with strings.
-As we can see, the first string object put in 'yam' is USED by the
-with statement. But because it is released back into the pool
-afterwards it is reused by the explicit call to sample_queue.get().
-Same thing happens with 'sam', when the ObjectPool created insided the
-function is deleted (by the GC) and the object is returned.
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-    *What does this example do?
-When the number of prototypes in an application can vary, it can be
-useful to keep a Dispatcher (aka, Registry or Manager). This allows
-clients to query the Dispatcher for a prototype before cloning a new
-instance.
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
+    
+if __name__ == '__main__':
+    unittest.main()
 
     
-        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'Yes'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time * 10), expected_execution_time)
+        def test_allsubtitles(self):
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['en']))
+        self.assertEqual(md5(subtitles['en']), 'acaca989e24a9e45a6719c9b3d60815c')
+    
+    
+def explain_template_loading_attempts(app, template, attempts):
+    '''This should help developers understand what failed'''
+    info = ['Locating template '%s':' % template]
+    total_found = 0
+    blueprint = None
+    reqctx = _request_ctx_stack.top
+    if reqctx is not None and reqctx.request.blueprint is not None:
+        blueprint = reqctx.request.blueprint
+    
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
 
     
+        def __init__(cls, name, bases, d):
+        super(MethodViewType, cls).__init__(name, bases, d)
     
-class HsmMethodTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.hsm = HierachicalStateMachine()
+        The request object is a :class:`~werkzeug.wrappers.Request` subclass and
+    provides all of the attributes Werkzeug defines plus a few Flask
+    specific ones.
+    '''
     
-    else:
-    text_type = str
-    string_types = (str,)
-    xrange = range
+        This fixture will run the testcase twice, once with and once without the
+    limitation/mock.
+    '''
+    if not request.param:
+        return
     
-        def __init__(self):
-        self.tokenizer = self.postokenizer = jieba.posseg.dt
-        self.stop_words = self.STOP_WORDS.copy()
-        self.pos_filt = frozenset(('ns', 'n', 'vn', 'v'))
-        self.span = 5
     
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-opt, args = parser.parse_args()
+def computing_error(last_press_time, target_board_x, target_board_y, last_piece_x, last_piece_y, temp_piece_x,
+                    temp_piece_y):
+    '''
+    计算跳跃实际误差
+    '''
+    target_distance = math.sqrt(
+        (target_board_x - last_piece_x) ** 2 + (target_board_y - last_piece_y) ** 2)  # 上一轮目标跳跃距离
+    actual_distance = math.sqrt((temp_piece_x - last_piece_x) ** 2 + (temp_piece_y - last_piece_y) ** 2)  # 上一轮实际跳跃距离
+    jump_error_value = math.sqrt((target_board_x - temp_piece_x) ** 2 + (target_board_y - temp_piece_y) ** 2)  # 跳跃误差
     
-    for topic_idx, topic in enumerate(nmf.components_):
-    print('Topic #%d:' % topic_idx)
-    print(' '.join([feature_names[i]
-                    for i in topic.argsort()[:-n_top_words - 1:-1]]))
-    print('')
+                # 修掉圆顶的时候一条线导致的小 bug，这个颜色判断应该 OK，暂时不提出来
+            if abs(pixel[0] - last_pixel[0]) \
+                    + abs(pixel[1] - last_pixel[1]) \
+                    + abs(pixel[2] - last_pixel[2]) > 10:
+                board_x_sum += j
+                board_x_c += 1
+    
+    
+if __name__ == '__main__':
+  testutils.main()
+
+    
+    '''As a simple example of Python Fire, a Widget serves no clear purpose.'''
+    
+      Args:
+    *positional: The functions to be used for parsing positional arguments.
+    **named: The functions to be used for parsing named arguments.
+  Returns:
+    The decorated function, which now has metadata telling Fire how to perform.
+  '''
+  def _Decorator(fn):
+    parse_fns = GetParseFns(fn)
+    parse_fns['positional'] = positional
+    parse_fns['named'].update(named)
+    _SetMetadata(fn, FIRE_PARSE_FNS, parse_fns)
+    return fn
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        if not isinstance(result, six.string_types):
+      max_distance += value.count('0')  # Leading 0s are stripped.
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      def testFireTraceElementAsStringWithTarget(self):
+    el = trace.FireTraceElement(
+        component='Example',
+        action='Created toy',
+        target='Beaker',
+    )
+    self.assertEqual(str(el), 'Created toy 'Beaker'')
+    
+        This is a longer description of the docstring. It spans multiple lines, as
+    is allowed.
+    
+    
+def IsValue(component):
+  return isinstance(component, VALUE_TYPES)
+
+    
+    import inspect
+    
+        Used in display width computations. Control sequences have display width 0.
+    
+    
+def _GetTermSizePosix():
+  '''Returns the Posix terminal x and y dimensions.'''
+  # pylint: disable=g-import-not-at-top
+  import fcntl
+  # pylint: disable=g-import-not-at-top
+  import struct
+  # pylint: disable=g-import-not-at-top
+  import termios
+    
+      # Try UTF-8 because the other encodings could be extended ASCII. It would
+  # be exceptional if a valid extended ascii encoding with extended chars
+  # were also a valid UITF-8 encoding.
+  try:
+    return string.decode('utf8')
+  except UnicodeError:
+    # Not a UTF-8 encoding.
+    pass
