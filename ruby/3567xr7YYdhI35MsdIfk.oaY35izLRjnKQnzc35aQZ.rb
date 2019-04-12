@@ -1,105 +1,95 @@
 
         
-        # Single-line step scoper
-When /^(.*) within (.*[^:])$/ do |step, parent|
-  with_scope(parent) { When step }
+          find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+    Then(/^it will not recreate the file$/) do
+  #
 end
     
-      module ClassMethods
-    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
-    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
-    # The attribute returns a Paperclip::Attachment object which handles the management of
-    # that file. The intent is to make the attachment as much like a normal attribute. The
-    # thumbnails will be created when the new file is assigned, but they will *not* be saved
-    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
-    # called on it, the attachment will *not* be deleted until +save+ is called. See the
-    # Paperclip::Attachment documentation for more specifics. There are a number of options
-    # you can set to change the behavior of a Paperclip attachment:
-    # * +url+: The full URL of where the attachment is publicly accessible. This can just
-    #   as easily point to a directory served directly through Apache as it can to an action
-    #   that can control permissions. You can specify the full domain and path, but usually
-    #   just an absolute path is sufficient. The leading slash *must* be included manually for
-    #   absolute paths. The default value is
-    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
-    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
-    #     :url => '/:class/:attachment/:id/:style_:filename'
-    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
-    #   Note: When using the +s3+ storage option, the +url+ option expects
-    #   particular values. See the Paperclip::Storage::S3#url documentation for
-    #   specifics.
-    # * +default_url+: The URL that will be returned if there is no attachment assigned.
-    #   This field is interpolated just as the url is. The default value is
-    #   '/:attachment/:style/missing.png'
-    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
-    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
-    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
-    #   geometry strings at the ImageMagick website
-    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
-    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
-    #   inside the dimensions and then crop the rest off (weighted at the center). The
-    #   default value is to generate no thumbnails.
-    # * +default_style+: The thumbnail style that will be used by default URLs.
-    #   Defaults to +original+.
-    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
-    #                       :default_style => :normal
-    #     user.avatar.url # => '/avatars/23/normal_me.png'
-    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
-    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
-    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
-    #   record is destroyed. Defaults to +false+.
-    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
-    #   to a command line error. This will override the global setting for this attachment.
-    #   Defaults to true.
-    # * +convert_options+: When creating thumbnails, use this free-form options
-    #   array to pass in various convert command options.  Typical options are '-strip' to
-    #   remove all Exif data from the image (save space for thumbnails and avatars) or
-    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
-    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
-    #   Note that this option takes a hash of options, each of which correspond to the style
-    #   of thumbnail being generated. You can also specify :all as a key, which will apply
-    #   to all of the thumbnails being generated. If you specify options for the :original,
-    #   it would be best if you did not specify destructive options, as the intent of keeping
-    #   the original around is to regenerate all the thumbnails when requirements change.
-    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
-    #                                :convert_options => {
-    #                                  :all => '-strip',
-    #                                  :negative => '-negate'
-    #                                }
-    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
-    #   It is recommended that :convert_options option be included in the hash passed to each
-    #   :styles for compatibility with future versions.
-    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
-    #   shell quoting for safety. If your options require a space, please pre-split them
-    #   and pass an array to :convert_options instead.
-    # * +storage+: Chooses the storage backend where the files will be stored. The current
-    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
-    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
-    #   for backend-specific options.
-    #
-    # It's also possible for you to dynamically define your interpolation string for :url,
-    # :default_url, and :path in your model by passing a method name as a symbol as a argument
-    # for your has_attached_file definition:
-    #
-    #   class Person
-    #     has_attached_file :avatar, :default_url => :default_url_by_gender
-    #
-    #     private
-    #
-    #     def default_url_by_gender
-    #       '/assets/avatars/default_#{gender}.png'
-    #     end
-    #   end
-    def has_attached_file(name, options = {})
-      HasAttachedFile.define_on(self, name, options)
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
     end
   end
 end
+
     
-      # Defines the geometry of an image.
-  class Geometry
-    attr_accessor :height, :width, :modifier
+    module Capistrano
+  class Configuration
+    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
+    # with `fetch`. Does internal bookkeeping to help identify user mistakes
+    # like spelling errors or unused variables that may lead to unexpected
+    # behavior.
+    class Variables
+      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
+      IGNORED_LOCATIONS = [
+        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
+        '#{CAPISTRANO_LOCATION}/configuration.rb:',
+        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
+        '/dsl.rb:',
+        '/forwardable.rb:'
+      ].freeze
+      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
     
-        def define_getters
-      define_instance_getter
-      define_class_getter
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+      end
     end
+  end
+end
+
+    
+            css_classes << 'next' if state_index == current_index + 1
+        css_classes << 'active' if state == @order.state
+        css_classes << 'first' if state_index == 0
+        css_classes << 'last' if state_index == states.length - 1
+        # No more joined classes. IE6 is not a target browser.
+        # Hack: Stops <a> being wrapped round previous items twice.
+        if state_index < current_index
+          content_tag('li', text, class: css_classes.join(' '))
+        else
+          content_tag('li', content_tag('a', text, class: 'nav-link #{'active text-white' if state == @order.state}'), class: css_classes.join(' '))
+        end
+      end
+      content_tag('ul', raw(items.join('\n')), class: 'progress-steps nav nav-pills nav-justified flex-column flex-md-row', id: 'checkout-step-#{@order.state}')
+    end
+    
+                respond_with(@order, default_template: :show, status: 201)
+          else
+            @order = Spree::Order.create!(user: current_api_user, store: current_store)
+            if Cart::Update.call(order: @order, params: order_params).success?
+              respond_with(@order, default_template: :show, status: 201)
+            else
+              invalid_resource!(@order)
+            end
+          end
+        end
+    
+                result = update_service.call(
+              order: spree_current_order,
+              params: params,
+              # defined in https://github.com/spree/spree/blob/master/core/lib/spree/core/controller_helpers/strong_parameters.rb#L19
+              permitted_attributes: permitted_checkout_attributes,
+              request_env: request.headers.env
+            )
