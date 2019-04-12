@@ -1,219 +1,378 @@
 
         
-        #include 'atom/browser/api/atom_api_browser_window.h'
-    
-    
-    {}  // namespace api
-    
-    void Event::SetSenderAndMessage(content::RenderFrameHost* sender,
-                                IPC::Message* message) {
-  DCHECK(!sender_);
-  DCHECK(!message_);
-  sender_ = sender;
-  message_ = message;
+        int secp256k1_ecdsa_recover(const secp256k1_context* ctx, secp256k1_pubkey *pubkey, const secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32) {
+    secp256k1_ge q;
+    secp256k1_scalar r, s;
+    secp256k1_scalar m;
+    int recid;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(pubkey != NULL);
     }
     
     
-    {}  // namespace atom
+    {
+    {        if (bytes <= 64) {
+            if (bytes < 64) {
+                for (i = 0;i < bytes;++i) ctarget[i] = c[i];
+            }
+            input[12] = j12;
+            input[13] = j13;
+            return;
+        }
+        bytes -= 64;
+        c += 64;
+    }
+}
+
     
-    namespace atom {
+      desired_output_for_decode = 'zbcdefghIJ';
+  expected = string('\0zbcdefghIJ\0', 12);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+    void MapLiteTestUtil::ExpectMapFieldsSetInitialized(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsSetInitialized<unittest::MapEnumLite,
+                                                 unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+    bool Status::operator==(const Status& x) const {
+  return error_code_ == x.error_code_ &&
+      error_message_ == x.error_message_;
+}
+    
+    class GoGoProtoGenerator : public CodeGenerator {
+ public:
+  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
+                           const string& parameter,
+                           GeneratorContext* context,
+                           string* error) const {
+    for (int i = 0; i < files.size(); i++) {
+      for (auto file : files) {
+        bool can_generate =
+            (new_pool_.FindFileByName(file->name()) == nullptr);
+        for (int j = 0; j < file->dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->public_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->public_dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->weak_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->weak_dependency(j)->name()) != nullptr);
+        }
+        if (can_generate) {
+          Generate(file, parameter, context, error);
+          break;
+        }
+      }
+    }
+    }
     }
     
-    #include <string>
+        tutorial::Person::PhoneNumber* phone_number = person->add_phones();
+    phone_number->set_number(number);
     
-    namespace atom {
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49, typename T50>
+internal::ValueArray50<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+    T44, T45, T46, T47, T48, T49, T50> Values(T1 v1, T2 v2, T3 v3, T4 v4,
+    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
+    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
+    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
+    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37,
+    T38 v38, T39 v39, T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45,
+    T46 v46, T47 v47, T48 v48, T49 v49, T50 v50) {
+  return internal::ValueArray50<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
+      T40, T41, T42, T43, T44, T45, T46, T47, T48, T49, T50>(v1, v2, v3, v4,
+      v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19,
+      v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33,
+      v34, v35, v36, v37, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47,
+      v48, v49, v50);
+}
+    
+      // Returns a pathname for a file that does not currently exist. The pathname
+  // will be directory/base_name.extension or
+  // directory/base_name_<number>.extension if directory/base_name.extension
+  // already exists. The number will be incremented until a pathname is found
+  // that does not already exist.
+  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
+  // There could be a race condition if two or more processes are calling this
+  // function at the same time -- they could both pick the same filename.
+  static FilePath GenerateUniqueFileName(const FilePath& directory,
+                                         const FilePath& base_name,
+                                         const char* extension);
+    
+      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
+      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3, GTEST_BY_REF_(T4) f4,
+      GTEST_BY_REF_(T5) f5, GTEST_BY_REF_(T6) f6, GTEST_BY_REF_(T7) f7,
+      GTEST_BY_REF_(T8) f8, GTEST_BY_REF_(T9) f9) : f0_(f0), f1_(f1), f2_(f2),
+      f3_(f3), f4_(f4), f5_(f5), f6_(f6), f7_(f7), f8_(f8), f9_(f9) {}
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35>
+struct Types35 {
+  typedef T1 Head;
+  typedef Types34<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35> Tail;
+};
+    
+    #ifndef GTEST_SAMPLES_PRIME_TABLES_H_
+#define GTEST_SAMPLES_PRIME_TABLES_H_
+    
+      // If we are given the --check_for_leaks command line flag, installs the
+  // leak checker.
+  if (check_for_leaks) {
+    TestEventListeners& listeners = UnitTest::GetInstance()->listeners();
     }
-    
-    StringType ArgvToCommandLineString(const StringVector& argv);
-#endif
-    
-    // scripts/fuse_gtest.py depends on gtest's own header being #included
-// *unconditionally*.  Therefore these #includes cannot be moved
-// inside #if GTEST_HAS_PARAM_TEST.
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-param-util.h'
-#include 'gtest/internal/gtest-param-util-generated.h'
     
      private:
-  std::vector<TestPartResult> array_;
-    
-    // Now the tricky part: you need to register all test patterns before
-// you can instantiate them.  The first argument of the macro is the
-// test case name; the rest are the names of the tests in this test
-// case.
-REGISTER_TYPED_TEST_CASE_P(FooTest,
-                           DoesBlah, HasPropertyA);
-    
-    
-    {    linked_ptr_internal const* p = ptr;
-    while (p->next_ != ptr) p = p->next_;
-    p->next_ = this;
-    next_ = ptr;
-  }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5>
-class ValueArray5 {
- public:
-  ValueArray5(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5) : v1_(v1), v2_(v2), v3_(v3),
-      v4_(v4), v5_(v5) {}
+  // Parses the next field from the incoming buffer and stores the parsed value
+  // in a GrpcTraceContext struct.  If it does not recognize the field ID it
+  // will return 0, otherwise it returns the number of bytes read.
+  static size_t ParseField(absl::string_view buf, GrpcTraceContext* tc) {
+    // TODO: Add support for multi-byte field IDs.
+    if (buf.empty()) {
+      return 0;
+    }
+    // Field ID is always the first byte in a field.
+    uint32_t field_id = buf[0];
+    size_t bytes_read = kFieldIdSize;
+    switch (field_id) {
+      case kTraceIdField:
+        bytes_read += kTraceIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_id, &buf[kFieldIdSize],
+               opencensus::trace::TraceId::kSize);
+        break;
+      case kSpanIdField:
+        bytes_read += kSpanIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->span_id, &buf[kFieldIdSize],
+               opencensus::trace::SpanId::kSize);
+        break;
+      case kTraceOptionsField:
+        bytes_read += kTraceOptionsSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_options, &buf[kFieldIdSize],
+               opencensus::trace::TraceOptions::kSize);
+        break;
+      default:  // Invalid field ID
+        return 0;
+    }
     }
     
-    // A handy wrapper for AddRef.
-#define GTEST_ADD_REF_(T) typename ::std::tr1::gtest_internal::AddRef<T>::type
+    #endif  // GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+
     
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
+    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
+
     
-    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
-  return !operator==(rhs);
+    #include 'unicode/regex.h'
+#include 'unicode/uclean.h'
+#include 'cmemory.h'
+#include 'cstr.h'
+#include 'uassert.h'
+#include 'uhash.h'
+#include 'uvector.h'
+#include 'uvectr32.h'
+#include 'uvectr64.h'
+#include 'regexcmp.h'
+#include 'regeximp.h'
+#include 'regexst.h'
+    
+    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+    
+    // -------------------------------------
+    
+    int32_t
+IntDigitCountRange::pin(int32_t digitCount) const {
+    return digitCount < fMin ? fMin : (digitCount < fMax ? digitCount : fMax);
 }
     
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
+    
+SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
 }
     
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
     
-    #include <grpc/support/port_platform.h>
-    
-    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
-    : shutdown_(false),
-      reserve_threads_(reserve_threads),
-      nthreads_(0),
-      threads_waiting_(0) {
-  for (int i = 0; i < reserve_threads_; i++) {
-    std::lock_guard<std::mutex> lock(mu_);
-    nthreads_++;
-    new DynamicThread(this);
-  }
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-      SrcLoc(SrcPos start, SrcPos past)
-    : start(start)
-    , past(past)
-  {}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////n
-    }
-    
-    #include 'hphp/runtime/base/directory.h'
-#include 'hphp/runtime/ext/std/ext_std_file.h'
-    
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
-}
-    
-    req::ptr<File> PhpStreamWrapper::openFD(const char *sFD) {
-  if (is_cli_mode()) {
-    raise_warning('Direct access to file descriptors is not '
-                  'available via remote unix server execution');
-    return nullptr;
-  }
-  if (RuntimeOption::ServerExecutionMode()) {
-    raise_warning('Direct access to file descriptors '
-                  'is only available from command-line');
-    return nullptr;
-  }
-    }
-    
-        static Follow* createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect = Rect::ZERO);
-    
-    /** Return boundarySet.
-     *
-     * @return Return boundarySet.
-     */
-    bool isBoundarySet() const { return _boundarySet; }
-    /** Alter behavior - turn on/off boundary. 
-     *
-     * @param value Turn on/off boundary.
-     */
-    void setBoundarySet(bool value) { _boundarySet = value; }
-    
-    /** @deprecated Alter behavior - turn on/off boundary. 
-     *
-     * @param value Turn on/off boundary.
-     */
-    CC_DEPRECATED_ATTRIBUTE void setBoudarySet(bool value) { setBoundarySet(value); }
-    
-    OrbitCamera* OrbitCamera::clone() const
+class SimpleDateFormatStaticSets : public UMemory
 {
-    // no copy constructor
-    return OrbitCamera::create(_duration, _radius, _deltaRadius, _angleZ, _deltaAngleZ, _angleX, _deltaAngleX);
-}
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
     
-    // CatmullRom Spline formula:
-Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, float tension, float t)
-{
-    float t2 = t * t;
-    float t3 = t2 * t;
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
     
-    /*
-     * Formula: s(-ttt + 2tt - t)P1 + s(-ttt + tt)P2 + (2ttt - 3tt + 1)P2 + s(ttt - 2tt + t)P3 + (-2ttt + 3tt)P3 + s(ttt - tt)P4
-     */
-    float s = (1 - tension) / 2;
-    }
-    
-        /** Get the value of a controlPoint at a given index.
-     *
-     * @js NA
-     * @param index Get the point in index.
-     * @return A Vec2.
-     */
-    const Vec2& getControlPointAtIndex(ssize_t index) const;
-    
-    protected:
-    /* lens center position */
-    Vec2 _position;
-    float _radius;
-    /** lens effect. Defaults to 0.7 - 0 means no effect, 1 is very strong effect */
-    float _lensEffect;
-    /** lens is concave. (true = concave, false = convex) default is convex i.e. false */
-    bool _concave;
-    
-    
-    /** Pauses the target: all running actions and newly added actions will be paused.
-     *
-     * @param target    A certain target.
-     */
-    virtual void pauseTarget(Node *target);
-    
-    
-    {    /**  A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. If UserInfo is nil, then no notification will be broadcast. */
-    ValueMap _userInfo;
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
     
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
 };
     
-    #endif // __CCATLAS_NODE_H__
+    #include <vector>
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
+    
+    TEST(ByteTest, GetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  EXPECT_EQ(0x05, value.get_byte(1, 3));
+  EXPECT_EQ(0x01, value.get_byte(1, 1));
+  EXPECT_EQ(0x00, value.get_byte(8, 1));
+  EXPECT_EQ(0x00, value.get_byte(-1, 1));
+  EXPECT_EQ(0x1A, value.get_byte(0, 10));
+}
+    
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
+}
+    
+    #include 'modules/planning/common/speed_limit.h'
+    
+      MatrixXd offset_golden(10, 1);
+  offset_golden << 0, 0, -80, 0, -160, 0, -240, 0, 0, 0;
+    
+    GemMessageManager::GemMessageManager() {
+  // Control Messages
+  AddSendProtocolData<Accelcmd67, true>();
+  AddSendProtocolData<Brakecmd6b, true>();
+  AddSendProtocolData<Globalcmd69, true>();
+  AddSendProtocolData<Headlightcmd76, true>();
+  AddSendProtocolData<Horncmd78, true>();
+  AddSendProtocolData<Shiftcmd65, true>();
+  AddSendProtocolData<Steeringcmd6d, true>();
+  AddSendProtocolData<Turncmd63, true>();
+  AddSendProtocolData<Wipercmd90, true>();
+    }
+    
+    // config detail: {'name': 'encoder_temperature', 'offset': -40.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
+// '[-32808|32727]', 'bit': 7, 'type': 'int', 'order': 'motorola',
+// 'physical_unit': 'deg C'}
+int Brakemotorrpt271::encoder_temperature(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    #include 'glog/logging.h'
+    
+    
+    {    CC_SAFE_DELETE(easeRateAction);
+    return nullptr;
+}
+    
+        /** initializes the action with the std::function<void(Node*)> */
+    bool initWithFunction(const std::function<void(Node*)>& func);
+    
+    /** initializes the action with the callback
+     
+     typedef void (Ref::*SEL_CallFuncN)(Node*);
+     @deprecated Use the std::function API instead.
+     */
+    CC_DEPRECATED_ATTRIBUTE bool initWithTarget(Ref* target, SEL_CallFuncN selector);
+    
+    Vector<Node*> ActionManager::pauseAllRunningActions()
+{
+    Vector<Node*> idsWithActions;
+    
+    for (tHashElement *element=_targets; element != nullptr; element = (tHashElement *)element->hh.next) 
+    {
+        if (! element->paused) 
+        {
+            element->paused = true;
+            idsWithActions.pushBack(element->target);
+        }
+    }    
+    
+    return idsWithActions;
+}
+    
+    /**
+@brief Progress from a percentage to another percentage.
+@since v0.99.1
+*/
+class CC_DLL ProgressFromTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with a duration, a 'from' percentage and a 'to' percentage.
+     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
+     * @param fromPercentage Specify the source percentage.
+     * @param toPercentage Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressFromTo action; otherwise, return nil.
+     */
+    static ProgressFromTo* create(float duration, float fromPercentage, float toPercentage);
+    }
     
         /**
-     * set the data to be a pointer to a number of Quads
-     * the member verts will not be released when this PolygonInfo destructs
-     * as the verts memory are managed by other objects
-     * @param quad  a pointer to the V3F_C4B_T2F_Quad quads
-     */
-    void setQuads(V3F_C4B_T2F_Quad *quads, int numberOfQuads);
+    @brief Get the amplitude of the effect.
+    @return Return the amplitude of the effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude to the effect.
+    @param amplitude The value of amplitude will be set.
+    */
+    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    
+        setFrames(arrayOfAnimationFrames);
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
