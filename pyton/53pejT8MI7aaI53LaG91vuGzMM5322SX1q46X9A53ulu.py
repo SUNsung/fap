@@ -1,31 +1,26 @@
 
         
-        
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
+            def process_appid_not_exist(self, appid, ip):
+        ret = self.check_api(ip, 'xxnet-1')
+        if ret and ret.ok:
+            self.set_appid_not_exist(appid)
         else:
-            s.delete()  # Clear sessions with no data.
-        return s
+            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
     
+            if response.status == 503:
+            # out of quota
+            if 'gws' not in server_type and 'Google Frontend' not in server_type and 'GFE' not in server_type:
+                xlog.warn('503 but server type:%s', server_type)
+                return False
+            else:
+                return True
     
-def x_robots_tag(func):
-    @wraps(func)
-    def inner(request, *args, **kwargs):
-        response = func(request, *args, **kwargs)
-        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
-        return response
-    return inner
+    Here is a little overview over the most commonly used classes provided by
+this runtime:
+    
+    EOF_TOKEN = CommonToken(type=EOF)
+	
+INVALID_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
+    
+                with open('htmlout.html', 'w') as out:
+                out.write(header)
