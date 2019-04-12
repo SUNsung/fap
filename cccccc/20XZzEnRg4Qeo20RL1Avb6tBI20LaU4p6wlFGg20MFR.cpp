@@ -1,395 +1,197 @@
 
         
-            assert(info.name.size() < (2 << 10) && 'name failed sanity check');
-    
-    using namespace swift::sys;
-using llvm::StringRef;
-    
-    /// Match a word within a name to a word within a type.
-static bool matchNameWordToTypeWord(StringRef nameWord, StringRef typeWord) {
-  // If the name word is longer, there's no match.
-  if (nameWord.size() > typeWord.size()) return false;
+        namespace atom {
     }
     
+    void AutoUpdater::CheckForUpdates() {}
     
+    #include 'base/memory/weak_ptr.h'
+#include 'net/url_request/url_request_job.h'
     
-    /// Maintain a set of known CF types.
-static bool isKnownCFTypeName(StringRef name) {
-  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
-                            name, SortByLengthComparator());
+    int LaunchProgram(const StringVector& relauncher_args,
+                  const StringVector& argv) {
+  base::LaunchOptions options;
+  base::Process process =
+      base::LaunchProcess(ArgvToCommandLineString(argv), options);
+  return process.IsValid() ? 0 : 1;
 }
     
-    // Import As Member -- attempt to import C global functions and variables as
-// members on types or instances.
+    
+    {}  // namespace atom
     
     
-    {  // let h = b = the number of basic code points in the input
-  // copy them to the output in order...
-  size_t h = 0;
-  for (auto C : InputCodePoints) {
-    if (C < 0x80) {
-      ++h;
-      OutPunycode.push_back(C);
-    }
-    if (!isValidUnicodeScalar(C)) {
-      OutPunycode.clear();
-      return false;
-    }
-  }
-  size_t b = h;
-  // ...followed by a delimiter if b > 0
-  if (b > 0)
-    OutPunycode.push_back(delimiter);
-  
-  while (h < InputCodePoints.size()) {
-    // let m = the minimum code point >= n in the input
-    uint32_t m = 0x10FFFF;
-    for (auto codePoint : InputCodePoints) {
-      if (codePoint >= n && codePoint < m)
-        m = codePoint;
-    }
+    {}  // namespace atom
     
-    delta = delta + (m - n) * (h + 1);
-    n = m;
-    for (auto c : InputCodePoints) {
-      if (c < n) ++delta;
-      if (c == n) {
-        int q = delta;
-        for (int k = base; ; k += base) {
-          int t = k <= bias ? tmin
-                : k >= bias + tmax ? tmax
-                : k - bias;
-          
-          if (q < t) break;
-          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
-          q = (q - t) / (base - t);
-        }
-        OutPunycode.push_back(digit_value(q));
-        bias = adapt(delta, h + 1, h == b);
-        delta = 0;
-        ++h;
-      }
-    }
-    ++delta; ++n;
-  }
-  return true;
+    void MapLiteTestUtil::SetArenaMapFields(unittest::TestArenaMapLite* message) {
+  MapTestUtilImpl::SetArenaMapFields<unittest::MapEnumLite,
+                                     unittest::MAP_ENUM_BAR_LITE,
+                                     unittest::MAP_ENUM_BAZ_LITE>(message);
 }
     
-    // The following variables should remain static globals, since they
-// are used by debug editor, which uses a single Tesseract instance.
-//
-// Contains the mappings from unique VC ids to their actual pointers.
-static std::map<int, ParamContent*> vcMap;
-static int nrParams = 0;
-static int writeCommands[2];
+    std::ostream& operator<<(std::ostream& os, const Status& x) {
+  os << x.ToString();
+  return os;
+}
     
-      // This and other putatively are the same, so call the (permanent) callback
-  // for each blob index where the bounding boxes match.
-  // The callback is deleted on completion.
-  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
-    
-    
-    {  float x;
-  float y;
-  float dir;
-  int x_bucket;
+    class Derived : public Base1, public Base2 {
+ public:
+  virtual ~Derived() {}
+  int evenmorepad;
 };
     
-      // Setup the normalization transformation parameters.
-  // The normalizations applied to a blob are as follows:
-  // 1. An optional block layout rotation that was applied during layout
-  // analysis to make the textlines horizontal.
-  // 2. A normalization transformation (LocalNormTransform):
-  // Subtract the 'origin'
-  // Apply an x,y scaling.
-  // Apply an optional rotation.
-  // Add back a final translation.
-  // The origin is in the block-rotated space, and is usually something like
-  // the x-middle of the word at the baseline.
-  // 3. Zero or more further normalization transformations that are applied
-  // in sequence, with a similar pattern to the first normalization transform.
-  //
-  // A DENORM holds the parameters of a single normalization, and can execute
-  // both the LocalNormTransform (a forwards normalization), and the
-  // LocalDenormTransform which is an inverse transform or de-normalization.
-  // A DENORM may point to a predecessor DENORM, which is actually the earlier
-  // normalization, so the full normalization sequence involves executing all
-  // predecessors first and then the transform in 'this'.
-  // Let x be image co-ordinates and that we have normalization classes A, B, C
-  // where we first apply A then B then C to get normalized x':
-  // x' = CBAx
-  // Then the backwards (to original coordinates) would be:
-  // x = A^-1 B^-1 C^-1 x'
-  // and A = B->predecessor_ and B = C->predecessor_
-  // NormTransform executes all predecessors recursively, and then this.
-  // NormTransform would be used to transform an image-based feature to
-  // normalized space for use in a classifier
-  // DenormTransform inverts this and then all predecessors. It can be
-  // used to get back to the original image coordinates from normalized space.
-  // The LocalNormTransform member executes just the transformation
-  // in 'this' without the layout rotation or any predecessors. It would be
-  // used to run each successive normalization, eg the word normalization,
-  // and later the character normalization.
+    #include 'google/protobuf/message.h'
+#include 'google/protobuf/descriptor.h'
     
-    		m_pblockParent = nullptr;
-    
-    		static unsigned int GetBytesPerBlock(Format a_format)
-		{
-			switch (a_format)
-			{
-			case Format::RGB8:
-			case Format::R11:
-			case Format::RGB8A1:
-				return 8;
-				break;
+      {
+    // Read the existing address book.
+    fstream input(argv[1], ios::in | ios::binary);
+    if (!input) {
+      cout << argv[1] << ': File not found.  Creating a new file.' << endl;
+    } else if (!address_book.ParseFromIstream(&input)) {
+      cerr << 'Failed to parse address book.' << endl;
+      return -1;
     }
-    }
-    
-    #if defined (__cplusplus)
-extern 'C' {
-#endif
-    }
-    
-    /** 16x16 multiply-add where the result fits in 32 bits */
-#undef MAC16_16
-static OPUS_INLINE opus_val32 MAC16_16_armv5e(opus_val32 c, opus_val16 a,
- opus_val16 b)
-{
-  int res;
-  __asm__(
-      '#MAC16_16\n\t'
-      'smlabb %0, %1, %2, %3;\n'
-      : '=r'(res)
-      : 'r'(a), 'r'(b), 'r'(c)
-  );
-  return res;
-}
-#define MAC16_16(c, a, b) (MAC16_16_armv5e(c, a, b))
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right and 32-bit add.
-    Results fits in 32 bits */
-#define MAC16_32_Q16(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16)))
-    
-    /* Adds two signed 32-bit values in a way that can overflow, while not relying on undefined behaviour
-   (just standard two's complement implementation-specific behaviour) */
-#define silk_ADD32_ovflw(a, b)              ((opus_int32)((opus_uint32)(a) + (opus_uint32)(b)))
-/* Subtractss two signed 32-bit values in a way that can overflow, while not relying on undefined behaviour
-   (just standard two's complement implementation-specific behaviour) */
-#define silk_SUB32_ovflw(a, b)              ((opus_int32)((opus_uint32)(a) - (opus_uint32)(b)))
-    
-    std::string InternalKey::DebugString() const {
-  std::string result;
-  ParsedInternalKey parsed;
-  if (ParseInternalKey(rep_, &parsed)) {
-    result = parsed.DebugString();
-  } else {
-    result = '(bad)';
-    result.append(EscapeString(rep_));
   }
-  return result;
-}
     
-    class FormatTest { };
+        // the following call will not add an object, because there is already
+    // a value stored at key 'B'
+    auto res2 = null.emplace('B', 'c');
     
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-    Writer::Writer(WritableFile* dest)
-    : dest_(dest),
-      block_offset_(0) {
-  InitTypeCrc(type_crc_);
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
-#define STORAGE_LEVELDB_DB_MEMTABLE_H_
-    
-    #include 'db/db_impl.h'
-#include 'db/filename.h'
-#include 'db/version_set.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    #ifndef STORAGE_LEVELDB_DB_SKIPLIST_H_
-#define STORAGE_LEVELDB_DB_SKIPLIST_H_
-    
-          if (!iter.Valid()) {
-        break;
-      }
-    
-      std::vector<std::thread> workers;
-  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
-    workers.push_back(std::thread([&] {
-      try {
-        hphp_thread_init();
-        hphp_session_init(Treadmill::SessionKind::HHBBC);
-        SCOPE_EXIT {
-          hphp_context_exit();
-          hphp_session_exit();
-          hphp_thread_exit();
-        };
-    }
-    }
-    }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    #ifndef HPHP_FILE_STREAM_WRAPPER_H
-#define HPHP_FILE_STREAM_WRAPPER_H
-    
-    
-    {            Reset();
-        }
-    
-        template <typename T>
-    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
-    {
-        if (!dict.Contains(typeKey))
-        {
-            const auto& version = GetVersion(dict);
-            LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        } 
-    }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_fd(-1),
-          m_fileName('/var/lock/' + name)
-    {
-    }
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
+    /** @class Follow
+ * @brief Follow is an action that 'follows' a node.
+ * Eg:
+ * @code
+ * layer->runAction(Follow::create(hero));
+ * @endcode
+ * Instead of using Camera as a 'follower', use this action instead.
+ * @since v0.99.2
+ */
+class CC_DLL Follow : public Action
 {
 public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
+    /**
+     * Creates the action with a set boundary or with no boundary.
+     *
+     * @param followedNode  The node to be followed.
+     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     *              with no boundary.
+    */
+    
+    static Follow* create(Node *followedNode, const Rect& rect = Rect::ZERO);
+    
+    /**
+     * Creates the action with a set boundary or with no boundary with offsets.
+     *
+     * @param followedNode  The node to be followed.
+     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     *              with no boundary.
+     * @param xOffset The horizontal offset from the center of the screen from which the
+     *               node  is to be followed.It can be positive,negative or zero.If
+     *               set to zero the node will be horizontally centered followed.
+     *  @param yOffset The vertical offset from the center of the screen from which the
+     *                 node is to be followed.It can be positive,negative or zero.
+     *                 If set to zero the node will be vertically centered followed.
+     *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
+     */
     }
     
-    
-    {            sequenceStartFrame += numFrames;
-        }
-    
-    protected:
-    InputValueBase(DEVICEID_TYPE deviceId, const wstring& name, const TensorShape& sampleLayout, bool isSparse, const std::wstring axisName)
-        : Base(deviceId, name)
+        if (ActionInterval::initWithDuration(action->getDuration()))
     {
-        Init(sampleLayout, isSparse, axisName);
-    }
-    InputValueBase(DEVICEID_TYPE deviceId, const wstring& name, size_t rows, bool isSparse, const std::wstring axisName)
-        : InputValueBase(deviceId, name, TensorShape(rows), isSparse, axisName)
-    {
-    }
-    InputValueBase(DEVICEID_TYPE deviceId, const wstring& name, bool isSparse, const std::wstring axisName)
-        : InputValueBase(deviceId, name, TensorShape(), isSparse, axisName)
-    {
-    }
-    InputValueBase(const ScriptableObjects::IConfigRecordPtr configp, bool isSparse)
-        : Base(configp->Get(L'deviceId'), L'<placeholder>')
-    {
-        AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
-        wstring axisName = L'';
-        // TODO This currently reads a ComputationNode object from a property, thereby bypassing 'normal' input handling.
-        // The passing of shapes represents a second graph that is 'overlaid' (and previously identical) to the data
-        // flow network. This needs to be solved on a more fundamental level.
-        // The proposed future change from fseide is as follows:
-        // (2) On BS level, dynamicAxis is an optional parameter that takes a DynamicAxis object--the alternative,
-        // passing a string, will be removed.
-        // (3) The dynamicAxis argument will become an actual m_inputs[] to the InputValue. I.e.InputValues are no
-        // longer leaves from the ComputationNetwork viewpoint. But they ARE leaves from the user / BS / NDL view, as
-        // the axis is not passed as a regular input.This way, the current special - casing can and will be removed;
-        // instead, the MBLayout propagation will happen automagically as part of regular ValidateNetwork().
-        if (configp->Exists(L'dynamicAxis'))
-        {
-            auto axisConfig = configp->Find(L'dynamicAxis');
-            if (axisConfig->Is<ComputationNodeBase>())
-            {
-                ComputationNodeBasePtr axis = configp->Get(L'dynamicAxis');
-                axisName = axis->GetName();
-            }
-            else
-            {
-                axisName = (const std::wstring&)*axisConfig;
-            }
-        }
+        _inner = action;
+        action->retain();
     }
     
-    // TODO: can this be static?
-template <class ElemType>
-void Microsoft::MSR::CNTK::UpdateRunningAverage(ComputationNode<ElemType>& newInput,
-                                                TensorView<ElemType>& runningAverage, size_t& runningCount)
-{
-    FrameRange fr(newInput.GetMBLayout());
-    // Set gaps to zero, since we are reducing in time.
-    newInput.MaskMissingValueColumnsToZero(fr);
+    // implementation of ReuseGrid
+    
+         typedef void (Ref::*SEL_CallFunc)();
+     @deprecated Use the std::function API instead.
+     * @js NA
+     * @lua NA
+     */
+    CC_DEPRECATED_ATTRIBUTE static CallFunc * create(Ref* target, SEL_CallFunc selector);
+    
+        //
+    // Overrides
+    //
+    virtual ProgressFromTo* clone() const override;
+    virtual ProgressFromTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressFromTo() {}
+    virtual ~ProgressFromTo() {}
+    
+    
+    
+    
+    {    /**
+     * Create an polygoninfo from the data of another Polygoninfo
+     * @param other     another PolygonInfo to be copied
+     * @return duplicate of the other PolygonInfo
+     */
+    PolygonInfo(const PolygonInfo& other);
+    //  end of creators group
+    /// @}
+    
+    /**
+     * Copy the member of the other PolygonInfo
+     * @param other     another PolygonInfo to be copied
+     */
+    PolygonInfo& operator= (const PolygonInfo &other);
+    ~PolygonInfo();
+    
+    /**
+     * set the data to be a pointer to a quad
+     * the member verts will not be released when this PolygonInfo destructs
+     * as the verts memory are managed by other objects
+     * @param quad  a pointer to the V3F_C4B_T2F_Quad object
+     */
+    void setQuad(V3F_C4B_T2F_Quad *quad);
+    
+     private:
+  // There are two store buffers. If one store buffer fills up, the main thread
+  // publishes the top pointer of the store buffer that needs processing in its
+  // global lazy_top_ field. After that it start the concurrent processing
+  // thread. The concurrent processing thread uses the pointer in lazy_top_.
+  // It will grab the given mutex and transfer its entries to the remembered
+  // set. If the concurrent thread does not make progress, the main thread will
+  // perform the work.
+  // Important: there is an ordering constrained. The store buffer with the
+  // older entries has to be processed first.
+  class Task : public CancelableTask {
+   public:
+    Task(Isolate* isolate, StoreBuffer* store_buffer)
+        : CancelableTask(isolate),
+          store_buffer_(store_buffer),
+          tracer_(isolate->heap()->tracer()) {}
+    ~Task() override = default;
     }
     
+    class Sweeper::IncrementalSweeperTask final : public CancelableTask {
+ public:
+  IncrementalSweeperTask(Isolate* isolate, Sweeper* sweeper)
+      : CancelableTask(isolate), isolate_(isolate), sweeper_(sweeper) {}
+    }
     
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
+      explicit Worklist(int num_tasks) : num_tasks_(num_tasks) {
+    DCHECK_LE(num_tasks, kMaxNumTasks);
+    for (int i = 0; i < num_tasks_; i++) {
+      private_push_segment(i) = NewSegment();
+      private_pop_segment(i) = NewSegment();
+    }
+  }
+    
+      // Leave the current exit frame. Expects the return value in
+  // register eax:edx (untouched) and the pointer to the first
+  // argument in register esi (if pop_arguments == true).
+  void LeaveExitFrame(bool save_doubles, bool pop_arguments = true);
+    
+    Node* BinaryOpAssembler::Generate_ExponentiateWithFeedback(
+    Node* context, Node* base, Node* exponent, Node* slot_id,
+    Node* feedback_vector, bool rhs_is_smi) {
+  // We currently don't optimize exponentiation based on feedback.
+  Node* dummy_feedback = SmiConstant(BinaryOperationFeedback::kAny);
+  UpdateFeedback(dummy_feedback, feedback_vector, slot_id);
+  return CallBuiltin(Builtins::kExponentiate, context, base, exponent);
 }
-
-    
-    #include <stdint.h>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include 'imgui.h'
-#include 'imgui_impl_allegro5.h'
-    
-    #include 'imgui.h'
-#include 'imgui_impl_glfw.h'
-#include 'imgui_impl_opengl3.h'
-#include <stdio.h>
-    
-    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
-    }
-    
-    
-    {    ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
-    if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
-    {
-        // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
-        glfwSetInputMode(g_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    }
-    else
-    {
-        // Show OS mouse cursor
-        // FIXME-PLATFORM: Unfocused windows seems to fail changing the mouse cursor with GLFW 3.2, but 3.3 works here.
-        glfwSetCursor(g_Window, g_MouseCursors[imgui_cursor] ? g_MouseCursors[imgui_cursor] : g_MouseCursors[ImGuiMouseCursor_Arrow]);
-        glfwSetInputMode(g_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    }
-}
-    
-    // Allow compilation with old Windows SDK. MinGW doesn't have default _WIN32_WINNT/WINVER versions.
-#ifndef WM_MOUSEHWHEEL
-#define WM_MOUSEHWHEEL 0x020E
-#endif
-#ifndef DBT_DEVNODES_CHANGED
-#define DBT_DEVNODES_CHANGED 0x0007
-#endif
