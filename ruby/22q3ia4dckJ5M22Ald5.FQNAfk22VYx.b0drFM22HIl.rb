@@ -1,34 +1,48 @@
 
         
-                  content_is_options = content_or_options.is_a?(Hash)
-          if content_is_options
-            options.merge! content_or_options
-            @content = nil
-          else
-            @content = content_or_options
-          end
+              @sign_out_via = options[:sign_out_via] || Devise.sign_out_via
+      @format = options[:format]
     
-            def ==(type)
-          @symbol == type.to_sym unless type.blank?
-        end
+          included do
+        before_update :clear_reset_password_token, if: :clear_reset_password_token?
       end
     
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
     
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
+          def create_worker_spec
+        template_file = File.join(
+            'spec/workers',
+            class_path,
+            '#{file_name}_worker_spec.rb'
+        )
+        template 'worker_spec.rb.erb', template_file
+      end
     
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
+        end
+      end
     end
-  end
-end
