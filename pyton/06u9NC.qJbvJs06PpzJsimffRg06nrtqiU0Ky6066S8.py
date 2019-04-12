@@ -1,39 +1,52 @@
 
         
-            def send_friend_request(self, friend_id):
+            @value.setter
+    def value(self, new_value):
+        if 1 <= new_value <= 13:
+            self._value = new_value
+        else:
+            raise ValueError('Invalid card value: {}'.format(new_value))
+    
+        def remove_from_tail(self):
         pass
+    
+        def mapper_sort(self, key, value):
+        '''Construct key to ensure proper sorting.
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
         def remove_link_to_crawl(self, url):
         '''Remove the given link from `links_to_crawl`.'''
         pass
     
-        def parse(self, response):
-        pass
+            if os.path.basename(full_path).lower().startswith('__init__.py'):
+            return os.path.dirname(os.path.dirname(full_path))
+        else:
+            # here we have been given a module rather than a package - so
+            # all we can do is search the *same* directory the module is in
+            # should an exception be raised instead
+            return os.path.dirname(full_path)
+    
+    # Of course, there are lots of email messages that could break this simple
+# minded program, but it will handle the most common ones.
 
     
-            parser.add_option_group(group)
+    document = '''\
+<slideshow>
+<title>Demo slideshow</title>
+<slide><title>Slide title</title>
+<point>This is a demo</point>
+<point>Of a program for processing slides</point>
+</slide>
     
-        def long_desc(self):
-        return ('Edit a spider using the editor defined in the EDITOR environment'
-                ' variable or else the EDITOR setting')
+    class MyManager(BaseManager):
+    pass
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-    
-                        if not cb:
-                        logger.error('Cannot find a rule that matches %(url)r in spider: %(spider)s',
-                                 {'url': response.url, 'spider': spider.name})
-                        return
-                else:
-                    cb = 'parse'
-    
-        # Stripping scripts and comments is slow (about 20x slower than
-    # just checking if a string is in text); this is a quick fail-fast
-    # path that should work for most pages.
-    if 'fragment' not in text:
-        return False
-    if 'content' not in text:
-        return False
+    #
+# Test code
+#
