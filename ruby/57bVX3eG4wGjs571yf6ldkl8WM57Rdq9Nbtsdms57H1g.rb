@@ -1,39 +1,23 @@
-        Redis::Cache.with do |redis|
-          redis.expire(key, timeout)
-        end
-      end
+
+        
+          def execute
+    signal_deprecation_warning_for_pack
     
-            yield Page.new(collection, page)
-    
-            def id_for_already_imported_cache(note)
-          note.id
-        end
-      end
+        desc 'Run one single machine acceptance test'
+    task :single, :machine do |t, args|
+      ENV['LS_VAGRANT_HOST']  = args[:machine]
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
     end
   end
 end
 
     
-          # The base cache key to use for tracking already imported objects.
-      ALREADY_IMPORTED_CACHE_KEY =
-        'github-importer/already-imported/%{project}/%{collection}'.freeze
-    
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
-    
-        # Returns the id of the instance in a split path form. e.g. returns
-    # 000/001/234 for an id of 1234.
-    def id_partition attachment, style_name
-      case id = attachment.instance.id
-      when Integer
-        if id < ID_PARTITION_LIMIT
-          ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
-        else
-          ('%012d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
-        end
-      when String
-        id.scan(/.{3}/).first(3).join('/'.freeze)
-      else
-        nil
-      end
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
+      super
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
     end
