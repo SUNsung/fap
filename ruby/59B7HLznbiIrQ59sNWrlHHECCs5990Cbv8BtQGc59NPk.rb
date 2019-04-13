@@ -1,115 +1,70 @@
 
         
-                  def field_type
-            self.class.field_type
-          end
+            def class_ref_for_action(named: nil)
+      class_ref = Actions.action_class_ref(named)
+      unless class_ref
+        if Fastlane::Actions.formerly_bundled_actions.include?(action)
+          # This was a formerly bundled action which is now a plugin.
+          UI.verbose(caller.join('\n'))
+          UI.user_error!('The action '#{action}' is no longer bundled with fastlane. You can install it using `fastlane add_plugin #{action}`')
+        else
+          Fastlane::ActionsList.print_suggestions(action)
+          UI.user_error!('Action '#{action}' not available, run `fastlane actions` to get a full list')
+        end
+      end
+    
+          inspector = GhInspector::Inspector.new('fastlane', 'fastlane', verbose: FastlaneCore::Globals.verbose?)
+      delegate = Fastlane::InspectorReporter.new
+      if message_or_error.kind_of?(String)
+        inspector.search_query(message_or_error, delegate)
+      else
+        inspector.search_exception(message_or_error, delegate)
+      end
+    rescue => ex
+      FastlaneCore::UI.error('Error finding relevant GitHub issues: #{ex}') if FastlaneCore::Globals.verbose?
+    end
+  end
+end
+
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            grouping: '#{grouping}',
+            build_number: #{specified_build_number},
+          })
+        end').runner.execute(:test)
+    
+          it 'handles the exclude_dirs parameter with multiple  elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle', 'Packages/'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle --exclude-dir Packages/')
       end
     end
   end
 end
 
     
-          def raise_or_wait_for_rate_limit
-        rate_limit_counter.increment
+            expect(result).to include(' -rule #{rule.shellescape} ')
+        expect(result).to include(' -disable-rule #{rule.shellescape} ')
+      end
     
-    module Gitlab
-  module GithubImport
-    # IssuableFinder can be used for caching and retrieving database IDs for
-    # issuable objects such as issues and pull requests. By caching these IDs we
-    # remove the need for running a lot of database queries when importing
-    # GitHub projects.
-    class IssuableFinder
-      attr_reader :project, :object
-    
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
+          it 'returns the return value of the block if present' do
+        expect_command('ls', '-la')
+        return_value = Fastlane::Actions.sh('ls', '-la') do |status, result|
+          42
         end
+        expect(return_value).to eq(42)
       end
     end
   end
-end
-
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+        # An empty argument will be skipped, so return empty quotes.
+    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
+    return ''''.dup if str.empty?
+    
+        # From asking people, it seems MacPorts does not have a `prefix` command, like
+    # Homebrew does, so make an educated guess:
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
     end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-            # Generate a token checking if one does not already exist in the database.
-        def remember_token #:nodoc:
-          loop do
-            token = Devise.friendly_token
-            break token unless to_adapter.find_first({ remember_token: token })
-          end
-        end
-    
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
-  end
-end
-    
-        <div id='cookies'>
-      <h3 id='cookie-info'>COOKIES</h3>
-      <% unless req.cookies.empty? %>
-        <table class='req'>
-          <tr>
-            <th>Variable</th>
-            <th>Value</th>
-          </tr>
-          <% req.cookies.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-          <% } %>
-        </table>
-      <% else %>
-        <p class='no-data'>No cookie data.</p>
-      <% end %>
-      <div class='clear'></div>
-    </div> <!-- /COOKIES -->
-    
-          def csp_policy
-        directives = []
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
-    
-          check_class_collision suffix: 'Worker'
-    
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
-    
-        def watchdog(last_words)
-      yield
-    rescue Exception => ex
-      handle_exception(ex, { context: last_words })
-      raise ex
-    end
-    
-        def _erb(file, locals)
-      locals.each {|k, v| define_singleton_method(k){ v } unless (singleton_methods.include? k)} if locals
