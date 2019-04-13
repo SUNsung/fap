@@ -1,141 +1,123 @@
 
         
-        
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
+            return render_template('auth/login.html')
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+    bp = Blueprint('blog', __name__)
     
     
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-            if self.tree.find('result').text != '1':
-            log.wtf('API result says failed!')
-            raise 
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    __all__ = ['ckplayer_download']
-    
-    site_info = 'CNTV.com'
-download = cntv_download
-download_playlist = playlist_not_supported('cntv')
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
 
     
-                print_info(site_info, title, type, size)
-            if not info_only:
-                download_urls([real_url], title, ext, size, output_dir, merge = merge)
     
-        video_url = match1(html, r'filepath=(.+)&sec')
-    video_url = video_url.replace('&mid', '?mid')
-    
-        title = r1(r'<meta property='og:title' content='(.*?)'>', html)
-    
-    
-def compute_bbox_regression_targets(entry):
-    '''Compute bounding-box regression targets for an image.'''
-    # Indices of ground-truth ROIs
-    rois = entry['boxes']
-    overlaps = entry['max_overlaps']
-    labels = entry['max_classes']
-    gt_inds = np.where((entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-    # Targets has format (class, tx, ty, tw, th)
-    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
-    if len(gt_inds) == 0:
-        # Bail if the image has no ground-truth ROIs
-        return targets
-    
-    from detectron.core.config import cfg
-from detectron.datasets import json_dataset
-from detectron.datasets import roidb as roidb_utils
-import detectron.modeling.FPN as fpn
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-import detectron.utils.blob as blob_utils
-    
-        num_keypoints = gt_keypoints.shape[2]
-    sampled_keypoints = -np.ones(
-        (len(sampled_fg_rois), gt_keypoints.shape[1], num_keypoints),
-        dtype=gt_keypoints.dtype
+@pytest.mark.parametrize(('username', 'password', 'message'), (
+    ('', '', b'Username is required.'),
+    ('a', '', b'Password is required.'),
+    ('test', 'test', b'already registered'),
+))
+def test_register_validate_input(client, username, password, message):
+    response = client.post(
+        '/auth/register',
+        data={'username': username, 'password': password}
     )
-    for ii in range(len(sampled_fg_rois)):
-        ind = box_to_gt_ind_map[ii]
-        if ind >= 0:
-            sampled_keypoints[ii, :, :] = gt_keypoints[gt_inds[ind], :, :]
-            assert np.sum(sampled_keypoints[ii, 2, :]) > 0
+    assert message in response.data
+    
+    
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+    '/1/delete',
+))
+def test_login_required(client, path):
+    response = client.post(path)
+    assert response.headers['Location'] == 'http://localhost/auth/login'
+    
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        try:
+            self.model.objects.get(session_key=session_key).delete()
+        except self.model.DoesNotExist:
+            pass
+    
+        def __str__(self):
+        '''Render this field as an HTML widget.'''
+        if self.field.show_hidden_initial:
+            return self.as_widget() + self.as_hidden(only_initial=True)
+        return self.as_widget()
+    
+    if __name__ == '__main__':
+	import sys
+    
+            '''
+        this section is to check that the inputs conform to our dimensionality constraints
+        '''
+        if X.ndim != 1:
+            print('Error: Input data set must be one dimensional')
+            return
+        if len(X) != len(y):
+            print('Error: X and y have different lengths')
+            return
+        if y.ndim != 1:
+            print('Error: Data set labels must be one dimensional')
+            return
+    
+    # Increasing --n without --keepalive will eventually run into problems
+# due to TIME_WAIT sockets
+define('n', type=int, default=15000)
+define('c', type=int, default=25)
+define('keepalive', type=bool, default=False)
+define('quiet', type=bool, default=False)
+    
+            # libcurl has bugs that sometimes cause it to not report all
+        # relevant file descriptors and timeouts to TIMERFUNCTION/
+        # SOCKETFUNCTION.  Mitigate the effects of such bugs by
+        # forcing a periodic scan of all active requests.
+        self._force_timeout_callback = ioloop.PeriodicCallback(
+            self._handle_force_timeout, 1000
+        )
+        self._force_timeout_callback.start()
+    
+       When using multiple ``parse_*`` functions, pass ``final=False`` to all
+   but the last one, or side effects may occur twice (in particular,
+   this can result in log messages being doubled).
+    
+    Unlike most other template systems, we do not put any restrictions on the
+expressions you can include in your statements. ``if`` and ``for`` blocks get
+translated exactly into Python, so you can do complex expressions like::
+    
+        def get_event_loop_on_thread(self):
+        def get_and_close_event_loop():
+            '''Get the event loop. Close it if one is returned.
+    
+    
+class OAuth1ServerRequestTokenHandler(RequestHandler):
+    def get(self):
+        self.write('oauth_token=zxcv&oauth_token_secret=1234')
     
     
 if __name__ == '__main__':
-    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
-    logger = setup_logging(__name__)
-    logger.setLevel(logging.DEBUG)
-    logging.getLogger('detectron.roi_data.loader').setLevel(logging.INFO)
-    np.random.seed(cfg.RNG_SEED)
-    args = parse_args()
-    logger.info('Called with args:')
-    logger.info(args)
-    if args.cfg_file is not None:
-        merge_cfg_from_file(args.cfg_file)
-    if args.opts is not None:
-        merge_cfg_from_list(args.opts)
-    assert_and_infer_cfg()
-    logger.info('Running with config:')
-    logger.info(pprint.pformat(cfg))
-    main(args)
-
+    main()
     
-    file_name = args[0]
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-    if len(sys.argv)>2:
-    n_topic = int(sys.argv[2])
-    
-    
-content = open(file_name,'rb').read()
+            print('Success: test_end_to_end')
