@@ -1,317 +1,335 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+          // C++ can not distinguish overloaded member function.
+  template <AtomNetworkDelegate::SimpleEvent type>
+  void SetSimpleListener(mate::Arguments* args);
+  template <AtomNetworkDelegate::ResponseEvent type>
+  void SetResponseListener(mate::Arguments* args);
+  template <typename Listener, typename Method, typename Event>
+  void SetListener(Method method, Event type, mate::Arguments* args);
     
-    #include <iomanip>
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/tensor_shape.pb.h'
-#include 'tensorflow/core/grappler/costs/graph_properties.h'
-#include 'tensorflow/core/grappler/grappler_item.h'
     
-    REGISTER_OP('Add').Doc(R'doc(
-An op to test that duplicate registrations don't override previously
-registered ops.
-)doc');
+    {    T* self = nullptr;
+    mate::ConvertFromV8(isolate, object.ToLocalChecked(), &self);
+    return self;
+  }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      // content::JavaScriptDialogManager implementations.
+  void RunJavaScriptDialog(content::WebContents* web_contents,
+                           content::RenderFrameHost* rfh,
+                           content::JavaScriptDialogType dialog_type,
+                           const base::string16& message_text,
+                           const base::string16& default_prompt_text,
+                           DialogClosedCallback callback,
+                           bool* did_suppress_message) override;
+  void RunBeforeUnloadDialog(content::WebContents* web_contents,
+                             content::RenderFrameHost* rfh,
+                             bool is_reload,
+                             DialogClosedCallback callback) override;
+  void CancelDialogs(content::WebContents* web_contents,
+                     bool reset_state) override;
     
-    namespace tensorflow {
-namespace swig {
+      // content::QuotaPermissionContext:
+  void RequestQuotaPermission(const content::StorageQuotaParams& params,
+                              int render_process_id,
+                              const PermissionCallback& callback) override;
+    
+    #include 'atom/browser/auto_updater.h'
+    
+      static std::string GetFeedURL();
+  static void SetFeedURL(mate::Arguments* args);
+  static void CheckForUpdates();
+  static void QuitAndInstall();
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(URLRequestAboutJob);
+};
+    
+      // ViewsDelegate:
+  void OnBeforeWidgetInit(
+      views::Widget::InitParams* params,
+      views::internal::NativeWidgetDelegate* delegate) override;
+  ui::ContextFactory* GetContextFactory() override;
+  ui::ContextFactoryPrivate* GetContextFactoryPrivate() override;
+    
+    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
     }
-    }
     
-    
-    {  delete db;
-  delete [] pixels;
+    int main(int argc, char** argv) {
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
+  }
+  return 0;
 }
-    
-    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
- *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
- */
-template <typename Dtype>
-class PositiveUnitballFiller : public Filler<Dtype> {
- public:
-  explicit PositiveUnitballFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    DCHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
-    // We expect the filler to not be called very frequently, so we will
-    // just use a simple implementation
-    int dim = blob->count() / blob->shape(0);
-    CHECK(dim);
-    for (int i = 0; i < blob->shape(0); ++i) {
-      Dtype sum = 0;
-      for (int j = 0; j < dim; ++j) {
-        sum += data[i * dim + j];
-      }
-      for (int j = 0; j < dim; ++j) {
-        data[i * dim + j] /= sum;
-      }
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-    #include <vector>
-    
-    #include <vector>
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace tesseract {
-class Tesseract;
-}
-    
-    #include 'blread.h'
-#include <cstdio>       // for fclose, fopen, FILE
-#include 'host.h'       // for TRUE
-#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
-#include 'scanutils.h'  // for tfscanf
-    
-    struct TWERD;
-    
-    #endif  // TESSERACT_CCSTRUCT_DPPOINT_H_
-
-    
-     private:
-  // Sets the value of total_pages_ behind a mutex.
-  void set_total_pages(int total) {
-    SVAutoLock lock(&general_mutex_);
-    total_pages_ = total;
-  }
-  void set_memory_used(int64_t memory_used) {
-    SVAutoLock lock(&general_mutex_);
-    memory_used_ = memory_used;
-  }
-  // Locks the pages_mutex_ and Loads as many pages can fit in max_memory_
-  // starting at index pages_offset_.
-  bool ReCachePages();
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-Iterator* NewDBIterator(DBImpl* db,
-                        const Comparator* user_key_comparator,
-                        Iterator* internal_iter,
-                        SequenceNumber sequence,
-                        uint32_t seed);
-    
-      int CountFiles() {
-    std::vector<std::string> files;
-    env_->GetChildren(dbname_, &files);
-    return static_cast<int>(files.size());
-  }
-    
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
-    
-    class Reader {
- public:
-  // Interface for reporting errors.
-  class Reporter {
-   public:
-    virtual ~Reporter();
-    }
-    }
-    
-    size_t LogTest::initial_offset_record_sizes_[] =
-    {10000,  // Two sizable records in first block
-     10000,
-     2 * log::kBlockSize - 1000,  // Span three blocks
-     1,
-     13716,  // Consume all but two bytes of block 3.
-     log::kBlockSize - kHeaderSize, // Consume the entirety of block 4.
-    };
-    
-    const char *kModelNames[6] = {'probing hash tables', 'probing hash tables with rest costs', 'trie', 'trie with quantization', 'trie with array-compressed pointers', 'trie with quantization and array-compressed pointers'};
-    
-    /* Suppose 'foo bar' appears with zero backoff but there is no trigram
- * beginning with these words.  Then, when scoring 'foo bar', the model could
- * return out_state containing 'bar' or even null context if 'bar' also has no
- * backoff and is never followed by another word.  Then the backoff is set to
- * kNoExtensionBackoff.  If the n-gram might be extended, then out_state must
- * contain the full n-gram, in which case kExtensionBackoff is set.  In any
- * case, if an n-gram has non-zero backoff, the full state is returned so
- * backoff can be properly charged.
- * These differ only in sign bit because the backoff is in fact zero in either
- * case.
- */
-const float kNoExtensionBackoff = -0.0;
-const float kExtensionBackoff = 0.0;
-const uint64_t kNoExtensionQuant = 0;
-const uint64_t kExtensionQuant = 1;
-    
-    template <class Range> struct SuffixLexicographicLess : public std::binary_function<const Range, const Range, bool> {
-  bool operator()(const Range first, const Range second) const {
-    for (const WordIndex *f = first.end() - 1, *s = second.end() - 1; f >= first.begin() && s >= second.begin(); --f, --s) {
-      if (*f < *s) return true;
-      if (*f > *s) return false;
-    }
-    return first.size() < second.size();
-  }
-};
-    
-          UTIL_THROW_IF(order != current + 1, FormatLoadException, 'Detected n-gram without matching suffix');
-    
-    
-    {} // namespace
-#endif // LM_BUILDER_NGRAM_STREAM_H
-
-    
-    void PrintARPA::Run(const util::stream::ChainPositions &positions) {
-  VocabReconstitute vocab(vocab_fd_);
-  util::FileStream out(out_fd_);
-  out << '\\data\\\n';
-  for (size_t i = 0; i < positions.size(); ++i) {
-    out << 'ngram ' << (i+1) << '=' << counts_[i] << '\n';
-  }
-  out << '\n';
-    }
-    
-    
-    {  private:
-    const WordIndex *new_numbers_;
-    std::size_t order_;
-};
-    
-        /* Translate from void* to State */
-    FullScoreReturn BaseFullScore(const void *in_state, const WordIndex new_word, void *out_state) const {
-      return static_cast<const Child*>(this)->FullScore(
-          *reinterpret_cast<const State*>(in_state),
-          new_word,
-          *reinterpret_cast<State*>(out_state));
-    }
-    
-        float &Backoff(std::size_t model, std::size_t order_minus_1) {
-      return backing_[model * max_order_ + order_minus_1];
-    }
-    
-    // main() provided by Catch in file 020-TestCase-1.cpp.
-    
-    // main() provided in 000-CatchMain.cpp
-    
-    
-    {} // end namespace Catch
-    
-            Verbosity verbosity = Verbosity::Normal;
-        WarnAbout::What warnings = WarnAbout::Nothing;
-        ShowDurations::OrNot showDurations = ShowDurations::DefaultForReporter;
-        RunTests::InWhatOrder runOrder = RunTests::InDeclarationOrder;
-        UseColour::YesOrNo useColour = UseColour::Auto;
-        WaitForKeypress::When waitForKeypress = WaitForKeypress::Never;
-    
-        inline IContext& getCurrentContext()
-    {
-        return getCurrentMutableContext();
-    }
-    
-    
-    {
-    {            return false;
-        }
-    } // namespace Catch
-#elif defined(_MSC_VER)
-    extern 'C' __declspec(dllimport) int __stdcall IsDebuggerPresent();
-    namespace Catch {
-        bool isDebuggerActive() {
-            return IsDebuggerPresent() != 0;
-        }
-    }
-#elif defined(__MINGW32__)
-    extern 'C' __declspec(dllimport) int __stdcall IsDebuggerPresent();
-    namespace Catch {
-        bool isDebuggerActive() {
-            return IsDebuggerPresent() != 0;
-        }
-    }
 #else
-    namespace Catch {
-       bool isDebuggerActive() { return false; }
-    }
-#endif // Platform
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
+}
+#endif  // USE_LEVELDB
 
-    
-        FatalConditionHandler::FatalConditionHandler() {
-        isSet = true;
-        stack_t sigStack;
-        sigStack.ss_sp = altStackMem;
-        sigStack.ss_size = sigStackSize;
-        sigStack.ss_flags = 0;
-        sigaltstack(&sigStack, &oldSigStack);
-        struct sigaction sa = { };
-    }
-    
-    
-    {  /**
-   * Enable the file event explicitly for a set of events. Should be a logical OR of FileReadyType
-   * events. As opposed to activate(), this routine causes the file event to listen for the
-   * registered events and fire callbacks when they are active.
-   */
-  virtual void setEnabled(uint32_t events) PURE;
-};
-    
-    
-    {  /**
-   * Signals that the request should be cancelled. No further callbacks will be invoked.
-   */
-  virtual void cancel() PURE;
-};
     
       /**
-   * @return Buffer::InstancePtr& the message body, if any. Callers are free to reallocate, remove,
-   *         etc. the body.
+   * @brief Compute the volume of a slice; i.e., the product of dimensions
+   *        among a range of axes.
+   *
+   * @param start_axis The first axis to include in the slice.
+   *
+   * @param end_axis The first axis to exclude from the slice.
    */
-  virtual Buffer::InstancePtr& body() PURE;
+  inline int count(int start_axis, int end_axis) const {
+    CHECK_LE(start_axis, end_axis);
+    CHECK_GE(start_axis, 0);
+    CHECK_GE(end_axis, 0);
+    CHECK_LE(start_axis, num_axes());
+    CHECK_LE(end_axis, num_axes());
+    int count = 1;
+    for (int i = start_axis; i < end_axis; ++i) {
+      count *= shape(i);
+    }
+    return count;
+  }
+  /**
+   * @brief Compute the volume of a slice spanning from a particular first
+   *        axis to the final axis.
+   *
+   * @param start_axis The first axis to include in the slice.
+   */
+  inline int count(int start_axis) const {
+    return count(start_axis, num_axes());
+  }
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+    
+    #endif  // CAFFE_BATCHNORM_LAYER_HPP_
+
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+    namespace caffe {
+    }
+    
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18>
+internal::ValueArray18<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6,
+    T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
+    T16 v16, T17 v17, T18 v18) {
+  return internal::ValueArray18<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18>(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+      v10, v11, v12, v13, v14, v15, v16, v17, v18);
+}
+    
+    // scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-param-util.h'
+#include 'gtest/internal/gtest-param-util-generated.h'
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED3.  Don't use
+// this in your code.
+#define GTEST_PRED3_(pred, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred3Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             #v3, \
+                                             pred, \
+                                             v1, \
+                                             v2, \
+                                             v3), on_failure)
+    
+    namespace testing {
+namespace internal {
+    }
+    }
+    
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    
+    // Anything in namespace gtest_internal is Google Test's INTERNAL
+// IMPLEMENTATION DETAIL and MUST NOT BE USED DIRECTLY in user code.
+namespace gtest_internal {
+    }
+    
+      // Now, we have that n is odd and n >= 3.
+    
+     public:
+  // Gets the element in this node.
+  const E& element() const { return element_; }
+    
+    namespace b2ConvexDecomp {
+    }
+    
+    /* */
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    #undef SIG2WORD16
+static OPUS_INLINE opus_val16 SIG2WORD16_armv6(opus_val32 x)
+{
+   celt_sig res;
+   __asm__(
+       '#SIG2WORD16\n\t'
+       'ssat %0, #16, %1, ASR #12\n\t'
+       : '=r'(res)
+       : 'r'(x+2048)
+   );
+   return EXTRACT16(res);
+}
+#define SIG2WORD16(x) (SIG2WORD16_armv6(x))
+    
+    std::string TableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'ldb');
+}
+    
+      // Compute the crc of the record type and the payload.
+  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
+  crc = crc32c::Mask(crc);                 // Adjust for storage
+  EncodeFixed32(buf, crc);
+    
+    // Snapshots are kept in a doubly-linked list in the DB.
+// Each SnapshotImpl corresponds to a particular sequence number.
+class SnapshotImpl : public Snapshot {
+ public:
+  SnapshotImpl(SequenceNumber sequence_number)
+      : sequence_number_(sequence_number) {}
+    }
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-null, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or to nullptr if no Table object
+  // underlies the returned iterator.  The returned '*tableptr' object is owned
+  // by the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = nullptr);
+    
+    class VersionSet;
+    
+      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Platform;
+using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+    
+            static NetworkAccessBehavior GetNetworkAccessBehavior();
     
     
-    {  /**
-   * Shadow a request.
-   * @param cluster supplies the cluster name to shadow to.
-   * @param message supplies the complete request to shadow.
-   * @param timeout supplies the shadowed request timeout.
-   */
-  virtual void shadow(const std::string& cluster, Http::MessagePtr&& request,
-                      std::chrono::milliseconds timeout) PURE;
+    {  std::unique_ptr<RateLimiter> low_pri_rate_limiter_;
 };
     
-    #include 'common/protobuf/protobuf.h'
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
+ public:
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
+  }
+    }
+    
+    #pragma once
+#ifndef ROCKSDB_LITE
+    
+    namespace rocksdb {
+    }
+    
+      // Any internal progress/error information generated by the db will
+  // be written to info_log if it is non-NULL, or to a file stored
+  // in the same directory as the DB contents if info_log is NULL.
+  // Default: NULL
+  Logger* info_log;
+    
+    namespace rocksdb {
+    }
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
