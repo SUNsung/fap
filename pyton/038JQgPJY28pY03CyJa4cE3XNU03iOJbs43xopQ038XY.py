@@ -1,88 +1,65 @@
 
         
-        
-@pytest.fixture
-def set_shell(monkeypatch):
-    def _set(cls):
-        shell = cls()
-        monkeypatch.setattr('thefuck.shells.shell', shell)
-        return shell
+            def __call__(self, r):
+        # Initialize per-thread state, if needed
+        self.init_per_thread_state()
+        # If we have a saved nonce, skip the 401
+        if self._thread_local.last_nonce:
+            r.headers['Authorization'] = self.build_digest_header(r.method, r.url)
+        try:
+            self._thread_local.pos = r.body.tell()
+        except AttributeError:
+            # In the case of HTTPDigestAuth being reused and the body of
+            # the previous request was a file-like object, pos has the
+            # file position of the previous body. Ensure it's set to
+            # None.
+            self._thread_local.pos = None
+        r.register_hook('response', self.handle_401)
+        r.register_hook('response', self.handle_redirect)
+        self._thread_local.num_401_calls = 1
+    
+        def list_domains(self):
+        '''Utility method to list all the domains in the jar.'''
+        domains = []
+        for cookie in iter(self):
+            if cookie.domain not in domains:
+                domains.append(cookie.domain)
+        return domains
+    
+    import idna
+import urllib3
+import chardet
     
     
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
-    
-        for node in doctree.traverse(settingslist_node):
-        settings_list = nodes.bullet_list()
-        settings_list.extend([make_setting_element(d, app, fromdocname)
-                              for d in sorted(env.scrapy_all_settings,
-                                              key=itemgetter('setting_name'))
-                              if fromdocname != d['docname']])
-        node.replace_self(settings_list)
-    
-    # Ignore noisy twisted deprecation warnings
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
-del warnings
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-    
-        def connectionLost(self, reason):
-        self._connection_lost_reason = reason
-        HTTPClient.connectionLost(self, reason)
-        self.factory.noPage(reason)
-    
-        def prepare(self, **kwargs):
-        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
-        self.title = self.api_data['title']
-        for s in self.api_data['video']:
-            for st in self.__class__.stream_types:
-                if st['map_to'] == s:
-                    urls = self.api_data['video'][s]
-                    src = [u['url'] for u in urls]
-                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
-                    self.streams[st['id']] = stream_data
-    
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
     '''
-refer to http://open.youku.com/tools
-'''
-youku_embed_patterns = [ 'youku\.com/v_show/id_([a-zA-Z0-9=]+)',
-                         'player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf',
-                         'loader\.swf\?VideoIDS=([a-zA-Z0-9=]+)',
-                         'player\.youku\.com/embed/([a-zA-Z0-9=]+)',
-                         'YKU.Player\(\'[a-zA-Z0-9]+\',{ client_id: \'[a-zA-Z0-9]+\', vid: \'([a-zA-Z0-9]+)\''
-                       ]
-    }
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-    def get_api_key(page):
-    match = match1(page, pattern_inline_api_key)
-    # this happens only when the url points to a gallery page
-    # that contains no inline api_key(and never makes xhr api calls)
-    # in fact this might be a better approch for getting a temporary api key
-    # since there's no place for a user to add custom infomation that may
-    # misguide the regex in the homepage
-    if not match:
-        return match1(get_html('https://flickr.com'), pattern_inline_api_key)
-    return match
+            try:
+            length = super_len(data)
+        except (TypeError, AttributeError, UnsupportedOperation):
+            length = None
+    
+        if 'charset' in params:
+        return params['charset'].strip(''\'')
+    
+            self.assertEqual(jws, JWS.from_json(jws.to_json()))
+    
+            :raises .errors.PluginError: If there has been an error in parsing with
+            the specified lens.
     
     
-def Match(pattern, s):
-  '''Matches the string with the pattern, caching the compiled regexp.'''
-  # The regexp compilation caching is inlined in both Match and Search for
-  # performance reasons; factoring it out into a separate function turns out
-  # to be noticeably expensive.
-  if pattern not in _regexp_compile_cache:
-    _regexp_compile_cache[pattern] = sre_compile.compile(pattern)
-  return _regexp_compile_cache[pattern].match(s)
+UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
+'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
+    
+    ========================================  =====================================
+``--dns-cloudflare-credentials``          Cloudflare credentials_ INI file.
+                                          (Required)
+``--dns-cloudflare-propagation-seconds``  The number of seconds to wait for DNS
+                                          to propagate before asking the ACME
+                                          server to verify the DNS record.
+                                          (Default: 10)
+========================================  =====================================
