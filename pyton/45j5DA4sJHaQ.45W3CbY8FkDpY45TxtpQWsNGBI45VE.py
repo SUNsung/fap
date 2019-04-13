@@ -1,160 +1,104 @@
 
         
-          * glmnet-python
-  * scikit-learn (of course)
+                if self.with_body:
+            try:
+                for chunk in self.iter_body():
+                    yield chunk
+                    if self.on_body_chunk_downloaded:
+                        self.on_body_chunk_downloaded(chunk)
+            except BinarySuppressedError as e:
+                if self.with_headers:
+                    yield b'\n'
+                yield e.message
+    
+        # The URL prefix the adapter should be mount to.
+    prefix = None
     
     
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
-    
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
-    
-        link = nodes.reference(text=text, refuri=ref, **options)
-    return [link], []
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    - single linkage is fast, and can perform well on
-  non-globular data, but it performs poorly in the
-  presence of noise.
-- average and complete linkage perform well on
-  cleanly separated globular clusters, but have mixed
-  results otherwise.
-- Ward is the most effective method for noisy data.
-    
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
-    '''
-    
-        def test_include_single_quotes(self):
-        self.verify_fnmatch(''' + self.config_path + ''')
-    
-            self.vhost1 = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-            del c1, c2, C, D
-        gc.collect()
-    
-    def makeSuite(testCaseClass, prefix='test', sortUsing=util.three_way_cmp,
-              suiteClass=suite.TestSuite):
-    return _makeLoader(prefix, sortUsing, suiteClass).loadTestsFromTestCase(
-        testCaseClass)
-    
-    IMPORT_MAPPING.update({
-    'cPickle': 'pickle',
-    '_elementtree': 'xml.etree.ElementTree',
-    'FileDialog': 'tkinter.filedialog',
-    'SimpleDialog': 'tkinter.simpledialog',
-    'DocXMLRPCServer': 'xmlrpc.server',
-    'SimpleHTTPServer': 'http.server',
-    'CGIHTTPServer': 'http.server',
-    # For compatibility with broken pickles saved in old Python 3 versions
-    'UserDict': 'collections',
-    'UserList': 'collections',
-    'UserString': 'collections',
-    'whichdb': 'dbm',
-    'StringIO':  'io',
-    'cStringIO': 'io',
-})
-    
-            Initialize the instance with the from and to addresses and subject
-        line of the email. To specify a non-standard SMTP port, use the
-        (host, port) tuple format for the mailhost argument. To specify
-        authentication credentials, supply a (username, password) tuple
-        for the credentials argument. To specify the use of a secure
-        protocol (TLS), pass in a tuple for the secure argument. This will
-        only be used when authentication credentials are supplied. The tuple
-        will be either an empty tuple, or a single-value tuple with the name
-        of a keyfile, or a 2-value tuple with the names of the keyfile and
-        certificate file. (This tuple is passed to the `starttls` method).
-        A timeout in seconds can be specified for the SMTP connection (the
-        default is one second).
-        '''
-        logging.Handler.__init__(self)
-        if isinstance(mailhost, (list, tuple)):
-            self.mailhost, self.mailport = mailhost
-        else:
-            self.mailhost, self.mailport = mailhost, None
-        if isinstance(credentials, (list, tuple)):
-            self.username, self.password = credentials
-        else:
-            self.username = None
-        self.fromaddr = fromaddr
-        if isinstance(toaddrs, str):
-            toaddrs = [toaddrs]
-        self.toaddrs = toaddrs
-        self.subject = subject
-        self.secure = secure
-        self.timeout = timeout
-    
-        def _generate_symbols(self, grammar_file, target_symbol_py_file):
-        proc = subprocess.Popen([sys.executable,
-                                 GEN_SYMBOL_FILE,
-                                 grammar_file,
-                                 target_symbol_py_file], stderr=subprocess.PIPE)
-        stderr = proc.communicate()[1]
-        return proc.returncode, stderr
-    
-        def testSeekPostEndTwice(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            bz2f.seek(150000)
-            bz2f.seek(150000)
-            self.assertEqual(bz2f.tell(), len(self.TEXT))
-            self.assertEqual(bz2f.read(), b'')
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
     
-def main():
-    import io
-    import pprint
+@mock.patch('httpie.core.get_response')
+def test_error(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+        def test_request_body_from_file_by_path_with_explicit_content_type(
+            self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG,
+                 'Content-Type:text/plain; charset=utf8')
+        assert HTTP_OK in r
+        assert FILE_CONTENT in r
+        assert 'Content-Type: text/plain; charset=utf8' in r
+    
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
+    
+    class BokeCC(VideoExtractor):
+    name = 'BokeCC'
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
+    
+    site_info = 'Giphy.com'
+download = giphy_download
+download_playlist = playlist_not_supported('giphy')
+
+    
+        def api_req(self, url):
+        xml_str = get_content(url)
+        dom = parseString(xml_str)
+        status = dom.getElementsByTagName('result')[0].getAttribute('status')
+        if status != 'success':
+            raise Exception('API returned fail')
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+    
+        for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
+    
+        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
     
     
-def main():
-    parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
-''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
-    args = parser.parse_args()
+class CurlAsyncHTTPClient(AsyncHTTPClient):
+    def initialize(  # type: ignore
+        self, max_clients: int = 10, defaults: Dict[str, Any] = None
+    ) -> None:
+        super(CurlAsyncHTTPClient, self).initialize(defaults=defaults)
+        self._multi = pycurl.CurlMulti()
+        self._multi.setopt(pycurl.M_TIMERFUNCTION, self._set_timeout)
+        self._multi.setopt(pycurl.M_SOCKETFUNCTION, self._handle_socket)
+        self._curls = [self._curl_create() for i in range(max_clients)]
+        self._free_list = self._curls[:]
+        self._requests = (
+            collections.deque()
+        )  # type: Deque[Tuple[HTTPRequest, Callable[[HTTPResponse], None], float]]
+        self._fds = {}  # type: Dict[int, int]
+        self._timeout = None  # type: Optional[object]
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+                from tornado.options import define, parse_command_line, options
     
-        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
-    :return: a dlib `rect` object
-    '''
-    return dlib.rectangle(css[3], css[0], css[1], css[2])
+    For each function or class described in `tornado.platform.interface`,
+the appropriate platform-specific implementation exists in this module.
+Most code that needs access to this functionality should do e.g.::
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
-    
-        def test_command_line_interface_options(self):
-        target_string = 'Show this message and exit.'
-        runner = CliRunner()
-        help_result = runner.invoke(face_recognition_cli.main, ['--help'])
-        self.assertEqual(help_result.exit_code, 0)
-        self.assertTrue(target_string in help_result.output)
+        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
+    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
+    the default for ``tornado.simple_httpclient``, but other libraries
+    may default to ``AF_UNSPEC``.
