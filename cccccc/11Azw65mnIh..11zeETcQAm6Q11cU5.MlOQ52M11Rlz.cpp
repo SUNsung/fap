@@ -1,218 +1,887 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
-    
-        secp256k1_fe_sqr(&zz, &a->z);                       /* z = Z1^2 */
-    u1 = a->x; secp256k1_fe_normalize_weak(&u1);        /* u1 = U1 = X1*Z2^2 (1) */
-    secp256k1_fe_mul(&u2, &b->x, &zz);                  /* u2 = U2 = X2*Z1^2 (1) */
-    s1 = a->y; secp256k1_fe_normalize_weak(&s1);        /* s1 = S1 = Y1*Z2^3 (1) */
-    secp256k1_fe_mul(&s2, &b->y, &zz);                  /* s2 = Y2*Z1^2 (1) */
-    secp256k1_fe_mul(&s2, &s2, &a->z);                  /* s2 = S2 = Y2*Z1^3 (1) */
-    t = u1; secp256k1_fe_add(&t, &u2);                  /* t = T = U1+U2 (2) */
-    m = s1; secp256k1_fe_add(&m, &s2);                  /* m = M = S1+S2 (2) */
-    secp256k1_fe_sqr(&rr, &t);                          /* rr = T^2 (1) */
-    secp256k1_fe_negate(&m_alt, &u2, 1);                /* Malt = -X2*Z1^2 */
-    secp256k1_fe_mul(&tt, &u1, &m_alt);                 /* tt = -U1*U2 (2) */
-    secp256k1_fe_add(&rr, &tt);                         /* rr = R = T^2-U1*U2 (3) */
-    /** If lambda = R/M = 0/0 we have a problem (except in the 'trivial'
-     *  case that Z = z1z2 = 0, and this is special-cased later on). */
-    degenerate = secp256k1_fe_normalizes_to_zero(&m) &
-                 secp256k1_fe_normalizes_to_zero(&rr);
-    /* This only occurs when y1 == -y2 and x1^3 == x2^3, but x1 != x2.
-     * This means either x1 == beta*x2 or beta*x1 == x2, where beta is
-     * a nontrivial cube root of one. In either case, an alternate
-     * non-indeterminate expression for lambda is (y1 - y2)/(x1 - x2),
-     * so we set R/M equal to this. */
-    rr_alt = s1;
-    secp256k1_fe_mul_int(&rr_alt, 2);       /* rr = Y1*Z2^3 - Y2*Z1^3 (2) */
-    secp256k1_fe_add(&m_alt, &u1);          /* Malt = X1*Z2^2 - X2*Z1^2 */
-    
-    static void secp256k1_sha256_initialize(secp256k1_sha256_t *hash) {
-    hash->s[0] = 0x6a09e667ul;
-    hash->s[1] = 0xbb67ae85ul;
-    hash->s[2] = 0x3c6ef372ul;
-    hash->s[3] = 0xa54ff53aul;
-    hash->s[4] = 0x510e527ful;
-    hash->s[5] = 0x9b05688cul;
-    hash->s[6] = 0x1f83d9abul;
-    hash->s[7] = 0x5be0cd19ul;
-    hash->bytes = 0;
-}
-    
-        /* Check NULLs for conversion */
-    CHECK(secp256k1_ecdsa_sign(both, &normal_sig, message, privkey, NULL, NULL) == 1);
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, NULL, &recsig) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, NULL) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, &recsig) == 1);
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
-{
-    static const std::string CASES[] = {
-        ' 1nwldj5',
-        '\x7f''1axkwrx',
-        '\x80''1eym55h',
-        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
-        'pzry9x0s0muk',
-        '1pzry9x0s0muk',
-        'x1b4n0q5v',
-        'li1dgmt3',
-        'de1lg7wt\xff',
-        'A1G7SGD8',
-        '10a06t8',
-        '1qzzfhee',
-        'a12UEL5L',
-        'A12uEL5L',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(ret.first.empty());
-    }
-}
-    
-        // Escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\ Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\Baz\'', {
-            {'Foo', 'BarBaz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\@Baz\'', {
-            {'Foo', 'Bar@Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
-            {'Foo', 'Bar\'Baz'},
-            {'Spam', '\'Eggs\''},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\\Baz\'', {
-            {'Foo', 'Bar\\Baz'},
-        });
-    
-            template<typename T>
-        explicit FormatArg(const T& value)
-            : m_value(static_cast<const void*>(&value)),
-            m_formatImpl(&formatImpl<T>),
-            m_toIntImpl(&toIntImpl<T>)
-        { }
-    
-        sub	rsp,STACK_SIZE
-%ifndef LINUX
-    movdqa	[rsp + _XMM_SAVE + 0*16],xmm6	
-    movdqa	[rsp + _XMM_SAVE + 1*16],xmm7
-    movdqa	[rsp + _XMM_SAVE + 2*16],xmm8	
-    movdqa	[rsp + _XMM_SAVE + 3*16],xmm9	
-    movdqa	[rsp + _XMM_SAVE + 4*16],xmm10
-    movdqa	[rsp + _XMM_SAVE + 5*16],xmm11
-    movdqa	[rsp + _XMM_SAVE + 6*16],xmm12
-%endif
-    
-    namespace caffe2 {
-    }
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
+        
+    {        return true;
       }
+    
+    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
+                    public auto_updater::Delegate,
+                    public WindowListObserver {
+ public:
+  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
     }
+    
+      int AddEntry(const base::DictionaryValue& entry);
+  void RemoveEntry(int id);
+    
+     private:
+  display::Screen* screen_;
+    
+      AtomQuotaPermissionContext();
+    
+      // There is a new update which has been downloaded.
+  virtual void OnUpdateDownloaded(const std::string& release_notes,
+                                  const std::string& release_name,
+                                  const base::Time& release_date,
+                                  const std::string& update_url) {}
+    
+    #if defined(OS_LINUX)
+typedef PowerObserverLinux PowerObserver;
+#else
+typedef base::PowerObserver PowerObserver;
+#endif  // defined(OS_LINUX)
+    
+    const SkBitmap* OffscreenViewProxy::GetBitmap() const {
+  return view_bitmap_.get();
+}
+    
+    
+    {  if (event.filter != EVFILT_PROC || event.fflags != NOTE_EXIT ||
+      event.ident != static_cast<uintptr_t>(parent_pid)) {
+    LOG(ERROR) << 'kevent (monitor): unexpected event, filter ' << event.filter
+               << ', fflags ' << event.fflags << ', ident ' << event.ident;
+    return;
   }
 }
     
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                           const std::string &filename, bool constants_only,
-                           bool is_system);
-    
-    const StaticString
-  s_wrapper_type('wrapper_type'),
-  s_stream_type('stream_type'),
-  s_mode('mode'),
-  s_unread_bytes('unread_bytes'),
-  s_seekable('seekable'),
-  s_timed_out('timed_out'),
-  s_blocked('blocked'),
-  s_eof('eof'),
-  s_plainfile('plainfile'),
-  s_dir('dir'),
-  s_r('r');
-    
-    #include 'hphp/runtime/base/perf-warning.h'
-    
-      static void setInitialized(bool f) { data_.initialized = f; }
-    
-      // localnode
-  // 8bytes reserved
-  readBytes(fp, buf, buf.size(), 8);
-  // localnode ID
-  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-  auto localNode = std::make_shared<DHTNode>(buf);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
-    
-      std::vector<std::shared_ptr<DHTNode>> nodes_;
-    
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
-    
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) = 0;
-    
-      DHTTaskQueue* taskQueue_;
-    
-      // returns 'unknown'
-  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
-    
-    
-    // exception type_error.304
-    try
-    {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
+    /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
     
-        // output element with JSON pointer '/number'
-    std::cout << j.at('/number'_json_pointer) << '\n';
-    // output element with JSON pointer '/string'
-    std::cout << j.at('/string'_json_pointer) << '\n';
-    // output element with JSON pointer '/array'
-    std::cout << j.at('/array'_json_pointer) << '\n';
-    // output element with JSON pointer '/array/1'
-    std::cout << j.at('/array/1'_json_pointer) << '\n';
+    namespace Ui {
+    class OpenURIDialog;
+}
+    
+    static void secp256k1_ge_set_all_gej_var(secp256k1_ge *r, const secp256k1_gej *a, size_t len, const secp256k1_callback *cb) {
+    secp256k1_fe *az;
+    secp256k1_fe *azi;
+    size_t i;
+    size_t count = 0;
+    az = (secp256k1_fe *)checked_malloc(cb, sizeof(secp256k1_fe) * len);
+    for (i = 0; i < len; i++) {
+        if (!a[i].infinity) {
+            az[count++] = a[i].z;
+        }
+    }
+    }
+    
+        // C escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
+            {'Foo', 'Bar\nBaz\t'},
+            {'Spam', '\rEggs'},
+            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
+            {'Final', 'Check'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Escaped=\'Escape\\\\\'', {
+            {'Valid', 'Mapping'},
+            {'Escaped', 'Escape\\'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Bare=\'Escape\\\'', {});
+    CheckParseTorReplyMapping(
+        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
+            {'OneOctal', 'OneEnd\1'},
+            {'TwoOctal', 'TwoEnd\11'},
+        });
+    
+        shl	NUM_BLKS, 6	; convert to bytes
+    jz	done_hash
+    add	NUM_BLKS, INP	; pointer to end of data
+    mov	[rsp + _INP_END], NUM_BLKS
+    
+    
+    {  // Check if the optional_nested_message was actually moved (and not just
+  // copied).
+  EXPECT_EQ(nested, &message2.optional_nested_message());
+  EXPECT_NE(nested, &message1.optional_nested_message());
+}
+    
+    using google::protobuf::util::GogoDataStripper;
+    
+    class GoGoProtoGenerator : public CodeGenerator {
+ public:
+  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
+                           const string& parameter,
+                           GeneratorContext* context,
+                           string* error) const {
+    for (int i = 0; i < files.size(); i++) {
+      for (auto file : files) {
+        bool can_generate =
+            (new_pool_.FindFileByName(file->name()) == nullptr);
+        for (int j = 0; j < file->dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->public_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->public_dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->weak_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->weak_dependency(j)->name()) != nullptr);
+        }
+        if (can_generate) {
+          Generate(file, parameter, context, error);
+          break;
+        }
+      }
+    }
+    }
+    }
+    
+      {
+    // Read the existing address book.
+    fstream input(argv[1], ios::in | ios::binary);
+    if (!address_book.ParseFromIstream(&input)) {
+      cerr << 'Failed to parse address book.' << endl;
+      return -1;
+    }
+  }
+    
+    Example 2 (with KEY):
+DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
+RANGES = [
+  [
+    [2, 4],
+    [0, 2],
+  ],
+  [
+    [0, 0],
+    [6, 2],
+  ]
+]
+lengths = [4, 2]
+OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
+OUTPUT[1] = [[1, 2], [8, 7]]
+    
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
+    
+    OPERATOR_SCHEMA(Im2Col)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc('The Im2Col operator from Matlab.')
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          ArgumentHelper helper(def);
+          auto pad = helper.GetSingleArgument<int>('pad', 0);
+          auto kernel_h = helper.GetSingleArgument<int>(
+              'kernel_h', helper.GetSingleArgument<int>('kernel', 0));
+          auto kernel_w = helper.GetSingleArgument<int>(
+              'kernel_w', helper.GetSingleArgument<int>('kernel', 0));
+          auto dilation_h = helper.GetSingleArgument<int>(
+              'dilation_h', helper.GetSingleArgument<int>('dilation', 1));
+          auto dilation_w = helper.GetSingleArgument<int>(
+              'dilation_w', helper.GetSingleArgument<int>('dilation', 1));
+          auto stride_h = helper.GetSingleArgument<int>(
+              'stride_h', helper.GetSingleArgument<int>('stride', 1));
+          auto stride_w = helper.GetSingleArgument<int>(
+              'stride_w', helper.GetSingleArgument<int>('stride', 1));
+          auto order = StringToStorageOrder(
+              helper.GetSingleArgument<string>('order', 'NCHW'));
+    }
+    
+    // Overloaded PrintTo() for tuples of various arities.  We support
+// tuples of up-to 10 fields.  The following implementation works
+// regardless of whether tr1::tuple is implemented using the
+// non-standard variadic template feature or not.
+    
+    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
+          &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    #define GTEST_IMPL_FORMAT_C_STRING_AS_POINTER_(CharType)                \
+  template <typename OtherOperand>                                      \
+  class FormatForComparison<CharType*, OtherOperand> {                  \
+   public:                                                              \
+    static ::std::string Format(CharType* value) {                      \
+      return ::testing::PrintToString(static_cast<const void*>(value)); \
+    }                                                                   \
+  }
+    
+    // Suppresses MSVC warnings 4072 (unreachable code) for the code following
+// statement if it returns or throws (or doesn't return or throw in some
+// situations).
+#define GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement) \
+  if (::testing::internal::AlwaysTrue()) { statement; }
+    
+      void capture(T* ptr) {
+    value_ = ptr;
+    link_.join_new();
+  }
+    
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
+    }
+    
+      // Now, we have that n is odd and n >= 3.
+    
+      bool check_for_leaks = false;
+  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
+    check_for_leaks = true;
+  else
+    printf('%s\n', 'Run this program with --check_for_leaks to enable '
+           'custom leak checking in the tests.');
+    
+    bool GuessType(const std::string& fname, FileType* type) {
+  size_t pos = fname.rfind('/');
+  std::string basename;
+  if (pos == std::string::npos) {
+    basename = fname;
+  } else {
+    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
+  }
+  uint64_t ignored;
+  return ParseFileName(basename, &ignored, type);
+}
+    
+    // Return the name of the descriptor file for the db named by
+// 'dbname' and the specified incarnation number.  The result will be
+// prefixed with 'dbname'.
+std::string DescriptorFileName(const std::string& dbname, uint64_t number);
+    
+    TEST(LogTest, BadLength) {
+  const int kPayloadSize = kBlockSize - kHeaderSize;
+  Write(BigString('bar', kPayloadSize));
+  Write('foo');
+  // Least significant size byte is stored in header[4].
+  IncrementByte(4, 1);
+  ASSERT_EQ('foo', Read());
+  ASSERT_EQ(kBlockSize, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('bad record length'));
+}
+    
+    class WritableFile;
+    
+      const SequenceNumber sequence_number_;
+    
+      // Set the count for the number of entries in the batch.
+  static void SetCount(WriteBatch* batch, int n);
+    
+    
+//--------------------------------------------------------------------------
+//
+//   Clone
+//
+//--------------------------------------------------------------------------
+RegexPattern  *RegexPattern::clone() const {
+    RegexPattern  *copy = new RegexPattern(*this);
+    return copy;
+}
+    
+    U_NAMESPACE_END
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    
+    class  UnicodeSet;
+    
+    const char *StandardPlural::getKeyword(Form p) {
+    U_ASSERT(ZERO <= p && p < COUNT);
+    return gKeywords[p];
+}
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    
+    {  bool ret = (x == 0x1);
+  return ret;
+}
+    
+    void Accelrpt68::Parse(const std::uint8_t* bytes, int32_t length,
+                       ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_output_value(
+      output_value(bytes, length));
+}
+    
+      Byte t2(bytes + 6);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    class JStringCache;
+    
+    namespace WeexCore {
+    }
+    
+      void ExecuteAction();
+    
+    
+    {
+    { public:
+  std::string page_id_;
+  std::string ref_;
+  std::vector<std::pair<std::string, std::string>> *attrs_;
+};
+}  // namespace WeexCore
+    
+    #include <map>
+#include <string>
