@@ -1,47 +1,46 @@
 
         
-        def linkify_prs(markdown)
-  markdown.gsub(%r!(?<\!&)#(\d+)!) do |word|
-    '[#{word}]({{ site.repository }}/issues/#{word.delete('#')})'
-  end
+          url = File.dirname(url)
+  url == FORWARD_SLASH ? url : '#{url}/'
 end
     
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
+    STDOUT.sync = true
     
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+            def initialize(_opts)
+          # If EventMachine SSL support on Windows ever gets better, the code below will
+          # set up the reactor to handle SSL
+          #
+          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
+          # if @ssl_enabled
+          #   em_opts[:tls_options] = {
+          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
+          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
+          #   }
+          #   em_opts[:secure] = true
+          # end
+    
+      describe 'DotHelper::DotDrawer' do
+    describe '#id' do
+      it 'properly escapes double quotaion and backslash' do
+        expect(DotHelper::DotDrawer.draw(foo: '') {
+          id('hello\\'')
+        }).to eq(''hello\\\\\\''')
+      end
+    end
   end
 end
 
     
-        it 'returns a Glyphicon icon element with an addidional class' do
-      icon = icon_tag('glyphicon-help', class: 'text-info')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
     end
-    
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
-    end
-    
-                expect {
-              scenario_import.import
-            }.to change { users(:bob).agents.count }.by(2)
+  end
     
           it 'runs until stop is called' do
         mock.instance_of(Rufus::Scheduler).join
@@ -49,133 +48,132 @@ end
         @agent_runner.run
       end
     
-    describe LiquidMigrator do
-  describe 'converting JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
-      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
-      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+      describe 'cleanup_failed_jobs!' do
+    before do
+      3.times do |i|
+        Delayed::Job.create(failed_at: Time.now - i.minutes)
+      end
+      @keep = Delayed::Job.order(:failed_at)[1]
     end
     
-        it 'accepts objects as well as strings' do
-      log = AgentLog.log_for_agent(agents(:jane_website_agent), events(:bob_website_agent_event).payload)
-      expect(log.message).to include(''title'=>'foo'')
+        it 'returns nil when passed nil' do
+      expect(Utils.parse_duration(nil)).to be_nil
+    end
+    
+        it 'should require credentials' do
+      @checker.options['api_key'] = nil
+      expect(@checker).not_to be_valid
     end
   end
     
-      def param_string
-    params=[]
-    self.uri_parts['QueryString'].each_pair { |param, value|
-      # inject a random number of params in between each param
-      if self.junk_params
-        rand(10)+5.times {
-          params.push(Rex::Text.rand_text_alpha(rand(16) + 5) + '=' + Rex::Text.rand_text_alpha(rand(10) + 1))
-        }
-      end
-      if value.kind_of?(Array)
-        value.each { |subvalue|
-    				params.push(Rex::Text.uri_encode(param, self.uri_encode_mode) + '=' + Rex::Text.uri_encode(subvalue, self.uri_encode_mode))
-        }
-      else
-        if !value.nil?
-          params.push(Rex::Text.uri_encode(param, self.uri_encode_mode) + '=' + Rex::Text.uri_encode(value, self.uri_encode_mode))
-        else
-          params.push(Rex::Text.uri_encode(param, self.uri_encode_mode))
-        end
-      end
-    }
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
+    end
     
-      attr_accessor :client
-  attr_accessor :oseq, :iseq
-  attr_accessor :scall, :dcall
-  attr_accessor :codec, :state
-  attr_accessor :ring_start, :ring_finish
-  attr_accessor :itime
-  attr_accessor :queue
-  attr_accessor :audio_hook
-  attr_accessor :audio_buff
-  attr_accessor :time_limit
-  attr_accessor :busy
-    
-    require 'rex/proto/ipmi/utils'
-    
-        head + [data.length].pack('v') + data
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
   end
     
-              private
-    
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-    
-                seq.to_der
-          end
-    
-              # Decodes the cipher from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Sting]
-          def decode_cipher(input)
-            input.value[0].value
-          end
-    
-              # Encodes the value field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_value
-            OpenSSL::ASN1::OctetString.new(value)
-          end
-        end
-      end
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
     end
   end
+    
+      def encoded_challenge
+    HTMLEntities.new.encode(params['hub.challenge'])
+  end
+    
+      included do
+    before_action :set_locale
+  end
+    
+      def set_rate_limit_headers
+    apply_header_limit
+    apply_header_remaining
+    apply_header_reset
+  end
+    
+    def to_boolean(proc)
+  IF[proc][true][false]
 end
     
-        def_delegators :@s, :scan_until, :skip_until, :string
-    
-    end
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
-      else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
-      end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
-    end
+        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
+                   args: [
+                           '--mode=silent',
+                         ],
+                   sudo: true
   end
     
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+            if state_index < current_index
+          css_classes << 'completed'
+          text = link_to text, checkout_state_path(state), class: 'nav-link'
         end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
-    end
     
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
-    end
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
+    
+            private
+    
+            def approve
+          authorize! :approve, @order, params[:token]
+          @order.approved_by(current_api_user)
+          respond_with(@order, default_template: :show)
+        end
+    
+          @@property_attributes = [:id, :name, :presentation]
+    
+    # This example uses the API to create a package from local files
+# it also creates necessary init-scripts and systemd files so our executable can be used as a service
+    
+        return str
   end
     
-    module Jekyll
+        # Build the packaging metadata files.
+    checksums = {}
+    self.files.each do |f|
+      path = staging_path(f)
+      if File.symlink?(path)
+        checksums[f] = '-'
+      elsif File.file?(path)
+        checksums[f] = Digest::SHA256.file(path).hexdigest
+      end
+    end
+    
+    class FPM::Package::NPM < FPM::Package
+  class << self
+    include FPM::Util
+  end
+  # Flags '--foo' will be accessable  as attributes[:npm_foo]
+  option '--bin', 'NPM_EXECUTABLE',
+    'The path to the npm executable you wish to run.', :default => 'npm'
+    
+      option '--user', 'USER',
+    'Set the user to USER in the prototype files.',
+    :default => 'root'
+    
+        stdout_w.close; stderr_w.close
+    logger.debug('Process is running', :pid => process.pid)
+    if block_given?
+      args3 = []
+      args3.push(process)           if opts[:process]
+      args3.push(process.io.stdin)  if opts[:stdin]
+      args3.push(stdout_r)          if opts[:stdout]
+      args3.push(stderr_r)          if opts[:stderr]
+    
+    # Like the ::Gem::Package::TarWriter but contains some backports and bug fixes
+class FPM::Util::TarWriter < ::Gem::Package::TarWriter
+  if FPM::Issues::TarWriter.has_issues_with_split_name?
+    def split_name(name)
+      if name.bytesize > 256 then
+        raise ::Gem::Package::TooLongFileName.new('File \'#{name}\' has a too long path (should be 256 or less)')
+      end
