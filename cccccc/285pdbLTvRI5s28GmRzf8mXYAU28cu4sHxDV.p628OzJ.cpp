@@ -1,165 +1,350 @@
 
         
-        private:
-    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
+            void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
     
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
+    #include 'include/secp256k1_ecdh.h'
+#include 'ecmult_const_impl.h'
+    
+        // Escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\ Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\Baz\'', {
+            {'Foo', 'BarBaz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\@Baz\'', {
+            {'Foo', 'Bar@Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
+            {'Foo', 'Bar\'Baz'},
+            {'Spam', '\'Eggs\''},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\\Baz\'', {
+            {'Foo', 'Bar\\Baz'},
+        });
+    
+    #include <stdint.h>
+#include <string>
+#include <vector>
+    
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
 }
     
-    const std::string& UniValue::get_str() const
+    
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
+    }
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
+};
+    
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
+    }
+    
+    
+    {} // namespace ui
+    
+        bool ReadRTF(ClipboardData& data) {
+      DCHECK(data.type == TYPE_RTF);
+      std::string text;
+      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(text));
+      return true;
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    #undef cv_hal_cmp8u
+#define cv_hal_cmp8u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u8, src1, sz1, src2, sz2, dst, sz, w, h, op)
+#undef cv_hal_cmp8s
+#define cv_hal_cmp8s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s8, src1, sz1, src2, sz2, dst, sz, w, h, op)
+#undef cv_hal_cmp16u
+#define cv_hal_cmp16u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u16, src1, sz1, src2, sz2, dst, sz, w, h, op)
+#undef cv_hal_cmp16s
+#define cv_hal_cmp16s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s16, src1, sz1, src2, sz2, dst, sz, w, h, op)
+#undef cv_hal_cmp32s
+#define cv_hal_cmp32s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s32, src1, sz1, src2, sz2, dst, sz, w, h, op)
+#undef cv_hal_cmp32f
+#define cv_hal_cmp32f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f32, src1, sz1, src2, sz2, dst, sz, w, h, op)
+//#undef cv_hal_cmp64f
+//#define cv_hal_cmp64f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f64, src1, sz1, src2, sz2, dst, sz, w, h, op)
+    
+        void convertScale(const Size2D &_size,
+                      const s32 * srcBase, ptrdiff_t srcStride,
+                      u16 * dstBase, ptrdiff_t dstStride,
+                      f64 alpha, f64 beta);
+    
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
+        v_dst = internal::vqsubq(v_max, v_min);
+    }
+    
+    void add(const Size2D &size,
+         const u32 * src0Base, ptrdiff_t src0Stride,
+         const u32 * src1Base, ptrdiff_t src1Stride,
+         u32 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
 {
-    if (typ != VSTR)
-        throw std::runtime_error('JSON value is not a string as expected');
-    return getValStr();
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u32, u64>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u32, u64>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
     
-        if (!bytes) return;
-    
-    TegraBinaryOp_Invoker(cmpEQ, cmpEQ)
-TegraBinaryOp_Invoker(cmpNE, cmpNE)
-TegraBinaryOp_Invoker(cmpGT, cmpGT)
-TegraBinaryOp_Invoker(cmpGE, cmpGE)
-TegraGenOp_Invoker(cmpLT, cmpGT, 2, 1, 0, RANGE_DATA(ST, src2_data, src2_step), src2_step, \
-                                          RANGE_DATA(ST, src1_data, src1_step), src1_step, \
-                                          RANGE_DATA(DT, dst1_data, dst1_step), dst1_step)
-TegraGenOp_Invoker(cmpLE, cmpGE, 2, 1, 0, RANGE_DATA(ST, src2_data, src2_step), src2_step, \
-                                          RANGE_DATA(ST, src1_data, src1_step), src1_step, \
-                                          RANGE_DATA(DT, dst1_data, dst1_step), dst1_step)
-#define TEGRA_CMP(type, src1, sz1, src2, sz2, dst, sz, w, h, op) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-        ((op) == cv::CMP_EQ) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpEQ_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        ((op) == cv::CMP_NE) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpNE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        ((op) == cv::CMP_GT) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpGT_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        ((op) == cv::CMP_GE) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpGE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        ((op) == cv::CMP_LT) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpLT_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        ((op) == cv::CMP_LE) ? \
-        parallel_for_(Range(0, h), \
-        TegraGenOp_cmpLE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
-        (w * h) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
-                     const typename VecTraits<s32>::vec64 & v_src1,
-                     typename VecTraits<s32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_s32(v_src0);
-        float32x2_t vs2 = vcvt_f32_s32(v_src1);
-    }
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u;
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-                for (; i <= lim; i += 16)
-            {
-                internal::prefetch(src0 + i);
-                internal::prefetch(src1 + i);
-    }
-    
-    
-    {            vec128 v_src = vld1q(src + js);
-            vec128 v_dst = vrev64q(v_src);
-            v_dst = vcombine(vget_high(v_dst), vget_low(v_dst));
-            vst1q(dst + jd - step_base, v_dst);
-        }
-        for (; js < roiw_tail; js += step_tail, jd -= step_tail)
+            mag_buf[1][0] = mag_buf[1][size.width+1] = 0;
+        if (borderyt == 0)
         {
-            vec64 v_src = vld1(src + js);
-            vst1(dst + jd - step_tail, vrev64(v_src));
+            //sobelH row #-1
+            _src = internal::getRowPtr(srcBase, srcStride, -1);
+            sobelRow(_src, ((s16*)mag_buf[2]) + shxOffset, ((s16*)mag_buf[2]) + shyOffset, size.width);
+    }
+    
+    #include <carotene/functions.hpp>
+#include 'saturate_cast.hpp'
+    
+    INRANGEFUNC(u8)
+INRANGEFUNC(s8)
+INRANGEFUNC(u16)
+INRANGEFUNC(s16)
+INRANGEFUNC(s32)
+INRANGEFUNC(f32)
+    
+            int16x8_t tcurr = vmovq_n_s16(0x0);
+        int16x8_t tnext = vmovq_n_s16(0x0);
+        int16x8_t t0, t2;
+        uint8x8_t xx0 = vmov_n_u8(0x0);
+        uint8x8_t xx1 = vmov_n_u8(0x0);
+        uint8x8_t xx2 = vmov_n_u8(0x0);
+        ptrdiff_t x = 0;
+        const ptrdiff_t bcols = y + 2 < rows ? cols : (cols - 8);
+        for( ; x <= bcols; x += 8 )
+        {
+            internal::prefetch(v0 + x);
+            internal::prefetch(v1 + x);
+            internal::prefetch(v2 + x);
+    }
+    
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
+    
+    /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
+ public:
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
+    
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {  /// Whether to ignore instances with a certain label.
+  bool has_ignore_label_;
+  /// The label indicating that an instance should be ignored.
+  int ignore_label_;
+  /// Keeps counts of the number of samples per class.
+  Blob<Dtype> nums_buffer_;
+};
+    
+     protected:
+  // Helper functions that abstract away the column buffer and gemm arguments.
+  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
+  // we just called weight_cpu_gemm with the same input.
+  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_cpu_bias(Dtype* output, const Dtype* bias);
+  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output);
+  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
+      weights);
+  void backward_cpu_bias(Dtype* bias, const Dtype* input);
+    
+    
+    {  // extra temporarary variables is used to carry out sums/broadcasting
+  // using BLAS
+  Blob<Dtype> batch_sum_multiplier_;
+  Blob<Dtype> num_by_chans_;
+  Blob<Dtype> spatial_sum_multiplier_;
+};
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace mxnet {
+namespace ndarray {
+    }
+    }
+    
+      ~CuDNNBilinearSamplerOp() {
+    if (init_cudnn_) {
+      CUDNN_CALL(cudnnDestroySpatialTransformerDescriptor(st_desc_));
+      CUDNN_CALL(cudnnDestroyTensorDescriptor(in_desc_));
+      CUDNN_CALL(cudnnDestroyTensorDescriptor(out_desc_));
+    }
+  }
+    
+      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
+                           const std::string &filename, bool constants_only,
+                           bool is_system);
+    
+    #include <folly/String.h>
+    
+    void LiveRegionHost::Announce(NarratorAnnouncement^ announcement)
+{
+    if (m_host == nullptr)
+    {
+        m_host = ref new TextBlock();
+        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
+    }
+    }
+    
+            static NarratorAnnouncement^ GetAnnouncement(Windows::UI::Xaml::DependencyObject^ element)
+        {
+            return safe_cast<NarratorAnnouncement^>(element->GetValue(s_announcementProperty));
         }
     
-    #include 'vtransform.hpp'
+    INarratorAnnouncementHost^ NotificationHost::MakeHost()
+{
+    return ref new NotificationHost();
+}
     
-    // Overloaded PrintTo() for tuples of various arities.  We support
-// tuples of up-to 10 fields.  The following implementation works
-// regardless of whether tr1::tuple is implemented using the
-// non-standard variadic template feature or not.
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
+}
     
-    // 4-ary predicate assertion macros.
-#define EXPECT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
-  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED4(pred, v1, v2, v3, v4) \
-  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
-  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED4(pred, v1, v2, v3, v4) \
-  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
+      uint32_t temp32;
+  uint64_t temp64;
+  // time
+  if (version == 2) {
+    READ_CHECK(fp, &temp32, sizeof(temp32));
+    serializedTime_.setTimeFromEpoch(ntohl(temp32));
+    // 4bytes reserved
+    readBytes(fp, buf, buf.size(), 4);
+  }
+  else {
+    READ_CHECK(fp, &temp64, sizeof(temp64));
+    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
+  }
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+      std::shared_ptr<DHTNode> localNode_;
+    
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+      virtual std::shared_ptr<DHTTask>
+  createNodeLookupTask(const unsigned char* targetID) CXX11_OVERRIDE;
     
     
-    { private:
-  String();  // Not meant to be instantiated.
-};  // class String
+    {} // namespace aria2
     
-    // The TypeList template makes it possible to use either a single type
-// or a Types<...> list in TYPED_TEST_CASE() and
-// INSTANTIATE_TYPED_TEST_CASE_P().
-    
-      // If we are given the --check_for_leaks command line flag, installs the
-  // leak checker.
-  if (check_for_leaks) {
-    TestEventListeners& listeners = UnitTest::GetInstance()->listeners();
-    }
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
     
     
-// A simple string class.
-class MyString {
- private:
-  const char* c_string_;
-  const MyString& operator=(const MyString& rhs);
-    }
+    {} // namespace aria2
     
-      // Set should work when the input pointer is the same as the one
-  // already in the MyString object.
-  s.Set(s.c_string());
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+      // do nothing; we don't use this message as outgoing message.
+  virtual bool send() CXX11_OVERRIDE;
