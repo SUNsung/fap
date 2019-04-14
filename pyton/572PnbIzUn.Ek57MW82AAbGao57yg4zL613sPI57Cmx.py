@@ -1,115 +1,100 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+            elif METHOD == 'LIST':
+        domain = compat_urllib_parse_urlparse(test['url']).netloc
+        if not domain:
+            print('\nFail: {0}'.format(test['name']))
+            continue
+        domain = '.'.join(domain.split('.')[-2:])
     
-            Emit key value pairs of the form:
+        for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
     
-        def create_signature(self):
-        # Create signature based on url and contents
-        pass
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import boto3_conn, camel_dict_to_snake_dict
-from ansible.module_utils.ec2 import ec2_argument_spec, get_aws_connection_info
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
     
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import (ansible_dict_to_boto3_filter_list,
-                                      boto3_tag_list_to_ansible_dict,
-                                      camel_dict_to_snake_dict)
-try:
-    from botocore.exceptions import (BotoCoreError, ClientError)
-except ImportError:
-    pass  # caught by imported AnsibleAWSModule
+            self.server_process.terminate()
+        self.server_process.communicate()
     
-        lambda_facts = dict()
+    import os  # noqa
     
-        :returns True on success, raises ValueError on type error.
-    :rtype ``bool``
-    '''
-    errmsg = ''
-    if not isinstance(instance.node_count, int):
-        errmsg = 'node_count must be an integer %s (%s)' % (
-            instance.node_count, type(instance.node_count))
-    if instance.display_name and not isinstance(instance.display_name,
-                                                string_types):
-        errmsg = 'instance_display_name must be an string %s (%s)' % (
-            instance.display_name, type(instance.display_name))
-    if errmsg:
-        raise ValueError(errmsg)
+        result = s[lambda x: ['A', 'B']]
+    tm.assert_series_equal(result, s.loc[['A', 'B']])
     
-    DOCUMENTATION = '''
----
-module: heroku_collaborator
-short_description: 'Add or delete app collaborators on Heroku'
-version_added: '2.6'
-description:
-  - Manages collaborators for Heroku apps.
-  - If set to C(present) and heroku user is already collaborator, then do nothing.
-  - If set to C(present) and heroku user is not collaborator, then add user to app.
-  - If set to C(absent) and heroku user is collaborator, then delete user from app.
-author:
-  - Marcel Arns (@marns93)
-requirements:
-  - heroku3
-options:
-  api_key:
-    description:
-      - Heroku API key
-  apps:
-    description:
-      - List of Heroku App names
-    required: true
-  suppress_invitation:
-    description:
-      - Suppress email invitation when creating collaborator
-    type: bool
-    default: 'no'
-  user:
-    description:
-      - User ID or e-mail
-    required: true
-  state:
-    description:
-      - Create or remove the heroku collaborator
-    choices: ['present', 'absent']
-    default: 'present'
-notes:
-  - C(HEROKU_API_KEY) and C(TF_VAR_HEROKU_API_KEY) env variable can be used instead setting c(api_key).
-  - If you use I(--check), you can also pass the I(-v) flag to see affected apps in C(msg), e.g. ['heroku-example-app'].
-'''
-    
-            if remove_rules:
-            chk_changed = False
-            for rule_id in remove_rules:
-                if module.check_mode:
-                    chk_changed |= _remove_firewall_rule(module,
-                                                         oneandone_conn,
-                                                         firewall_policy['id'],
-                                                         rule_id)
-    
-        if module.params['repo']:
-        params['deploy[scm_repository]'] = module.params['repo']
-    
-        model_address = model.find('./*[@id='0x12d7f']').text
-    
-    
-if __name__ == '__main__':
-    main()
+        extract_tags = textrank
 
     
-                    if self.eot[s] >= 0:
-                    #print 'EOT to %d' % self.eot[s]
-                    
-                    s = self.eot[s]
-                    input.consume()
-                    continue
+    seg_list = jieba.cut('他来到了网易杭研大厦')
+print(', '.join(seg_list))
     
-            self.expecting = expecting
-        
+    USAGE = 'usage:    python extract_tags_with_weight.py [file name] -k [top k] -w [with weight=1 or 0]'
     
-        output_directory = 'pdfs' if results.directory is None else results.directory
+        def test_del_msg_success(self):
+        '''Del_msg succeeds: Returns 200 and sets del_on_recipient.'''
+        message = MagicMock(spec=Message)
+        message.name = 'msg_1'
+        message.to_id = self.id
+        message.del_on_recipient = False
+    
+            # When a Bid is found, assert that auth is called
+        with patch('r2.lib.authorize.interaction.Bid.one') as one:
+            one_mock = MagicMock()
+            one.return_value = one_mock
+            auth_freebie_transaction(amount, self.user, link, campaign_id)
+            self.assertTrue(one_mock.auth.called)
+    
+        def test_ftue_autocreate(self):
+        request = MagicMock()
+        context = MagicMock()
+        request.cookies = {}
+        loid = LoId.load(request, context, create=True)
+        self.assertIsNotNone(loid.loid)
+        self.assertIsNotNone(loid.created)
+        self.assertTrue(loid.new)
+    
+    
+class ModeratorPermissionSetTest(unittest.TestCase):
+    def test_loads(self):
+        self.assertTrue(ModeratorPermissionSet.loads(None).is_superuser())
+        self.assertFalse(ModeratorPermissionSet.loads('').is_superuser())
+    
+        @patch('r2.models.Subreddit.user_subreddits')
+    def test_frontpage_logged_in(self, user_subreddits):
+        user_subreddits.return_value = subscriptions
+        srnames = srnames_from_site(self.logged_in, Frontpage)
+    
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
+    
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'https://unsplash.it/200/400')
+    
+        def test_future_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        self.assert_invalid(
+            body,
+            header='2:awesomefuturespec',
+            error=signing.ERRORS.UNKOWN_GLOBAL_VERSION,
+            global_version=2,
+        )
+    
+        def test_doctype(self):
+        self.assertFragmentRaises('<!DOCTYPE VRML>', SoupSyntaxError)
