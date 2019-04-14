@@ -1,337 +1,184 @@
 
         
-            @value.setter
-    def value(self, new_value):
-        if 1 <= new_value <= 13:
-            self._value = new_value
-        else:
-            raise ValueError('Invalid card value: {}'.format(new_value))
-    
-            (2016-01, shopping), 125
-        (2016-01, gas), 50
-        '''
-        total = sum(values)
-        self.handle_budget_notifications(key, total)
-        yield key, sum(values)
-    
-            Emit key value pairs of the form:
-    
-    from mrjob.job import MRJob
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
-        self.pages = pages
-        self.data_store = data_store
-        self.reverse_index_queue = reverse_index_queue
-        self.doc_index_queue = doc_index_queue
-    
-      print('Number of distinct paths: %d' % len(path_index))
-  return path_index, path_vectors
-    
-        # \tau, which is the autocorrelation time constant of the AR(1) process
-    log_atau_inits_1xu = tf.expand_dims(tf.log(autocorrelation_taus), 0)
-    self.logataus_1xu = logataus_1xu = \
-        tf.Variable(log_atau_inits_1xu, name=name+'/logatau', dtype=tf.float32,
-                    trainable=do_train_prior_ar_atau)
-    
-          if self.hps.ic_dim > 0:
-        prior_g0_mean[es_idx,:] = model_values['prior_g0_mean']
-        prior_g0_logvar[es_idx,:] = model_values['prior_g0_logvar']
-        post_g0_mean[es_idx,:] = model_values['post_g0_mean']
-        post_g0_logvar[es_idx,:] = model_values['post_g0_logvar']
-      gen_ics[es_idx,:] = model_values['gen_ics']
-    
-    
-flags.DEFINE_float('prior_ar_atau',  PRIOR_AR_AUTOCORRELATION,
-                   'Initial autocorrelation of AR(1) priors.')
-flags.DEFINE_float('prior_ar_nvar', PRIOR_AR_PROCESS_VAR,
-                   'Initial noise variance for AR(1) priors.')
-flags.DEFINE_boolean('do_train_prior_ar_atau', DO_TRAIN_PRIOR_AR_ATAU,
-                     'Is the value for atau an init, or the constant value?')
-flags.DEFINE_boolean('do_train_prior_ar_nvar', DO_TRAIN_PRIOR_AR_NVAR,
-                     'Is the value for noise variance an init, or the constant \
-                     value?')
-    
-      # Visualize this in the morning.
-  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
-  for name, dataset in datasets.items():
-    cidx_s = channel_idxs[name][0]
-    cidx_f = channel_idxs[name][1]
-    for cname in conditions_all[name]:
-      cidxs = np.argwhere(all_conditions_list == cname)
-      if cidxs.shape[0] > 0:
-        cidx = cidxs[0][0]
-        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
-        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
-            avg_data_all[name][cname].T
-    
-    
-def flatten(list_of_lists):
-  '''Takes a list of lists and returns a list of the elements.
-    
-      def __init__(self, filename):
-    '''Initialize vocabulary.
-    
-      Args:
-    raw_data: one of the raw data outputs from imdb_raw_data.
-    batch_size: int, the batch size.
-    num_steps: int, the number of unrolls.
-    
-      Returns:
-    Tuple of the (sequence, logits, log_probs) of the Generator.   Sequence
-      and logits have shape [batch_size, sequence_length, vocab_size].  The
-      log_probs will have shape [batch_size, sequence_length].  Log_probs
-      corresponds to the log probability of selecting the words.
+          Args:
+    pairs: the word pairs (list of tuple of two strings).
+    labels: the gold-standard labels for these pairs (array of rel ID).
+    predictions: the predicted labels for these pairs (array of rel ID).
+    classes: a list of relation names.
+    predictions_file: where to save the predictions.
   '''
-  if FLAGS.generator_model == 'rnn':
-    (sequence, logits, log_probs, initial_state, final_state) = rnn.generator(
-        hparams,
-        inputs,
-        targets,
-        present,
-        is_training=is_training,
-        is_validating=is_validating,
-        reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_vd':
-    (sequence, logits, log_probs, initial_state, final_state,
-     encoder_states) = seq2seq_vd.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  else:
-    raise NotImplementedError
-  return (sequence, logits, log_probs, initial_state, final_state,
-          encoder_states)
-    
-    
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
-    
-      return p
-    
-          # Compute alignment weights
-      #   scores: [batch_size, length]
-      #   alignments: [batch_size, length]
-      # TODO(thangluong): not normalize over padding positions.
-      alignments = tf.nn.softmax(scores)
-    
-    
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
-    
-    
-Invalid choice: 'dynamdb', maybe you meant:
-    
-            if isinstance(headers, bytes):
-            # Python < 3
-            headers = headers.decode('utf8')
-        return headers
-    
-        '''
-    return path.replace('\\', '\\\\\\')
-    
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
+  with open(predictions_file, 'w') as f_out:
+    for pair, label, pred in zip(pairs, labels, predictions):
+      w1, w2 = pair
+      f_out.write('\t'.join([w1, w2, classes[label], classes[pred]]) + '\n')
 
     
-    
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
-    
-        def ensure_present(self, enabled=True):
-        '''Ensures the rule and targets are present and synced'''
-        rule_description = self.rule.describe()
-        if rule_description:
-            # Rule exists so update rule, targets and state
-            self._sync_rule(enabled)
-            self._sync_targets()
-            self._sync_state(enabled)
-        else:
-            # Rule does not exist, so create new rule and targets
-            self._create(enabled)
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import (ansible_dict_to_boto3_filter_list,
-                                      boto3_tag_list_to_ansible_dict,
-                                      camel_dict_to_snake_dict)
-try:
-    from botocore.exceptions import (BotoCoreError, ClientError)
-except ImportError:
-    pass  # caught by imported AnsibleAWSModule
+    rates_train, rates_valid = split_list_by_inds(rates, train_inds, valid_inds)
+spikes_train, spikes_valid = split_list_by_inds(spikes, train_inds, valid_inds)
+condition_labels_train, condition_labels_valid = split_list_by_inds(
+    condition_labels, train_inds, valid_inds)
+ext_input_train, ext_input_valid = split_list_by_inds(
+    ext_input, train_inds, valid_inds)
     
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'core'}
+def linear(x, out_size, do_bias=True, alpha=1.0, identity_if_possible=False,
+           normalized=False, name=None, collections=None):
+  '''Linear (affine) transformation, y = x W + b, for a variety of
+  configurations.
+    
+      Args:
+    gen_logits: Generator logits.
+    gen_labels:  Labels for the correct token.
+    dis_predictions:  Discriminator predictions.
+    is_real_input:  Tensor indicating whether the label is present.
+    
+      # Common elements to Generator and Discriminator.
+  embedding = [
+      v for v in tf.trainable_variables()
+      if v.op.name == str(model) + '/rnn/embedding'
+  ][0]
+  lstm_w_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name ==
+      str(model) + '/rnn/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat'
+  ][0]
+  lstm_b_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == str(model) +
+      '/rnn/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat'
+  ][0]
+  lstm_w_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name ==
+      str(model) + '/rnn/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat'
+  ][0]
+  lstm_b_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == str(model) +
+      '/rnn/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat'
+  ][0]
+    
+          Args:
+        query: A Tensor of shape [batch_size, num_units].
+        keys: A Tensor of shape [batch_size, attention_length, num_units].
+        values: A Tensor of shape [batch_size, attention_length, num_units].
+    
+          predictions = tf.transpose(predictions, [1, 0, 2])
+      return tf.squeeze(predictions, axis=2)
+
+    
+    '''
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: Simplified BSD
+    
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
+    
+    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+for k, col in zip(range(n_clusters_), colors):
+    my_members = labels == k
+    cluster_center = cluster_centers[k]
+    plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+    plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
+             markeredgecolor='k', markersize=14)
+plt.title('Estimated number of clusters: %d' % n_clusters_)
+plt.show()
+
+    
+                if (arr[i-1] <= j):
+                dp[i][j] = dp[i][j] or dp[i-1][j-arr[i-1]]
+    
+    	for m in getBlock(bs):
+		A = a0 
+		B = b0
+		C = c0
+		D = d0
+		for i in range(64):
+			if i <= 15:
+				#f = (B & C) | (not32(B) & D)
+				f = D ^ (B & (C ^ D))
+				g = i
+			elif i<= 31:
+				#f = (D & B) | (not32(D) & C)
+				f = C ^ (D & (B ^ C))
+				g = (5*i+1) % 16
+			elif i <= 47:
+				f = B ^ C ^ D
+				g = (3*i+5) % 16
+			else:
+				f = C ^ (B | not32(D))
+				g = (7*i) % 16
+			dtemp = D
+			D = C
+			C = B
+			B = sum32(B,leftrot32((A + f + tvals[i] + m[g]) % 2**32, s[i]))
+			A = dtemp
+		a0 = sum32(a0, A)
+		b0 = sum32(b0, B)
+		c0 = sum32(c0, C)
+		d0 = sum32(d0, D)
+    
+    # coco (val5k)
+# INFO roidb.py: 220: 1        person: 21296
+# INFO roidb.py: 220: 2       bicycle: 628
+# INFO roidb.py: 220: 3           car: 3818
+# INFO roidb.py: 220: 4    motorcycle: 732
+# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
+# INFO roidb.py: 220: 6           bus: 564
+# INFO roidb.py: 220: 7         train: 380
+# INFO roidb.py: 220: 8         truck: 828
     
     
-def create(module, connection, replication_id, cluster_id, name):
-    ''' Create an Elasticache backup. '''
-    try:
-        response = connection.create_snapshot(ReplicationGroupId=replication_id,
-                                              CacheClusterId=cluster_id,
-                                              SnapshotName=name)
-        changed = True
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == 'SnapshotAlreadyExistsFault':
-            response = {}
-            changed = False
-        else:
-            module.fail_json(msg='Unable to create the snapshot.', exception=traceback.format_exc())
-    return response, changed
+def generate_anchors(
+    stride=16, sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.5, 1, 2)
+):
+    '''Generates a matrix of anchor boxes in (x1, y1, x2, y2) format. Anchors
+    are centered on stride / 2, have (approximate) sqrt areas of the specified
+    sizes, and aspect ratios as given.
+    '''
+    return _generate_anchors(
+        stride,
+        np.array(sizes, dtype=np.float) / stride,
+        np.array(aspect_ratios, dtype=np.float)
+    )
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import boto3_conn, ec2_argument_spec, get_aws_connection_info
+        for i in range(cfg.KRCNN.NUM_STACKED_CONVS):
+        current = model.Conv(
+            current,
+            'conv_fcn' + str(i + 1),
+            dim_in,
+            hidden_dim,
+            kernel_size,
+            stride=1,
+            pad=pad_size,
+            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.01}),
+            bias_init=('ConstantFill', {'value': 0.})
+        )
+        current = model.Relu(current, current)
+        dim_in = hidden_dim
     
-            try:
-            lambda_facts.update(function_list=client.list_functions(**params)['Functions'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(function_list=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get function list')
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
     
-        CLIENT_MINIMUM_VERSION = '0.22.0'
-    if not check_min_pkg_version('google-cloud-pubsub', CLIENT_MINIMUM_VERSION):
-        module.fail_json(msg='Please install google-cloud-pubsub library version %s' % CLIENT_MINIMUM_VERSION)
+        # Select foreground RoIs as those with >= FG_THRESH overlap
+    fg_inds = np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0]
+    # Guard against the case when an image has fewer than fg_rois_per_image
+    # foreground RoIs
+    fg_rois_per_this_image = np.minimum(fg_rois_per_image, fg_inds.size)
+    # Sample foreground regions without replacement
+    if fg_inds.size > 0:
+        fg_inds = npr.choice(
+            fg_inds, size=fg_rois_per_this_image, replace=False
+        )
     
-    
-def get_schema_facts(cursor, schema=''):
-    facts = {}
-    cursor.execute('''
-        select schema_name, schema_owner, create_time
-        from schemata
-        where not is_system_schema and schema_name not in ('public')
-        and (? = '' or schema_name ilike ?)
-    ''', schema, schema)
-    while True:
-        rows = cursor.fetchmany(100)
-        if not rows:
-            break
-        for row in rows:
-            facts[row.schema_name.lower()] = {
-                'name': row.schema_name,
-                'owner': row.schema_owner,
-                'create_time': str(row.create_time),
-                'usage_roles': [],
-                'create_roles': []}
-    cursor.execute('''
-        select g.object_name as schema_name, r.name as role_name,
-        lower(g.privileges_description) privileges_description
-        from roles r join grants g
-        on g.grantee = r.name and g.object_type='SCHEMA'
-        and g.privileges_description like '%USAGE%'
-        and g.grantee not in ('public', 'dbadmin')
-        and (? = '' or g.object_name ilike ?)
-    ''', schema, schema)
-    while True:
-        rows = cursor.fetchmany(100)
-        if not rows:
-            break
-        for row in rows:
-            schema_key = row.schema_name.lower()
-            if 'create' in row.privileges_description:
-                facts[schema_key]['create_roles'].append(row.role_name)
-            else:
-                facts[schema_key]['usage_roles'].append(row.role_name)
-    return facts
-    
-    - bigpanda:
-    component: '{{ deployment.component }}'
-    version: '{{ deployment.version }}'
-    token: '{{ deployment.token }}'
-    state: finished
-  delegate_to: localhost
-'''
-    
-        if module.params['environment']:
-        params['deploy[environment]'] = module.params['environment']
-    
-            if query_log_status(module, le_path, log):
-            module.fail_json(msg='failed to remove '%s': %s' % (log, err.strip()))
+            if check_grad:
+            gc = gradient_checker.GradientChecker(
+                stepsize=0.1,
+                threshold=0.001,
+                device_option=core.DeviceOption(caffe2_pb2.CUDA, 0)
+            )
