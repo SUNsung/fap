@@ -1,263 +1,254 @@
 
         
-        REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
-    
-    
-    {  if (PyBfloat16_Check(arg)) {
-    Py_INCREF(arg);
-    return arg;
-  } else {
-    bfloat16 value;
-    if (!AsBfloat16(arg, &value)) {
-      return nullptr;
+        void test_bad_scalar(void) {
+    unsigned char s_zero[32] = { 0 };
+    unsigned char s_overflow[32] = {
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
+        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
+        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
+    };
+    unsigned char s_rand[32] = { 0 };
+    unsigned char output[32];
+    secp256k1_scalar rand;
+    secp256k1_pubkey point;
     }
-    return PyBfloat16_FromBfloat16(value).release();
-  }
-}
     
-    #include 'tensorflow/python/lib/core/numpy.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-
-    
-    
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    StreamExecutor *stream_exec)
-    : ScopedActivateExecutorContext(ExtractCudaExecutor(stream_exec)) {}
-    
-      // Extracts the kernel driver version from the current host.
-  static port::StatusOr<DriverVersion> FindKernelDriverVersion();
-    
-    private:
-    Ui::SignVerifyMessageDialog *ui;
-    WalletModel *model;
-    const PlatformStyle *platformStyle;
-    
-    #include <QWidget>
-#include <QQueue>
-    
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
-}
-    
-    /* Equality between doubles is imprecise. Comparison should be done
- * with a small threshold of tolerance, rather than exact equality.
- */
-static bool DoubleEquals(double a, double b, double epsilon)
+    double UniValue::get_real() const
 {
-    return std::abs(a - b) < epsilon;
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not a number as expected');
+    double retval;
+    if (!ParseDouble(getValStr(), &retval))
+        throw std::runtime_error('JSON double out of range');
+    return retval;
 }
     
-    /** Encode a Bech32 string. Returns the empty string in case of failure. */
-std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
+std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
     
-    #else
-    
-    class ConstraintBullet : public RIDBullet {
+    /** A hasher class for RIPEMD-160. */
+class CRIPEMD160
+{
+private:
+    uint32_t s[5];
+    unsigned char buf[64];
+    uint64_t bytes;
     }
     
-    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsResponse(body0, body1);
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
 }
-
     
-    class HingeJointBullet : public JointBullet {
-	class btHingeConstraint *hingeConstraint;
-    }
+    TEST(ByteSourceTest, CopyToStringByteSink) {
+  StringPiece data('Hello world!');
+  MockByteSource source(data, 3);
+  string str;
+  StringByteSink sink(&str);
+  source.CopyTo(&sink, data.size());
+  EXPECT_EQ(data, str);
+}
     
-    public:
-	_FORCE_INLINE_ void set_self(const RID &p_self) { self = p_self; }
-	_FORCE_INLINE_ RID get_self() const { return self; }
+    Status::Status() : error_code_(error::OK) {
+}
     
-    	ClassDB::register_virtual_class<CSGShape>();
-	ClassDB::register_virtual_class<CSGPrimitive>();
-	ClassDB::register_class<CSGMesh>();
-	ClassDB::register_class<CSGSphere>();
-	ClassDB::register_class<CSGBox>();
-	ClassDB::register_class<CSGCylinder>();
-	ClassDB::register_class<CSGTorus>();
-	ClassDB::register_class<CSGPolygon>();
-	ClassDB::register_class<CSGCombiner>();
+    TEST(StatusOr, TestAssignmentStatusOk) {
+  const int kI = 4;
+  StatusOr<int> source(kI);
+  StatusOr<int> target;
+  target = source;
+  EXPECT_EQ(source.status(), target.status());
+  EXPECT_EQ(source.ValueOrDie(), target.ValueOrDie());
+}
     
-      void PrintHeader() {
-    const int kKeySize = 16;
-    PrintEnvironment();
-    fprintf(stdout, 'Keys:       %d bytes each\n', kKeySize);
-    fprintf(stdout, 'Values:     %d bytes each (%d bytes after compression)\n',
-            FLAGS_value_size,
-            static_cast<int>(FLAGS_value_size * FLAGS_compression_ratio + 0.5));
-    fprintf(stdout, 'Entries:    %d\n', num_);
-    fprintf(stdout, 'RawSize:    %.1f MB (estimated)\n',
-            ((static_cast<int64_t>(kKeySize + FLAGS_value_size) * num_)
-             / 1048576.0));
-    fprintf(stdout, 'FileSize:   %.1f MB (estimated)\n',
-            (((kKeySize + FLAGS_value_size * FLAGS_compression_ratio) * num_)
-             / 1048576.0));
-    PrintWarnings();
-    fprintf(stdout, '------------------------------------------------\n');
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
   }
+}
     
-    namespace {
-class AtomicCounter {
- private:
-  port::Mutex mu_;
-  int count_ GUARDED_BY(mu_);
- public:
-  AtomicCounter() : count_(0) { }
-  void Increment() {
-    IncrementBy(1);
-  }
-  void IncrementBy(int count) LOCKS_EXCLUDED(mu_) {
-    MutexLock l(&mu_);
-    count_ += count;
-  }
-  int Read() LOCKS_EXCLUDED(mu_) {
-    MutexLock l(&mu_);
-    return count_;
-  }
-  void Reset() LOCKS_EXCLUDED(mu_) {
-    MutexLock l(&mu_);
-    count_ = 0;
-  }
-};
-    }
-    
-    
-    {}  // namespace leveldb
-
-    
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-std::string CurrentFileName(const std::string& dbname);
-    
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-    // Create and register a benchmark with the specified 'name' that invokes
-// the specified functor 'fn'.
+    // ----
+// Author: lar@google.com (Laramie Leavitt)
 //
-// RETURNS: A pointer to the registered benchmark.
-internal::Benchmark* RegisterBenchmark(const char* name,
-                                       internal::Function* fn);
+// Template metaprogramming utility functions.
+//
+// This code is compiled directly on many platforms, including client
+// platforms like Windows, Mac, and embedded systems.  Before making
+// any changes here, make sure that you're not breaking any platforms.
+//
+//
+// The names chosen here reflect those used in tr1 and the boost::mpl
+// library, there are similar operations used in the Loki library as
+// well.  I prefer the boost names for 2 reasons:
+// 1.  I think that portions of the Boost libraries are more likely to
+// be included in the c++ standard.
+// 2.  It is not impossible that some of the boost libraries will be
+// included in our own build in the future.
+// Both of these outcomes means that we may be able to directly replace
+// some of these with boost equivalents.
+//
+#ifndef GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+#define GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+    
+        for (size_t i = 0; i < set_fields.size(); i++) {
+      const FieldDescriptor* field = set_fields[i];
+      if (ShouldBeClear(field)) {
+        reflection->ClearField(message, field);
+        continue;
+      }
+      if (field->type() == FieldDescriptor::TYPE_MESSAGE) {
+        if (field->is_repeated()) {
+          for (int j = 0; j < reflection->FieldSize(*message, field); j++) {
+            StripMessage(reflection->MutableRepeatedMessage(message, field, j));
+          }
+        } else {
+          StripMessage(reflection->MutableMessage(message, field));
+        }
+      }
+    }
+    
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
+    
+      void ScrubMessage(DescriptorProto *message_type) {
+    for (int i = 0; i < message_type->mutable_enum_type()->size(); i++) {
+      ScrubEnum(message_type->mutable_enum_type(i));
+    }
+    for (int i = 0; i < message_type->mutable_nested_type()->size(); i++) {
+      ScrubMessage(message_type->mutable_nested_type(i));
+    }
+  }
     
     
     {
-    {}  // end namespace internal
-}  // end namespace benchmark
-    
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
-};
+    {
+    {      switch (phone_number.type()) {
+        case tutorial::Person::MOBILE:
+          cout << '  Mobile phone #: ';
+          break;
+        case tutorial::Person::HOME:
+          cout << '  Home phone #: ';
+          break;
+        case tutorial::Person::WORK:
+          cout << '  Work phone #: ';
+          break;
+        default:
+          cout << '  Unknown phone #: ';
+          break;
+      }
+      cout << phone_number.number() << endl;
     }
-    
-      PrintBasicContext(&GetErrorStream(), context);
-    
-    void Increment(UserCounters *l, UserCounters const& r) {
-  // add counters present in both or just in *l
-  for (auto &c : *l) {
-    auto it = r.find(c.first);
-    if (it != r.end()) {
-      c.second.value = c.second + it->second;
-    }
-  }
-  // add counters present in r, but not in *l
-  for (auto const &tc : r) {
-    auto it = l->find(tc.first);
-    if (it == l->end()) {
-      (*l)[tc.first] = tc.second;
+    if (person.has_last_updated()) {
+      cout << '  Updated: ' << TimeUtil::ToString(person.last_updated()) << endl;
     }
   }
 }
     
-    #include 'check.h'
+      void GenerateHeader(io::Printer* printer);
+  void GenerateSource(io::Printer* printer);
     
-    #ifndef SKIP_RESERVE
-void BENCHFUN(reserve)(int iters, int size) {
-  auto const obj = randomObject<VECTOR::value_type>();
-  FOR_EACH_RANGE (i, 0, iters) {
-    VECTOR v(random(0U, 1U), obj);
-    v.reserve(size);
-  }
-}
-BENCHMARK_PARAM(BENCHFUN(reserve), 16)
-BENCHMARK_PARAM(BENCHFUN(reserve), 128)
-BENCHMARK_PARAM(BENCHFUN(reserve), 1024)
-#endif
+      // Changes the box at the given index to the new box.
+  // Recomputes the bounding box.
+  void ChangeBox(int index, const TBOX& box);
     
-    BENCHMARK_RELATIVE(format_long_string_safe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    fbstring out;
-    suspender.dismissing([&] { format(&out, '{}', longString); });
-  }
-}
+    #include 'allheaders.h'
     
-    #include <glog/logging.h>
-    
-    template <class RNG>
-struct StateSize<RNG, void_t<decltype(RNG::state_size)>> {
-  using type = std::integral_constant<size_t, RNG::state_size>;
-};
-    
-    
-    {  /**
-   * The strategy parameter is used to tune the compression algorithm.
-   * Supported values:
-   * - Z_DEFAULT_STRATEGY: normal data
-   * - Z_FILTERED: data produced by a filter (or predictor)
-   * - Z_HUFFMAN_ONLY: force Huffman encoding only (no string match)
-   * - Z_RLE: limit match distances to one
-   * - Z_FIXED: prevents the use of dynamic Huffman codes
-   *
-   * The strategy parameter only affects the compression ratio but not the
-   * correctness of the compressed output.
-   */
-  int strategy;
-};
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
+    namespace tesseract {
     }
-  }
+    
+    We add our current vertex to the list.
+We check the seg from current vertex to next vertex for intersections
+  - if no intersections, follow to next vertex and continue
+  - if intersections, pick one with minimum distance
+    - if more than one, pick one with 'rightest' next point (two possibilities for each)
+    
+    			a_pMipmapImages[mip].paucEncodingBits = std::shared_ptr<unsigned char>(image.GetEncodingBits(), [](unsigned char *p) { delete[] p; });
+			a_pMipmapImages[mip].uiEncodingBitsBytes = image.GetEncodingBitsBytes();
+			a_pMipmapImages[mip].uiExtendedWidth = image.GetExtendedWidth();
+			a_pMipmapImages[mip].uiExtendedHeight = image.GetExtendedHeight();
+    
+    	void EncodeMipmaps(float *a_pafSourceRGBA,
+		unsigned int a_uiSourceWidth,
+		unsigned int a_uiSourceHeight,
+		Image::Format a_format,
+		ErrorMetric a_eErrMetric,
+		float a_fEffort,
+		unsigned int a_uiJobs,
+		unsigned int a_uiMaxJobs,
+		unsigned int a_uiMaxMipmaps,
+		unsigned int a_uiMipFilterFlags,
+		RawImage* a_pMipmaps,
+		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    	class Block4x4EncodingBits_A8
+	{
+	public:
+    }
+    
+    
+    {		m_uiEncodingIterations++;
+		SetDoneIfPerfect();
+	}
+    
+    int fastlz_decompress(const void* input, int length, void* output, int maxout);
+    
+    #endif // __ACTIONS_CCACTION_H__
+
+    
+    PointArray* PointArray::reverse() const
+{
+    vector<Vec2> newArray;
+    newArray.reserve(_controlPoints.size());
+    for (auto iter = _controlPoints.rbegin(), iterRend = _controlPoints.rend(); iter != iterRend; ++iter)
+    {
+        newArray.push_back(*iter);
+    }
+    PointArray *config = PointArray::create(0);
+    config->setControlPoints(std::move(newArray));
+    
+    return config;
+}
+    
+    #include <vector>
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+            coords.bl.x += direction * _winSize.width * time;
+        coords.br.x += direction * _winSize.width * time;
+        coords.tl.x += direction * _winSize.width * time;
+        coords.tr.x += direction * _winSize.width * time;
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
