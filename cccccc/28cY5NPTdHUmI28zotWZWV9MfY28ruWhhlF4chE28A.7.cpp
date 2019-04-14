@@ -1,261 +1,279 @@
 
         
-          // Quit the whole app.
-  static void Quit(content::RenderProcessHost* rph = NULL);
+            void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        v_dst = internal::vaddq(v_src0, v_src1);
+    }
     
-    v8::Handle<v8::Value> AllocateId(int routing_id);
+            for (; dj < roiw8; sj += 16, dj += 8)
+        {
+            uint8x8x2_t v_src = vld2_u8(src + sj);
+            vst1_u8(dst + dj, v_src.val[coi]);
+        }
     
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+    void assertSupportedConfiguration(bool parametersSupported = true);
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s8, s16, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
+             'vmovl.s8 q1, d0                                       \n\t'
+             'vmovl.s8 q2, d1                                       \n\t'
+             'vst1.16 {d2-d3}, [%[dst1]]                            \n\t'
+             'vst1.16 {d4-d5}, [%[dst2]]                            \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst1] 'r' (_dst + i + 0),
+               [dst2] 'r' (_dst + i + 8)
+             : 'd0','d1','d2','d3','d4','d5'
+         );
+     }
+})
+#else
+CVT_FUNC(s8, s16, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         int8x16_t vline_s8 = vld1q_s8(_src + i);
+    }
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s32, u8, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vcvt.f32.s32 q4, q2                                     \n\t'
+            'vcvt.f32.s32 q5, q3                                     \n\t'
+            'vmul.f32 q6, q4, q0                                     \n\t'
+            'vmul.f32 q7, q5, q0                                     \n\t'
+            'vadd.f32 q8, q6, q1                                     \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vcvt.s32.f32 q10, q8                                    \n\t'
+            'vcvt.s32.f32 q11, q9                                    \n\t'
+            'vqmovun.s32 d24, q10                                    \n\t'
+            'vqmovun.s32 d25, q11                                    \n\t'
+            'vqmovn.u16  d26, q12                                    \n\t'
+            'vst1.8 {d26}, [%[dst]]                                  \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
+        );
+    }
+})
+#else
+CVTS_FUNC(s32, u8, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
+        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
+        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
+        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
+        vst1_u8(_dst + i, vRes);
+    }
+})
+#endif
+    
+                // make extrapolation for the first elements
+            if (!x)
+            {
+                // make border
+                if (border == BORDER_MODE_CONSTANT)
+                    tcurr[0] = tcurr[1] = tcurr[2] = v_border;
+                else if (border == BORDER_MODE_REPLICATE)
+                {
+                    tcurr[0] = vdup_n_u8(vget_lane_u8(tnext[0], 0));
+                    tcurr[1] = vdup_n_u8(vget_lane_u8(tnext[1], 0));
+                    tcurr[2] = vdup_n_u8(vget_lane_u8(tnext[2], 0));
+                }
+    }
+    
+    
+    {    return 0;
+#endif
+}
+    
+            for ( ; j + 7 < size.width; j += 8)
+        {
+            internal::prefetch(sum + j);
+            internal::prefetch(src + j);
+    }
+    
+    // calculate reciprocal value
+    
+    
+    {
+    {
+    {}  // namespace io
+}  // namespace protobuf
+}  // namespace google
+
+    
+    void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+    TEST(StructurallyValidTest, InvalidUTF8String) {
+  const string invalid_str('abcd\xA0\xB0\xA0\xB0\xA0\xB0 - xyz789');
+  EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data(),
+                                       invalid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data() + i,
+                                         invalid_str.size() - i));
   }
 }
     
-    base::string16 MenuDelegate::GetLabelForCommandId(int command_id) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  return item->label_;
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-    ExtensionFunction::ResponseAction
-NwAppCloseAllWindowsFunction::Run() {
-  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
-  if (!registry)
-    return RespondNow(Error(''));
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
+      while (true) {
+    const void* inptr;
+    int inlen;
+    bool ok;
+    ok = in.Next(&inptr, &inlen);
+    if (!ok) {
+      break;
     }
-    
-    #include 'base/lazy_instance.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/nw_screen.h'
-#include 'extensions/browser/extensions_browser_client.h'
-#include 'ui/display/display_observer.h'
-#include 'ui/display/display.h'
-#include 'ui/display/screen.h'
-    
-      protected:
-    ~NwScreenRegisterStreamFunction() override {}
-    DECLARE_EXTENSION_FUNCTION('nw.Screen.registerStream', UNKNOWN)
-    
-    struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
-    }
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-    // Deletes the box with the given index, and shuffles up the rest.
-// Recomputes the bounding box.
-void BoxWord::DeleteBox(int index) {
-  ASSERT_HOST(0 <= index && index < length_);
-  boxes_.remove(index);
-  --length_;
-  ComputeBoundingBox();
-}
-    
-      // Reads all the pages in the given lstmf filename to the cache. The reader
-  // is used to read the file.
-  bool LoadDocument(const char* filename, int start_page, int64_t max_memory,
-                    FileReader reader);
-  // Sets up the document, without actually loading it.
-  void SetDocument(const char* filename, int64_t max_memory, FileReader reader);
-  // Writes all the pages to the given filename. Returns false on error.
-  bool SaveDocument(const char* filename, FileWriter writer);
-  bool SaveToBuffer(GenericVector<char>* buffer);
-    
-    
-    { private:
-  double total_weight;         // no of elements or sum of weights.
-  double sigx;                 // sum of x
-  double sigy;                 // sum of y
-  double sigxx;                // sum x squared
-  double sigxy;                // sum of xy
-  double sigyy;                // sum y squared
-};
-    
-        // out_of_range.402
-    try
-    {
-        // try to use the array index '-'
-        json::reference ref = j.at('/array/-'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-    /** @class Speed
- * @brief Changes the speed of an action, making it take longer (speed>1)
- * or shorter (speed<1) time.
- * Useful to simulate 'slow motion' or 'fast forward' effect.
- * @warning This action can't be Sequenceable because it is not an IntervalAction.
- */
-class CC_DLL Speed : public Action
-{
-public:
-    /** Create the action and set the speed.
-     *
-     * @param action An action.
-     * @param speed The action speed.
-     */
-    static Speed* create(ActionInterval* action, float speed);
-    /** Return the speed.
-     *
-     * @return The action speed.
-     */
-    float getSpeed() const { return _speed; }
-    /** Alter the speed of the inner function in runtime. 
-     *
-     * @param speed Alter the speed of the inner function in runtime.
-     */
-    void setSpeed(float speed) { _speed = speed; }
-    }
-    
-    void PointArray::reverseInline()
-{
-    const size_t l = _controlPoints.size();
-    Vec2 *p1 = nullptr;
-    Vec2 *p2 = nullptr;
-    float x, y;
-    for (size_t i = 0; i < l/2; ++i)
-    {
-        p1 = &_controlPoints.at(i);
-        p2 = &_controlPoints.at(l-i-1);
-        
-        x = p1->x;
-        y = p1->y;
-        
-        p1->x = p2->x;
-        p1->y = p2->y;
-        
-        p2->x = x;
-        p2->y = y;
-    }
-}
-    
-    bool AccelAmplitude::initWithAction(Action *action, float duration)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _rate = 1.0f;
-        _other = (ActionInterval*)(action);
-        action->retain();
-    }
-    }
-    
-    CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
-{
-    auto ret = new (std::nothrow) CallFuncN();
-    }
-    
-    http://www.cocos2d-x.org
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    /**
-@brief WavesTiles3D action.
-@details This action wave the target node with many tiles.
-*/
-class CC_DLL WavesTiles3D : public TiledGrid3DAction
-{
-public:
-    /** 
-     * @brief Create the action with a number of waves, the waves amplitude, the grid size and the duration.
-     * @param duration Specify the duration of the WavesTiles3D action. It's a value in seconds.
-     * @param gridSize Specify the size of the grid.
-     * @param waves Specify the waves count of the WavesTiles3D action.
-     * @param amplitude Specify the amplitude of the WavesTiles3D action.
-     * @return If the creation success, return a pointer of WavesTiles3D action; otherwise, return nil.
-     */
-    static WavesTiles3D* create(float duration, const Size& gridSize, unsigned int waves, float amplitude);
-    }
-    
-    AnimationFrame* AnimationFrame::clone() const
-{
-    // no copy constructor
-    auto frame = new (std::nothrow) AnimationFrame();
-    frame->initWithSpriteFrame(_spriteFrame->clone(),
-                               _delayUnits,
-                               _userInfo);
-    }
-    
-    PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, float threshold)
-{
-    Rect realRect = getRealRect(rect);
-    auto p = trace(realRect, threshold);
-    p = reduce(p, realRect, epsilon);
-    p = expand(p, realRect, epsilon);
-    auto tri = triangulate(p);
-    calculateUV(realRect, tri.verts, tri.vertCount);
-    PolygonInfo ret;
-    ret.triangles = tri;
-    ret.setFilename(_filename);
-    ret.setRect(realRect);
-    return ret;
-}
-    
-    #include <vector>
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
-                          ContiRadar* conti_radar) const {
-  auto state = conti_radar->mutable_radar_state();
-  state->set_max_distance(max_dist(bytes, length));
-  state->set_output_type(output_type(bytes, length));
-  state->set_rcs_threshold(rcs_threshold(bytes, length));
-  state->set_radar_power(radar_power(bytes, length));
-  state->set_send_quality(send_quality(bytes, length));
-  state->set_send_ext_info(send_ext_info(bytes, length));
-}
-    
-    void SplineSegKernel::CalculateThirdOrderDerivative(const uint32_t num_params) {
-  kernel_third_order_derivative_ =
-      Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 3; r < kernel_third_order_derivative_.rows(); ++r) {
-    for (int c = 3; c < kernel_third_order_derivative_.cols(); ++c) {
-      kernel_third_order_derivative_(r, c) =
-          (r * r - r) * (r - 2) * (c * c - c) * (c - 2) / (r + c - 5.0);
+    if (inlen > 0) {
+      int err = write(STDOUT_FILENO, inptr, inlen);
+      if (err != inlen) {
+        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
+        return 1;
+      }
     }
   }
+    
+      while (true) {
+    void* outptr;
+    int outlen;
+    bool ok;
+    do {
+      ok = out.Next(&outptr, &outlen);
+      if (!ok) {
+        break;
+      }
+    } while (outlen <= 0);
+    readlen = read(STDIN_FILENO, outptr, outlen);
+    if (readlen <= 0) {
+      out.BackUp(outlen);
+      break;
+    }
+    if (readlen < outlen) {
+      out.BackUp(outlen - readlen);
+    }
+  }
+    
+    class EnumScrubber {
+    }
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+    }
+    
+    template <>
+template <typename T>
+bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
+  EnforceOnCPU<T>(Input(0));
+  return true;
 }
     
-    // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
-// 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 48, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 1);
+    
+<details>
+    
+    #endif // CAFFE2_OPERATORS_JSD_OP_H_
+
+    
+    #include 'absl/strings/str_cat.h'
+#include 'absl/strings/string_view.h'
+#include 'opencensus/stats/stats.h'
+#include 'src/core/lib/surface/call.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+#include 'src/cpp/ext/filters/census/measures.h'
+    
+    #include <grpc/support/port_platform.h>
+    
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
+    
+    Status ProtoServerReflection::GetFileContainingExtension(
+    ServerContext* context, const ExtensionRequest* request,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
     }
+    
+    namespace grpc {
+    }
+    
+    namespace grpc {
+    }
+    
+    void NarratorNotifier::OnAnnouncementChanged(_In_ DependencyObject^ dependencyObject, _In_ DependencyPropertyChangedEventArgs^ e)
+{
+    auto instance = safe_cast<NarratorNotifier^>(dependencyObject);
+    if (instance != nullptr)
+    {
+        instance->Announce(safe_cast<NarratorAnnouncement^>(e->NewValue));
+    }
+}
+
+    
+            if (id.compare(L'sThousand') == 0)
+        {
+            return localizationSettings.GetNumberGroupingSeparatorStr();
+        }
+    
+    class Extension_ping_presult {
+ public:
+    }
+    
+    
+ExtensionManager_query_args::~ExtensionManager_query_args() throw() {
+}
+    
+    TEST_F(KernelModules, test_sanity) {
+  QueryData data = execute_query('select * from kernel_modules');
+  ASSERT_GT(data.size(), 0ul);
+  ValidatatioMap row_map = {
+      {'name', NonEmptyString},
+      {'size', NonNegativeInt},
+      {'used_by', NonEmptyString},
+      {'status', NonEmptyString},
+      {'address', NonNegativeInt},
+  };
+  validate_rows(data, row_map);
+}
