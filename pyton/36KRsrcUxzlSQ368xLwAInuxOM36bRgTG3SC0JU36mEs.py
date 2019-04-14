@@ -1,199 +1,217 @@
 
         
-            def message_group(self, group_id, message):
-        pass
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer),
-            self.mr(mapper=self.mapper_sort,
-                    reducer=self.reducer_identity),
-        ]
-    
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
-    
-        @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-    
-        # login request set the user_id in the session
-    # check that the user is loaded from the session
-    with client:
-        client.get('/')
-        assert session['user_id'] == 1
-        assert g.user['username'] == 'test'
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
-    
-        @classmethod
-    def as_view(cls, name, *class_args, **class_kwargs):
-        '''Converts the class into an actual view function that can be used
-        with the routing system.  Internally this generates a function on the
-        fly which will instantiate the :class:`View` on each request and call
-        the :meth:`dispatch_request` method on it.
-    
-        @app.route('/')
-    def index():
-        raise Exception('dummy')
-    
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
-    
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
-    
-            if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
-    
-    # Generate sample data
-n_samples = 1500
-np.random.seed(0)
-t = 1.5 * np.pi * (1 + 3 * np.random.rand(1, n_samples))
-x = t * np.cos(t)
-y = t * np.sin(t)
-    
-    X_restored = agglo.inverse_transform(X_reduced)
-images_restored = np.reshape(X_restored, images.shape)
-plt.figure(1, figsize=(4, 3.5))
-plt.clf()
-plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
-for i in range(4):
-    plt.subplot(3, 4, i + 1)
-    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
-    plt.xticks(())
-    plt.yticks(())
-    if i == 1:
-        plt.title('Original data')
-    plt.subplot(3, 4, 4 + i + 1)
-    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
-               interpolation='nearest')
-    if i == 1:
-        plt.title('Agglomerated data')
-    plt.xticks(())
-    plt.yticks(())
-    
-    What this example shows us is the behavior 'rich getting richer' of
-agglomerative clustering that tends to create uneven cluster sizes.
-This behavior is pronounced for the average linkage strategy,
-that ends up with a couple of singleton clusters, while in the case
-of single linkage we get a single central cluster with all other clusters
-being drawn from noise points around the fringes.
-'''
-    
-    plt.figure()
-for k in range(n_clusters):
-    my_members = km.labels_ == k
-    color = cm.nipy_spectral(float(k) / n_clusters, 1)
-    plt.plot(X[my_members, 0], X[my_members, 1], 'o', marker='.', c=color)
-    cluster_center = km.cluster_centers_[k]
-    plt.plot(cluster_center[0], cluster_center[1], 'o',
-             markerfacecolor=color, markeredgecolor='k', markersize=6)
-    plt.title('Example cluster allocation with a single random init\n'
-              'with MiniBatchKMeans')
-    
-    # Used for remembering the file (and its contents)
-# so we don't have to open the same file again.
-_filename = None
-_contents = None
-    
-    
-def sanitize_module_name(module_name):
-    '''Sanitize the given module name, by replacing dashes and points
-    with underscores and prefixing it with a letter if it doesn't start
-    with one
+            # Raises
+        ValueError: in case of invalid `label_mode`.
     '''
-    module_name = module_name.replace('-', '_').replace('.', '_')
-    if module_name[0] not in string.ascii_letters:
-        module_name = 'a' + module_name
-    return module_name
+    if label_mode not in ['fine', 'coarse']:
+        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-                    except ValueError as e:
-                    logger.warning(
-                        'Ignoring error while verifying certificate '
-                        'from host '{}' (exception: {})'.format(
-                            self._hostnameASCII, repr(e)))
+def load_data():
+    '''Loads the Fashion-MNIST dataset.
     
-        def __init__(self, request, timeout=180):
-        self._url = urldefrag(request.url)[0]
-        # converting to bytes to comply to Twisted interface
-        self.url = to_bytes(self._url, encoding='ascii')
-        self.method = to_bytes(request.method, encoding='ascii')
-        self.body = request.body or None
-        self.headers = Headers(request.headers)
-        self.response_headers = None
-        self.timeout = request.meta.get('download_timeout') or timeout
-        self.start_time = time()
-        self.deferred = defer.Deferred().addCallback(self._build_response, request)
+    print('Evaluate IRNN...')
+model = Sequential()
+model.add(SimpleRNN(hidden_units,
+                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
+                    recurrent_initializer=initializers.Identity(gain=1.0),
+                    activation='relu',
+                    input_shape=x_train.shape[1:]))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+rmsprop = RMSprop(lr=learning_rate)
+model.compile(loss='categorical_crossentropy',
+              optimizer=rmsprop,
+              metrics=['accuracy'])
     
-            dfd.addBoth(lambda _: self.signals.send_catch_log_deferred(
-            signal=signals.spider_closed, spider=spider, reason=reason))
-        dfd.addErrback(log_failure('Error while sending spider_close signal'))
+    # convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
     
-        # Stripping scripts and comments is slow (about 20x slower than
-    # just checking if a string is in text); this is a quick fail-fast
-    # path that should work for most pages.
-    if 'fragment' not in text:
-        return False
-    if 'content' not in text:
-        return False
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        if not crawler.settings.getbool('COOKIES_ENABLED'):
-            raise NotConfigured
-        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
+def train_model(model, train, test, num_classes):
+    x_train = train[0].reshape((train[0].shape[0],) + input_shape)
+    x_test = test[0].reshape((test[0].shape[0],) + input_shape)
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train /= 255
+    x_test /= 255
+    print('x_train shape:', x_train.shape)
+    print(x_train.shape[0], 'train samples')
+    print(x_test.shape[0], 'test samples')
+    
+        # Arguments
+        y_true: tensor of true targets.
+        y_pred: tensor of predicted targets.
+    
+    
+def test_deconv_length():
+    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
+    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
+    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
+    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
+    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
+    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
+    
+    
+def test_array32():
+    check_array(5, (1 << 16))
+    
+            exp = pd.DatetimeIndex(['2011-01-01 09:00', '2011-01-01 10:00',
+                                '2011-01-01 11:00'])
+        tm.assert_index_equal(
+            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
+    
+        expected = pd.Series([1, 2, inc, 4])
+    tm.assert_series_equal(s, expected)
+
+    
+    
+class _ABCGeneric(type):
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
+    
+      def _adjust_thread_count( self ):
+    # When the executor gets lost, the weakref callback will wake up
+    # the worker threads.
+    def weakref_cb( _, q=self._work_queue ):
+      q.put( None )
+    # TODO(bquinlan): Should avoid creating new threads if there are more
+    # idle threads than items in the work queue.
+    if len( self._threads ) < self._max_workers:
+      t = threading.Thread( target=_worker,
+                            args=( weakref.ref( self, weakref_cb ),
+                                   self._work_queue ) )
+      t.daemon = True
+      t.start()
+      self._threads.add( t )
+    
+            if max_workers is None:
+            self._max_workers = multiprocessing.cpu_count()
+        else:
+            self._max_workers = max_workers
+    
+    def _worker(executor_reference, work_queue):
+    try:
+        while True:
+            work_item = work_queue.get(block=True)
+            if work_item is not None:
+                work_item.run()
+                continue
+            executor = executor_reference()
+            # Exit if:
+            #   - The interpreter is shutting down OR
+            #   - The executor that owns the worker has been collected OR
+            #   - The executor that owns the worker has been shutdown.
+            if _shutdown or executor is None or executor._shutdown:
+                # Notice other workers
+                work_queue.put(None)
+                return
+            del executor
+    except BaseException:
+        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    
+    
+def mocap_set_action(sim, action):
+    '''The action controls the robot using mocaps. Specifically, bodies
+    on the robot (for example the gripper wrist) is controlled with
+    mocap bodies. In this case the action is the desired difference
+    in position and orientation (quaternion), in world coordinates,
+    of the of the target body. The mocap is positioned relative to
+    the target body according to the delta, and the MuJoCo equality
+    constraint optimizer tries to center the welded body on the mocap.
+    '''
+    if sim.model.nmocap > 0:
+        action, _ = np.split(action, (sim.model.nmocap * 7, ))
+        action = action.reshape(sim.model.nmocap, 7)
+    
+    env.render()
+env.unwrapped.viewer.window.on_key_press = key_press
+env.unwrapped.viewer.window.on_key_release = key_release
+    
+        # You provide the directory to write to (can be an existing
+    # directory, including one with existing data -- all monitor files
+    # will be namespaced). You can also dump to a tempdir if you'd
+    # like: tempfile.mkdtemp().
+    outdir = '/tmp/random-agent-results'
+    env = wrappers.Monitor(env, directory=outdir, force=True)
+    env.seed(0)
+    agent = RandomAgent(env.action_space)
+    
+        def steer(self, s):
+        'control: steer s=-1..1, it takes time to rotate steering wheel from side to side, s is target position'
+        self.wheels[0].steer = s
+        self.wheels[1].steer = s
+    
+    import six
+import texttable
+    
+    
+def format_return(result, max_lines):
+    if isinstance(result, (list, tuple, set)):
+        return '({0} with {1} items)'.format(type(result).__name__, len(result))
+    
+        >>> timeparse('1m24s')
+    84
+    >>> timeparse('1.2 minutes')
+    72
+    >>> timeparse('1.2 seconds')
+    1.2
+    '''
+    match = re.match(r'\s*' + TIMEFORMAT + r'\s*$', sval, re.I)
+    if not match or not match.group(0).strip():
+        return
+    
+    
+def create_host_file(client, filename):
+    with open(filename, 'r') as fh:
+        content = fh.read()
+    
+            self.project.up()
+        container = self.db.containers()[0]
+        assert container.get_mount('/var/db')['Source'] == self.host_path
+    
+        def test_tls_verify_flag_no_override(self):
+        environment = Environment({
+            'DOCKER_TLS_VERIFY': 'true',
+            'COMPOSE_TLS_VERSION': 'TLSv1',
+            'DOCKER_CERT_PATH': self.cert_path
+        })
+        options = {'--tls': True, '--tlsverify': False}
