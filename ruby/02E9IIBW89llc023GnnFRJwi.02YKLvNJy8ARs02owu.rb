@@ -1,80 +1,113 @@
 
         
-          def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
-    end
-  end
-end
+        multitask :default => [:test, :features]
     
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
-  end
-end
-
+    require 'jekyll'
+require 'mercenary'
     
-        context 'on a post you do not partecipate to' do
-      it 'says it is an unprocessable request' do
-        delete :destroy, params: {post_id: post.id}
-        expect(response.code).to eq('422')
-      end
-    end
-  end
-end
-
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Then(/^the release is created$/) do
-  run_vagrant_command('ls -g #{TestApp.releases_path}')
-end
-    
-            filter = Object.new
-        def filter.filter(servers)
-          block.call(servers)
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
         end
-      elsif !filter.respond_to? :filter
-        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
-                         'not have a public 'filter' method'
-      end
-      @custom_filters ||= []
-      @custom_filters << filter
-    end
     
-    task :add_template, [:name] do |t, args|
-  Dir.glob('README.*') do |file|
-    code = File.read(file)
-    if code =~ /^===.*#{args.name.capitalize}/
-      puts 'Already covered in #{file}'
+              relation.update_all(update)
+        end
+      end
+    end
+  end
+end
+
+    
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
+      end
+    end
+  end
+end
+
+    
+            def id_for_already_imported_cache(note)
+          note.id
+        end
+      end
+    end
+  end
+end
+
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class NotesImporter
+        include ParallelScheduling
+    
+      #
+  # Split the URI into the resource being requested and its query string.
+  #
+  def update_uri_parts
+    # If it has a query string, get the parts.
+    if ((self.raw_uri) and (md = self.raw_uri.match(/(.+?)\?(.*)$/)))
+      self.uri_parts['QueryString'] = parse_cgi_qstring(md[2])
+      self.uri_parts['Resource']    = md[1]
+    # Otherwise, just assume that the URI is equal to the resource being
+    # requested.
     else
-      template = code[/===[^\n]*Liquid.*index\.liquid<\/tt>[^\n]*/m]
-      if !template
-        puts 'Liquid not found in #{file}'
-      else
-        puts 'Adding section to #{file}'
-        template = template.gsub(/Liquid/, args.name.capitalize).gsub(/liquid/, args.name.downcase)
-        code.gsub! /^(\s*===.*CoffeeScript)/, '\n' << template << '\n\\1'
-        File.open(file, 'w') { |f| f << code }
-      end
+      self.uri_parts['QueryString'] = {}
+      self.uri_parts['Resource']    = self.raw_uri
     end
-  end
-end
     
-          def session_key
-        @session_key ||= options[:session_key]
-      end
-    end
-  end
-end
+    # Default timings
+IAX_DEFAULT_REG_REFRESH = 60
+IAX_DEFAULT_TIMEOUT     = 10
+    
+              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new(elems)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+                int
+          end
+    
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_asn1_msg_type(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
