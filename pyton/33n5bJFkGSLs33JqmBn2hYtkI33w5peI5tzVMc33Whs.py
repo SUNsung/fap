@@ -1,85 +1,38 @@
 
         
-            context['show_on_github_url'] = show_url
-    context['edit_on_github_url'] = edit_url
+        model.fit(x_train, y_train,
+          batch_size=batch_size,
+          callbacks=[tensorboard],
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
     
     
-def setup_button(hass, config, add_entities, client, address):
-    '''Set up a single button device.'''
-    timeout = config.get(CONF_TIMEOUT)
-    ignored_click_types = config.get(CONF_IGNORED_CLICK_TYPES)
-    button = FlicButton(hass, client, address, timeout, ignored_click_types)
-    _LOGGER.info('Connected to button %s', address)
+def load_data():
+    '''Loads the Fashion-MNIST dataset.
     
-            # Check if the access point is accessible
-        response = self._make_request()
-        if not response.status_code == 200:
-            raise ConnectionError('Cannot connect to Linksys Access Point')
     
-    import voluptuous as vol
+def test_preprocess_input_symbolic():
+    # Test image batch
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    inputs = Input(shape=x.shape[1:])
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape[1:])(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x).shape == x.shape
     
-        def __init__(self, app_name, app_icon, hostname, password, port):
-        '''Initialize the service.'''
-        import gntp.notifier
-        import gntp.errors
-        self.gntp = gntp.notifier.GrowlNotifier(
-            applicationName=app_name,
-            notifications=['Notification'],
-            applicationIcon=app_icon,
-            hostname=hostname,
-            password=password,
-            port=port
-        )
-        try:
-            self.gntp.register()
-        except gntp.errors.NetworkError:
-            _LOGGER.error('Unable to register with the GNTP host')
-            return
     
-            if send_test_msg:
-            self.send_message('Home Assistant started')
+def logcosh(y_true, y_pred):
+    '''Logarithm of the hyperbolic cosine of the prediction error.
     
-            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
-        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
     
-            # Adding model 'RawEvent'
-        db.create_table(
-            'sentry_rawevent', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), (
-                    'event_id',
-                    self.gf('django.db.models.fields.CharField')(max_length=32, null=True)
-                ), (
-                    'datetime',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-                ('data', self.gf('sentry.db.models.fields.node.NodeField')(null=True, blank=True)),
-            )
-        )
-        db.send_create_signal('sentry', ['RawEvent'])
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'Distribution', fields ['release', 'name']
-        db.delete_unique('sentry_distribution', ['release_id', 'name'])
-    
-        '''
-    for k, v in ret.items():
-        tokens = list(k)
-        print(tokens)
-        if v:
-            for t in v:
-                print('\t', t)
-        else:
-            print('\t', '---')
-    
-        Returns:
-    
-    import tensorflow as tf
-import keras.backend as K
+def test_conv_input_length():
+    assert conv_utils.conv_input_length(None, 7, 'same', 1) is None
+    assert conv_utils.conv_input_length(112, 7, 'same', 1) == 112
+    assert conv_utils.conv_input_length(112, 7, 'same', 2) == 223
+    assert conv_utils.conv_input_length(28, 5, 'valid', 1) == 32
+    assert conv_utils.conv_input_length(14, 5, 'valid', 2) == 31
+    assert conv_utils.conv_input_length(36, 5, 'full', 1) == 32
+    assert conv_utils.conv_input_length(18, 5, 'full', 2) == 31
