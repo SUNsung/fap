@@ -1,303 +1,229 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        
+    {}  // namespace api
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+     private:
+  display::Screen* screen_;
     
-    template <typename InType, typename OutType, typename Functor>
-void BinaryUFunc(char** args, npy_intp* dimensions, npy_intp* steps,
-                 void* data) {
-  const char* i0 = args[0];
-  const char* i1 = args[1];
-  char* o = args[2];
-  for (npy_intp k = 0; k < *dimensions; k++) {
-    InType x = *reinterpret_cast<const InType*>(i0);
-    InType y = *reinterpret_cast<const InType*>(i1);
-    *reinterpret_cast<OutType*>(o) = Functor()(x, y);
-    i0 += steps[0];
-    i1 += steps[1];
-    o += steps[2];
+      // Removes this instance from the weak map.
+  void RemoveFromWeakMap() {
+    if (weak_map_ && weak_map_->Has(weak_map_id()))
+      weak_map_->Remove(weak_map_id());
   }
+    
+    #include 'content/public/browser/javascript_dialog_manager.h'
+    
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
 }
     
-      int type_num = -1;
-  Status s =
-      TF_DataType_to_PyArray_TYPE(static_cast<TF_DataType>(dtype), &type_num);
-  if (!s.ok()) {
-    return s;
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {
-    {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
-        }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
-  }
-    
-    /*
- * Macro definition for EmitXOForm functions
- * Format:
- *  X(name,   arg3,  oe,  xop)
- *    name: function name
- *    arg3: ARG if needed, otherwise NONE to skip
- *    oe:   parameter value
- *    xop:  parameter value
- */
-    
-      void branchFar(CodeAddress c,
-                 BranchConditions bc = BranchConditions::Always,
-                 LinkReg lr = LinkReg::DoNotTouch,
-                 ImmType immt = ImmType::TocOnly,
-                 bool immMayChange = false) {
-    Label l(c);
-    l.branchFar(*this, bc, lr, immt, immMayChange);
-  }
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    std::string Config::IniName(const std::string& config,
-                            bool prepend_hhvm /* = true */) {
-  std::string out = '';
-  if (prepend_hhvm) {
-    out += 'hhvm.';
-  }
-  size_t idx = 0;
-  for (auto& c : config) {
-    // This is the first or last character
-    if (idx == 0 || idx == config.length() - 1) {
-      out += tolower(c);
-    } else if (!isalpha(c)) {
-      // Any . or _ or numeral is just output with no special behavior
-      out += c;
-    } else {
-      if (isupper(c) && isupper(config[idx - 1 ]) && islower(config[idx + 1])) {
-      // Handle something like 'SSLPort', and c = 'P', which will then put
-      // the underscore between the 'L' and 'P'
-        out += '_';
-        out += tolower(c);
-      } else if (islower(c) && isupper(config[idx + 1])) {
-      // Handle something like 'PathDebug', and c = 'h', which will then put
-      // the underscore between the 'h' and 'D'
-        out += tolower(c);
-        out += '_';
-      } else {
-      // Otherwise we just output as lower
-        out += tolower(c);
-      }
-    }
-    idx++;
-  }
-    }
-    
-      static std::string FormatNumber(const char* fmt, int64_t n);
-  static std::string FormatSize(int64_t size);
-  static std::string FormatTime(int64_t milliSeconds);
-    
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
-}
-    
-    namespace HPHP {
-    }
-    
-        /*virtual*/ Dictionary LearnerRMSProp::CreateCheckpoint() /*override*/
-    {
-        auto dict = LearnerBase::CreateCheckpoint();
-        dict[smoothedCountKey] = m_smoothedCount;
-        return dict;
-    }
-    
-        template <typename ElementType>
-    std::tuple<const void *, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers() const
-    {
-        return _SparseBlockColumnDataBuffers<ElementType, ElementType>();
-    }
-    
-            if (sectionOffset.size() > m_maskShape.Rank())
-            LogicError('NDMask::MaskSection: The sectionOffset dimensionality (%d) must be <= rank (%d) of 'this' mask.', (int)sectionOffset.size(), (int)m_maskShape.Rank());
-    
-    #include <chrono>
-    
-    
-    {        assert(m_fd == -1);
-        for (;;)
-        {
-            // opening a lock file
-            int fd = open(m_fileName.c_str(), O_WRONLY | O_CREAT, 0666);
-            if (fd < 0)
-                RuntimeError('Acquire: Failed to open lock file %s: %s.', m_fileName.c_str(), strerror(errno));
-            // locking it with the fcntl API
-            memset(&m_lock, 0, sizeof(m_lock));
-            m_lock.l_type = F_WRLCK;
-            // BUG: fcntl call with F_SETLKW doesn't always reliably detect when lock is released
-            // As a workaround, using alarm() for interupting fcntl if it waits more than 1 second
-            setupTimeout(1);
-            int r = fcntl(fd, wait ? F_SETLKW : F_SETLK, &m_lock);
-            if (errno == EINTR)
-            {
-                sleep(1);
-                // retrying in the case of signal or timeout
-                close(fd);
-                continue;
-            }
-            if (r != 0)
-            {
-                // acquire failed
-                close(fd);
-                umask(mask);
-                return false;
-            }
-            // we own the exclusive lock on file descriptor, but we need to double-check
-            // that the lock file wasn't deleted and/or re-created;
-            // checking this by comparing inode numbers
-            struct stat before, after;
-            fstat(fd, &before);
-            if (stat(m_fileName.c_str(), &after) != 0 || before.st_ino != after.st_ino)
-            {
-                // we have a race with 'unlink' call in Release()
-                // our lock is held to the previous instance of the file;
-                // this is not a problem, we just need to retry locking the new file
-                close(fd);
-                continue;
-            }
-            else
-            {
-                // lock acquired successfully
-                m_fd = fd;
-                umask(mask);
-                return true;
-            }
-        }
-    }
-    
-            // determine all indirect inputs of the specified outputs
-        vector<ComputationNodeBasePtr> roots;
-        for (let& outputNodeKV : outputNodes)
-            roots.push_back(outputNodeKV.second);
-        let allInputs = ComputationNodeBase::EnumerateNodes(roots);
-    
-    // -----------------------------------------------------------------------
-// DiagTimesNode (vector representing the diagonal of a square matrix, data)
-// Deprecated because can be implemented with ElementTimes.
-// -----------------------------------------------------------------------
-    
-    
-    {  bool abort_;
-};
-    
-      auto it = publishers_.find(sub->pubType());
-  if (it != publishers_.end()) {
-    auto ret = it->second->subscribe(std::move(sub));
-    if (ret.isError()) {
-      return createError(Error::PublisherError,
-                         'Calling subscribe() on publisher '' +
-                             it->second->name() +
-                             '' for subscription from request from '' +
-                             sub->subscriber() + '' returned an error.',
-                         ret.takeError());
-    }
-  } else {
-    return createError(Error::UnknownPublisher,
-                       'No registered publisher for bind request from '' +
-                           sub->subscriber() + ''');
-  }
-    
-    /**
- * @brief Interface between a ev2::Publisher and a subscriber
- *
- * @details A ev2::Subscription is the interface between a ev2::Publisher and a
- * subscriber interested in consuming events. It allows the subscriber to
- * register with the ev2::Publisher and define the subscription parameters
- * (e.g. the type of events it is interested on, advanced filters, etc) and
- * mediates the transfer of events from the ev2::Publisher to the subscriber
- * while allowing to decouple the two instances which only need to share a
- * pointer to the ev2::Subscription usually using an ev2::EventManager.
- *
- * The ev2::Subscription is meant to be specialized by each ev2::Publisher to
- * suit its needs, and therefore the basic interface is intentionally simple
- * providing only a basic mechanism for determining the publisher the
- * subscriber is interested on (which will be used by the ev2::EventManager to
- * route request to registered ev2::Publisher instances) and a mechanism to
- * query about the availability of new events. It says nothing about the way
- * events are passed around, buffered or otherwise managed and is up to the
- * ev2::Publisher to define those interfaces. Some basic interfaces accepting
- * parameterized event types are provided like the ev2::BufferedSubscription
- * which can be further specialized by the ev2::Publisher.
- */
-class Subscription {
- public:
-  /**
-   * @brief Subscription constructor.
-   *
-   * @param subscriber Subscriber name used for logging.
-   *
-   * @param pub_type Type of publisher to register with, used by an
-   * ev2::EventManager to route ev2::EventManager::bind() calls.
-   */
-  explicit Subscription(std::string subscriber, std::type_index pub_type);
-  virtual ~Subscription() = default;
-    }
-    
-    void NullSubscription::abort() {}
-    
-    
-    {
-    {
-    {} // namespace
-} // namespace table_tests
-} // namespace osquery
+    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
 
     
-      void __set_request(const ExtensionPluginRequest& val);
+    void OffscreenViewProxy::SetBitmap(const SkBitmap& bitmap) {
+  if (view_bounds_.width() == bitmap.width() &&
+      view_bounds_.height() == bitmap.height() && observer_) {
+    view_bitmap_.reset(new SkBitmap(bitmap));
+    observer_->OnProxyViewPaint(view_bounds_);
+  }
+}
+    
+    #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
+  }
+}
+#endif
+    
+    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
+    }
     
     
-    {    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin('deregisterExtension', ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
+    {  return Begin + oldSize;
+}  
+
+    
+    #ifndef VERB
+#  define VERB(Word)
+#endif
+    
+    enum class ChildKind { Left, Right, Further, Root };
+    
+    
+bool Mangle::isNonAscii(StringRef str) {
+  for (unsigned char c : str) {
+    if (c >= 0x80)
+      return true;
+  }
+  return false;
+}
+    
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
+  }
+  if (!node) {
+    Out << '<<NULL>>';
     return;
   }
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
+  }
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
+  }
+}
+    
+    // Section 6.1: Bias adaptation function
+    
+    // Parses the given box file string into a page_number, utf8_str, and
+// bounding_box. Returns true on a successful parse.
+bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
+                     STRING* utf8_str, TBOX* bounding_box);
+    
+    #endif  // TESSERACT_CSTRUCT_BOXWORD_H_
+
+    
+    
+// Returns the median value of the vector, given that the values are
+// circular, with the given modulus. Values may be signed or unsigned,
+// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
+// NOTE that the array is shuffled, but the time taken is linear.
+// An assumption is made that most of the values are spread over no more than
+// half the range, but wrap-around is accounted for if the median is near
+// the wrap-around point.
+// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
+// T must be an integer or float/double type.
+template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
+  LLSQ stats;
+  T halfrange = static_cast<T>(modulus / 2);
+  int num_elements = v->size();
+  for (int i = 0; i < num_elements; ++i) {
+    stats.add((*v)[i], (*v)[i] + halfrange);
+  }
+  bool offset_needed = stats.y_variance() < stats.x_variance();
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] += halfrange;
+    }
+  }
+  int median_index = v->choose_nth_item(num_elements / 2);
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] -= halfrange;
+    }
+  }
+  return (*v)[median_index];
+}
+    
+    #ifndef TESSERACT_CCSTRUCT_OCRPARA_H_
+#define TESSERACT_CCSTRUCT_OCRPARA_H_
+    
+    CallCredentials::~CallCredentials() {}
+    
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
+}
+    
+    MeasureDouble RpcClientReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all response messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+    
+    { private:
+  CensusContext context_;
+  // server method
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // Pointer to the grpc_call element
+  grpc_call* gc_;
+  // Authorization context for the call.
+  grpc_auth_context* auth_context_;
+  // Metadata element for census stats.
+  grpc_linked_mdelem census_bin_;
+  // recv callback
+  grpc_metadata_batch* recv_initial_metadata_;
+  grpc_closure* initial_on_done_recv_initial_metadata_;
+  grpc_closure on_done_recv_initial_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  absl::Time start_time_;
+  absl::Duration elapsed_time_;
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference it when adding metatdata to
+  // response.
+  char stats_buf_[kMaxServerStatsLen];
+};
+    
+      const protobuf::Descriptor* desc =
+      descriptor_pool_->FindMessageTypeByName(request->containing_type());
+  if (desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Type not found.');
+  }
+    
+    #endif  // !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
+
+    
+      void __set_success(const ExtensionResponse& val);
+    
+    #include 'ExtensionManager.h'
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/server/TSimpleServer.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TBufferTransports.h>
+    
+    int main(int argc, char **argv) {
+  int port = 9090;
+  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
+  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
+  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+    }
     
     
   while (true)
@@ -309,44 +235,33 @@ class Subscription {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->status.read(iprot);
-          this->__isset.status = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          this->__isset.name = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_LIST) {
-          {
-            this->response.clear();
-            uint32_t _size6;
-            ::apache::thrift::protocol::TType _etype9;
-            xfer += iprot->readListBegin(_etype9, _size6);
-            this->response.resize(_size6);
-            uint32_t _i10;
-            for (_i10 = 0; _i10 < _size6; ++_i10)
-            {
-              {
-                this->response[_i10].clear();
-                uint32_t _size11;
-                ::apache::thrift::protocol::TType _ktype12;
-                ::apache::thrift::protocol::TType _vtype13;
-                xfer += iprot->readMapBegin(_ktype12, _vtype13, _size11);
-                uint32_t _i15;
-                for (_i15 = 0; _i15 < _size11; ++_i15)
-                {
-                  std::string _key16;
-                  xfer += iprot->readString(_key16);
-                  std::string& _val17 = this->response[_i10][_key16];
-                  xfer += iprot->readString(_val17);
-                }
-                xfer += iprot->readMapEnd();
-              }
-            }
-            xfer += iprot->readListEnd();
-          }
-          this->__isset.response = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->version);
+          this->__isset.version = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->sdk_version);
+          this->__isset.sdk_version = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->min_sdk_version);
+          this->__isset.min_sdk_version = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -358,111 +273,32 @@ class Subscription {
     xfer += iprot->readFieldEnd();
   }
     
-        //
-    // Override
-    //
-    virtual Speed* clone() const override;
-    virtual Speed* reverse() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void stop() override;
-    /**
-     * @param dt in seconds.
-     */
-    virtual void step(float dt) override;
-    /** Return true if the action has finished.
-     *
-     * @return Is true if the action has finished.
-     */
-    virtual bool isDone() const  override;
+    #include <vector>
+#include <string>
     
-CC_CONSTRUCTOR_ACCESS:
-    Speed();
-    virtual ~Speed(void);
-    /** Initializes the action. */
-    bool initWithAction(ActionInterval *action, float speed);
     
-    CallFuncN * CallFuncN::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) CallFuncN();
+    {      if (entry.first == serial->second) {
+        matched = true;
+        row['disk_id'] = entry.second['disk_id'];
+        row['driver_type'] = entry.second['driver_type'];
+      }
     }
     
-        virtual void startWithTarget(Node *target) override;
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
     
-    virtual bool isDone() const override;
-    /**
-     * @param dt In seconds.
-     */
-    virtual void step(float dt) override;
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
+    #pragma once
     
-    /*
- * Update each tick
- * Time is the percentage of the way through the duration
- */
-void PageTurn3D::update(float time)
-{
-    float tt = MAX(0, time - 0.25f);
-    float deltaAy = (tt * tt * 500);
-    float ay = -100 - deltaAy;
     
-    float deltaTheta = sqrtf(time);
-    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
-    
-    float rotateByYAxis = (2-time)* M_PI;
-    
-    float sinTheta = sinf(theta);
-    float cosTheta = cosf(theta);
-    
-    for (int i = 0; i <= _gridSize.width; ++i)
     {
-        for (int j = 0; j <= _gridSize.height; ++j)
-        {
-            // Get original vertex
-            Vec3 p = getOriginalVertex(Vec2(i ,j));
-            
-            p.x -= getGridRect().origin.x;
-            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
-            float r = R * sinTheta;
-            float alpha = asinf( p.x / R );
-            float beta = alpha / sinTheta;
-            float cosBeta = cosf( beta );
-            
-            // If beta > PI then we've wrapped around the cone
-            // Reduce the radius to stop these points interfering with others
-            if (beta <= M_PI)
-            {
-                p.x = ( r * sinf(beta));
-            }
-            else
-            {
-                // Force X = 0 to stop wrapped
-                // points
-                p.x = 0;
-            }
+    {} // namespace table_tests
+} // namespace osquery
+
+    
+    namespace osquery {
+namespace table_tests {
     }
     }
-    }
-    
-    ActionTween *ActionTween::clone() const
-{
-    return ActionTween::create(_duration, _key, _from, _to);
-}
-    
-    class Texture2D;
-class SpriteFrame;
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCAnimationCache.h'
-#include '2d/CCSpriteFrameCache.h'
-#include 'platform/CCFileUtils.h'
