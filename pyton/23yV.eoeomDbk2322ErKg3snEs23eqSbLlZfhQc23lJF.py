@@ -1,260 +1,158 @@
 
         
-        
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
-    
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
-    
-        def create(self):
-        # Because a cache can fail silently (e.g. memcache), we don't know if
-        # we are failing to create a new session because of a key collision or
-        # because the cache is missing. So we try for a (large) number of times
-        # and then raise an exception. That's the risk you shoulder if using
-        # cache backing.
-        for i in range(10000):
-            self._session_key = self._get_new_session_key()
-            try:
-                self.save(must_create=True)
-            except CreateError:
-                continue
-            self.modified = True
-            return
-        raise RuntimeError(
-            'Unable to create a new session key. '
-            'It is likely that the cache is unavailable.')
-    
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        try:
-            self.model.objects.get(session_key=session_key).delete()
-        except self.model.DoesNotExist:
-            pass
+        filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
     
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
     
-        For example, ``headers['content-encoding']`` will return the
-    value of a ``'Content-Encoding'`` response header, regardless
-    of how the header name was originally stored.
+        infile, outfile = args
     
-        return inner
+    ZSH_COMPLETION_FILE = 'youtube-dl.zsh'
+ZSH_COMPLETION_TEMPLATE = 'devscripts/zsh-completion.in'
     
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    # Output file base name for HTML help builder.
+htmlhelp_basename = 'youtube-dldoc'
+
     
-        if cryptography_version < [1, 3, 4]:
-        warning = 'Old version of cryptography ({}) may cause slowdown.'.format(cryptography_version)
-        warnings.warn(warning, RequestsDependencyWarning)
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-            KD = lambda s, d: hash_utf8('%s:%s' % (s, d))
+        assert len(kernel_size) == 2
+    assert len(strides) == 4
     
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
-    
-            with Server(handler) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(question)
-            text = sock.recv(1000)
-            assert text == answer
-            sock.close()
-    
-            self._content_consumed = True
-        # don't need to release the connection; that's been handled by urllib3
-        # since we exhausted the data.
-        return self._content
-    
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
+            return self._call(x)
+
     
     
-DOCUMENTATION = '''
----
-module: elasticache_subnet_group
-version_added: '2.0'
-short_description: manage Elasticache subnet groups
-description:
-     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
-options:
-  state:
-    description:
-      - Specifies whether the subnet should be present or absent.
-    required: true
-    default: present
-    choices: [ 'present' , 'absent' ]
-  name:
-    description:
-      - Database subnet group identifier.
-    required: true
-  description:
-    description:
-      - Elasticache subnet group description. Only set when a new group is added.
-  subnets:
-    description:
-      - List of subnet IDs that make up the Elasticache subnet group.
-author: 'Tim Mahoney (@timmahoney)'
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
     
-        lambda_facts = dict()
-    
-    RETURN = '''
-monitoring_policy:
-    description: Information about the monitoring policy that was processed
-    type: dict
-    sample: '{'id': '92B74394A397ECC3359825C1656D67A6', 'name': 'Default Policy'}'
-    returned: always
-'''
-    
-    # Ensure rule with certain limitations
-- ipa_hbacrule:
-    name: allow_all_developers_access_to_db
-    description: Allow all developers to access any database from any host
-    hostgroup:
-    - db-server
-    usergroup:
-    - developers
-    state: present
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-    
-        # Insert state-specific attributes to body
-    if state == 'started':
-        for k in ('source_system', 'env', 'owner', 'description'):
-            v = module.params[k]
-            if v is not None:
-                body[k] = v
-    
-        params = {}
-    params['revision_id'] = revision_id
-    params['deployed_by'] = deployed_by
-    if deployed_to:
-        params['deployed_to'] = deployed_to
-    if repository:
-        params['repository'] = repository
-    
-        '''
-    return_vars = {}
-    # Get list of words in the variable
-    a_opts = util.get_var_from_file(varname, filepath).split()
-    for i, v in enumerate(a_opts):
-        # Handle Define statements and make sure it has an argument
-        if v == '-D' and len(a_opts) >= i+2:
-            var_parts = a_opts[i+1].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-        elif len(v) > 2 and v.startswith('-D'):
-            # Found var with no whitespace separator
-            var_parts = v[2:].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-    return return_vars
-    
-        def test_rollback_checkpoints(self):
-        mock_load = mock.Mock()
-        self.config.aug.load = mock_load
-    
-        @mock.patch('certbot_apache.display_ops.display_util')
-    @certbot_util.patch_get_utility()
-    @mock.patch('certbot_apache.display_ops.logger')
-    def test_small_display(self, mock_logger, mock_util, mock_display_util):
-        mock_display_util.WIDTH = 20
-        mock_util().menu.return_value = (display_util.OK, 0)
-        self._call(self.vhosts)
-    
-    # -- Options for LaTeX output ---------------------------------------------
-    
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
-    
-    
-class FixFutureImports(fixer_base.BaseFix):
-    BM_compatible = True
-    
-    For each function or class described in `tornado.platform.interface`,
-the appropriate platform-specific implementation exists in this module.
-Most code that needs access to this functionality should do e.g.::
-    
-        def _sock_state_cb(self, fd: int, readable: bool, writable: bool) -> None:
-        state = (IOLoop.READ if readable else 0) | (IOLoop.WRITE if writable else 0)
-        if not state:
-            self.io_loop.remove_handler(fd)
-            del self.fds[fd]
-        elif fd in self.fds:
-            self.io_loop.update_handler(fd, state)
-            self.fds[fd] = state
-        else:
-            self.io_loop.add_handler(fd, self._handle_events, state)
-            self.fds[fd] = state
-    
-        def test_twitter_show_user(self):
-        response = self.fetch('/twitter/client/show_user?name=somebody')
-        response.rethrow()
-        self.assertEqual(
-            json_decode(response.body), {'name': 'Somebody', 'screen_name': 'somebody'}
+            logit_masks = [logit(y) for y in masks_ts]
+        logit_masks = np.mean(logit_masks, axis=0)
+        masks_c = 1.0 / (1.0 + np.exp(-logit_masks))
+    else:
+        raise NotImplementedError(
+            'Heuristic {} not supported'.format(cfg.TEST.MASK_AUG.HEUR)
         )
+    
+    
+def _do_matlab_eval(json_dataset, salt, output_dir='output'):
+    import subprocess
+    logger.info('-----------------------------------------------------')
+    logger.info('Computing results with the official MATLAB eval code.')
+    logger.info('-----------------------------------------------------')
+    info = voc_info(json_dataset)
+    path = os.path.join(
+        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
+    cmd = 'cd {} && '.format(path)
+    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
+    cmd += '-r 'dbstop if error; '
+    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
+       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
+               output_dir)
+    logger.info('Running:\n{}'.format(cmd))
+    subprocess.call(cmd, shell=True)
+    
+        if cfg.KRCNN.USE_DECONV_OUTPUT:
+        # Use ConvTranspose to predict heatmaps; results in 2x upsampling
+        blob_out = model.ConvTranspose(
+            blob_in,
+            blob_name,
+            dim,
+            cfg.KRCNN.NUM_KEYPOINTS,
+            kernel=cfg.KRCNN.DECONV_KERNEL,
+            pad=int(cfg.KRCNN.DECONV_KERNEL / 2 - 1),
+            stride=2,
+            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.001}),
+            bias_init=const_fill(0.0)
+        )
+    else:
+        # Use Conv to predict heatmaps; does no upsampling
+        blob_out = model.Conv(
+            blob_in,
+            blob_name,
+            dim,
+            cfg.KRCNN.NUM_KEYPOINTS,
+            kernel=1,
+            pad=0,
+            stride=1,
+            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.001}),
+            bias_init=const_fill(0.0)
+        )
+    
+    
+def ResNet101_rfcn(model):
+    return build_generic_rfcn_model(
+        model, ResNet.add_ResNet101_conv5_body, dim_reduce=1024
+    )
+
+    
+    '''Construct minibatches for Mask R-CNN training when keypoints are enabled.
+Handles the minibatch blobs that are specific to training Mask R-CNN for
+keypoint detection. Other blobs that are generic to RPN or Fast/er R-CNN are
+handled by their respecitive roi_data modules.
+'''
+    
+        # Compute anchor labels:
+    # label=1 is positive, 0 is negative, -1 is don't care (ignore)
+    labels = np.empty((num_inside, ), dtype=np.float32)
+    labels.fill(-1)
+    if len(gt_boxes) > 0:
+        # Compute overlaps between the anchors and the gt boxes overlaps
+        anchor_by_gt_overlap = box_utils.bbox_overlaps(anchors, gt_boxes)
+        # Map from anchor to gt box that has highest overlap
+        anchor_to_gt_argmax = anchor_by_gt_overlap.argmax(axis=1)
+        # For each anchor, amount of overlap with most overlapping gt box
+        anchor_to_gt_max = anchor_by_gt_overlap[
+            np.arange(num_inside), anchor_to_gt_argmax]
+    
+    _get_module_path = lambda path: os.path.normpath(os.path.join(os.getcwd(),
+                                                 os.path.dirname(__file__), path))
+_get_abs_path = jieba._get_abs_path
+    
+    seg_list = jieba.cut('我来到北京清华大学', cut_all=False)
+print('Default Mode: ' + '/ '.join(seg_list))  # 默认模式
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK, withWeight=withWeight)
+    
+    nmf = decomposition.NMF(n_components=n_topic).fit(tfidf)
+print('done in %0.3fs.' % (time.time() - t0))
+    
+    jieba.enable_parallel()
+    
+    jieba.enable_parallel(4)
+    
+            self.topwidget.wm_geometry('+%d+%d' % (xpos, ypos))
+    
+    
+def backup_file(directory, filename):
+    ''' Backup a given file by appending .bk to the end '''
+    logger.trace('Backing up: '%s'', filename)
+    origfile = os.path.join(directory, filename)
+    backupfile = origfile + '.bk'
+    if os.path.exists(backupfile):
+        logger.trace('Removing existing file: '%s'', backup_file)
+        os.remove(backupfile)
+    if os.path.exists(origfile):
+        logger.trace('Renaming: '%s' to '%s'', origfile, backup_file)
+        os.rename(origfile, backupfile)
