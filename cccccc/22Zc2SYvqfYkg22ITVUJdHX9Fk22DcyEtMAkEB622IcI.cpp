@@ -1,115 +1,174 @@
 
         
-            template <typename ElementType>
-    /*static*/ ValuePtr Value::CreateSequence(const NDShape& sampleShape, const std::vector<ElementType>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */)
-    {
-        auto shapeSize = sampleShape.TotalSize();
-        if (sequenceData.size() % shapeSize != 0)
-            InvalidArgument('The number of elements (%zu) in the sequence data must be a multiple of the size (%zu) of the sample shape '%S'', 
-                            sequenceData.size(), shapeSize, sampleShape.AsString().c_str());
+        		typedef struct
+		{
+			//Red portion
+			unsigned baseR : 8;
+			unsigned tableIndexR : 4;
+			unsigned multiplierR : 4;
+			unsigned selectorsR0 : 8;
+			unsigned selectorsR1 : 8;
+			unsigned selectorsR2 : 8;
+			unsigned selectorsR3 : 8;
+			unsigned selectorsR4 : 8;
+			unsigned selectorsR5 : 8;
+			//Green portion
+			unsigned baseG : 8;
+			unsigned tableIndexG : 4;
+			unsigned multiplierG : 4;
+			unsigned selectorsG0 : 8;
+			unsigned selectorsG1 : 8;
+			unsigned selectorsG2 : 8;
+			unsigned selectorsG3 : 8;
+			unsigned selectorsG4 : 8;
+			unsigned selectorsG5 : 8;
+		} Data;
+    
+    
+  FT_LOCAL_ARRAY( char )
+  af_blue_strings[];
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createInstance(
+            DecimalFormat *fmtToAdopt,
+            Style *styleToAdopt,
+            UErrorCode &status) {
+    LocalPointer<DecimalFormat> fmt(fmtToAdopt);
+    LocalPointer<Style> style(styleToAdopt);
+    if (U_FAILURE(status)) {
+        return NULL;
     }
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-        static void setupTimeout(int seconds)
-    {
-        struct sigaction action = {};
-        action.sa_handler = &CrossProcessMutex::noOpAlarmHandler;
-        sigaction(SIGALRM, &action, NULL);
-        alarm(seconds);
+    ScientificNumberFormatter *result =
+            new ScientificNumberFormatter(
+                    fmt.getAlias(),
+                    style.getAlias(),
+                    status);
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
-{
-public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
+    fmt.orphan();
+    style.orphan();
+    if (U_FAILURE(status)) {
+        delete result;
+        return NULL;
     }
-    
-    #include <string>
-    
-        virtual void BackpropToNonLooping(size_t /*inputIndex*/) override
-    {
-        LogicError('%ls operation is used for evaluation only.', OperationName().c_str());
-    }
-    
-    template <class ElemType>
-EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
-    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
-{
-    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+    return result;
 }
     
-    private: 
-    bool CheckOverlap(pair<int, int>occ, vector<pair<int, int>>&occVec)
-    {
-        bool bRet = false;
-        for (auto& o : occVec)
-        {
-            if (occ.first <= o.second && occ.second >= o.first)
-            {
-                bRet = true;
-                break;
-            }
+    
+ScriptSet &ScriptSet::set(UScriptCode script, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return *this;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    bits[index] |= bit;
+    return *this;
+}
+    
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+    static const int32_t gMaxFastInt = 4096;
+    
+    int32_t
+CollationKey::hashCode() const
+{
+    // (Cribbed from UnicodeString)
+    // We cache the hashCode; when it becomes invalid, due to any change to the
+    // string, we note this by setting it to kInvalidHashCode. [LIU]
+    }
+    
+    
+    {        UnicodeReplacer* r = data->lookupReplacer(c);
+        if (r == NULL) {
+            ICU_Utility::appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            UnicodeString buf;
+            r->toReplacerPattern(buf, escapeUnprintable);
+            buf.insert(0, (UChar)0x20);
+            buf.append((UChar)0x20);
+            ICU_Utility::appendToRule(rule, buf,
+                                      TRUE, escapeUnprintable, quoteBuf);
         }
-//#define SUPRESS_MEMSHARING // #define this to disable memory sharing by always return true 
-// TODO: Make this a runtime option.
-#ifdef SUPRESS_MEMSHARING
-        bRet = true; 
-#endif
-        return bRet;
     }
     
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
-}
+    namespace CalculatorApp::Common::Automation
+{
+    public ref class NotificationHost sealed : public INarratorAnnouncementHost
+    {
+    public:
+        NotificationHost();
+    }
+    }
     
-    SEXP XGDMatrixSaveBinary_R(SEXP handle, SEXP fname, SEXP silent) {
-  R_API_BEGIN();
-  CHECK_CALL(XGDMatrixSaveBinary(R_ExternalPtrAddr(handle),
-                                 CHAR(asChar(fname)),
-                                 asInteger(silent)));
-  R_API_END();
-  return R_NilValue;
-}
+    // See app behavior guidelines at https://msdn.microsoft.com/en-us/library/windows/apps/xaml/jj835821(v=win.10).aspx
+NetworkAccessBehavior NetworkManager::ConvertCostInfoToBehavior(_In_ ConnectionCost^ connectionCost)
+{
+    if (connectionCost->Roaming || connectionCost->OverDataLimit
+        || connectionCost->NetworkCostType == NetworkCostType::Variable
+        || connectionCost->NetworkCostType == NetworkCostType::Fixed)
+    {
+        return NetworkAccessBehavior::OptIn;
+    }
+    }
     
-    /*!
- * \brief Macro to register gradient booster.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_GBM(GBTree, 'gbtree')
- * .describe('Boosting tree ensembles.')
- * .set_body([]() {
- *     return new GradientBooster<TStats>();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_GBM(UniqueId, Name)                            \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::GradientBoosterReg &          \
-  __make_ ## GradientBoosterReg ## _ ## UniqueId ## __ =                \
-      ::dmlc::Registry< ::xgboost::GradientBoosterReg>::Get()->__REGISTER__(Name)
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    
+    {
+    {}  // namespace experimental
+}  // namespace rocksdb
+
+    
+    
+    {}  // namespace rocksdb
+
+    
+    namespace rocksdb {
+namespace lua {
+class LuaStateWrapper {
+ public:
+  explicit LuaStateWrapper(const std::string& lua_script) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, {});
+  }
+  LuaStateWrapper(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, libraries);
+  }
+  lua_State* GetLuaState() const { return lua_state_; }
+  ~LuaStateWrapper() { lua_close(lua_state_); }
+    }
+    }
+    }
+    
+    
+    {  // Should be set if the DB has a non-default comparator.
+  // See comment in WriteBatchWithIndex constructor.
+  const Comparator* cmp = BytewiseComparator();
+};
