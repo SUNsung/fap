@@ -1,104 +1,76 @@
 
         
-        require 'active_support/core_ext/time/calculations'
-    
-          def identifier
-        'text template'
-      end
-    
-            MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
-    
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
-        end
-    
-            def importer_class
-          LfsObjectImporter
-        end
-    
-              new(hash)
-        end
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
-    
-      # Checks whether it's a devise mapped resource or not.
-  def assert_is_devise_resource! #:nodoc:
-    unknown_action! <<-MESSAGE unless devise_mapping
-Could not find devise mapping for path #{request.fullpath.inspect}.
-This may happen for two reasons:
-    
-          private
-    
-          def remember_me?(token, generated_at)
-        # TODO: Normalize the JSON type coercion along with the Timeoutable hook
-        # in a single place https://github.com/plataformatec/devise/blob/ffe9d6d406e79108cf32a2c6a1d0b3828849c40b/lib/devise/hooks/timeoutable.rb#L14-L18
-        if generated_at.is_a?(String)
-          generated_at = time_from_json(generated_at)
-        end
-    
-    class FormulaPin
-  def initialize(f)
-    @f = f
-  end
-    
-        it 'returns true if there is a switch with the same initial character' do
-      expect(subject.flag?('--baz')).to eq true
-      expect(subject.flag?('--qux')).to eq true
+            def absolute_url_string?(str)
+      str =~ SCHEME_RGX
     end
     
-      describe BuildEnvironment::DSL do
-    subject { double.extend(described_class) }
+        attr_reader :filters
     
-    describe 'Kernel.sleep' do
-  it 'needs to be reviewed for spec completeness'
+        def process_response?(response)
+      if response.error?
+        raise <<~ERROR
+          Error status code (#{response.code}): #{response.return_message}
+          #{response.url}
+          #{JSON.pretty_generate(response.headers).slice(2..-3)}
+        ERROR
+      elsif response.blank?
+        raise 'Empty response body: #{response.url}'
+      end
+    
+            occisect = Isect.new
+        @spheres[0].intersect(ray, occisect)
+        @spheres[1].intersect(ray, occisect)
+        @spheres[2].intersect(ray, occisect)
+        @plane.intersect(ray, occisect)
+        if occisect.hit then
+          occlusion = occlusion + 1.0
+        else
+          0.0
+        end
+      end
+    end
+    
+      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
+  # see https://github.com/Homebrew/homebrew-cask/pull/8887
+  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
+    
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+        end
+      rescue NameError
+        super
+      end
+    end
+  end
 end
-
     
-        desc 'List all undocumented methods and classes.'
-    task :undocumented do
-      opts = ENV['YARD_OPTS'] || ''
-      ENV['YARD_OPTS'] = opts.dup + <<OPTS
- --list --tag comment --hide-tag comment --query '
-  object.docstring.blank? &&
-  !(object.type == :method && object.is_alias?)'
-OPTS
-      Rake::Task['yard'].execute
-    end
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
     
-          if vars.nil? # scan failed, try to figure out why for error message
-        if value !~ /^[^\s]+/
-          expected = 'variable name'
-        elsif value !~ /^[^\s]+(?:\s*,\s*[^\s]+)*[^\s]+\s+from\s+.+/
-          expected = ''in <expr>''
-        end
-        raise SyntaxError.new('Invalid each directive '@each #{value}': expected #{expected}.')
+          Sidekiq.logger.debug { 'Re-queueing terminated jobs' }
+      jobs_to_requeue = {}
+      inprogress.each do |unit_of_work|
+        jobs_to_requeue[unit_of_work.queue_name] ||= []
+        jobs_to_requeue[unit_of_work.queue_name] << unit_of_work.job
       end
     
-    module Sidekiq
-  class Client
-    
-        def self.enable_delay!
-      if defined?(::ActiveSupport)
-        require 'sidekiq/extensions/active_record'
-        require 'sidekiq/extensions/action_mailer'
-    
-    module Sidekiq
-  class BasicFetch
-    # We want the fetch operation to timeout every few seconds so the thread
-    # can check if the process is shutting down.
-    TIMEOUT = 2
+          def insert_after(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
+        entries.insert(i+1, new_entry)
+      end
