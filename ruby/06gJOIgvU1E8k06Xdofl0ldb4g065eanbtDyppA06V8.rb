@@ -1,46 +1,118 @@
 
         
-              spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
+        namespace :doc do
+  task :readmes do
+    Dir.glob 'lib/rack/protection/*.rb' do |file|
+      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
+      next if excluded_files.include?(file)
+      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
+      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
+      Dir.mkdir 'doc' unless File.directory? 'doc'
+      puts 'writing #{file}'
+      File.open(file, 'w') { |f| f << doc }
     end
+  end
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
+            begin
+          token = decode_token(token)
+        rescue ArgumentError # encoded_masked_token is invalid Base64
+          return false
+        end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+          def is_create_page
+        false
+      end
+    
+          def previous_link
+      end
+    
+          def title
+        'Home'
+      end
+    
+    def testpath(path)
+  File.join(TEST_DIR, path)
 end
     
-        context 'on my own post' do
-      it 'succeeds' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        post :create, params: like_hash, format: :json
-        expect(response.code).to eq('201')
-      end
-    end
+      test 'rename page catches empty target' do
+    # Empty rename target
+    post '/rename/B', :rename => '', :message => 'def'
+    assert !last_response.ok?
+    assert_equal last_response.status, 500
+  end
     
-          it 'returns reshares without login' do
-        bob.reshare!(@post)
-        sign_out :user
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
-      end
-    end
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+      teardown do
+    FileUtils.rm_rf(@path)
   end
 end
 
     
-    desc 'Runs all tests in all Spree engines'
-task test: :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rspec'
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
+    
+            # Return if resource is found and user is not allowed to :admin
+        return '' if (klass = klass_for(options[:label])) && cannot?(:admin, klass)
+    
+          if simple_current_order.nil? || simple_current_order.item_count.zero?
+        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{Spree.t('empty')})'
+        css_class = 'empty'
+      else
+        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{simple_current_order.item_count})
+                <span class='amount'>#{simple_current_order.display_total.to_html}</span>'
+        css_class = 'full'
+      end
+    
+    ERR
+      end
     end
-  end
-end
+    
+          get_web_content(redirected_url)
+    end
