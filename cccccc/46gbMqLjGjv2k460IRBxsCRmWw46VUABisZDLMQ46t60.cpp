@@ -1,278 +1,223 @@
 
         
-        
-    {
-    {        // Register the memory buffer.
-        SML->registerMemoryBuffer(info.name, std::move(bitstream));
-        foundModules.push_back(info.name);
-      }
-    } else {
-      llvm::dbgs() << 'Unable to load module';
-      if (!info.name.empty())
-        llvm::dbgs() << ' '' << info.name << '\'';
-      llvm::dbgs() << '.\n';
+        #include <string>
+#include <vector>
+#include 'tensorflow/core/framework/op_def.pb.h'
+#include 'tensorflow/core/framework/op_gen_lib.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    namespace tensorflow {
     }
     
-        // Try adding an 'e' and look for that as a verb.
-    if (possibleVerb.back() != 'e') {
-      SmallString<16> possibleVerbWithE;
-      possibleVerbWithE += possibleVerb;
-      possibleVerbWithE += 'e';
-      if (getPartOfSpeech(possibleVerbWithE) == PartOfSpeech::Verb)
-        return PartOfSpeech::Gerund;
-    }
-    
-    namespace {
-  // Quasi-lexicographic order: string length first, then string data.
-  // Since we don't care about the actual length, we can use this, which
-  // lets us ignore the string data a larger proportion of the time.
-  struct SortByLengthComparator {
-    bool operator()(StringRef lhs, StringRef rhs) const {
-      return (lhs.size() < rhs.size() ||
-              (lhs.size() == rhs.size() && lhs < rhs));
-    }
-  };
-} // end anonymous namespace
-    
-      // If this is a getter/setter, the other accessor
-  const clang::FunctionDecl *pairedAccessor = nullptr;
-    
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
-  }
-    }
-    
-    #ifndef UINT32_MAX
-    #define UINT32_MAX (4294967295U)
-#endif
-    
-    void combineYUYV(const Size2D &size,
-                 const u8 * srcyBase, ptrdiff_t srcyStride,
-                 const u8 * srcuBase, ptrdiff_t srcuStride,
-                 const u8 * srcvBase, ptrdiff_t srcvStride,
-                 u8 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-                vec128 v_src00 = internal::vld1q(src0 + x), v_src01 = internal::vld1q(src0 + x + 16 / sizeof(type));
-            vec128 v_src10 = internal::vld1q(src1 + x), v_src11 = internal::vld1q(src1 + x + 16 / sizeof(type));
-            uvec128 v_dst0;
-            uvec128 v_dst1;
-    
-             int16x4_t vline1_s16 = vqmovn_s32(vline1_s32);
-         int16x4_t vline2_s16 = vqmovn_s32(vline2_s32);
-    
-        lshiftConstFunc funcs[16] =
-    {
-        lshiftConst<0>,
-        lshiftConst<1>,
-        lshiftConst<2>,
-        lshiftConst<3>,
-        lshiftConst<4>,
-        lshiftConst<5>,
-        lshiftConst<6>,
-        lshiftConst<7>,
-        lshiftConst<8>,
-        lshiftConst<9>,
-        lshiftConst<10>,
-        lshiftConst<11>,
-        lshiftConst<12>,
-        lshiftConst<13>,
-        lshiftConst<14>,
-        lshiftConst<15>
-    }, func = funcs[shift];
-    
-    
-    {
-    {
-    {                    for( k = 0; k < N; k++ )
-                    {
-                        s32 x = ptr[pixel[k]];
-                        if(x > vt)
-                        {
-                            if( ++count > K )
-                            {
-                                cornerpos[ncorners++] = j;
-                                if(nonmax_suppression)
-                                    curr[j] = cornerScore(ptr, pixel);
-                                break;
-                            }
-                        }
-                        else
-                            count = 0;
-                    }
-                }
-            }
-        }
-    
-        Size2D size(_size);
-    if (srcStride == dstStride &&
-        srcStride == rng1Stride &&
-        srcStride == rng2Stride &&
-        srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    const size_t width = size.width & ~( 32/sizeof(T) - 1 );
-    
-    enum GARBAGE_LEVEL
-{
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
-};
-    
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
-    
-      // Reads all the pages in the given lstmf filename to the cache. The reader
-  // is used to read the file.
-  bool LoadDocument(const char* filename, int start_page, int64_t max_memory,
-                    FileReader reader);
-  // Sets up the document, without actually loading it.
-  void SetDocument(const char* filename, int64_t max_memory, FileReader reader);
-  // Writes all the pages to the given filename. Returns false on error.
-  bool SaveDocument(const char* filename, FileWriter writer);
-  bool SaveToBuffer(GenericVector<char>* buffer);
-    
-    #include <cstdint>      // for int32_t
-#include 'points.h'     // for FCOORD
-    
-      // Choose a location for the test database if none given with --db=<path>
-  if (FLAGS_db == nullptr) {
-      leveldb::g_env->GetTestDirectory(&default_db_path);
-      default_db_path += '/dbbench';
-      FLAGS_db = default_db_path.c_str();
-  }
-    
-    // Return the name of the sstable with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string TableFileName(const std::string& dbname, uint64_t number);
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-      // Offset of the last record returned by ReadRecord.
-  uint64_t last_record_offset_;
-  // Offset of the first location past the end of buffer_.
-  uint64_t end_of_buffer_offset_;
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-      // Increase reference count.
-  void Ref() { ++refs_; }
-    
-    #define MXCAFFEBLOB(__object$, __type$) \
-  (static_cast<mxnet::op::caffe::CaffeBlobFriend<__type$> *>(__object$))
-    
-      ExtensionManager_options_pargs args;
-  args.write(oprot_);
-    
-    class ExtensionManagerHandler : virtual public ExtensionManagerIf {
- public:
-  ExtensionManagerHandler() {
-    // Your initialization goes here
-  }
-    }
-    
-    uint32_t InternalExtensionInfo::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin('InternalExtensionInfo');
-    }
-    
-    namespace osquery {
-    }
-    
-    namespace impl {
-    }
-    
-    PosixError toPosixSystemError(int from_errno);
-    
-    #include <string>
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
- public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
-  }
-};
-    
-    
-    {  int ret = x;
-  return ret;
+    PyObject* MakePyString(const string& s) {
+  return PyUnicode_FromString(s.c_str());
 }
     
-    
-    {  int ret = x;
-  return ret;
+    static void TensorReleaser_dealloc(PyObject* pself) {
+  TensorReleaser* self = reinterpret_cast<TensorReleaser*>(pself);
+  (*self->destructor)();
+  delete self->destructor;
+  TensorReleaserType.tp_free(pself);
 }
     
-    BackupTrajectoryGenerator::BackupTrajectoryGenerator(
-    const State& init_s, const State& init_d,
-    const double init_relative_time,
-    const std::shared_ptr<CollisionChecker>& ptr_collision_checker,
-    const Trajectory1dGenerator* trajectory1d_generator)
-    : init_relative_time_(init_relative_time),
-      ptr_collision_checker_(ptr_collision_checker),
-      ptr_trajectory1d_generator_(trajectory1d_generator) {
-  GenerateTrajectory1dPairs(init_s, init_d);
-}
-    
-      MatrixXd offset_golden = MatrixXd::Zero(10, 1);
-  offset_golden(0, 0) = -10000.0;
+    #include 'tensorflow/stream_executor/platform.h'
     
     
-    {
-    {}  // namespace planning
-}  // namespace apollo
+    {}  // namespace stream_executor
+    
+    #include <condition_variable>
+#include <mutex>
+#include <string>
+#include <system_error>
+#include <vector>
+    
+    op = core.CreateOperator(
+    'FindDuplicateElements',
+    ['data'],
+    ['indices'],
+)
+    
+    
+    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
+} // namespace caffe2
 
     
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
     
-    {  EXPECT_EQ(0, exec.refCount);
+    
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    #define MULT16_16_Q15(a, b) MULT16_16_Q15_(a, b, __FILE__, __LINE__)
+static OPUS_INLINE short MULT16_16_Q15_(int a, int b, char *file, int line)
+{
+   opus_int64 res;
+   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(b))
+   {
+      fprintf (stderr, 'MULT16_16_Q15: inputs are not short: %d %d in %s: line %d\n', a, b, file, line);
+#ifdef FIXED_DEBUG_ASSERT
+      celt_assert(0);
+#endif
+   }
+   res = ((opus_int64)a)*b;
+   res >>= 15;
+   if (!VERIFY_SHORT(res))
+   {
+      fprintf (stderr, 'MULT16_16_Q15: output is not short: %d in %s: line %d\n', (int)res, file, line);
+#ifdef FIXED_DEBUG_ASSERT
+      celt_assert(0);
+#endif
+   }
+   celt_mips+=1;
+   return res;
 }
     
-    // error result
-Expected<int, Err> f4(int, double, Err err) {
-  return makeUnexpected(err);
+    /** 16x32 multiplication, followed by a 16-bit shift right and 32-bit add.
+    Results fits in 32 bits */
+#define MAC16_32_Q16(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16)))
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    /* Requires that shift > 0 */
+#define silk_RSHIFT_ROUND(a, shift)         ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
+#define silk_RSHIFT_ROUND64(a, shift)       ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
+    
+    
+    {  int ret = x;
+  return ret;
 }
     
+        auto it_lower = std::lower_bound(
+        speed_limit_.speed_limit_points().begin(),
+        speed_limit_.speed_limit_points().end(), s,
+        [](const std::pair<double, double>& point, const double curr_s) {
+          return point.first < curr_s;
+        });
     
-    {} // namespace folly
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-     public:
-  // Default generator type.
-#if FOLLY_HAVE_EXTRANDOM_SFMT19937
-  typedef __gnu_cxx::sfmt19937 DefaultGenerator;
-#else
-  typedef std::mt19937 DefaultGenerator;
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+    
+    // config detail: {'name': 'encoder_temperature', 'offset': -40.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
+// '[-32808|32727]', 'bit': 7, 'type': 'int', 'order': 'motorola',
+// 'physical_unit': 'deg C'}
+int Brakemotorrpt271::encoder_temperature(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+      x <<= 0;
+  x >>= 0;
+    
+    // config detail: {'name': 'override_status', 'enum': {0:
+// 'OVERRIDE_STATUS_NOT_OVERRIDDEN', 1: 'OVERRIDE_STATUS_OVERRIDDEN'},
+// 'precision': 1.0, 'len': 1, 'is_signed_var': False, 'offset': 0.0,
+// 'physical_range': '[0|1]', 'bit': 1, 'type': 'enum', 'order': 'motorola',
+// 'physical_unit': ''}
+Global_rpt_6a::Override_statusType Globalrpt6a::override_status(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(1, 1);
+    }
+    
+    void Hornrpt79::Parse(const std::uint8_t* bytes, int32_t length,
+                      ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_manual_input(
+      manual_input(bytes, length));
+}
+    
+        /** Initializes the action with a duration and an array of points.
+     *
+     * @param dt In seconds.
+     * @param points An PointArray.
+     */
+    bool initWithDuration(float dt, PointArray* points);
+    
+    #ifndef M_PI_X_2
+#define M_PI_X_2 (float)M_PI * 2.0f
 #endif
     
-      tv = to<struct timeval>(duration<uint32_t, std::nano>{3123});
-  EXPECT_EQ(0, tv.tv_sec);
-  EXPECT_EQ(3, tv.tv_usec);
-  tv = to<struct timeval>(duration<int32_t, std::nano>{-3123});
-  EXPECT_EQ(-1, tv.tv_sec);
-  EXPECT_EQ(999997, tv.tv_usec);
+    StopGrid* StopGrid::create()
+{
+    StopGrid* action = new (std::nothrow) StopGrid();
+    if (action)
+    {
+        action->autorelease();
+        return action;
+    }
+    }
+    
+    #include <functional>
+#include '2d/CCAction.h'
+    
+    // run
+    
+        /** 
+     * @brief Initializes with a duration and destination percentage. 
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, float percent);
+    
+    SplitCols* SplitCols::create(float duration, unsigned int cols)
+{
+    SplitCols *action = new (std::nothrow) SplitCols();
+    }
+    
+    /** @brief AtlasNode is a subclass of Node that implements the RGBAProtocol and TextureProtocol protocol.
+ * It knows how to render a TextureAtlas object.
+ * If you are going to render a TextureAtlas consider subclassing AtlasNode (or a subclass of AtlasNode).
+ * All features from Node are valid, plus the following features:
+ * - opacity and RGB colors.
+ */
+class CC_DLL AtlasNode : public Node, public TextureProtocol
+{    
+public:
+	/** creates a AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render.
+     *
+     * @param filename The path of Atlas file.
+     * @param tileWidth The width of the item.
+     * @param tileHeight The height of the item.
+     * @param itemsToRender The quantity of items to render.
+     */
+	static AtlasNode * create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
+    }
