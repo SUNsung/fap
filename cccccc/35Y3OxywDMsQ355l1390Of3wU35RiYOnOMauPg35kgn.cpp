@@ -1,197 +1,184 @@
 
         
-          bool isValid() const { return past != SrcPos{0,0}; }
+        OPERATOR_SCHEMA(GivenTensorIntFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
     
-    //////////////////////////////////////////////////////////////////////
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
     
-    // Deserializing an array could give back a different ArrayKind than we need,
-// so we have to go with the slow case of calling a collection constructor.
-NEVER_INLINE
-Object createFromSerialized(CollectionType colType, APCHandle* handle) {
-  auto const col = Object::attach(collections::alloc(colType));
-  auto const arr = handle->toLocal();
-  switch (colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    static_cast<BaseVector*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    static_cast<BaseSet*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    static_cast<BaseMap*>(col.get())->init(arr);
-    break;
-  case CollectionType::Pair:
-    not_reached();
-    break;
-  }
-  return col;
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/logging.h'
+#include 'caffe2/core/operator.h'
+#include 'caffe2/utils/math.h'
+    
+    
+    {
 }
+
+    
+    		inline float GetError(void)
+		{
+			assert(m_fError >= 0.0f);
+    }
     
     
-    {private:
-  APCHandle m_handle;
-  APCHandle* m_arrayHandle;
-  CollectionType m_colType;
-};
+  typedef struct  AF_Blue_StringRec_
+  {
+    AF_Blue_String  string;
+    FT_UShort       properties;
+    }
     
-    #include <fstream>
-#include <sstream>
+    #define PSHR(a,shift)   (a)
+#define SHR(a,shift)    (a)
+#define SHL(a,shift)    (a)
+#define SATURATE(x,a)   (x)
+#define SATURATE16(x)   (x)
     
-      /**
-   * Returns a map of those support bits. Tells caller which function can be
-   * called.
-   */
-  virtual int debuggerSupport() {
-    return 0;
+    
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q15
+#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
+    
+      xfer += oprot->writeStructBegin('ExtensionManager_extensions_result');
+    
+    class ExtensionManager_deregisterExtension_presult {
+ public:
+    }
+    
+    int main(int argc, char **argv) {
+  int port = 9090;
+  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
+  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
+  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+    }
+    
+      std::string content;
+  auto status = readFile('/etc/exports', content);
+  if (!status.ok()) {
+    VLOG(1) << 'Error reading /etc/exports: ' << status.toString();
+    return {};
   }
     
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+    
+    {
+    {} // namespace table_tests
+} // namespace osquery
 
     
     
-    {}
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
     
-    template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done) {
-  if (LIKELY(map.numSubMaps() == 1) ||
-      done.load(std::memory_order_relaxed) ||
-      done.exchange(true, std::memory_order_relaxed)) {
-    return;
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
+    
+    int ClusterQualityInfo702::invalid_state(const std::uint8_t* bytes,
+                                         int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(3, 5);
+    }
+    
+    int ObjectGeneralInfo60B::dynprop(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    namespace apollo {
+namespace drivers {
+namespace conti_radar {
+    }
+    }
+    }
+    
+    BaseMapMatrix::~BaseMapMatrix() {}
+    
+    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateThirdOrderDerivative(num_params);
   }
-    }
-    
-    #include <atomic>
-    
-                    // Pick up the three extra operands that CTR_INIT_NG has, and
-                //    skip the pattern location counter past
-                int32_t instrOperandLoc = (int32_t)fp->fPatIdx;
-                fp->fPatIdx += 3;
-                int32_t loopLoc  = URX_VAL(pat[instrOperandLoc]);
-                int32_t minCount = (int32_t)pat[instrOperandLoc+1];
-                int32_t maxCount = (int32_t)pat[instrOperandLoc+2];
-                U_ASSERT(minCount>=0);
-                U_ASSERT(maxCount>=minCount || maxCount==-1);
-                U_ASSERT(loopLoc>fp->fPatIdx);
-                if (maxCount == -1) {
-                    fp->fExtra[opValue+1] = fp->fInputIdx;   //  Save initial input index for loop breaking.
-                }
-    
-        ScriptSet &setAll();
-    ScriptSet &resetAll();
-    int32_t countMembers() const;
-    int32_t hashCode() const;
-    int32_t nextSetBit(int32_t script) const;
-    
-    SearchIterator::SearchIterator(const SearchIterator &other)
-    : UObject(other)
-{   
-    m_breakiterator_            = other.m_breakiterator_;
-    m_text_                     = other.m_text_;
-    m_search_                   = (USearch *)uprv_malloc(sizeof(USearch));   
-    m_search_->breakIter        = other.m_search_->breakIter;
-    m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
-    m_search_->isOverlap        = other.m_search_->isOverlap;
-    m_search_->elementComparisonType = other.m_search_->elementComparisonType;
-    m_search_->matchedIndex     = other.m_search_->matchedIndex;
-    m_search_->matchedLength    = other.m_search_->matchedLength;
-    m_search_->text             = other.m_search_->text;
-    m_search_->textLength       = other.m_search_->textLength;
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
+  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
+      .cwiseProduct(term_matrix);
 }
     
-    Format* SelectFormat::clone() const
-{
-    return new SelectFormat(*this);
-}
+    Accelrpt68::Accelrpt68() {}
+const int32_t Accelrpt68::ID = 0x68;
     
-    class NumberFormat;
-    
-    uint8_t *CollationKey::reallocate(int32_t newCapacity, int32_t length) {
-    uint8_t *newBytes = static_cast<uint8_t *>(uprv_malloc(newCapacity));
-    if(newBytes == NULL) { return NULL; }
-    if(length > 0) {
-        uprv_memcpy(newBytes, getBytes(), length);
+    namespace apollo {
+namespace canbus {
+namespace gem {
     }
-    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
-    fUnion.fFields.fBytes = newBytes;
-    fUnion.fFields.fCapacity = newCapacity;
-    fFlagAndLength |= 0x80000000;
-    return newBytes;
-}
-    
-     public:
-    
-    void printLinkedList(ListNode* head){
+    }
     }
     
-                    char match;
-                if( s[i] == ')' )
-                    match = '(';
-                else if( s[i] == ']' )
-                    match = '[';
-                else{
-                    assert( s[i] == '}' );
-                    match = '{';
-                }
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-    
-            ListNode* dummyHead = new ListNode(-1);
-        dummyHead->next = head;
-    
-    
-    {
-    {
-    {            if(command.s == 'print')
-                res.push_back(command.node->val);
-            else{
-                assert(command.s == 'go');
-                if(command.node->right)
-                    stack.push(Command('go',command.node->right));
-                stack.push(Command('print', command.node));
-                if(command.node->left)
-                    stack.push(Command('go',command.node->left));
-            }
-        }
-        return res;
-    }
-};
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-                if(cur->left == NULL){
-                res.push_back(cur->val);
-                cur = cur->right;
-            }
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right != NULL && prev->right != cur)
-                    prev = prev->right;
+    // config detail: {'name': 'torque_output', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': True, 'physical_range':
+// '[-2147483.648|2147483.647]', 'bit': 7, 'type': 'double', 'order':
+// 'motorola', 'physical_unit': 'N-m'}
+double Brakemotorrpt372::torque_output(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-    using namespace std;
+    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
+// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
