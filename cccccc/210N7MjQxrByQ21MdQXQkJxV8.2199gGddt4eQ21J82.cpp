@@ -1,291 +1,275 @@
 
         
-        #endif  // ATOM_APP_UV_TASK_RUNNER_H_
-
+          char *oldAllocation = Allocated;
+  char *oldBegin = Begin;
+  std::size_t oldSize = (std::size_t) (End - oldBegin);
     
-    void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+    
+    {  return 0;
 }
     
-    AboutProtocolHandler::AboutProtocolHandler() {}
+    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
     
-    namespace asar {
-    }
+      scoped_ptr<base::Value> value_args(
+      converter->FromV8Value(args, isolate->GetCurrentContext()));
+  if (!value_args.get() ||
+      !value_args->IsType(base::Value::TYPE_LIST))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'args' passed to CallObjectMethodSync')));
     
+    #include 'content/nw/src/api/menu/menu.h'
     
+          if (data.type == TYPE_PNG &&
+         !gfx::PNGCodec::EncodeBGRASkBitmap(bitmap, false, &encoded_image)) {
+        LOG(INFO) << 'NwClipboardGetSyncFunction::RunSync(' << nwapi::nw__clipboard::ToString(data.type) << ') failed when converting to PNG';
+        error_ = 'Failed to encode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG &&
+                 !gfx::JPEGCodec::Encode(bitmap, kQuality, &encoded_image)) {
+        LOG(INFO) << 'NwClipboardGetSyncFunction::RunSync(' << nwapi::nw__clipboard::ToString(data.type) << ') failed when converting to JPEG';
+        error_ = 'Failed to encode as JPEG';
+        return false;
+      }
     
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
+    #include <vector>
     
-        while (outlen > 0) {
-        secp256k1_hmac_sha256_t hmac;
-        int now = outlen;
-        secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
-        secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
-        secp256k1_hmac_sha256_finalize(&hmac, rng->v);
-        if (now > 32) {
-            now = 32;
-        }
-        memcpy(out, rng->v, now);
-        out += now;
-        outlen -= now;
-    }
+    #include 'extensions/browser/extension_function.h'
     
-        // create an array from an array_t value
-    json::array_t array_value = {'one', 'two', 3, 4.5, false};
-    json j_array_t(array_value);
+    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
+}
     
-        static BOOST_FORCEINLINE void fence_before_store(memory_order order) BOOST_NOEXCEPT
+    #include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+      Slice in(encoded);
+  ParsedInternalKey decoded('', 0, kTypeValue);
+    
+      Cache::Handle* handle = nullptr;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (!s.ok()) {
+    return NewErrorIterator(s);
+  }
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+        size_t Trainer::TotalNumberOfUnitsSeen(DataUnit unit) const
     {
-        BOOST_ATOMIC_DETAIL_COMPILER_BARRIER();
+        switch (unit)
+        {
+        case DataUnit::Minibatch:
+            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfMinibatchesSeen();
+            break;
+        case DataUnit::Sweep:
+            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfSweepsSeen();
+            break;
+        case DataUnit::Sample:
+            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfSamplesSeen();
+        default:
+            //should not be here; whenever a new data unit is defined, there should be a new case in this function.
+            LogicError('Unsupported data unit: %d', (int)unit);
+        }
     }
     
-    #ifndef BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
-#define BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+            NDArrayViewPtr valueData;
+        NDShape valueDataShape = fullyDefinedSampleShape.AppendShape({ maxSequenceLength, numSequences });
+        if (numSequences == 1)
+        {
+            if (createNewCopy)
+                valueData = sequences[0]->DeepClone();
+            else
+                valueData = sequences[0];
+    }
     
-    using atomics::atomic_thread_fence;
-using atomics::atomic_signal_fence;
+        private:
+        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const NDArrayViewPtr& packedData, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
+            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(packedData), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
+        {
+            // Determine unpacked shape
+            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
+        }
     
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/ANTLRException.hpp#2 $
- */
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
+    }
     
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/ASTRefCount.hpp#2 $
- */
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
     
-    #include <antlr/config.hpp>
-#include <vector>
-#include <stdexcept>
+        virtual void Save(File& fstream) const override
+    {
+        Base::Save(fstream);
+        fstream << m_subPen;
+        fstream << m_delPen;
+        fstream << m_insPen;
+        fstream << m_squashInputs;
+        fstream << m_tokensToIgnore;
+    }
     
-    #endif //INC_CharStreamException_hpp__
+    template<class ElemType>
+void OptimizedRNNStackNode<ElemType>::Validate(bool isFinalValidationPass)
+{
+    // support an internal legacy version
+    if (m_legacySwapInputsPending)
+    {
+        ::swap(m_inputs[0], m_inputs[1]);
+        m_legacySwapInputsPending = false;
+    }
+    // N.B.: I need both of these lines.
+    Base::Validate(isFinalValidationPass);
+    InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
+    
+      static Data& getMutableData() { return data_; }
+    
+      virtual bool isReply() const CXX11_OVERRIDE;
+    
+    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
 
     
+      virtual void executeTask() = 0;
     
-    {	IOException( ANTLR_USE_NAMESPACE(std)exception& e )
-		: ANTLRException(e.what())
-	{
-	}
-	IOException( const ANTLR_USE_NAMESPACE(std)string& mesg )
-		: ANTLRException(mesg)
-	{
-	}
-	virtual ~IOException() throw()
-	{
-	}
-};
+    public:
+  DHTTaskQueueImpl();
     
-    	/** Consume another token from the input stream.  Can only write sequentially!
-	 * If you need 3 tokens ahead, you must consume() 3 times.
-	 * <p>
-	 * Note that it is possible to overwrite tokens that have not been matched.
-	 * For example, calling consume() 3 times when k=2, means that the first token
-	 * consumed will be overwritten with the 3rd.
-	 */
-	virtual inline void consume()
-	{
-		inputState->getInput().consume();
-	}
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
     
-    namespace codegen {
-namespace common {
-    }
-    }
-    
-    std::string relativeLocalPath(const QString &filepath) {
-	auto name = QFile::encodeName(QDir(WorkingPath).relativeFilePath(filepath));
-	return name.constData();
-}
-    
-    	bool writeHeader();
-	bool writeSource();
-    
-    		// Working path
-		} else if (arg == '-w') {
-			if (++i == count) {
-				logError(kErrorWorkingPathExpected, 'Command Line') << 'working path expected after -w';
-				return Options();
-			} else {
-				common::logSetWorkingPath(args.at(i));
-			}
-		} else if (arg.startsWith('-w')) {
-			common::logSetWorkingPath(arg.mid(2));
-    
-    // Parsing failed if inputPath is empty in the result.
-Options parseOptions();
-    
-    // Walks through a file, parses it and generates the output.
-class Processor {
-public:
-	explicit Processor(const Options &options);
-	Processor(const Processor &other) = delete;
-	Processor &operator=(const Processor &other) = delete;
-    }
-    
-    For license and copyright information please follow this link:
-https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
-*/
-#pragma once
-    
-    
-    {};
-    
-    int sum(vector<int>& v){
-    int s=0;
-    for(int i=0; i<v.size(); i++){
-        s += v[i];
-    }
-    return s;
-}
-    
-    
-int printMatrix(vector< vector<int> > &vv)
+    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
+                   uint16_t port)
 {
-    for(int i=0; i<vv.size(); i++) {
-        cout << '[';
-        for(int j=0; j<vv[i].size(); j++) {
-            cout << ' ' << vv[i][j];
-        }
-        cout << ']' << endl;;
-    }
-}
-    
-    /********************************************************************************** 
- * Given a non-negative integer num, repeatedly add all its digits until the result has only one digit.
- *
- * For example:
- * Given num = 38, the process is like: 3 + 8 = 11, 1 + 1 = 2. Since 2 has only one digit, return it.
- *
- * Follow up:
- * 	Could you do it without any loop/recursion in O(1) runtime?
- *
- **********************************************************************************/
-    
-    
-vector<string> Parse(string& s){
-    vector<string> exp;
-    for(int i=0; i<s.size(); ){
-        char c = s[i];
-        string token;
-        if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')' ) {
-            exp.push_back(token+c);
-            i++;
-            continue;
-        }
-        if ( isdigit(c) ) {
-            while( isdigit(s[i]) ) {
-                token.push_back(s[i++]);
-            }
-            exp.push_back(token);
-            continue;
-        }
-        i++;
-    }
-    return exp;
-}
-    
-    int alternate_format_size() {
-  return sizeof(data) / sizeof(data[0]);
-}
-    
-    // A function to convert T* into scoped_ptr<T>
-// Doing e.g. make_scoped_ptr(new FooBarBaz<type>(arg)) is a shorter notation
-// for scoped_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
-template <typename T>
-scoped_ptr<T> make_scoped_ptr(T* ptr) {
-  return scoped_ptr<T>(ptr);
-}
-    
-    // Note that this implementation is not thread-safe. For a thread-safe
-// implementation on non-POSIX platforms, please compile with
-// -DI18N_PHONENUMBERS_USE_BOOST.
-template <class T>
-class Singleton {
- public:
-  Singleton() : thread_checker_() {}
-    }
-    
-      // Avoid the cost of BuildLookupTable() for a single-character search.
-  if (s.length_ == 1)
-    return find_first_not_of(s.ptr_[0], pos);
-    
-      void CopyToString(std::string* target) const;
-  void AppendToString(std::string* target) const;
-    
-      void Release() const {
-    int ret = pthread_mutex_unlock(&mutex_);
-    (void) ret;
-    DCHECK_EQ(0, ret);
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.lower_bound(target);
+  if (i != entries_.end() && *(*i) == *target) {
+    (*i)->add(ipaddr);
   }
-    
-    template <class T, class U> struct is_same : public false_type {};
-template <class T> struct is_same<T,T> : true_type {};
-    
-    #if !defined(NDEBUG) && !defined(I18N_PHONENUMBERS_USE_BOOST) && \
-    (defined(__linux__) || defined(__apple__))
-    
-    class EncodingUtils {
- public:
-  // Decodes one Unicode code-point value from a UTF-8 array. Returns the number
-  // of bytes read from the array. If the array does not contain valid UTF-8,
-  // the function stores 0xFFFD in the output variable and returns 1.
-  static inline int DecodeUTF8Char(const char* in, char32* out) {
-    Rune r;
-    int len = chartorune(&r, in);
-    *out = r;
-    return len;
+  else {
+    target->add(ipaddr);
+    entries_.insert(i, target);
   }
-    }
-    
-    AreaCodeMap::~AreaCodeMap() {
 }
     
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
     
-    {  DISALLOW_COPY_AND_ASSIGN(AreaCodeMap);
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+        auto it_lower = std::lower_bound(
+        speed_limit_.speed_limit_points().begin(),
+        speed_limit_.speed_limit_points().end(), s,
+        [](const std::pair<double, double>& point, const double curr_s) {
+          return point.first < curr_s;
+        });
+    
+      const auto mat = kernel.kernel_matrix() / (2.0 * 1.0 / std::pow(0.1, 6));
+  const auto offset = kernel.offset_matrix();
+    
+    void Accelrpt68::Parse(const std::uint8_t* bytes, int32_t length,
+                       ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_output_value(
+      output_value(bytes, length));
+}
+    
+    class Accelrpt68Test : public ::testing::Test {
+ public:
+  virtual void SetUp() {}
 };
     
-    using std::string;
-    
-    /**
- * Wrapper for file based (read/write) event notifications.
- */
-class FileEvent {
-public:
-  virtual ~FileEvent() {}
+    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
+// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
+// 'physical_unit': 'deg C'}
+int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
+                                        int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-      /**
-   * Init must be called in order to initialize the compressor. Once compressor is initialized, it
-   * cannot be initialized again. Init should run before compressing any data.
-   * @param level @see CompressionLevel enum
-   * @param strategy @see CompressionStrategy enum
-   * @param window_bits sets the size of the history buffer. Larger values result in better
-   * compression, but will use more memory @see window_bits. (zlib manual)
-   * @param memory_level sets how much memory should be allocated for the internal compression, min
-   * 1 and max 9. @see memory_level (zlib manual)
-   */
-  void init(CompressionLevel level, CompressionStrategy strategy, int64_t window_bits,
-            uint64_t memory_level);
+    // config detail: {'name': 'commanded_value', 'enum': {0:
+// 'COMMANDED_VALUE_HEADLIGHTS_OFF', 1: 'COMMANDED_VALUE_LOW_BEAMS', 2:
+// 'COMMANDED_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
+// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 15, 'type': 'enum',
+// 'order': 'motorola', 'physical_unit': ''}
+Headlight_rpt_77::Commanded_valueType Headlightrpt77::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
     
-    
-    {  // We don't have v1 JSON with unresolved addresses in non-URL form.
-  ASSERT(url);
-  // Non-TCP scheme (e.g. Unix scheme) is not supported with unresolved address.
-  if (!Network::Utility::urlIsTcpScheme(json_address)) {
-    throw EnvoyException(fmt::format('unresolved URL must be TCP scheme, got: {}', json_address));
-  }
-  address.mutable_socket_address()->set_address(Network::Utility::hostFromTcpUrl(json_address));
-  address.mutable_socket_address()->set_port_value(Network::Utility::portFromTcpUrl(json_address));
-}
+    using ::apollo::drivers::canbus::Byte;
