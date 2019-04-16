@@ -1,242 +1,125 @@
 
         
-                print('Writing data for %s data and kind %s.' % (data_name, data_kind))
-        if push_mean:
-          model_runs = self.eval_model_runs_push_mean(data_name, data_extxd,
-                                                      ext_input_extxi)
-        else:
-          model_runs = self.eval_model_runs_avg_epoch(data_name, data_extxd,
-                                                      ext_input_extxi)
-        full_fname = os.path.join(hps.lfads_save_dir, fname)
-        write_data(full_fname, model_runs, compression='gzip')
-        print('Done.')
-    
-      def get_batch(self, batch_size, num_steps, pad=False, forever=True):
-    return get_batch(self._get_sentence(forever), batch_size, num_steps,
-                     self.vocab.max_word_length, pad=pad)
-    
-      Returns:
-    values:  tf.float32 Tensor of predictions of shape [batch_size,
-      sequence_length]
-  '''
-  if FLAGS.baseline_method == 'critic':
-    if FLAGS.discriminator_model == 'seq2seq_vd':
-      values = critic_vd.critic_seq2seq_vd_derivative(
-          hparams, sequence, is_training, reuse=reuse)
-    else:
-      raise NotImplementedError
-  else:
-    raise NotImplementedError
-  return values
-
-    
-          for s in xrange(t, FLAGS.sequence_length):
-        cum_advantage += reward_missing_list[s] * np.power(gamma, (s - t)) * (
-            rewards_list[s] - baselines[s])
-      # Clip advantages.
-      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
-                                       FLAGS.advantage_clipping)
-      advantages.append(reward_missing_list[t] * cum_advantage)
-      final_gen_objective += tf.multiply(
-          log_probability,
-          reward_missing_list[t] * tf.stop_gradient(cum_advantage))
-    
-      Returns:
-    attention_score_fn: to compute similarity between key and target states.
-  '''
-  with tf.variable_scope(name, reuse=reuse):
-    if attention_option == 'bahdanau':
-      query_w = tf.get_variable('attnW', [num_units, num_units], dtype=dtype)
-      score_v = tf.get_variable('attnV', [num_units], dtype=dtype)
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    import io
-import optparse
-    
-    make_valid_template = '''
-    @classmethod
-    def _make_valid_url(cls):
-        return {valid_url!r}
-'''
-    
-    import io
-import sys
-import re
+        
+@pytest.fixture(autouse=True)
+def usage_tracker_io(usage_tracker):
+    io = StringIO()
+    usage_tracker.return_value \
+                 .open.return_value \
+                 .__enter__.return_value = io
+    return io
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['nl']))
-        self.assertEqual(md5(subtitles['nl']), 'fc6435027572b63fb4ab143abd5ad3f4')
-    
-       >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('https://httpbin.org/post', data=payload)
-   >>> print(r.text)
-   {
-     ...
-     'form': {
-       'key2': 'value2',
-       'key1': 'value1'
-     },
-     ...
-   }
-    
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
-        elif _algorithm == 'SHA-256':
-            def sha256_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha256(x).hexdigest()
-            hash_utf8 = sha256_utf8
-        elif _algorithm == 'SHA-512':
-            def sha512_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha512(x).hexdigest()
-            hash_utf8 = sha512_utf8
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
     
-class VersionedPackage(object):
-    def __init__(self, version):
-        self.__version__ = version
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
-    
-http_proxies = {'http': 'http://http.proxy',
-                'http://some.host': 'http://some.host.proxy'}
-all_proxies = {'all': 'socks5://http.proxy',
-               'all://some.host': 'socks5://some.host.proxy'}
-mixed_proxies = {'http': 'http://http.proxy',
-                 'http://some.host': 'http://some.host.proxy',
-                 'all': 'socks5://http.proxy'}
-@pytest.mark.parametrize(
-    'url, expected, proxies', (
-        ('hTTp://u:p@Some.Host/path', 'http://some.host.proxy', http_proxies),
-        ('hTTp://u:p@Other.Host/path', 'http://http.proxy', http_proxies),
-        ('hTTp:///path', 'http://http.proxy', http_proxies),
-        ('hTTps://Other.Host', None, http_proxies),
-        ('file:///etc/motd', None, http_proxies),
-    
-    from .structures import LookupDict
-    
-        value = value.strip(replace_chars)
-    if not value:
-        return links
-    
-            # In general, we want to try IDNA encoding the hostname if the string contains
-        # non-ASCII characters. This allows users to automatically get the correct IDNA
-        # behaviour. For strings containing only ASCII characters, we need to also verify
-        # it doesn't start with a wildcard (*), before allowing the unencoded hostname.
-        if not unicode_is_ascii(host):
-            try:
-                host = self._get_idna_encoded_host(host)
-            except UnicodeError:
-                raise InvalidURL('URL has an invalid label.')
-        elif host.startswith(u'*'):
-            raise InvalidURL('URL has an invalid label.')
+    X -= X.mean(axis=0)
+X /= X.std(axis=0)
     
             start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
     
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
+    File: sparsity_benchmark.py
+Function: benchmark_dense_predict at line 51
+Total time: 0.532979 s
     
-    Typical output
---------------
+        This is called by sphinx.ext.linkcode
     
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
+    # Plot the results (= shape of the data points cloud)
+plt.figure(1)  # two clusters
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X1[:, 0], X1[:, 1], color='black')
+bbox_args = dict(boxstyle='round', fc='0.8')
+arrow_args = dict(arrowstyle='->')
+plt.annotate('several confounded points', xy=(24, 19),
+             xycoords='data', textcoords='data',
+             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
+plt.xlim((xx1.min(), xx1.max()))
+plt.ylim((yy1.min(), yy1.max()))
+plt.legend((legend1_values_list[0].collections[0],
+            legend1_values_list[1].collections[0],
+            legend1_values_list[2].collections[0]),
+           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('accessibility to radial highways')
+plt.xlabel('pupil-teacher ratio by town')
     
-    plt.axis('tight')
-plt.axis('off')
-plt.suptitle('Ground truth', size=20)
-    
-    from sklearn.cluster import KMeans
-from sklearn.datasets import make_blobs
-    
-    random_state = np.random.RandomState(0)
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
     
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
+#----------------------------------------------------------------------
+# Visualize the clustering
+def plot_clustering(X_red, labels, title=None):
+    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
+    X_red = (X_red - x_min) / (x_max - x_min)
     
-        # Round in the units appropriate
-    if precision == PRECISION_HALVES:
-        temperature = round(temperature * 2) / 2.0
-    elif precision == PRECISION_TENTHS:
-        temperature = round(temperature, 1)
-    # Integer as a fall back (PRECISION_WHOLE)
-    else:
-        temperature = round(temperature)
+    Dorin Comaniciu and Peter Meer, 'Mean Shift: A robust approach toward
+feature space analysis'. IEEE Transactions on Pattern Analysis and
+Machine Intelligence. 2002. pp. 603-619.
     
+        @classmethod
+    def marshal(cls, input_data):
+        return pickle.dumps(input_data)
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+        def draw_landmarks(self, color_id=3, radius=1):
+        ''' Draw the facial landmarks '''
+        color = self.colors[color_id]
+        for alignment in self.alignments:
+            landmarks = alignment['landmarksXY']
+            logger.trace('Drawing Landmarks: (landmarks: %s, color: %s, radius: %s)',
+                         landmarks, color, radius)
+            for (pos_x, pos_y) in landmarks:
+                cv2.circle(self.image,  # pylint: disable=no-member
+                           (pos_x, pos_y),
+                           radius,
+                           color,
+                           -1)
+    
+        def __init__(self):
+        gpu_stats = GPUStats(log=False)
+    
+            folder:     folder alignments file is stored in
+        filename:   Filename of alignments file excluding extension. If a
+                    valid extension is provided, then it will be used to
+                    decide the serializer, and the serializer argument will
+                    be ignored.
+        serializer: If provided, this will be the format that the data is
+                    saved in (if data is to be saved). Can be 'json', 'pickle'
+                    or 'yaml'
+    '''
+    # pylint: disable=too-many-public-methods
+    def __init__(self, folder, filename='alignments', serializer='json'):
+        logger.debug('Initializing %s: (folder: '%s', filename: '%s', serializer: '%s')',
+                     self.__class__.__name__, folder, filename, serializer)
+        self.serializer = self.get_serializer(filename, serializer)
+        self.file = self.get_location(folder, filename)
