@@ -1,53 +1,57 @@
-FORWARD_SLASH = '/'.freeze
+
+        
+            def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+          it 'adds warnings param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            warnings: '--warn-missing-output-path --warn-missing-company-id --warn-undocumented-object'
+          )
+        end').runner.execute(:test)
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
+            expect(result).to eq('carthage bootstrap')
       end
-    end
     
-            # Defines additional communicators to be available. Communicators
-        # should be returned by a block passed to this method. This is done
-        # to ensure that the class is lazy loaded, so if your class inherits
-        # from or uses any Vagrant internals specific to Vagrant 1.0, then
-        # the plugin can still be defined without breaking anything in future
-        # versions of Vagrant.
-        #
-        # @param [String] name Communicator name.
-        def self.communicator(name=UNSET_VALUE, &block)
-          data[:communicator] ||= Registry.new
+            expect(result).to include(' oclint -report-type=pmd -o=report_path.xml ')
+        expect(result).to include(' -max-priority-1=10 ')
+        expect(result).to include(' -max-priority-2=20 ')
+        expect(result).to include(' -max-priority-3=30 ')
+        expect(result).to include(' -rc=LONG_LINE=200 -rc=LONG_METHOD=200 ')
+        expect(result).to include(' -rule DoubleNegative -rule DeadCode ')
+        expect(result).to include(' -disable-rule GotoStatement -disable-rule ShortVariableName ')
+        expect(result).to include(' -list-enabled-rules ')
+        expect(result).to include(' -enable-clang-static-analyzer ')
+        expect(result).to include(' -enable-global-analysis ')
+        expect(result).to include(' -allow-duplicated-violations ')
+      end
     
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
+                expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                swiftlint
+              end').runner.execute(:test)
+            end.to raise_error(/SwiftLint finished with errors/)
+          end
+        end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+    # confirms that the escaped string that is generated actually
+# gets turned back into the source string by the actual shell.
+# abuses a `grep` (or `find`) error message because that should be cross platform
+def confirm_shell_unescapes_string_correctly(string, escaped)
+  compare_string = string.to_s.dup
     
-    Then(/^the specified stage files are created$/) do
-  qa = TestApp.test_app_path.join('config/deploy/qa.rb')
-  production = TestApp.test_app_path.join('config/deploy/production.rb')
-  expect(File.exist?(qa)).to be true
-  expect(File.exist?(production)).to be true
+    # Contributors should always provide a changelog when submitting a PR
+if github.pr_body.length < 5
+  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
 end
     
-      class VagrantSSHCommandError < RuntimeError; end
-    
-        def role(name, hosts, options={})
-      if name == :all
-        raise ArgumentError, '#{name} reserved name for role. Please choose another name'
-      end
-    
-        def process_nonce
-      @@process_nonce ||= SecureRandom.hex(6)
-    end
+    module Cert
+  class CommandsGenerator
+    include Commander::Methods
