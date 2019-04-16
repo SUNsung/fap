@@ -1,148 +1,153 @@
 
         
-          Performance (recall, precision and F1), classification report (per
-  class performance), and confusion matrix).
+                # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
     
-      Args:
-    hps: The dictionary of hyperparameters.
-    datasets: A dictionary of data dictionaries.  The dataset dict is simply a
-      name(string)-> data dictionary mapping (See top of lfads.py).
-    output_fname (optional): output filename stem to write the model runs.
-    push_mean: if False (default), generates batch_size samples for each trial
-      and averages the results. if True, runs each trial once without noise,
-      pushing the posterior mean initial conditions and control inputs through
-      the trained model. False is used for posterior_sample_and_average, True
-      is used for posterior_push_mean.
-  '''
-  model = build_model(hps, kind=hps.kind, datasets=datasets)
-  model.write_model_runs(datasets, output_fname, push_mean)
-    
-        for word in self._id_to_word:
-      chars_set |= set(word)
-    
-      # Generator rewards are log-probabilities.
-  eps = tf.constant(1e-7, tf.float32)
-  dis_predictions = tf.nn.sigmoid(dis_predictions)
-  rewards = tf.log(dis_predictions + eps)
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
     
-def clip_weights(variables, c_lower, c_upper):
-  '''Clip a list of weights to be within a certain range.
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    
-def gen_encoder_seq2seq(hparams):
-  '''Returns the PTB Variable name to MaskGAN Variable
-  dictionary mapping.  This is a highly restrictive function just for testing.
-  This is foe the *unidirecitional* seq2seq_zaremba encoder.
-    
-        Raises:
-      ValueError: if cell_input is not None.
-    
-    A test of LocalOutlierFactor on classical anomaly detection datasets.
-    
-    
-def rbf_kernels(X, n_jobs):
-    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
-    
-    np.random.seed(42)
-    
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
-    
-    We selected two sets of two variables from the Boston housing data set
-as an illustration of what kind of analysis can be done with several
-outlier detection tools. For the purpose of visualization, we are working
-with two-dimensional examples, but one should be aware that things are
-not so trivial in high-dimension, as it will be pointed out.
-    
-    X_restored = agglo.inverse_transform(X_reduced)
-images_restored = np.reshape(X_restored, images.shape)
-plt.figure(1, figsize=(4, 3.5))
-plt.clf()
-plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
-for i in range(4):
-    plt.subplot(3, 4, i + 1)
-    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
-    plt.xticks(())
-    plt.yticks(())
-    if i == 1:
-        plt.title('Original data')
-    plt.subplot(3, 4, 4 + i + 1)
-    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
-               interpolation='nearest')
-    if i == 1:
-        plt.title('Agglomerated data')
-    plt.xticks(())
-    plt.yticks(())
-    
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
     '''
+from httpie.client import JSON_ACCEPT
+from utils import MockEnvironment, http, HTTP_OK
+from fixtures import FILE_PATH
     
-        if num in lowPrimes:
-        return True
+        def test_request_body_from_file_by_path_no_field_name_allowed(
+            self, httpbin):
+        env = MockEnvironment(stdin_isatty=True)
+        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
+                 env=env, error_exit_ok=True)
+        assert 'perhaps you meant --form?' in r.stderr
     
-        def __init__(self, size_table, charge_factor=None, lim_charge=None):
-        self.size_table = size_table
-        self.values = [None] * self.size_table
-        self.lim_charge = 0.75 if lim_charge is None else lim_charge
-        self.charge_factor = 1 if charge_factor is None else charge_factor
-        self.__aux_list = []
-        self._keys = {}
+        @property
+    def path(self):
+        '''Return the config file path creating basedir, if needed.'''
+        path = self._get_path()
+        try:
+            os.makedirs(os.path.dirname(path), mode=0o700)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+        return path
+    
+        try:
+        response = requests_session.request(**kwargs)
+    except Exception:
+        raise
+    else:
+        # Existing sessions with `read_only=True` don't get updated.
+        if session.is_new() or not read_only:
+            session.cookies = requests_session.cookies
+            session.save()
+        return response
+    
+            try:
+            speed = actually_downloaded / time_taken
+        except ZeroDivisionError:
+            # Either time is 0 (not all systems provide `time.time`
+            # with a better precision than 1 second), and/or nothing
+            # has been downloaded.
+            speed = actually_downloaded
+    
+    
+class CloudWatchEventRuleManager(object):
+    RULE_FIELDS = ['name', 'event_pattern', 'schedule_expression', 'description', 'role_arn']
     
     
 if __name__ == '__main__':
-	test()
+    main()
 
     
-        return score
-    
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
+    ## List all Subscriptions for a Topic in a project
+- gcpubsub_facts:
+    view: subscriptions
+    topic: my-topic
+    state: list
 '''
-
     
-            a += a
-        b >>= 1
+        if purge_rules is True and len(rules) > 0:
+        result['rules_purged'] = len(rules)
+        deletions = result['rules_purged']
+        rules = list()
+        if not module.check_mode:
+            gateway.del_all_nat_rules()
+            task = gateway.save_services_configuration()
+            vca.block_until_completed(task)
+            rules = gateway.get_nat_rules()
+        result['changed'] = True
     
-    def getLetterCount(message):
-    letterCount = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0,
-                   'I': 0, 'J': 0, 'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0,
-                   'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 'W': 0, 'X': 0,
-                   'Y': 0, 'Z': 0}
-    for letter in message.upper():
-        if letter in LETTERS:
-            letterCount[letter] += 1
-    
-    # If not None, a 'Last updated on:' timestamp is inserted at every page
-# bottom, using the given strftime format.
-# The empty string is equivalent to '%b %d, %Y'.
-#
-html_last_updated_fmt = '%b %d, %Y'
+    RETURN = '''# '''
     
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+        params = {}
+    params['message'] = msg
+    if annotated_by:
+        params['annotated_by'] = annotated_by
+    if level:
+        params['level'] = level
+    if instance_id:
+        params['instance_id'] = instance_id
+    if event_epoch:
+        params['event_epoch'] = event_epoch
+    
+    for face_location in face_locations:
+    
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
+    
+    
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
+    
+        def test_raw_face_landmarks(self):
+        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg'))
+        face_landmarks = api._raw_face_landmarks(img)
+        example_landmark = face_landmarks[0].parts()[10]
+    
+    
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+    
+        :param file: image file name or file object to load
+    :param mode: format to convert the image to. Only 'RGB' (8-bit RGB, 3 channels) and 'L' (black and white) are supported.
+    :return: image contents as numpy array
+    '''
+    im = PIL.Image.open(file)
+    if mode:
+        im = im.convert(mode)
+    return np.array(im)
