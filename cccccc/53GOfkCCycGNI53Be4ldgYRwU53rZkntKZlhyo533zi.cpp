@@ -1,239 +1,405 @@
 
         
-        #endif  // ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
-
-    
-    static gfx::Rect DIPToScreenRect(atom::NativeWindow* window,
-                                 const gfx::Rect& rect) {
-  HWND hwnd = window ? window->GetAcceleratedWidget() : nullptr;
-  return display::win::ScreenWin::DIPToScreenRect(hwnd, rect);
-}
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_SCREEN_H_
-
-    
-    class AtomBrowserContext;
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    #include 'atom/browser/api/save_page_handler.h'
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+          // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
     
-    void AutoUpdater::SetDelegate(Delegate* delegate) {
-  delegate_ = delegate;
+    {  cache_t *cache_out = nullptr;
+  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
+  assert(cache_out);
+  return cache_out;
 }
     
     
-    { protected:
-  virtual ~Delegate() {}
-};
-    
-    #include 'base/macros.h'
-    
-      // Construct a generic signature builder by collecting the constraints
-  // from the requirement and the context of the conformance together,
-  // because both define the capabilities of the requirement.
-  GenericSignatureBuilder builder(ctx);
+    {    // Must be 'const' or nothing.
+    clang::Qualifiers quals = pointee.getQualifiers();
+    bool isConst = quals.hasConst();
+    quals.removeConst();
+    if (quals.empty()) {
+      if (auto record = pointee->getAs<clang::RecordType>()) {
+        auto recordDecl = record->getDecl();
+        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return forRecord(isConst, record->getDecl());
+        }
+      } else if (pointee->isVoidType()) {
+        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return isConst ? forConstVoid() : forVoid();
+        }
+      }
+    }
+  }
     
     
     {
-    {        // Register the memory buffer.
-        SML->registerMemoryBuffer(info.name, std::move(bitstream));
-        foundModules.push_back(info.name);
-      }
-    } else {
-      llvm::dbgs() << 'Unable to load module';
-      if (!info.name.empty())
-        llvm::dbgs() << ' '' << info.name << '\'';
-      llvm::dbgs() << '.\n';
-    }
+    {  } else {
+    assert(clangDiag.hasSourceManager());
+    auto clangCI = ImporterImpl.getClangInstance();
+    ClangDiagRenderer renderer(clangCI->getLangOpts(),
+                               &clangCI->getDiagnosticOpts(), emitDiag);
+    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
+                                      clangDiag.getSourceManager());
+    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
+                            clangDiag.getRanges(), clangDiag.getFixItHints(),
+                            &clangDiag);
+  }
+}
+
     
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
+    // Import As Member -- attempt to import C global functions and variables as
+// members on types or instances.
+    
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
+
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+     private:
+  // We construct a char array of the form:
+  //    klength  varint32               <-- start_
+  //    userkey  char[klength]          <-- kstart_
+  //    tag      uint64
+  //                                    <-- end_
+  // The array is a suitable MemTable key.
+  // The suffix starting with 'userkey' can be used as an InternalKey.
+  const char* start_;
+  const char* kstart_;
+  const char* end_;
+  char space_[200];      // Avoid allocation for short keys
+    
+    
+// Called on every log record (each one of which is a WriteBatch)
+// found in a kLogFile.
+static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  if (record.size() < 12) {
+    r += 'log record length ';
+    AppendNumberTo(&r, record.size());
+    r += ' is too small\n';
+    dst->Append(r);
     return;
   }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
-}
-    
-    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
-    
-    #ifndef SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
-#define SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
-    
-    #include <grpcpp/impl/grpc_library.h>
-#include <grpcpp/security/credentials.h>
-    
-    #include <grpcpp/support/channel_arguments.h>
-    
-    #include 'src/cpp/ext/filters/census/context.h'
-    
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
+  WriteBatch batch;
+  WriteBatchInternal::SetContents(&batch, record);
+  r += 'sequence ';
+  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
+  r.push_back('\n');
+  dst->Append(r);
+  WriteBatchItemPrinter batch_item_printer;
+  batch_item_printer.dst_ = dst;
+  Status s = batch.Iterate(&batch_item_printer);
+  if (!s.ok()) {
+    dst->Append('  error: ' + s.ToString() + '\n');
   }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
 }
     
-    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first. Tags are directly
-// serialized into the given grpc_slice.
-size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
+    #include <stdint.h>
+#include <string>
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+#include 'port/port.h'
     
-    namespace grpc {
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
     }
-    
-        NDMask::~NDMask()
-    {}
-    
-    
-    {
-    {    private:
-        static bool IsNativeUDF(const Dictionary& dict);
-    };
+  }
+  return ok;
 }
-
     
-        ParameterInitializer HeNormalInitializer(double scale, int outputRank, int filterRank, unsigned long seed)
-    {
-        return CreateInitializer(Microsoft::MSR::CNTK::HeNormalInitializerTypeName, scale, outputRank, filterRank, seed);
+    namespace leveldb {
     }
     
-    
-    {        ImGui::Render();
+      Status WriteDescriptor() {
+    std::string tmp = TempFileName(dbname_, 1);
+    WritableFile* file;
+    Status status = env_->NewWritableFile(tmp, &file);
+    if (!status.ok()) {
+      return status;
+    }
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
+                             Cache::Handle** handle) {
+  Status s;
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  Slice key(buf, sizeof(buf));
+  *handle = cache_->Lookup(key);
+  if (*handle == nullptr) {
+    std::string fname = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = nullptr;
+    Table* table = nullptr;
+    s = env_->NewRandomAccessFile(fname, &file);
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
+      }
+    }
+    if (s.ok()) {
+      s = Table::Open(options_, file, file_size, &table);
+    }
+    }
+    }
     
-        // Setup orthographic projection matrix into our constant buffer
-    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). 
-    {
-        D3D11_MAPPED_SUBRESOURCE mapped_resource;
-        if (ctx->Map(g_pVertexConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource) != S_OK)
-            return;
-        VERTEX_CONSTANT_BUFFER* constant_buffer = (VERTEX_CONSTANT_BUFFER*)mapped_resource.pData;
-        float L = draw_data->DisplayPos.x;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
-        float T = draw_data->DisplayPos.y;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
-        float mvp[4][4] =
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+                    // Loop through input, until either the input is exhausted or
+                //   we reach a character that is not a member of the set.
+                int64_t ix = fp->fInputIdx;
+                UTEXT_SETNATIVEINDEX(fInputText, ix);
+                for (;;) {
+                    if (ix >= fActiveLimit) {
+                        fHitEnd = TRUE;
+                        break;
+                    }
+                    UChar32 c = UTEXT_NEXT32(fInputText);
+                    if (c<256) {
+                        if (s8->contains(c) == FALSE) {
+                            break;
+                        }
+                    } else {
+                        if (s->contains(c) == FALSE) {
+                            break;
+                        }
+                    }
+                    ix = UTEXT_GETNATIVEINDEX(fInputText);
+                }
+    
+        case URX_STRING:
+    case URX_STRING_I:
         {
-            { 2.0f/(R-L),   0.0f,           0.0f,       0.0f },
-            { 0.0f,         2.0f/(T-B),     0.0f,       0.0f },
-            { 0.0f,         0.0f,           0.5f,       0.0f },
-            { (R+L)/(L-R),  (T+B)/(B-T),    0.5f,       1.0f },
-        };
-        memcpy(&constant_buffer->mvp, mvp, sizeof(mvp));
-        ctx->Unmap(g_pVertexConstantBuffer, 0);
-    }
-    
-    void ImGui_ImplFreeGLUT_InstallFuncs()
-{
-    glutReshapeFunc(ImGui_ImplFreeGLUT_ReshapeFunc);
-    glutMotionFunc(ImGui_ImplFreeGLUT_MotionFunc);
-    glutPassiveMotionFunc(ImGui_ImplFreeGLUT_MotionFunc);
-    glutMouseFunc(ImGui_ImplFreeGLUT_MouseFunc);
-    glutMouseWheelFunc(ImGui_ImplFreeGLUT_MouseWheelFunc);
-    glutKeyboardFunc(ImGui_ImplFreeGLUT_KeyboardFunc);
-    glutKeyboardUpFunc(ImGui_ImplFreeGLUT_KeyboardUpFunc);
-    glutSpecialFunc(ImGui_ImplFreeGLUT_SpecialFunc);
-    glutSpecialUpFunc(ImGui_ImplFreeGLUT_SpecialUpFunc);
-}
-    
-    int32 ImGui_Marmalade_CharCallback(void* system_data, void* user_data)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)system_data;
-    if ((e->m_Char > 0 && e->m_Char < 0x10000))
-        io.AddInputCharacter((unsigned short)e->m_Char);
-    }
-    
-        const GLchar* fragment_shader_glsl_120 =
-        '#ifdef GL_ES\n'
-        '    precision mediump float;\n'
-        '#endif\n'
-        'uniform sampler2D Texture;\n'
-        'varying vec2 Frag_UV;\n'
-        'varying vec4 Frag_Color;\n'
-        'void main()\n'
-        '{\n'
-        '    gl_FragColor = Frag_Color * texture2D(Texture, Frag_UV.st);\n'
-        '}\n';
-    
-        // Request a certain mode and confirm that it is available. If not use VK_PRESENT_MODE_FIFO_KHR which is mandatory
-    uint32_t avail_count = 0;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device, surface, &avail_count, NULL);
-    ImVector<VkPresentModeKHR> avail_modes;
-    avail_modes.resize((int)avail_count);
-    vkGetPhysicalDeviceSurfacePresentModesKHR(physical_device, surface, &avail_count, avail_modes.Data);
-    //for (uint32_t avail_i = 0; avail_i < avail_count; avail_i++)
-    //    printf('[vulkan] avail_modes[%d] = %d\n', avail_i, avail_modes[avail_i]);
-    
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-    static void SetupVulkan(const char** extensions, uint32_t extensions_count)
-{
-    VkResult err;
-    }
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
+            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
+            int32_t length = URX_VAL(lengthOp);
+            UnicodeString str(fLiteralText, val, length);
+            printf('%s', CStr(str)());
         }
+        break;
     
-    #endif  // !defined(ROCKSDB_LITE) && !defined(OS_WIN)
-
+    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
+        const UnicodeString &original,
+        FieldPositionIterator &fpi,
+        const UnicodeString &preExponent,
+        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fp;
+    int32_t copyFromOffset = 0;
+    while (fpi.next(fp)) {
+        switch (fp.getField()) {
+        case UNUM_EXPONENT_SYMBOL_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(preExponent);
+            appendTo.append(fBeginMarkup);
+            break;
+        case UNUM_EXPONENT_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getEndIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(fEndMarkup);
+            break;
+        default:
+            break;
+        }
+    }
+    appendTo.append(
+            original, copyFromOffset, original.length() - copyFromOffset);
+    return appendTo;
+}
     
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
+        ScriptSet &setAll();
+    ScriptSet &resetAll();
+    int32_t countMembers() const;
+    int32_t hashCode() const;
+    int32_t nextSetBit(int32_t script) const;
     
-      static void CompactFiles(void* arg) {
-    std::unique_ptr<CompactionTask> task(
-        reinterpret_cast<CompactionTask*>(arg));
-    assert(task);
-    assert(task->db);
-    Status s = task->db->CompactFiles(
-        task->compact_options,
-        task->input_file_names,
-        task->output_level);
-    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
-    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
-      // If a compaction task with its retry_on_fail=true failed,
-      // try to schedule another compaction in case the reason
-      // is not an IO error.
-      CompactionTask* new_task = task->compactor->PickCompaction(
-          task->db, task->column_family_name);
-      task->compactor->ScheduleCompaction(new_task);
+    UnicodeString&
+SelectFormat::format(const UnicodeString& keyword,
+                     UnicodeString& appendTo,
+                     FieldPosition& /*pos */,
+                     UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    // Check for the validity of the keyword
+    if (!PatternProps::isIdentifier(keyword.getBuffer(), keyword.length())) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;  // Invalid formatting argument.
+    }
+    if (msgPattern.countParts() == 0) {
+        status = U_INVALID_STATE_ERROR;
+        return appendTo;
+    }
+    int32_t msgStart = findSubMessage(msgPattern, 0, keyword, status);
+    if (!MessageImpl::jdkAposMode(msgPattern)) {
+        int32_t patternStart = msgPattern.getPart(msgStart).getLimit();
+        int32_t msgLimit = msgPattern.getLimitPartIndex(msgStart);
+        appendTo.append(msgPattern.getPatternString(),
+                        patternStart,
+                        msgPattern.getPatternIndex(msgLimit) - patternStart);
+        return appendTo;
+    }
+    // JDK compatibility mode: Remove SKIP_SYNTAX.
+    return MessageImpl::appendSubMessageWithoutSkipSyntax(msgPattern, msgStart, appendTo);
+}
+    
+    #endif
+    
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
+    
+    // Bitwise comparison for the collation keys.
+Collator::EComparisonResult
+CollationKey::compareTo(const CollationKey& target) const
+{
+    UErrorCode errorCode = U_ZERO_ERROR;
+    return static_cast<Collator::EComparisonResult>(compareTo(target, errorCode));
+}
+    
+    int32_t StandardPlural::indexOrNegativeFromString(const char *keyword) {
+    switch (*keyword++) {
+    case 'f':
+        if (uprv_strcmp(keyword, 'ew') == 0) {
+            return FEW;
+        }
+        break;
+    case 'm':
+        if (uprv_strcmp(keyword, 'any') == 0) {
+            return MANY;
+        }
+        break;
+    case 'o':
+        if (uprv_strcmp(keyword, 'ther') == 0) {
+            return OTHER;
+        } else if (uprv_strcmp(keyword, 'ne') == 0) {
+            return ONE;
+        }
+        break;
+    case 't':
+        if (uprv_strcmp(keyword, 'wo') == 0) {
+            return TWO;
+        }
+        break;
+    case 'z':
+        if (uprv_strcmp(keyword, 'ero') == 0) {
+            return ZERO;
+        }
+        break;
+    default:
+        break;
+    }
+    return -1;
+}
+    
+    
+    {        // Delete the old text (the key)
+        text.handleReplaceBetween(start + outLen, limit + outLen, UnicodeString());
+    }        
+    
+    namespace CalculatorApp::Common::Automation
+{
+    class NarratorAnnouncementHostFactory
+    {
+    public:
+        static INarratorAnnouncementHost^ MakeHost();
+    }
+    }
+    
+        public enum class LanguageFontType
+    {
+        UIText,
+        UICaption,
+    };
+    
+      virtual std::string toString() const CXX11_OVERRIDE;
+    
+      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
     }
   }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
+}
     
-      // The operation (high-level action) that the current thread is involved.
-  const OperationType operation_type;
+    namespace aria2 {
+    }
+    
+    #include <cstring>
+#include <cstdlib>
