@@ -1,120 +1,93 @@
 
         
-        
-class BadNonceTest(unittest.TestCase):
-    '''Tests for acme.errors.BadNonce.'''
+        try:
+    from google.cloud import spanner
+    from google.gax.errors import GaxError
+    HAS_GOOGLE_CLOUD_SPANNER = True
+except ImportError as e:
+    HAS_GOOGLE_CLOUD_SPANNER = False
     
-        # TODO: decoder should check that nonce is in the protected header
+            if service is not None:
+            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberservice_hbacsvc', []), service,
+                                            client.hbacrule_add_service,
+                                            client.hbacrule_remove_service, 'hbacsvc') or changed
     
-    OLD_REWRITE_HTTPS_ARGS = [
-    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,QSA,R=permanent]'],
-    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,QSA,R=permanent]']]
+    EXAMPLES = '''
+- stackdriver:
+    key: AAAAAA
+    event: deploy
+    deployed_to: production
+    deployed_by: leeroyjenkins
+    repository: MyWebApp
+    revision_id: abcd123
     
-            return all_names
+    def getTestCaseNames(testCaseClass, prefix, sortUsing=util.three_way_cmp, testNamePatterns=None):
+    return _makeLoader(prefix, sortUsing, testNamePatterns=testNamePatterns).getTestCaseNames(testCaseClass)
     
-        def test_basic_ifdefine(self):
-        self.assertEqual(len(self.parser.find_dir('VAR_DIRECTIVE')), 2)
-        self.assertEqual(len(self.parser.find_dir('INVALID_VAR_DIRECTIVE')), 0)
+        def test_underscore_literals(self):
+        def number_token(s):
+            f = BytesIO(s.encode('utf-8'))
+            for toktype, token, start, end, line in tokenize(f.readline):
+                if toktype == NUMBER:
+                    return token
+            return 'invalid token'
+        for lit in VALID_UNDERSCORE_LITERALS:
+            if '(' in lit:
+                # this won't work with compound complex inputs
+                continue
+            self.assertEqual(number_token(lit), lit)
+        for lit in INVALID_UNDERSCORE_LITERALS:
+            self.assertNotEqual(number_token(lit), lit)
     
-    class EntryPointTest(unittest.TestCase):
-    '''Entrypoint tests'''
-    
-        def load_config(self):
-        '''Loads the next configuration for the plugin to test'''
-        config = super(Proxy, self).load_config()
-        self._all_names, self._test_names = _get_names(config)
-    
-      files_belong_to_same_module = filename_cc.endswith(filename_h)
-  common_path = ''
-  if files_belong_to_same_module:
-    common_path = filename_cc[:-len(filename_h)]
-  return files_belong_to_same_module, common_path
-    
-    # All the missing Fares -> assume median of their respective class
-if len(test_df.Fare[ test_df.Fare.isnull() ]) > 0:
-    median_fare = np.zeros(3)
-    for f in range(0,3):                                              # loop 0 to 2
-        median_fare[f] = test_df[ test_df.Pclass == f+1 ]['Fare'].dropna().median()
-    for f in range(0,3):                                              # loop 0 to 2
-        test_df.loc[ (test_df.Fare.isnull()) & (test_df.Pclass == f+1 ), 'Fare'] = median_fare[f]
+        def _generate_symbols(self, grammar_file, target_symbol_py_file):
+        proc = subprocess.Popen([sys.executable,
+                                 GEN_SYMBOL_FILE,
+                                 grammar_file,
+                                 target_symbol_py_file], stderr=subprocess.PIPE)
+        stderr = proc.communicate()[1]
+        return proc.returncode, stderr
     
     
-def batch_iter(data, batch_size, num_epochs):
-    '''
-    Generates a batch iterator for a dataset.
-    '''
-    data = np.array(data)
-    data_size = len(data)
-    num_batches_per_epoch = int(len(data)/batch_size) + 1
-    for epoch in range(num_epochs):
-        # Shuffle the data at each epoch
-        shuffle_indices = np.random.permutation(np.arange(data_size))
-        shuffled_data = data[shuffle_indices]
-        for batch_num in range(num_batches_per_epoch):
-            start_index = batch_num * batch_size
-            end_index = min((batch_num + 1) * batch_size, data_size)
-            yield shuffled_data[start_index:end_index]
-    
-        x = conv_block(x, 3, [512, 512, 2048], stage=5, block='a')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
-    
-        # load weights
-    if weights == 'imagenet':
-        print('K.image_dim_ordering:', K.image_dim_ordering())
-        if K.image_dim_ordering() == 'th':
-            if include_top:
-                weights_path = get_file('vgg19_weights_th_dim_ordering_th_kernels.h5',
-                                        TH_WEIGHTS_PATH,
-                                        cache_subdir='models')
-            else:
-                weights_path = get_file('vgg19_weights_th_dim_ordering_th_kernels_notop.h5',
-                                        TH_WEIGHTS_PATH_NO_TOP,
-                                        cache_subdir='models')
-            model.load_weights(weights_path)
-            if K.backend() == 'tensorflow':
-                warnings.warn('You are using the TensorFlow backend, yet you '
-                              'are using the Theano '
-                              'image dimension ordering convention '
-                              '(`image_dim_ordering='th'`). '
-                              'For best performance, set '
-                              '`image_dim_ordering='tf'` in '
-                              'your Keras config '
-                              'at ~/.keras/keras.json.')
-                convert_all_kernels_in_model(model)
+def open_text(package: Package,
+              resource: Resource,
+              encoding: str = 'utf-8',
+              errors: str = 'strict') -> TextIO:
+    '''Return a file-like object opened for text reading of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return TextIOWrapper(reader.open_resource(resource), encoding, errors)
+    _check_location(package)
+    absolute_package_path = os.path.abspath(package.__spec__.origin)
+    package_path = os.path.dirname(absolute_package_path)
+    full_path = os.path.join(package_path, resource)
+    try:
+        return open(full_path, mode='r', encoding=encoding, errors=errors)
+    except OSError:
+        # Just assume the loader is a resource loader; all the relevant
+        # importlib.machinery loaders are and an AttributeError for
+        # get_data() will make it clear what is needed from the loader.
+        loader = cast(ResourceLoader, package.__spec__.loader)
+        data = None
+        if hasattr(package.__spec__.loader, 'get_data'):
+            with suppress(OSError):
+                data = loader.get_data(full_path)
+        if data is None:
+            package_name = package.__spec__.name
+            message = '{!r} resource not found in {!r}'.format(
+                resource, package_name)
+            raise FileNotFoundError(message)
         else:
-            if include_top:
-                weights_path = get_file('vgg19_weights_tf_dim_ordering_tf_kernels.h5',
-                                        TF_WEIGHTS_PATH,
-                                        cache_subdir='models')
-            else:
-                weights_path = get_file('vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5',
-                                        TF_WEIGHTS_PATH_NO_TOP,
-                                        cache_subdir='models')
-            model.load_weights(weights_path)
-            if K.backend() == 'theano':
-                convert_all_kernels_in_model(model)
-    return model
+            return TextIOWrapper(BytesIO(data), encoding, errors)
     
-        # The expression below can be re-written in a more C style as
-    # follows :
-    #
-    # out_shape    = [0,0]
-    # out_shape[0] = (img_shape[0]+tile_spacing[0])*tile_shape[0] -
-    #                tile_spacing[0]
-    # out_shape[1] = (img_shape[1]+tile_spacing[1])*tile_shape[1] -
-    #                tile_spacing[1]
-    out_shape = [
-        (ishp + tsp) * tshp - tsp
-        for ishp, tshp, tsp in zip(img_shape, tile_shape, tile_spacing)
-    ]
+    import pickle
+import sqlite3
+from collections import namedtuple
     
-    import numpy
-import theano
-from theano import config
-import theano.tensor as T
-from theano.tensor.nnet import categorical_crossentropy
-    
-    # Generate the components of the polynomial
-full_range = T.arange(max_coefficients_supported)
-outputs_info = np.zeros((), dtype=theano.config.floatX)
+            try:
+            print(pool.apply(f, (5,)))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from pool.apply()')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
