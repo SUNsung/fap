@@ -1,1078 +1,655 @@
 
         
-        private:
-    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
+        REGISTER_OP('ShapelessOp');
     
-    protected:
-    bool eventFilter(QObject *object, QEvent *event);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    static void secp256k1_rfc6979_hmac_sha256_finalize(secp256k1_rfc6979_hmac_sha256_t *rng) {
-    memset(rng->k, 0, 32);
-    memset(rng->v, 0, 32);
-    rng->retry = 0;
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    {    /* Try to multiply it by bad values */
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
-    /* ...and a good one */
-    s_overflow[31] -= 1;
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
-}
-    
-            'Lloop1_%=:'
-        'movdqa 0x0(%13),%%xmm9;'
-        'paddd  %%xmm4,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm7,%%xmm0;'
-        'mov    %k2,%10;'
-        'ror    $0xe,%10;'
-        'mov    %3,%11;'
-        'palignr $0x4,%%xmm6,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %k2,%10;'
-        'mov    %7,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm5,%%xmm1;'
-        'xor    %3,%11;'
-        'xor    %8,%12;'
-        'paddd  %%xmm4,%%xmm0;'
-        'xor    %k2,%10;'
-        'and    %k2,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm4,%%xmm1;'
-        'xor    %3,%11;'
-        'ror    $0x6,%10;'
-        'xor    %8,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %3,%10;'
-        'add    %12,%9;'
-        'mov    %3,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %5,%10;'
-        'add    %9,%6;'
-        'and    %5,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %4,%10;'
-        'add    %11,%9;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%9;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %6,%10;'
-        'mov    %9,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %6,%10;'
-        'mov    %k2,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %9,%11;'
-        'ror    $0x5,%10;'
-        'xor    %7,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %6,%10;'
-        'and    %6,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %9,%11;'
-        'xor    %7,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %9,%10;'
-        'add    %12,%8;'
-        'mov    %9,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %4,%10;'
-        'add    %8,%5;'
-        'and    %4,%12;'
-        'pshufd $0xfa,%%xmm7,%%xmm2;'
-        'and    %3,%10;'
-        'add    %11,%8;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%8;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %5,%10;'
-        'mov    %8,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %5,%10;'
-        'ror    $0x9,%11;'
-        'mov    %6,%12;'
-        'xor    %8,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %k2,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %5,%10;'
-        'and    %5,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %8,%11;'
-        'xor    %k2,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %8,%10;'
-        'add    %12,%7;'
-        'mov    %8,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %3,%10;'
-        'add    %7,%4;'
-        'and    %3,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %9,%10;'
-        'add    %11,%7;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%7;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %4,%10;'
-        'ror    $0xe,%10;'
-        'mov    %7,%11;'
-        'movdqa %%xmm2,%%xmm4;'
-        'ror    $0x9,%11;'
-        'xor    %4,%10;'
-        'mov    %5,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %7,%11;'
-        'xor    %6,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %4,%10;'
-        'and    %4,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm4;'
-        'xor    %7,%11;'
-        'ror    $0x6,%10;'
-        'xor    %6,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm4;'
-        'mov    %7,%10;'
-        'add    %12,%k2;'
-        'mov    %7,%12;'
-        'pshufb %%xmm11,%%xmm4;'
-        'or     %9,%10;'
-        'add    %k2,%3;'
-        'and    %9,%12;'
-        'paddd  %%xmm0,%%xmm4;'
-        'and    %8,%10;'
-        'add    %11,%k2;'
-        'or     %12,%10;'
-        'add    %10,%k2;'
-        'movdqa 0x10(%13),%%xmm9;'
-        'paddd  %%xmm5,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm4,%%xmm0;'
-        'mov    %3,%10;'
-        'ror    $0xe,%10;'
-        'mov    %k2,%11;'
-        'palignr $0x4,%%xmm7,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %3,%10;'
-        'mov    %4,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm6,%%xmm1;'
-        'xor    %k2,%11;'
-        'xor    %5,%12;'
-        'paddd  %%xmm5,%%xmm0;'
-        'xor    %3,%10;'
-        'and    %3,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm5,%%xmm1;'
-        'xor    %k2,%11;'
-        'ror    $0x6,%10;'
-        'xor    %5,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %k2,%10;'
-        'add    %12,%6;'
-        'mov    %k2,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %8,%10;'
-        'add    %6,%9;'
-        'and    %8,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %7,%10;'
-        'add    %11,%6;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%6;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %9,%10;'
-        'mov    %6,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %9,%10;'
-        'mov    %3,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %6,%11;'
-        'ror    $0x5,%10;'
-        'xor    %4,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %9,%10;'
-        'and    %9,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %6,%11;'
-        'xor    %4,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %6,%10;'
-        'add    %12,%5;'
-        'mov    %6,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %7,%10;'
-        'add    %5,%8;'
-        'and    %7,%12;'
-        'pshufd $0xfa,%%xmm4,%%xmm2;'
-        'and    %k2,%10;'
-        'add    %11,%5;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%5;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %8,%10;'
-        'mov    %5,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %8,%10;'
-        'ror    $0x9,%11;'
-        'mov    %9,%12;'
-        'xor    %5,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %3,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %8,%10;'
-        'and    %8,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %5,%11;'
-        'xor    %3,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %5,%10;'
-        'add    %12,%4;'
-        'mov    %5,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %k2,%10;'
-        'add    %4,%7;'
-        'and    %k2,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %6,%10;'
-        'add    %11,%4;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%4;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %7,%10;'
-        'ror    $0xe,%10;'
-        'mov    %4,%11;'
-        'movdqa %%xmm2,%%xmm5;'
-        'ror    $0x9,%11;'
-        'xor    %7,%10;'
-        'mov    %8,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %4,%11;'
-        'xor    %9,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %7,%10;'
-        'and    %7,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm5;'
-        'xor    %4,%11;'
-        'ror    $0x6,%10;'
-        'xor    %9,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm5;'
-        'mov    %4,%10;'
-        'add    %12,%3;'
-        'mov    %4,%12;'
-        'pshufb %%xmm11,%%xmm5;'
-        'or     %6,%10;'
-        'add    %3,%k2;'
-        'and    %6,%12;'
-        'paddd  %%xmm0,%%xmm5;'
-        'and    %5,%10;'
-        'add    %11,%3;'
-        'or     %12,%10;'
-        'add    %10,%3;'
-        'movdqa 0x20(%13),%%xmm9;'
-        'paddd  %%xmm6,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm5,%%xmm0;'
-        'mov    %k2,%10;'
-        'ror    $0xe,%10;'
-        'mov    %3,%11;'
-        'palignr $0x4,%%xmm4,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %k2,%10;'
-        'mov    %7,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm7,%%xmm1;'
-        'xor    %3,%11;'
-        'xor    %8,%12;'
-        'paddd  %%xmm6,%%xmm0;'
-        'xor    %k2,%10;'
-        'and    %k2,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm6,%%xmm1;'
-        'xor    %3,%11;'
-        'ror    $0x6,%10;'
-        'xor    %8,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %3,%10;'
-        'add    %12,%9;'
-        'mov    %3,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %5,%10;'
-        'add    %9,%6;'
-        'and    %5,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %4,%10;'
-        'add    %11,%9;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%9;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %6,%10;'
-        'mov    %9,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %6,%10;'
-        'mov    %k2,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %9,%11;'
-        'ror    $0x5,%10;'
-        'xor    %7,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %6,%10;'
-        'and    %6,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %9,%11;'
-        'xor    %7,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %9,%10;'
-        'add    %12,%8;'
-        'mov    %9,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %4,%10;'
-        'add    %8,%5;'
-        'and    %4,%12;'
-        'pshufd $0xfa,%%xmm5,%%xmm2;'
-        'and    %3,%10;'
-        'add    %11,%8;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%8;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %5,%10;'
-        'mov    %8,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %5,%10;'
-        'ror    $0x9,%11;'
-        'mov    %6,%12;'
-        'xor    %8,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %k2,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %5,%10;'
-        'and    %5,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %8,%11;'
-        'xor    %k2,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %8,%10;'
-        'add    %12,%7;'
-        'mov    %8,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %3,%10;'
-        'add    %7,%4;'
-        'and    %3,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %9,%10;'
-        'add    %11,%7;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%7;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %4,%10;'
-        'ror    $0xe,%10;'
-        'mov    %7,%11;'
-        'movdqa %%xmm2,%%xmm6;'
-        'ror    $0x9,%11;'
-        'xor    %4,%10;'
-        'mov    %5,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %7,%11;'
-        'xor    %6,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %4,%10;'
-        'and    %4,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm6;'
-        'xor    %7,%11;'
-        'ror    $0x6,%10;'
-        'xor    %6,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm6;'
-        'mov    %7,%10;'
-        'add    %12,%k2;'
-        'mov    %7,%12;'
-        'pshufb %%xmm11,%%xmm6;'
-        'or     %9,%10;'
-        'add    %k2,%3;'
-        'and    %9,%12;'
-        'paddd  %%xmm0,%%xmm6;'
-        'and    %8,%10;'
-        'add    %11,%k2;'
-        'or     %12,%10;'
-        'add    %10,%k2;'
-        'movdqa 0x30(%13),%%xmm9;'
-        'paddd  %%xmm7,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'add    $0x40,%13;'
-        'movdqa %%xmm6,%%xmm0;'
-        'mov    %3,%10;'
-        'ror    $0xe,%10;'
-        'mov    %k2,%11;'
-        'palignr $0x4,%%xmm5,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %3,%10;'
-        'mov    %4,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm4,%%xmm1;'
-        'xor    %k2,%11;'
-        'xor    %5,%12;'
-        'paddd  %%xmm7,%%xmm0;'
-        'xor    %3,%10;'
-        'and    %3,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm7,%%xmm1;'
-        'xor    %k2,%11;'
-        'ror    $0x6,%10;'
-        'xor    %5,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %k2,%10;'
-        'add    %12,%6;'
-        'mov    %k2,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %8,%10;'
-        'add    %6,%9;'
-        'and    %8,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %7,%10;'
-        'add    %11,%6;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%6;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %9,%10;'
-        'mov    %6,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %9,%10;'
-        'mov    %3,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %6,%11;'
-        'ror    $0x5,%10;'
-        'xor    %4,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %9,%10;'
-        'and    %9,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %6,%11;'
-        'xor    %4,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %6,%10;'
-        'add    %12,%5;'
-        'mov    %6,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %7,%10;'
-        'add    %5,%8;'
-        'and    %7,%12;'
-        'pshufd $0xfa,%%xmm6,%%xmm2;'
-        'and    %k2,%10;'
-        'add    %11,%5;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%5;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %8,%10;'
-        'mov    %5,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %8,%10;'
-        'ror    $0x9,%11;'
-        'mov    %9,%12;'
-        'xor    %5,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %3,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %8,%10;'
-        'and    %8,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %5,%11;'
-        'xor    %3,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %5,%10;'
-        'add    %12,%4;'
-        'mov    %5,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %k2,%10;'
-        'add    %4,%7;'
-        'and    %k2,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %6,%10;'
-        'add    %11,%4;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%4;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %7,%10;'
-        'ror    $0xe,%10;'
-        'mov    %4,%11;'
-        'movdqa %%xmm2,%%xmm7;'
-        'ror    $0x9,%11;'
-        'xor    %7,%10;'
-        'mov    %8,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %4,%11;'
-        'xor    %9,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %7,%10;'
-        'and    %7,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm7;'
-        'xor    %4,%11;'
-        'ror    $0x6,%10;'
-        'xor    %9,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm7;'
-        'mov    %4,%10;'
-        'add    %12,%3;'
-        'mov    %4,%12;'
-        'pshufb %%xmm11,%%xmm7;'
-        'or     %6,%10;'
-        'add    %3,%k2;'
-        'and    %6,%12;'
-        'paddd  %%xmm0,%%xmm7;'
-        'and    %5,%10;'
-        'add    %11,%3;'
-        'or     %12,%10;'
-        'add    %10,%3;'
-        'sub    $0x1,%1;'
-        'jne    Lloop1_%=;'
-        'mov    $0x2,%1;'
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    class EventListener : public Base {
-  std::map<int, BaseEvent*> listerners_;
+    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result) {
+  int size = 1;
+  for (int i = 0; i < dim_size; ++i) {
+    size *= dims[i];
+  }
+  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
+    return errors::FailedPrecondition(
+        'Cannot convert strings, resources, or empty Tensors.');
+  }
     }
     
-    class ObjectManager;
+    #endif  // TENSORFLOW_PYTHON_UTIL_KERNEL_REGISTRY_H_
+
     
     
-    {  focus_manager_ = NULL;
-}
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
+
     
-    #include 'content/nw/src/api/menuitem/menuitem.h'
+      // Synchronize with spinlocks.
+  static const unsigned kScheduleSpin = 0x02;
+  // Synchronize with spinlocks that also call CPU yield instructions.
+  static const unsigned kScheduleYield = 0x04;
+  // Synchronize with a 'synchronization primitive' (e.g. mutex).
+  static const unsigned kScheduleBlockingSync = 0x08;
     
-    void MenuItem::Create(const base::DictionaryValue& option) {
-  std::string type;
-  option.GetString('type', &type);
-  submenu_ = NULL;
-  gtk_accel_group = NULL;
-    }
+      // Returns a pointer to the described executor (if one with a matching config
+  // has been created), or a NOT_FOUND status.
+  port::StatusOr<StreamExecutor*> Get(const StreamExecutorConfig& config);
     
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+    #endif  // TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_PLATFORM_H_
+
     
-    // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
-// executed:
-//
-//   1. It generates a warning if there is more than one active
-//   thread.  This is because it's safe to fork() or clone() only
-//   when there is a single thread.
-//
-//   2. The parent process clone()s a sub-process and runs the death
-//   test in it; the sub-process exits with code 0 at the end of the
-//   death test, if it hasn't exited already.
-//
-//   3. The parent process waits for the sub-process to terminate.
-//
-//   4. The parent process checks the exit code and error message of
-//   the sub-process.
-//
-// Examples:
-//
-//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
-//   for (int i = 0; i < 5; i++) {
-//     EXPECT_DEATH(server.ProcessRequest(i),
-//                  'Invalid request .* in ProcessRequest()')
-//                  << 'Failed to die on request ' << i;
-//   }
-//
-//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
-//
-//   bool KilledBySIGHUP(int exit_code) {
-//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
-//   }
-//
-//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
-//
-// On the regular expressions used in death tests:
-//
-//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
-//   which uses the POSIX extended regex syntax.
-//
-//   On other platforms (e.g. Windows), we only support a simple regex
-//   syntax implemented as part of Google Test.  This limited
-//   implementation should be enough most of the time when writing
-//   death tests; though it lacks many features you can find in PCRE
-//   or POSIX extended regex syntax.  For example, we don't support
-//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
-//   repetition count ('x{5,7}'), among others.
-//
-//   Below is the syntax that we do support.  We chose it to be a
-//   subset of both PCRE and POSIX extended regex, so it's easy to
-//   learn wherever you come from.  In the following: 'A' denotes a
-//   literal character, period (.), or a single \\ escape sequence;
-//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
-//   natural numbers.
-//
-//     c     matches any literal character c
-//     \\d   matches any decimal digit
-//     \\D   matches any character that's not a decimal digit
-//     \\f   matches \f
-//     \\n   matches \n
-//     \\r   matches \r
-//     \\s   matches any ASCII whitespace, including \n
-//     \\S   matches any character that's not a whitespace
-//     \\t   matches \t
-//     \\v   matches \v
-//     \\w   matches any letter, _, or decimal digit
-//     \\W   matches any character that \\w doesn't match
-//     \\c   matches any literal character c, which must be a punctuation
-//     .     matches any single character except \n
-//     A?    matches 0 or 1 occurrences of A
-//     A*    matches 0 or many occurrences of A
-//     A+    matches 1 or many occurrences of A
-//     ^     matches the beginning of a string (not that of each line)
-//     $     matches the end of a string (not that of each line)
-//     xy    matches x followed by y
-//
-//   If you accidentally use PCRE or POSIX extended regex features
-//   not implemented by us, you will get a run-time failure.  In that
-//   case, please try to rewrite your regular expression within the
-//   above syntax.
-//
-//   This implementation is *not* meant to be as highly tuned or robust
-//   as a compiled regex library, but should perform well enough for a
-//   death test, which already incurs significant overhead by launching
-//   a child process.
-//
-// Known caveats:
-//
-//   A 'threadsafe' style death test obtains the path to the test
-//   program from argv[0] and re-executes it in the sub-process.  For
-//   simplicity, the current implementation doesn't search the PATH
-//   when launching the sub-process.  This means that the user must
-//   invoke the test program via a path that contains at least one
-//   path separator (e.g. path/to/foo_test and
-//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
-//   is rarely a problem as people usually don't put the test binary
-//   directory in PATH.
-//
-// TODO(wan@google.com): make thread-safe death tests search the PATH.
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
-                on_failure)
-    
-    // Returns a newly created InternalRunDeathTestFlag object with fields
-// initialized from the GTEST_FLAG(internal_run_death_test) flag if
-// the flag is specified; otherwise returns NULL.
-InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
+        internal::assertSupportedConfiguration();
     
     
-template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7>
-class CartesianProductGenerator7
-    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
-        T7> > {
- public:
-  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7> ParamType;
-    }
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
-};
-    
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
-    
-    
-// Queue is a simple queue implemented as a singled-linked list.
-//
-// The element type must support copy constructor.
-template <typename E>  // E is the element type
-class Queue;
-    
-    		case Image::Format::RGBA8:
-		case Image::Format::SRGBA8:
-			if (a_errormetric == RGBX)
-			{
-				m_pencoding = new Block4x4Encoding_RGBA8;
-			}
-			else
-			{
-				switch (m_sourcealphamix)
-				{
-				case SourceAlphaMix::OPAQUE:
-					m_pencoding = new Block4x4Encoding_RGBA8_Opaque;
-					break;
-    }
-    }
-    
-    			// Favor Luma accuracy over Chroma, and Red over Blue 
-			return LUMA_WEIGHT*fDeltaL*fDeltaL +
-					fDeltaCr*fDeltaCr +
-					CHROMA_BLUE_WEIGHT*fDeltaCb*fDeltaCb +
-					fDAlpha*fDAlpha;
-	#if 0
-			float fDRed = a_frgbaDecodedPixel.fR - a_frgbaSourcePixel.fR;
-			float fDGreen = a_frgbaDecodedPixel.fG - a_frgbaSourcePixel.fG;
-			float fDBlue = a_frgbaDecodedPixel.fB - a_frgbaSourcePixel.fB;
-			return 2.0f * 3.0f * fDeltaL * fDeltaL + fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue;
+    {
+    {         vst1q_u8(_dst + i, vcombine_u8(vline1_u8, vline2_u8));
+     }
+})
 #endif
-		}
-		else if (m_errormetric == ErrorMetric::NORMALXYZ)
-		{
-			float fDecodedX = 2.0f * a_frgbaDecodedColor.fR - 1.0f;
-			float fDecodedY = 2.0f * a_frgbaDecodedColor.fG - 1.0f;
-			float fDecodedZ = 2.0f * a_frgbaDecodedColor.fB - 1.0f;
     
-    	// ----------------------------------------------------------------------------------------------------
-	// set the decoded colors and decoded alpha based on the encoding state
-	//
-	void Block4x4Encoding_ETC1::Decode(void)
-	{
-    }
-    
-    
-  /*
-   *  The next functions shouldn't normally be exported.  However, other
-   *  writing systems might like to use these functions as-is.
-   */
-  FT_LOCAL( FT_Error )
-  af_latin_hints_compute_segments( AF_GlyphHints  hints,
-                                   AF_Dimension   dim );
-    
-    #ifndef clipper_hpp
-#define clipper_hpp
-    
-    #ifndef ARCH_H
-#define ARCH_H
-    
-    /** 16x16 multiplication where the result fits in 32 bits */
-#undef MULT16_16
-static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_16\n\t'
-      'smulbb %0, %1, %2;\n'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
-    
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
-    
-    
-    {}  // namespace
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusServerCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusServerCallData : public CallData {
- public:
-  // Maximum size of server stats that are sent on the wire.
-  static constexpr uint32_t kMaxServerStatsLen = 16;
-    }
-    
-    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
-    
-    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
-    : shutdown_(false),
-      reserve_threads_(reserve_threads),
-      nthreads_(0),
-      threads_waiting_(0) {
-  for (int i = 0; i < reserve_threads_; i++) {
-    std::lock_guard<std::mutex> lock(mu_);
-    nthreads_++;
-    new DynamicThread(this);
-  }
-}
-    
-        ProgressWriter::ProgressWriter(size_t trainingUpdateWriteFrequency, size_t trainingFirstUpdatesToWrite,
-                                   size_t testUpdateWriteFrequency, size_t testFirstUpdatesToWrite,
-                                   size_t distributedSyncUpdateWriteFrequency, size_t distributedSyncFirstUpdatesToWrite)
-        : m_training(std::make_unique<Impl>(trainingUpdateWriteFrequency, trainingFirstUpdatesToWrite)),
-        m_test(std::make_unique<Impl>(testUpdateWriteFrequency, testFirstUpdatesToWrite)),
-        m_distributedSync(std::make_unique<Impl>(distributedSyncUpdateWriteFrequency, distributedSyncFirstUpdatesToWrite))
-    {
-    }
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
+            if (i < roiw4)
         {
-            m_aggregateTimer.Start();
-        }
+            internal::prefetch(src + i + 2);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
     }
     
-    
-    {} // namespace aria2
-    
-    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
-    
-    class DHTNode;
-    
-    void DHTRoutingTableSerializer::serialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
-  std::string filenameTemp = filename;
-  filenameTemp += '__temp';
-  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
+            while(i + 16 <= size.width)
+        {
+            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
     }
     
-    class DHTRoutingTableSerializer {
-private:
-  int family_;
-    }
+                vec128 v_src = vld3q(src + js), v_dst;
+            v_src.val[0] = vrev64q(v_src.val[0]);
+            v_src.val[1] = vrev64q(v_src.val[1]);
+            v_src.val[2] = vrev64q(v_src.val[2]);
     
-        dispatcher->setTimeout(std::chrono::seconds(messageTimeout));
+                    uint8x8x3_t vRes;
+                vRes.val[0] = vrshrn_n_u16(vSum_0_4, 8);
+                vRes.val[1] = vrshrn_n_u16(vSum_1_5, 8);
+                vRes.val[2] = vrshrn_n_u16(vSum_2_6, 8);
     
+    // Prints the given value using the << operator if it has one;
+// otherwise prints the bytes in it.  This is what
+// UniversalPrinter<T>::Print() does when PrintTo() is not specialized
+// or overloaded for type T.
+//
+// A user can override this behavior for a class type Foo by defining
+// an overload of PrintTo() in the namespace where Foo is defined.  We
+// give the user this option as sometimes defining a << operator for
+// Foo is not desirable (e.g. the coding style may prevent doing it,
+// or there is already a << operator but it doesn't do what the user
+// wants).
+template <typename T>
+void PrintTo(const T& value, ::std::ostream* os) {
+  // DefaultPrintTo() is overloaded.  The type of its first two
+  // arguments determine which version will be picked.  If T is an
+  // STL-style container, the version for container will be called; if
+  // T is a pointer, the pointer version will be called; otherwise the
+  // generic version will be called.
+  //
+  // Note that we check for container types here, prior to we check
+  // for protocol message types in our operator<<.  The rationale is:
+  //
+  // For protocol messages, we want to give people a chance to
+  // override Google Mock's format by defining a PrintTo() or
+  // operator<<.  For STL containers, other formats can be
+  // incompatible with Google Mock's format for the container
+  // elements; therefore we check for container types here to ensure
+  // that our format is used.
+  //
+  // The second argument of DefaultPrintTo() is needed to bypass a bug
+  // in Symbian's C++ compiler that prevents it from picking the right
+  // overload between:
+  //
+  //   PrintTo(const T& x, ...);
+  //   PrintTo(T* x, ...);
+  DefaultPrintTo(IsContainerTest<T>(0), is_pointer<T>(), value, os);
+}
     
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
+    // Binary predicate assertion macros.
+#define EXPECT_PRED_FORMAT2(pred_format, v1, v2) \
+  GTEST_PRED_FORMAT2_(pred_format, v1, v2, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED2(pred, v1, v2) \
+  GTEST_PRED2_(pred, v1, v2, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT2(pred_format, v1, v2) \
+  GTEST_PRED_FORMAT2_(pred_format, v1, v2, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED2(pred, v1, v2) \
+  GTEST_PRED2_(pred, v1, v2, GTEST_FATAL_FAILURE_)
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4>
+struct Templates4 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates3<T2, T3, T4> Tail;
 };
     
-    namespace aria2 {
-    }
+    #ifndef GTEST_SAMPLES_SAMPLE2_H_
+#define GTEST_SAMPLES_SAMPLE2_H_
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
-{
-  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
-  setCommonProperty(task);
-  return task;
+    MeasureInt64 RpcClientSentMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientSentMessagesPerRpcMeasureName,
+                             'Number of messages sent per RPC', kCount);
+  return measure;
 }
     
-    class DHTTaskQueue {
-public:
-  virtual ~DHTTaskQueue() = default;
+    
+    {}  // namespace grpc
+
+    
+    namespace grpc {
+namespace load_reporter {
+    }
     }
     
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port) const
-{
-  return generateToken(infoHash, ipaddr, port, secret_[0]);
+    
+    {}  // namespace leveldb
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
 }
     
-      template <typename OutputIterator>
-  void findAll(OutputIterator out, const std::string& hostname,
-               uint16_t port) const
-  {
-    auto target = std::make_shared<CacheEntry>(hostname, port);
-    auto i = entries_.find(target);
-    if (i != entries_.end()) {
-      (*i)->getAllGoodAddrs(out);
+    bool GuessType(const std::string& fname, FileType* type) {
+  size_t pos = fname.rfind('/');
+  std::string basename;
+  if (pos == std::string::npos) {
+    basename = fname;
+  } else {
+    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
+  }
+  uint64_t ignored;
+  return ParseFileName(basename, &ignored, type);
+}
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
     }
   }
+  return (ok ? 0 : 1);
+}
+
     
-      oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-    
-      ExtensionManager_extensions_result(const ExtensionManager_extensions_result&);
-  ExtensionManager_extensions_result& operator=(const ExtensionManager_extensions_result&);
-  ExtensionManager_extensions_result() {
+      virtual bool Valid() const { return iter_.Valid(); }
+  virtual void Seek(const Slice& k) { iter_.Seek(EncodeKey(&tmp_, k)); }
+  virtual void SeekToFirst() { iter_.SeekToFirst(); }
+  virtual void SeekToLast() { iter_.SeekToLast(); }
+  virtual void Next() { iter_.Next(); }
+  virtual void Prev() { iter_.Prev(); }
+  virtual Slice key() const { return GetLengthPrefixedSlice(iter_.key()); }
+  virtual Slice value() const {
+    Slice key_slice = GetLengthPrefixedSlice(iter_.key());
+    return GetLengthPrefixedSlice(key_slice.data() + key_slice.size());
   }
     
-    using namespace ::apache::thrift;
-using namespace ::apache::thrift::protocol;
-using namespace ::apache::thrift::transport;
-using namespace ::apache::thrift::server;
+      // Add the specified file at the specified number.
+  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
+  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
+  void AddFile(int level, uint64_t file,
+               uint64_t file_size,
+               const InternalKey& smallest,
+               const InternalKey& largest) {
+    FileMetaData f;
+    f.number = file;
+    f.file_size = file_size;
+    f.smallest = smallest;
+    f.largest = largest;
+    new_files_.push_back(std::make_pair(level, f));
+  }
     
-    /**
- * @brief Queries SMART devices on the system by autodetection and explicit
- * storage controller arguments.
- *
- * @param client libsmartctl client
- * @param walk_func function that walks the system devices and runs the handler
- * function on each device
- * @param results reference to QueryData to store results in
+    
+    {    elem_of_each_node_[left_node_id] = Elem(begin, split_pt, left_node_id);
+    elem_of_each_node_[right_node_id] = Elem(split_pt, e.end, right_node_id);
+    elem_of_each_node_[node_id] = Elem(nullptr, nullptr, -1);
+  }
+    
+    SEXP XGBoosterUpdateOneIter_R(SEXP handle, SEXP iter, SEXP dtrain) {
+  R_API_BEGIN();
+  CHECK_CALL(XGBoosterUpdateOneIter(R_ExternalPtrAddr(handle),
+                                  asInteger(iter),
+                                  R_ExternalPtrAddr(dtrain)));
+  R_API_END();
+  return R_NilValue;
+}
+    
+    /*! \brief try to do efficient pruning */
+template<typename DType, typename RType>
+struct WXQSummary : public WQSummary<DType, RType> {
+  // redefine entry type
+  using Entry = typename WQSummary<DType, RType>::Entry;
+  // constructor
+  WXQSummary(Entry *data, size_t size)
+      : WQSummary<DType, RType>(data, size) {}
+  // check if the block is large chunk
+  inline static bool CheckLarge(const Entry &e, RType chunk) {
+    return  e.RMinNext() > e.RMaxPrev() + chunk;
+  }
+  // set prune
+  inline void SetPrune(const WQSummary<DType, RType> &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    RType begin = src.data[0].rmax;
+    // n is number of points exclude the min/max points
+    size_t n = maxsize - 2, nbig = 0;
+    // these is the range of data exclude the min/max point
+    RType range = src.data[src.size - 1].rmin - begin;
+    // prune off zero weights
+    if (range == 0.0f || maxsize <= 2) {
+      // special case, contain only two effective data pts
+      this->data[0] = src.data[0];
+      this->data[1] = src.data[src.size - 1];
+      this->size = 2;
+      return;
+    } else {
+      range = std::max(range, static_cast<RType>(1e-3f));
+    }
+    // Get a big enough chunk size, bigger than range / n
+    // (multiply by 2 is a safe factor)
+    const RType chunk = 2 * range / n;
+    // minimized range
+    RType mrange = 0;
+    {
+      // first scan, grab all the big chunk
+      // moving block index, exclude the two ends.
+      size_t bid = 0;
+      for (size_t i = 1; i < src.size - 1; ++i) {
+        // detect big chunk data point in the middle
+        // always save these data points.
+        if (CheckLarge(src.data[i], chunk)) {
+          if (bid != i - 1) {
+            // accumulate the range of the rest points
+            mrange += src.data[i].RMaxPrev() - src.data[bid].RMinNext();
+          }
+          bid = i; ++nbig;
+        }
+      }
+      if (bid != src.size - 2) {
+        mrange += src.data[src.size-1].RMaxPrev() - src.data[bid].RMinNext();
+      }
+    }
+    // assert: there cannot be more than n big data points
+    if (nbig >= n) {
+      // see what was the case
+      LOG(INFO) << ' check quantile stats, nbig=' << nbig << ', n=' << n;
+      LOG(INFO) << ' srcsize=' << src.size << ', maxsize=' << maxsize
+                << ', range=' << range << ', chunk=' << chunk;
+      src.Print();
+      CHECK(nbig < n) << 'quantile: too many large chunk';
+    }
+    this->data[0] = src.data[0];
+    this->size = 1;
+    // The counter on the rest of points, to be selected equally from small chunks.
+    n = n - nbig;
+    // find the rest of point
+    size_t bid = 0, k = 1, lastidx = 0;
+    for (size_t end = 1; end < src.size; ++end) {
+      if (end == src.size - 1 || CheckLarge(src.data[end], chunk)) {
+        if (bid != end - 1) {
+          size_t i = bid;
+          RType maxdx2 = src.data[end].RMaxPrev() * 2;
+          for (; k < n; ++k) {
+            RType dx2 =  2 * ((k * mrange) / n + begin);
+            if (dx2 >= maxdx2) break;
+            while (i < end &&
+                   dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+            if (i == end) break;
+            if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+              if (i != lastidx) {
+                this->data[this->size++] = src.data[i]; lastidx = i;
+              }
+            } else {
+              if (i + 1 != lastidx) {
+                this->data[this->size++] = src.data[i + 1]; lastidx = i + 1;
+              }
+            }
+          }
+        }
+        if (lastidx != end) {
+          this->data[this->size++] = src.data[end];
+          lastidx = end;
+        }
+        bid = end;
+        // shift base by the gap
+        begin += src.data[bid].RMinNext() - src.data[bid].RMaxPrev();
+      }
+    }
+  }
+};
+/*!
+ * \brief traditional GK summary
  */
-void querySmartDevices(
-    libsmartctl::ClientInterface& client,
-    std::function<void(
-        std::function<void(const std::string&, hardwareDriver*)>)> walk_func,
-    QueryData& results);
+template<typename DType, typename RType>
+struct GKSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    Entry() = default;
+    // constructor
+    Entry(RType rmin, RType rmax, DType value)
+        : rmin(rmin), rmax(rmax), value(value) {}
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // the input queue
+    std::vector<DType> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      queue[qtail++] = x;
+    }
+    inline void MakeSummary(GKSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = qtail;
+      for (size_t i = 0; i < qtail; ++i) {
+        out->data[i] = Entry(i + 1, i + 1, queue[i]);
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  GKSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*! \brief the maximum error of the summary */
+  inline RType MaxError() const {
+    RType res = 0;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].rmax - data[i-1].rmin, res);
+    }
+    return res;
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const GKSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void CheckValid(RType eps) const {
+    // assume always valid
+  }
+  /*! \brief used for debug purpose, print the summary */
+  inline void Print() const {
+    for (size_t i = 0; i < size; ++i) {
+      LOG(CONSOLE) << 'x=' << data[i].value << '\t'
+                   << '[' << data[i].rmin << ',' << data[i].rmax << ']';
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+  inline void SetPrune(const GKSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType max_rank = src.MaxRank();
+    this->size = maxsize;
+    data[0] = src.data[0];
+    size_t n = maxsize - 1;
+    RType top = 1;
+    for (size_t i = 1; i < n; ++i) {
+      RType k = (i * max_rank) / n;
+      while (k > src.data[top + 1].rmax) ++top;
+      // assert src.data[top].rmin <= k
+      // because k > src.data[top].rmax >= src.data[top].rmin
+      if ((k - src.data[top].rmin) < (src.data[top+1].rmax - k)) {
+        data[i] = src.data[top];
+      } else {
+        data[i] = src.data[top + 1];
+      }
+    }
+    data[n] = src.data[src.size - 1];
+  }
+  inline void SetCombine(const GKSummary &sa,
+                         const GKSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0) << 'invalid input for merge';
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    this->size = sa.size + sb.size;
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      if (a->value < b->value) {
+        *dst = Entry(bprev_rmin + a->rmin,
+                     a->rmax + b->rmax - 1, a->value);
+        aprev_rmin = a->rmin;
+        ++dst; ++a;
+      } else {
+        *dst = Entry(aprev_rmin + b->rmin,
+                     b->rmax + a->rmax - 1, b->value);
+        bprev_rmin = b->rmin;
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType bprev_rmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(bprev_rmin + a->rmin, bprev_rmax + a->rmax, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType aprev_rmax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(aprev_rmin + b->rmin, aprev_rmax + b->rmax, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    CHECK(dst == data + size) << 'bug in combine';
+  }
+};
     
-    TEST_F(iokitRegistry, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from iokit_registry');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'name', NormalType}
-  //      {'class', NormalType}
-  //      {'id', IntType}
-  //      {'parent', IntType}
-  //      {'busy_state', IntType}
-  //      {'retain_count', IntType}
-  //      {'depth', IntType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
+    
+    { private:
+  MyLogisticParam param_;
+};
+    
+    
+    {
+    {}  // namespace data
+}  // namespace xgboost
+
+    
+    BatchSet SimpleDMatrix::GetRowBatches() {
+  auto cast = dynamic_cast<SimpleCSRSource*>(source_.get());
+  auto begin_iter = BatchIterator(new SimpleBatchIteratorImpl(&(cast->page_)));
+  return BatchSet(begin_iter);
 }
     
-    // Sanity check integration test for kernel_extensions
-// Spec file: specs/darwin/kernel_extensions.table
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    // Sanity check integration test for keychain_items
-// Spec file: specs/darwin/keychain_items.table
+    
+    {    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
+    
+    /** @class ToggleVisibility
+* @brief Toggles the visibility of a node.
+*/
+class CC_DLL ToggleVisibility : public ActionInstant
+{
+public:
+    /** Allocates and initializes the action.
+     *
+     * @return An autoreleased ToggleVisibility object.
+     */
+    static ToggleVisibility * create();
+    }
+    
+        /** Removes an action given its tag and the target.
+     *
+     * @param tag       The action's tag.
+     * @param target    A certain target.
+     */
+    virtual void removeActionByTag(int tag, Node *target);
+    
+    /** Removes all actions given its tag and the target.
+     *
+     * @param tag       The actions' tag.
+     * @param target    A certain target.
+     * @js NA
+     */
+    virtual void removeAllActionsByTag(int tag, Node *target);
+    
+    
+    {// end of actions group
+/// @}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+    
+    {        return true;
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CCACTIONTWEEN_H__
+#define __CCACTIONTWEEN_H__
+    
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+        /** Adds an animation from an NSDictionary.
+     * Make sure that the frames were previously loaded in the SpriteFrameCache.
+     * @param dictionary An NSDictionary.
+     * @param plist The path of the relative file,it use to find the plist path for load SpriteFrames.
+     * @since v1.1
+	 @js NA
+     */
+    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
+    
+    void AtlasNode::updateBlendFunc()
+{
+    if( ! _textureAtlas->getTexture()->hasPremultipliedAlpha() )
+    {
+        _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
+        setOpacityModifyRGB(false);
+    }
+    else
+    {
+        _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
+        setOpacityModifyRGB(true);
+    }
+}
