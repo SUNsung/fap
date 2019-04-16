@@ -1,182 +1,177 @@
 
         
-                if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
+        data_train_truth = nparray_and_transpose(data_train_truth)
+data_valid_truth = nparray_and_transpose(data_valid_truth)
+data_train_spiking = nparray_and_transpose(data_train_spiking)
+data_valid_spiking = nparray_and_transpose(data_valid_spiking)
+    
+    # not the best way to do this but E is small enough
+rates = []
+spikes = []
+for trial in xrange(E):
+  if rnn_to_use[trial] == 0:
+    rates.append(rates_a[trial])
+    spikes.append(spikes_a[trial])
+  else:
+    rates.append(rates_b[trial])
+    spikes.append(spikes_b[trial])
+    
+        # Group maintain averages op.
+    if averages_op:
+      gen_train_op = tf.group(maximize_op, averages_op)
+    else:
+      gen_train_op = maximize_op
+    
+        def __repr__(self):
+        return str(dict(self.items()))
+    
+        @get_item_parameters
+    def test_getitem(self, key, value):
+        assert self.lookup_dict[key] == value
+    
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
+    
+    from base64 import b64encode
+    
+    import chardet
+    
+        if hasattr(jar, 'copy'):
+        # We're dealing with an instance of RequestsCookieJar
+        return jar.copy()
+    # We're dealing with a generic CookieJar instance
+    new_jar = copy.copy(jar)
+    new_jar.clear()
+    for cookie in jar:
+        new_jar.set_cookie(copy.copy(cookie))
+    return new_jar
+    
+        @pytest.mark.parametrize(
+        'url', (
+            'http://192.168.1.1:5000/',
+            'http://192.168.1.1/',
+            'http://www.requests.com/',
+        ))
+    def test_not_bypass(self, url):
+        assert get_environ_proxies(url, no_proxy=None) != {}
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'GroupCommitResolution'
+        db.create_table(
+            'sentry_groupcommitresolution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'group_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'commit_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'datetime', self.gf('django.db.models.fields.DateTimeField')(
+                        db_index=True
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['GroupCommitResolution'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'VersionDSymFile'
+        db.create_table(
+            'sentry_versiondsymfile', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProjectDSymFile'], null=True
+                    )
+                ), (
+                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.DSymApp']
+                    )
+                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
+                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['VersionDSymFile'])
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+            users = orm.User.objects.exclude(
+            email__in=orm.UserEmail.objects.all().values_list('email', flat=True)
+        )
+    
+            # Deleting field 'CommitAuthor.external_id'
+        db.delete_column('sentry_commitauthor', 'external_id')
+    
+        def __init__(self, idf_path=None):
+        self.tokenizer = jieba.dt
+        self.postokenizer = jieba.posseg.dt
+        self.stop_words = self.STOP_WORDS.copy()
+        self.idf_loader = IDFLoader(idf_path or DEFAULT_IDF)
+        self.idf_freq, self.median_idf = self.idf_loader.get_idf()
+    
+        (prob, state) = max((V[len(obs) - 1][y], y) for y in 'ES')
+    
+        def _lcut_internal(self, sentence):
+        return list(self.__cut_internal(sentence))
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK)
+    
+    jieba.analyse.set_idf_path('../extra_dict/idf.txt.big');
+    
+        The roulette wheel has 37 spots. If the bet is 0 and a 0 comes up,
+    you win a reward of 35. If the parity of your bet matches the parity
+    of the spin, you win 1. Otherwise you receive a reward of -1.
+    
+    def update_rollout_dict(spec, rollout_dict):
+    '''
+    Takes as input the environment spec for which the rollout is to be generated,
+    and the existing dictionary of rollouts. Returns True iff the dictionary was
+    modified.
+    '''
+    # Skip platform-dependent
+    if should_skip_env_spec_for_tests(spec):
+        logger.info('Skipping tests for {}'.format(spec.id))
+        return False
+    
+    def key_press(key, mod):
+    global human_agent_action, human_wants_restart, human_sets_pause
+    if key==0xff0d: human_wants_restart = True
+    if key==32: human_sets_pause = not human_sets_pause
+    a = int( key - ord('0') )
+    if a <= 0 or a >= ACTIONS: return
+    human_agent_action = a
+    
+                # Skid trace
+            if abs(force) > 2.0*friction_limit:
+                if w.skid_particle and w.skid_particle.grass==grass and len(w.skid_particle.poly) < 30:
+                    w.skid_particle.poly.append( (w.position[0], w.position[1]) )
+                elif w.skid_start is None:
+                    w.skid_start = w.position
+                else:
+                    w.skid_particle = self._create_particle( w.skid_start, w.position, grass )
+                    w.skid_start = None
             else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-    from ..common import *
-    
-    
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
-    
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
-    
-    	html = get_html(url)
-	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
-	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
-	assert vid
-    
-    __all__ = ['huomaotv_download']
-    
-    
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
-    
-    from homeassistant.core import CoreState
-from homeassistant.setup import async_setup_component
-import homeassistant.components.automation as automation
-    
-    
-def test_setitem_callable():
-    # GH 12533
-    s = pd.Series([1, 2, 3, 4], index=list('ABCD'))
-    s[lambda x: 'A'] = -1
-    tm.assert_series_equal(s, pd.Series([-1, 2, 3, 4], index=list('ABCD')))
-    
-            # create target S3 bucket
-        s3_resource.create_bucket(Bucket=TEST_BUCKET_NAME)
-    
-    DDB_KINESIS_STREAM_NAME_PREFIX = '__ddb_stream_'
-    
-    ES_URL = aws_stack.get_local_service_url('elasticsearch')
-TEST_INDEX = 'megacorp'
-TEST_DOC_ID = 1
-COMMON_HEADERS = {
-    'content-type': 'application/json',
-    'Accept-encoding': 'identity'
-}
-TEST_DOMAIN_NAME = 'test_es_domain_1'
-TEST_ENDPOINT_URL = 'http://localhost:4571'
-    
-      def run_tester(self, tester):
-    with self.test_session() as sess:
-      ops = tester.create_model()
-      init_op = tf.group(tf.global_variables_initializer(),
-                         tf.local_variables_initializer())
-      sess.run(init_op)
-      output_result = sess.run(ops)
-      tester.check_output(output_result)
-    
-      def _run_strip_accents(self, text):
-    '''Strips accents from a piece of text.'''
-    text = unicodedata.normalize('NFD', text)
-    output = []
-    for char in text:
-      cat = unicodedata.category(char)
-      if cat == 'Mn':
-        continue
-      output.append(char)
-    return ''.join(output)
-    
-      if len(from_shape) == 3:
-    batch_size = from_shape[0]
-    from_seq_length = from_shape[1]
-    to_seq_length = to_shape[1]
-  elif len(from_shape) == 2:
-    if (batch_size is None or from_seq_length is None or to_seq_length is None):
-      raise ValueError(
-          'When passing in rank 2 tensors to attention_layer, the values '
-          'for `batch_size`, `from_seq_length`, and `to_seq_length` '
-          'must all be specified.')
-    
-        self.assertAllEqual(
-        tokenizer.tokenize(u' \tHeLLo!how  \n Are yoU?  '),
-        ['hello', '!', 'how', 'are', 'you', '?'])
-    self.assertAllEqual(tokenizer.tokenize(u'H\u00E9llo'), ['hello'])
-    
-    Revision ID: 6b5be7e0a0ef
-Revises: 5ec5c84ba61e
-Create Date: 2017-11-02 20:42:13.356360
-    
-        @require_admin
-    def get(self):
-        page = request.args.get('page', 1, type=int)
-        page_size = request.args.get('page_size', 25, type=int)
-        return paginate(self.current_org.events, page, page_size, serialize_event)
-
-    
-            self.record_event({
-            'action': 'edit',
-            'object_id': self.current_org.id,
-            'object_type': 'settings',
-            'new_values': new_values,
-            'previous_values': previous_values
-        })
-    
-        return required_level <= group_level
-    
-            return json_data, error
-    
-        def _get_value(self, dct, dots):
-        for key in dots.split('.'):
-            if dct is not None and key in dct:
-                dct = dct.get(key)
-            else:
-                dct = None
-        return dct
-    
-            response = self.make_request('delete', path, user=user)
-        self.assertEqual(response.status_code, 200)
-    
-    
-    
-        # This part is to make a new line when the process is finished.
-    if progress >= 1:
-        progress = 1
-        status = '\r\n'
-    
-                # Last layer which is the logits for classes
-            logits = tf.contrib.layers.conv2d(net, num_classes, [1, 1], activation_fn=None, scope='fc4')
-    
-        ############################################
-    ############ Run the Session ###############
-    ############################################
-    session_conf = tf.ConfigProto(
-        allow_soft_placement=FLAGS.allow_soft_placement,
-        log_device_placement=FLAGS.log_device_placement)
-    sess = tf.Session(graph=graph, config=session_conf)
-    
-        with sess.as_default():
-        # Run the saver.
-        # 'max_to_keep' flag determines the maximum number of models that the tensorflow save and keep. default by TensorFlow = 5.
-        saver = tf.train.Saver(max_to_keep=FLAGS.max_num_checkpoint)
-    
-    # The tutorials in this section is just a start for going into TensorFlow world.
-# The TensorFlow flags are used for having a more user friendly environment.
-    
-    ##########################################################
-######## Initialization using other variables ############
-##########################################################
-    
-    #######################
-### Necessary Flags ###
-#######################
+                w.skid_start = None
+                w.skid_particle = None
