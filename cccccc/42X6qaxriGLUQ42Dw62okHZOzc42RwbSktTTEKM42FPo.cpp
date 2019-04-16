@@ -1,186 +1,292 @@
 
         
-        // Implements the helper function for {ASSERT|EXPECT}_NE
-GTEST_IMPL_CMP_HELPER_(NE, !=);
-// Implements the helper function for {ASSERT|EXPECT}_LE
-GTEST_IMPL_CMP_HELPER_(LE, <=);
-// Implements the helper function for {ASSERT|EXPECT}_LT
-GTEST_IMPL_CMP_HELPER_(LT, <);
-// Implements the helper function for {ASSERT|EXPECT}_GE
-GTEST_IMPL_CMP_HELPER_(GE, >=);
-// Implements the helper function for {ASSERT|EXPECT}_GT
-GTEST_IMPL_CMP_HELPER_(GT, >);
-    
-    // Makes sure this header is not included before gtest.h.
-#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
-# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
-#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
-    
-      tuple& operator=(const tuple& t) { return CopyFrom(t); }
-    
-    ]]
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
-    }
-    
-    // Tests factorial of 0.
-TEST(FactorialTest, Zero) {
-  EXPECT_EQ(1, Factorial(0));
+        
+    {  return Status::OK();
 }
     
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
+    REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
     
-    	PathCombine(configDirPath, exeDir, L'config');
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #include 'db/filename.h'
-#include 'leveldb/env.h'
-#include 'leveldb/table.h'
-#include 'util/coding.h'
+    // Macro used to quickly declare overrides for abstract virtuals in the
+// fft::FftSupport base class. Assumes that it's emitted somewhere inside the
+// ::stream_executor namespace.
+#define TENSORFLOW_STREAM_EXECUTOR_GPU_FFT_SUPPORT_OVERRIDES                   \
+  std::unique_ptr<fft::Plan> Create1dPlan(Stream *stream, uint64 num_x,        \
+                                          fft::Type type, bool in_place_fft)   \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> Create2dPlan(Stream *stream, uint64 num_x,        \
+                                          uint64 num_y, fft::Type type,        \
+                                          bool in_place_fft) override;         \
+  std::unique_ptr<fft::Plan> Create3dPlan(                                     \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft) override;                             \
+  std::unique_ptr<fft::Plan> Create1dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, fft::Type type, bool in_place_fft,         \
+      ScratchAllocator *scratch_allocator) override;                           \
+  std::unique_ptr<fft::Plan> Create2dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, fft::Type type,              \
+      bool in_place_fft, ScratchAllocator *scratch_allocator) override;        \
+  std::unique_ptr<fft::Plan> Create3dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft, ScratchAllocator *scratch_allocator)  \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> CreateBatchedPlan(                                \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count) override;                            \
+  std::unique_ptr<fft::Plan> CreateBatchedPlanWithScratchAllocator(            \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count, ScratchAllocator *scratch_allocator) \
+      override;                                                                \
+  void UpdatePlanWithScratchAllocator(Stream *stream, fft::Plan *plan,         \
+                                      ScratchAllocator *scratch_allocator)     \
+      override;                                                                \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<float> &input,                                 \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<double> &input,                                \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<float> *output) override;                            \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<double> *output) override;
     
-      // Delete the specified 'file' from the specified 'level'.
-  void DeleteFile(int level, uint64_t file) {
-    deleted_files_.insert(std::make_pair(level, file));
+    #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
+  }
+}
+#endif
+    
+    namespace llvm {
+template<> struct DenseMapInfo<DefaultCacheKey> {
+  static inline DefaultCacheKey getEmptyKey() {
+    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
+  }
+  static inline DefaultCacheKey getTombstoneKey() {
+    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
+  }
+  static unsigned getHashValue(const DefaultCacheKey &Val) {
+    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
+    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
+  }
+  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
+    if (LHS.Key == RHS.Key)
+      return true;
+    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
+        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
+      return false;
+    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
+  }
+};
+} // namespace llvm
+    
+    
+    {    RawText = RawText.drop_front(Pos);
+    unsigned NewlineBytes = measureNewline(RawText);
+    RawText = RawText.drop_front(NewlineBytes);
   }
     
-    #include 'db/version_edit.h'
-#include 'util/testharness.h'
-    
-    namespace mxnet {
-namespace op {
-namespace caffe {
-    }
-    }
+    /// Split the base name, if it makes sense.
+static bool splitBaseName(StringRef &baseName, StringRef &argName,
+                          const OmissionTypeName &paramType,
+                          StringRef paramName) {
+  // If there is already an argument label, do nothing.
+  if (!argName.empty()) return false;
     }
     
-    namespace mxnet {
-    }
+    #include 'SwiftLookupTable.h'
     
-    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
-with width and height of the second input symbol, i.e., with one input, we need h_w to
-specify the crop height and width, otherwise the second input symbol's size will be used
-)code' ADD_FILELINE)
+    void VerifyDebugInfoJobAction::anchor() {}
     
+      bool shouldProvideRPathToLinker() const override;
     
-    {
-    {
-    {  bool init_cudnn_;
-  cudnnDataType_t dtype_;
-  cudnnSpatialTransformerDescriptor_t st_desc_;
-  cudnnTensorDescriptor_t in_desc_;
-  cudnnTensorDescriptor_t out_desc_;
-  cudnnSamplerType_t sampler_;
-  #if CUDNN_MAJOR >= 5
-  cudnnTensorFormat_t format_;
-  #endif
-  BilinearSamplerParam param_;
-};
-#endif  // __CUDACC__ && CUDNN
-}  // namespace op
-}  // namespace mxnet
+    /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
     
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
-    
-        ProgressWriter::ProgressWriter(size_t trainingUpdateWriteFrequency, size_t trainingFirstUpdatesToWrite,
-                                   size_t testUpdateWriteFrequency, size_t testFirstUpdatesToWrite,
-                                   size_t distributedSyncUpdateWriteFrequency, size_t distributedSyncFirstUpdatesToWrite)
-        : m_training(std::make_unique<Impl>(trainingUpdateWriteFrequency, trainingFirstUpdatesToWrite)),
-        m_test(std::make_unique<Impl>(testUpdateWriteFrequency, testFirstUpdatesToWrite)),
-        m_distributedSync(std::make_unique<Impl>(distributedSyncUpdateWriteFrequency, distributedSyncFirstUpdatesToWrite))
-    {
-    }
-    
-            Dictionary aggregatedState;
-        for (const auto& w : communicator->Workers())
-        {
-            aggregatedState[std::to_wstring(w.m_globalRank)] = *remoteState[w.m_globalRank];
-        }
-    
-        Variable Variable::NonCompositePreservingCopy() const
-    {
-        Variable copy = *this;
-        copy.m_outputComposite = nullptr;
-        return copy;
-    }
-    
-        // release gradient and temp matrices that no longer needed after all the children's gradients are computed.
-    virtual void ReleaseMatricesAfterBackprop(MatrixPool& matrixPool)
-    {
-        Base::ReleaseMatricesAfterBackprop(matrixPool);
-        ReleaseMatrixToPool(m_innerproduct, matrixPool);
-        ReleaseMatrixToPool(m_rightGradient, matrixPool);
-    }
-    
-    
-    {        bool isImage = configp->Get(L'isImage');
-        if (!isImage)
-            Init(configp->Get(L'shape'), isSparse, axisName);
-        else
-            Init(ImageDimensions::AsTensorShape(configp->Get(L'imageWidth'), configp->Get(L'imageHeight'), configp->Get(L'imageChannels'), ImageLayoutKindFrom(configp->Get(L'imageLayout'))), isSparse, axisName);
-    }
-    
-    template <class ElemType>
-EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
-    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
+    double UniValue::get_real() const
 {
-    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not a number as expected');
+    double retval;
+    if (!ParseDouble(getValStr(), &retval))
+        throw std::runtime_error('JSON double out of range');
+    return retval;
 }
     
+        shl	NUM_BLKS, 6	; convert to bytes
+    jz	done_hash
+    add	NUM_BLKS, INP	; pointer to end of data
+    mov	[rsp + _INP_END], NUM_BLKS
     
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8>
+internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8> Values(T1 v1, T2 v2,
+    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8) {
+  return internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8>(v1, v2, v3, v4,
+      v5, v6, v7, v8);
+}
     
-      sender.AddMessage(1, &mpd);
-  EXPECT_EQ(sender.Start(), common::ErrorCode::OK);
-  EXPECT_TRUE(sender.IsRunning());
-  EXPECT_TRUE(sender.enable_log());
+    #include <ostream>  // NOLINT
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+#include 'gtest/internal/gtest-port.h'
+#include 'gtest/internal/gtest-internal.h'
     
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
- public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
+      // If input name has a trailing separator character, removes it and returns
+  // the name, otherwise return the name string unmodified.
+  // On Windows platform, uses \ as the separator, other platforms use /.
+  FilePath RemoveTrailingPathSeparator() const;
+    
+    
+    {  return result;
+}
+    
+      // Copy c'tor
+  MyString(const MyString& string) : c_string_(NULL) {
+    Set(string.c_string_);
   }
-};
     
-      x <<= 3;
-  x |= t;
+        private:
+        std::unordered_set<StreamInformation> m_streamInfos;
+        bool m_epochEndReached;
+        size_t m_numWorkers;
+        size_t m_workerRank;
+        size_t m_prevMinibatchSize;
+        size_t m_maxNumSamplesToRead;
+        size_t m_maxNumSweepsToRead;
+        size_t m_truncationLength;
+        size_t m_maxErrors;
+        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
     
-    
-    {  bool ret = (x == 0x1);
-  return ret;
+    // StartMinibatchLoop - Startup a minibatch loop
+//  mbSize - [in] size of the minibatch (number of frames, etc.)
+//  epoch - [in] epoch number for this loop
+//  requestedEpochSamples - [in] number of samples to randomize, defaults to requestDataSize which uses the number of samples there are in the dataset
+void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, size_t requestedEpochSamples)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, requestedEpochSamples);
 }
     
-    GemMessageManager::~GemMessageManager() {}
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
+    }
     
-    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Brakerpt6c::output_value(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+            std::vector<bool> workspaceFlagVec = {true, false};
+        for (auto& devId : m_deviceIDSet)
+        {
+            for (auto wsFlag : workspaceFlagVec)   // we allocate the workspace memory pointers first, and they are not shared with the non-workspace memory requests
+            {
+                // memAllocInfoVec is a sorted list of memory allocations from smallest to largest in memory size 
+                vector<MemAllocInfo> memAllocInfoVec;
+                int memoryCounter = 0;
+                // we start with memory request that is scalable with minibatch size(usually those require larger memory size)
+                for (auto& memInfo : memInfoVec)
+                {
+                    // check if it's the proper device
+                    if (memInfo.deviceId != devId || memInfo.isWorkSpace != wsFlag || !memInfo.mbScale)
+                        continue;
+    }
+    }
+    }
+    
+            // Similarly, we will eventually need to transpose the output. Generate the necessary shape here, and do
+        // the transposition after RNNForward() returns.
+    
+            // Get the function pointer (required for any extensions)
+        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
+        IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    static int stb_compress_chunk(stb_uchar *history,
+    stb_uchar *start,
+    stb_uchar *end,
+    int length,
+    int *pending_literals,
+    stb_uchar **chash,
+    stb_uint mask)
+{
+    (void)history;
+    int window = stb__window;
+    stb_uint match_max;
+    stb_uchar *lit_start = start - *pending_literals;
+    stb_uchar *q = start;
+    }
+    
+        ImGui_ImplGlfw_UpdateMousePosAndButtons();
+    ImGui_ImplGlfw_UpdateMouseCursor();
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+        // read-only access
+    
+    int main()
+{
+    // create a JSON value
+    const json j =
+    {
+        {'number', 1}, {'string', 'foo'}, {'array', {1, 2}}
+    };
     }
