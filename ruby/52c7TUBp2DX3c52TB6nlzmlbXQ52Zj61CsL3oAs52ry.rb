@@ -1,122 +1,119 @@
-    def url
-      @url ||= URL.parse request.base_url
-    end
+
+        
+            context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+      end
     
-      def passthru
-    render status: 404, plain: 'Not found. Authentication passthru.'
+      it 'renders the import form' do
+    visit new_scenario_imports_path
+    expect(page).to have_text('Import a Public Scenario')
   end
     
-      # DELETE /resource/sign_out
-  def destroy
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    set_flash_message! :notice, :signed_out if signed_out
-    yield if block_given?
-    respond_to_on_destroy
-  end
-    
-          def time_from_json(value)
-        if value =~ /\A\d+\.\d+\Z/
-          Time.at(value.to_f)
-        else
-          Time.parse(value) rescue nil
-        end
-      end
-    
-      #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
-    
-      #
-  # Gets cookies from the Set-Cookie header in a parsed format
-  #
-  def get_cookies_parsed
-    if (self.headers.include?('Set-Cookie'))
-      ret = CGI::Cookie::parse(self.headers['Set-Cookie'])
-    else
-      ret = {}
-    end
-    ret
-  end
-    
-        self.listener = Rex::Socket::TcpServer.create(
-      'LocalHost' => self.listen_host,
-      'LocalPort' => self.listen_port,
-      'Context'   => self.context,
-      'SSL'       => self.ssl,
-      'SSLCert'   => self.ssl_cert,
-      'SSLCompression' => self.ssl_compression,
-      'SSLCipher' => self.ssl_cipher,
-      'Comm'      => self.comm
-    )
-    
-        when IAX_TYPE_VOICE
-      v_codec = stype
-      if self.state == :answered
-        handle_audio(pkt)
-      end
-      self.client.send_ack(self)
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a KRB_AP_REQ definition, containing the Kerberos protocol version number,
-        # the message type KRB_AP_REQ, an options field to indicate any options in use, and the ticket and authenticator
-        # themselves
-        class ApReq < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of the protocol message
-          attr_accessor :msg_type
-          # @!attribute options
-          #   @return [Integer] request options, affects processing
-          attr_accessor :options
-          # @!attribute ticket
-          #   @return [Rex::Proto::Kerberos::Model::Ticket] The ticket authenticating the client to the server
-          attr_accessor :ticket
-          # @!attribute authenticator
-          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] This contains the authenticator, which includes the
-          #   client's choice of a subkey
-          attr_accessor :authenticator
-    
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
-      end
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
     end
   end
 end
+
     
-          # Verify the types requested are valid
-      types = FPM::Package.types.keys.sort
-      @command.input_type.tap do |val|
-        next if val.nil?
-        mandatory(FPM::Package.types.include?(val),
-                  'Invalid input package -s flag) type #{val.inspect}. ' \
-                  'Expected one of: #{types.join(', ')}')
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
+        end
       end
     
-          header = ::Gem::Package::TarHeader.new(:name => name, :mode => mode,
-                                             :size => 0, :typeflag => '2',
-                                             :linkname => target,
-                                             :prefix => prefix,
-                                             :mtime => Time.now).to_s
+        it 'unregisters disabled SchedulerAgents' do
+      @scheduler.schedule_scheduler_agents
+    
+        it 'should convert the 'escape' method correctly' do
+      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
+                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
+      )
+    end
+    
+      let :new_template do
+    {
+      'description' => '{{ hovertext }}',
+      'comment' => '{{ comment }}'
+    }
+  end
+    
+        it 'updates Agents' last_error_log_at when an error is logged' do
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 3, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at).to be_nil
+    
+        stub_request(:get, /trackings/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    
+        def fragment_url_string?(str)
+      str[0] == '#'
+    end
+    
+        def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
+    
+            css('h1:not(:first-child)').each do |node|
+          node.name = 'h2'
+        end unless at_css('h2')
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+              # Encodes the renew_time field
+          #
+          # @return [String]
+          def encode_renew_time
+            [renew_till].pack('N')
+          end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+          def button_link_to(text, url, html_options = {})
+        if html_options[:method] &&
+            !html_options[:method].to_s.casecmp('get').zero? &&
+            !html_options[:remote]
+          form_tag(url, method: html_options.delete(:method), class: 'd-inline') do
+            button(text, html_options.delete(:icon), nil, html_options)
+          end
+        else
+          if html_options['data-update'].nil? && html_options[:remote]
+            object_name, action = url.split('/')[-2..-1]
+            html_options['data-update'] = [action, object_name.singularize].join('_')
+          end
+    
+    describe 'Orders Listing', type: :feature do
+  stub_authorization!
+    
+    namespace :gem do
+  def version
+    require 'spree/core/version'
+    Spree.version
+  end
+    
+                render_order(result)
+          end
