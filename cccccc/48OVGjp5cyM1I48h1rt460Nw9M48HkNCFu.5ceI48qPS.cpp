@@ -1,383 +1,243 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        
+    {    void operator() (const T * src0, const T * src1, T * dst) const
+    {
+        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
+    }
+};
     
-    // Returns true if s is a Python keyword or built-in.
-bool IsPythonReserved(const string& s);
     
-    REGISTER_OP('ShapelessOp');
+    {
+    {        for (; j < size.width; j++)
+            dst[j] = (u16)src0[j] + (u16)src1[j];
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
     
-        http://www.apache.org/licenses/LICENSE-2.0
+        void operator() (const typename VecTraits<T>::vec128 & v_src0,
+                     const typename VecTraits<T>::vec128 & v_src1,
+                     typename VecTraits<T>::vec128 & v_dst) const
+    {
+        typename VecTraits<wtype>::vec128 vrl, vrh;
+        wideAdd(vmovl( vget_low(v_src0)), vmovl( vget_low(v_src1)), vrl);
+        wideAdd(vmovl(vget_high(v_src0)), vmovl(vget_high(v_src1)), vrh);
+    }
     
-      // We hit a mysterious crash if we haven't initialized numpy before this:
-  PyBfloat16_Type.tp_base = &PyGenericArrType_Type;
     
-    // Returns the PyObject for the bfloat16 type.
-PyObject* Bfloat16PyType();
+    {
+    {            vst1q_s16(dstx + (width - 8), taildx);
+            vst1q_s16(dsty + (width - 8), taildy);
+        }
+    }
     
-    /// Get the total length and remove the nth node
-/// Two Pass Algorithm
-///
-/// Time Complexity: O(n)
-/// Space Complexity: O(1)
+    #define SPLIT(sgn,bits,n) void split##n(const Size2D &size,                                          \
+                                    const sgn##bits * srcBase, ptrdiff_t srcStride                   \
+                                    FILL_LINES##n(FARG, sgn##bits) )                                 \
+{                                                                                                    \
+    internal::assertSupportedConfiguration();                                                        \
+    (void)size;                                                                                      \
+    (void)srcBase;                                                                                   \
+    (void)srcStride;                                                                                 \
+    FILL_LINES##n(VOID, sgn##bits)                                                                   \
+}
+    
+    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
+inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
+inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    
+        // Caffe seems to understand phase inside an 'include {}' block
+    if (!param_.prototxt.has_phase()) {
+      if (param_.prototxt.include().size()) {
+        if (param_.prototxt.include(0).has_phase()) {
+          param_.prototxt.set_phase(param_.prototxt.include(0).phase());
+        }
+      }
+    }
+    
+      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
+    const auto& inode = idx[nid];
+    if (inode.source->op() != ewise_plus_op) continue;
+    int sid = storage_id[idx.entry_id(inode.inputs[0])];
+    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
+    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
+    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
+    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
+    if (ref_count[eid_rhs] != 1) continue;
+    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
+    // TODO(haibin) support inplace addto for Dynamic Storage
+    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
+    CHECK_NE(storage_id[eid_rhs], sid);
+    storage_id[eid_rhs] = sid;
+    addto_entry[eid_rhs] = 1;
+    storage_inplace_index[eid_rhs] = -1;
+    skip_plus_node[nid] = 1;
+  }
+    
+      /*!
+   * \brief returns compression factor, which is the factor by which size of gradient
+   * reduces when using a particular type of compression
+   */
+  int GetCompressionFactor();
+    
+    
+    {
+    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
+'will be used as crop_like shape reference')
+.add_arguments(CropParam::__FIELDS__())
+.set_key_var_num_args('num_args');
+}  // namespace op
+}  // namespace mxnet
+
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(out_grad.size(), 1U);
+    CHECK_EQ(in_data.size(), 1U);
+    CHECK_EQ(out_data.size(), 2U);
+    CHECK_EQ(req.size(), 1U);
+    CHECK_EQ(in_grad.size(), 1U);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> grad = out_grad[lrn_enum::kOut].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> output_data = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> input_grad = in_grad[lrn_enum::kData].get<gpu, 4, DType>(s);
+    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
+    CUDNN_CALL(cudnnLRNCrossChannelBackward(s->dnn_handle_,
+                                            lrn_desc_,
+                                            CUDNN_LRN_CROSS_CHANNEL_DIM1,
+                                            &alpha,
+                                            shape_desc_,
+                                            output_data.dptr_,
+                                            shape_desc_,
+                                            grad.dptr_,
+                                            shape_desc_,
+                                            data.dptr_,
+                                            &beta,
+                                            shape_desc_,
+                                            input_grad.dptr_));
+  }
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
+  return new IdentityAttachKLSparseRegOp<cpu>(param);
+}
+    }
+    }
+    
+    using namespace std;
+    
+    
+int main() {
+    }
+    
+            ListNode* pre = dummyHead;
+        for(int i = 0; i < m - 1; i ++){
+            pre = pre->next
+        }
+    
+    private:
+    void preorderTraversal(TreeNode* node, vector<int> &res){
+    }
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
+#include <cassert>
+    
+    using namespace std;
+    
+    // PreOrder Morris Traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(1)
 class Solution {
-public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-    }
     }
     
-                cur = stack.top();
-            stack.pop();
-            res.push_back(cur->val);
-            cur = cur->right;
+    using namespace std;
     
     
-    {    return 0;
+    {    // FIXME: Using the AdditionalTransform is a complete hack.
+    // This should be done by multiplying the lookup-Matrix with the Node's MV matrix
+    // And then setting the result as the new MV matrix
+    // But that operation needs to be done after all the 'updates'.
+    // So the Director should emit an 'director_after_update' event.
+    // And this object should listen to it
+    _target->setAdditionalTransform(&mv);
 }
     
-    int main() {
-    }
-    
-            TreeNode* p = root;
-        while(p != NULL || !stack.empty()){
-            if(p != NULL){
-                stack.push(p);
-                output.push(p);
-                p = p->right;
-            }
-            else{
-                p = stack.top();
-                stack.pop();
-                p = p->left;
-            }
-        }
-    
-    void LiveRegionHost::Announce(NarratorAnnouncement^ announcement)
+    bool Ripple3D::initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude)
 {
-    if (m_host == nullptr)
+    if (Grid3DAction::initWithDuration(duration, gridSize))
     {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
+        setPosition(position);
+        _radius = radius;
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
     }
     }
     
-    // This static variable is used only to call the initialization function, to initialize the other static variables.
-int NarratorAnnouncementHostFactory::s_init = NarratorAnnouncementHostFactory::Initialize();
-int NarratorAnnouncementHostFactory::Initialize()
+    /**
+@brief The delegate class for ActionTween.
+@details If you want to use ActionTween on a node.
+        You should implement the node follow these steps:
+        1. The node should be inherit from ActionTweenDelegate.
+        2. Override the virtual method updateTweenAction in the node.
+    
+    Animation::~Animation(void)
 {
-    RegisterHosts();
-    NarratorAnnouncementHostFactory::s_hostProducer = GetHostProducer();
-    }
-    
-    
-    
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
+    CCLOGINFO('deallocing Animation: %p', this);
 }
     
-    namespace xgboost {
-namespace obj {
-    }
-    }
+        bool init(void);
     
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
     
-    {
-    {}  // namespace common
-}  // namespace xgboost
-
-    
-    
-    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
-    if (src.size <= maxsize) {
-      this->CopyFrom(src); return;
-    }
-    const RType begin = src.data[0].rmax;
-    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
-    const size_t n = maxsize - 1;
-    data[0] = src.data[0];
-    this->size = 1;
-    // lastidx is used to avoid duplicated records
-    size_t i = 1, lastidx = 0;
-    for (size_t k = 1; k < n; ++k) {
-      RType dx2 =  2 * ((k * range) / n + begin);
-      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
-      while (i < src.size - 1
-             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
-      CHECK(i != src.size - 1);
-      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
-        if (i != lastidx) {
-          data[size++] = src.data[i]; lastidx = i;
-        }
-      } else {
-        if (i + 1 != lastidx) {
-          data[size++] = src.data[i + 1]; lastidx = i + 1;
-        }
-      }
-    }
-    if (lastidx != src.size - 1) {
-      data[size++] = src.data[src.size - 1];
-    }
-  }
-  /*!
-   * \brief set current summary to be merged summary of sa and sb
-   * \param sa first input summary to be merged
-   * \param sb second input summary to be merged
-   */
-  inline void SetCombine(const WQSummary &sa,
-                         const WQSummary &sb) {
-    if (sa.size == 0) {
-      this->CopyFrom(sb); return;
-    }
-    if (sb.size == 0) {
-      this->CopyFrom(sa); return;
-    }
-    CHECK(sa.size > 0 && sb.size > 0);
-    const Entry *a = sa.data, *a_end = sa.data + sa.size;
-    const Entry *b = sb.data, *b_end = sb.data + sb.size;
-    // extended rmin value
-    RType aprev_rmin = 0, bprev_rmin = 0;
-    Entry *dst = this->data;
-    while (a != a_end && b != b_end) {
-      // duplicated value entry
-      if (a->value == b->value) {
-        *dst = Entry(a->rmin + b->rmin,
-                     a->rmax + b->rmax,
-                     a->wmin + b->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        bprev_rmin = b->RMinNext();
-        ++dst; ++a; ++b;
-      } else if (a->value < b->value) {
-        *dst = Entry(a->rmin + bprev_rmin,
-                     a->rmax + b->RMaxPrev(),
-                     a->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        ++dst; ++a;
-      } else {
-        *dst = Entry(b->rmin + aprev_rmin,
-                     b->rmax + a->RMaxPrev(),
-                     b->wmin, b->value);
-        bprev_rmin = b->RMinNext();
-        ++dst; ++b;
-      }
-    }
-    if (a != a_end) {
-      RType brmax = (b_end - 1)->rmax;
-      do {
-        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
-        ++dst; ++a;
-      } while (a != a_end);
-    }
-    if (b != b_end) {
-      RType armax = (a_end - 1)->rmax;
-      do {
-        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
-        ++dst; ++b;
-      } while (b != b_end);
-    }
-    this->size = dst - data;
-    const RType tol = 10;
-    RType err_mingap, err_maxgap, err_wgap;
-    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
-    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
-      LOG(INFO) << 'mingap=' << err_mingap
-                << ', maxgap=' << err_maxgap
-                << ', wgap=' << err_wgap;
-    }
-    CHECK(size <= sa.size + sb.size) << 'bug in combine';
-  }
-  // helper function to print the current content of sketch
-  inline void Print() const {
-    for (size_t i = 0; i < this->size; ++i) {
-      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
-                   << ', rmax=' << data[i].rmax
-                   << ', wmin=' << data[i].wmin
-                   << ', v=' << data[i].value;
-    }
-  }
-  // try to fix rounding error
-  // and re-establish invariance
-  inline void FixError(RType *err_mingap,
-                       RType *err_maxgap,
-                       RType *err_wgap) const {
-    *err_mingap = 0;
-    *err_maxgap = 0;
-    *err_wgap = 0;
-    RType prev_rmin = 0, prev_rmax = 0;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin < prev_rmin) {
-        data[i].rmin = prev_rmin;
-        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
-      } else {
-        prev_rmin = data[i].rmin;
-      }
-      if (data[i].rmax < prev_rmax) {
-        data[i].rmax = prev_rmax;
-        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
-      }
-      RType rmin_next = data[i].RMinNext();
-      if (data[i].rmax < rmin_next) {
-        data[i].rmax = rmin_next;
-        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
-      }
-      prev_rmax = data[i].rmax;
-    }
-  }
-  // check consistency of the summary
-  inline bool Check(const char *msg) const {
-    const float tol = 10.0f;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
-          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
-        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
-        this->Print();
-        return false;
-      }
-    }
-    return true;
-  }
-};
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct GradientBoosterReg
-    : public dmlc::FunctionRegEntryBase<
-  GradientBoosterReg,
-  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
-                                  bst_float base_margin)> > {
-};
-    
-    /*! \brief interface of objective function */
-class ObjFunction {
- public:
-  /*! \brief virtual destructor */
-  virtual ~ObjFunction() = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Configure the objective with the specified parameters.
-   * \param args arguments to the objective function.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief Get gradient over each of predictions, given existing information.
-   * \param preds prediction of current round
-   * \param info information about labels, weights, groups in rank
-   * \param iteration current iteration number.
-   * \param out_gpair output of get gradient, saves gradient and second order gradient in
-   */
-  virtual void GetGradient(const HostDeviceVector<bst_float>& preds,
-                           const MetaInfo& info,
-                           int iteration,
-                           HostDeviceVector<GradientPair>* out_gpair) = 0;
-    }
-    
-    class SparsePageRawFormat : public SparsePageFormat {
- public:
-  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
-    auto& offset_vec = page->offset.HostVector();
-    if (!fi->Read(&offset_vec)) return false;
-    auto& data_vec = page->data.HostVector();
-    CHECK_NE(page->offset.Size(), 0U) << 'Invalid SparsePage file';
-    data_vec.resize(offset_vec.back());
-    if (page->data.Size() != 0) {
-      CHECK_EQ(fi->Read(dmlc::BeginPtr(data_vec),
-                        (page->data).Size() * sizeof(Entry)),
-               (page->data).Size() * sizeof(Entry))
-          << 'Invalid SparsePage file';
-    }
-    return true;
-  }
-    }
-    
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
+    std::vector<cocos2d::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
 {
-  msgDict->put(R, getResponse());
-}
-    
-      virtual std::unique_ptr<Dict> getResponse() = 0;
-    
-    std::shared_ptr<DHTNode> DHTRoutingTable::getNode(const unsigned char* nodeID,
-                                                  const std::string& ipaddr,
-                                                  uint16_t port) const
-{
-  std::shared_ptr<DHTBucket> bucket = getBucketFor(nodeID);
-  return bucket->getNode(nodeID, ipaddr, port);
-}
-    
-      void dropNode(const std::shared_ptr<DHTNode>& node);
-    
-    namespace aria2 {
+    int stepx = 0;
+    int stepy = 0;
+    int prevx = 0;
+    int prevy = 0;
+    int startx = start.x;
+    int starty = start.y;
+    int curx = startx;
+    int cury = starty;
+    unsigned int count = 0;
+    std::vector<int> case9s;
+    std::vector<int> case6s;
+    int i;
+    std::vector<int>::iterator it;
+    std::vector<cocos2d::Vec2> _points;
+    do{
+        int sv = getSquareValue(curx, cury, rect, threshold);
+        switch(sv){
     }
-    
-    class DHTTaskExecutor {
-private:
-  int numConcurrent_;
-  std::vector<std::shared_ptr<DHTTask>> execTasks_;
-  std::deque<std::shared_ptr<DHTTask>> queue_;
     }
-    
-    
-    {  void setTimeout(std::chrono::seconds timeout)
-  {
-    timeout_ = std::move(timeout);
-  }
-};
-    
-    #endif // D_DHT_TASK_QUEUE_H
-
-    
-    namespace aria2 {
     }
-    
-    namespace aria2 {
-    }
-    
-    void DHTUnknownMessage::doReceivedAction() {}
-    
-        // create an object from std::unordered_multimap
-    std::unordered_multimap<std::string, bool> c_ummap
-    {
-        {'one', true}, {'two', true}, {'three', false}, {'three', true}
-    };
-    json j_ummap(c_ummap); // only one entry for key 'three' is used
