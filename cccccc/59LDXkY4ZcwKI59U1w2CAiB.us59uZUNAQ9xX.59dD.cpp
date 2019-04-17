@@ -1,358 +1,196 @@
 
         
-        
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
+    }
+  }
+  return true;
+}
+    
+    
+    {}  // namespace atom
+    
+    const gfx::Rect& OffscreenViewProxy::GetBounds() {
+  return view_bounds_;
+}
+    
+    #include 'base/files/file_util.h'
+#include 'base/logging.h'
+#include 'base/mac/mac_logging.h'
+#include 'base/posix/eintr_wrapper.h'
+#include 'base/process/launch.h'
+#include 'base/strings/sys_string_conversions.h'
+    
+        // Allocate temporary rasterization data buffers.
+    // We could not find a way to retrieve accurate glyph size without rendering them.
+    // (e.g. slot->metrics->width not always matching bitmap->width, especially considering the Oblique transform)
+    // We allocate in chunks of 256 KB to not waste too much extra memory ahead. Hopefully users of FreeType won't find the temporary allocations.
+    const int BITMAP_BUFFERS_CHUNK_SIZE = 256 * 1024;
+    int buf_bitmap_current_used_bytes = 0;
+    ImVector<unsigned char*> buf_bitmap_buffers;
+    buf_bitmap_buffers.push_back((unsigned char*)IM_ALLOC(BITMAP_BUFFERS_CHUNK_SIZE));
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
+    }
+    
+    // About GLSL version:
+//  The 'glsl_version' initialization parameter should be NULL (default) or a '#version XXX' string.
+//  On computer platform the GLSL version default to '#version 130'. On OpenGL ES 3 platform it defaults to '#version 300 es'
+//  Only override if your GL version doesn't handle this GLSL version. See GLSL version table at the top of imgui_impl_opengl3.cpp.
+    
+        for (int i = 0; i < num_greetings; i++) {
+      auto msg_offset = mb_.CreateString('Many hellos, ' + name);
+      auto hello_offset = CreateHelloReply(mb_, msg_offset);
+      mb_.Finish(hello_offset);
+      writer->Write(mb_.ReleaseMessage<HelloReply>());
+    }
+    
+    #include <android/log.h>
+    
+    #include 'monster_generated.h'  // Already includes 'flatbuffers/flatbuffers.h'.
+    
+    
+    {  printf('The FlatBuffer has been parsed from JSON successfully.\n');
+}
 
     
-    // A CodeGenerator that captures the FileDescriptor it's passed as a
-// FileDescriptorProto.
-class DescriptorCapturingGenerator : public CodeGenerator {
- public:
-  // Does not own file; file must outlive the Generator.
-  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
-      : file_(file) {}
+    #include <stdlib.h>  // for abort()
+#include <iostream>
+#include <map>
+#include <string>
+    
+    // Generate Json schema file
+// See idl_gen_json_schema.cpp.
+extern bool GenerateJsonSchema(const Parser &parser,
+                           const std::string &path,
+                           const std::string &file_name);
+    
+    
+    {    for (auto it = dc.begin(); it != dc.end(); ++it) {
+      if (indent) code += indent;
+      code += '/// ' + *it + '\n';
     }
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    
-    {  WriteFieldDocComment(printer, descriptor_);
-  if (descriptor_->is_repeated()) {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newRepeatedGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $packed$,\n'
-        '      $singular_type$.class);\n');
-  } else {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newSingularGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $default$,\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $singular_type$.class);\n');
-  }
-  printer->Annotate('name', descriptor_);
-}
-    
-    // Author: liujisi@google.com (Pherl Liu)
-    
-      // Note:
-  //  deprecated-declarations suppression is only needed if some place in this
-  //    proto file is something deprecated or if it references something from
-  //    another file that is deprecated.
-  printer->Print(
-      '// @@protoc_insertion_point(imports)\n'
-      '\n'
-      '#pragma clang diagnostic push\n'
-      '#pragma clang diagnostic ignored \'-Wdeprecated-declarations\'\n'
-      '\n'
-      'CF_EXTERN_C_BEGIN\n'
-      '\n');
-    
-    #include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
-#include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-    
-    static const int kDefaultBufferSize = 65536;
-    
-    #include <google/protobuf/io/zero_copy_stream.h>
-    
-    #ifdef USE_OPENCV
-  /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Mat.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<cv::Mat> & mat_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    template <typename Dtype>
-class BasePrefetchingDataLayer :
-    public BaseDataLayer<Dtype>, public InternalThread {
- public:
-  explicit BasePrefetchingDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden.
-  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    namespace caffe {
-    }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    { private:
-  Blob<Dtype> bias_multiplier_;
-  int outer_dim_, bias_dim_, inner_dim_, dim_;
-};
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    
-    {}  // namespace caffe
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
+    if (!extra_lines.empty()) {
+      if (!dc.empty()) {
+        if (indent) code += indent;
+        code += '///\n';
+      }
+      if (indent) code += indent;
+      std::string::size_type start = 0;
+      for (;;) {
+        auto end = extra_lines.find('\n', start);
+        if (end != std::string::npos) {
+          code += '/// ' + extra_lines.substr(start, end - start) + '\n';
+          start = end + 1;
         } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
+          code += '/// ' + extra_lines.substr(start) + '\n';
+          break;
         }
+      }
+    }
+  }
+    
+    static std::string GenType(const Type &type, bool underlying = false) {
+  switch (type.base_type) {
+    case BASE_TYPE_STRUCT:
+      return type.struct_def->defined_namespace->GetFullyQualifiedName(
+          type.struct_def->name);
+    case BASE_TYPE_VECTOR: return '[' + GenType(type.VectorType()) + ']';
+    default:
+      if (type.enum_def && !underlying) {
+        return type.enum_def->defined_namespace->GetFullyQualifiedName(
+            type.enum_def->name);
       } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+        return kTypeNames[type.base_type];
       }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
   }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-      bool operator == (const ExtensionManager_registerExtension_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const ExtensionManager_registerExtension_result &rhs) const {
-    return !(*this == rhs);
-  }
-    
-    using namespace  ::osquery::extensions;
-    
-    QueryData genCrashLogs(QueryContext& context) {
-  const std::string kDumpFileExtension = '.dmp';
-  QueryData results;
-  std::string dumpFolderLocation{''};
-    }
-    
-    
-    {  // start, end are in units of 100 nanoseconds
-  return (end.QuadPart - start.QuadPart) * 0.0000001;
 }
-#else
-static double timeDiff(struct timeval* pStart, struct timeval* pEnd) {
-  return (pEnd->tv_usec - pStart->tv_usec) * 0.000001 +
-         static_cast<double>(pEnd->tv_sec - pStart->tv_sec);
-}
-#endif
     
-      static Killswitch& get() {
-    static Killswitch killswitch;
-    return killswitch;
+      // Most field accessors need to retrieve and test the field offset first,
+  // this is the prefix code for that.
+  std::string OffsetPrefix(const FieldDef &field) {
+    return '{\n\to := flatbuffers.UOffsetT(rcv._tab.Offset(' +
+           NumToString(field.value.offset) + '))\n\tif o != 0 {\n';
+  }
+    }
+    }
+    
+      void CheckNameSpace(const Definition &def, std::string *code_ptr) {
+    auto ns = GetNameSpace(def);
+    if (ns == current_namespace_) return;
+    current_namespace_ = ns;
+    std::string &code = *code_ptr;
+    code += 'namespace ' + ns + '\n\n';
   }
     
-    /**
- * @brief Intel HECI GUID for the update application.
- *
- * This GUID can be used on every OS over the HECI protocol to inspect the
- * FW version.
- */
-const std::vector<uint8_t> kMEIUpdateGUID{
-    232, 205, 157, 48, 177, 204, 98, 64, 143, 120, 96, 1, 21, 163, 67, 39,
+    
+    {      GenReceiver(struct_def, code_ptr);
+      code += MakeCamel(NormalizedName(field)) + 'Length()\n';
+      code += OffsetPrefix(field);
+      code += std::string(Indent) + Indent + 'return ' + SelfData + ':VectorLen(o)\n';
+      code += std::string(Indent) + End;
+      code += std::string(Indent) + 'return 0\n';
+      code += EndFunc;
+    }
+    
+    // MessageBuilder is a gRPC-specific FlatBufferBuilder that uses SliceAllocator
+// to allocate gRPC buffers.
+class MessageBuilder : private detail::SliceAllocatorMember,
+                       public FlatBufferBuilder {
+ public:
+  explicit MessageBuilder(uoffset_t initial_size = 1024)
+    : FlatBufferBuilder(initial_size, &slice_allocator_, false) {}
+    }
+    
+    class MockFoo {
+ public:
+  // A mock method that returns a user-defined type.  Google Mock
+  // doesn't know what the default value for this type is.
+  MOCK_METHOD0(GetNonDefaultConstructible, NonDefaultConstructible());
 };
     
-    #include <osquery/utils/expected/expected.h>
-#include <osquery/utils/system/linux/perf_event/perf_event.h>
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
+
+    
+    void Subroutine() {
+  EXPECT_EQ(42, 42);
+}
