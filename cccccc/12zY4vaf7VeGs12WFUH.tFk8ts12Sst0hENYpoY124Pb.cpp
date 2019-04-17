@@ -1,113 +1,216 @@
 
         
-        // TaskRunner implementation that posts tasks into libuv's default loop.
-class UvTaskRunner : public base::SingleThreadTaskRunner {
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    class Base {
  public:
-  explicit UvTaskRunner(uv_loop_t* loop);
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
     }
     
-    #include <vector>
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
     
-    namespace atom {
-    }
-    
-     protected:
-  TrackableObject() { weak_map_id_ = ++next_id_; }
-    
-      // content::JavaScriptDialogManager implementations.
-  void RunJavaScriptDialog(content::WebContents* web_contents,
-                           content::RenderFrameHost* rfh,
-                           content::JavaScriptDialogType dialog_type,
-                           const base::string16& message_text,
-                           const base::string16& default_prompt_text,
-                           DialogClosedCallback callback,
-                           bool* did_suppress_message) override;
-  void RunBeforeUnloadDialog(content::WebContents* web_contents,
-                             content::RenderFrameHost* rfh,
-                             bool is_reload,
-                             DialogClosedCallback callback) override;
-  void CancelDialogs(content::WebContents* web_contents,
-                     bool reset_state) override;
+    #include 'content/nw/src/api/menu/menu.h'
     
     
-    {}  // namespace asar
+    {}  // namespace
+    
+      remover->AddObserver(this);
+  remover->RemoveAndReply(base::Time(), base::Time::Max(),
+                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
+                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
+                          this);
+  // BrowsingDataRemover deletes itself.
+  base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
     
     
-    {}  // namespace atom
-
-    
-    
-    {}  // namespace atom
-
-    
-    
-    {}  // namespace relauncher
-
-    
-    
-    {}  // namespace atom
-    
-      // Computes all the cross product distances of the points perpendicular to
-  // the given direction, ignoring distances outside of the give distance range,
-  // storing the actual (signed) cross products in distances_.
-  void ComputeConstrainedDistances(const FCOORD& direction,
-                                   double min_dist, double max_dist);
-    
-    // A CostFunc that takes the variance of step into account in the cost.
-int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
-  if (prev == nullptr || prev == this) {
-    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
-    return 0;
-  }
-    }
-    
-    
-    {  int32_t local_cost_;    // Cost of this point on its own.
-  int32_t total_cost_;    // Sum of all costs in best path to here.
-                        // During cost calculations local_cost is excluded.
-  int32_t total_steps_;   // Number of steps in best path to here.
-  const DPPoint* best_prev_;  // Pointer to prev point in best path from here.
-  // Information for computing the variance part of the cost.
-  int32_t n_;             // Number of steps in best path to here for variance.
-  int32_t sig_x_;         // Sum of step sizes for computing variance.
-  int64_t sig_xsq_;       // Sum of squares of steps for computing variance.
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
 };
     
-    namespace CNTK
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+        UText inputText = UTEXT_INITIALIZER;
+    utext_openConstUnicodeString(&inputText, &input, &status);
+    init2(&inputText, status);
+    utext_close(&inputText);
+    
+        /**
+     * Constructs a transliterator.
+     */
+    RemoveTransliterator();
+    
+    void SearchIterator::setMatchNotFound() 
 {
-    class PackedValue final : public Value
-    {
-        template <typename T, typename ...CtorArgTypes>
-        friend inline std::shared_ptr<T> MakeSharedObject(CtorArgTypes&& ...ctorArgs);
+    setMatchStart(USEARCH_DONE);
+    setMatchLength(0);
+    UErrorCode status = U_ZERO_ERROR;
+    // by default no errors should be returned here since offsets are within 
+    // range.
+    if (m_search_->isForwardSearching) {
+        setOffset(m_search_->textLength, status);
     }
+    else {
+        setOffset(0, status);
     }
+}
+    
+    U_NAMESPACE_END
     
     
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
 };
     
-        template <class ElemType>
-    void RequestRelease(shared_ptr<Matrix<ElemType>> *pMatrixPtr)
-    {
-        auto memInfo = GetMemInfo(pMatrixPtr);
-        if (memInfo != nullptr)
-        {
-            memInfo->SetReleaseStep(m_stepCounter);
-        }
-        m_stepCounter++; 
+    #ifndef __SHARED_NUMBERFORMAT_H__
+#define __SHARED_NUMBERFORMAT_H__
+    
+        /**
+     * The text to be matched.
+     */
+    UnicodeString pattern;
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
+                        const unsigned char* key) const;
+    
+    class DHTTask {
+public:
+  virtual ~DHTTask() = default;
     }
     
-        // output element at index 2 (third element)
-    std::cout << array.at(2) << '\n';
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
     
-        // create string from std::string
-    std::string s_stdstring = 'The quick brown fox jumps over the lazy dog.';
-    json j_stdstring(s_stdstring);
+      Type type_;
+    
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
+}
+    
+    bool Executor::keepAliveAcquire() {
+  return false;
+}
+    
+    
+    {} // namespace folly
+
+    
+    namespace folly {
+    }
+    
+    
+    { private:
+  const KeepAlive<> executor_;
+};
+    
+      unsigned int get_local_count(const PackedPtr& p) const {
+    return p.extra() & ~ALIASED_PTR;
+  }
+    
+    void AtFork::unregisterHandler(void* object) {
+  auto& list = AtForkList::instance();
+  std::lock_guard<std::mutex> lg(list.tasksLock);
+  for (auto it = list.tasks.begin(); it != list.tasks.end(); ++it) {
+    if (it->object == object) {
+      list.tasks.erase(it);
+      return;
+    }
+  }
+}
+    
+    
+    {
+    {template <typename IPAddrType>
+inline bool
+getNthMSBitImpl(const IPAddrType& ip, size_t bitIndex, sa_family_t family) {
+  if (bitIndex >= ip.bitCount()) {
+    getNthMSBitImplThrow(ip.bitCount(), family);
+  }
+  // Underlying bytes are in n/w byte order
+  return (ip.getNthMSByte(bitIndex / 8) & (0x80 >> (bitIndex % 8))) != 0;
+}
+} // namespace detail
+} // namespace folly
+
+    
+    size_t qfind_first_byte_of_bitset(
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
+  std::bitset<256> s;
+  for (auto needle : needles) {
+    s[(uint8_t)needle] = true;
+  }
+  for (size_t index = 0; index < haystack.size(); ++index) {
+    if (s[(uint8_t)haystack[index]]) {
+      return index;
+    }
+  }
+  return std::string::npos;
+}
+    
+    public:
+    JStringCache(int capacity) : capacity(capacity) {}
+    
+    namespace WeexCore {
+    }
+    
+    #include <map>
+#include <set>
+#include <string>
+    
+    namespace WeexCore {
+    }
+    
+    
+    {
+    { public:
+  std::string page_id_;
+  std::string ref_;
+  std::vector<std::pair<std::string, std::string>> *style_;
+  std::vector<std::pair<std::string, std::string>> *margin_;
+  std::vector<std::pair<std::string, std::string>> *padding_;
+  std::vector<std::pair<std::string, std::string>> *border_;
+};
+}  // namespace WeexCore
+    
+    #endif  // CORE_RENDER_NODE_RENDER_APPBAR_H_
