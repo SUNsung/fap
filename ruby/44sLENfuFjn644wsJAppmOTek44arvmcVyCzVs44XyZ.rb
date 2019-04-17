@@ -1,39 +1,65 @@
 
         
-          def vcross(b)
-    Vec.new(@y * b.z - @z * b.y,
-            @z * b.x - @x * b.z,
-            @x * b.y - @y * b.x)
-  end
+        require 'action_view/helpers/tags/collection_helpers'
     
-      [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
+                  Time.utc(
+                default[:year], default[:month], default[:day],
+                default[:hour], default[:min], default[:sec]
+              )
+            end
+          end
+      end
+    end
+  end
 end
+
     
-        def post_render(page)
-      OctopressFilters::post_filter(page)
+            private
+    
+    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
+    
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+      it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
+  end
+end
+
+    
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
     end
-  end
     
-      def new
-    @address_endpoint = @server.address_endpoints.build
-  end
-    
-      def create
-    @organization = Organization.new(params.require(:organization).permit(:name, :permalink))
-    @organization.owner = current_user
-    if @organization.save
-      redirect_to_with_json organization_root_path(@organization)
-    else
-      render_form_errors 'new', @organization
+      describe 'down' do
+    let :valid_options do
+      super().merge('extract' => new_extract,
+                    'template' => new_template)
     end
-  end
     
-      def create
-    @organization_user = organization.organization_users.build(params.require(:organization_user).permit(:email_address, :admin, :all_servers))
-    if @organization_user.save
-      AppMailer.user_invite(@organization_user.user, organization).deliver
-      redirect_to_with_json [organization, :users], :notice => 'An invitation will be sent to #{@organization_user.user.email_address} which will allow them to access your organization.'
-    else
-      render_form_errors 'new', @organization_user
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
     end
-  end
+    
+          def stack
+        UI::ErrorReport.stack
+      end
