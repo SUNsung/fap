@@ -1,76 +1,83 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class CollectionRadioButtons < Base # :nodoc:
-        include CollectionHelpers
+        Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
+ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur
+tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
+Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
+aliquet. Sed ultrices placerat ultricies.
+TEXT
     
-            def ==(type)
-          @symbol == type.to_sym unless type.blank?
-        end
-      end
+    # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
     
-            @status = status
-      end
+    require 'benchmark/ips'
+require 'jekyll'
+require 'json'
     
-                  Jekyll.logger.info 'LiveReload address:',
-                                 'http://#{opts['host']}:#{opts['livereload_port']}'
-            end
-          end
-          @thread.abort_on_exception = true
-        end
+    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
     
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-          # renders hidden field and link to remove record using nested_attributes
-      def link_to_icon_remove_fields(form)
-        url = form.object.persisted? ? [:admin, form.object] : '#'
-        link_to_with_icon('delete', '', url,
-                          class: 'spree_remove_fields btn btn-sm btn-danger',
-                          data: {
-                            action: 'remove'
-                          },
-                          title: Spree.t(:remove),
-                          no_text: true
-                         ) + form.hidden_field(:_destroy)
-      end
-    
-            # Return if resource is found and user is not allowed to :admin
-        return '' if (klass = klass_for(options[:label])) && cannot?(:admin, klass)
-    
-          within('.table') do
-        expect(page).to have_content('19.99')
-        expect(page).to have_content('black')
-        expect(page).to have_content('A100')
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
     end
-  end
-end
-
     
-          if simple_current_order.nil? || simple_current_order.item_count.zero?
-        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{Spree.t('empty')})'
-        css_class = 'empty'
-      else
-        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{simple_current_order.item_count})
-                <span class='amount'>#{simple_current_order.display_total.to_html}</span>'
-        css_class = 'full'
-      end
-    
-            # Should be overriden if you have areas of your checkout that don't match
-        # up to a step within checkout_steps, such as a registration step
-        def skip_state_validation?
-          false
+            def collection_method
+          :issues
         end
     
-            private
+            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
+        # project - An instance of `Project`
+        # client - An instance of `Gitlab::GithubImport::Client`
+        def initialize(issue, project, client)
+          @issue = issue
+          @project = project
+          @client = client
+          @label_finder = LabelFinder.new(project)
+        end
     
-                result = advance_service.call(order: spree_current_order)
+            expose_attribute :noteable_type, :noteable_id, :commit_id, :file_path,
+                         :diff_hunk, :author, :note, :created_at, :updated_at,
+                         :github_id
+    
+    When /^(?:|I )go to (.+)$/ do |page_name|
+  visit path_to(page_name)
+end
+    
+    # This stuff needs to be run after Paperclip is defined.
+require 'paperclip/io_adapters/registry'
+require 'paperclip/io_adapters/abstract_adapter'
+require 'paperclip/io_adapters/empty_string_adapter'
+require 'paperclip/io_adapters/identity_adapter'
+require 'paperclip/io_adapters/file_adapter'
+require 'paperclip/io_adapters/stringio_adapter'
+require 'paperclip/io_adapters/data_uri_adapter'
+require 'paperclip/io_adapters/nil_adapter'
+require 'paperclip/io_adapters/attachment_adapter'
+require 'paperclip/io_adapters/uploaded_file_adapter'
+require 'paperclip/io_adapters/uri_adapter'
+require 'paperclip/io_adapters/http_url_proxy_adapter'
+
+    
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
+    end
+    
+        # Returns an extension based on the content type. e.g. 'jpeg' for
+    # 'image/jpeg'. If the style has a specified format, it will override the
+    # content-type detection.
+    #
+    # Each mime type generally has multiple extensions associated with it, so
+    # if the extension from the original filename is one of these extensions,
+    # that extension is used, otherwise, the first in the list is used.
+    def content_type_extension attachment, style_name
+      mime_type = MIME::Types[attachment.content_type]
+      extensions_for_mime_type = unless mime_type.empty?
+        mime_type.first.extensions
+      else
+        []
+      end
