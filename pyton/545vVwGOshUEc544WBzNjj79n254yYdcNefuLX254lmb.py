@@ -1,105 +1,123 @@
 
         
-                X, Y, coef_ = make_regression(
-            n_samples=(i * step) + n_test_samples, n_features=n_features,
-            noise=0.1, n_informative=n_informative, coef=True)
+                for filename in os.listdir(firefox_path):
+            if filename.endswith('.default') and os.path.isdir(os.path.join(firefox_path, filename)):
+                config_path = os.path.join(firefox_path, filename)
+                #xlog.debug('Got Firefox path: %s', config_path)
+                return config_path
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-    np.random.seed(42)
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-    In this examples we will use a movie review dataset.
-    
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    for f in solutions:
-    if not f.endswith('.py'):
-        continue
-    
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
-    
-    X = list()
-y = list()
-for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
-    for _ in range(30):
-        phase_noise = .01 * np.random.normal()
-        amplitude_noise = .04 * np.random.normal()
-        additional_noise = 1 - 2 * np.random.rand(n_features)
-        # Make the noise sparse
-        additional_noise[np.abs(additional_noise) < .997] = 0
-    
-    '''
-=========================================================
-Feature agglomeration
-=========================================================
-    
-        plt.figure(figsize=(6, 4))
-    for i in range(X_red.shape[0]):
-        plt.text(X_red[i, 0], X_red[i, 1], str(y[i]),
-                 color=plt.cm.nipy_spectral(labels[i] / 10.),
-                 fontdict={'weight': 'bold', 'size': 9})
-    
-    plt.figure(figsize=(12, 12))
+    EOF = -1
     
     
-  def _SendRequest( self ):
-    self._response_future = self.PostDataToHandlerAsync(
-      self._request_data,
-      'receive_messages',
-      timeout = TIMEOUT_SECONDS )
-    return
+    def match(self, input, ttype, follow):
+        '''
+        Match current input symbol against ttype.  Attempt
+        single token insertion or deletion error recovery.  If
+        that fails, throw MismatchedTokenException.
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        '''
     
-      def ServerResponse( *args ):
-    return {
-      'completions': [ {
-        'insertion_text': 'insertion_text',
-        'menu_text': 'menu_text',
-        'extra_menu_info': 'extra_menu_info',
-        'detailed_info': 'detailed_info',
-        'kind': 'kind',
-        'extra_data': {
-           'doc_string': 'doc_string'
-        }
-      } ],
-      'completion_start_column': 3,
-      'errors': [ {
-        'exception': {
-           'TYPE': 'Exception'
-        },
-        'message': 'message',
-        'traceback': 'traceback'
-      } ]
-    }
+    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
+                 input=None, start=None, stop=None, oldToken=None):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            self.index = oldToken.index
+            self._text = oldToken._text
+            if isinstance(oldToken, CommonToken):
+                self.input = oldToken.input
+                self.start = oldToken.start
+                self.stop = oldToken.stop
+            
+        else:
+            self.type = type
+            self.input = input
+            self.charPositionInLine = -1 # set to invalid position
+            self.line = 0
+            self.channel = channel
+            
+	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
+            self.index = -1
+            
+            # We need to be able to change the text once in a while.  If
+            # this is non-null, then getText should return this.  Note that
+            # start/stop are not affected by changing this.
+            self._text = text
     
-        def add_exception(self, future):
-        self.finished_futures.append(future)
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
+    
+        # Test if configuration directory exists
+    if not os.path.isdir(config_dir):
+        print('Creating directory', config_dir)
+        os.makedirs(config_dir)
+    
+    
+def test_bump_version():
+    '''Make sure it all works.'''
+    assert bump_version(Version('0.56.0'), 'beta') == Version('0.56.1b0')
+    assert bump_version(Version('0.56.0b3'), 'beta') == Version('0.56.0b4')
+    assert bump_version(Version('0.56.0.dev0'), 'beta') == Version('0.56.0b0')
+    
+    try:
+    import pkg_resources
+    get_module_res = lambda *res: pkg_resources.resource_stream(__name__,
+                                                                os.path.join(*res))
+except ImportError:
+    get_module_res = lambda *res: open(os.path.normpath(os.path.join(
+                            os.getcwd(), os.path.dirname(__file__), *res)), 'rb')
+    
+        def rank(self):
+        ws = defaultdict(float)
+        outSum = defaultdict(float)
+    
+        STOP_WORDS = set((
+        'the', 'of', 'is', 'and', 'to', 'in', 'that', 'we', 'for', 'an', 'are',
+        'by', 'be', 'as', 'on', 'with', 'can', 'if', 'from', 'which', 'you', 'it',
+        'this', 'then', 'at', 'have', 'all', 'not', 'one', 'has', 'or', 'that'
+    ))
+    
+        def __cut_detail(self, sentence):
+        blocks = re_han_detail.split(sentence)
+        for blk in blocks:
+            if re_han_detail.match(blk):
+                for word in self.__cut(blk):
+                    yield word
+            else:
+                tmp = re_skip_detail.split(blk)
+                for x in tmp:
+                    if x:
+                        if re_num.match(x):
+                            yield pair(x, 'm')
+                        elif re_eng.match(x):
+                            yield pair(x, 'eng')
+                        else:
+                            yield pair(x, 'x')
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK)
+    
+    if opt.withWeight is None:
+    withWeight = False
+else:
+    if int(opt.withWeight) is 1:
+        withWeight = True
+    else:
+        withWeight = False
+    
+    
+def fixViewBox(data):
+    viewBox = reViewBox.search(data)
+    if not viewBox:
+        return data
+    fixedViewBox = 'viewBox=\'0 1000 1000 1000\''
+    fixedData = re.sub(viewBox.group(1), fixedViewBox, data)
+    return fixedData
