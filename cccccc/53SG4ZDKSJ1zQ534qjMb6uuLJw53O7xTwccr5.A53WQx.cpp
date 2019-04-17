@@ -1,475 +1,325 @@
 
         
-          if (op_reg_data->shape_inference_fn == nullptr) {
-    return errors::InvalidArgument(
-        'No shape inference function exists for op '', node.op(),
-        '', did you forget to define it?');
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  DCHECK(PyDict_Check(code_to_exc_type_map));
-  PyObject* key;
-  PyObject* value;
-  Py_ssize_t pos = 0;
-  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
-    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
-    singleton_->exc_types_[code] = value;
-    // The exception classes should also have the lifetime of the process, but
-    // incref just in case.
-    Py_INCREF(value);
+        EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
   }
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'base/run_loop.h'
+#include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/message_loop/message_loop_current.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/app_window/app_window.h'
+#include 'skia/ext/image_operations.h'
+#include 'ui/aura/client/screen_position_client.h'
+#include 'ui/aura/window.h'
+#include 'ui/aura/window_tree_host.h'
+#include 'ui/events/platform/platform_event_source.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+#include 'ui/views/widget/widget.h'
+#include 'ui/views/focus/focus_manager.h'
+#include 'vector'
     
-    class RandomAccessFile;
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
-}
-    
-    #include <functional>
-#include <map>
-    
-    
-    {    /* Cleanup */
-    secp256k1_context_destroy(tctx);
-}
-    
-        /* Check bad contexts and NULLs for recovery */
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_recover(none, &recpubkey, &recsig, message) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_recover(sign, &recpubkey, &recsig, message) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_recover(vrfy, &recpubkey, &recsig, message) == 1);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, message) == 1);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_recover(both, NULL, &recsig, message) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, NULL, message) == 0);
-    CHECK(ecount == 4);
-    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, NULL) == 0);
-    CHECK(ecount == 5);
-    
-    #include <stdint.h>
-#include <stdlib.h>
-    
-    		// intermediate encoding
-		Mode			m_mode;
-    
-    
-  typedef struct  AF_LatinAxisRec_
-  {
-    FT_Fixed         scale;
-    FT_Pos           delta;
+    namespace {
     }
     
-    class Clipper : public virtual ClipperBase
+    #include 'extensions/browser/extension_function.h'
+    
+    #endif
+    
+            int16x8_t l02 = vaddq_s16(line0x, line2x);
+        int16x8_t l1x2 = vshlq_n_s16(line1x, 1);
+        int16x8_t dy = vsubq_s16(line2y, line0y);
+        int16x8_t dx = vaddq_s16(l1x2, l02);
+    
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
+        {
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
+    }
+    
+    #endif
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, f32, 8,
+,
 {
-public:
-  Clipper(int initOptions = 0);
-  bool Execute(ClipType clipType,
-      Paths &solution,
-      PolyFillType fillType = pftEvenOdd);
-  bool Execute(ClipType clipType,
-      Paths &solution,
-      PolyFillType subjFillType,
-      PolyFillType clipFillType);
-  bool Execute(ClipType clipType,
-      PolyTree &polytree,
-      PolyFillType fillType = pftEvenOdd);
-  bool Execute(ClipType clipType,
-      PolyTree &polytree,
-      PolyFillType subjFillType,
-      PolyFillType clipFillType);
-  bool ReverseSolution() { return m_ReverseOutput; };
-  void ReverseSolution(bool value) {m_ReverseOutput = value;};
-  bool StrictlySimple() {return m_StrictSimple;};
-  void StrictlySimple(bool value) {m_StrictSimple = value;};
-  //set the callback function for z value filling on intersections (otherwise Z is 0)
-#ifdef use_xyz
-  void ZFillFunction(ZFillCallback zFillFunc);
-#endif
-protected:
-  virtual bool ExecuteInternal();
-private:
-  JoinList         m_Joins;
-  JoinList         m_GhostJoins;
-  IntersectList    m_IntersectList;
-  ClipType         m_ClipType;
-  typedef std::list<cInt> MaximaList;
-  MaximaList       m_Maxima;
-  TEdge           *m_SortedEdges;
-  bool             m_ExecuteLocked;
-  PolyFillType     m_ClipFillType;
-  PolyFillType     m_SubjFillType;
-  bool             m_ReverseOutput;
-  bool             m_UsingPolyTree; 
-  bool             m_StrictSimple;
-#ifdef use_xyz
-  ZFillCallback   m_ZFill; //custom callback 
-#endif
-  void SetWindingCount(TEdge& edge);
-  bool IsEvenOddFillType(const TEdge& edge) const;
-  bool IsEvenOddAltFillType(const TEdge& edge) const;
-  void InsertLocalMinimaIntoAEL(const cInt botY);
-  void InsertEdgeIntoAEL(TEdge *edge, TEdge* startEdge);
-  void AddEdgeToSEL(TEdge *edge);
-  bool PopEdgeFromSEL(TEdge *&edge);
-  void CopyAELToSEL();
-  void DeleteFromSEL(TEdge *e);
-  void SwapPositionsInSEL(TEdge *edge1, TEdge *edge2);
-  bool IsContributing(const TEdge& edge) const;
-  bool IsTopHorz(const cInt XPos);
-  void DoMaxima(TEdge *e);
-  void ProcessHorizontals();
-  void ProcessHorizontal(TEdge *horzEdge);
-  void AddLocalMaxPoly(TEdge *e1, TEdge *e2, const IntPoint &pt);
-  OutPt* AddLocalMinPoly(TEdge *e1, TEdge *e2, const IntPoint &pt);
-  OutRec* GetOutRec(int idx);
-  void AppendPolygon(TEdge *e1, TEdge *e2);
-  void IntersectEdges(TEdge *e1, TEdge *e2, IntPoint &pt);
-  OutPt* AddOutPt(TEdge *e, const IntPoint &pt);
-  OutPt* GetLastOutPt(TEdge *e);
-  bool ProcessIntersections(const cInt topY);
-  void BuildIntersectList(const cInt topY);
-  void ProcessIntersectList();
-  void ProcessEdgesAtTopOfScanbeam(const cInt topY);
-  void BuildResult(Paths& polys);
-  void BuildResult2(PolyTree& polytree);
-  void SetHoleState(TEdge *e, OutRec *outrec);
-  void DisposeIntersectNodes();
-  bool FixupIntersectionOrder();
-  void FixupOutPolygon(OutRec &outrec);
-  void FixupOutPolyline(OutRec &outrec);
-  bool IsHole(TEdge *e);
-  bool FindOwnerFromSplitRecs(OutRec &outRec, OutRec *&currOrfl);
-  void FixHoleLinkage(OutRec &outrec);
-  void AddJoin(OutPt *op1, OutPt *op2, const IntPoint offPt);
-  void ClearJoins();
-  void ClearGhostJoins();
-  void AddGhostJoin(OutPt *op, const IntPoint offPt);
-  bool JoinPoints(Join *j, OutRec* outRec1, OutRec* outRec2);
-  void JoinCommonEdges();
-  void DoSimplePolygons();
-  void FixupFirstLefts1(OutRec* OldOutRec, OutRec* NewOutRec);
-  void FixupFirstLefts2(OutRec* InnerOutRec, OutRec* OuterOutRec);
-  void FixupFirstLefts3(OutRec* OldOutRec, OutRec* NewOutRec);
-#ifdef use_xyz
-  void SetZ(IntPoint& pt, TEdge& e1, TEdge& e2);
-#endif
-};
-//------------------------------------------------------------------------------
-    
-      Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the 'Software'), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-    
-        * Redistributions of source code must retain the above copyright notice,
-       this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice,
-       this list of conditions and the following disclaimer in the
-       documentation and/or other materials provided with the distribution.
-    
-    
-    {        template <typename ElementType>
-        void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const;
-    };
-    
-        NDMask::NDMask(const NDShape& shape, const DeviceDescriptor& device)
-        : NDMask(shape, AllocateMatrix(shape, device))
-    {
-        if (shape.Rank() > 2)
-            LogicError('NDMask instance shaped '%S' with more than 2 axes is currently unsupported.', shape.AsString().c_str());
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
+             'vcvt.f32.s32 q1, q0                                    \n\t'
+             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3'//,'d4','d5'
+         );
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
+             'vcvt.f32.s32 q1, q0                                    \n\t'
+             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i + 4)
+             : 'd0','d1','d2','d3'//,'d4','d5'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, f32, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline_s32 = vld1q_s32(_src + i);
+         float32x4_t vline_f32 = vcvtq_f32_s32(vline_s32);
+         vst1q_f32(_dst + i, vline_f32);
+    }
     }
     
-        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
-    {
-        m_test->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
+                // calculate values for plain CPU part below if needed
+            if (x + 8 >= bwidth)
             {
-                OnWriteTestUpdate(samples, updates, aggregateMetric);
-            });
+                ptrdiff_t x3 = x == width ? width - 1 : x;
+                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
     }
     
-            m_combinedTrainingFunction->Save(tempModelFile);
-        std::wstring trainerStateCheckpointFilePath = GetTrainerStateCheckpointFilePath(modelFilePath);
-        std::wstring tempCheckpointFile = trainerStateCheckpointFilePath + L'.tmp';
-    
-    #pragma once
-    
-    namespace CNTK
+    f64 dotProduct(const Size2D &_size,
+               const f32 * src0Base, ptrdiff_t src0Stride,
+               const f32 * src1Base, ptrdiff_t src1Stride)
 {
-    struct VariableFields final : public std::enable_shared_from_this<VariableFields>
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width * sizeof(f32)))
     {
-        friend class CompositeFunction;
+        size.width *= size.height;
+        size.height = 1;
     }
     }
     
+    #ifdef CAROTENE_NEON
     
-    {
-    {
-    {}}}
-
     
-                // reshape Input(1)
-            Input(1)->SetDims(TensorShape(dimsA), false);
-            fprintf(stderr, '\n%ls %ls operation: For legacy compatibility, the sample layout of second input (%ls %ls operation) was patched to [%s] (from [%s])\n',
-                NodeName().c_str(), OperationName().c_str(), Input(1)->NodeName().c_str(), Input(1)->OperationName().c_str(), string(Input(1)->GetSampleLayout()).c_str(), dimsBstring.c_str());
+    {            prev = vaddw_u16(prev, vdup_lane_u16(el4h, 3));
+        }
     
-      void shutdown() {
-    // Your implementation goes here
-    printf('shutdown\n');
+            s16 prevx = 0, currx = 0, nextx = 0;
+        ptrdiff_t x = 0;
+        const ptrdiff_t bwidth = y + 2 < height ? width : (width - 8);
+    
+    namespace leveldb {
+    }
+    
+    #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+      // Successful parses
+  static struct {
+    const char* fname;
+    uint64_t number;
+    FileType type;
+  } cases[] = {
+    { '100.log',            100,   kLogFile },
+    { '0.log',              0,     kLogFile },
+    { '0.sst',              0,     kTableFile },
+    { '0.ldb',              0,     kTableFile },
+    { 'CURRENT',            0,     kCurrentFile },
+    { 'LOCK',               0,     kDBLockFile },
+    { 'MANIFEST-2',         2,     kDescriptorFile },
+    { 'MANIFEST-7',         7,     kDescriptorFile },
+    { 'LOG',                0,     kInfoLogFile },
+    { 'LOG.old',            0,     kInfoLogFile },
+    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
+  };
+  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+    std::string f = cases[i].fname;
+    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
+    ASSERT_EQ(cases[i].type, type) << f;
+    ASSERT_EQ(cases[i].number, number) << f;
   }
     
-    namespace osquery {
-namespace tables {
-    }
-    }
+      bool empty() const { return head_.next_ == &head_; }
+  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
+  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
     
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
+      if (msg == nullptr && !input.empty()) {
+    msg = 'invalid tag';
   }
-}
     
-        // No need to check each individual software partition since they will
-    // examined at the HW level below.
-    if (devname.substr(devname.length() - 1).find_last_of('0123456789') !=
-        std::string::npos) {
-      return;
-    }
-    
-    #include <vector>
-    
-    
-    {  test_read_uri_ =
-      'https://' + Flag::getValue('tls_hostname') + '/test_read_requests';
-}
-    
-    class EbpfTracepoint final {
+    // WriteBatchInternal provides static methods for manipulating a
+// WriteBatch that we don't want in the public WriteBatch interface.
+class WriteBatchInternal {
  public:
-  EbpfTracepoint(EbpfTracepoint&&);
-  EbpfTracepoint& operator=(EbpfTracepoint&&);
+  // Return the number of entries in the batch.
+  static int Count(const WriteBatch* batch);
     }
     
-    TEST_F(PerfOutputTests,
-       impl_consumeWrappedMessagesFromCircularBuffer_without_wrapping) {
-  using WrappedMessage = ebpf::PerfOutput<TestMessage>::WrappedMessage;
-  auto const test_size = std::size_t{9};
-  auto buf = std::vector<ebpf::impl::ByteType>(
-      sizeof(WrappedMessage) * test_size + 128, 0);
-  auto buf_ptr = &buf[0];
-  for (std::size_t i = 0; i < test_size; ++i) {
-    auto wrapped = WrappedMessage{};
-    wrapped.msg.a_ = i + 1;
-    wrapped.msg.b_ = i * 2 + 2;
-    wrapped.msg.c_ = 'j';
-    wrapped.msg.d_ = 'k';
-    wrapped.size = sizeof(TestMessage);
-    wrapped.header.type = PERF_RECORD_SAMPLE;
-    wrapped.header.size = sizeof(WrappedMessage);
-    auto const wrapped_ptr =
-        reinterpret_cast<ebpf::impl::ByteType const*>(&wrapped);
-    std::copy(wrapped_ptr, wrapped_ptr + sizeof(WrappedMessage), buf_ptr);
-    buf_ptr += sizeof(WrappedMessage);
-  }
-  auto dst = std::vector<TestMessage>{};
-  auto status =
-      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
-          &buf[0],
-          0,
-          static_cast<std::size_t>(buf_ptr - &buf[0]),
-          buf.size(),
-          dst);
-  ASSERT_FALSE(status.isError());
-  ASSERT_EQ(dst.size(), test_size);
-  for (std::size_t i = 0; i < test_size; ++i) {
-    EXPECT_EQ(dst[i].a_, static_cast<int>(i + 1));
-    EXPECT_EQ(dst[i].b_, static_cast<int>(i * 2 + 2));
-    EXPECT_EQ(dst[i].c_, 'j');
-    EXPECT_EQ(dst[i].d_, 'k');
-  }
-}
     
-    void EnterExitJoiner::drop_stuck_events() {
-  // As far as `table_` is relatively small we can afford to iterarte over it
-  // once in a kCounterLimit events in order to clean it up.
-  for (auto it = table_.begin(); it != table_.end();) {
-    if (it->second.return_value < 0) {
-      it = table_.erase(it);
-    } else {
-      it->second.return_value -= kCounterLimit;
-      ++it;
-    }
-  }
-}
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    int ClusterQualityInfo702::ambig_state(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    int ObjectExtendedInfo60D::obstacle_class(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 3);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
-    
-    Eigen::MatrixXd SplineSegKernel::NthDerivativeKernel(
-    const uint32_t n, const uint32_t num_params, const double accumulated_x) {
-  if (n == 1) {
-    return DerivativeKernel(num_params, accumulated_x);
-  } else if (n == 2) {
-    return SecondOrderDerivativeKernel(num_params, accumulated_x);
-  } else if (n == 3) {
-    return ThirdOrderDerivativeKernel(num_params, accumulated_x);
-  } else {
-    return Eigen::MatrixXd::Zero(num_params, num_params);
-  }
-}
-    
-    
-    {  double length_2 = 50.0;
-  const LaneGraph &lane_graph_2 =
-      ObstacleClusters::GetLaneGraph(start_s, length_2, lane);
-  EXPECT_EQ(1, lane_graph_2.lane_sequence_size());
-  EXPECT_EQ(3, lane_graph_2.lane_sequence(0).lane_segment_size());
-  EXPECT_EQ('l9', lane_graph_2.lane_sequence(0).lane_segment(0).lane_id());
-  EXPECT_EQ('l18', lane_graph_2.lane_sequence(0).lane_segment(1).lane_id());
-  EXPECT_EQ('l21', lane_graph_2.lane_sequence(0).lane_segment(2).lane_id());
-}
-    
-    
-    { protected:
-  GemVehicleFactory gem_factory_;
+    {  SrcPos start;
+  SrcPos past;
 };
     
+      char* comma = (char*)memchr(data, ',', data_len);
+  if (comma == nullptr) {
+    raise_warning('rfc2397: missing comma');
+    return nullptr;
+  }
     
-    {    swHeap_free(pq);
-}
+    #endif // incl_HPHP_DEBUGGABLE_H_
 
     
-    void Context::context_func(void *arg)
+    
+    {}
+
+    
+        class Rational
+    {
+    public:
+        Rational() noexcept;
+        Rational(Number const& n) noexcept;
+        Rational(Number const& p, Number const& q) noexcept;
+        Rational(int32_t i);
+        Rational(uint32_t ui);
+        Rational(uint64_t ui);
+    }
+    
+            static property Windows::UI::Xaml::DependencyProperty^ AnnouncementProperty
+        {
+            Windows::UI::Xaml::DependencyProperty^ get()
+            {
+                return s_announcementProperty;
+            }
+        }
+    
+            static std::unordered_map<std::wstring, std::wstring> GetTokenToReadableNameMap();
+    
+    static constexpr auto sc_MetadataUriLocalizeFor = L'https://go.microsoft.com/fwlink/?linkid=2041093&localizeFor=';
+static constexpr auto sc_RatiosUriRelativeTo = L'https://go.microsoft.com/fwlink/?linkid=2041339&localCurrency=';
+    
+      static bool isInitialized6() { return data6_.initialized; }
+    
+      virtual bool isReply() const CXX11_OVERRIDE;
+    
+    void DHTRoutingTable::showBuckets() const
 {
-    Context* _this = (Context*) arg;
-    _this->fn_(_this->private_data_);
-    _this->end = true;
-    _this->SwapOut();
-}
-    
-    
-    {
-    {#if defined(USE_VALGRIND)
-        VALGRIND_STACK_DEREGISTER(valgrind_stack_id);
-#endif
-        sw_free(stack_);
-        stack_ = NULL;
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
     }
+  */
 }
     
-    #ifndef __HIREDIS_QT_H__
-#define __HIREDIS_QT_H__
-#include <QSocketNotifier>
-#include '../async.h'
+      ~DHTRoutingTable();
     
-        Q_OBJECT
-    
-    
-    {
-    {        if (msg.timer)
-        {
-            swTimer_del(&SwooleG.timer, msg.timer);
-        }
-        if (msg.error || closed)
-        {
-            return nullptr;
-        }
-    }
-    /**
-     * pop data
-     */
-    void *data = data_queue.front();
-    data_queue.pop();
-    /**
-     * notify producer
-     */
-    if (!producer_queue.empty())
-    {
-        Coroutine *co = pop_coroutine(PRODUCER);
-        co->resume();
-    }
-    return data;
-}
-    
-        cache.set('test', val);
-    ASSERT_EQ(cache.get('test').get(), val.get());
-    val.reset();
-    ASSERT_EQ(dtor_num, 0);
-    
-    #include <unordered_map>
-#include <list>
-#include <utility>
-#include <memory>
-#include <time.h>
-    
-    #include <map>
-#include <unordered_map>
-    
-    
-    {    ASSERT_EQ(swThreadPool_free(&pool), SW_OK);
-    ASSERT_EQ(result, N);
-}
+    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
 
     
-            [](void *arg)
-        {
-            auto result = CAres::resolve('www.swoole.com', AF_INET, 0.001);
-            ASSERT_EQ(result, '');
-        },
     
-    #include <atomic>
+    {  void serialize(const std::string& filename);
+};
+    
+    #include <memory>
+    
+    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
+{
+  memcpy(secret_[0], initialSecret, SECRET_SIZE);
+  memcpy(secret_[1], initialSecret, SECRET_SIZE);
+}
+    
+    std::vector<DNSCache::AddrEntry>::const_iterator
+DNSCache::CacheEntry::find(const std::string& addr) const
+{
+  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
+    if ((*i).addr_ == addr) {
+      return i;
+    }
+  }
+  return addrEntries_.end();
+}
+    
+    #include 'gtest/gtest.h'
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+    
+    
+    {  Byte t1(bytes + 6);
+  uint32_t t = t1.get_byte(5, 3);
+  x <<= 3;
+  x |= t;
+  double ret = x * CLUSTER_VREL_RES + CLUSTER_VREL_LAT_MIN;
+  return ret;
+}
+    
+    void Spline1dSeg::SetParams(const std::vector<double>& params) {
+  SetSplineFunc(PolynomialXd(params));
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
+#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
+#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
+#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
+#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
+#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
+    
+      Byte t3(bytes + 7);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Byte t1(bytes + 1);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    #include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+    
+    // config detail: {'name': 'output_value', 'enum': {0: 'OUTPUT_VALUE_OFF', 1:
+// 'OUTPUT_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 23, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Output_valueType Hornrpt79::output_value(const std::uint8_t* bytes,
+                                                      int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
+    }
