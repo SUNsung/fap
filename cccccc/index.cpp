@@ -1,42 +1,57 @@
 
         
-        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
-    }
+        // Names that corresponds to a single input parameter.
+class ParamNames {
+ public:
+  // Create param based on Arg.
+  ParamNames(const string& name, const string& rename_to) : name_(name) {
+    rename_to_ = AvoidPythonReserved(rename_to);
   }
     }
+    
+    
+    {}  // end namespace tensorflow
+
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    // Comparisons on PyBfloat16s.
+PyObject* PyBfloat16_RichCompare(PyObject* a, PyObject* b, int op) {
+  bfloat16 x, y;
+  if (!AsBfloat16(a, &x) || !AsBfloat16(b, &y)) return nullptr;
+  bool result;
+  switch (op) {
+    case Py_LT:
+      result = x < y;
+      break;
+    case Py_LE:
+      result = x <= y;
+      break;
+    case Py_EQ:
+      result = x == y;
+      break;
+    case Py_NE:
+      result = x != y;
+      break;
+    case Py_GT:
+      result = x > y;
+      break;
+    case Py_GE:
+      result = x >= y;
+      break;
+    default:
+      LOG(FATAL) << 'Invalid op type ' << op;
+  }
+  return PyBool_FromLong(result);
+}
+    
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -44,338 +59,264 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
     
-    namespace tensorflow {
-    }
+    #include 'tensorflow/stream_executor/lib/status.h'
+#include 'tensorflow/stream_executor/lib/statusor.h'
+#include 'tensorflow/stream_executor/platform/mutex.h'
+#include 'tensorflow/stream_executor/stream_executor_pimpl.h'
     
-      TemporaryFile() {
-    path = tmppath();
-  }
+    // Macro used to quickly declare overrides for abstract virtuals in the
+// fft::FftSupport base class. Assumes that it's emitted somewhere inside the
+// ::stream_executor namespace.
+#define TENSORFLOW_STREAM_EXECUTOR_GPU_FFT_SUPPORT_OVERRIDES                   \
+  std::unique_ptr<fft::Plan> Create1dPlan(Stream *stream, uint64 num_x,        \
+                                          fft::Type type, bool in_place_fft)   \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> Create2dPlan(Stream *stream, uint64 num_x,        \
+                                          uint64 num_y, fft::Type type,        \
+                                          bool in_place_fft) override;         \
+  std::unique_ptr<fft::Plan> Create3dPlan(                                     \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft) override;                             \
+  std::unique_ptr<fft::Plan> Create1dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, fft::Type type, bool in_place_fft,         \
+      ScratchAllocator *scratch_allocator) override;                           \
+  std::unique_ptr<fft::Plan> Create2dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, fft::Type type,              \
+      bool in_place_fft, ScratchAllocator *scratch_allocator) override;        \
+  std::unique_ptr<fft::Plan> Create3dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft, ScratchAllocator *scratch_allocator)  \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> CreateBatchedPlan(                                \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count) override;                            \
+  std::unique_ptr<fft::Plan> CreateBatchedPlanWithScratchAllocator(            \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count, ScratchAllocator *scratch_allocator) \
+      override;                                                                \
+  void UpdatePlanWithScratchAllocator(Stream *stream, fft::Plan *plan,         \
+                                      ScratchAllocator *scratch_allocator)     \
+      override;                                                                \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<float> &input,                                 \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<double> &input,                                \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<float> *output) override;                            \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<double> *output) override;
     
-    class GetMergeSingleListFeatureTensorsGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    vector<string> input_blob_names{};
-    vector<string> output_blob_names{};
-    }
-    }
+      // If a PyObject is owned, decrement its reference count.
+  ~ScopedPythonPtr() { Py_XDECREF(ptr_); }
     
-    namespace caffe2 {
-namespace {
-    }
-    }
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    #include <cstdio>    // for FILE
-#include 'strngs.h'  // for STRING
     
-      // Adds an element with a weight of 1.
-  void add(double x, double y);
-  // Adds an element with a specified weight.
-  void add(double x, double y, double weight);
-  // Adds a whole LLSQ.
-  void add(const LLSQ& other);
-  // Deletes an element with a weight of 1.
-  void remove(double x, double y);
-  int32_t count() const {  // no of elements
-    return static_cast<int>(total_weight + 0.5);
-  }
-    
-    #endif
-
-    
-      // Return whether this model is likely to agree with the other model on most
-  // paragraphs they are marked.
-  bool Comparable(const ParagraphModel &other) const;
-    
-      public:
-    REJ() = default;
-    
-    // Trivial class to encapsulate a fixed-length array of bits, with
-// Serialize/DeSerialize. Replaces the old macros.
-class BitVector {
- public:
-  // Fast lookup table to get the first least significant set bit in a byte.
-  // For zero, the table has 255, but since it is a special case, most code
-  // that uses this table will check for zero before looking up lsb_index_.
-  static const uint8_t lsb_index_[256];
-  // Fast lookup table to get the residual bits after zeroing the least
-  // significant set bit in a byte.
-  static const uint8_t lsb_eroded_[256];
-  // Fast lookup table to give the number of set bits in a byte.
-  static const int hamming_table_[256];
-    }
-    
-    TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() method
-  // of the TestWithParam<T> class:
-  EXPECT_TRUE(foo.Blah(GetParam()));
-  ...
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
 }
     
-    // A set of macros for testing Google Test assertions or code that's expected
-// to generate Google Test fatal failures.  It verifies that the given
-// statement will cause exactly one fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - 'statement' cannot reference local non-static variables or
-//     non-static members of the current object.
-//   - 'statement' cannot return a value.
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
-// gtest_unittest.cc will fail to compile if we do that.
-#define EXPECT_FATAL_FAILURE(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+    #include 'google/protobuf/message.h'
+#include 'google/protobuf/descriptor.h'
     
-      // Protects mutable state in *impl_.  This is mutable as some const
-  // methods need to lock it too.
-  mutable internal::Mutex mutex_;
+    std::string ReadFile(const std::string& name) {
+  std::ifstream file(name.c_str());
+  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
+      << name
+      << '', please make sure you are running this command from the benchmarks'
+      << ' directory.\n';
+  return std::string((std::istreambuf_iterator<char>(file)),
+                     std::istreambuf_iterator<char>());
+}
     
-      // Called after a test ends.
-  virtual void OnTestEnd(const TestInfo& /* test_info */) {
-    int difference = Water::allocated() - initially_allocated_;
+      void ScrubMessage(DescriptorProto *message_type) {
+    for (int i = 0; i < message_type->mutable_enum_type()->size(); i++) {
+      ScrubEnum(message_type->mutable_enum_type(i));
     }
-    
-      // Gets the next node in the queue.
-  QueueNode* next() { return next_; }
-  const QueueNode* next() const { return next_; }
-    
-    
-    { private:
-  CensusContext context_;
-  // Metadata elements for tracing and census stats data.
-  grpc_linked_mdelem stats_bin_;
-  grpc_linked_mdelem tracing_bin_;
-  // Client method.
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // The recv trailing metadata callbacks.
-  grpc_metadata_batch* recv_trailing_metadata_;
-  grpc_closure* initial_on_done_recv_trailing_metadata_;
-  grpc_closure on_done_recv_trailing_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  // Start time (for measuring latency).
-  absl::Time start_time_;
-  // Server elapsed time in nanoseconds.
-  uint64_t elapsed_time_;
-  // The received message--may be null.
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  // Number of messages in this RPC.
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference when adding trace context
-  // metatdata to outgoing message.
-  char tracing_buf_[kMaxTraceContextLen];
-};
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
-
-    
-    
-    {    uint8_t version = buf[kVersionIdOffset];
-    uint32_t fieldID = buf[kServerElapsedTimeOffset];
-    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
-      *time = 0;
-      return kEncodeDecodeFailure;
+    for (int i = 0; i < message_type->mutable_nested_type()->size(); i++) {
+      ScrubMessage(message_type->mutable_nested_type(i));
     }
-    *time = absl::little_endian::Load64(
-        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
-    return kRpcServerStatsSize;
   }
     
-    #endif  // !GRPC_CUSTOM_DEFAULT_THREAD_POOL
-
+    #include <string>
+#include <set>
+#include <vector>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
     
-    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
-    : shutdown_(false),
-      reserve_threads_(reserve_threads),
-      nthreads_(0),
-      threads_waiting_(0) {
-  for (int i = 0; i < reserve_threads_; i++) {
-    std::lock_guard<std::mutex> lock(mu_);
-    nthreads_++;
-    new DynamicThread(this);
+    namespace xgboost {
+/*!
+ * \brief interface of tree update module, that performs update of a tree.
+ */
+class TreeUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~TreeUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
+  /*!
+   * \brief perform update to the tree models
+   * \param gpair the gradient pair statistics of the data
+   * \param data The data matrix passed to the updater.
+   * \param trees references the trees to be updated, updater will change the content of trees
+   *   note: all the trees in the vector are updated, with the same statistics,
+   *         but maybe different random seeds, usually one tree is passed in at a time,
+   *         there can be multiple trees when we train random forest style model
+   */
+  virtual void Update(HostDeviceVector<GradientPair>* gpair,
+                      DMatrix* data,
+                      const std::vector<RegTree*>& trees) = 0;
+    }
+    }
+    
+    // Finally register the objective function.
+// After it succeeds you can try use xgboost with objective=mylogistic
+XGBOOST_REGISTER_OBJECTIVE(MyLogistic, 'mylogistic')
+.describe('User defined logistic regression plugin')
+.set_body([]() { return new MyLogistic(); });
+    
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
   }
 }
     
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
-    
-     public:
-  /*! \brief cuda kernel argument descriptor */
-  struct ArgType {
-    /*! \brief whether argument is NDArray */
-    bool is_ndarray;
-    /*! \brief whether argument is constant (input) */
-    bool is_const;
-    /*! \brief data type of argument */
-    mshadow::TypeFlag dtype;
-  };
-  /*! \brief Cuda kernel */
-  class Kernel {
-   public:
-    /*! \brief Launch the kernel */
-    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
-                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
-                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
-                uint32_t shared_mem);
-    /*! \brief kernel interface signature */
-    const std::vector<ArgType>& signature() { return signature_; }
+      void GetGradient(const HostDeviceVector<bst_float>& preds,
+                   const MetaInfo& info,
+                   int iter,
+                   HostDeviceVector<GradientPair>* out_gpair) override {
+    CHECK_EQ(preds.Size(), info.labels_.Size()) << 'label size predict size not match';
+    const auto& preds_h = preds.HostVector();
+    out_gpair->Resize(preds_h.size());
+    std::vector<GradientPair>& gpair = out_gpair->HostVector();
+    // quick consistency when group is not available
+    std::vector<unsigned> tgptr(2, 0); tgptr[1] = static_cast<unsigned>(info.labels_.Size());
+    const std::vector<unsigned> &gptr = info.group_ptr_.size() == 0 ? tgptr : info.group_ptr_;
+    CHECK(gptr.size() != 0 && gptr.back() == info.labels_.Size())
+        << 'group structure not consistent with #rows';
     }
     
-    class CaffeDataIterWrapper : public PrefetcherIter {
- public:
-  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
-  virtual ~CaffeDataIterWrapper() {
-    IF_CHECK_TIMING(
-      if (next_time_.load() > 0) {
-        LOG(WARNING) << 'Caffe data loader was blocked for '
-                     << next_time_.load()
-                     << ' ms waiting for incoming data';
-      }
-    )
-  }
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    // We need to init prefetcher args in order to get dtype
-    this->param_.InitAllowUnknown(kwargs);
-    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
-    switch (this->param_.dtype.value()) {
-      case mshadow::kFloat32:
-        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat64:
-        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat16:
-        LOG(FATAL) << 'float16 layer is not supported by caffe';
-        return;
-      default:
-        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
-        return;
-    }
-    PrefetcherIter::Init(kwargs);
-    this->param_.prefetch_buffer = 1;
-  }
-  virtual void BeforeFirst(void) {
-    return PrefetcherIter::BeforeFirst();
-  }
-  virtual bool Next(void) {
-    IF_CHECK_TIMING(
-      const uint64_t start_time = GetTickCountMS();
-    )
-    const bool rc = PrefetcherIter::Next();
-    IF_CHECK_TIMING(
-      const uint64_t diff_time  = GetTickCountMS() - start_time;
-      next_time_.fetch_add(diff_time);
-    )
-    return rc;
+    float SimpleDMatrix::GetColDensity(size_t cidx) {
+  size_t column_size = 0;
+  // Use whatever version of column batches already exists
+  if (sorted_column_page_) {
+    auto batch = this->GetSortedColumnBatches();
+    column_size = (*batch.begin())[cidx].size();
+  } else {
+    auto batch = this->GetColumnBatches();
+    column_size = (*batch.begin())[cidx].size();
   }
     }
     
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    {    // one-liner channel-wise normalization
-    switch (data.shape_[0]) {
-      case 4:
-        if (meanfile_ready_ && flip) {
-          outimg_[3] = mirror((data[3] - meanimg_[3]) * contrast + illumination)
-            * param_.scale / param_.std_a;
-        } else if (meanfile_ready_ && (!flip)) {
-          outimg_[3] = ((data[3] - meanimg_[3]) * contrast + illumination)
-            * param_.scale / param_.std_a;
-        } else if (!meanfile_ready_ && flip) {
-          outimg_[3] = mirror((data[3] - param_.mean_a) * contrast + illumination)
-            * param_.scale / param_.std_a;
-        } else {
-          outimg_[3] = ((data[3] - param_.mean_a) * contrast + illumination)
-            * param_.scale / param_.std_a;
-        }
-      case 3:
-        if (meanfile_ready_ && flip) {
-          outimg_[2] = mirror((data[2] - meanimg_[2]) * contrast + illumination)
-            * param_.scale / param_.std_b;
-        } else if (meanfile_ready_ && (!flip)) {
-          outimg_[2] = ((data[2] - meanimg_[2]) * contrast + illumination)
-            * param_.scale / param_.std_b;
-        } else if (!meanfile_ready_ && flip) {
-          outimg_[2] = mirror((data[2] - param_.mean_b) * contrast + illumination)
-            * param_.scale / param_.std_b;
-        } else {
-          outimg_[2] = ((data[2] - param_.mean_b) * contrast + illumination)
-            * param_.scale / param_.std_b;
-        }
-      case 2:
-        if (meanfile_ready_ && flip) {
-          outimg_[1] = mirror((data[1] - meanimg_[1]) * contrast + illumination)
-            * param_.scale / param_.std_g;
-        } else if (meanfile_ready_ && (!flip)) {
-          outimg_[1] = ((data[1] - meanimg_[1]) * contrast + illumination)
-            * param_.scale / param_.std_g;
-        } else if (!meanfile_ready_ && flip) {
-          outimg_[1] = mirror((data[1] - param_.mean_g) * contrast + illumination)
-            * param_.scale / param_.std_g;
-        } else {
-          outimg_[1] = ((data[1] - param_.mean_g) * contrast + illumination)
-            * param_.scale / param_.std_g;
-        }
-      case 1:
-        if (meanfile_ready_ && flip) {
-          outimg_[0] = mirror((data[0] - meanimg_[0]) * contrast + illumination)
-            * param_.scale / param_.std_r;
-        } else if (meanfile_ready_ && (!flip)) {
-          outimg_[0] = ((data[0] - meanimg_[0]) * contrast + illumination)
-            * param_.scale / param_.std_r;
-        } else if (!meanfile_ready_ && flip) {
-          outimg_[0] = mirror((data[0] - param_.mean_r) * contrast + illumination)
-            * param_.scale / param_.std_r;
-        } else {
-          outimg_[0] = ((data[0] - param_.mean_r) * contrast + illumination)
-            * param_.scale / param_.std_r;
-        }
-        break;
-      default:
-        LOG(FATAL) << 'Expected image channels range 1-4, got ' << data.shape_[0];
+    // About GLSL version:
+// The 'glsl_version' initialization parameter defaults to '#version 150' if NULL.
+// Only override if your GL version doesn't handle this GLSL version. Keep NULL if unsure!
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+    using apollo::common::ErrorCode;
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
     }
-  }
     
-      std::vector<Tensor<cpu, 2, DType> > ts_t_arr;
-  for (int i = 0; i < static_cast<int>(ts_arr.size()); ++i) {
-    ts_t_arr.emplace_back(Shape2(ts_arr[i].size(1), ts_arr[i].size(0)));
-    AllocSpace(&ts_t_arr[i]);
-    flip<cpu, DType>(ts_arr[i].size(0), ts_arr[i].size(1), ts_t_arr[i].dptr_,
-      ts_t_arr[i].stride_, ts_arr[i].dptr_, ts_arr[i].stride_);
-  }
+    TEST(ByteTest, SetBit) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  value.set_bit_0(1);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_bit_0(7);
+  EXPECT_EQ(0x7D, value.get_byte());
+  value.set_bit_1(7);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_value(0x77);
+  value.set_bit_1(0);
+  EXPECT_EQ(0x77, value.get_byte());
+    }
     
-    // relu
-MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
-.describe(R'code(Rescale the input by the square root of the channel dimension.
+    
+    {  Byte t1(bytes + 2);
+  uint32_t t = t1.get_byte(3, 5);
+  x <<= 5;
+  x |= t;
+  double ret = x * CLUSTER_DIST_RES + CLUSTER_DIST_LONG_MIN;
+  return ret;
+}
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    
+    {  bool ret = x;
+  return ret;
+}
+    
+    
+    {  Headlight_rpt_77::Manual_inputType ret =
+      static_cast<Headlight_rpt_77::Manual_inputType>(x);
+  return ret;
+}
