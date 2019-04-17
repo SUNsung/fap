@@ -3,148 +3,178 @@
         namespace atom {
     }
     
-      // content::JavaScriptDialogManager implementations.
-  void RunJavaScriptDialog(content::WebContents* web_contents,
-                           content::RenderFrameHost* rfh,
-                           content::JavaScriptDialogType dialog_type,
-                           const base::string16& message_text,
-                           const base::string16& default_prompt_text,
-                           DialogClosedCallback callback,
-                           bool* did_suppress_message) override;
-  void RunBeforeUnloadDialog(content::WebContents* web_contents,
-                             content::RenderFrameHost* rfh,
-                             bool is_reload,
-                             DialogClosedCallback callback) override;
-  void CancelDialogs(content::WebContents* web_contents,
-                     bool reset_state) override;
+    #include <string>
     
-      // There is a new update which has been downloaded.
-  virtual void OnUpdateDownloaded(const std::string& release_notes,
-                                  const std::string& release_name,
-                                  const base::Time& release_date,
-                                  const std::string& update_url) {}
-    
-    #ifndef ATOM_BROWSER_LIB_POWER_OBSERVER_H_
-#define ATOM_BROWSER_LIB_POWER_OBSERVER_H_
-    
-    
-    {}  // namespace asar
-    
-    void OffScreenOutputDevice::Resize(const gfx::Size& pixel_size,
-                                   float scale_factor) {
-  if (viewport_pixel_size_ == pixel_size)
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
     return;
-  viewport_pixel_size_ = pixel_size;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
+    
+    namespace api {
     }
     
-    OffscreenViewProxy::~OffscreenViewProxy() {
-  if (observer_) {
-    observer_->ProxyViewDestroyed(this);
-  }
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
 }
     
-    namespace Ui {
-    class SignVerifyMessageDialog;
-}
+    #if defined(OS_LINUX)
+typedef PowerObserverLinux PowerObserver;
+#else
+typedef base::PowerObserver PowerObserver;
+#endif  // defined(OS_LINUX)
     
-    static void secp256k1_gej_neg(secp256k1_gej *r, const secp256k1_gej *a) {
-    r->infinity = a->infinity;
-    r->x = a->x;
-    r->y = a->y;
-    r->z = a->z;
-    secp256k1_fe_normalize_weak(&r->y);
-    secp256k1_fe_negate(&r->y, &r->y, 1);
-}
-    
-        secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
-    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
-    
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
+    void URLRequestAboutJob::Kill() {
+  weak_ptr_factory_.InvalidateWeakPtrs();
+  URLRequestJob::Kill();
 }
     
     
-    {    /* Test r/s equal to zero */
-    {
-        /* (1,1) encoded in DER. */
-        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
-        unsigned char sigc64[64] = {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        };
-        secp256k1_pubkey pubkeyc;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
-        sigcder[4] = 0;
-        sigc64[31] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-        sigcder[4] = 1;
-        sigcder[7] = 0;
-        sigc64[31] = 1;
-        sigc64[63] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-    }
+    {  return canvas_.get();
 }
     
-    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
+    
+    {        b2Triangle* triangulated = new b2Triangle[p->nVertices - 2];
+		int32 nTri;
+        if (p->IsCCW()) {
+			//printf('It is ccw \n');
+			b2Polygon tempP;
+			tempP.Set(*p);
+			ReversePolygon(tempP.x, tempP.y, tempP.nVertices);
+			nTri = TriangulatePolygon(tempP.x, tempP.y, tempP.nVertices, triangulated);
+			//ReversePolygon(p->x, p->y, p->nVertices); //reset orientation
+		} else {
+			//printf('It is not ccw \n');
+			nTri = TriangulatePolygon(p->x, p->y, p->nVertices, triangulated);
+		}
+		if (nTri < 1) {
+            //Still no luck?  Oh well...
+            delete[] triangulated;
+            return -1;
+        }
+        int32 nPolys = PolygonizeTriangles(triangulated, nTri, results, maxPolys);
+        delete[] triangulated;
+        return nPolys;
+}
+    
+    			float fDX = a_frgbaDecodedColor.fR - a_frgbaSourcePixel.fR;
+			float fDY = a_frgbaDecodedColor.fG - a_frgbaSourcePixel.fG;
+			float fDZ = a_frgbaDecodedColor.fB - a_frgbaSourcePixel.fB;
+			float fDW = a_frgbaDecodedColor.fA - a_frgbaSourcePixel.fA;
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    static OPUS_INLINE opus_val16 SIG2WORD16_generic(celt_sig x)
 {
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
-    auto ret = ParseTorReplyMapping(input);
-    BOOST_CHECK_EQUAL(ret.size(), expected.size());
-    auto r_it = ret.begin();
-    auto e_it = expected.begin();
-    while (r_it != ret.end() && e_it != expected.end()) {
-        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
-        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
-        r_it++;
-        e_it++;
-    }
+   x = PSHR32(x, SIG_SHIFT);
+   x = MAX32(x, -32768);
+   x = MIN32(x, 32767);
+   return EXTRACT16(x);
 }
+#define SIG2WORD16(x) (SIG2WORD16_generic(x))
     
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
+    /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
     
-    #include 'rocksdb/slice.h'
-#include 'rocksdb/status.h'
-    
-    class StopWriteToken : public WriteControllerToken {
+    /**
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
+ */
+class CaffeMode {
  public:
-  explicit StopWriteToken(WriteController* controller)
-      : WriteControllerToken(controller) {}
-  virtual ~StopWriteToken();
+  template<typename xpu> static void SetMode();
 };
     
-      MyFilter filter;
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file crop.cc
+ * \brief
+ * \author Wei Wu
+*/
     
-      // Start a transaction
-  Transaction* txn = txn_db->BeginTransaction(write_options);
-  assert(txn);
+    Operator *IdentityAttachKLSparseRegProp::CreateOperator(Context ctx) const {
+  DO_BIND_DISPATCH(CreateOp, param_);
+}
     
-      static Status Open(const DBOptions& db_options, const std::string& dbname,
-                     const std::vector<ColumnFamilyDescriptor>& column_families,
-                     std::vector<ColumnFamilyHandle*>* handles,
-                     OptimisticTransactionDB** dbptr);
+    namespace
+{
+    // Glyph metrics:
+    // --------------
+    //
+    //                       xmin                     xmax
+    //                        |                         |
+    //                        |<-------- width -------->|
+    //                        |                         |
+    //              |         +-------------------------+----------------- ymax
+    //              |         |    ggggggggg   ggggg    |     ^        ^
+    //              |         |   g:::::::::ggg::::g    |     |        |
+    //              |         |  g:::::::::::::::::g    |     |        |
+    //              |         | g::::::ggggg::::::gg    |     |        |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //    offsetX  -|-------->| g:::::g     g:::::g     |  offsetY     |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //              |         | g::::::g    g:::::g     |     |        |
+    //              |         | g:::::::ggggg:::::g     |     |        |
+    //              |         |  g::::::::::::::::g     |     |      height
+    //              |         |   gg::::::::::::::g     |     |        |
+    //  baseline ---*---------|---- gggggggg::::::g-----*--------      |
+    //            / |         |             g:::::g     |              |
+    //     origin   |         | gggggg      g:::::g     |              |
+    //              |         | g:::::gg   gg:::::g     |              |
+    //              |         |  g::::::ggg:::::::g     |              |
+    //              |         |   gg:::::::::::::g      |              |
+    //              |         |     ggg::::::ggg        |              |
+    //              |         |         gggggg          |              v
+    //              |         +-------------------------+----------------- ymin
+    //              |                                   |
+    //              |------------- advanceX ----------->|
+    }
+    
+        IMGUI_API bool BuildFontAtlas(ImFontAtlas* atlas, unsigned int extra_flags = 0);
+    
+    
+    {    return 0;
+}
+
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
+    
+    
+    {        g_pSwapChain->Present(1, 0); // Present with vsync
+        //g_pSwapChain->Present(0, 0); // Present without vsync
+    }
+    
+    void ResetDevice()
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+    if (hr == D3DERR_INVALIDCALL)
+        IM_ASSERT(0);
+    ImGui_ImplDX9_CreateDeviceObjects();
+}
