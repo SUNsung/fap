@@ -1,99 +1,82 @@
 
         
-                class << self
-          def field_type
-            @field_type ||= name.split('::').last.sub('Field', '').downcase
-          end
-        end
-    
-            attr_reader :symbol
-    
-          def test_controller_raise_error_about_missing_helper
-        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
-        assert_equal 'Missing helper file helpers/missing_helper.rb', e.message
-      end
-    
-        class WithConditionalOverride < WithString
-      layout 'overwrite', only: :overwritten
-    
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-                active_machines.each do |active_name, active_provider|
-              if name == active_name
-                # We found an active machine with the same name
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V2 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
-    
-    def piece(n, a, nb)
-  nb.each{|x|
-    a[n] = x
-    if n == NP-1
-      $p << [a.sort]
-    else
-      nbc=nb.dup
-      [-ROW, -1, 1, ROW].each{|d|
-        if x+d > 0 and not a.include?(x+d) and not nbc.include?(x+d)
-          nbc << x+d
-        end
-      }
-      nbc.delete x
-      piece(n+1,a[0..n],nbc)
+            def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
+      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
+      return action_return
     end
-  }
+    
+        def finalize_session
+      @threads.map(&:join)
+    end
+  end
 end
+
     
-        context 'filter on shipment state' do
-      it 'only shows the orders with the selected shipment state' do
-        select Spree.t('payment_states.#{order1.shipment_state}'), from: 'Shipment State'
-        click_on 'Filter Results'
-        within_row(1) { expect(page).to have_content('R100') }
-        within('table#listing_orders') { expect(page).not_to have_content('R200') }
-      end
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << tag.shellescape
+        cmd << options[:commit].to_s if options[:commit]
+    
+        it 'recognizes an array as the only element of a command' do
+      command = command_from_args(['/usr/local/bin/git', 'git'])
+      expect(command).to eq('/usr/local/bin/git')
     end
     
-      context 'moving variants between shipments', js: true do
-    before do
-      create(:stock_location, name: 'LA')
-      visit spree.admin_orders_path
-      within_row(1) do
-        click_link 'R100'
-      end
-    end
+    # Here be helper
     
-          within('#sidebar') { click_link 'Variants' }
-      click_link 'Option Values'
-      click_link 'new_option_type_link'
-      fill_in 'option_type_name', with: 'shirt colors'
-      fill_in 'option_type_presentation', with: 'colors'
-      click_button 'Create'
-      expect(page).to have_content('successfully created!')
+    shelljoin_testcases = [
+  {
+    'it' => '(#1) on array with entry with space',
+    'it_result' => {
+      'windows' => 'wraps this entry in double quotes',
+      'other'   => 'escapes the space in this entry'
+    },
+    'input' => ['a', 'b c', 'd'],
+    'expect' => {
+      'windows' => 'a 'b c' d',
+      'other'   => 'a b\ c d'
+    }
+  },
+  {
+    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
+    'it_result' => {
+      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
+      'other'   => 'escapes the double quotes and escapes the space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a '''b'' c' d',
+      'other'   => 'a \'b\'\ c d'
+    }
+  },
+  {
+    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
+    'it_result' => {
+      'windows' => 'no changes',
+      'other'   => 'escapes the single quotes and space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a \''b' c\' d',
+      'other'   => 'a \\'b\\'\\ c d'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
+  {
+    'it' => '(#4) on array with entry that is `$$`',
+    'it_result' => {
+      'windows' => 'the result includes the process id',
+      'other'   => 'the result includes the process id'
+    },
+    'input' => ['ps', '-p', $$],
+    'expect' => {
+      'windows' => 'ps -p #{$$}',
+      'other'   => 'ps -p #{$$}'
+    }
+  }
+]
     
-              def spree_current_order
-            @spree_current_order ||= find_spree_current_order
-          end
+    module Cert
+  class CommandsGenerator
+    include Commander::Methods
