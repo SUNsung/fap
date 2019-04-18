@@ -1,90 +1,99 @@
 
         
-                platform_lanes.each do |lane_name, lane|
-          all << [platform, lane_name].reject(&:nil?).join(' ') unless lane.is_private
-        end
-      end
-      all
-    end
-    
-    module Fastlane
-  # Handles receiving commands from the socket server, finding the Action to be invoked,
-  # invoking it, and returning any return values
-  class SocketServerActionCommandExecutor < CommandExecutor
-    attr_accessor :runner
-    attr_accessor :actions_requiring_special_handling
-    
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
-    
-          it 'handles the extensions parameter with multiple elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m', 'h'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{m,h}')
-      end
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.h *.m', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path}, shell_escape: false)
-          end').runner.execute(:test)
-        end
-      end
-    
-        it 'raises when no argument passed' do
-      expect do
-        command_from_args
-      end.to raise_error(ArgumentError)
-    end
-    
-    exec_arr = ['fastlane', tool_name] + ARGV
-    
-      def prefixes
-    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
-    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
-    
-          private
-    
-    Liquid::Template.register_tag('gist', Jekyll::GistTag)
-Liquid::Template.register_tag('gistnocache', Jekyll::GistTagNoCache)
-
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
-
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+                class << self
+          def field_type
+            @field_type ||= name.split('::').last.sub('Field', '').downcase
           end
         end
+    
+            attr_reader :symbol
+    
+          def test_controller_raise_error_about_missing_helper
+        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
+        assert_equal 'Missing helper file helpers/missing_helper.rb', e.message
       end
-      rtn
+    
+        class WithConditionalOverride < WithString
+      layout 'overwrite', only: :overwritten
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+                active_machines.each do |active_name, active_provider|
+              if name == active_name
+                # We found an active machine with the same name
+    
+            # This registers a plugin. This should _NEVER_ be called by the public
+        # and should only be called from within Vagrant. Vagrant will
+        # automatically register V2 plugins when a name is set on the
+        # plugin.
+        def register(plugin)
+          if !@registered.include?(plugin)
+            @logger.info('Registered plugin: #{plugin.name}')
+            @registered << plugin
+          end
+        end
+    
+    def piece(n, a, nb)
+  nb.each{|x|
+    a[n] = x
+    if n == NP-1
+      $p << [a.sort]
+    else
+      nbc=nb.dup
+      [-ROW, -1, 1, ROW].each{|d|
+        if x+d > 0 and not a.include?(x+d) and not nbc.include?(x+d)
+          nbc << x+d
+        end
+      }
+      nbc.delete x
+      piece(n+1,a[0..n],nbc)
     end
-  end
+  }
+end
     
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-    # The base module that gets included in ActiveRecord::Base. See the
-# documentation for Paperclip::ClassMethods for more useful information.
-module Paperclip
-  extend Helpers
-  extend Logger
-  extend ProcessorHelpers
-    
-        def self.names_for(klass)
-      instance.names_for(klass)
+        context 'filter on shipment state' do
+      it 'only shows the orders with the selected shipment state' do
+        select Spree.t('payment_states.#{order1.shipment_state}'), from: 'Shipment State'
+        click_on 'Filter Results'
+        within_row(1) { expect(page).to have_content('R100') }
+        within('table#listing_orders') { expect(page).not_to have_content('R200') }
+      end
     end
+    
+      context 'moving variants between shipments', js: true do
+    before do
+      create(:stock_location, name: 'LA')
+      visit spree.admin_orders_path
+      within_row(1) do
+        click_link 'R100'
+      end
+    end
+    
+          within('#sidebar') { click_link 'Variants' }
+      click_link 'Option Values'
+      click_link 'new_option_type_link'
+      fill_in 'option_type_name', with: 'shirt colors'
+      fill_in 'option_type_presentation', with: 'colors'
+      click_button 'Create'
+      expect(page).to have_content('successfully created!')
+    
+              def spree_current_order
+            @spree_current_order ||= find_spree_current_order
+          end
