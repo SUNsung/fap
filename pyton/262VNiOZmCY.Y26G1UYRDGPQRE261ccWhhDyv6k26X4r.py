@@ -1,123 +1,62 @@
 
         
-        secret_msg = b'Secret message goes here'
+            def setUp(self):
+        BaseTestCase.setUp(self)
+        self.cwd = os.getcwd()
+        basetempdir = tempfile.gettempdir()
+        os.chdir(basetempdir)
+        self.data = b'We are the knights who say Ni!'
+        self.tempdir = tempfile.mkdtemp(dir=basetempdir)
+        self.tempdir_name = os.path.basename(self.tempdir)
+        self.base_url = '/' + self.tempdir_name
+        tempname = os.path.join(self.tempdir, 'test')
+        with open(tempname, 'wb') as temp:
+            temp.write(self.data)
+            temp.flush()
+        mtime = os.stat(tempname).st_mtime
+        # compute last modification datetime for browser cache tests
+        last_modif = datetime.datetime.fromtimestamp(mtime,
+            datetime.timezone.utc)
+        self.last_modif_datetime = last_modif.replace(microsecond=0)
+        self.last_modif_header = email.utils.formatdate(
+            last_modif.timestamp(), usegmt=True)
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
+        def discover(self, start_dir, pattern='test*.py', top_level_dir=None):
+        '''Find and return all test modules from the specified start
+        directory, recursing into subdirectories to find them and return all
+        tests found within them. Only test files that match the pattern will
+        be loaded. (Using shell style pattern matching.)
     
-            if in_options:
-            if line.lstrip().startswith('-'):
-                split = re.split(r'\s{2,}', line.lstrip())
-                # Description string may start with `-` as well. If there is
-                # only one piece then it's a description bit not an option.
-                if len(split) > 1:
-                    option, description = split
-                    split_option = option.split(' ')
+        def test_additive(self):
+        # Additive
+        self.check_tokenize('x = 1 - y + 15 - 1 + 0x124 + z + a[5]', '''\
+    NAME       'x'           (1, 0) (1, 1)
+    OP         '='           (1, 2) (1, 3)
+    NUMBER     '1'           (1, 4) (1, 5)
+    OP         '-'           (1, 6) (1, 7)
+    NAME       'y'           (1, 8) (1, 9)
+    OP         '+'           (1, 10) (1, 11)
+    NUMBER     '15'          (1, 12) (1, 14)
+    OP         '-'           (1, 15) (1, 16)
+    NUMBER     '1'           (1, 17) (1, 18)
+    OP         '+'           (1, 19) (1, 20)
+    NUMBER     '0x124'       (1, 21) (1, 26)
+    OP         '+'           (1, 27) (1, 28)
+    NAME       'z'           (1, 29) (1, 30)
+    OP         '+'           (1, 31) (1, 32)
+    NAME       'a'           (1, 33) (1, 34)
+    OP         '['           (1, 34) (1, 35)
+    NUMBER     '5'           (1, 35) (1, 36)
+    OP         ']'           (1, 36) (1, 37)
+    ''')
     
-    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
+        # Fetch the records to be pickled.
+    cursor.execute('SELECT * FROM memos')
+    memos = [MemoRecord(key, task) for key, task in cursor]
+    # Save the records using our custom DBPickler.
+    file = io.BytesIO()
+    DBPickler(file).dump(memos)
     
-            def _hook(status):
-            if status['status'] == 'finished':
-                finished_hook_called.add(status['filename'])
-        ydl.add_progress_hook(_hook)
-        expect_warnings(ydl, test_case.get('expected_warnings', []))
-    
-    
-class TestThePlatformSubtitles(BaseTestSubtitles):
-    # from http://www.3playmedia.com/services-features/tools/integrations/theplatform/
-    # (see http://theplatform.com/about/partners/type/subtitles-closed-captioning/)
-    url = 'theplatform:JFUjUE1_ehvq'
-    IE = ThePlatformIE
-    
-    no_match_output = '''
-Listing... Done
-'''
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
-
-    
-        binop = { 'Add':'+', 'Sub':'-', 'Mult':'*', 'MatMult':'@', 'Div':'/', 'Mod':'%',
-                    'LShift':'<<', 'RShift':'>>', 'BitOr':'|', 'BitXor':'^', 'BitAnd':'&',
-                    'FloorDiv':'//', 'Pow': '**'}
-    def _BinOp(self, t):
-        self.write('(')
-        self.dispatch(t.left)
-        self.write(' ' + self.binop[t.op.__class__.__name__] + ' ')
-        self.dispatch(t.right)
-        self.write(')')
-    
-    NAME_MAPPING.update({
-    ('__builtin__', 'basestring'): ('builtins', 'str'),
-    ('exceptions', 'StandardError'): ('builtins', 'Exception'),
-    ('UserDict', 'UserDict'): ('collections', 'UserDict'),
-    ('socket', '_socketobject'): ('socket', 'SocketType'),
-})
-    
-        If a name, the module is imported.  If the passed or imported module
-    object is not a package, raise an exception.
-    '''
-    if hasattr(package, '__spec__'):
-        if package.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(
-                package.__spec__.name))
-        else:
-            return package
-    else:
-        module = import_module(package)
-        if module.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(package))
-        else:
-            return module
-    
-            env['PYTHONDEVMODE'] = '1'
-        proc = subprocess.run(args, stdout=subprocess.PIPE,
-                              universal_newlines=True, env=env)
-        self.assertEqual(proc.stdout.rstrip(), 'True')
-        self.assertEqual(proc.returncode, 0, proc)
-    
-        #Creating title page
-    with open('title.html', 'w') as f:
-        f.write(header + title_content)
-    
-    
-class Borg(object):
-    __shared_state = {}
-    
-    ### OUTPUT ###
-# dog σκύλος
-# parrot parrot
-# cat γάτα
-# bear bear
-
-    
-    
-if __name__ == '__main__':
-    main()
-    
-    ### OUTPUT ###
-# before: hello, world!
-# after: <i><b>hello, world!</b></i>
-
-    
-            def __str__(self):
-            return '{:.2f}'.format(self)
-    
-        def test_subscriber_shall_be_detachable_from_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
-        sub.unsubscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 0)
-    
-        def test_parents(self):
-        for _ in range(2):
-            self.assertEqual(self.John.parents, 'Father and mother')
-        self.assertEqual(self.John.call_count2, 1)
+    #
+# Function used to calculate result
+#
