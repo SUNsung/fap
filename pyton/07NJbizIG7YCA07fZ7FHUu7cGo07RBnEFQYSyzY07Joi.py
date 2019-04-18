@@ -1,273 +1,127 @@
 
         
-            def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        def __init__(self, data=None, **kwargs):
-        self._store = OrderedDict()
-        if data is None:
-            data = {}
-        self.update(data, **kwargs)
+    **youtube-dl** \[OPTIONS\] URL [URL...]
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
     
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
-        else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-    :copyright: (c) 2017 by Kenneth Reitz.
-:license: Apache 2.0, see LICENSE for more details.
-'''
-    
-            chunked = not (request.body is None or 'Content-Length' in request.headers)
-    
-        @property
-    def unverifiable(self):
-        return self.is_unverifiable()
-    
-    import json
-import platform
+    # Allow direct execution
+import os
 import sys
-import ssl
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-class TestIsIPv4Address:
+FILEPATH = os.path.join(
+    os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'blns.txt')
+'''Path to the file'''
     
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
+        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
     
-    # The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+        def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-        Example: if mask is 24 function returns 255.255.255.0
+    	for m in getBlock(bs):
+		A = a0 
+		B = b0
+		C = c0
+		D = d0
+		for i in range(64):
+			if i <= 15:
+				#f = (B & C) | (not32(B) & D)
+				f = D ^ (B & (C ^ D))
+				g = i
+			elif i<= 31:
+				#f = (D & B) | (not32(D) & C)
+				f = C ^ (D & (B ^ C))
+				g = (5*i+1) % 16
+			elif i <= 47:
+				f = B ^ C ^ D
+				g = (3*i+5) % 16
+			else:
+				f = C ^ (B | not32(D))
+				g = (7*i) % 16
+			dtemp = D
+			D = C
+			C = B
+			B = sum32(B,leftrot32((A + f + tvals[i] + m[g]) % 2**32, s[i]))
+			A = dtemp
+		a0 = sum32(a0, A)
+		b0 = sum32(b0, B)
+		c0 = sum32(c0, C)
+		d0 = sum32(d0, D)
     
-            # This MUST go after prepare_auth. Authenticators could add a hook
-        self.prepare_hooks(hooks)
-    
-        keys = ['protocol', 'dest_port', 'dest_ip', 'source_port', 'source_ip']
-    for rule in deletions:
-        if not module.check_mode:
-            kwargs = dict([(k, v) for k, v in rule.items() if k in keys])
-            kwargs['protocol'] = protocol_to_string(kwargs['protocol'])
-            gateway.delete_fw_rule(**kwargs)
-        result['changed'] = True
-    
-        module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True)
-    
-    EXAMPLES = '''
-- airbrake_deployment:
-    token: AAAAAA
-    environment: staging
-    user: ansible
-    revision: '4.2'
+    * @author chinmoy159
+* @version 1.0 dated 10/08/2017
 '''
     
-    # Copyright 2014 Benjamin Curtis <benjamin.curtis@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-    
-    def _iter_command_classes(module_name):
-    # TODO: add `name` attribute to commands and and merge this function with
-    # scrapy.utils.spider.iter_spider_classes
-    for module in walk_modules(module_name):
-        for obj in vars(module).values():
-            if inspect.isclass(obj) and \
-                    issubclass(obj, ScrapyCommand) and \
-                    obj.__module__ == module.__name__ and \
-                    not obj == ScrapyCommand:
-                yield obj
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-    
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
-    
-                        if not cb:
-                        logger.error('Cannot find a rule that matches %(url)r in spider: %(spider)s',
-                                 {'url': response.url, 'spider': spider.name})
-                        return
-                else:
-                    cb = 'parse'
-    
-    
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
-    
-        def _set_connection_attributes(self, request):
-        parsed = urlparse_cached(request)
-        self.scheme, self.netloc, self.host, self.port, self.path = _parsed_url_args(parsed)
-        proxy = request.meta.get('proxy')
-        if proxy:
-            self.scheme, _, self.host, self.port, _ = _parse(proxy)
-            self.path = self.url
-    
-    
-ALL_SSL_OPTIONS_HASHES = [
-    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
-    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
-    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
-    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
-    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
-    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
-]
-'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
-    
-    
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
-    '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
-    
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-    
-            self.assertEqual(len(self.parser.filter_args_num(matches, 1)), 3)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 2)), 2)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 3)), 1)
-    
-    # This is a very simple benchmark to give you an idea of how fast each step of face recognition will run on your system.
-# Notice that face detection gets very slow at large image sizes. So you might consider running face detection on a
-# scaled down version of your image and then running face encodings on the the full size image.
+    min_length = 8
+max_length = 16
+password = ''.join(random.choice(chars) for x in range(random.randint(min_length, max_length)))
+print('Password: ' + password)
+print('[ If you are thinking of using this passsword, You better save it. ]')
     
         # Print the location of each face in this image
     top, right, bottom, left = face_location
     print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
     
+def detect_faces_in_image(file_stream):
+    # Pre-calculated face encoding of Obama generated with face_recognition.face_encodings(img)
+    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
+                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
+                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
+                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
+                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
+                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
+                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
+                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
+                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
+                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
+                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
+                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
+                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
+                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
+                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
+                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
+                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
+                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
+                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
+                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
+                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
+                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
+                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
+                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
+                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
+                            0.07417042,  0.07126575,  0.00209804]
+    
+    
 def image_files_in_folder(folder):
     return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
     
-    # Load some sample pictures and learn how to recognize them.
-lmm_image = face_recognition.load_image_file('lin-manuel-miranda.png')
-lmm_face_encoding = face_recognition.face_encodings(lmm_image)[0]
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
     
-    while video_capture.isOpened():
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-    
-def add_residual_block(
-    model,
-    prefix,
-    blob_in,
-    dim_in,
-    dim_out,
-    dim_inner,
-    dilation,
-    stride_init=2,
-    inplace_sum=False
-):
-    '''Add a residual block to the model.'''
-    # prefix = res<stage>_<sub_stage>, e.g., res2_3
-    
-            Adapted from the CVPR'15 FCN code.
-        See: https://github.com/shelhamer/fcn.berkeleyvision.org/blob/master/surgery.py
-        '''
-        assert dim_in == dim_out
-        assert up_scale % 2 == 0, 'Scale should be even'
-    
-    from detectron.core.config import cfg
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-import detectron.modeling.ResNet as ResNet
-import detectron.utils.blob as blob_utils
-    
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-    bg_inds = np.where(
-        (max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
-        (max_overlaps >= cfg.TRAIN.BG_THRESH_LO)
-    )[0]
-    # Compute number of background RoIs to take from this image (guarding
-    # against there being fewer than desired)
-    bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
-    bg_rois_per_this_image = np.minimum(bg_rois_per_this_image, bg_inds.size)
-    # Sample foreground regions without replacement
-    if bg_inds.size > 0:
-        bg_inds = npr.choice(
-            bg_inds, size=bg_rois_per_this_image, replace=False
-        )
-    
-        # Create a blob to hold the input images
-    blob = blob_utils.im_list_to_blob(processed_ims)
-    
-    from detectron.core.config import assert_and_infer_cfg
-from detectron.core.config import cfg
-from detectron.core.config import merge_cfg_from_file
-from detectron.core.config import merge_cfg_from_list
-from detectron.datasets.roidb import combined_roidb_for_training
-from detectron.roi_data.loader import RoIDataLoader
-from detectron.utils.logging import setup_logging
-from detectron.utils.timer import Timer
+            if file.filename == '':
+            return redirect(request.url)
