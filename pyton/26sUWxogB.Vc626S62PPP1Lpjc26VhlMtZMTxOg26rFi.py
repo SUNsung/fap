@@ -1,105 +1,166 @@
 
         
-        def main():
-    # First, we load the current README into memory as an array of lines
-    with open('README.md', 'r') as read_me_file:
-        read_me = read_me_file.readlines()
+        import json
+import sys
+import hashlib
+import os.path
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
-    
-        # Arguments
-        label_mode: one of 'fine', 'coarse'.
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
     
-def test_objective_shapes_3d():
-    y_a = K.variable(np.random.random((5, 6, 7)))
-    y_b = K.variable(np.random.random((5, 6, 7)))
-    for obj in allobj:
-        objective_output = obj(y_a, y_b)
-        assert K.eval(objective_output).shape == (5, 6)
-    
-        def get_slice(data, i, parts):
-        shape = K.shape(data)
-        batch_size = shape[:1]
-        input_shape = shape[1:]
-        step = batch_size // parts
-        if i == parts - 1:
-            size = batch_size - step * i
-        else:
-            size = step
-        size = K.concatenate([size, input_shape], axis=0)
-        stride = K.concatenate([step, input_shape * 0], axis=0)
-        start = stride * i
-        return K.slice(data, start, size)
-    
-    seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                   padding='same', return_sequences=True))
-seq.add(BatchNormalization())
-    
-    model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
     
-def cnn_layers(inputs):
-    x = layers.Conv2D(32, (3, 3),
-                      activation='relu', padding='valid')(inputs)
-    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
-    x = layers.Conv2D(64, (3, 3), activation='relu')(x)
-    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
-    x = layers.Flatten()(x)
-    x = layers.Dense(512, activation='relu')(x)
-    x = layers.Dropout(0.5)(x)
-    predictions = layers.Dense(num_classes,
-                               activation='softmax',
-                               name='x_train_out')(x)
-    return predictions
+def main():
+    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
+    options, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error('Expected an output filename')
     
-        # case 1: only ip
-    # case 2: ip + domain
-    #    connect use domain
+    import io
+import optparse
+import os.path
+import re
     
-    ##
-# imaginary tree navigation type; traverse 'get child' link
-DOWN = 2
-##
-#imaginary tree navigation type; finish with a child list
-UP = 3
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+html_theme = 'default'
     
-    if __name__ == '__main__':
-    main()
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    
+@functools.lru_cache()
+def get_hstore_oids(connection_alias):
+    '''Return hstore and hstore array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute(
+            'SELECT t.oid, typarray '
+            'FROM pg_type t '
+            'JOIN pg_namespace ns ON typnamespace = ns.oid '
+            'WHERE typname = 'hstore''
+        )
+        oids = []
+        array_oids = []
+        for row in cursor:
+            oids.append(row[0])
+            array_oids.append(row[1])
+        return tuple(oids), tuple(array_oids)
+    
+            if data is None:
+            s = self._get_session_from_db()
+            if s:
+                data = self.decode(s.session_data)
+                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
+            else:
+                data = {}
+        return data
+    
+        @classmethod
+    def get_model_class(cls):
+        # Avoids a circular import and allows importing SessionStore when
+        # django.contrib.sessions is not in INSTALLED_APPS.
+        from django.contrib.sessions.models import Session
+        return Session
+    
+    
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
+    
+        if dataset_name == 'http' or dataset_name == 'smtp':
+        y = (y != b'normal.').astype(int)
+    
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = PCA(n_components=n_components, svd_solver='randomized',
+                   random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
+    
+    
+def setup(app):
+    # Format template for issues URI
+    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
+    app.add_config_value('issues_uri', default=None, rebuild='html')
+    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
+    app.add_config_value('issues_github_path', default=None, rebuild='html')
+    # Format template for user profile URI
+    # e.g. 'https://github.com/{user}'
+    app.add_config_value('issues_user_uri', default=None, rebuild='html')
+    app.add_role('issue', issue_role)
+    app.add_role('user', user_role)
 
     
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-    Usage:
-  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
-  
-  2. create initial_centroids,
-        initial_centroids = get_initial_centroids(
-            X, 
-            k, 
-            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
-            )
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    plt.show()
+
+    
+    # The data that we are interested in is made of 8x8 images of digits, let's
+# have a look at the first 4 images, stored in the `images` attribute of the
+# dataset.  If we were working from image files, we could load them using
+# matplotlib.pyplot.imread.  Note that each image must have the same size. For these
+# images, we know which digit they represent: it is given in the 'target' of
+# the dataset.
+images_and_labels = list(zip(digits.images, digits.target))
+for index, (image, label) in enumerate(images_and_labels[:4]):
+    plt.subplot(2, 4, index + 1)
+    plt.axis('off')
+    plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
+    plt.title('Training: %i' % label)
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+    Reference:
