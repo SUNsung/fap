@@ -1,132 +1,151 @@
 
         
-            it 'allows to delete a user' do
-      visit admin_users_path
-      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
-      expect(page).to have_text('User 'bob' was deleted.')
-      expect(page).to have_no_text('bob@example.com')
-    end
+        Then(/^the current directory will be a symlink to the release$/) do
+  run_vagrant_command(exists?('e', TestApp.current_path))
+end
     
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
-    
-        it 'should raise an exception when encountering complex JSONPaths' do
-      @agent.options['username_path'] = '$.very.complex[*]'
-      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
-        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
   end
 end
-
     
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
+        def installer
+      @installer ||= PluginInstaller.new
     end
     
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+          def load_built_in_scm
+        require 'capistrano/scm/#{scm_name}'
+        scm_class = Object.const_get(built_in_scm_plugin_class_name)
+        # We use :load_immediately because we are initializing the SCM plugin
+        # late in the load process and therefore can't use the standard
+        # load:defaults technique.
+        install_plugin(scm_class, load_immediately: true)
+      end
     
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+          def safe?(env)
+        %w[GET HEAD OPTIONS TRACE].include? env['REQUEST_METHOD']
+      end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS
+    # Supported browsers:: all
+    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
+    #
+    # Automatically escapes Rack::Request#params so they can be embedded in HTML
+    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
+    # strings if defined, to avoid double-escaping in Rails.
+    #
+    # Options:
+    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
+    #          Available: :html (default), :javascript, :url
+    class EscapedParams < Base
+      extend Rack::Utils
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+      it 'should allow changing report only' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
+      run DummyApp
+    end
+    
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
+    
+        puts('No plugin updated') if update_count.zero?
   end
     
-          # Calls the given block for each `key` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_key
-        return pairs.map(&:key).to_enum unless block_given?
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
-    end
+      it 'records when the config was read' do
+    expect(subject.read_at).to be <= Time.now
   end
-end
-
     
-          # Checks whether this `hash` element is on the same line as `other`.
-      #
-      # @note A multiline element is considered to be on the same line if it
-      #       shares any of its lines with `other`
-      #
-      # @return [Boolean] whether this element is on the same line as `other`
-      def same_line?(other)
-        loc.last_line == other.loc.line || loc.line == other.loc.last_line
-      end
-    
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
-    
-            if obj && obj.errors[method].present?
-          errors = safe_join(obj.errors[method], '<br />'.html_safe)
-          content_tag(:span, errors, class: 'formError')
-        else
-          ''
-        end
-      end
-    
-          within('#sidebar') { click_link 'Variants' }
-      expect(page).to have_content('To add variants, you must first define')
-    end
-    
-              def spree_current_order
-            @spree_current_order ||= find_spree_current_order
-          end
-    
-            def create
-          authorize! :create, Product
-          params[:product][:available_on] ||= Time.current
-          set_up_shipping_category
-    
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
     end
   end
 end
 
     
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
+    require 'fpm'
+require 'tmpdir'
+require 'fpm/package/pleaserun'
+    
+      def output_check(output_path)
+    if !File.directory?(File.dirname(output_path))
+      raise ParentDirectoryMissing.new(output_path)
+    end
+    if File.file?(output_path)
+      if attributes[:force?]
+        logger.warn('Force flag given. Overwriting package at #{output_path}')
+        File.delete(output_path)
+      else
+        raise FileAlreadyExists.new(output_path)
       end
     end
+  end # def output_path
+    
+        # Create the .txz package archive from the files in staging_path.
+    File.open(output_path, 'wb') do |file|
+      XZ::StreamWriter.new(file) do |xz|
+        FPM::Util::TarWriter.new(xz) do |tar|
+          # The manifests must come first for pkg.
+          add_path(tar, '+COMPACT_MANIFEST',
+                   File.join(staging_path, '+COMPACT_MANIFEST'))
+          add_path(tar, '+MANIFEST',
+                   File.join(staging_path, '+MANIFEST'))
+    
+        # do channel-update if requested
+    if attributes[:pear_channel_update?]
+      channel = attributes[:pear_channel] || 'pear'
+      logger.info('Updating the channel', :channel => channel)
+      safesystem('pear', '-c', config, 'channel-update', channel)
+    end
+    
+        if File.exists?(params[:output])
+      # TODO(sissel): Allow folks to choose output?
+      logger.error('Puppet module directory '#{params[:output]}' already ' \
+                    'exists. Delete it or choose another output (-p flag)')
+    end
+    
+        logger.info('Trying to download', :package => package)
+    
+        safesystem('tar', *args)
+    
+          case
+      when value.is_a?(String), value.is_a?(Symbol)
+        %W(--#{opt} #{value})
+      when value.is_a?(Array)
+        value.map { |v| %W(--#{opt} #{v}) }
+      when value.is_a?(TrueClass)
+        '--#{opt}'
+      when value.is_a?(FalseClass)
+        '--no-#{opt}'
+      else
+        fail TypeError, 'Unexpected type: #{value.class}'
+      end
+    end
+  end
