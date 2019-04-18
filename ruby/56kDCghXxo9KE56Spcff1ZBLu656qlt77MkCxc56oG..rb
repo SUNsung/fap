@@ -1,83 +1,102 @@
 
         
-        Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
-ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur
-tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
-Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
-aliquet. Sed ultrices placerat ultricies.
-TEXT
-    
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-    require 'benchmark/ips'
-require 'jekyll'
-require 'json'
-    
-    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
-COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
+            it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
     end
     
-            def collection_method
-          :issues
+        it 'should work with nested arrays' do
+      @agent.options['array'] = ['one', '$.two']
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
+    
+      describe '#sort_tuples!' do
+    let(:tuples) {
+      time = Time.now
+      [
+        [2, 'a', time - 1],  # 0
+        [2, 'b', time - 1],  # 1
+        [1, 'b', time - 1],  # 2
+        [1, 'b', time],      # 3
+        [1, 'a', time],      # 4
+        [2, 'a', time + 1],  # 5
+        [2, 'a', time],      # 6
+      ]
+    }
+    
+        stub_request(:get, /trackings/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    
+        context 'single argument' do
+      before do
+        subject.instance_eval do
+          env :userpaths
         end
+      end
     
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
+      def down
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id
+  end
     
-            expose_attribute :noteable_type, :noteable_id, :commit_id, :file_path,
-                         :diff_hunk, :author, :note, :created_at, :updated_at,
-                         :github_id
-    
-    When /^(?:|I )go to (.+)$/ do |page_name|
-  visit path_to(page_name)
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
 end
-    
-    # This stuff needs to be run after Paperclip is defined.
-require 'paperclip/io_adapters/registry'
-require 'paperclip/io_adapters/abstract_adapter'
-require 'paperclip/io_adapters/empty_string_adapter'
-require 'paperclip/io_adapters/identity_adapter'
-require 'paperclip/io_adapters/file_adapter'
-require 'paperclip/io_adapters/stringio_adapter'
-require 'paperclip/io_adapters/data_uri_adapter'
-require 'paperclip/io_adapters/nil_adapter'
-require 'paperclip/io_adapters/attachment_adapter'
-require 'paperclip/io_adapters/uploaded_file_adapter'
-require 'paperclip/io_adapters/uri_adapter'
-require 'paperclip/io_adapters/http_url_proxy_adapter'
 
     
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
+    def await_condition &condition
+  start_time = Time.zone.now
+  until condition.call
+    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
+    sleep 0.05
+  end
+  true
+end
+
+    
+          delete :destroy, params: {post_id: @message.id, id: @like.id}, format: :json
+      expect(response.status).to eq(204)
     end
     
-        # Returns an extension based on the content type. e.g. 'jpeg' for
-    # 'image/jpeg'. If the style has a specified format, it will override the
-    # content-type detection.
-    #
-    # Each mime type generally has multiple extensions associated with it, so
-    # if the extension from the original filename is one of these extensions,
-    # that extension is used, otherwise, the first in the list is used.
-    def content_type_extension attachment, style_name
-      mime_type = MIME::Types[attachment.content_type]
-      extensions_for_mime_type = unless mime_type.empty?
-        mime_type.first.extensions
-      else
-        []
+          get :update, params: {id: note.id, set_unread: 'true'}, format: :json
+      expect(response).to be_success
+    
+    get '/' do
+  stats = Sidekiq::Stats.new
+  @failed = stats.failed
+  @processed = stats.processed
+  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
+  erb :index
+end
+    
+          def create_worker_file
+        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
       end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+        def initialize(klass, name, options)
+      @klass = klass
+      @name = name
+      @options = options
+    end
