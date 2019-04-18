@@ -1,285 +1,284 @@
 
         
-          Args:
-    hps: The dictionary of hyperparameters.
-    datasets: A dictionary of data dictionaries.  The dataset dict is simply a
-      name(string)-> data dictionary mapping (See top of lfads.py).
-    dataset_name: The name of the dataset to grab the factors -> rates
-      alignment matrices from. Only a concern with models trained on
-      multi-session data. By default, uses the first dataset in the data dict.
-    output_fname: The name prefix of the file in which to save the generated
-      samples.
-  '''
-  if not output_fname:
-    output_fname = 'model_runs_' + hps.kind
-  else:
-    output_fname = output_fname + 'model_runs_' + hps.kind
-  if not dataset_name:
-    dataset_name = datasets.keys()[0]
-  else:
-    if dataset_name not in datasets.keys():
-      raise ValueError('Invalid dataset name '%s'.'%(dataset_name))
-  model = build_model(hps, kind=hps.kind, datasets=datasets)
-  model.write_model_samples(dataset_name, output_fname)
-    
-      # Visualize this in the morning.
-  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
-  for name, dataset in datasets.items():
-    cidx_s = channel_idxs[name][0]
-    cidx_f = channel_idxs[name][1]
-    for cname in conditions_all[name]:
-      cidxs = np.argwhere(all_conditions_list == cname)
-      if cidxs.shape[0] > 0:
-        cidx = cidxs[0][0]
-        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
-        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
-            avg_data_all[name][cname].T
-    
-      Args:
-    dataset: LM1BDataset object.
-  '''
-  sess, t = _LoadModel(FLAGS.pbtxt, FLAGS.ckpt)
-    
-      def _score(self, word_patch):
-    '''Score a matrix of shape (batch_size, num_timesteps+1) str tokens.'''
-    word_ids = np.array(
-        [[self.vocab.word_to_id(word) for word in row]
-         for row in word_patch])
-    char_ids = np.array(
-        [[self.vocab.word_to_char_ids(word) for word in row]
-         for row in word_patch])
-    print('Probs for \n{}\n='.format(np.array(word_patch)[:, 1:]))
-    
-      ## Load Generator weights from MaskGAN checkpoint.
-  if FLAGS.maskgan_ckpt:
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    init_saver = tf.train.Saver(var_list=gen_vars)
-    init_savers['init_saver'] = init_saver
-    
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
-    
-            Did you mean `build`?
-'''
-    
-        elif args.form and not args.files:
-        # If sending files, `requests` will set
-        # the `Content-Type` for us.
-        default_headers['Content-Type'] = FORM_CONTENT_TYPE
-    return default_headers
-    
+                When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-    if not env.stdout_isatty and not args.prettify:
-        Stream = partial(
-            RawStream,
-            chunk_size=RawStream.CHUNK_SIZE_BY_LINE
-            if args.stream
-            else RawStream.CHUNK_SIZE
-        )
-    elif args.prettify:
-        Stream = partial(
-            PrettyStream if args.stream else BufferedPrettyStream,
-            env=env,
-            conversion=Conversion(),
-            formatting=Formatting(
-                env=env,
-                groups=args.prettify,
-                color_scheme=args.style,
-                explicit_json=args.json,
-            ),
-        )
-    else:
-        Stream = partial(EncodedStream, env=env)
+        node = self.lookup.get(query)
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-        # By default the `-a` argument is parsed for `username:password`.
-    # Set this to `False` to disable the parsing and error handling.
-    auth_parse = True
+        def _park_starting_at_spot(self, spot, vehicle):
+        '''Occupy starting at spot.spot_number to vehicle.spot_size.'''
+        pass
     
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
     
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
+
     
-        config['implicit_content_type'] = 'json'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert not config['default_options']
-    
-    
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
-    
-    
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
-    
-    
-def test_unicode_form_item(httpbin):
-    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['form'] == {'test': UNICODE}
-    
-            :param response: Initiated response object with headers already fetched
-        :type response: requests.models.Response
-    
-        dim = start_dim
-    for i in range(0, n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        dim += step
-        X = np.random.randn(100, dim)
-        Y = np.random.randint(0, n_classes, (100,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(100)
-        bench_scikit_tree_regressor(X, Y)
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+    Provides utility functions that are consumed internally by Requests
+which depend on extremely few external helpers (such as compat)
 '''
     
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
+            self.handler = handler or consume_socket_content
+        self.handler_results = []
     
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
+            .. warning:: operation is O(n), not O(1).
+        '''
+        return self._find_no_duplicates(name)
+    
+    
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
+    
+        :param method: method for the new :class:`Request` object.
+    :param url: URL for the new :class:`Request` object.
+    :param params: (optional) Dictionary, list of tuples or bytes to send
+        in the query string for the :class:`Request`.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) A JSON serializable Python object to send in the body of the :class:`Request`.
+    :param headers: (optional) Dictionary of HTTP Headers to send with the :class:`Request`.
+    :param cookies: (optional) Dict or CookieJar object to send with the :class:`Request`.
+    :param files: (optional) Dictionary of ``'name': file-like-objects`` (or ``{'name': file-tuple}``) for multipart encoding upload.
+        ``file-tuple`` can be a 2-tuple ``('filename', fileobj)``, 3-tuple ``('filename', fileobj, 'content_type')``
+        or a 4-tuple ``('filename', fileobj, 'content_type', custom_headers)``, where ``'content-type'`` is a string
+        defining the content type of the given file and ``custom_headers`` a dict-like object containing additional headers
+        to add for the file.
+    :param auth: (optional) Auth tuple to enable Basic/Digest/Custom HTTP Auth.
+    :param timeout: (optional) How many seconds to wait for the server to send data
+        before giving up, as a float, or a :ref:`(connect timeout, read
+        timeout) <timeouts>` tuple.
+    :type timeout: float or tuple
+    :param allow_redirects: (optional) Boolean. Enable/disable GET/OPTIONS/POST/PUT/PATCH/DELETE/HEAD redirection. Defaults to ``True``.
+    :type allow_redirects: bool
+    :param proxies: (optional) Dictionary mapping protocol to the URL of the proxy.
+    :param verify: (optional) Either a boolean, in which case it controls whether we verify
+            the server's TLS certificate, or a string, in which case it must be a path
+            to a CA bundle to use. Defaults to ``True``.
+    :param stream: (optional) if ``False``, the response content will be immediately downloaded.
+    :param cert: (optional) if String, path to ssl client cert file (.pem). If Tuple, ('cert', 'key') pair.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+                def raising_fn(callback_future):
+                raising_was_called[0] = True
+                raise Exception('doh!')
+    
+    
+def main():
+    test = TestSelectionSort()
+    selection_sort = SelectionSort()
+    test.test_selection_sort(selection_sort.sort)
+    try:
+        test.test_selection_sort(selection_sort.sort_recursive)
+        test.test_selection_sort(selection_sort.sor_iterative_alt)
+    except NameError:
+        # Alternate solutions are only defined
+        # in the solutions file
+        pass
+    
+            print('Test: Enqueue on empty stack')
+        print('Test: Enqueue on non-empty stack')
+        print('Test: Multiple enqueue in a row')
+        num_items = 3
+        for i in range(0, num_items):
+            queue.enqueue(i)
+    
+    		print('Test: delete')
+		myTree.delete(5)
+		assert_equal(myTree.treeIsEmpty(), True)
+		
+		print('Test: more complex deletions')
+		[myTree.insert(x) for x in range(1, 5)]
+		myTree.delete(2)
+		assert_equal(myTree.root.rightChild.data, 3)
+		print('Test: delete invalid value')
+		assert_equal(myTree.delete(100), False)
+    
+    
+if __name__ == '__main__':
+    rs = RandomizedSet()
+    print('insert 1: ', rs.insert(1))
+    print('insert 2: ', rs.insert(2))
+    print('insert 3: ', rs.insert(3))
+    print('insert 4: ', rs.insert(4))
+    print('remove 3: ', rs.remove(3))
+    print('remove 3: ', rs.remove(3))
+    print('remove 1: ', rs.remove(1))
+    print('random: ', rs.get_random())
+    print('random: ', rs.get_random())
+    print('random: ', rs.get_random())
+    print('random: ', rs.get_random())
+
+    
+        for _ in range(k):
+        if valid_witness(random.randrange(2, n - 2)):
+            return False
+    
+    return True
+
+    
+                for a in self.addons[:]:
+                if a.path not in ctx.options.scripts:
+                    ctx.log.info('Un-loading script: %s' % a.path)
+                    ctx.master.addons.remove(a)
+                    self.addons.remove(a)
+    
+    
+def ckey(attrs: Dict[str, str], f: http.HTTPFlow) -> TOrigin:
     '''
-print(__doc__)
-    
-    # Authors: Gael Varoquaux
-# License: BSD 3 clause (C) INRIA 2014
-    
+        Returns a (domain, port, path) tuple.
     '''
-=========================================================
-Vector Quantization Example
-=========================================================
+    domain = f.request.host
+    path = '/'
+    if 'domain' in attrs:
+        domain = attrs['domain']
+    if 'path' in attrs:
+        path = attrs['path']
+    return (domain, f.request.port, path)
     
-    # #############################################################################
-# Compute clustering with MeanShift
+        _stateobject_attributes = dict(
+        id=str,
+        address=tuple,
+        tls_established=bool,
+        clientcert=certs.Cert,
+        mitmcert=certs.Cert,
+        timestamp_start=float,
+        timestamp_tls_setup=float,
+        timestamp_end=float,
+        sni=str,
+        cipher_name=str,
+        alpn_proto_negotiated=bytes,
+        tls_version=str,
+        tls_extensions=typing.List[typing.Tuple[int, bytes]],
+    )
     
-        def syntax(self):
-        return '[options] <spider>'
     
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
-        else:
-            request.meta['handle_httpstatus_all'] = True
-    
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+    class Chunk(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self.len = self._io.read_u4be()
+            self.type = (self._io.read_bytes(4)).decode(u'UTF-8')
+            _on = self.type
+            if _on == u'iTXt':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.InternationalTextChunk(io, self, self._root)
+            elif _on == u'gAMA':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.GamaChunk(io, self, self._root)
+            elif _on == u'tIME':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.TimeChunk(io, self, self._root)
+            elif _on == u'PLTE':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.PlteChunk(io, self, self._root)
+            elif _on == u'bKGD':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.BkgdChunk(io, self, self._root)
+            elif _on == u'pHYs':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.PhysChunk(io, self, self._root)
+            elif _on == u'tEXt':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.TextChunk(io, self, self._root)
+            elif _on == u'cHRM':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.ChrmChunk(io, self, self._root)
+            elif _on == u'sRGB':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.SrgbChunk(io, self, self._root)
+            elif _on == u'zTXt':
+                self._raw_body = self._io.read_bytes(self.len)
+                io = KaitaiStream(BytesIO(self._raw_body))
+                self.body = self._root.CompressedTextChunk(io, self, self._root)
             else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-            # kept for old-style HTTP/1.0 downloader context twisted calls,
-        # e.g. connectSSL()
-        def getContext(self, hostname=None, port=None):
-            return self.getCertificateOptions().getContext()
-    
-            def log_failure(msg):
-            def errback(failure):
-                logger.error(
-                    msg,
-                    exc_info=failure_to_exc_info(failure),
-                    extra={'spider': spider}
-                )
-            return errback
-    
-            # extract cookies from Set-Cookie and drop invalid/expired cookies
-        cookiejarkey = request.meta.get('cookiejar')
-        jar = self.jars[cookiejarkey]
-        jar.extract_cookies(response, request)
-        self._debug_set_cookie(response, spider)
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    
-def display_temp(hass: HomeAssistant, temperature: float, unit: str,
-                 precision: float) -> float:
-    '''Convert temperature into preferred units/precision for display.'''
-    temperature_unit = unit
-    ha_unit = hass.config.units.temperature_unit
-    
-    
-def convert(value: float, unit_1: str, unit_2: str) -> float:
-    '''Convert one unit of measurement to another.'''
-    if unit_1 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
-    if unit_2 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
+                self.body = self._io.read_bytes(self.len)
+            self.crc = self._io.read_bytes(4)
