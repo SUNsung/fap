@@ -1,440 +1,166 @@
 
         
-        class AckermannOp : public OpKernel {
+        **Result**
+    
+    workspace.FeedBlob('X', (np.random.uniform(-10, 10, (5,5))).astype(np.float32))
+print('X before running op:', workspace.FetchBlob('X'))
+workspace.RunOperatorOnce(op)
+print('X after running op:', workspace.FetchBlob('X'))
+    
+    REGISTER_CPU_OPERATOR(GatherRangesToDense, GatherRangesToDenseOp<CPUContext>);
+NO_GRADIENT(GatherRangesToDense);
+    
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
  public:
-  explicit AckermannOp(OpKernelConstruction* context) : OpKernel(context) {}
-    }
-    
-    
-    {}  // namespace tensorflow
-
-    
-    static void TensorReleaser_dealloc(PyObject* pself) {
-  TensorReleaser* self = reinterpret_cast<TensorReleaser*>(pself);
-  (*self->destructor)();
-  delete self->destructor;
-  TensorReleaserType.tp_free(pself);
-}
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-
-    
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
-    
-    #include <Python.h>
-    
-    Safe_TF_StatusPtr make_safe(TF_Status* status) {
-  return Safe_TF_StatusPtr(status);
-}
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-          embedded_test_server()->RegisterRequestHandler(base::Bind(
-          &NWWebViewTestBase::UserAgentResponseHandler,
-          kUserAgentRedirectResponsePath,
-          embedded_test_server()->GetURL(kRedirectResponseFullPath)));
-    
-    #if defined(COMPONENT_BUILD) && defined(WIN32)
-#define NW_HOOK_MAP(type, sym, fn) BASE_EXPORT type fn;
-#else
-#define NW_HOOK_MAP(type, sym, fn) extern type fn;
-#endif
-#include 'content/nw/src/common/node_hooks.h'
-#undef NW_HOOK_MAP
-    
-    // Request Shell's id for current render_view_host.
-IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_GetShellId,
-                           int /* result */)
-    
-      // Post 'open' event.
-  static void EmitOpenEvent(const std::string& path);
-    
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
-    
-    v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id) {
-  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
-      routing_id, object_id));
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  return v8::Undefined(isolate);
-}
-    
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
-    
-    
-    {}
-    
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-    class NwAppCrashBrowserFunction : public UIThreadExtensionFunction {
- public:
-  NwAppCrashBrowserFunction() {}
-    }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.create', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCreateFunction);
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    int16_t word_blob_quality(WERD_RES *word, ROW *row);
-void reject_whole_page(PAGE_RES_IT &page_res_it);
-    
-    #include 'platform.h'  // for TESS_API
-    
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
+    namespace grpc {
     }
+    
+    
+    {    uint8_t version = buf[kVersionIdOffset];
+    uint32_t fieldID = buf[kServerElapsedTimeOffset];
+    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
+      *time = 0;
+      return kEncodeDecodeFailure;
+    }
+    *time = absl::little_endian::Load64(
+        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
+    return kRpcServerStatsSize;
   }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
     
     
-    {  // Restore the pointer to original blamer bundle and combine blamer
-  // information recorded in the splits.
-  if (orig_bb != nullptr) {
-    orig_bb->JoinBlames(*word->blamer_bundle, *word2->blamer_bundle,
-                        wordrec_debug_blamer);
-    delete word->blamer_bundle;
-    word->blamer_bundle = orig_bb;
-  }
-  word->SetupBoxWord();
-  word->reject_map.initialise(word->box_word->length());
-  delete word2;
-}
-    
-    
-    {}  // namespace tesseract
-    
-     private:
-  // Simple struct to hold an ICOORD point and a halfwidth representing half
-  // the 'width' (supposedly approximately parallel to the direction of the
-  // line) of each point, such that distant points can be discarded when they
-  // overlap nearer points. (Think i dot and other diacritics or noise.)
-  struct PointWidth {
-    PointWidth() : pt(ICOORD(0, 0)), halfwidth(0) {}
-    PointWidth(const ICOORD& pt0, int halfwidth0)
-      : pt(pt0), halfwidth(halfwidth0) {}
-    }
-    
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return nullptr;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
-      int64_t new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
-  }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
-}
-    
-    	si.cb = sizeof(STARTUPINFO);
-#if USE_TASKBAR_API
-	si.lpTitle = appId;
-	si.dwFlags = STARTF_TITLEISAPPID;
-#endif
-	PROCESS_INFORMATION pi;
-	if (!CreateProcess(conEmuPath, args, NULL, NULL, false, 0, NULL, NULL, &si, &pi)) {
-		MessageBox(NULL, _T('Unable to create the ConEmu process!'), _T('Error'), MB_OK);
-		return;
-	}
-    
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-        auto node = std::make_shared<DHTNode>(buf);
-    node->setIPAddress(peer.first);
-    node->setPort(peer.second);
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-    
-    void DHTRoutingTableSerializer::setNodes(
-    const std::vector<std::shared_ptr<DHTNode>>& nodes)
-{
-  nodes_ = nodes;
-}
-    
-    #include <vector>
-#include <string>
-#include <memory>
-    
-    #include 'common.h'
-    
-    namespace aria2 {
-    }
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPeerAnnounceTask(const unsigned char* infoHash)
-{
-  // TODO
-  return nullptr;
-}
-    
-      std::chrono::seconds timeout_;
-    
-    class DHTTaskQueue {
-public:
-  virtual ~DHTTaskQueue() = default;
-    }
-    
-    class DHTTaskQueueImpl : public DHTTaskQueue {
-private:
-  DHTTaskExecutor periodicTaskQueue1_;
-    }
-    
-    
-    {  void updateTokenSecret();
+    { private:
+  CensusContext context_;
+  // server method
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // Pointer to the grpc_call element
+  grpc_call* gc_;
+  // Authorization context for the call.
+  grpc_auth_context* auth_context_;
+  // Metadata element for census stats.
+  grpc_linked_mdelem census_bin_;
+  // recv callback
+  grpc_metadata_batch* recv_initial_metadata_;
+  grpc_closure* initial_on_done_recv_initial_metadata_;
+  grpc_closure on_done_recv_initial_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  absl::Time start_time_;
+  absl::Duration elapsed_time_;
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference it when adding metatdata to
+  // response.
+  char stats_buf_[kMaxServerStatsLen];
 };
     
-    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
-    
-    
-    {} // namespace aria2
-    
-    namespace aria2 {
-    }
-    
-    using apollo::common::ErrorCode;
-    
-    
-    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
-      auto obs = conti_radar->mutable_contiobs(i);
-      obs->set_longitude_dist_rms(
-          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
-      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
-      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
-      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
-      obs->set_longitude_accel_rms(
-          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
-      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
-      obs->set_oritation_angle_rms(
-          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
-      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
-      obs->set_meas_state(meas_state(bytes, length));
-      break;
-    }
-  }
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
 }
     
-    void SplineSegKernel::IntegratedTermMatrix(const uint32_t num_params,
-                                           const double x,
-                                           const std::string& type,
-                                           Eigen::MatrixXd* term_matrix) const {
-  if (term_matrix->rows() != term_matrix->cols() ||
-      term_matrix->rows() != static_cast<int>(num_params)) {
-    term_matrix->resize(num_params, num_params);
-  }
-    }
     
-    
-    {  double length_2 = 50.0;
-  const LaneGraph &lane_graph_2 =
-      ObstacleClusters::GetLaneGraph(start_s, length_2, lane);
-  EXPECT_EQ(1, lane_graph_2.lane_sequence_size());
-  EXPECT_EQ(3, lane_graph_2.lane_sequence(0).lane_segment_size());
-  EXPECT_EQ('l9', lane_graph_2.lane_sequence(0).lane_segment(0).lane_id());
-  EXPECT_EQ('l18', lane_graph_2.lane_sequence(0).lane_segment(1).lane_id());
-  EXPECT_EQ('l21', lane_graph_2.lane_sequence(0).lane_segment(2).lane_id());
+    {
+    {   private:
+    const grpc::string name_;
+    const grpc::string value_;
+  };
+  return std::unique_ptr<ServerBuilderOption>(new StringOption(name, value));
 }
     
-      Byte t1(bytes + 1);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
     
-    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Brakerpt6c::output_value(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+    {}  // namespace
+    
+    void LoadDataStore::ReportStreamCreated(const grpc::string& hostname,
+                                        const grpc::string& lb_id,
+                                        const grpc::string& load_key) {
+  per_host_stores_[hostname].ReportStreamCreated(lb_id, load_key);
+}
+    
+    
+    {}  // namespace grpc
+    
+    #include 'src/cpp/util/core_stats.h'
+    
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    
+    void
+SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+      return;
+    }
     }
     
-    #include <adapters/qt.h>
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
     
-            yield(PRODUCER);
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
+}
     
-    public:
-    explicit LRUCache(size_t capacity)
-    {
-        cache_capacity = capacity;
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+    uint8_t *CollationKey::reallocate(int32_t newCapacity, int32_t length) {
+    uint8_t *newBytes = static_cast<uint8_t *>(uprv_malloc(newCapacity));
+    if(newBytes == NULL) { return NULL; }
+    if(length > 0) {
+        uprv_memcpy(newBytes, getBytes(), length);
     }
+    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
+    fUnion.fFields.fBytes = newBytes;
+    fUnion.fFields.fCapacity = newCapacity;
+    fFlagAndLength |= 0x80000000;
+    return newBytes;
+}
     
-    using namespace swoole;
-using namespace std;
-    
-        time_t start = time(nullptr);
-    while (i != 1000)
-    {
-        usleep(100);
-        
-        if ((time(nullptr) - start) > 3)
-        {
-            ASSERT_TRUE(false);
+        // Handle a cursor after the output.  Use > rather than >= because
+    // if cursor == output.length() it is at the end of the output,
+    // which is the default position, so we need not emit it.
+    if (hasCursor && cursor > output.length()) {
+        cursor -= output.length();
+        while (cursor-- > 0) {
+            ICU_Utility::appendToRule(rule, (UChar)0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
         }
+        ICU_Utility::appendToRule(rule, (UChar)0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
     }
-    
-    int swAio_dispatch(const swAio_event *request)
-{
-    if (unlikely(!SwooleAIO.init))
-    {
-        swAio_init();
-    }
-    SwooleAIO.task_num++;
-    async_event *event = pool->dispatch(request);
-    return event->task_id;
-}
-    
-            for (int i = 0; i < 5; ++i)
-        {
-            std::string addr2 = Coroutine::gethostbyname('www.baidu.com', AF_INET);
-            ASSERT_NE(addr2, '');
-        }
-    
-    typedef struct
-{
-    uint32_t size;
-    uint32_t serial_num;
-    void* ptr;
-} pkg;
-    
-    #include <map>
-#include <unordered_map>
-    
-    
-    {    }
-    
-    void swoole_coroutine_signal_init()
-{
-    if (!signal_init)
-    {
-        signal_init = true;
-        swSignal_add(SIGCHLD, signal_handler);
-#ifdef HAVE_SIGNALFD
-        if (SwooleG.use_signalfd && !swReactor_handle_isset(SwooleG.main_reactor, SW_FD_SIGNAL))
-        {
-            swSignalfd_setup(SwooleG.main_reactor);
-        }
-#endif
-    }
-}
+    // Flush quoteBuf out to result
+    ICU_Utility::appendToRule(rule, -1,
+                              TRUE, escapeUnprintable, quoteBuf);
