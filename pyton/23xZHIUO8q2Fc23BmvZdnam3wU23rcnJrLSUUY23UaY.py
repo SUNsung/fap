@@ -1,92 +1,93 @@
 
         
-        
-class BasicAuthPlugin(BuiltinAuthPlugin):
+          # Convert from figure to an numpy array width x height x 3 (last for RGB)
+  f.canvas.draw()
+  data = np.fromstring(f.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+  data_wxhx3 = data.reshape(f.canvas.get_width_height()[::-1] + (3,))
+  plt.close()
     
-        def unregister(self, plugin):
-        self._plugins.remove(plugin)
+      def get_batch(self, batch_size, num_steps, pad=False, forever=True):
+    return get_batch(self._get_sentence(forever), batch_size, num_steps,
+                     self.vocab.max_word_length, pad=pad)
     
+      data_gen = dataset.get_batch(BATCH_SIZE, NUM_TIMESTEPS, forever=False)
+  sum_num = 0.0
+  sum_den = 0.0
+  perplexity = 0.0
+  for i, (inputs, char_inputs, _, targets, weights) in enumerate(data_gen):
+    input_dict = {t['inputs_in']: inputs,
+                  t['targets_in']: targets,
+                  t['target_weights_in']: weights}
+    if 'char_inputs_in' in t:
+      input_dict[t['char_inputs_in']] = char_inputs
+    log_perp = sess.run(t['log_perplexity_out'], feed_dict=input_dict)
     
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
+    np.set_printoptions(precision=3)
+np.set_printoptions(suppress=True)
     
-        def test_implicit_POST_json(self, httpbin):
-        r = http(httpbin.url + '/post', 'hello=world')
-        assert HTTP_OK in r
-        assert r.json['json'] == {'hello': 'world'}
+        for index, pred in zip(index_batch, pred_batch):
+      indices_predictions.append([str(id_to_word[index]), pred])
+    batch_of_indices_predictions.append(indices_predictions)
+  return batch_of_indices_predictions
     
+      # Forward Discriminator Elements.
+  if not FLAGS.dis_share_embedding:
+    embedding = [
+        v for v in tf.trainable_variables() if v.op.name == 'dis/embedding'
+    ][0]
+  fw_lstm_w_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  fw_lstm_b_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  fw_lstm_w_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  fw_lstm_b_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
+  if FLAGS.dis_share_embedding:
+    variable_mapping = {
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
+    }
+  else:
+    variable_mapping = {
+        'Model/embedding': embedding,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
+    }
+  return variable_mapping
     
-def test_unicode_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': UNICODE}
+    '''Simple bidirectional model definitions.'''
     
-        def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
-        try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
-
+            assert vid
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
+        ep = 'http://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={}'
     
-        return authstr
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls(url, title, ext, size, output_dir, merge=False)
     
-        return strings
-
+        title = match1(html, r'<title>([^<]{1,9999})</title>')
     
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'face_recognition',
-     u'Face Recognition Documentation',
-     [u'Adam Geitgey'], 1)
-]
-    
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    
-    import face_recognition
-from flask import Flask, jsonify, request, redirect
-    
-        # Quit when the input video file ends
-    if not ret:
-        break
-    
-    # Create a PIL imagedraw object so we can draw on the picture
-pil_image = Image.fromarray(image)
-d = ImageDraw.Draw(pil_image)
-    
-        # 图片上传失败，输出以下html代码
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
