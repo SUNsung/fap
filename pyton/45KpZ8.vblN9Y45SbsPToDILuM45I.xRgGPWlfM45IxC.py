@@ -1,112 +1,54 @@
 
         
-        - RecognitionException
-  - MismatchedRangeException
-  - MismatchedSetException
-    - MismatchedNotSetException
-    .
-  - MismatchedTokenException
-  - MismatchedTreeNodeException
-  - NoViableAltException
-  - EarlyExitException
-  - FailedPredicateException
-  .
-.
+        current_path = os.path.dirname(os.path.abspath(__file__))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
     
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
-                    
-                    if snext < 0:
-                        #print 'not a normal transition'
-                        # was in range but not a normal transition
-                        # must check EOT, which is like the else clause.
-                        # eot[s]>=0 indicates that an EOT edge goes to another
-                        # state.
-                        if self.eot[s] >= 0: # EOT Transition to accept state?
-                            #print 'EOT trans to accept state %d' % self.eot[s]
-                            
-                            s = self.eot[s]
-                            input.consume()
-                            # TODO: I had this as return accept[eot[s]]
-                            # which assumed here that the EOT edge always
-                            # went to an accept...faster to do this, but
-                            # what about predicated edges coming from EOT
-                            # target?
-                            continue
+            elif isinstance(e, EarlyExitException):
+            msg = 'required (...)+ loop did not match anything at input ' \
+                  + self.getTokenErrorDisplay(e.token)
     
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
+    test_face_landmarks = '''
+landmarks = face_recognition.face_landmarks(image, face_locations=face_locations)[0]
+'''
     
-        def test_jwk_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url)
-        self.assertEqual(jws.signature.combined.kid, None)
-        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
     
-    # General information about the project.
-project = u'acme-python'
-copyright = u'2015-2015, Let\'s Encrypt Project'
-author = u'Let\'s Encrypt Project'
-    
-            # Adding field 'Environment.organization_id'
-        db.add_column(
-            'sentry_environment',
-            'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True),
-            keep_default=False
-        )
-    
-            for environment in RangeQuerySetWrapperWithProgressBar(orm.Environment.objects.all()):
-            try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.create(
-                        environment=environment, project_id=environment.project_id
-                    )
-            except IntegrityError:
-                pass
-    
-        complete_apps = ['sentry']
-
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'ApiAuthorization', fields ['user', 'application']
-        db.delete_unique('sentry_apiauthorization', ['user_id', 'application_id'])
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'VersionDSymFile'
-        db.create_table(
-            'sentry_versiondsymfile', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ProjectDSymFile'], null=True
-                    )
-                ), (
-                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.DSymApp']
-                    )
-                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
-                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['VersionDSymFile'])
+def image_files_in_folder(folder):
+    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
     
-            # Deleting model 'ReleaseHeadCommit'
-        db.delete_table('sentry_releaseheadcommit')
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+    
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
+    
+            self.assertEqual(result.exit_code, 0)
+        self.assertTrue(target_string in result.output)
+    
+        # 图片上传失败，输出以下html代码
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
+    
+    # Release handle to the webcam
+video_capture.release()
+cv2.destroyAllWindows()
