@@ -1,147 +1,114 @@
 
         
-        # Fail if the server certificate name was not found
-- iam_server_certificate_facts:
-    name: production-cert
-  register: server_cert
-  failed_when: '{{ server_cert.results | length == 0 }}'
-'''
+        from httpie.compat import is_windows
+from httpie.config import DEFAULT_CONFIG_DIR, Config
     
-        json_output = {}
-    if mod_params['view'] == 'topics':
-        json_output['topics'] = list_func(pubsub_client.list_topics())
-    elif mod_params['view'] == 'subscriptions':
-        if mod_params['topic']:
-            t = pubsub_client.topic(mod_params['topic'])
-            json_output['subscriptions'] = list_func(t.list_subscriptions())
-        else:
-            json_output['subscriptions'] = list_func(pubsub_client.list_subscriptions())
+        def get_converters(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, ConverterPlugin)]
     
-        elif state == 'present':
-        for param in ('name', 'rules'):
-            if not module.params.get(param):
-                module.fail_json(
-                    msg='%s parameter is required for new firewall policies.' % param)
-        try:
-            (changed, firewall_policy) = create_firewall_policy(module, oneandone_conn)
-        except Exception as e:
-            module.fail_json(msg=str(e))
-    
-            # apply properties
-        if desired_state == 'present':
-            if current_state == HOST_ABSENT:
-                self.allocate_host()
-                host = self.get_host_by_name(host_name)
-                self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-            elif current_state in [HOST_STATES.ERROR, HOST_STATES.MONITORING_ERROR]:
-                self.fail(msg='invalid host state %s' % current_state_name)
-    
-        if module.params['user']:
-        params['deploy[local_username]'] = module.params['user']
-    
-        module.exit_json(changed=False, msg='logs(s) already followed')
-    
-        if event == 'annotation':
-        if not msg:
-            module.fail_json(msg='msg required for annotation events')
-        try:
-            send_annotation_event(module, key, msg, annotated_by, level, instance_id, event_epoch)
-        except Exception as e:
-            module.fail_json(msg='unable to sent annotation event: %s' % to_native(e),
-                             exception=traceback.format_exc())
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
     
-def linkcode_resolve(domain, info):
-    '''Determine the URL corresponding to Python object.'''
-    if domain != 'py':
-        return None
-    modname = info['module']
-    fullname = info['fullname']
-    submod = sys.modules.get(modname)
-    if submod is None:
-        return None
-    obj = submod
-    for part in fullname.split('.'):
-        try:
-            obj = getattr(obj, part)
-        except:
-            return None
-    try:
-        fn = inspect.getsourcefile(obj)
-    except:
-        fn = None
-    if not fn:
-        return None
-    try:
-        source, lineno = inspect.findsource(obj)
-    except:
-        lineno = None
-    if lineno:
-        linespec = '#L%d' % (lineno + 1)
-    else:
-        linespec = ''
-    index = fn.find('/homeassistant/')
-    if index == -1:
-        index = 0
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
+    
+        def test_implicit_GET_with_headers(self, httpbin):
+        r = http(httpbin.url + '/headers', 'Foo:bar')
+        assert HTTP_OK in r
+        assert r.json['headers']['Foo'] == 'bar'
+    
+    from httpie import ExitStatus
+from httpie.core import main
     
     
-# Concrete Buildings
-class House(Building):
-    def build_floor(self):
-        self.floor = 'One'
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
     
-        sample_queue.put('yam')
-    with ObjectPool(sample_queue) as obj:
-        print('Inside with: {}'.format(obj))
-    print('Outside with: {}'.format(sample_queue.get()))
+            if self.about:
+            self['__meta__']['about'] = self.about
     
-    This is useful as it make it easier to derive new kinds of objects,
-when instances of the class have only a few different combinations of
-state, and when instantiation is expensive.
+            # host:port => host_port
+        hostname = hostname.replace(':', '_')
+        path = os.path.join(config_dir,
+                            SESSIONS_DIR_NAME,
+                            hostname,
+                            session_name + '.json')
     
-            if start == end:
-            return path
-        shortest = None
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_shortest_path(node, end, path[:])
-                if newpath:
-                    if not shortest or len(newpath) < len(shortest):
-                        shortest = newpath
-        return shortest
+        def stop(self):
+        '''Stop reporting on next tick.'''
+        self._should_stop.set()
+    
+        def reset_appid(self):
+        # called by web_control
+        with self.lock:
+            self.working_appid_list = list()
+            for appid in self.config.GAE_APPIDS:
+                if not appid:
+                    self.config.GAE_APPIDS.remove(appid)
+                    continue
+                self.working_appid_list.append(appid)
+            self.not_exist_appids = []
+            self.out_of_quota_appids = []
+        self.last_reset_time = time.time()
     
     
-class Failed(OutOfService):
-    '''No need to override any method.'''
+IPv4 = CheckNetwork('IPv4')
+IPv4.urls = [
+            'https://www.microsoft.com',
+            'https://www.apple.com',
+            'https://code.jquery.com',
+            'https://cdn.bootcss.com',
+            'https://cdnjs.cloudflare.com']
+IPv4.triger_check_network()
     
-        def test_publisher_shall_append_subscription_message_to_queue(cls):
-        ''' msg_queue ~ Provider.notify(msg) ~ Publisher.publish(msg) '''
-        expected_msg = 'expected msg'
-        pro = Provider()
-        pub = Publisher(pro)
-        Subscriber('sub name', pro)
-        cls.assertEqual(len(pro.msg_queue), 0)
-        pub.publish(expected_msg)
-        cls.assertEqual(len(pro.msg_queue), 1)
-        cls.assertEqual(pro.msg_queue[0], expected_msg)
     
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
-
+    def __str__(self):
+        exp = ', expected %s' % self.expecting
+        if self.expecting == INVALID_TOKEN_TYPE:
+            exp = ''
     
-            Parameters
-        ----------
-        declarations_str : str
-            A list of CSS declarations
-        inherited : dict, optional
-            Atomic properties indicating the inherited style context in which
-            declarations_str is to be resolved. ``inherited`` should already
-            be resolved, i.e. valid output of this method.
-    
-            exp = pd.DatetimeIndex(['2011-01-01 09:00', '2011-01-01 10:00',
-                                '2011-01-01 11:00'])
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
+                if point.name == 'p':
+                link = point.find('a')
+                if link is not None:
+                    link = clean_pdf_link(link.attrs['href'])
+                    ext = get_extension(link)
+                    print(ext)
+                    if not ext in forbidden_extensions:
+                        print(shorten_title(point.text) + ' (' + link + ')')
+                        try:
+                            name = clean_text(point.text.split('[' + ext + ']')[0])
+                            fullname = '.'.join((name, ext))
+                            if not os.path.exists('/'.join((current_directory, fullname)) ):
+                                download_pdf(link, current_directory, '.'.join((name, ext)))
+                        except KeyboardInterrupt:
+                            try:
+                                print('Press Ctrl-C in 1 second to quit')
+                                time.sleep(1)
+                            except KeyboardInterrupt:
+                                print('Cancelling..')
+                                break
+                        except:
+                            failures.append(point.text)
+                        
+        point = point.next_sibling          
