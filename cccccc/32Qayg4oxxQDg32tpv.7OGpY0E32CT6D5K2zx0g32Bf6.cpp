@@ -1,211 +1,465 @@
 
         
-            /*
-        Calculation of Sobel operator
-        NOTE: the function cannot operate inplace
-    */
-    bool isSobel3x3Supported(const Size2D &size, BORDER_MODE border, s32 dx, s32 dy, Margin borderMargin = Margin());
-    void Sobel3x3(const Size2D &size,
-                  const u8 * srcBase, ptrdiff_t srcStride,
-                  s16 * dstBase, ptrdiff_t dstStride,
-                  s32 dx, s32 dy,
-                  BORDER_MODE border, u8 borderValue, Margin borderMargin = Margin());
+        #include 'include/secp256k1_ecdh.h'
+#include 'ecmult_const_impl.h'
     
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
-        v_dst = internal::vqsub(v_max, v_min);
-    }
+        /* Check for (correctly reporting) a parsing error if the initial
+       JSON construct is followed by more stuff.  Note that whitespace
+       is, of course, exempt.  */
     
+    ROTATE_ARGS
+	movdqa	XTMP2, XTMP3	; XTMP2 = W[-15]
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+	movdqa	XTMP4, XTMP3	; XTMP4 = W[-15]
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    mov	y2, f		; y2 = f
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+	pslld	XTMP3, (32-18)
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+    xor	y2, g		; y2 = f^g
+	psrld	XTMP2, 18
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP1, XTMP3
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+	psrld	XTMP4, 3	; XTMP4 = W[-15] >> 3
+    add	y2, y0		; y2 = S1 + CH
+    add	y2, [rsp + _XFER + 1*4]	; y2 = k + w + S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+	pxor	XTMP1, XTMP2	; XTMP1 = W[-15] ror 7 ^ W[-15] ror 18
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pxor	XTMP1, XTMP4	; XTMP1 = s0
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	;; compute low s1
+	pshufd	XTMP2, X3, 11111010b	; XTMP2 = W[-2] {BBAA}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	paddd	XTMP0, XTMP1	; XTMP0 = W[-16] + W[-7] + s0
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
     
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_src = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            int16x8_t v_dst = vld1q_s16(dst + j);
-            int16x4_t v_srclo = vget_low_s16(v_src), v_srchi = vget_high_s16(v_src);
-            v_dst = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst))),
-                                 vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst))));
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    
-    {
-    {
-    {            for (; j < size.width; j++)
-                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
-        }
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-                int16x8_t tail02 = vreinterpretq_s16_u16(vaddl_u8(tail2, tail0));
-            int16x8_t tail1x2 = vreinterpretq_s16_u16(vshll_n_u8(tail1, 1));
-            int16x8_t taildx = vreinterpretq_s16_u16(vsubl_u8(tail2, tail0));
-            int16x8_t taildy = vqaddq_s16(tail02, tail1x2);
-    
-             float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-         float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-         float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
-         float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
-    
-                vec128 v_src = vld3q(src + js), v_dst;
-            v_src.val[0] = vrev64q(v_src.val[0]);
-            v_src.val[1] = vrev64q(v_src.val[1]);
-            v_src.val[2] = vrev64q(v_src.val[2]);
-    
-    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
+    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
 
     
-      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
-  // Add must be called on points in sequence along the line.
-  void Add(const ICOORD& pt);
-  // Associates a half-width with the given point if a point overlaps the
-  // previous point by more than half the width, and its distance is further
-  // than the previous point, then the more distant point is ignored in the
-  // distance calculation. Useful for ignoring i dots and other diacritics.
-  void Add(const ICOORD& pt, int halfwidth);
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
     
-    class DLLSYM DIR128
-{
-  public:
-    DIR128() = default;
+    #include 'base/logging.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    namespace nw {
     }
     
-    #ifndef TESSERACT_CCMAIN_OTSUTHR_H_
-#define TESSERACT_CCMAIN_OTSUTHR_H_
     
-      void set_flag(REJ_FLAGS rej_flag) {
-    if (rej_flag < 16)
-      flags1.turn_on_bit (rej_flag);
-    else
-      flags2.turn_on_bit (rej_flag - 16);
+    {}  // namespace
+    
+    
+    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
+                           base::WaitableEvent::InitialState::NOT_SIGNALED);
+  base::PostTaskWithTraits(
+      FROM_HERE, {content::BrowserThread::IO},
+      base::BindOnce(&SetProxyConfigCallback, &done,
+                 base::WrapRefCounted(context_getter), config));
+  done.Wait();
+  return true;
+}
+    
+    
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.quit', UNKNOWN)
+ private:
+  void Callback();
+};
+    
+      for(auto& data : params->data) {
+    if (!writer->Write(data)) {
+      *error = writer->error();
+      writer->Reset();
+      return false;
+    }
   }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_common.h
- * \brief Common functions for caffeOp and caffeLoss symbols
- * \author Haoran Wang
-*/
-    
-    
-    
-        info = MXNET_LAPACK_posv<DType>(MXNET_LAPACK_ROW_MAJOR, 'U',
-      k, out.size(1), hadamard_prod.dptr_, hadamard_prod.stride_,
-      out.dptr_, out.stride_);
-  } else {
-    Tensor<cpu, 2, DType> kr(Shape2(out.size(1), out.size(0)));
-    AllocSpace(&kr);
-    khatri_rao(kr, ts_arr);
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file cudnn_spatial_transformer-inl.h
- * \brief
- * \author Wei Wu
-*/
-#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-    
-        ListNode* curNode = head;
-    while(curNode != NULL){
-        cout << curNode->val;
-        if(curNode->next != NULL)
-            cout << ' -> ';
-        curNode = curNode->next;
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-            int count[3] = {0};
-        for(int i = 0 ; i < nums.size() ; i ++){
-            assert(nums[i] >= 0 && nums[i] <= 2);
-            count[nums[i]] ++;
-        }
+      // Null char in the string.
     
-                cur = stack.top();
-            stack.pop();
-            res.push_back(cur->val);
-            cur = cur->right;
+    #include <google/protobuf/io/zero_copy_stream.h>
     
-    using namespace std;
+    #include <ostream>
+#include <stdio.h>
+#include <string>
+#include <utility>
     
-                int new_level_num = 0;
-            vector<int> level;
-            for(int i = 0; i < level_num; i ++){
-                TreeNode* node = q.front();
-                q.pop();
-                level.push_back(node->val);
+    // Copyright 2008 Google Inc. All Rights Reserved.
+// Author: xpeng@google.com (Peter Peng)
+    
+    #include 'google/protobuf/message.h'
+#include 'google/protobuf/descriptor.h'
+    
+    namespace {
     }
     
-    // Classic Non-Recursive algorithm for preorder traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-    }
-    
-            TreeNode* cur = root;
-        while(cur != NULL){
-            if(cur->left == NULL){
-                res.push_back(cur->val);
-                cur = cur->right;
-            }
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right != NULL && prev->right != cur)
-                    prev = prev->right;
-    }
-    }
-    
-    
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    }
-    
-    
-    {    return 0;
+    string StripProto(string filename) {
+  return filename.substr(0, filename.rfind('.proto'));
 }
+    
+      cout << 'Enter name: ';
+  getline(cin, *person->mutable_name());
+    
+        float32* x; //vertex arrays
+    float32* y;
+    int32 nVertices;
+	
+	float32 area;
+	bool areaIsSet;
+	
+    b2Polygon(float32* _x, float32* _y, int32 nVert);
+    b2Polygon(b2Vec2* v, int32 nVert);
+	b2Polygon();
+    ~b2Polygon();
+	
+	float32 GetArea();
+	
+	void MergeParallelEdges(float32 tolerance);
+    b2Vec2* GetVertexVecs();
+    b2Polygon(b2Triangle& t);
+    void Set(const b2Polygon& p);
+    bool IsConvex();
+	bool IsCCW();
+	bool IsUsable(bool printError);
+	bool IsUsable();
+    bool IsSimple();
+   // void AddTo(b2FixtureDef& pd);
+	
+    b2Polygon* Add(b2Triangle& t);
+    
+    #ifndef VPX_DSP_TXFM_COMMON_H_
+#define VPX_DSP_TXFM_COMMON_H_
+    
+      Decompression is memory safe and guaranteed not to write the output buffer
+  more than what is specified in maxout.
+ */
+    
+    #define NORM_SCALING 1.f
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q16
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_32_Q16\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b),'r'(a)
+  );
+  return res;
+}
+#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
+    
+    /* Requires that shift > 0 */
+#define silk_RSHIFT_ROUND(a, shift)         ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
+#define silk_RSHIFT_ROUND64(a, shift)       ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
+    
+      ~AutoCompactTest() {
+    delete db_;
+    DestroyDB(dbname_, Options());
+    delete tiny_cache_;
+  }
+    
+    #include 'db/builder.h'
+    
+    
+    {  ParsedInternalKey() { }  // Intentionally left uninitialized (for speed)
+  ParsedInternalKey(const Slice& u, const SequenceNumber& seq, ValueType t)
+      : user_key(u), sequence(seq), type(t) { }
+  std::string DebugString() const;
+};
+    
+    // Notified when log reader encounters corruption.
+class CorruptionReporter : public log::Reader::Reporter {
+ public:
+  WritableFile* dst_;
+  virtual void Corruption(size_t bytes, const Status& status) {
+    std::string r = 'corruption: ';
+    AppendNumberTo(&r, bytes);
+    r += ' bytes; ';
+    r += status.ToString();
+    r.push_back('\n');
+    dst_->Append(r);
+  }
+};
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+    class FileNameTest { };
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-null, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+         uint64_t initial_offset);
+    
+    class LogTest {
+ private:
+  class StringDest : public WritableFile {
+   public:
+    std::string contents_;
+    }
+    }
+    
+    
+    {
+    {      // Install new manifest
+      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
+      if (status.ok()) {
+        status = SetCurrentFile(env_, dbname_, 1);
+      } else {
+        env_->DeleteFile(tmp);
+      }
+    }
+    return status;
+  }
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != nullptr) {
+    *tableptr = nullptr;
+  }
+    }
+    
+    
+    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+};
+    
+    uint32_t Extension_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin('Extension_ping_args');
+    }
+    
+    
+    {};
+    
+    /**
+ * @brief Represents a hardware driver type that SMART api can you use to query
+ * device information.
+ *
+ * @param driver name of SMART controller driver
+ * @param maxID max ID number of which disks on the controller is monitored
+ */
+struct hardwareDriver {
+  std::string driver;
+  size_t maxID;
+};
+    
+    
+    {  auto blk_devices = SQL::selectAllFrom('block_devices');
+  for (const auto& device : blk_devices) {
+    auto size = device.find('size');
+    auto name = device.find('name');
+    if (size != device.end() && size->second != '0' && size->second != '' &&
+        name != device.end()) {
+      handle_device_func(name->second, type);
+    }
+  }
+}
+    
+    
+    {
+    {} // namespace table_tests
+} // namespace osquery
 
     
-    // The data is first compressed with stb_compress() to reduce source code size,
-// then encoded in Base85 to fit in a string so we can fit roughly 4 bytes of compressed data into 5 bytes of source code (suggested by @mmalex)
-// (If we used 32-bits constants it would require take 11 bytes of source code to encode 4 bytes, and be endianness dependent)
-// Note that even with compression, the output array is likely to be bigger than the binary file..
-// Load compressed TTF fonts with ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF()
+    #include <osquery/tests/integration/tables/helper.h>
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+    TEST_F(kernelExtensions, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from kernel_extensions');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'idx', IntType}
+  //      {'refs', IntType}
+  //      {'size', IntType}
+  //      {'name', NormalType}
+  //      {'version', NormalType}
+  //      {'linked_against', NormalType}
+  //      {'path', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+    TEST_F(KernelInfo, test_sanity) {
+  QueryData data = execute_query('select * from kernel_info');
+  ValidatatioMap row_map = {{'version', NonEmptyString},
+                            {'arguments', NormalType},
+                            {'path', NormalType},
+                            {'device', NonEmptyString}};
+  validate_rows(data, row_map);
+}
+    
+    TEST_F(kernelIntegrity, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from kernel_integrity');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'sycall_addr_modified', IntType}
+  //      {'text_segment_hash', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+    
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
+    
+    TEST_F(keychainAcls, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from keychain_acls');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'keychain_path', NormalType}
+  //      {'authorizations', NormalType}
+  //      {'path', NormalType}
+  //      {'description', NormalType}
+  //      {'label', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+    
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
+    
+    TEST(CanSenderTest, OneRunCase) {
+  CanSender<::apollo::canbus::ChassisDetail> sender;
+  can::FakeCanClient can_client;
+  sender.Init(&can_client, true);
+    }
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+    
+    int ObjectGeneralInfo60B::dynprop(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    class SpeedLimitTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    speed_limit_.Clear();
+    for (int i = 0; i < 100; ++i) {
+      std::pair<double, double> sp;
+      sp.first = i * 1.0;
+      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
+      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
+    }
+  }
+    }
+    
+      MatrixXd mat_golden(10, 10);
+  // clang-format off
+  mat_golden <<
+      6, -4,  1,  0,  0,  0,  0,  0,  0,  0,
+     -4,  6, -4,  1,  0,  0,  0,  0,  0,  0,
+      1, -4,  6, -4,  1,  0,  0,  0,  0,  0,
+      0,  1, -4,  6, -4,  1,  0,  0,  0,  0,
+      0,  0,  1, -4,  6, -4,  1,  0,  0,  0,
+      0,  0,  0,  1, -4,  6, -4,  1,  0,  0,
+      0,  0,  0,  0,  1, -4,  6, -4,  1,  0,
+      0,  0,  0,  0,  0,  1, -4,  6, -4,  1,
+      0,  0,  0,  0,  0,  0,  1, -4,  5, -2,
+      0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    SplineSegKernel::SplineSegKernel() {
+  const int reserved_num_params = reserved_order_ + 1;
+  CalculateFx(reserved_num_params);
+  CalculateDerivative(reserved_num_params);
+  CalculateSecondOrderDerivative(reserved_num_params);
+  CalculateThirdOrderDerivative(reserved_num_params);
+}
+    
+    
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+      Brakerpt6c brake;
+  brake.Parse(bytes, length, &chassis_detail);
+    
+    
+    {  bool ret = x;
+  return ret;
+}
