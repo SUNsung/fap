@@ -1,117 +1,168 @@
 
         
-            /**
-     * System registration hook.
-     */
-    static void registerIDs();
+          void Transform(const Datum& datum, Dtype* transformed_data);
+  // Tranformation parameters
+  TransformationParameter param_;
     
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
+    }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
+  }
     
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-#include 'unicode/dtfmtsym.h'
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+        // Make sure that the dictionary contains all required keys, and if it does, return version value
+    // from the dictionary.
+    template <typename T>
+    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
+    { 
+        const auto& version = GetVersion(dict);
+    }
+    
+            static const size_t s_serializationVersion = 0;
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
 };
     
-        int unit;
-    double value;
+    #include 'Basics.h'
+#include 'ScriptableObjects.h'
     
-    #include <cstring>
-#include <deque>
-#include <exception>
-#include <functional>
-#include <memory>
-#include <string>
-    
-    template <YGMarker M>
-struct MarkerData;
-    
-    #ifdef __cplusplus
-namespace facebook {
-namespace yoga {
-namespace enums {
-    }
-    }
+        /**
+     * Returns TRUE if this object is equal to rhs.
+     */
+    UBool equals(const SignificantDigitInterval &rhs) const {
+        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
     }
     
-        Size(double width, double height)
-    : width(width)
-    , height(height)
+        switch (patternCharIndex) {
+    case UDAT_ERA_FIELD:
+        if (isChineseCalendar) {
+            if (!gotNumber) {
+                return -start;
+            }
+            cal.set(UCAL_ERA, value);
+            return pos.getIndex();
+        }
+        if (count == 5) {
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, NULL, cal);
+        } else if (count == 4) {
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, NULL, cal);
+        } else {
+            ps = matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, NULL, cal);
+        }
+    }
+    
+    
+U_NAMESPACE_END
+    
+    // set the key to a 'bogus' or invalid state
+CollationKey&
+CollationKey::setToBogus()
+{
+    fFlagAndLength &= 0x80000000;
+    fHashCode = kBogusHashCode;
+    }
+    
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the plural form corresponding to the keyword
+     */
+    static Form fromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+        return static_cast<Form>(indexFromString(keyword, errorCode));
+    }
+    
+    #ifdef IMGUI_VULKAN_DEBUG_REPORT
+    // Remove the debug report callback
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkDestroyDebugReportCallbackEXT');
+    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
+#endif // IMGUI_VULKAN_DEBUG_REPORT
+    
+        // Bind pipeline and descriptor sets:
     {
+        vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_Pipeline);
+        VkDescriptorSet desc_set[1] = { g_DescriptorSet };
+        vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_PipelineLayout, 0, 1, desc_set, 0, NULL);
     }
     
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
+                // Blit from temporary buffer to final texture
+            size_t blit_src_stride = (size_t)src_glyph.Info.Width;
+            size_t blit_dst_stride = (size_t)atlas->TexWidth;
+            unsigned char* blit_src = src_glyph.BitmapData;
+            unsigned char* blit_dst = atlas->TexPixelsAlpha8 + (ty * blit_dst_stride) + tx;
+            for (int y = info.Height; y > 0; y--, blit_dst += blit_dst_stride, blit_src += blit_src_stride)
+                memcpy(blit_dst, blit_src, blit_src_stride);
     
-    template <typename T> template <typename U>
-RefPtr<T>::operator RefPtr<U>() const {
-  static_assert(std::is_base_of<T, U>::value, 'Invalid static cast');
-  return assumeAlreadyReffedOrNull<U>(static_cast<U*>(m_ptr));
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    ////////////////////           compressor         ///////////////////////
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    int display_w, display_h;
+    glfwGetWindowSize(g_Window, &w, &h);
+    glfwGetFramebufferSize(g_Window, &display_w, &display_h);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    if (w > 0 && h > 0)
+        io.DisplayFramebufferScale = ImVec2((float)display_w / w, (float)display_h / h);
+    
+      virtual bool isReply() const CXX11_OVERRIDE;
+    
+      void showBuckets() const;
+    
+    
+    {} // namespace aria2
+
+    
+    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
+{
+  factory_ = factory;
 }
     
-    #if ENABLE_FBASSERT
-#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
-#else
-#define FBASSERTMSGF(expr, msg, ...)
-#endif // ENABLE_FBASSERT
+      void setRoutingTable(DHTRoutingTable* routingTable);
+    
+    namespace aria2 {
+    }
+    
+    DNSCache::~DNSCache() = default;
+    
+        CacheEntry& operator=(const CacheEntry& c);
     
     
-    {} // namespace detail
-    
-    
-/**
- * This needs to be called at library load time, typically in your JNI_OnLoad method.
- *
- * The intended use is to return the result of initialize() directly
- * from JNI_OnLoad and to do nothing else there. Library specific
- * initialization code should go in the function passed to initialize
- * (which can be, and probably should be, a C++ lambda). This approach
- * provides correct error handling and translation errors during
- * initialization into Java exceptions when appropriate.
- *
- * Failure to call this will cause your code to crash in a remarkably
- * unhelpful way (typically a segfault) while trying to handle an exception
- * which occurs later.
- */
-FBEXPORT jint initialize(JavaVM*, std::function<void()>&&) noexcept;
+    {    std::cout << null << '\n';
+    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
+}
