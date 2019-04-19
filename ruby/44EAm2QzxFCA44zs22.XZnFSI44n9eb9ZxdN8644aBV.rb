@@ -1,154 +1,97 @@
-    it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-      describe '#working?' do
-    it 'should not be working until the first event was received' do
-      expect(@checker).not_to be_working
-      @checker.last_receive_at = Time.now
-      expect(@checker).to be_working
-    end
-  end
-    
-        def entries_as_json
-      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
-end
 
+        
+                      accept = if current_value.respond_to?(:call)
+                current_value.call(item)
+              else
+                Array(current_value).map(&:to_s).include?(value.to_s)
+              end
     
-        def document?
-      @content =~ DOCUMENT_RGX
-    end
-    
-        private
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
+              super(object_name, method_name, template_object, options)
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
+    
+      it 'creates an alert if a new agent with invalid json is submitted' do
+    visit '/'
+    page.find('a', text: 'Agents').trigger(:mouseover)
+    click_on('New Agent')
+    
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+        it 'should raise an exception when encountering complex JSONPaths' do
+      @agent.options['username_path'] = '$.very.complex[*]'
+      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
+        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
+    end
+    
+      it 'replaces invalid byte sequences in a message' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
+    log.message = '\u{3042}\xffA\x95'
+    expect { log.save! }.not_to raise_error
+    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+  end
+    
+        it 'should generate the correct specific tracking url' do
+      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
+    end
+    
+      # log-levels from the diaspora.yml for SQL and federation debug-logging
+  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
+  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
+  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
+    AppConfig.environment.logging.debug.federation? ? :debug : :info
+    
+    Then(/^I should not be able to sign up$/) do
+  confirm_not_signed_up
+end
+    
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
+    
+          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
+      save_fixture(response.body, 'aspects_manage_contacts_json')
+    end
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      get :bookmarklet
+      save_fixture(html_for('body'), 'bookmarklet')
+    end
+    
+        context 'on my own post' do
+      before do
+        aspect_to_post = alice.aspects.where(:name => 'generic').first
+        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
       end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
+    
+          # Returns the else branch of the `case` statement, if any.
+      #
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
       end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
+    
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
       end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-          get_web_content(redirected_url)
-    end
+          # A helper class for comparing the positions of different parts of a
+      # `pair` node.
+      class HashElementDelta
+        def initialize(first, second)
+          @first = first
+          @second = second
     
-      expansion(:inspection) {
-    {
-      :inspected => o.inspected == 1 ? true : false,
-      :spam => o.spam == 1 ? true : false,
-      :spam_score => o.spam_score.to_f,
-      :threat => o.threat == 1 ? true : false,
-      :threat_details => o.threat_details
-    }
-  }
-    
-      def update
-    if @credential.update(params.require(:credential).permit(:name, :hold))
-      redirect_to_with_json [organization, @server, :credentials]
-    else
-      render_form_errors 'edit', @credential
-    end
-  end
-    
-        if @domain.save
-      if @domain.verified?
-        redirect_to_with_json [:setup, organization, @server, @domain]
-      else
-        redirect_to_with_json [:verify, organization, @server, @domain]
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
+      #
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
       end
-    else
-      render_form_errors 'new', @domain
-    end
-  end
-    
-          if @query = (params[:query] || session['msg_query_#{@server.id}_#{scope}']).presence
-        session['msg_query_#{@server.id}_#{scope}'] = @query
-        qs = Postal::QueryString.new(@query)
-        if qs.empty?
-          flash.now[:alert] = 'It doesn't appear you entered anything to filter on. Please double check your query.'
-        else
-          @queried = true
-          if qs[:order] == 'oldest-first'
-            options[:direction] = 'asc'
-          end
-    
-      def finish_password_reset
-    @user = User.where(:password_reset_token => params[:token]).where('password_reset_token_valid_until > ?', Time.now).first
-    if @user.nil?
-      redirect_to login_path(:return_to => params[:return_to]), :alert => 'This link has expired or never existed. Please choose reset password to try again.'
-    end
-    
-      def create
-    @track_domain = @server.track_domains.build(params.require(:track_domain).permit(:name, :domain_id, :track_loads, :track_clicks, :excluded_click_domains, :ssl_enabled))
-    if @track_domain.save
-      redirect_to_with_json [:return_to, [organization, @server, :track_domains]]
-    else
-      render_form_errors 'new', @track_domain
-    end
-  end
-    
-      def join
-    if @invite = UserInvite.where(:uuid => params[:token]).where('expires_at > ?', Time.now).first
-      if logged_in?
-        if request.post?
-          @invite.accept(current_user)
-          redirect_to_with_json root_path(:nrd => 1), :notice => 'Invitation has been accepted successfully. You now have access to this organization.'
-        elsif request.delete?
-          @invite.reject
-          redirect_to_with_json root_path(:nrd => 1), :notice => 'Invitation has been rejected successfully.'
-        else
-          @organizations = @invite.organizations.order(:name).to_a
-        end
-      else
-        redirect_to new_signup_path(params[:token])
-      end
-    else
-      redirect_to_with_json root_path(:nrd => 1), :alert => 'The invite URL you have has expired. Please ask the person who invited you to re-send your invitation.'
-    end
-  end
-    
-      def update
-    @organization_user = organization.user_assignment(@user)
-    if @organization_user.update(params.require(:organization_user).permit(:admin))
-      redirect_to_with_json [organization, :users], :notice => 'Permissions for #{@organization_user.user.name} have been updated successfully.'
-    else
-      render_form_errors 'edit', @organization_user
-    end
-  end
-    
-      def format_delivery_details(server, text)
-    text.gsub!(/\<msg\:(\d+)\>/) do
-      id = $1.to_i
-      link_to('message ##{id}', organization_server_message_path(server.organization, server, id), :class => 'u-link')
-    end
-    text.html_safe
-  end
