@@ -1,359 +1,181 @@
 
         
-        namespace c10d {
-namespace test {
-    }
-    }
-    
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    #include 'caffe2/utils/math.h'
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-    namespace caffe2 {
-    }
-    
-    namespace grpc {
-    }
-    
-    #include 'absl/strings/string_view.h'
-#include 'absl/time/time.h'
-#include 'src/cpp/ext/filters/census/channel_filter.h'
-#include 'src/cpp/ext/filters/census/context.h'
-    
-    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    #include <grpcpp/grpcpp.h>
-#include 'src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h'
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
-    
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
-  }
-}
-    
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type);
-    
-        ArchiveFile(src);
-    if (counter == 0) {
-      builder->Abandon();  // Nothing to save
-    } else {
-      s = builder->Finish();
-      if (s.ok()) {
-        t.meta.file_size = builder->FileSize();
-      }
-    }
-    delete builder;
-    builder = nullptr;
-    
-    class SnapshotList {
+        /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
  public:
-  SnapshotList() : head_(0) {
-    head_.prev_ = &head_;
-    head_.next_ = &head_;
-  }
-    }
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
     
-    TableCache::~TableCache() {
-  delete cache_;
+    template <typename Dtype>
+class Layer;
+    
+    #endif  // CAFFE_CONV_LAYER_HPP_
+
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    b2Triangle::~b2Triangle(){
+	delete[] x;
+	delete[] y;
 }
     
-    class Env;
+    			if (!pImageData)
+			{
+				break;
+			}
     
-      while (msg == nullptr && GetVarint32(&input, &tag)) {
-    switch (tag) {
-      case kComparator:
-        if (GetLengthPrefixedSlice(&input, &str)) {
-          comparator_ = str.ToString();
-          has_comparator_ = true;
-        } else {
-          msg = 'comparator name';
-        }
-        break;
-    }
+    
+    {	}
+    
+    #if defined (__cplusplus)
+extern 'C' {
+#endif
     }
     
-        template <typename ElementType>
-    void Value::CopyVariableValueToCSCSparse(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<ElementType>& nonZeroValues, size_t& numNonZeroValues)
-    {
-        // All sanity check has been done in ValidateSparseCSCAndGetIndexSizes().
-        NDArrayViewPtr cpuView;
-        if (Device().Type() == DeviceKind::GPU)
-        {
-            // Todo: GPUSparseMatrix to CPUSparseMatrix is not implemented in matrix, as a workaround the dense matrix is used as intermediate presentation.
-            // However, it is possible that data value very close to 0 could treated as 0 after transformation between dense and sparse.
-            auto cpuDenseView = MakeSharedObject<NDArrayView>(GetDataType(), StorageFormat::Dense, Shape(), DeviceDescriptor::CPUDevice());
-            cpuDenseView->CopyFrom(*Data());
-            cpuView = MakeSharedObject<NDArrayView>(GetDataType(), GetStorageFormat(), Shape(), DeviceDescriptor::CPUDevice());
-            cpuView->CopyFrom(*cpuDenseView);
-        }
-        else
-            cpuView = Data();
-    }
-    
-    namespace CNTK
+    #ifdef FLOAT_APPROX
+/* This code should reliably detect NaN/inf even when -ffast-math is used.
+   Assumes IEEE 754 format. */
+static OPUS_INLINE int celt_isnan(float x)
 {
-    class PackedValue final : public Value
-    {
-        template <typename T, typename ...CtorArgTypes>
-        friend inline std::shared_ptr<T> MakeSharedObject(CtorArgTypes&& ...ctorArgs);
-    }
-    }
-    
-                if (m_varKind == VariableKind::Input)
-            {
-                for (auto dim : m_shape.Dimensions())
-                {
-                    if (dim == 0)
-                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
-                }
-            }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_handle(NULL),
-          m_name('Global\\' + name)
-    {
-    }
-    
-    ScriptableObjects::ConfigurableRuntimeTypeRegister::Add<CloneFunctionConfigLambda> registerCloneFunctionConfigLambda(L'CloneFunctionConfigLambda');
-    
-    
-    {                    if (!memAllocInfoVec.empty())
-                    {
-                        // since we assign from highest memory to lowest, every memory that has been allocated can accommodate the 
-                        // current memory request, unless there is a conflict (overlap) 
-                        auto iter = memAllocInfoVec.begin();
-                        while (iter != memAllocInfoVec.end() && CheckOverlap(make_pair(memInfo.allocStep, memInfo.releaseStep), iter->occupancy))
-                            iter++;
-                        if (iter == memAllocInfoVec.end())
-                        {
-                            // no current memory can be assigned, need to create a new one 
-                            vector<pair<int, int>> occ;
-                            occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                            // insert in the front of the vector to maintain sorted order 
-                            memAllocInfoVec.insert(memAllocInfoVec.begin(), ma);
-                            memInfo.SetMemoryId(memoryCounter);
-                            memoryCounter++;
-                        }
-                        else
-                        {
-                            iter->occupancy.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            memInfo.SetMemoryId(iter->memoryId);
-                        }
-                    }
-                    else
-                    {
-                        vector<pair<int, int>> occ;
-                        occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                        MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                        memAllocInfoVec.push_back(ma);
-                        memInfo.SetMemoryId(memoryCounter);
-                        memoryCounter++;
-                    }
-                }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    void Assembler::patchAbsolute(CodeAddress jmp, CodeAddress dest) {
-  // Initialize code block cb pointing to li64
-  HPHP::CodeBlock cb;
-  cb.init(jmp, Assembler::kLimmLen, 'patched bctr');
-  Assembler a{ cb };
-  a.limmediate(reg::r12, ssize_t(dest), ImmType::TocOnly, true);
+   union {float f; opus_uint32 i;} in;
+   in.f = x;
+   return ((in.i>>23)&0xFF)==0xFF && (in.i&0x007FFFFF)!=0;
 }
+#else
+#ifdef __FAST_MATH__
+#error Cannot build libopus with -ffast-math unless FLOAT_APPROX is defined. This could result in crashes on extreme (e.g. NaN) input
+#endif
+#define celt_isnan(x) ((x)!=(x))
+#endif
+    
+    void opus_fft_neon(const kiss_fft_state *st,
+                   const kiss_fft_cpx *fin,
+                   kiss_fft_cpx *fout);
     
     
-    {}
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
     
-      if (comma != data) {
-    // we have meta
-    ssize_t meta_len = comma - data;
-    data_len -= meta_len;
-    char* semi = (char*)memchr(data, ';', meta_len);
-    char* slash = (char*)memchr(data, '/', meta_len);
+    #include <grpc/status.h>
+#include 'absl/memory/memory.h'
+#include 'absl/strings/string_view.h'
+#include 'absl/strings/strip.h'
+#include 'opencensus/trace/span.h'
+#include 'opencensus/trace/span_context.h'
+#include 'opencensus/trace/trace_params.h'
+#include 'src/core/lib/slice/slice_internal.h'
+#include 'src/cpp/common/channel_filter.h'
+#include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+    // TODO: This may not be needed. Check to see if opencensus requires
+// a trailing server response.
+// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
+// rpc server stats messages. Rpc server stats consists of a uint64_t time
+// value (server latency in nanoseconds).
+class RpcServerStatsEncoding {
+ public:
+  // Size of encoded RPC server stats.
+  static constexpr size_t kRpcServerStatsSize = 10;
+  // Error value.
+  static constexpr size_t kEncodeDecodeFailure = 0;
     }
+    
+    
+    {}  // namespace grpc
+    
+    #include <utility>
+    
+        dword(xfx_formater.instruction);
+  }
+  void EmitXFXForm(const uint8_t op,
+                   const RegNumber rs,
+                   const uint16_t mask,
+                   const uint16_t xo,
+                   const uint8_t rsv = 0) {
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
     
     
     {///////////////////////////////////////////////////////////////////////////////
 }
-    
-    
-    {}
 
     
-    /*
- * If the given AtomicHashMap has more than one submap allocated, log a perf
- * warning with its name.
- *
- * A single unique done flag should exist for each map being checked, to avoid
- * logging more than once (process, map) pair.
- */
-template<typename AHM>
+    template<typename AHM>
 void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done);
-    
-    
-    {private:
-  bool closeImpl();
-};
-    
-    #include 'imgui.h'
-#include 'imgui_impl_glfw.h'
-#include 'imgui_impl_opengl3.h'
-#include <stdio.h>
-    
-    #include 'imgui.h'
-#include 'imgui_impl_marmalade.h'
-#include <stdio.h>
-    
-            // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!), 
-        // you may need to backup/reset/restore current shader using the commented lines below.
-        //GLint last_program; 
-        //glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-        //glUseProgram(0);
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        //glUseProgram(last_program);
-    
-    
-    {        // Setup the debug report callback
-        VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
-        debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-        debug_report_ci.pfnCallback = debug_report;
-        debug_report_ci.pUserData = NULL;
-        err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
-        check_vk_result(err);
-#else
-        // Create Vulkan Instance without any debug feature
-        err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
-        check_vk_result(err);
-#endif
+                     std::atomic<bool>& done) {
+  if (LIKELY(map.numSubMaps() == 1) ||
+      done.load(std::memory_order_relaxed) ||
+      done.exchange(true, std::memory_order_relaxed)) {
+    return;
+  }
     }
     
-    // About Desktop OpenGL function loaders:
-//  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
-//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
-//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
     
-    // Chain GLFW callbacks: our callbacks will call the user's previously installed callbacks, if any.
-static GLFWmousebuttonfun   g_PrevUserCallbackMousebutton = NULL;
-static GLFWscrollfun        g_PrevUserCallbackScroll = NULL;
-static GLFWkeyfun           g_PrevUserCallbackKey = NULL;
-static GLFWcharfun          g_PrevUserCallbackChar = NULL;
-    
-    #endif // D_DHT_REPLACE_NODE_TASK_H
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
 
     
-      DHTTaskQueue* taskQueue_;
+        // output changed array
+    std::cout << array << '\n';
     
-    namespace {
-void readBytes(BufferedFile& fp, unsigned char* buf, size_t buflen,
-               size_t readlen)
-{
-  assert(readlen <= buflen);
-  READ_CHECK(fp, buf, readlen);
-}
-} // namespace
-    
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
-};
-    
-    class DHTTask {
-public:
-  virtual ~DHTTask() = default;
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
-    }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
-}
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
-    
-      virtual void
-  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-    
-    bool DNSCache::CacheEntry::operator==(const CacheEntry& e) const
-{
-  return hostname_ == e.hostname_ && port_ == e.port_;
-}
-    
-        // change element with key 'the bad'
-    object.at('the bad') = 'il cattivo';
+    // =============
+    // boolean types
+    // =============
