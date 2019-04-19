@@ -1,439 +1,320 @@
 
         
-        // static
-void UvTaskRunner::OnTimeout(uv_timer_t* timer) {
-  UvTaskRunner* self = static_cast<UvTaskRunner*>(timer->data);
-  if (!ContainsKey(self->tasks_, timer))
-    return;
+            if (info.status == serialization::Status::Valid) {
+      assert(info.bytes != 0);
+      if (!info.name.empty()) {
+        StringRef moduleData = buf.substr(0, info.bytes);
+        std::unique_ptr<llvm::MemoryBuffer> bitstream(
+          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+    }
     }
     
-      // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
+    }
+    IsFirstLine = false;
     
-    #include 'atom/browser/browser.h'
-#include 'atom/browser/native_window.h'
-#include 'atom/browser/window_list.h'
-#include 'atom/common/api/event_emitter_caller.h'
-#include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/node_includes.h'
-#include 'base/time/time.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
     
-    namespace atom {
+    {
+    {  } else {
+    assert(clangDiag.hasSourceManager());
+    auto clangCI = ImporterImpl.getClangInstance();
+    ClangDiagRenderer renderer(clangCI->getLangOpts(),
+                               &clangCI->getDiagnosticOpts(), emitDiag);
+    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
+                                      clangDiag.getSourceManager());
+    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
+                            clangDiag.getRanges(), clangDiag.getFixItHints(),
+                            &clangDiag);
+  }
+}
+
+    
+    void swift::Demangle::Node::dump() {
+  std::string TreeStr = getNodeTreeAsString(this);
+  fputs(TreeStr.c_str(), stderr);
+}
+    
+    
+    {  base::ListValue result;
+  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method_Sync(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get()),
+      &result));
+  return converter->ToV8Value(&result, isolate->GetCurrentContext());
+}
+    
+    namespace remote {
     }
     
-      // TrayIconObserver:
-  void OnClicked(const gfx::Rect& bounds,
-                 const gfx::Point& location,
-                 int modifiers) override;
-  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnBalloonShow() override;
-  void OnBalloonClicked() override;
-  void OnBalloonClosed() override;
-  void OnDrop() override;
-  void OnDropFiles(const std::vector<std::string>& files) override;
-  void OnDropText(const std::string& text) override;
-  void OnDragEntered() override;
-  void OnDragExited() override;
-  void OnDragEnded() override;
-  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
-  void OnMouseExited(const gfx::Point& location, int modifiers) override;
-  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+
     
     
-    {}  // namespace mate
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+    }
     
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
+    
+    {}  // namespace nw
+    
+    void Menu::OnMenuClosed() {
+  CHECK(!message_loop_quit_.is_null());
+  message_loop_quit_.Run();
+  
+#if !defined(OS_WIN)
+  // Ask PlatformEventSource to stop dispatching
+  // events in this message loop
+  // iteration. We want our menu's loop to return
+  // before the next event.
+  if (ui::PlatformEventSource::GetInstance())
+    ui::PlatformEventSource::GetInstance()->StopCurrentEventStream();
+#endif
+}
+    
+        bool Write(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return WriteText(data);
+        break;
+        case TYPE_HTML:
+        return WriteHTML(data);
+        break;
+        case TYPE_RTF:
+        return WriteRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return WriteImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;
+    }
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    Status::Status(error::Code error_code, StringPiece error_message)
+    : error_code_(error_code) {
+  if (error_code != error::OK) {
+    error_message_ = error_message.ToString();
+  }
+}
+    
+    // ----
+// Author: lar@google.com (Laramie Leavitt)
+//
+// Template metaprogramming utility functions.
+//
+// This code is compiled directly on many platforms, including client
+// platforms like Windows, Mac, and embedded systems.  Before making
+// any changes here, make sure that you're not breaking any platforms.
+//
+//
+// The names chosen here reflect those used in tr1 and the boost::mpl
+// library, there are similar operations used in the Loki library as
+// well.  I prefer the boost names for 2 reasons:
+// 1.  I think that portions of the Boost libraries are more likely to
+// be included in the c++ standard.
+// 2.  It is not impossible that some of the boost libraries will be
+// included in our own build in the future.
+// Both of these outcomes means that we may be able to directly replace
+// some of these with boost equivalents.
+//
+#ifndef GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+#define GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+    
+    
+    { private:
+  const EnumDescriptor* descriptor_;
+  std::vector<const EnumValueDescriptor*> base_values_;
+  std::vector<const EnumValueDescriptor*> all_values_;
+  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
+  const string name_;
+};
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
+    
+    MeasureInt64 RpcServerReceivedMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcServerReceivedMessagesPerRpcMeasureName,
+                             'Number of messages received per RPC', kCount);
+  return measure;
+}
+    
+    // TODO: This may not be needed. Check to see if opencensus requires
+// a trailing server response.
+// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
+// rpc server stats messages. Rpc server stats consists of a uint64_t time
+// value (server latency in nanoseconds).
+class RpcServerStatsEncoding {
  public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+  // Size of encoded RPC server stats.
+  static constexpr size_t kRpcServerStatsSize = 10;
+  // Error value.
+  static constexpr size_t kEncodeDecodeFailure = 0;
     }
     
-    #ifndef DOCQUAL_H
-#define DOCQUAL_H
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
     
-      // A simple array of pointers to the best assigned column division at
-  // each grid y coordinate. This pointer is passed in from the caller, so do
-  // NOT destroy it in the class.
-  ColPartitionSet** best_columns_;
+    #include 'src/cpp/server/dynamic_thread_pool.h'
     
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
+    #include <grpc/impl/codegen/port_platform.h>
+    
+    #include <grpc/support/port_platform.h>
+    
+    
+    {
+    {}}
+    
+    
+    {
+    {
+    {
+    {
+    {          // Special code for overflow handling
+          if (bc == BranchConditions::Overflow ||
+              bc == BranchConditions::NoOverflow) {
+            a.xor(reg::r0, reg::r0, reg::r0,false);
+            a.mtspr(Assembler::SpecialReg::XER, reg::r0);
+          }
+          a.bc (bp.bo(), bp.bi(), diff);
+          return;
         }
       }
     }
   }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
+  // fallback: use CTR to perform absolute branch up to 64 bits
+  branchFar(a, bc, lr, ImmType::TocOnly, addrMayChange);
 }
     
-    // Getter for the description.
-const char* ParamContent::GetDescription() const {
-  if (param_type_ == VT_INTEGER) { return iIt->info_str(); }
-  else if (param_type_ == VT_BOOLEAN) { return bIt->info_str(); }
-  else if (param_type_ == VT_DOUBLE) { return dIt->info_str(); }
-  else if (param_type_ == VT_STRING) { return sIt->info_str(); }
-  else return nullptr;
-}
+    //////////////////////////////////////////////////////////////////////
     
-    #include <cmath>
-    
-      // Set the resolution of the source image in pixels per inch.
-  // This should be called right after SetImage(), and will let us return
-  // appropriate font sizes for the text.
-  void SetSourceYResolution(int ppi) {
-    yres_ = ppi;
-    estimated_res_ = ppi;
-  }
-  int GetSourceYResolution() const {
-    return yres_;
-  }
-  int GetScaledYResolution() const {
-    return scale_ * yres_;
-  }
-  // Set the resolution of the source image in pixels per inch, as estimated
-  // by the thresholder from the text size found during thresholding.
-  // This value will be used to set internal size thresholds during recognition
-  // and will not influence the output 'point size.' The default value is
-  // the same as the source resolution. (yres_)
-  void SetEstimatedResolution(int ppi) {
-    estimated_res_ = ppi;
-  }
-  // Returns the estimated resolution, including any active scaling.
-  // This value will be used to set internal size thresholds during recognition.
-  int GetScaledEstimatedResolution() const {
-    return scale_ * estimated_res_;
-  }
-    
-    class TBOX;
-    
-    // Maximum number of files to keep open at the same time (use default if == 0)
-static int FLAGS_open_files = 0;
-    
-    void DBImpl::RecordBackgroundError(const Status& s) {
-  mutex_.AssertHeld();
-  if (bg_error_.ok()) {
-    bg_error_ = s;
-    background_work_finished_signal_.SignalAll();
-  }
-}
-    
-      int NumTableFilesAtLevel(int level) {
-    std::string property;
-    ASSERT_TRUE(
-        db_->GetProperty('leveldb.num-files-at-level' + NumberToString(level),
-                         &property));
-    return atoi(property.c_str());
-  }
-    
-    struct ParsedInternalKey {
-  Slice user_key;
-  SequenceNumber sequence;
-  ValueType type;
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
     
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
-}
-    
-    // Return the name of the lock file for the db named by
-// 'dbname'.  The result will be prefixed with 'dbname'.
-std::string LockFileName(const std::string& dbname);
-    
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
-    
-    
-    {  // For fragments
-  kFirstType = 2,
-  kMiddleType = 3,
-  kLastType = 4
-};
-static const int kMaxRecordType = kLastType;
-    
-          case kEof:
-        if (in_fragmented_record) {
-          // This can be caused by the writer dying immediately after
-          // writing a physical record but before completing the next; don't
-          // treat it as a corruption, just ignore the entire logical record.
-          scratch->clear();
-        }
-        return false;
-    
-      // Recover and check that all log files were processed.
-  Open();
-  ASSERT_LE(1, NumTables());
-  ASSERT_EQ(1, NumLogs());
-  uint64_t new_log = FirstLogFile();
-  ASSERT_LE(old_log+3, new_log);
-  ASSERT_EQ('bar2', Get('foo'));
-  ASSERT_EQ('world', Get('hello'));
-  ASSERT_EQ('there', Get('hi'));
-    
-    #include <inttypes.h>
-#include <sys/types.h>
-#include <stdio.h>
-    
-    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
-                                    const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return SingleDelete(column_family, key_slice);
-}
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
 };
     
-    namespace rocksdb {
-    }
-    
-    #pragma once
-    
-    class MyMerge : public rocksdb::MergeOperator {
+    class MyFilter : public rocksdb::CompactionFilter {
  public:
-  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override {
-    merge_out->new_value.clear();
-    if (merge_in.existing_value != nullptr) {
-      merge_out->new_value.assign(merge_in.existing_value->data(),
-                                  merge_in.existing_value->size());
-    }
-    for (const rocksdb::Slice& m : merge_in.operand_list) {
-      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
-      // the compaction filter filters out bad values
-      assert(m.ToString() != 'bad');
-      merge_out->new_value.assign(m.data(), m.size());
-    }
-    return true;
+  bool Filter(int level, const rocksdb::Slice& key,
+              const rocksdb::Slice& existing_value, std::string* new_value,
+              bool* value_changed) const override {
+    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
+    ++count_;
+    assert(*value_changed == false);
+    return false;
   }
     }
     
-    #ifndef ROCKSDB_LITE
+      // Do some reads and writes to key 'y'
+  s = txn->GetForUpdate(read_options, 'y', &value);
+  txn->Put('y', 'y');
     
-    // Take a default ColumnFamilyOptions 'base_options' in addition to a
-// map 'opts_map' of option name to option value to construct the new
-// ColumnFamilyOptions 'new_options'.
-//
-// Below are the instructions of how to config some non-primitive-typed
-// options in ColumnFOptions:
-//
-// * table_factory:
-//   table_factory can be configured using our custom nested-option syntax.
-//
-//   {option_a=value_a; option_b=value_b; option_c=value_c; ... }
-//
-//   A nested option is enclosed by two curly braces, within which there are
-//   multiple option assignments.  Each assignment is of the form
-//   'variable_name=value;'.
-//
-//   Currently we support the following types of TableFactory:
-//   - BlockBasedTableFactory:
-//     Use name 'block_based_table_factory' to initialize table_factory with
-//     BlockBasedTableFactory.  Its BlockBasedTableFactoryOptions can be
-//     configured using the nested-option syntax.
-//     [Example]:
-//     * {'block_based_table_factory', '{block_cache=1M;block_size=4k;}'}
-//       is equivalent to assigning table_factory with a BlockBasedTableFactory
-//       that has 1M LRU block-cache with block size equals to 4k:
-//         ColumnFamilyOptions cf_opt;
-//         BlockBasedTableOptions blk_opt;
-//         blk_opt.block_cache = NewLRUCache(1 * 1024 * 1024);
-//         blk_opt.block_size = 4 * 1024;
-//         cf_opt.table_factory.reset(NewBlockBasedTableFactory(blk_opt));
-//   - PlainTableFactory:
-//     Use name 'plain_table_factory' to initialize table_factory with
-//     PlainTableFactory.  Its PlainTableFactoryOptions can be configured using
-//     the nested-option syntax.
-//     [Example]:
-//     * {'plain_table_factory', '{user_key_len=66;bloom_bits_per_key=20;}'}
-//
-// * memtable_factory:
-//   Use 'memtable' to config memtable_factory.  Here are the supported
-//   memtable factories:
-//   - SkipList:
-//     Pass 'skip_list:<lookahead>' to config memtable to use SkipList,
-//     or simply 'skip_list' to use the default SkipList.
-//     [Example]:
-//     * {'memtable', 'skip_list:5'} is equivalent to setting
-//       memtable to SkipListFactory(5).
-//   - PrefixHash:
-//     Pass 'prfix_hash:<hash_bucket_count>' to config memtable
-//     to use PrefixHash, or simply 'prefix_hash' to use the default
-//     PrefixHash.
-//     [Example]:
-//     * {'memtable', 'prefix_hash:1000'} is equivalent to setting
-//       memtable to NewHashSkipListRepFactory(hash_bucket_count).
-//   - HashLinkedList:
-//     Pass 'hash_linkedlist:<hash_bucket_count>' to config memtable
-//     to use HashLinkedList, or simply 'hash_linkedlist' to use the default
-//     HashLinkedList.
-//     [Example]:
-//     * {'memtable', 'hash_linkedlist:1000'} is equivalent to
-//       setting memtable to NewHashLinkListRepFactory(1000).
-//   - VectorRepFactory:
-//     Pass 'vector:<count>' to config memtable to use VectorRepFactory,
-//     or simply 'vector' to use the default Vector memtable.
-//     [Example]:
-//     * {'memtable', 'vector:1024'} is equivalent to setting memtable
-//       to VectorRepFactory(1024).
-//   - HashCuckooRepFactory:
-//     Pass 'cuckoo:<write_buffer_size>' to use HashCuckooRepFactory with the
-//     specified write buffer size, or simply 'cuckoo' to use the default
-//     HashCuckooRepFactory.
-//     [Example]:
-//     * {'memtable', 'cuckoo:1024'} is equivalent to setting memtable
-//       to NewHashCuckooRepFactory(1024).
-//
-//  * compression_opts:
-//    Use 'compression_opts' to config compression_opts.  The value format
-//    is of the form '<window_bits>:<level>:<strategy>:<max_dict_bytes>'.
-//    [Example]:
-//    * {'compression_opts', '4:5:6:7'} is equivalent to setting:
-//        ColumnFamilyOptions cf_opt;
-//        cf_opt.compression_opts.window_bits = 4;
-//        cf_opt.compression_opts.level = 5;
-//        cf_opt.compression_opts.strategy = 6;
-//        cf_opt.compression_opts.max_dict_bytes = 7;
-//
-// @param base_options the default options of the output 'new_options'.
-// @param opts_map an option name to value map for specifying how 'new_options'
-//     should be set.
-// @param new_options the resulting options based on 'base_options' with the
-//     change specified in 'opts_map'.
-// @param input_strings_escaped when set to true, each escaped characters
-//     prefixed by '\' in the values of the opts_map will be further converted
-//     back to the raw string before assigning to the associated options.
-// @param ignore_unknown_options when set to true, unknown options are ignored
-//     instead of resulting in an unknown-option error.
-// @return Status::OK() on success.  Otherwise, a non-ok status indicating
-//     error will be returned, and 'new_options' will be set to 'base_options'.
-Status GetColumnFamilyOptionsFromMap(
-    const ColumnFamilyOptions& base_options,
-    const std::unordered_map<std::string, std::string>& opts_map,
-    ColumnFamilyOptions* new_options, bool input_strings_escaped = false,
-    bool ignore_unknown_options = false);
-    
-      // number of bytes that has been written.
-  uint64_t bytes_written;
-  // number of bytes that has been read.
-  uint64_t bytes_read;
-    
-      // Obtain the name of an operation given its type.
-  static const std::string& GetOperationName(OperationType op_type);
-    
-      // Called once for each group of benchmark runs, gives information about
-  // cpu-time and heap memory usage during the benchmark run. If the group
-  // of runs contained more than two entries then 'report' contains additional
-  // elements representing the mean and standard deviation of those runs.
-  // Additionally if this group of runs was the last in a family of benchmarks
-  // 'reports' contains additional entries representing the asymptotic
-  // complexity and RMS of that benchmark family.
-  virtual void ReportRuns(const std::vector<Run>& report) = 0;
-    
-      // Populate the accumulators.
-  for (const Run& run : reports) {
-    CHECK_GT(run.complexity_n, 0) << 'Did you forget to call SetComplexityN?';
-    n.push_back(run.complexity_n);
-    real_time.push_back(run.real_accumulated_time / run.iterations);
-    cpu_time.push_back(run.cpu_accumulated_time / run.iterations);
+      {
+    PinnableSlice pinnable_val;
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
   }
     
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+      // Insert to page cache
+  //
+  // page_key   Identifier to identify a page uniquely across restarts
+  // data       Page data
+  // size       Size of the page
+  virtual Status Insert(const Slice& key, const char* data,
+                        const size_t size) = 0;
     
-    #include 'modules/drivers/canbus/can_comm/message_manager.h'
+    #include <stddef.h>
     
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(4, 4);
-    
-    double ObjectExtendedInfo60D::lateral_accel(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 5);
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
+     * @js NA
+     */
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
     }
     
-    void ObjectGeneralInfo60B::Parse(const std::uint8_t* bytes, int32_t length,
-                                 ContiRadar* conti_radar) const {
-  int obj_id = object_id(bytes, length);
-  auto conti_obs = conti_radar->add_contiobs();
-  conti_obs->set_clusterortrack(false);
-  conti_obs->set_obstacle_id(obj_id);
-  conti_obs->set_longitude_dist(longitude_dist(bytes, length));
-  conti_obs->set_lateral_dist(lateral_dist(bytes, length));
-  conti_obs->set_longitude_vel(longitude_vel(bytes, length));
-  conti_obs->set_lateral_vel(lateral_vel(bytes, length));
-  conti_obs->set_rcs(rcs(bytes, length));
-  conti_obs->set_dynprop(dynprop(bytes, length));
-  double timestamp = apollo::common::time::Clock::NowInSeconds();
-  auto header = conti_obs->mutable_header();
-  header->CopyFrom(conti_radar->header());
-  header->set_timestamp_sec(timestamp);
-}
+        // convert to 'diffs' to 'reverse absolute'
     
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-    TEST(TestPiecewiseLinearConstraint, add_monotone_inequality_constraint) {
-  PiecewiseLinearConstraint constraint(10, 0.1);
-  constraint.AddMonotoneInequalityConstraint();
-  const auto mat = constraint.inequality_constraint_matrix();
-  const auto bd = constraint.inequality_constraint_boundary();
-    }
-    
-    namespace apollo {
-namespace planning {
+    EaseBezierAction* EaseBezierAction::clone() const
+{
+    // no copy constructor
+    if (_inner)
+    {
+        auto ret = EaseBezierAction::create(_inner->clone());
+        if (ret)
+        {
+            ret->setBezierParamer(_p0,_p1,_p2,_p3);
+        }
+        return ret;
     }
     }
     
-    bool NodeWithRange::IsVirtual() const { return topo_node_->IsVirtual(); }
+        /** 
+    @brief Initializes an action with duration and grid size.
+    @param gridSize Specify the grid size of the FlipX3D action.
+    @param duration Specify the duration of the FlipX3D action. It's a value in seconds.
+    @return If the initialization success, return true; otherwise, return false.
+    */
+    virtual bool initWithSize(const Size& gridSize, float duration);
+    
+    /**
+ * @addtogroup actions
+ * @{
+ */
+    }
+    
+        /** @deprecated Use destroyInstance() instead. */
+    CC_DEPRECATED_ATTRIBUTE static void purgeSharedAnimationCache() { return AnimationCache::destroyInstance(); }
