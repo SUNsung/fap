@@ -1,254 +1,302 @@
 
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
-}
+        
+          // Construct a generic signature builder by collecting the constraints
+  // from the requirement and the context of the conformance together,
+  // because both define the capabilities of the requirement.
+  GenericSignatureBuilder builder(ctx);
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
-  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
-                                unittest::MAP_ENUM_BAR_LITE,
-                                unittest::MAP_ENUM_BAZ_LITE>(message);
-}
-    
-      {
-    string str;
-    StringByteSink sink(&str);
-    limit_source.CopyTo(&sink, limit_source.Available());
-    EXPECT_EQ('ello ', str);
-    EXPECT_EQ(0, limit_source.Available());
-    EXPECT_EQ(6, source.Available());
-  }
-    
-    std::string ReadFile(const std::string& name) {
-  std::ifstream file(name.c_str());
-  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
-      << name
-      << '', please make sure you are running this command from the benchmarks'
-      << ' directory.\n';
-  return std::string((std::istreambuf_iterator<char>(file)),
-                     std::istreambuf_iterator<char>());
-}
-    
-    #endif  // CAFFE_LAYER_FACTORY_H_
+    #undef VERB
+#undef DIRECTIONAL_PREPOSITION
+#undef PREPOSITION
 
     
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    void InputAction::anchor() {}
     
-    namespace caffe {
+        struct Margin {
+        Margin() : left(0), right(0), top(0), bottom(0) {}
+        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
+            : left(left_), right(right_), top(top_), bottom(bottom_) {}
     }
     
-    
-    {}  // namespace caffe
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CLIENT_FILTER_H */
-
-    
-    #include 'opencensus/stats/stats.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
-    
-    
-    {    buf[kVersionIdOffset] = kVersionId;
-    buf[kServerElapsedTimeOffset] = kServerElapsedTimeField;
-    absl::little_endian::Store64(&buf[kServerElapsedTimeOffset + kFieldIdSize],
-                                 time);
-    return kRpcServerStatsSize;
-  }
-    
-    #include <grpc/support/port_platform.h>
-    
-    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
-    
-    // Given a map from type K to a set of value type V, removes the given key and
-// the associated set, and returns the set. Returns an empty set if the key is
-// not found.
-template <typename K, typename V>
-std::set<V> UnorderedMapOfSetExtract(std::unordered_map<K, std::set<V>>& map,
-                                     const K& key) {
-  auto it = map.find(key);
-  if (it != map.end()) {
-    auto set = std::move(it->second);
-    map.erase(it);
-    return set;
-  }
-  return {};
-};
-    
-    bool InternalFilterPolicy::KeyMayMatch(const Slice& key, const Slice& f) const {
-  return user_policy_->KeyMayMatch(ExtractUserKey(key), f);
-}
-    
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
-  }
-}
-    
-    // Return the name of the log file with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string LogFileName(const std::string& dbname, uint64_t number);
-    
-        RecordType type;
-    const bool end = (left == fragment_length);
-    if (begin && end) {
-      type = kFullType;
-    } else if (begin) {
-      type = kFirstType;
-    } else if (end) {
-      type = kLastType;
-    } else {
-      type = kMiddleType;
-    }
-    
-        for (size_t i = 0; i < tables_.size(); i++) {
-      // TODO(opt): separate out into multiple levels
-      const TableInfo& t = tables_[i];
-      edit_.AddFile(0, t.meta.number, t.meta.file_size,
-                    t.meta.smallest, t.meta.largest);
-    }
-    
-    static void UnrefEntry(void* arg1, void* arg2) {
-  Cache* cache = reinterpret_cast<Cache*>(arg1);
-  Cache::Handle* h = reinterpret_cast<Cache::Handle*>(arg2);
-  cache->Release(h);
-}
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-    // Compression flag. If true, compression is on. If false, compression
-// is off.
-static bool FLAGS_compression = true;
-    
-    namespace CNTK
-{
-    class ProgressWriter::Impl
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
     {
-    public:
-        Impl(size_t updateWriteFrequency, size_t firstUpdatesToWrite)
-            : m_frequency(updateWriteFrequency), m_firstN(firstUpdatesToWrite),
-            m_totalUpdates(0), m_totalSummaries(0)
+        v_dst = internal::vabdq(v_src0, v_src1);
+    }
+    
+        f32* laneb = internal::alignPtr(laneA + cn * (size.width + 2), 32);
+    f32* laneB = internal::alignPtr(laneb + cn * (size.width + 2), 32);
+    
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
         {
-            Reset();
-        }
-    }
-    }
-    
-        Trainer::Trainer(const FunctionPtr& model, const FunctionPtr& lossFunction, const FunctionPtr& evaluationFunction,
-                     const std::vector<LearnerPtr>& parameterLearners,
-                    const std::vector<ProgressWriterPtr>& progressWriters) 
-        : Evaluator(evaluationFunction, progressWriters, false),
-          m_model(model),
-          m_lossFunction(lossFunction),
-          m_parameterLearners(std::make_shared<Learners>(parameterLearners)),
-          m_prevMinibatchNumSamples(0),
-          m_distributed(false),
-          m_aggregatedTrainingLossValue(std::make_shared<Accumulator>()),
-          m_aggregatedTrainingEvalCriterionValue(),
-          m_prevDistributedTotalNumSamples(0)
-    {
-        std::vector<Variable> combinedFunctionArgs;
-        if (m_model) // model is optional, since it may not be adding any information on top of lossFunction
-            combinedFunctionArgs = m_model->Outputs();
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
     }
     
-    class Clock
+                for( ; i <= lim; i += 4 )
+            {
+                internal::prefetch(src0 + i);
+                internal::prefetch(src1 + i);
+                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
+            }
+    
+    
+    {} // namespace CAROTENE_NS
+
+    
+            size_t x = 0;
+        for (; x <= colsn - 4; x += 4)
+        {
+            internal::prefetch(internal::getRowPtr(ln2 + x, srcStride, x % 5 - 2));
+            uint16x4_t v0 = vld1_u16(ln0+x);
+            uint16x4_t v1 = vld1_u16(ln1+x);
+            uint16x4_t v2 = vld1_u16(ln2+x);
+            uint16x4_t v3 = vld1_u16(ln3+x);
+            uint16x4_t v4 = vld1_u16(ln4+x);
+    }
+    
+    inline float32x2_t vrecp_f32(float32x2_t val)
 {
-public:
-    static long long GetTimeStamp();
-    static long long GetTicksPerSecond();
-};
-    
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        return false;
-    }
-    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override
-    {
-        return false;
-    }
-    
-    // -----------------------------------------------------------------------
-// DiagonalLikeNode
-// -----------------------------------------------------------------------
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    void Config::SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                          const std::string &filename, bool constants_only,
-                          bool is_system) {
-  // if we are setting constants, we must be setting system settings
-  if (constants_only) {
-    assertx(is_system);
-  }
-  auto parsed_ini = IniSetting::FromStringAsMap(confStr, filename);
-  for (ArrayIter iter(parsed_ini.toArray()); iter; ++iter) {
-    // most likely a string, but just make sure that we are dealing
-    // with something that can be converted to a string
-    assertx(iter.first().isScalar());
-    ini.set(iter.first().toString(), iter.second());
-    if (constants_only) {
-      IniSetting::FillInConstant(iter.first().toString().toCppString(),
-                                 iter.second());
-    } else if (is_system) {
-      IniSetting::SetSystem(iter.first().toString().toCppString(),
-                            iter.second());
-    }
-  }
+    float32x2_t reciprocal = vrecpe_f32(val);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    return reciprocal;
 }
+    
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    }
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    std::string InfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG';
+}
+    
+      fname = CurrentFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kCurrentFile, type);
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+    
+    {      // LevelDB's default cache size is a combined 4 MB
+      std::string WAL_checkpoint = 'PRAGMA wal_autocheckpoint = 4096';
+      status = sqlite3_exec(db_, WAL_stmt.c_str(), nullptr, nullptr, &err_msg);
+      ExecErrorCheck(status, err_msg);
+      status = sqlite3_exec(db_, WAL_checkpoint.c_str(), nullptr, nullptr,
+                            &err_msg);
+      ExecErrorCheck(status, err_msg);
+    }
     
     /**
- * Parts of the language can individually be made stricter, warning or
- * erroring when there's dangerous/unintuive usage; for example,
- * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
  */
-enum class HackStrictOption {
-  OFF, // PHP5 behavior
-  WARN,
-  ON
+class CaffeMode {
+ public:
+  template<typename xpu> static void SetMode();
 };
     
-    #endif
-
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
     
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
+    
+template<typename xpu>
+inline void KhatriRaoCompute(const nnvm::NodeAttrs &attrs,
+                             const OpContext &ctx,
+                             const std::vector<TBlob> &inputs,
+                             const std::vector<OpReqType> &req,
+                             const std::vector<TBlob> &outputs) {
+  using namespace mxnet_op;
+  CHECK_EQ(outputs.size(), 1U);
+  MSHADOW_TYPE_SWITCH(outputs[0].type_flag_, DType, {
+      KhatriRaoCompute_<xpu, DType>(attrs, ctx, inputs, req, outputs);
+  });
 }
     
-    #include 'hphp/util/stack-trace.h'
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+            static NDShape GetUnpackedShape(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout)
+        {
+            // Determine unpacked shape
+            auto unpackedShape = sampleShape;
+            if (packedDataLayout)
+            {
+                if (sampleDynamicAxes.empty())
+                    LogicError('A PackedValue object that has a layout must have at least one dynamic axis.');
+    }
+    }
+    
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
+    }
+    
+        // Overrides
+    OrbitCamera *clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    OrbitCamera();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~OrbitCamera();
+    
+    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
+    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    
+        if (targetGrid && targetGrid->getReuseGrid() > 0)
+    {
+        if (targetGrid->isActive() && targetGrid->getGridSize().width == _gridSize.width
+            && targetGrid->getGridSize().height == _gridSize.height)
+        {
+            targetGrid->reuse();
+        }
+        else
+        {
+            CCASSERT(0, 'Invalid grid parameters!');
+        }
+    }
+    else
+    {
+        if (targetGrid && targetGrid->isActive())
+        {
+            targetGrid->setActive(false);
+        }
+    }
+    
+        /**
+    @brief Get the center position of twirl action.
+    @return The center position of twirl action.
+    */
+    const Vec2& getPosition() const { return _position; }
+    /**
+    @brief Set the center position of twirl action.
+    @param position The center position of twirl action will be set.
+    */
+    void setPosition(const Vec2& position);
+    
+    void ActionInstant::step(float /*dt*/)
+{
+    float updateDt = 1;
+#if CC_ENABLE_SCRIPT_BINDING
+    if (_scriptType == kScriptTypeJavascript)
+    {
+        if (ScriptEngineManager::sendActionEventToJS(this, kActionUpdate, (void *)&updateDt))
+            return;
+    }
+#endif
+    update(updateDt);
+}
+    
+    
+    {     actionAllocWithHashElement(element);
+ 
+     CCASSERT(! ccArrayContainsObject(element->actions, action), 'action already be added!');
+     ccArrayAppendObject(element->actions, action);
+ 
+     action->startWithTarget(target);
+}
+    
+    void ActionTween::startWithTarget(Node *target)
+{
+    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
+    ActionInterval::startWithTarget(target);
+    _delta = _to - _from;
+}
