@@ -1,90 +1,161 @@
 
         
-        struct CaffeDataParam : public dmlc::Parameter<CaffeDataParam> {
-  /*! \brief protobuf text */
-  ::caffe::LayerParameter prototxt;
-  /*! \brief number of iterations per epoch */
-  int num_examples;
-  /*! \brief data mode */
-  bool flat;
-    }
-    
-        caffeOp_->SetUp(bot_blobs, top_blobs);
-    CHECK_EQ(in_shape->size(), caffeOp_->blobs().size() + param_.num_data);
-    // Initialize out shapes
-    out_shape->clear();
-    for (auto blob : top_blobs) {
-      TShape tshape = caffe::Vector2TShape(blob->shape());
-      out_shape->push_back(tshape);
-    }
+        REGISTER_CUDA_OPERATOR(LC2D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC2DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
     
-using namespace mxnet;
-// http://www.64lines.com/jpeg-width-height
-// Gets the JPEG size from the array of data passed to the function, file reference: http://www.obrador.com/essentialjpeg/headerinfo.htm
-bool get_jpeg_size(const unsigned char* data, mx_uint data_size, mx_uint *width, mx_uint *height) {
-  // Check for valid JPEG image
-  mx_uint i = 0;  // Keeps track of the position within the file
-  if (data[i] == 0xFF && data[i+1] == 0xD8 && data[i+2] == 0xFF && data[i+3] == 0xE0) {
-    i += 4;
-    // Check for valid JPEG header (null terminated JFIF)
-    if (data[i+2] == 'J' && data[i+3] == 'F' && data[i+4] == 'I'
-        && data[i+5] == 'F' && data[i+6] == 0x00) {
-      // Retrieve the block length of the first block since
-      // the first block will not contain the size of file
-      uint16_t block_length = data[i] * 256 + data[i+1];
-      while (i < data_size) {
-        i+=block_length;  // Increase the file index to get to the next block
-        if (i >= data_size) return false;  // Check to protect against segmentation faults
-        if (data[i] != 0xFF) return false;  // Check that we are truly at the start of another block
-        if (data[i+1] == 0xC0) {
-          // 0xFFC0 is the 'Start of frame' marker which contains the file size
-          // The structure of the 0xFFC0 block is quite simple
-          // [0xFFC0][ushort length][uchar precision][ushort x][ushort y]
-          *height = data[i+5]*256 + data[i+6];
-          *width = data[i+7]*256 + data[i+8];
-          return true;
-        } else {
-          i+=2;  // Skip the block marker
-          block_length = data[i] * 256 + data[i+1];  // Go to the next block
-        }
-      }
-      return false;  // If this point is reached then no size was found
-    } else {
-      return false;  // Not a valid JFIF string
+void printVec(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
+}
+    
+    
+    {private:
+    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
+        for( ; p < nums.size() ; p ++ )
+            if( nums[p] != nums[p - 1] )
+                break;
+        return p;
     }
-  } else {
-    return false;  // Not a valid SOI header
-  }
+};
+    
+    
+void printArr(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
 }
     
     
     {
-    {}  // namespace io
-}  // namespace mxnet
-
-    
-      void sendMessage();
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
-  {
-    return nodes_;
-  }
-    
-    DHTSetup::DHTSetup() = default;
-    
-    class DownloadEngine;
-class Command;
-    
-    
-    {  virtual bool finished() = 0;
+    {        delete dummyHead1;
+        delete dummyHead2;
+        return ret;
+    }
 };
     
-    const std::string DHTUnknownMessage::UNKNOWN('unknown');
     
-    DNSCache::CacheEntry::CacheEntry(const std::string& hostname, uint16_t port)
-    : hostname_(hostname), port_(port)
+    {    return 0;
+}
+
+    
+    
+// InOrder Morris Traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(1)
+class Solution {
+    }
+    
+                int new_level_num = 0;
+            vector<int> level;
+            for(int i = 0; i < level_num; i ++){
+                TreeNode* node = q.front();
+                q.pop();
+                level.push_back(node->val);
+    }
+    
+    #include <iostream>
+#include <vector>
+    
+    using namespace std;
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
+    
+    namespace CalculatorApp
 {
+    EngineResourceProvider::EngineResourceProvider()
+    {
+        m_resLoader = ResourceLoader::GetForViewIndependentUse('CEngineStrings');
+    }
+    }
+    
+    std::shared_ptr<IExpressionCommand> CommandDeserializer::Deserialize(_In_ CalculationManager::CommandType cmdType)
+{
+    switch (cmdType)
+    {
+    case CalculationManager::CommandType::OperandCommand:
+    }
+    }
+    
+                static void OnVirtualKeyControlChordPropertyChanged(
+                Windows::UI::Xaml::DependencyObject^ target,
+                MyVirtualKey oldValue,
+                MyVirtualKey newValue);
+    
+    #include 'pch.h'
+#include 'NetworkManager.h'
+    
+    #include 'ICurrencyHttpClient.h'
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+    using json = nlohmann::json;
+    
+    using apollo::common::ErrorCode;
+    
+    using apollo::drivers::canbus::Byte;
+    
+    void SplineSegKernel::CalculateDerivative(const uint32_t num_params) {
+  kernel_derivative_ = Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 1; r < kernel_derivative_.rows(); ++r) {
+    for (int c = 1; c < kernel_derivative_.cols(); ++c) {
+      kernel_derivative_(r, c) = r * c / (r + c - 1.0);
+    }
+  }
+}
+    
+      Byte t2(bytes + 2);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Byte t2(bytes + 6);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Byte t3(bytes + 3);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    
+    {
+    {
+    {
+    {  Brake_rpt_6c::Brake_on_offType ret =
+      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    void Headlightrpt77::Parse(const std::uint8_t* bytes, int32_t length,
+                           ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_commanded_value(
+      commanded_value(bytes, length));
 }
