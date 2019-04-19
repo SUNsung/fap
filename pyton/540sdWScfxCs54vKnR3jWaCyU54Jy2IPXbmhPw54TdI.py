@@ -1,152 +1,125 @@
 
         
-        
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
+            # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = os.path.join('datasets', 'fashion-mnist')
+    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
+    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
+             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+    
+    import six
+from . import backend as K
+from .utils.generic_utils import serialize_keras_object
+from .utils.generic_utils import deserialize_keras_object
+    
+    # Stack of Transposed Conv2D blocks
+# Notes:
+# 1) Use Batch Normalization before ReLU on deep networks
+# 2) Use UpSampling2D as alternative to strides>1
+# - faster but not as good as strides>1
+for filters in layer_filters[::-1]:
+    x = Conv2DTranspose(filters=filters,
+                        kernel_size=kernel_size,
+                        strides=2,
+                        activation='relu',
+                        padding='same')(x)
+    
+    Reaches 0.93 train/test accuracy after 900 epochs
+(which roughly corresponds to 1687500 steps in the original paper.)
+'''
+    
+    model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dropout(0.2))
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(num_classes, activation='softmax'))
+    
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
+    
+        # skip j = 0, because it's the background class
+    for j in range(1, num_classes):
+        segms = []
+        for _ in range(cls_boxes[j].shape[0]):
+            if cfg.MRCNN.CLS_SPECIFIC_MASK:
+                padded_mask[1:-1, 1:-1] = masks[mask_ind, j, :, :]
+            else:
+                padded_mask[1:-1, 1:-1] = masks[mask_ind, 0, :, :]
+    
+    
+def evaluate_masks(
+    json_dataset,
+    all_boxes,
+    all_segms,
+    output_dir,
+    use_salt=True,
+    cleanup=False
+):
+    if cfg.CLUSTER.ON_CLUSTER:
+        # On the cluster avoid saving these files in the job directory
+        output_dir = '/tmp'
+    res_file = os.path.join(
+        output_dir, 'segmentations_' + json_dataset.name + '_results')
+    if use_salt:
+        res_file += '_{}'.format(str(uuid.uuid4()))
+    res_file += '.json'
+    
+    
+def add_fpn_ResNet101_conv5_P2only_body(model):
+    return add_fpn_onto_conv_body(
+        model,
+        ResNet.add_ResNet101_conv5_body,
+        fpn_level_info_ResNet101_conv5,
+        P2only=True
+    )
+    
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
+    
+    
+# octave and aspect fields are only used on RetinaNet. Octave corresponds to the
+# scale of the anchor and aspect denotes which aspect ratio is used in the range
+# of aspect ratios
+FieldOfAnchors = namedtuple(
+    'FieldOfAnchors', [
+        'field_of_anchors', 'num_cell_anchors', 'stride', 'field_size',
+        'octave', 'aspect'
+    ]
+)
+    
+        points: Nx2xK
+    boxes: Nx4
+    output: NxK
+    '''
+    x_within = np.logical_and(
+        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
+        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
+    )
+    y_within = np.logical_and(
+        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
+        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
+    )
+    return np.logical_and(x_within, y_within)
 
     
-            raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
+        for i in range(masks.shape[0]):
+        cls = int(mask_class_labels[i])
+        start = M**2 * cls
+        end = start + M**2
+        # Ignore background instance
+        # (only happens when there is no fg samples in an image)
+        if cls > 0:
+            mask_targets[i, start:end] = masks[i, :]
     
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
-    
-    # Import encoding now, to avoid implicit import later.
-# Implicit import within threads may cause LookupError when standard library is in a ZIP,
-# such as in Embedded Python. See https://github.com/requests/requests/issues/3578.
-import encodings.idna
-    
-    random_state = 2  # to control the random selection of anomalies in SA
-    
-        revision is a git commit reference (hash or name)
-    
-            if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
-    
-    # Anisotropicly distributed data
-random_state = 170
-X, y = datasets.make_blobs(n_samples=n_samples, random_state=random_state)
-transformation = [[0.6, -0.6], [-0.4, 0.8]]
-X_aniso = np.dot(X, transformation)
-aniso = (X_aniso, y)
-    
-    
-@patch( 'ycm.client.messages_request.PostVimMessage',
-        new_callable = ExtendedMock )
-def HandlePollResponse_MultipleMessages_test( post_vim_message ):
-  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' },
-                                      { 'message': 'this is another one' } ] ,
-                                    None ),
-               equal_to( True ) )
-    
-      def _adjust_thread_count( self ):
-    # When the executor gets lost, the weakref callback will wake up
-    # the worker threads.
-    def weakref_cb( _, q=self._work_queue ):
-      q.put( None )
-    # TODO(bquinlan): Should avoid creating new threads if there are more
-    # idle threads than items in the work queue.
-    if len( self._threads ) < self._max_workers:
-      t = threading.Thread( target=_worker,
-                            args=( weakref.ref( self, weakref_cb ),
-                                   self._work_queue ) )
-      t.daemon = True
-      t.start()
-      self._threads.add( t )
-    
-    # Possible future states (for internal use by the futures package).
-PENDING = 'PENDING'
-RUNNING = 'RUNNING'
-# The future was cancelled by the user...
-CANCELLED = 'CANCELLED'
-# ...and _Waiter.add_cancelled() was called by a worker.
-CANCELLED_AND_NOTIFIED = 'CANCELLED_AND_NOTIFIED'
-FINISHED = 'FINISHED'
-    
-    from concurrent.futures import (as_completed, ThreadPoolExecutor,
-                                ProcessPoolExecutor)
-    
-    # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
-    
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
-    
-    def produce_group_chat(core, msg):
-    r = re.match('(@[0-9a-z]*?):<br/>(.*)$', msg['Content'])
-    if r:
-        actualUserName, content = r.groups()
-        chatroomUserName = msg['FromUserName']
-    elif msg['FromUserName'] == core.storageClass.userName:
-        actualUserName = core.storageClass.userName
-        content = msg['Content']
-        chatroomUserName = msg['ToUserName']
-    else:
-        msg['ActualUserName'] = core.storageClass.userName
-        msg['ActualNickName'] = core.storageClass.nickName
-        msg['IsAt'] = False
-        utils.msg_formatter(msg, 'Content')
-        return
-    chatroom = core.storageClass.search_chatrooms(userName=chatroomUserName)
-    member = utils.search_dict_list((chatroom or {}).get(
-        'MemberList') or [], 'UserName', actualUserName)
-    if member is None:
-        chatroom = core.update_chatroom(chatroomUserName)
-        member = utils.search_dict_list((chatroom or {}).get(
-            'MemberList') or [], 'UserName', actualUserName)
-    if member is None:
-        logger.debug('chatroom member fetch failed with %s' % actualUserName)
-        msg['ActualNickName'] = ''
-        msg['IsAt'] = False
-    else:
-        msg['ActualNickName'] = member.get('DisplayName', '') or member['NickName']
-        atFlag = '@' + (chatroom['Self'].get('DisplayName', '') or core.storageClass.nickName)
-        msg['IsAt'] = (
-            (atFlag + (u'\u2005' if u'\u2005' in msg['Content'] else ' '))
-            in msg['Content'] or msg['Content'].endswith(atFlag))
-    msg['ActualUserName'] = actualUserName
-    msg['Content']        = content
-    utils.msg_formatter(msg, 'Content')
-    
-    
-def docker_client(environment, version=None, tls_config=None, host=None,
-                  tls_version=None):
-    '''
-    Returns a docker-py client configured using environment variables
-    according to the same logic as the official Docker client.
-    '''
-    try:
-        kwargs = kwargs_from_env(environment=environment, ssl_version=tls_version)
-    except TLSParameterError:
-        raise UserError(
-            'TLS configuration is invalid - make sure your DOCKER_TLS_VERIFY '
-            'and DOCKER_CERT_PATH are set correctly.\n'
-            'You might need to run `eval \'$(docker-machine env default)\'`')
-    
-        def test_api_error_version_mismatch_unicode_explanation(self, mock_logging):
-        with pytest.raises(errors.ConnectionError):
-            with handle_connection_errors(mock.Mock(api_version='1.22')):
-                raise APIError(None, None, u'client is newer than server')
-    
-        def test_format_unicode_warn(self):
-        message = b'\xec\xa0\x95\xec\x88\x98\xec\xa0\x95'
-        output = self.formatter.format(make_log_record(logging.WARN, message))
-        expected = colors.yellow('WARNING') + ': '
-        assert output == '{0}{1}'.format(expected, message.decode('utf-8'))
+            A = np.random.randn(10, 3, 5, 7).astype(np.float32)
+        I = np.array(np.random.permutation(10), dtype=np.int32)
+        self._run_op_test(A, I, check_grad=True)
