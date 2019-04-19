@@ -1,417 +1,323 @@
 
         
-        // Request Shell's id for current render_view_host.
-IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_GetShellId,
-                           int /* result */)
+        #include 'tensorflow/core/framework/numeric_types.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/python/lib/core/numpy.h'
+#include 'tensorflow/python/lib/core/safe_ptr.h'
     
+    namespace tensorflow {
+    }
     
-    { private:
-  App();
-  DISALLOW_COPY_AND_ASSIGN(App);
-};
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+
     
-    #include 'content/nw/src/api/base/base.h'
+    namespace tensorflow {
+    }
     
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/stream_executor/platform.h'
+    
+    protected:
+    bool eventFilter(QObject *object, QEvent *event);
+    
+        Round(a, b, c, d, e, f, g, h, 0x19a4c116, w0 += sigma1(w14) + w9 + sigma0(w1));
+    Round(h, a, b, c, d, e, f, g, 0x1e376c08, w1 += sigma1(w15) + w10 + sigma0(w2));
+    Round(g, h, a, b, c, d, e, f, 0x2748774c, w2 += sigma1(w0) + w11 + sigma0(w3));
+    Round(f, g, h, a, b, c, d, e, 0x34b0bcb5, w3 += sigma1(w1) + w12 + sigma0(w4));
+    Round(e, f, g, h, a, b, c, d, 0x391c0cb3, w4 += sigma1(w2) + w13 + sigma0(w5));
+    Round(d, e, f, g, h, a, b, c, 0x4ed8aa4a, w5 += sigma1(w3) + w14 + sigma0(w6));
+    Round(c, d, e, f, g, h, a, b, 0x5b9cca4f, w6 += sigma1(w4) + w15 + sigma0(w7));
+    Round(b, c, d, e, f, g, h, a, 0x682e6ff3, w7 += sigma1(w5) + w0 + sigma0(w8));
+    Round(a, b, c, d, e, f, g, h, 0x748f82ee, w8 += sigma1(w6) + w1 + sigma0(w9));
+    Round(h, a, b, c, d, e, f, g, 0x78a5636f, w9 += sigma1(w7) + w2 + sigma0(w10));
+    Round(g, h, a, b, c, d, e, f, 0x84c87814, w10 += sigma1(w8) + w3 + sigma0(w11));
+    Round(f, g, h, a, b, c, d, e, 0x8cc70208, w11 += sigma1(w9) + w4 + sigma0(w12));
+    Round(e, f, g, h, a, b, c, d, 0x90befffa, w12 += sigma1(w10) + w5 + sigma0(w13));
+    Round(d, e, f, g, h, a, b, c, 0xa4506ceb, w13 += sigma1(w11) + w6 + sigma0(w14));
+    Round(c, d, e, f, g, h, a, b, 0xbef9a3f7, w14 + sigma1(w12) + w7 + sigma0(w15));
+    Round(b, c, d, e, f, g, h, a, 0xc67178f2, w15 + sigma1(w13) + w8 + sigma0(w0));
+    
+    void run_ecdh_tests(void) {
+    test_ecdh_api();
+    test_ecdh_generator_basepoint();
+    test_bad_scalar();
+}
+    
+    /** Encode a Bech32 string. Returns the empty string in case of failure. */
+std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+    
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
+  }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12>
+internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+    T12> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+    T10 v10, T11 v11, T12 v12) {
+  return internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+}
+    
+      // Returns true iff the test part non-fatally failed.
+  bool nonfatally_failed() const { return type_ == kNonFatalFailure; }
+    
+    #if GTEST_HAS_TYPED_TEST
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_INTERNAL_H_
 
     
     
-    {}
+    {  T0 f0_;
+};
     
     
-void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    gtk_widget_add_accelerator(
-      menu_item_,
-      'activate',
-      gtk_accel_group,
-      keyval,
-      modifiers_mask,
-      GTK_ACCEL_VISIBLE);
+    {    return element;
   }
-  if (submenu_ != NULL){
-    submenu_->UpdateKeys(gtk_accel_group);
-  }
-  return;
+    
+    MeasureDouble RpcClientServerLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientServerLatencyMeasureName,
+      'Time between first byte of request received to last byte of response '
+      'sent, or terminal error (propagated from the server)',
+      kUnitMilliseconds);
+  return measure;
 }
     
-    NwAppSetProxyConfigFunction::NwAppSetProxyConfigFunction() {
-}
+      const protobuf::Descriptor* desc =
+      descriptor_pool_->FindMessageTypeByName(type);
+  if (desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Type not found.');
+  }
     
-        bool WriteRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      scw_->WriteRTF(*(data.data));
-      return true;
+      Status GetFileContainingSymbol(
+      ServerContext* context, const grpc::string& symbol,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    namespace grpc {
+namespace load_reporter {
+    }
     }
     
-    void absDiff(const Size2D &size,
-             const u16 *src0Base, ptrdiff_t src0Stride,
-             const u16 *src1Base, ptrdiff_t src1Stride,
-             u16 *dstBase, ptrdiff_t dstStride)
+    #include <mach/mach.h>
+    
+    #include <grpc/support/port_platform.h>
+    
+    #endif  // GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
+
+    
+    namespace grpc {
+    }
+    
+    
+//
+//   compile with no UParseErr parameter.
+//
+RegexPattern * U_EXPORT2
+RegexPattern::compile(const UnicodeString &regex,
+                      uint32_t             flags,
+                      UErrorCode          &err)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u16>());
+    UParseError pe;
+    return compile(regex, flags, pe, err);
+}
+    
+    int32_t SearchIterator::getMatchedLength() const
+{
+    return m_search_->matchedLength;
+}
+    
+void SearchIterator::getMatchedText(UnicodeString &result) const
+{
+    int32_t matchedindex  = m_search_->matchedIndex;
+    int32_t     matchedlength = m_search_->matchedLength;
+    if (matchedindex != USEARCH_DONE && matchedlength != 0) {
+        result.setTo(m_search_->text + matchedindex, matchedlength); 
+    }
+    else {
+        result.remove();
+    }
+}
+    
+void SearchIterator::setBreakIterator(BreakIterator *breakiter, 
+                                      UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+#if 0
+        m_search_->breakIter = NULL;
+        // the c++ breakiterator may not make use of ubreakiterator.
+        // so we'll have to keep track of it ourselves.
 #else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
+        // Well, gee... the Constructors that take a BreakIterator
+        // all cast the BreakIterator to a UBreakIterator and
+        // pass it to the corresponding usearch_openFromXXX
+        // routine, so there's no reason not to do this.
+        //
+        // Besides, a UBreakIterator is a BreakIterator, so
+        // any subclass of BreakIterator should work fine here...
+        m_search_->breakIter = (UBreakIterator *) breakiter;
 #endif
-}
-    
-    
-    {    void operator() (const u8 * src0, const u8 * src1, u8 * dst) const
-    {
-        dst[0] = src0[0] | src1[0];
-    }
-};
-    
-    
-    {    if (!parametersSupported) {
-        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
-        std::abort();
+        
+        m_breakiterator_ = breakiter;
     }
 }
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-    }
-    
-            vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        float32x4_t vline1Shifted_f32 = vaddq_f32(vline1_f32, vshift);
-        float32x4_t vline2Shifted_f32 = vaddq_f32(vline2_f32, vshift);
-        uint32x4_t vline1_u32 = vcvtq_u32_f32(vline1Shifted_f32);
-        uint32x4_t vline2_u32 = vcvtq_u32_f32(vline2Shifted_f32);
-        uint32x4_t vline1Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline2_f32));
-        uint32x4_t vline2Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline1Shifted_f32));
-        vline1Mask = vshrq_n_u32(vline1Mask, 16);
-        vline2Mask = vshrq_n_u32(vline2Mask, 16);
-        vline1_u32 = vqsubq_u32(vline1_u32, vline1Mask);
-        vline2_u32 = vqsubq_u32(vline2_u32, vline2Mask);
-        uint16x4_t vRes1 = vqrshrn_n_u32(vline1_u32, 16);
-        uint16x4_t vRes2 = vqrshrn_n_u32(vline2_u32, 16);
-        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
-    
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-        Size2D size(_size);
-    if (srcStride == dstStride &&
-        srcStride == rng1Stride &&
-        srcStride == rng2Stride &&
-        srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    const size_t width = size.width & ~( 32/sizeof(T) - 1 );
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
+const BreakIterator * SearchIterator::getBreakIterator(void) const
 {
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
+    return m_breakiterator_;
 }
     
-                tnext3 = vreinterpretq_s16_u16(vaddq_u16(vaddl_u8(x3, x2),vaddl_u8(x2, x1)));
-            tnext3 = vshlq_n_s16(tnext3, 1);
+    //eof
+
     
-      protobuf_unittest::TestAllTypes message2;
+    #define LOW_A             ((UChar)0x0061)
+#define LOW_B             ((UChar)0x0062)
+#define LOW_C             ((UChar)0x0063)
+#define LOW_D             ((UChar)0x0064)
+#define LOW_E             ((UChar)0x0065)
+#define LOW_F             ((UChar)0x0066)
+#define LOW_G             ((UChar)0x0067)
+#define LOW_H             ((UChar)0x0068)
+#define LOW_I             ((UChar)0x0069)
+#define LOW_J             ((UChar)0x006a)
+#define LOW_K             ((UChar)0x006B)
+#define LOW_L             ((UChar)0x006C)
+#define LOW_M             ((UChar)0x006D)
+#define LOW_N             ((UChar)0x006E)
+#define LOW_O             ((UChar)0x006F)
+#define LOW_P             ((UChar)0x0070)
+#define LOW_Q             ((UChar)0x0071)
+#define LOW_R             ((UChar)0x0072)
+#define LOW_S             ((UChar)0x0073)
+#define LOW_T             ((UChar)0x0074)
+#define LOW_U             ((UChar)0x0075)
+#define LOW_V             ((UChar)0x0076)
+#define LOW_W             ((UChar)0x0077)
+#define LOW_X             ((UChar)0x0078)
+#define LOW_Y             ((UChar)0x0079)
+#define LOW_Z             ((UChar)0x007A)
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
+    U_NAMESPACE_END
     
-    TEST(TemplateUtilTest, TestTemplateAndOr) {
-  // Check that the TemplateTypeEquals works correctly.
-  bool value = false;
-    }
+    #if !UCONFIG_NO_BREAK_ITERATION
     
-    // Main function:  Reads the entire address book from a file,
-//   adds one person based on user input, then writes it back out to the same
-//   file.
-int main(int argc, char* argv[]) {
-  // Verify that the version of the library that we linked against is
-  // compatible with the version of the headers we compiled against.
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-    }
-    
-    #ifndef TESSERACT_CCMAIN_PARAGRAPHS_H_
-#define TESSERACT_CCMAIN_PARAGRAPHS_H_
-    
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
-    
-      // Fits a line to the points, returning the fitted line as a pair of
-  // points, and the upper quartile error.
-  double Fit(ICOORD* pt1, ICOORD* pt2) {
-    return Fit(0, 0, pt1, pt2);
-  }
-  // Fits a line to the points, ignoring the skip_first initial points and the
-  // skip_last final points, returning the fitted line as a pair of points,
-  // and the upper quartile error.
-  double Fit(int skip_first, int skip_last, ICOORD* pt1, ICOORD* pt2);
-    
-      // Deletes all existing documents from the cache.
-  void Clear() {
-    documents_.clear();
-    num_pages_per_doc_ = 0;
-  }
-  // Adds all the documents in the list of filenames, counting memory.
-  // The reader is used to read the files.
-  bool LoadDocuments(const GenericVector<STRING>& filenames,
-                     CachingStrategy cache_strategy, FileReader reader);
-    
-      // Prints the content of the DENORM for debug purposes.
-  void Print() const;
-    
-    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
-  if (justification_ != other.justification_)
-    return false;
-  if (justification_ == JUSTIFICATION_CENTER ||
-      justification_ == JUSTIFICATION_UNKNOWN)
-    return true;
-  int tolerance = (tolerance_ + other.tolerance_) / 4;
-  return NearlyEqual(margin_ + first_indent_,
-                     other.margin_ + other.first_indent_, tolerance) &&
-         NearlyEqual(margin_ + body_indent_,
-                     other.margin_ + other.body_indent_, tolerance);
-}
-    
-      ParagraphModel()
-      : justification_(tesseract::JUSTIFICATION_UNKNOWN),
-         margin_(0),
-         first_indent_(0),
-         body_indent_(0),
-         tolerance_(0) { }
-    
-      REJMAP &operator=(const REJMAP &source);
-    
-    
-    {  // WARNING! Keep data as the first element! KDPairInc and KDPairDec depend
-  // on the order of these elements so they can downcast pointers appropriately
-  // for use by GenericHeap::Reshuffle.
-  Data data;
-  Key key;
-};
-// Specialization of KDPair to provide operator< for sorting in increasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairInc : public KDPair<Key, Data> {
-  KDPairInc() = default;
-  KDPairInc(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in increasing order.
-  int operator<(const KDPairInc<Key, Data>& other) const {
-    return this->key < other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairInc pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairInc* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairInc*>(data_ptr);
-  }
-};
-// Specialization of KDPair to provide operator< for sorting in decreasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairDec : public KDPair<Key, Data> {
-  KDPairDec() = default;
-  KDPairDec(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in decreasing order by using operator> on
-  // the key values.
-  int operator<(const KDPairDec<Key, Data>& other) const {
-    return this->key > other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairDec pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairDec* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairDec*>(data_ptr);
-  }
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
 };
     
-    bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
+    // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
+// offset the years within the current millenium down to 1-999
+static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
+static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
+    
+    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    switch (fieldIndex) {
+        case UDAT_YEAR_FIELD:
+        case UDAT_MONTH_FIELD:
+        case UDAT_DATE_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+        case UDAT_STANDALONE_MONTH_FIELD:
+            return gStaticSets->fDateIgnorables;
+            
+        case UDAT_HOUR_OF_DAY1_FIELD:
+        case UDAT_HOUR_OF_DAY0_FIELD:
+        case UDAT_MINUTE_FIELD:
+        case UDAT_SECOND_FIELD:
+        case UDAT_HOUR1_FIELD:
+        case UDAT_HOUR0_FIELD:
+            return gStaticSets->fTimeIgnorables;
+            
+        default:
+            return gStaticSets->fOtherIgnorables;
+    }
 }
     
     
-    {			totalEncodingTime += image.GetEncodingTimeMs();
-			}
+    {    // Create SwapChain, RenderPass, Framebuffer, etc.
+    IM_ASSERT(g_MinImageCount >= 2);
+    ImGui_ImplVulkanH_CreateWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
+}
     
-    		typedef void (Block4x4::*EncoderFunctionPtr)(void);
-    
-    			float fWeightSumLeft = fWeightSumUL + fWeightSumLL;
-			float fWeightSumRight = fWeightSumUR + fWeightSumLR;
-			float fWeightSumTop = fWeightSumUL + fWeightSumUR;
-			float fWeightSumBottom = fWeightSumLL + fWeightSumLR;
-    
-      /* The AF_Blue_Stringset enumeration values are offsets into the */
-  /* `af_blue_stringsets' array.                                   */
-    
-    /* kiss_fft.h
-   defines kiss_fft_scalar as either short or a float type
-   and defines
-   typedef struct { kiss_fft_scalar r; kiss_fft_scalar i; }kiss_fft_cpx; */
-#include 'kiss_fft.h'
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
-  }
-    
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-    
-    static void TestKey(const std::string& key,
-                    uint64_t seq,
-                    ValueType vt) {
-  std::string encoded = IKey(key, seq, vt);
+    static void CreateOrResizeBuffer(VkBuffer& buffer, VkDeviceMemory& buffer_memory, VkDeviceSize& p_buffer_size, size_t new_size, VkBufferUsageFlagBits usage)
+{
+    ImGui_ImplVulkan_InitInfo* v = &g_VulkanInitInfo;
+    VkResult err;
+    if (buffer != VK_NULL_HANDLE)
+        vkDestroyBuffer(v->Device, buffer, v->Allocator);
+    if (buffer_memory != VK_NULL_HANDLE)
+        vkFreeMemory(v->Device, buffer_memory, v->Allocator);
     }
     
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    void CleanupRenderTarget()
+{
+    WaitForLastSubmittedFrame();
+    }
+    
+    static int InputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
     {
-    {}  // namespace
-}  // namespace leveldb
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_READER_H_
-#define STORAGE_LEVELDB_DB_LOG_READER_H_
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  virtual ~ExtensionProcessor() {}
-};
-    
-    namespace osquery {
-namespace tables {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        std::string* str = user_data->Str;
+        IM_ASSERT(data->Buf == str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
     }
-    }
-    
-    class iokitRegistry : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
-    
-    
-    {  ValidatatioMap row_map = {{'filter_name', NonEmptyString},
-                            {'chain', NormalType},
-                            {'policy', NormalType},
-                            {'target', NormalType},
-                            {'protocol', IntType},
-                            {'src_port', IntMinMaxCheck(0, 65535)},
-                            {'dst_port', IntMinMaxCheck(0, 65535)},
-                            {'src_ip', verifyEmptyStringOrIpAddress},
-                            {'src_mask', verifyEmptyStringOrIpAddress},
-                            {'iniface', NormalType},
-                            {'iniface_mask', verifyEmptyStringOrIpAddress},
-                            {'dst_ip', verifyEmptyStringOrIpAddress},
-                            {'dst_mask', verifyEmptyStringOrIpAddress},
-                            {'outiface', NormalType},
-                            {'outiface_mask', verifyEmptyStringOrIpAddress},
-                            {'match', SpecificValuesCheck{'yes', 'no'}},
-                            {'packets', NonNegativeInt},
-                            {'bytes', NonNegativeInt}};
-  validate_rows(data, row_map);
-}
-    
-    TEST_F(kernelExtensions, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_extensions');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'idx', IntType}
-  //      {'refs', IntType}
-  //      {'size', IntType}
-  //      {'name', NormalType}
-  //      {'version', NormalType}
-  //      {'linked_against', NormalType}
-  //      {'path', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    
+    else if (user_data->ChainCallback)
     {
-    {} // namespace table_tests
-} // namespace osquery
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+    }
+    return 0;
+}
