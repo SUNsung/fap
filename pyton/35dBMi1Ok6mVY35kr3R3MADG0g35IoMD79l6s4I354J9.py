@@ -1,380 +1,302 @@
 
         
-            return epoch_total_cost, epoch_recon_cost, epoch_kl_cost, \
-        kl_weight, l2_cost, l2_weight
+        with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+
     
-    x0s = []
-condition_labels = []
-condition_number = 0
-for c in range(C):
-  x0 = FLAGS.x0_std * rng.randn(N, 1)
-  x0s.append(np.tile(x0, nreplications))
-  for ns in range(nreplications):
-    condition_labels.append(condition_number)
-  condition_number += 1
-x0s = np.concatenate(x0s, axis=1)
+        with open('supportedsites.html', 'w', encoding='utf-8') as sitesf:
+        sitesf.write(template)
     
-      Args:
-    datasets: The dictionary of dataset structures.
-    npcs:  The number of pcs for each, basically like lfads factors.
-    nsamples (optional): Number of samples to take for each dataset.
-    ntime (optional): Number of time steps to take in each sample.
+                        # Pandoc's definition_lists. See http://pandoc.org/README.html
+                    # for more information.
+                    ret += '\n%s\n:   %s\n' % (option, description)
+                    continue
+            ret += line.lstrip() + '\n'
+        else:
+            ret += line + '\n'
     
-      print ('loading data from ' + data_path + ' with stem ' + data_fname_stem)
-  for fname in fnames:
-    if fname.startswith(data_fname_stem):
-      data_dict = read_data(os.path.join(data_path,fname))
-      idx = len(data_fname_stem) + 1
-      key = fname[idx:]
-      data_dict['data_dim'] = data_dict['train_data'].shape[2]
-      data_dict['num_steps'] = data_dict['train_data'].shape[1]
-      dataset_dict[key] = data_dict
-    
-      inputs = np.zeros([batch_size, num_steps], np.int32)
-  char_inputs = np.zeros([batch_size, num_steps, max_word_length], np.int32)
-  global_word_ids = np.zeros([batch_size, num_steps], np.int32)
-  targets = np.zeros([batch_size, num_steps], np.int32)
-  weights = np.ones([batch_size, num_steps], np.float32)
-    
-        fname = os.path.join(FLAGS.save_dir, 'lstm_emb_step_%d.npy' % i)
-    with tf.gfile.Open(fname, mode='w') as f:
-      np.save(f, lstm_emb)
-    sys.stderr.write('LSTM embedding step %d file saved\n' % i)
-    
-      Returns:
-    wasserstein_loss:  Scalar tf.float32 loss.
-    
-    from models import bidirectional_zaremba
-from models import cnn
-from models import critic_vd
-from models import feedforward
-from models import rnn
-from models import rnn_nas
-from models import rnn_vd
-from models import rnn_zaremba
-from models import seq2seq
-from models import seq2seq_nas
-from models import seq2seq_vd
-from models import seq2seq_zaremba
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     
-  Args:
-    hparams:  MaskGAN hyperparameters.
-    log_probs:  tf.float32 Tensor of log probailities of the tokens selected by
-      the Generator.  Shape [batch_size, sequence_length].
-    dis_predictions:  tf.float32 Tensor of the predictions from the
-      Discriminator.  Shape [batch_size, sequence_length].
-    present:  tf.bool Tensor indicating which tokens are present.  Shape
-      [batch_size, sequence_length].
-    estimated_values:  tf.float32 Tensor of estimated state values of tokens.
-      Shape [batch_size, sequence_length]
+@bp.before_app_request
+def load_logged_in_user():
+    '''If a user id is stored in the session, load the user object from
+    the database into ``g.user``.'''
+    user_id = session.get('user_id')
     
-      Args:
-    FLAGS:  Flags for the model.
-    hparams:  Hyperparameters for the MaskGAN.
     
-        # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
     
 @pytest.fixture
-def auth(client):
-    return AuthActions(client)
+def app():
+    '''Create and configure a new app instance for each test.'''
+    # create a temporary file to isolate the database for each test
+    db_fd, db_path = tempfile.mkstemp()
+    # create the app with common test config
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
+    
+        return logger
 
     
-    
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('a', 'test', b'Incorrect username.'),
-    ('test', 'a', b'Incorrect password.'),
-))
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
-    
-            #: A dictionary with URL defaults that is added to each and every
-        #: URL that was defined with the blueprint.
-        self.url_defaults = dict(self.blueprint.url_values_defaults)
-        self.url_defaults.update(self.options.get('url_defaults', ()))
+        When you want to decorate a pluggable view you will have to either do that
+    when the view function is created (by wrapping the return value of
+    :meth:`as_view`) or you can use the :attr:`decorators` attribute::
     
     
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
-
-    
-        def default(self, o):
-        '''Implement this method in a subclass such that it returns a
-        serializable object for ``o``, or calls the base implementation (to
-        raise a :exc:`TypeError`).
-    
-        It is what ends up as :class:`~flask.request`.  If you want to replace
-    the request object used you can subclass this and set
-    :attr:`~flask.Flask.request_class` to your subclass.
-    
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
+def test_request_context_means_app_context(app):
+    with app.test_request_context():
+        assert flask.current_app._get_current_object() == app
+    assert flask._app_ctx_stack.top is None
     
     
-class Session(AbstractBaseSession):
-    '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+class BtreeGistExtension(CreateExtension):
     
-        @cached_property
-    def initial(self):
-        data = self.form.get_initial_for_field(self.field, self.name)
-        # If this is an auto-generated default date, nix the microseconds for
-        # standardized handling. See #22502.
-        if (isinstance(data, (datetime.datetime, datetime.time)) and
-                not self.field.widget.supports_microseconds):
-            data = data.replace(microsecond=0)
-        return data
+        def save(self, must_create=False):
+        super().save(must_create)
+        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
     
-    In both cases, only 10% of the features are informative.
-'''
-import numpy as np
-import gc
-from time import time
-from sklearn.datasets.samples_generator import make_regression
+        def exists(self, session_key):
+        return self.model.objects.filter(session_key=session_key).exists()
+    
+        def __str__(self):
+        return self.session_key
     
     
-def fixed_batch_size_comparison(data):
-    all_features = [i.astype(int) for i in np.linspace(data.shape[1] // 10,
-                                                       data.shape[1], num=5)]
-    batch_size = 1000
-    # Compare runtimes and error for fixed batch size
-    all_times = defaultdict(list)
-    all_errors = defaultdict(list)
-    for n_components in all_features:
-        pca = PCA(n_components=n_components)
-        ipca = IncrementalPCA(n_components=n_components, batch_size=batch_size)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('ipca', ipca)]}
+FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8'
+JSON_CONTENT_TYPE = 'application/json'
+JSON_ACCEPT = '{0}, */*'.format(JSON_CONTENT_TYPE)
+DEFAULT_UA = 'HTTPie/%s' % __version__
     
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
+    from httpie.plugins import plugin_manager
+from httpie.context import Environment
     
-    The dataset is the Boston Housing dataset (resp. 20 Newsgroups) for
-regression (resp. classification).
+        def __init__(self, chunk_size=CHUNK_SIZE, **kwargs):
+        super(RawStream, self).__init__(**kwargs)
+        self.chunk_size = chunk_size
     
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
+            :param headers: The headers as text.
     
-    # Import datasets, classifiers and performance metrics
-from sklearn import datasets, svm, metrics
+            See https://github.com/jakubroztocil/httpie/issues/212
     
-    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-ms.fit(X)
-labels = ms.labels_
-cluster_centers = ms.cluster_centers_
     
-        def __get__(self, obj, type_):
-        if obj is None:
-            return self
-        val = self.function(obj)
-        obj.__dict__[self.function.__name__] = val
-        return val
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
     
-    *TL;DR80
-Decouples an abstraction from its implementation.
-'''
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-        def show_item_information(self, item_name):
+    
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
+    
+        def test_non_existent_file_raises_parse_error(self, httpbin):
+        with pytest.raises(ParseError):
+            http('--form',
+                 'POST', httpbin.url + '/post', 'foo@/__does_not_exist__')
+    
+        num_train_samples = 50000
+    
+    
+def serialize(regularizer):
+    return serialize_keras_object(regularizer)
+    
+        out1 = utils.preprocess_input(x, 'channels_last')
+    out1int = utils.preprocess_input(xint, 'channels_last')
+    out2 = utils.preprocess_input(np.transpose(x, (0, 3, 1, 2)),
+                                  'channels_first')
+    out2int = utils.preprocess_input(np.transpose(xint, (0, 3, 1, 2)),
+                                     'channels_first')
+    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
+    assert_allclose(out1int, out2int.transpose(0, 2, 3, 1))
+    
+    
+def test_cifar():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+    
+    
+def normalize(x, axis=-1, order=2):
+    '''Normalizes a Numpy array.
+    
+        all_outputs = []
+    for i in range(len(model.outputs)):
+        all_outputs.append([])
+    
+    # convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+    
+    x = Conv2DTranspose(filters=1,
+                    kernel_size=kernel_size,
+                    padding='same')(x)
+    
+    
+def binary_crossentropy(y_true, y_pred):
+    return K.mean(K.binary_crossentropy(y_true, y_pred), axis=-1)
+    
+            if row1 == row2:
+            plaintext += table[row1*5+(col1-1)%5]
+            plaintext += table[row2*5+(col2-1)%5]
+        elif col1 == col2:
+            plaintext += table[((row1-1)%5)*5+col1]
+            plaintext += table[((row2-1)%5)*5+col2]
+        else: # rectangle
+            plaintext += table[row1*5+col2]
+            plaintext += table[row2*5+col1]
+    
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
+    
+        def _colision_resolution(self, key, data=None):
+        i = 1
+        new_key = self.hash_function(key + i*i)
+    
+    This is a pure Python implementation of Dynamic Programming solution to the longest_sub_array problem.
+    
+    #Mean Bias Deviation
+def mbd(predict, actual):
+    predict = np.array(predict)
+    actual = np.array(actual)
+    
+        return res
+    
+            a += a
+        b >>= 1
+    
+    from certbot_apache import constants
+    
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:443')
+        self.addr_default = Addr.fromstring('_default_:443')
+    
+    
+# -- Options for LaTeX output ---------------------------------------------
+    
+    
+Examples
+--------
+    
+        # Display the results
+    for top, right, bottom, left in face_locations:
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+    
+        function_parameters = zip(
+        images_to_check,
+        itertools.repeat(model),
+    )
+    
+    # Open the input movie file
+input_movie = cv2.VideoCapture('hamilton_clip.mp4')
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # 看看图片中的第一张脸是不是奥巴马
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
+    
+        # Start to show video
+    last_num = 1
+    fps_list = []
+    tmp_time = time.time()
+    while not Global.is_exit:
+        while Global.write_num != last_num:
+            last_num = int(Global.write_num)
+    
+    
+def process_code(read_filehandle, text_filehandle, line, linenum, sourcefile, codedir, name, index, indent_depth):
+    fenced = (line.strip() == '```')
+    if fenced:
         try:
-            item_info = self.model.get(item_name)
-        except Exception:
-            item_type = self.model.item_type
-            self.view.item_not_found(item_type, item_name)
+            line = read_filehandle.next()
+            linenum += 1
+            text_filehandle.write('\n')
+        except StopIteration:
+            return ('', linenum)
+    start_linenum = linenum
+    has_actual_code = False
+    has_question_marks = False
+    linebuffer = []
+    while ((fenced and line.strip() != '```') or (not fenced and is_inside_code(line, indent_depth))):
+        # copy comments to plain text for spell check
+        comment_idx = line.find('//')
+        no_comment_line = line
+        if comment_idx >= 0:
+            no_comment_line = line[:comment_idx].strip()
+            text_filehandle.write(line[comment_idx + 2:])
         else:
-            item_type = self.model.item_type
-            self.view.show_item_information(item_type, item_name, item_info)
+            # write empty line so line numbers stay stable
+            text_filehandle.write('\n')
     
-    
-class NoTalkProxy(Proxy):
-    def talk(self):
-        print('Proxy checking for Sales Manager availability')
-        time.sleep(0.1)
-        print('This Sales Manager will not talk to you', 'whether he/she is busy or not')
-    
-        def test_relatives_after_access(self):
-        print(u'John's relatives: {0}'.format(self.John.relatives))
-        self.assertIn('relatives', self.John.__dict__)
-    
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-    # mapping coco categories to cityscapes (our converted json) id
-# cityscapes
-# INFO roidb.py: 220: 1       bicycle: 7286
-# INFO roidb.py: 220: 2           car: 53684
-# INFO roidb.py: 220: 3        person: 35704
-# INFO roidb.py: 220: 4         train: 336
-# INFO roidb.py: 220: 5         truck: 964
-# INFO roidb.py: 220: 6    motorcycle: 1468
-# INFO roidb.py: 220: 7           bus: 758
-# INFO roidb.py: 220: 8         rider: 3504
-    
-        # For other levels add top-down and lateral connections
-    for i in range(num_backbone_stages - 1):
-        add_topdown_lateral_module(
-            model,
-            output_blobs[i],             # top-down blob
-            lateral_input_blobs[i + 1],  # lateral blob
-            output_blobs[i + 1],         # next output blob
-            fpn_dim,                     # output dimension
-            fpn_dim_lateral[i + 1]       # lateral input dimension
-        )
-    
-        # ==========================================================================
-    # bbox tower if not sharing features with the classification tower with
-    # logits and prob prediction
-    # ==========================================================================
-    if not cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
-        for lvl in range(k_min, k_max + 1):
-            bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
-            for nconv in range(cfg.RETINANET.NUM_CONVS):
-                suffix = 'n{}_fpn{}'.format(nconv, lvl)
-                dim_in, dim_out = dim_in, dim_in
-                if lvl == k_min:
-                    bl_out = model.Conv(
-                        bl_in,
-                        'retnet_bbox_conv_' + suffix,
-                        dim_in,
-                        dim_out,
-                        3,
-                        stride=1,
-                        pad=1,
-                        weight_init=('GaussianFill', {
-                            'std': 0.01
-                        }),
-                        bias_init=('ConstantFill', {
-                            'value': 0.
-                        })
+            # Adding model 'DSymApp'
+        db.create_table(
+            'sentry_dsymapp', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
                     )
-                else:
-                    bl_out = model.ConvShared(
-                        bl_in,
-                        'retnet_bbox_conv_' + suffix,
-                        dim_in,
-                        dim_out,
-                        3,
-                        stride=1,
-                        pad=1,
-                        weight='retnet_bbox_conv_n{}_fpn{}_w'.format(
-                            nconv, k_min
-                        ),
-                        bias='retnet_bbox_conv_n{}_fpn{}_b'.format(
-                            nconv, k_min
-                        )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
                     )
-                bl_in = model.Relu(bl_out, bl_out)
-                # Add octave scales and aspect ratio
-                # At least 1 convolution for dealing different aspect ratios
-                bl_feat = bl_in
-            bbox_feat_list.append(bl_feat)
-    # Depending on the features [shared/separate] for bbox, add prediction layer
-    for i, lvl in enumerate(range(k_min, k_max + 1)):
-        bbox_pred = 'retnet_bbox_pred_fpn{}'.format(lvl)
-        bl_feat = bbox_feat_list[i]
-        if lvl == k_min:
-            model.Conv(
-                bl_feat,
-                bbox_pred,
-                dim_in,
-                bbox_regr_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight_init=('GaussianFill', {
-                    'std': 0.01
-                }),
-                bias_init=('ConstantFill', {
-                    'value': 0.
-                })
+                ), ('app_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
+                ('sync_id', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
+                ('data', self.gf('jsonfield.fields.JSONField')(default={})), (
+                    'platform',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        default=0
+                    )
+                ), (
+                    'last_synced',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
             )
-        else:
-            model.ConvShared(
-                bl_feat,
-                bbox_pred,
-                dim_in,
-                bbox_regr_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight='retnet_bbox_pred_fpn{}_w'.format(k_min),
-                bias='retnet_bbox_pred_fpn{}_b'.format(k_min)
-            )
-    
-    logger = logging.getLogger(__name__)
-    
-    
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
-    '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
         )
-    else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
-    
-            retinanet_blobs, fg_num, bg_num = _get_retinanet_blobs(
-            foas, all_anchors, gt_rois, gt_classes, image_width, image_height)
-        for i, foa in enumerate(foas):
-            for k, v in retinanet_blobs[i].items():
-                # the way it stacks is:
-                # [[anchors for image1] + [anchors for images 2]]
-                level = int(np.log2(foa.stride))
-                key = '{}_fpn{}'.format(k, level)
-                if k == 'retnet_roi_fg_bbox_locs':
-                    v[:, 0] = im_i
-                    # loc_stride: 80 * 4 if cls_specific else 4
-                    loc_stride = 4  # 4 coordinate corresponding to bbox prediction
-                    if cfg.RETINANET.CLASS_SPECIFIC_BBOX:
-                        loc_stride *= (cfg.MODEL.NUM_CLASSES - 1)
-                    anchor_ind = foa.octave * num_aspect_ratios + foa.aspect
-                    # v[:, 1] is the class label [range 0-80] if we do
-                    # class-specfic bbox otherwise it is 0. In case of class
-                    # specific, based on the label, the location of current
-                    # anchor is class_label * 4 and then we take into account
-                    # the anchor_ind if the anchors
-                    v[:, 1] *= 4
-                    v[:, 1] += loc_stride * anchor_ind
-                blobs[key].append(v)
-        blobs['retnet_fg_num'] += fg_num
-        blobs['retnet_bg_num'] += bg_num
+        db.send_create_signal('sentry', ['DSymApp'])
