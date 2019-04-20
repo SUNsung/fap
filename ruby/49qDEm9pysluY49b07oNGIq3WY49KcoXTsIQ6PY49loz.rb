@@ -1,139 +1,160 @@
 
         
-        def liquid_escape(markdown)
-  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
-      end
-    end
-  end
-    
-          def cell_prefix(status)
-        @prefixes[status]
-      end
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+                  def checked?(value)
+            case value
+            when TrueClass, FalseClass
+              value == !!@checked_value
+            when NilClass
+              false
+            when String
+              value == @checked_value
+            else
+              if value.respond_to?(:include?)
+                value.include?(@checked_value)
+              else
+                value.to_i == @checked_value.to_i
+              end
+            end
           end
     
-          it 'bootstraps with a single dependency' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              command: 'bootstrap',
-              dependencies: ['TestDependency']
-            )
-          end').runner.execute(:test)
+              def initialize(template_object, object_name, method_name, object,
+                         sanitized_attribute_name, text, value, input_html_options)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @sanitized_attribute_name = sanitized_attribute_name
+            @text = text
+            @value = value
+            @input_html_options = input_html_options
+          end
     
-          it 'shellescapes the exclude_dirs correctly' do
-        directory = 'My Dir'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
+          def self.delegate_to(klass)
+        self.type_klass = klass
       end
     
-      # make sure local implementation is also used in shelljoin
-  def shelljoin(array)
-    array.map { |arg| shellescape(arg) }.join(' ')
-  end
-  module_function :shelljoin
-end
+          def objekt
+        Object.new
+      end
+    end
     
-    require 'colored'
-require 'shellwords'
+              issue.label_names.each do |label_name|
+            # Although unlikely it's technically possible for an issue to be
+            # given a label that was created and assigned after we imported all
+            # the project's labels.
+            next unless (label_id = label_finder.id_for(label_name))
     
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class LfsObjectsImporter
-        include ParallelScheduling
-    
-          # Marks the given object as 'already imported'.
-      def mark_as_imported(object)
-        id = id_for_already_imported_cache(object)
+            # Builds a new note using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
     
               new(hash)
         end
     
-              hash[:state] = hash[:state].to_sym
-          hash[:assignees].map! { |u| Representation::User.from_json_hash(u) }
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
     
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
+    end
+
+    
+            it 'should add an error when no service is selected' do
+          expect(services_scenario_import.import).to eq(false)
+          expect(services_scenario_import.errors[:base].length).to eq(1)
         end
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      0x01, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # HMAC-SHA1
-      0x01, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # AES Encryption
-      0x01, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-                decrypted
-          end
-    
-                seq.to_der
-          end
-    
-          it 'allows closing brace on same line as last multiline element' do
-        expect_no_offenses(construct(true, a, make_multi(multi), false))
       end
     
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
+      let :reverted_template do
+    old_template.merge('url' => '{{ url }}')
+  end
     
-        def each_directive
-      return if processed_source.comments.nil?
+      describe 'path request must exist' do
+    it 'should check that validation added if path does not exist' do
+      opts = @opts.tap { |o| o.delete('path') }
+      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
+      @checker.user = users(:bob)
+      expect(@checker.save).to eq false
+      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
+    end
+  end
     
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+        it 'should raise error when invalid response arrives' do
+      stub(HTTParty).post { {'blah' => 'blah'} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Invalid response from Boxcar:/)
+    end
+    
+        if resource.errors.empty?
+      set_flash_message!(:notice, :confirmed)
+      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+          def extend_remember_period
+        self.class.extend_remember_period
+      end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
     end
   end
+end
+
+    
+          def order_time(time)
+        [I18n.l(time.to_date), time.strftime('%l:%M %p').strip].join(' ')
+      end
+    end
+  end
+end
+
+    
+            select_tag(:per_page,
+                   options_for_select(per_page_options, selected_option),
+                   class: 'form-control pull-right js-per-page-select per-page-selected-#{selected_option}')
+      end
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
+end
+    
+            def load_order(lock = false)
+          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
+          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
+          @order.state = params[:state] if params[:state]
+          state_callback(:before)
+        end
