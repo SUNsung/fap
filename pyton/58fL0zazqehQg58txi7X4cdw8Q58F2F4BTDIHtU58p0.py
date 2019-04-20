@@ -1,121 +1,141 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
+        
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
+    
+        def fake_init_db():
+        Recorder.called = True
+    
+            info.append('% 5d: trying loader of %s' % (
+            idx + 1, src_info))
+    
+        def check(self, value):
+        return isinstance(value, bytes)
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
+    
+        with app.app_context():
+        pass
+    
+        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
+    # that are too rare or too frequent
+    
+    for connectivity in (None, knn_graph):
+    for n_clusters in (30, 3):
+        plt.figure(figsize=(10, 4))
+        for index, linkage in enumerate(('average',
+                                         'complete',
+                                         'ward',
+                                         'single')):
+            plt.subplot(1, 4, index + 1)
+            model = AgglomerativeClustering(linkage=linkage,
+                                            connectivity=connectivity,
+                                            n_clusters=n_clusters)
+            t0 = time.time()
+            model.fit(X)
+            elapsed_time = time.time() - t0
+            plt.scatter(X[:, 0], X[:, 1], c=model.labels_,
+                        cmap=plt.cm.nipy_spectral)
+            plt.title('linkage=%s\n(time %.2fs)' % (linkage, elapsed_time),
+                      fontdict=dict(verticalalignment='top'))
+            plt.axis('equal')
+            plt.axis('off')
+    
+    ax.w_xaxis.set_ticklabels([])
+ax.w_yaxis.set_ticklabels([])
+ax.w_zaxis.set_ticklabels([])
+ax.set_xlabel('Petal width')
+ax.set_ylabel('Sepal length')
+ax.set_zlabel('Petal length')
+ax.set_title('Ground Truth')
+ax.dist = 12
+    
+    plt.subplot(223)
+plt.scatter(X_varied[:, 0], X_varied[:, 1], c=y_pred)
+plt.title('Unequal Variance')
+    
             else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+            colision_resolution = self._colision_resolution(key, data)
+            if colision_resolution is not None:
+                self._set_value(colision_resolution, data)
+            else:
+                self.rehashing()
+                self.insert_data(data)
     
-                # >leading or trailing LWS MAY be removed without
-            # >changing the semantics of the field value'
-            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
-            # Also, requests raises `InvalidHeader` for leading spaces.
-            value = value.strip()
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+'''
+from __future__ import print_function
     
+        for j in range(int(s/2), -1, -1):
+        if dp[n][j] == True:
+            diff = s-2*j
+            break;
     
-class ConverterPlugin(object):
+    	Arguments:
+		testString {[string]} -- [message]
+	'''
     
-    from httpie.plugins.base import AuthPlugin
-    
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        def test_POST_with_data_auto_JSON_headers(self, httpbin):
-        r = http('POST', httpbin.url + '/post', 'a=b')
-        assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        assert r.json['headers']['Content-Type'] == 'application/json'
-    
-    from utils import TESTS_ROOT
-    
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
+    '''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
+* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a ^ b
+* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
+*
+* As far as the modulo is concerned,
+* the fact : (a*b) % c = ((a%c) * (b%c)) % c
+* Now apply RULE 1 OR 2 whichever is required.
+'''
 
     
-    # NOTE: This example requires flask to be installed! You can install it with pip:
-# $ pip3 install flask
-    
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-    print('I found {} face(s) in this photograph.'.format(len(face_landmarks_list)))
-    
-    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-# See http://pillow.readthedocs.io/ for more about PIL/Pillow
-pil_image = Image.fromarray(unknown_image)
-# Create a Pillow ImageDraw Draw instance to draw with
-draw = ImageDraw.Draw(pil_image)
-    
-        # Create a subprocess to capture frames
-    p.append(Process(target=capture, args=(read_frame_list,)))
-    p[0].start()
-    
-        def step(self, action):
-        assert self.action_space.contains(action)
-        if self.np_random.rand() < self.slip:
-            action = not action  # agent slipped, reverse action taken
-        if action:  # 'backwards': go back to the beginning, get small reward
-            reward = self.small
-            self.state = 0
-        elif self.state < self.n - 1:  # 'forwards': go up along the chain
-            reward = 0
-            self.state += 1
-        else:  # 'forwards': stay at the end of the chain, collect large reward
-            reward = self.large
-        done = False
-        return self.state, reward, done, {}
-    
-            Returns:
-            int: The registration ID of this object. It is the caller's responsibility to save this ID if early closing is desired.
-        '''
-        assert hasattr(closeable, 'close'), 'No close method for {}'.format(closeable)
-    
-        Args:
-        a (Optional[int, str]): None seeds from an operating system specific randomness source.
-        max_bytes: Maximum number of bytes to use in the seed.
+        search_txt = 'html a z'
+    ret = search(search_txt, inverse_index, word_freq)
+    # print(ret)
+    printy(ret)
+    r''' 
+    ['html']
+         ./data\b.txt
+         ./data\c.txt
+    ['a']
+         ./data\b.txt
+         ./data\a.txt
+    ['z']
+         -
+    ['a', 'html']
+         ./data\b.txt
+    ['html', 'z']
+         -
+    ['a', 'z']
+         -
+    ['a', 'html', 'z']
+         -
     '''
-    # Adapted from https://svn.python.org/projects/python/tags/r32/Lib/random.py
-    if a is None:
-        a = _bigint_from_bytes(os.urandom(max_bytes))
-    elif isinstance(a, str):
-        a = a.encode('utf8')
-        a += hashlib.sha512(a).digest()
-        a = _bigint_from_bytes(a[:max_bytes])
-    elif isinstance(a, integer_types):
-        a = a % 2**(8 * max_bytes)
-    else:
-        raise error.Error('Invalid type for seed: {} ({})'.format(type(a), a))
+
     
-        logger.info('Generating rollout for {}'.format(spec.id))
     
-        def _create_particle(self, point1, point2, grass):
-        class Particle:
-            pass
-        p = Particle()
-        p.color = WHEEL_COLOR if not grass else MUD_COLOR
-        p.ttl = 1
-        p.poly = [(point1[0],point1[1]), (point2[0],point2[1])]
-        p.grass = grass
-        self.particles.append(p)
-        while len(self.particles) > 30:
-            self.particles.pop(0)
-        return p
+def parametric_relu(x, channel_shared=False, alpha_init=constant(0.), name='parametric_relu', reuse=None):
+    '''参数化 ReLU
+    
+            o = tf.nn.conv2d(x, W, strides=strides, padding=padding) + b
+        o = act_fn(o)
+    
+    
+def permute(x, perm):
+    '''
+    Examples:
+        x.shape == [128, 32, 1]
+        x = permute(x, [0, 2, 1])
+        x.shape == [128, 1, 32]
