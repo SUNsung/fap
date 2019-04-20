@@ -1,117 +1,122 @@
 
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
+        
+        WITH_LIQUID = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
+mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
     
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
+    FORWARD_SLASH = '/'.freeze
     
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
     
-              def initialize(options = {})
-            self.class.attributes.each do |attr|
-              if options.has_key?(attr)
-                m = (attr.to_s + '=').to_sym
-                self.send(m, options[attr])
-              end
-            end
+          def after_features(features)
+        @io.puts
+        print_worst_offenders
+        print_summary(features)
+      end
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
+  end
+end
+
+    
+            include ::EachBatch
+      end
+    
+            @parallel = parallel
+      end
+    
+              lfs_objects.each do |object|
+            yield object
           end
-    
-              # Encodes the value field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_value
-            OpenSSL::ASN1::OctetString.new(value)
-          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
         end
       end
     end
   end
 end
+
     
-    # SPECS ===============================================================
+            # Builds a new note using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
     
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
+        describe '#agents_dot' do
+      before do
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
     
-      it 'should not override the header if already set' do
-    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
-    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
+  end
+    
+      gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
+end
+
+    
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+        def any?(key)
+      value = fetch(key)
+      if value && value.respond_to?(:any?)
+        begin
+          return value.any?
+        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
+          # Gracefully ignore values whose `any?` method doesn't accept 0 args
+        end
+      end
+    
+    MESSAGE
+      end
+    end
   end
 end
 
     
-          # Returns the else branch of the `case` statement, if any.
-      #
-      # @return [Node] the else branch node of the `case` statement
-      # @return [nil] if the case statement does not have an else branch.
-      def else_branch
-        node_parts[-1]
+            def lvalue(key)
+          key.to_s.chomp('=').to_sym
+        end
       end
-    
-          # Calls the given block for each `key` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_key
-        return pairs.map(&:key).to_enum unless block_given?
-    
-          # Returns the delta between this element's value and the argument's.
-      #
-      # @note Keyword splats always return a delta of 0
-      #
-      # @return [Integer] the delta between the two values
-      def value_delta(other)
-        HashElementDelta.new(self, other).value_delta
-      end
-    
-        def analyze_disabled(analysis, line)
-      if (start_line = analysis.start_line_number)
-        # Cop already disabled on this line, so we end the current disabled
-        # range before we start a new range.
-        return CopAnalysis.new(analysis.line_ranges + [start_line..line], line)
-      end
-    
-        def for(file_or_dir)
-      return @options_config if @options_config
+    end
+  end
+end
