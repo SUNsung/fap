@@ -1,69 +1,103 @@
 
         
-        #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
+        using namespace swift::sys;
+using llvm::StringRef;
     
-    #include <google/protobuf/stubs/common.h>
-#include <gtest/gtest.h>
+      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = isConst;
+    info.Decl = decl;
+    return info;
+  }
     
-    #include 'addressbook.pb.h'
+      bool isImportAsMember() const { return bool(effectiveDC); }
     
-    // Iterates though all people in the AddressBook and prints info about them.
-void ListPeople(const tutorial::AddressBook& address_book) {
-  for (int i = 0; i < address_book.people_size(); i++) {
-    const tutorial::Person& person = address_book.people(i);
+    
+bool Mangle::isNonAscii(StringRef str) {
+  for (unsigned char c : str) {
+    if (c >= 0x80)
+      return true;
+  }
+  return false;
+}
+    
+    static const int base         = 36;
+static const int tmin         = 1;
+static const int tmax         = 26;
+static const int skew         = 38;
+static const int damp         = 700;
+static const int initial_bias = 72;
+static const uint32_t initial_n = 128;
+    
+    void BackendJobAction::anchor() {}
+    
+    class LLVM_LIBRARY_VISIBILITY Windows : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const LinkJobAction &job,
+                                     const JobContext &context) const override;
     }
-    }
+    
+    // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
     
-    {  // No copying allowed
-  LookupKey(const LookupKey&);
-  void operator=(const LookupKey&);
-};
-    
-    class MemTableIterator: public Iterator {
- public:
-  explicit MemTableIterator(MemTable::Table* table) : iter_(table) { }
-    }
-    
-    
-    {}  // namespace leveldb
+    {}  // namespace nw
 
     
-    // Tag numbers for serialized VersionEdit.  These numbers are written to
-// disk and should not be changed.
-enum Tag {
-  kComparator           = 1,
-  kLogNumber            = 2,
-  kNextFileNumber       = 3,
-  kLastSequence         = 4,
-  kCompactPointer       = 5,
-  kDeletedFile          = 6,
-  kNewFile              = 7,
-  // 8 was used for large value refs
-  kPrevLogNumber        = 9
-};
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
     
-      void EncodeTo(std::string* dst) const;
-  Status DecodeFrom(const Slice& src);
-    
-    // WriteBatchInternal provides static methods for manipulating a
-// WriteBatch that we don't want in the public WriteBatch interface.
-class WriteBatchInternal {
- public:
-  // Return the number of entries in the batch.
-  static int Count(const WriteBatch* batch);
+    bool MenuDelegate::IsItemForCommandIdDynamic(int command_id) const {
+  if (command_id < 0)
+    return false;
     }
     
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
-
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
+};
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
+};
+    
+        // Helper function to convert display::Display to nwapi::nw__screen::Display
+    std::unique_ptr<nwapi::nw__screen::Display> ConvertGfxDisplay(const display::Display& gfx_display) {
+      std::unique_ptr<nwapi::nw__screen::Display> displayResult(new nwapi::nw__screen::Display);
+    }
+    
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
+  }
     
     
     {
@@ -79,32 +113,20 @@ std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
 #endif  // MXNET_IO_ITER_PREFETCHER_H_
 
     
-    template<typename xpu>
-void Quantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                              const float threshold) {
-  mxnet::op::mxnet_op::Kernel<quantize_2bit, xpu>
-    ::Launch(s,
-            inputs[2].Size(),         // compressed array size
-            inputs[0].Size(),         // original size
-            inputs[2].dptr<float>(),  // compressed array
-            inputs[0].dptr<float>(),  // original array
-            inputs[1].dptr<float>(),  // residual array
-            -1 *threshold,            // negative threshold
-            threshold);               // positive threshold
-}
     
-    #ifndef MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-#define MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-#include <dmlc/parameter.h>
-#include <string>
-#include <utility>
-#include <vector>
-#include 'mxnet/ndarray.h'
+    {
+    {inline void Dequantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
+                               const std::vector<mxnet::TBlob> &inputs,
+                               const float threshold) {
+  Dequantize2BitKernelLaunch(s, inputs, threshold);
+}
+}  // namespace kvstore
+}  // namespace mxnet
     
     template<>
-void EvalRandom<DEVICE, GammaDistribution>(
-    const real_t &alpha,
-    const real_t &beta,
+void EvalRandom<DEVICE, PoissonDistribution>(
+    const real_t &lambda,
+    const real_t &dummy,  // this is to satisfy the SampleOp lambda signature
     const Resource &resource,
     TBlob *ret,
     RunContext ctx) {
@@ -115,14 +137,14 @@ void EvalRandom<DEVICE, GammaDistribution>(
     {
       mshadow::Random<xpu, float> *prnd = resource.get_random<xpu, float>(s);
       mshadow::Tensor<xpu, 2, float> tmp = ret->FlatTo2D<xpu, float>(s);
-      prnd->SampleGamma(&tmp, float(alpha), float(beta));  // NOLINT(*)
+      prnd->SamplePoisson(&tmp, float(lambda));  // NOLINT(*)
       break;
     }
   case mshadow::kFloat64:
     {
       mshadow::Random<xpu, double> *prnd = resource.get_random<xpu, double>(s);
       mshadow::Tensor<xpu, 2, double> tmp = ret->FlatTo2D<xpu, double>(s);
-      prnd->SampleGamma(&tmp, double(alpha), double(beta));  // NOLINT(*)
+      prnd->SamplePoisson(&tmp, double(lambda));  // NOLINT(*)
       break;
     }
   default:
@@ -131,44 +153,91 @@ void EvalRandom<DEVICE, GammaDistribution>(
 }
     
     
-    {
-    {}  // namespace op
-}  // namespace mxnet
-
-    
-    
-    {  CHECK(param_.pinfo->forward(ptrs.size(), ptrs.data(), tags.data(), param_.pinfo->p_forward));
-  Engine::Get()->PushAsync(
-      [ndcpy, ctx](RunContext rctx, Engine::CallbackOnComplete on_complete) {
-        ctx.async_on_complete();
-        on_complete();
-      }, ndctx, ndvar, {}, FnProperty::kNormal, 0, 'NDArrayOpForward');
-}
-    
-                callback(m_samples.second, m_updates.second, m_totalSummaries, m_loss.second, m_metric.second, durationMs);
-    
-    #pragma once
-    
-        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
-    // function waits until mutex is released
-    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
-    bool Acquire(bool wait)
-    {
-        assert(m_handle == NULL);
-        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
-        if (m_handle == NULL)
-        {
-            if (!wait)
-                return false;   // can't lock due to access permissions: lock already exists, consider not available
-            else
-                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
-        }
+// Wrap a TVM function to a function that invokes MXNet's Engine
+// It does two things: call the engine properly
+// set up the NDArray to DLTensor during invocation.
+void WrapAsyncCall(TVMArgs wrap_args, TVMRetValue* wrap_rv) {
+  PackedFunc f = wrap_args[0];
+  PackedFunc fset_stream =  wrap_args[1];
+  int num_const = wrap_args[2];
     }
     
-        string precision = config(L'precision', 'float');
+    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
+.describe(R'code(
     
-    using namespace std;
+    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#include <vector>
+#include './lrn-inl.h'
     
-    // -----------------------------------------------------------------------
-// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
-// -----------------------------------------------------------------------
+    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
+.describe('Apply a sparse regularization to the output a sigmoid activation function.')
+.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
+.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
+    
+      void query(ExtensionResponse& _return, const std::string& sql) {
+    // Your implementation goes here
+    printf('query\n');
+  }
+    
+    
+    {  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+    
+    /*
+** If an input line begins with '.' then invoke this routine to
+** process that line.
+**
+** Return 1 on error, 2 to exit, and 0 otherwise.
+*/
+static int do_meta_command(char* zLine, struct callback_data* p) {
+  int i = 1;
+  int nArg = 0;
+  int n, c;
+  int rc = 0;
+  char* azArg[50];
+    }
+    
+    class keychainItems : public testing::Test {
+ protected:
+  void SetUp() override {
+    setUpEnvironment();
+  }
+};
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+      // drop column family
+  s = db->DropColumnFamily(handles[1]);
+  assert(s.ok());
+    
+    class MyMerge : public rocksdb::MergeOperator {
+ public:
+  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
+                           MergeOperationOutput* merge_out) const override {
+    merge_out->new_value.clear();
+    if (merge_in.existing_value != nullptr) {
+      merge_out->new_value.assign(merge_in.existing_value->data(),
+                                  merge_in.existing_value->size());
+    }
+    for (const rocksdb::Slice& m : merge_in.operand_list) {
+      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
+      // the compaction filter filters out bad values
+      assert(m.ToString() != 'bad');
+      merge_out->new_value.assign(m.data(), m.size());
+    }
+    return true;
+  }
+    }
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
