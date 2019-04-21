@@ -1,91 +1,158 @@
 
         
-              def select?(options)
-        options.each do |k, v|
-          callable = v.respond_to?(:call) ? v : ->(server) { server.fetch(v) }
-          result = \
-            case k
-            when :filter, :select
-              callable.call(self)
-            when :exclude
-              !callable.call(self)
+                  def checked?(value)
+            case value
+            when TrueClass, FalseClass
+              value == !!@checked_value
+            when NilClass
+              false
+            when String
+              value == @checked_value
             else
-              fetch(k) == v
+              if value.respond_to?(:include?)
+                value.include?(@checked_value)
+              else
+                value.to_i == @checked_value.to_i
+              end
             end
-          return false unless result
+          end
+    
+              def render_component(builder)
+            builder.radio_button + builder.label
+          end
+      end
+    end
+  end
+end
+
+    
+          test 'when layout is specified as nil, do not use a layout' do
+        controller = WithNilLayout.new
+        controller.process(:index)
+        assert_equal 'Hello nil!', controller.response_body
+      end
+    
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
         end
     
-    module Sinatra
-  class Application < Base
+            if parallel?
+          raise RateLimitError
+        else
+          sleep(rate_limit_resets_in)
+        end
+      end
     
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+            def create_labels
+          time = Time.zone.now
+          rows = []
+          target_id = find_target_id
+    
+          # The name of the method to call to retrieve the data to import.
+      def collection_method
+        raise NotImplementedError
+      end
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+          @report_note = current_account.report_notes.new(resource_params)
+      @report = @report_note.report
+    
+      def load_export
+    @export = Export.new(current_account)
   end
     
-          def compare_with_real_token(token, session)
-        secure_compare(token, real_token(session))
-      end
+      def rate_limit_reset
+    (request_time + reset_period_offset).iso8601(6)
+  end
     
-          def encrypt(value)
-        options[:encryptor].hexdigest value.to_s
-      end
+      def prepend(*paths)
+    @paths = parse(*paths, *@paths)
+    self
+  end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
+              # Encodes the renew_time field
+          #
+          # @return [String]
+          def encode_renew_time
+            [renew_till].pack('N')
+          end
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
     
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
+              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
+            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
+            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
+            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
+            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
+            seq_asn1.to_der
+          end
+    
+      preflight do
+    processes = system_command '/bin/launchctl', args: ['list']
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          default_options :escape => :html,
+        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
     
         headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
+    expect(headers['Content-Security-Policy']).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
   end
+    
+    module LogStash
+  module PluginManager
+  end
+end
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    end
