@@ -1,350 +1,320 @@
 
         
-            void setModel(WalletModel *model);
-    void setAddress_SM(const QString &address);
-    void setAddress_VM(const QString &address);
+        
+    {}  // namespace atom
+
     
-    #include 'include/secp256k1_ecdh.h'
-#include 'ecmult_const_impl.h'
+    namespace api {
+    }
     
-        // Escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\ Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\Baz\'', {
-            {'Foo', 'BarBaz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\@Baz\'', {
-            {'Foo', 'Bar@Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
-            {'Foo', 'Bar\'Baz'},
-            {'Spam', '\'Eggs\''},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\\Baz\'', {
-            {'Foo', 'Bar\\Baz'},
-        });
+    class AtomBrowserContext;
     
-    #include <stdint.h>
-#include <string>
-#include <vector>
+    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
+ public:
+  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
+  ~AtomJavaScriptDialogManager() override;
+    }
     
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
+    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+    
+    #if !defined(OS_MACOSX) || defined(MAS_BUILD)
+std::string AutoUpdater::GetFeedURL() {
+  return '';
 }
     
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
+}
     
-    {  template<typename T> bool RemoveListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i!=listerners_.end()) {
-      delete i->second;
-      listerners_.erase(i);
+    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
+
+    
+    class AsarProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit AsarProtocolHandler(
+      const scoped_refptr<base::TaskRunner>& file_task_runner);
+  ~AsarProtocolHandler() override;
+    }
+    
+    #include <string>
+    
+    #include 'ui/views/view.h'
+    
+    TegraCvtColor_Invoker(rgb2gray, rgb2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                                          dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(bgr2gray, bgr2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                                          dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgbx2gray, rgbx2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                                            dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(bgrx2gray, bgrx2gray, CAROTENE_NS::COLOR_SPACE_BT601, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                                            dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+#define TEGRA_CVTBGRTOGRAY(src_data, src_step, dst_data, dst_step, width, height, depth, scn, swapBlue) \
+( \
+    depth == CV_8U && CAROTENE_NS::isSupportedConfiguration() ? \
+        scn == 3 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgb2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_bgr2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        scn == 4 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgbx2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_bgrx2gray_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
+    
+    
+    {        vs1 = vmla_f32(vget_low(vgamma), vs1, vget_low(valpha));
+        vs1 = vmla_f32(vs1, vs2, vget_low(vbeta));
+        v_dst = vcvt_s32_f32(vs1);
+    }
+    
+    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
+#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
+#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
+#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
+    
+    f64 dotProduct(const Size2D &_size,
+               const u8 * src0Base, ptrdiff_t src0Stride,
+               const u8 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    }
+    
+    namespace {
+    }
+    
+    namespace CAROTENE_NS {
+    }
+    
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    }
+    
+    #include <gtest/gtest.h>
+    
+    // TODO(thomasvl): Should probably add some unittests for all the special cases
+// of name mangling (class name, field name, enum names).  Rather than doing
+// this with an ObjC test in the objectivec directory, we should be able to
+// use src/google/protobuf/compiler/importer* (like other tests) to support a
+// virtual file system to feed in protos, once we have the Descriptor tree, the
+// tests could use the helper methods for generating names and validate the
+// right things are happening.
+    
+    void MapLiteTestUtil::ExpectMapFieldsSetInitialized(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsSetInitialized<unittest::MapEnumLite,
+                                                 unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+    bool Status::operator==(const Status& x) const {
+  return error_code_ == x.error_code_ &&
+      error_message_ == x.error_message_;
+}
+    
+    using google::protobuf::io::FileOutputStream;
+using google::protobuf::io::GzipOutputStream;
+    
+    namespace {
+    }
+    
+     private:
+  static bool IsMessageSet(const Descriptor *descriptor) {
+    if (descriptor != nullptr
+        && descriptor->options().message_set_wire_format()) {
       return true;
     }
     return false;
   }
-private:
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
-};
-    
-    void Menu::Popup(int x, int y, content::Shell* shell) {
-  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
-  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
-  gfx::Point point;
-  if (!event) {
-    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
-    // point = gfx::Point(x + bounds.x(), y + bounds.y());
-    DVLOG(1) << 'no last mouse down event';
-    point = gfx::Point(x, y);
-  }else
-    point = gfx::Point(event->x_root, event->y_root);
-    }
     
     
-    {} // namespace ui
-    
-        bool ReadRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      std::string text;
-      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(text));
-      return true;
-    }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    #undef cv_hal_cmp8u
-#define cv_hal_cmp8u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u8, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp8s
-#define cv_hal_cmp8s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s8, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp16u
-#define cv_hal_cmp16u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u16, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp16s
-#define cv_hal_cmp16s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s16, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp32s
-#define cv_hal_cmp32s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s32, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp32f
-#define cv_hal_cmp32f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f32, src1, sz1, src2, sz2, dst, sz, w, h, op)
-//#undef cv_hal_cmp64f
-//#define cv_hal_cmp64f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f64, src1, sz1, src2, sz2, dst, sz, w, h, op)
-    
-        void convertScale(const Size2D &_size,
-                      const s32 * srcBase, ptrdiff_t srcStride,
-                      u16 * dstBase, ptrdiff_t dstStride,
-                      f64 alpha, f64 beta);
-    
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
-        v_dst = internal::vqsubq(v_max, v_min);
-    }
-    
-    void add(const Size2D &size,
-         const u32 * src0Base, ptrdiff_t src0Stride,
-         const u32 * src1Base, ptrdiff_t src1Stride,
-         u32 * dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u32, u64>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u32, u64>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-            mag_buf[1][0] = mag_buf[1][size.width+1] = 0;
-        if (borderyt == 0)
-        {
-            //sobelH row #-1
-            _src = internal::getRowPtr(srcBase, srcStride, -1);
-            sobelRow(_src, ((s16*)mag_buf[2]) + shxOffset, ((s16*)mag_buf[2]) + shyOffset, size.width);
-    }
-    
-    #include <carotene/functions.hpp>
-#include 'saturate_cast.hpp'
-    
-    INRANGEFUNC(u8)
-INRANGEFUNC(s8)
-INRANGEFUNC(u16)
-INRANGEFUNC(s16)
-INRANGEFUNC(s32)
-INRANGEFUNC(f32)
-    
-            int16x8_t tcurr = vmovq_n_s16(0x0);
-        int16x8_t tnext = vmovq_n_s16(0x0);
-        int16x8_t t0, t2;
-        uint8x8_t xx0 = vmov_n_u8(0x0);
-        uint8x8_t xx1 = vmov_n_u8(0x0);
-        uint8x8_t xx2 = vmov_n_u8(0x0);
-        ptrdiff_t x = 0;
-        const ptrdiff_t bcols = y + 2 < rows ? cols : (cols - 8);
-        for( ; x <= bcols; x += 8 )
-        {
-            internal::prefetch(v0 + x);
-            internal::prefetch(v1 + x);
-            internal::prefetch(v2 + x);
-    }
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-    /// @brief Fills a Blob with constant or randomly-generated data.
-template <typename Dtype>
-class Filler {
- public:
-  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
-  virtual ~Filler() {}
-  virtual void Fill(Blob<Dtype>* blob) = 0;
- protected:
-  FillerParameter filler_param_;
-};  // class Filler
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {  /// Whether to ignore instances with a certain label.
-  bool has_ignore_label_;
-  /// The label indicating that an instance should be ignored.
-  int ignore_label_;
-  /// Keeps counts of the number of samples per class.
-  Blob<Dtype> nums_buffer_;
-};
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    
-    {  // extra temporarary variables is used to carry out sums/broadcasting
-  // using BLAS
-  Blob<Dtype> batch_sum_multiplier_;
-  Blob<Dtype> num_by_chans_;
-  Blob<Dtype> spatial_sum_multiplier_;
-};
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  bool ReadProtoFromTextContent(const std::string& text,
+                                ::google::protobuf::Message* proto) const {
+    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
+    return success;
+  }
     
     namespace mxnet {
-namespace ndarray {
+namespace engine {
     }
     }
     
-      ~CuDNNBilinearSamplerOp() {
-    if (init_cudnn_) {
-      CUDNN_CALL(cudnnDestroySpatialTransformerDescriptor(st_desc_));
-      CUDNN_CALL(cudnnDestroyTensorDescriptor(in_desc_));
-      CUDNN_CALL(cudnnDestroyTensorDescriptor(out_desc_));
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
+    
+    
+    {  Stream<xpu> *stream = ctx.get_stream<xpu>();
+  Tensor<xpu, 2, DType> out = out_data[0].get<xpu, 2, DType>(stream);
+  std::vector<Tensor<xpu, 2, DType> > ts_arr(in_data.size());
+  std::transform(in_data.begin(), in_data.end(), ts_arr.begin(),
+                 [&stream](TBlob blob) -> Tensor<xpu, 2, DType> {
+                   return blob.get<xpu, 2, DType>(stream);
+                 });
+  khatri_rao(out, ts_arr);
+}
+    
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                        sampler_,
+                                                        dtype_,
+                                                        4,
+                                                        dim));
     }
   }
     
-      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                           const std::string &filename, bool constants_only,
-                           bool is_system);
+    template<>
+Operator *CreateOp<cpu>(NDArrayOpParam param) {
+  return new NDArrayOp<cpu>(param);
+}
     
-    #include <folly/String.h>
     
-    void LiveRegionHost::Announce(NarratorAnnouncement^ announcement)
-{
-    if (m_host == nullptr)
+    {        return dict[versionKey].Value<size_t>();
+    }
+    
+    
+    {    ~CrossProcessMutex()
     {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-            static NarratorAnnouncement^ GetAnnouncement(Windows::UI::Xaml::DependencyObject^ element)
+        if (m_fd != -1)
         {
-            return safe_cast<NarratorAnnouncement^>(element->GetValue(s_announcementProperty));
+            Release();
         }
+    }
+};
     
-    INarratorAnnouncementHost^ NotificationHost::MakeHost()
-{
-    return ref new NotificationHost();
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
+    {
+        Base::CopyTo(nodeP, newName, flags);
+        if (flags & CopyNodeFlags::copyNodeValue)
+        {
+            auto node = dynamic_pointer_cast<ClassificationErrorNode<ElemType>>(nodeP);
+            node->m_maxIndexes0->SetValue(*m_maxIndexes0);
+            node->m_maxIndexes1->SetValue(*m_maxIndexes1);
+            node->m_maxValues->SetValue(*m_maxValues);
+        }
+    }
+    // request matrices needed to do node function value evaluation
+    virtual void RequestMatricesBeforeForwardProp(MatrixPool& matrixPool)
+    {
+        Base::RequestMatricesBeforeForwardProp(matrixPool);
+        RequestMatrixFromPool(m_maxIndexes0, matrixPool);
+        RequestMatrixFromPool(m_maxIndexes1, matrixPool);
+        RequestMatrixFromPool(m_maxValues, matrixPool);
+    }
+    
+    
+    {}
+    
+      /**
+   * Fill up vector with summary information.
+   */
+  virtual void debuggerInfo(InfoVec& /*info*/) {}
+    
+    PlainDirectory::PlainDirectory(int fd) {
+  m_dir = ::fdopendir(fd);
 }
     
-    void DHTReplaceNodeTask::sendMessage()
-{
-  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
-  if (!questionableNode) {
-    setFinished(true);
-  }
-  else {
-    getMessageDispatcher()->addMessageToQueue(
-        getMessageFactory()->createPingMessage(questionableNode), timeout_,
-        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
-  }
-}
-    
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
-  }
-    
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-      std::shared_ptr<DHTNode> localNode_;
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) CXX11_OVERRIDE;
-    
-    
-    {} // namespace aria2
-    
-    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
-    
-    
-    {} // namespace aria2
-    
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
+    namespace HPHP {
+    }
