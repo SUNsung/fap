@@ -1,336 +1,193 @@
 
         
-        
-    {  if (!base::JSONWriter::Write(top_dictionary, &json))
-    return false;
-  int written = base::WriteFile(path, json.data(), (int)json.size());
-  if (static_cast<unsigned>(written) != json.size()) {
-    LOG(ERROR) << 'Error writing ' << path.AsUTF8Unsafe()
-               << ' ; write result:' << written << ' expected:' << json.size();
-    return false;
+        /**
+ * @brief Get a specific filler from the specification given in FillerParameter.
+ *
+ * Ideally this would be replaced by a factory pattern, but we will leave it
+ * this way for now.
+ */
+template <typename Dtype>
+Filler<Dtype>* GetFiller(const FillerParameter& param) {
+  const std::string& type = param.type();
+  if (type == 'constant') {
+    return new ConstantFiller<Dtype>(param);
+  } else if (type == 'gaussian') {
+    return new GaussianFiller<Dtype>(param);
+  } else if (type == 'positive_unitball') {
+    return new PositiveUnitballFiller<Dtype>(param);
+  } else if (type == 'uniform') {
+    return new UniformFiller<Dtype>(param);
+  } else if (type == 'xavier') {
+    return new XavierFiller<Dtype>(param);
+  } else if (type == 'msra') {
+    return new MSRAFiller<Dtype>(param);
+  } else if (type == 'bilinear') {
+    return new BilinearFiller<Dtype>(param);
+  } else {
+    CHECK(false) << 'Unknown filler name: ' << param.type();
   }
-  return true;
+  return (Filler<Dtype>*)(NULL);
 }
     
-    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
     
     
-    {} // namespace nwapi
-
+    {}  // namespace caffe
     
-      static int getUID() {
-    static int id = 0;
-    return ++id;
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+                           const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+                            const vector<bool>& propagate_down,
+                            const vector<Blob<Dtype>*>& bottom);
+    
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
+    
+    template <typename T>
+internal::ParamGenerator<T> Range(T start, T end) {
+  return Range(start, end, 1);
+}
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
+                on_failure)
+    
+    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_DEATH_TEST_INTERNAL_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_DEATH_TEST_INTERNAL_H_
+    
+    
+    {    const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+    const typename ParamGenerator<T1>::iterator begin1_;
+    const typename ParamGenerator<T1>::iterator end1_;
+    typename ParamGenerator<T1>::iterator current1_;
+    const typename ParamGenerator<T2>::iterator begin2_;
+    const typename ParamGenerator<T2>::iterator end2_;
+    typename ParamGenerator<T2>::iterator current2_;
+    const typename ParamGenerator<T3>::iterator begin3_;
+    const typename ParamGenerator<T3>::iterator end3_;
+    typename ParamGenerator<T3>::iterator current3_;
+    const typename ParamGenerator<T4>::iterator begin4_;
+    const typename ParamGenerator<T4>::iterator end4_;
+    typename ParamGenerator<T4>::iterator current4_;
+    const typename ParamGenerator<T5>::iterator begin5_;
+    const typename ParamGenerator<T5>::iterator end5_;
+    typename ParamGenerator<T5>::iterator current5_;
+    const typename ParamGenerator<T6>::iterator begin6_;
+    const typename ParamGenerator<T6>::iterator end6_;
+    typename ParamGenerator<T6>::iterator current6_;
+    ParamType current_value_;
+  };  // class CartesianProductGenerator6::Iterator
+    
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
   }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
     
     
-    {}  // namespace nwapi
+    {}  // namespace leveldb
 
     
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
+    // Make the CURRENT file point to the descriptor file with the
+// specified number.
+Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number);
     
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
-      }
-    }
-    }
+    // Return a skewed potentially long string
+static std::string RandomSkewedString(int i, Random* rnd) {
+  return BigString(NumberString(i), rnd->Skewed(17));
+}
+    
+    Status Writer::AddRecord(const Slice& slice) {
+  const char* ptr = slice.data();
+  size_t left = slice.size();
     }
     
-    
-    {} // namespace extensions
-#endif
-
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
-    
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-      // When user keys are misordered
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('bar', 99, kTypeValue)));
+      // Return an iterator that yields the contents of the memtable.
+  //
+  // The caller must ensure that the underlying MemTable remains live
+  // while the returned iterator is live.  The keys returned by this
+  // iterator are internal keys encoded by AppendInternalKey in the
+  // db/format.{h,cc} module.
+  Iterator* NewIterator();
     
     namespace leveldb {
-namespace {
-    }
     }
     
-    void Reader::ReportCorruption(uint64_t bytes, const char* reason) {
-  ReportDrop(bytes, Status::Corruption(reason));
-}
-    
-    
-    {  // No copying allowed
-  Writer(const Writer&);
-  void operator=(const Writer&);
-};
-    
-    #include 'db/memtable.h'
-#include 'db/dbformat.h'
-#include 'leveldb/comparator.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'util/coding.h'
-    
-      KeyComparator comparator_;
-  int refs_;
-  Arena arena_;
-  Table table_;
-    
-      // Store the specified number as the sequence number for the start of
-  // this batch.
-  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#endif  // MXNET_RTC_H_
-
-    
-    
-    {
-    {      if (top_size > DATA) {
-        if (param_.flat) {
-          batch_data_ = TBlob(nullptr, mshadow::Shape2(batch_size_,
-                                                       channels_ * width_ * height_),
-                              cpu::kDevCPU, type_flag_);
-        } else {
-          batch_data_ = TBlob(nullptr, mxnet::TShape(top_[DATA]->shape().begin(),
-                                                     top_[DATA]->shape().end()),
-                              cpu::kDevCPU, type_flag_);
-        }
-      }
-      out_.data.clear();
-      if (top_size > LABEL) {
-          batch_label_ = TBlob(nullptr, mxnet::TShape(top_[LABEL]->shape().begin(),
-                                                      top_[LABEL]->shape().end()),
-                               cpu::kDevCPU, type_flag_);
-      }
-      out_.batch_size = batch_size_;
-    }
-  }
-    
-    
-    {
-    {
-    {  /*!
-   * \brief Worker threads.
-   */
-  std::vector<std::thread> worker_threads_;
-  /*!
-   * \brief Startup synchronization objects
-   */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
-  /*!
-   * \brief Disallow default construction.
-   */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
-};
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
-
-    
-    
-    {
-    {
-    {  // creat mean image.
-  inline void CreateMeanImg(void) {
-    if (param_.verbose) {
-      LOG(INFO) << 'Cannot find ' << param_.mean_img
-                << ': create mean image, this will take some time...';
-    }
-    double start = dmlc::GetTime();
-    size_t imcnt = 1;  // NOLINT(*)
-    CHECK(this->Next_()) << 'input iterator failed.';
-    meanimg_.Resize(outimg_.shape_);
-    mshadow::Copy(meanimg_, outimg_);
-    while (this->Next_()) {
-      meanimg_ += outimg_;
-      imcnt += 1;
-      double elapsed = dmlc::GetTime() - start;
-      if (imcnt % 10000L == 0 && param_.verbose) {
-        LOG(INFO) << imcnt << ' images processed, ' << elapsed << ' sec elapsed';
-      }
-    }
-    meanimg_ *= (1.0f / imcnt);
-    // save as mxnet python compatible format.
-    TBlob tmp = meanimg_;
-    {
-      std::unique_ptr<dmlc::Stream> fo(dmlc::Stream::Create(param_.mean_img.c_str(), 'w'));
-      NDArray::Save(fo.get(),
-                    {NDArray(tmp, 0)},
-                    {'mean_img'});
-    }
-    if (param_.verbose) {
-      LOG(INFO) << 'Save mean image to ' << param_.mean_img << '..';
-    }
-    meanfile_ready_ = true;
-    this->BeforeFirst();
-  }
-};
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_ITER_NORMALIZE_H_
-
-    
-      virtual bool Next(void) {
-    if (out_ != nullptr) {
-      recycle_queue_.push(out_); out_ = nullptr;
-    }
-    // do recycle
-    if (recycle_queue_.size() == param_.prefetch_buffer) {
-      DataBatch *old_batch =  recycle_queue_.front();
-      // can be more efficient on engine
-      for (NDArray& arr : old_batch->data) {
-        arr.WaitToWrite();
-      }
-      recycle_queue_.pop();
-      iter.Recycle(&old_batch);
-    }
-    return iter.Next(&out_);
-  }
-  virtual const DataBatch &Value(void) const {
-    return *out_;
-  }
-    
-    struct GradientCompressionParam : public dmlc::Parameter<GradientCompressionParam> {
-  std::string type;
-  float threshold;
-  DMLC_DECLARE_PARAMETER(GradientCompressionParam) {
-    DMLC_DECLARE_FIELD(type)
-      .describe('Type of gradient compression to use, like `2bit` for example');
-    DMLC_DECLARE_FIELD(threshold).set_default(0.5)
-      .describe('Threshold to use for 2bit gradient compression');
-  }
-};
-    
-    #endif  // MXNET_OPERATOR_CONTRIB_KRPROD_H_
-
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file native_op.cc
- * \brief
- * \author Junyuan Xie
-*/
-#include './native_op-inl.h'
-    
-    /**
- * Factory method
- */
-static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
-                                                   Transliterator::Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
-}
-    
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        const ScientificNumberFormatter &other)
-        : UObject(other),
-          fPreExponent(other.fPreExponent),
-          fDecimalFormat(NULL),
-          fStyle(NULL),
-          fStaticSets(other.fStaticSets) {
-    fDecimalFormat = static_cast<DecimalFormat *>(
-            other.fDecimalFormat->clone());
-    fStyle = other.fStyle->clone();
-}
-    
-    
-UBool ScriptSet::operator == (const ScriptSet &other) const {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        if (bits[i] != other.bits[i]) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-    
-    SearchIterator::~SearchIterator()
+    // For now, there are two type of announcement hosts.
+// We'd prefer to use Notification if it's available and fall back to LiveRegion
+// if not.  The availability of the host depends on the version of the OS the app is running on.
+// When the app switches to min version RS3, the LiveRegionHost can be removed and we will always
+// use NotificationHost.
+// TODO - MSFT 12735088
+void NarratorAnnouncementHostFactory::RegisterHosts()
 {
-    if (m_search_ != NULL) {
-        uprv_free(m_search_);
+    // The host that will be used is the first available host,
+    // therefore, order of hosts is important here.
+    NarratorAnnouncementHostFactory::s_hosts = {
+        ref new NotificationHost(),
+        ref new LiveRegionHost()
+    };
+}
+    
+    namespace op
+{
+    const auto FACE_MAX_FACES = POSE_MAX_PEOPLE;
     }
-}
-    
-    class NumberFormat;
-    
-    /**
- * UnicodeReplacer API
- */
-UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
-                                                UBool /*escapeUnprintable*/) const {
-    // assert(segmentNumber > 0);
-    rule.truncate(0);
-    rule.append((UChar)0x0024 /*$*/);
-    ICU_Utility::appendNumber(rule, segmentNumber, 10, 1);
-    return rule;
-}
-    
-    Follow* Follow::create(Node *followedNode, const Rect& rect/* = Rect::ZERO*/)
-{
-    return createWithOffset(followedNode, 0.0, 0.0,rect);
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
-}
-    
-    http://www.cocos2d-x.org
