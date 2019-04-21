@@ -1,152 +1,262 @@
 
         
-        
-    {  ~TemporaryFile() {
-    unlink(path.c_str());
-  }
-};
+        void CacheImpl::removeAll() {
+  cache_remove_all(static_cast<cache_t*>(Impl));
+}
     
-    class GetMergeSingleScalarFeatureTensorsGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    vector<string> input_blob_names{};
-    vector<string> output_blob_names{};
+    #include 'swift/Basic/PrefixMap.h'
+#include 'swift/Basic/QuotedString.h'
+#include 'llvm/ADT/SmallString.h'
+#include 'llvm/Support/Compiler.h'
+    
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
     }
+    
+    bool Punycode::decodePunycodeUTF8(StringRef InputPunycode,
+                                  std::string &OutUTF8) {
+  std::vector<uint32_t> OutCodePoints;
+  if (!decodePunycode(InputPunycode, OutCodePoints))
+    return false;
     }
     
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
+      bool shouldProvideRPathToLinker() const override;
+    
+      // Appends the TestPartResult object to the TestPartResultArray
+  // received in the constructor.
+  //
+  // This method is from the TestPartResultReporterInterface
+  // interface.
+  virtual void ReportTestPartResult(const TestPartResult& result);
+ private:
+  void Init();
+    
+      T* value_;
+  linked_ptr_internal link_;
+    
+     private:
+  // No implementation - assignment is unsupported.
+  void operator=(const CartesianProductHolder10& other);
+    
+    
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
   }
     
+    int main(int argc, char **argv) {
+  InitGoogleTest(&argc, argv);
+    }
     
-    { private:
-  double total_weight;         // no of elements or sum of weights.
-  double sigx;                 // sum of x
-  double sigy;                 // sum of y
-  double sigxx;                // sum x squared
-  double sigxy;                // sum of xy
-  double sigyy;                // sum y squared
-};
-    
-    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
 
     
-    	//Find node with minimum y value (max x if equal)
-	float32 minY = 1e10;
-	float32 maxX = -1e10;
-	int32 minYIndex = -1;
-	for (int32 i = 0; i < nNodes; ++i) {
-		if (nodes[i].position.y < minY && nodes[i].nConnected > 1) {
-			minY = nodes[i].position.y;
-			minYIndex = i;
-			maxX = nodes[i].position.x;
-		} else if (nodes[i].position.y == minY && nodes[i].position.x > maxX && nodes[i].nConnected > 1) {
-			minYIndex = i;
-			maxX = nodes[i].position.x;
+    
+    {  // Sets the 0-terminated C string this MyString object represents.
+  void Set(const char* c_string);
+};
+    
+        /**
+     * Triangulates a polygon using simple ear-clipping algorithm. Returns
+     * size of Triangle array unless the polygon can't be triangulated.
+     * This should only happen if the polygon self-intersects,
+     * though it will not _always_ return null for a bad polygon - it is the
+     * caller's responsibility to check for self-intersection, and if it
+     * doesn't, it should at least check that the return value is non-null
+     * before using. You're warned!
+	 *
+	 * Triangles may be degenerate, especially if you have identical points
+	 * in the input to the algorithm.  Check this before you use them.
+     *
+     * This is totally unoptimized, so for large polygons it should not be part
+     * of the simulation loop.
+     *
+     * Returns:
+     * -1 if algorithm fails (self-intersection most likely)
+     * 0 if there are not enough vertices to triangulate anything.
+     * Number of triangles if triangulation was successful.
+     *
+     * results will be filled with results - ear clipping always creates vNum - 2
+     * or fewer (due to pinch point polygon snipping), so allocate an array of
+	 * this size.
+     */
+	
+int32 TriangulatePolygon(float32* xv, float32* yv, int32 vNum, b2Triangle* results) {
+        if (vNum < 3)
+            return 0;
+    }
+    
+    		Block4x4Encoding(void);
+		//virtual ~Block4x4Encoding(void) =0;
+		virtual ~Block4x4Encoding(void) {}
+		virtual void InitFromSource(Block4x4 *a_pblockParent,
+									ColorFloatRGBA *a_pafrgbaSource,
+    
+    	// ----------------------------------------------------------------------------------------------------
+	//
+	Block4x4Encoding_ETC1::Block4x4Encoding_ETC1(void)
+	{
+		m_mode = MODE_ETC1;
+		m_boolDiff = false;
+		m_boolFlip = false;
+		m_frgbaColor1 = ColorFloatRGBA();
+		m_frgbaColor2 = ColorFloatRGBA();
+		m_uiCW1 = 0;
+		m_uiCW2 = 0;
+		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
+		{
+			m_auiSelectors[uiPixel] = 0;
+			m_afDecodedAlphas[uiPixel] = 1.0f;
 		}
-	}
-    
-    class b2Triangle{
-public:
-	float* x;
-    float* y;
-	b2Triangle();
-	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
-	~b2Triangle();
-	bool IsInside(float32 _x, float32 _y);
-	void Set(const b2Triangle& toMe);
     }
     
-      /* The AF_Blue_String enumeration values are offsets into the */
-  /* `af_blue_strings' array.                                   */
-    
-    
-#define SAMP_MAX 2147483647
-#define TWID_MAX 32767
-#define TRIG_UPSCALE 1
-    
-    #define MULT16_16_Q11_32(a,b)     ((a)*(b))
-#define MULT16_16_Q11(a,b)     ((a)*(b))
-#define MULT16_16_Q13(a,b)     ((a)*(b))
-#define MULT16_16_Q14(a,b)     ((a)*(b))
-#define MULT16_16_Q15(a,b)     ((a)*(b))
-#define MULT16_16_P15(a,b)     ((a)*(b))
-#define MULT16_16_P13(a,b)     ((a)*(b))
-#define MULT16_16_P14(a,b)     ((a)*(b))
-#define MULT16_32_P16(a,b)     ((a)*(b))
-    
-    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
-void opus_fft_free_arm_neon(kiss_fft_state *st);
-    
-    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
-#if OPUS_FAST_INT64
-#define MULT32_32_Q31(a,b) ((opus_val32)SHR((opus_int64)(a)*(opus_int64)(b),31))
-#else
-#define MULT32_32_Q31(a,b) ADD32(ADD32(SHL(MULT16_16(SHR((a),16),SHR((b),16)),1), SHR(MULT16_16SU(SHR((a),16),((b)&0x0000ffff)),15)), SHR(MULT16_16SU(SHR((b),16),((a)&0x0000ffff)),15))
-#endif
-    
-    namespace CNTK
+    class ClipperOffset 
 {
-    class CompositeMinibatchSource final : public MinibatchSource
+public:
+  ClipperOffset(double miterLimit = 2.0, double roundPrecision = 0.25);
+  ~ClipperOffset();
+  void AddPath(const Path& path, JoinType joinType, EndType endType);
+  void AddPaths(const Paths& paths, JoinType joinType, EndType endType);
+  void Execute(Paths& solution, double delta);
+  void Execute(PolyTree& solution, double delta);
+  void Clear();
+  double MiterLimit;
+  double ArcTolerance;
+private:
+  Paths m_destPolys;
+  Path m_srcPoly;
+  Path m_destPoly;
+  std::vector<DoublePoint> m_normals;
+  double m_delta, m_sinA, m_sin, m_cos;
+  double m_miterLim, m_StepsPerRad;
+  IntPoint m_lowest;
+  PolyNode m_polyNodes;
+    }
+    
+    #else  /* not FIXED_POINT*/
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    #endif /* OPUS_ARM_INLINE_MEDIA */
+    
+    #include './exec_pass.h'
+    
+    
     {
-        static const std::wstring PositionAttributeName;
-        static const std::wstring DistributedAfterSampleCountAttributeName;
-    }
-    }
+    {/*! \brief typedef the factory function of data iterator */
+typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
+/*!
+ * \brief Registry entry for DataIterator factory functions.
+ */
+struct ImageAugmenterReg
+    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
+                                        ImageAugmenterFactory> {
+};
+//--------------------------------------------------------------
+// The following part are API Registration of Iterators
+//--------------------------------------------------------------
+/*!
+ * \brief Macro to register image augmenter
+ *
+ * \code
+ * // example of registering a mnist iterator
+ * REGISTER_IMAGE_AUGMENTER(aug_default)
+ * .describe('default augmenter')
+ * .set_body([]() {
+ *     return new DefaultAugmenter();
+ *   });
+ * \endcode
+ */
+#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
+  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_USE_OPENCV
     
-        NDMask::NDMask(const NDShape& shape, const DeviceDescriptor& device)
-        : NDMask(shape, AllocateMatrix(shape, device))
-    {
-        if (shape.Rank() > 2)
-            LogicError('NDMask instance shaped '%S' with more than 2 axes is currently unsupported.', shape.AsString().c_str());
-    }
-    
-            if (!learnerParametersNotPartOfModel.empty())
-            InvalidArgument('Trainer ctor: %d of the learner parameters '%S' are not part of the model specified', 
-                            (int)learnerParametersNotPartOfModel.size(), NamedListString(learnerParametersNotPartOfModel).c_str());
-    
-    
-    {        if (currReaderIter->second->IsLegacyReader())
-        {
-            return true;
-        }
-    }
-    
-        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
-    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
-    size_t currentseed;             // seed for current sequence
-    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
-                                    // special values (randomizeDisable)
-    void Invalidate()
-    {
-        currentseed = (size_t) -1;
-    }
-    
-        ConfigValuePtr NodeToConfigValuePtr(ComputationNodeBasePtr node)
-    {
-        assert(node);
-        auto valuep = ConfigValuePtr(node, [](const std::wstring& msg) { LogicError('CloneFunction (NodeToConfigValuePtr): Unexpected failure: %ls', msg.c_str()); }, node->NodeName());
-        return valuep;
-    }
-    
-    // -----------------------------------------------------------------------
-// DiagTimesNode (vector representing the diagonal of a square matrix, data)
-// Deprecated because can be implemented with ElementTimes.
-// -----------------------------------------------------------------------
-    
-        Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
-    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
-    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
-    
-    
-    {    return StandardPeers::AutomationNotificationKind::Other;
+    template<typename xpu>
+void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                                const float threshold) {
+  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
+  ::Launch(s,
+          inputs[1].Size(),         // original size
+          inputs[1].dptr<float>(),  // out array
+          inputs[0].dptr<float>(),  // compressed array
+          -1 *threshold,            // negative threshold
+          threshold);               // positive threshold
 }
+    
+    
+    {
+    {}  // namespace op
+}  // namespace mxnet
+
+    
+    
+    {
+    {
+    { private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 1U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+      unsigned lrn_n = param_.nsize;
+      double alpha = param_.alpha;
+      double beta = param_.beta;
+      double lrn_k = param_.knorm;
+      CHECK_EQ(data.shape_, out.shape_);
+      CUDNN_CALL(cudnnCreateLRNDescriptor(&lrn_desc_));
+      CUDNN_CALL(cudnnSetLRNDescriptor(lrn_desc_,
+                                       lrn_n,
+                                       alpha,
+                                       beta,
+                                       lrn_k));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&shape_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(shape_desc_,
+                                            CUDNN_TENSOR_NCHW,
+                                            dtype_,
+                                            data.shape_[0],
+                                            data.shape_[1],
+                                            data.shape_[2],
+                                            data.shape_[3]));
+    }
+  }
+  bool init_cudnn_;
+  LRNParam param_;
+  cudnnDataType_t dtype_;
+  cudnnLRNDescriptor_t lrn_desc_;
+  cudnnTensorDescriptor_t shape_desc_;
+};  // class CuDNNLocalResponseNormOp
+}  // namespace op
+}  // namespace mxnet
+#endif  // MXNET_OPERATOR_CUDNN_LRN_INL_H_
