@@ -1,153 +1,101 @@
 
         
-              if existing == nil or value > existing then
-        redis.call('set', key, value)
-        redis.call('expire', key, ttl)
-        return true
-      else
-        return false
-      end
-      EOF
-    
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
-        end
-    
-          def cache_key_iid
-        if object.respond_to?(:noteable_id)
-          object.noteable_id
-        elsif object.respond_to?(:iid)
-          object.iid
-        else
-          raise(
-            TypeError,
-            'Instances of #{object.class} are not supported'
-          )
-        end
-      end
-    end
-  end
-end
-
-    
-        it 'interpolates jsonpath expressions between matching <>'s' do
-      expect(Utils.interpolate_jsonpaths('hello <$.there.world> this <escape works>', payload)).to eq('hello WORLD this should+work')
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-        it 'updates Agents' last_error_log_at when an error is logged' do
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 3, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at).to be_nil
-    
-        alias_method :insert_before, :insert
-    
-          @terminal_width = if !tty?
-        nil
-      elsif ENV['COLUMNS']
-        ENV['COLUMNS'].to_i
-      else
-        `stty size`.scan(/\d+/).last.to_i
-      end
-    rescue
-      @terminal_width = nil
-    end
-  end
-end
-
-    
-            css('h1:not(:first-child)').each do |node|
-          node.name = 'h2'
-        end unless at_css('h2')
-    
-      prepend_before_action :assert_is_devise_resource!
-  respond_to :html if mimes_for_respond_to.empty?
-    
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-    end
-    
-          protected
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
-      end
-    
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
-    end
-    
-              # Return the registry
-          data[:command]
-        end
-    
-              # Handle the case that argv was empty or didn't contain any subcommand
-          main_args = argv.dup if main_args.nil?
-    
-            # This contains all the registered guest capabilities.
+                # Download a file from the remote machine to the local machine.
         #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :guest_capabilities
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
         end
     
-        # Get a value by the given key.
-    #
-    # This will evaluate the block given to `register` and return the
-    # resulting value.
-    def get(key)
-      return nil if !@items.key?(key)
-      return @results_cache[key] if @results_cache.key?(key)
-      @results_cache[key] = @items[key].call
-    end
-    alias :[] :get
-    
-          # Regression test for #4004
-      it 'is able to go from page to page for incomplete orders' do
-        Spree::Order.destroy_all
-        2.times { Spree::Order.create! email: 'incomplete@example.com', completed_at: nil, state: 'cart' }
-        click_on 'Filter'
-        uncheck 'q_completed_at_not_null'
-        click_on 'Filter Results'
-        within('.pagination') do
-          click_link '2'
+            # Mounts a shared folder via NFS. This assumes that the exports
+        # via the host are already done.
+        def mount_nfs(ip, folders)
+          raise BaseError, _key: :unsupported_nfs
         end
-        expect(page).to have_content('incomplete@example.com')
-        expect(find('#q_completed_at_not_null')).not_to be_checked
+    
+              hosts
+        end
+    
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
       end
     end
+  end
+end
+
     
-          within('#sidebar') { click_link 'Variants' }
-      click_link 'New Variant'
-    
-              scope = scope.not_deleted unless params[:show_deleted]
-          scope = scope.not_discontinued unless params[:show_discontinued]
-        else
-          scope = Product.accessible_by(current_ability, :read).active.includes(*product_includes)
+            # This returns any automatically detected errors.
+        #
+        # @return [Array<String>]
+        def _detected_errors
+          return [] if !@__invalid_methods || @__invalid_methods.empty?
+          return [I18n.t('vagrant.config.common.bad_field',
+                         fields: @__invalid_methods.to_a.sort.join(', '))]
         end
     
-            def find_product
-          super(params[:id])
+            # This should return a hash of information that explains how to
+        # SSH into the machine. If the machine is not at a point where
+        # SSH is even possible, then `nil` should be returned.
+        #
+        # The general structure of this returned hash should be the
+        # following:
+        #
+        #     {
+        #       host: '1.2.3.4',
+        #       port: '22',
+        #       username: 'mitchellh',
+        #       private_key_path: '/path/to/my/key'
+        #     }
+        #
+        # **Note:** Vagrant only supports private key based authentication,
+        # mainly for the reason that there is no easy way to exec into an
+        # `ssh` prompt with a password, whereas we can pass a private key
+        # via commandline.
+        #
+        # @return [Hash] SSH information. For the structure of this hash
+        #   read the accompanying documentation for this method.
+        def ssh_info
+          nil
         end
+    
+    # This is the version that ships with OS X 10.10, so be sure we test against it.
+# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
+# so we use a fork that makes a trivial change to a macro invocation.
+gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
+    
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `hash` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `hash` nodes within RuboCop.
+    class HashNode < Node
+      # Returns an array of all the key value pairs in the `hash` literal.
+      #
+      # @return [Array<PairNode>] an array of `pair` nodes
+      def pairs
+        each_pair.to_a
+      end
+    
+        def possible_types
+      MIME::Types.type_for(@filepath).collect(&:content_type)
+    end
