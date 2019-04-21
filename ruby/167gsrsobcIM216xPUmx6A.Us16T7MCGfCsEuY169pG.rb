@@ -1,173 +1,160 @@
 
         
-        module Gitlab
-  module Ci
-    module Pipeline
-      # Class for preloading data associated with pipelines such as commit
-      # authors.
-      class Preloader
-        def self.preload!(pipelines)
-          ##
-          # This preloads all commits at once, because `Ci::Pipeline#commit` is
-          # using a lazy batch loading, what results in only one batched Gitaly
-          # call.
-          #
-          pipelines.each(&:commit)
-    
-            def representation_class
-          Representation::LfsObject
+                class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+          end
         end
     
-            def collection_method
-          :issues_comments
-        end
+                  [:year, :month, :day, :hour, :min, :sec].each do |key|
+                default[key] ||= time.send(key)
+              end
     
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-          it 'deactivates an existing user' do
-        visit admin_users_path
-        expect(page).to have_no_text('inactive')
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
-        expect(page).to have_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).not_to be_active
+          def with_symbol
+        render inline: 'I respond to bare_a: <%= respond_to?(:bare_a) %>'
       end
-    
-        let!(:bob_formatting_agent) {
-      agents(:bob_formatting_agent).tap { |agent|
-        # Make this valid
-        agent.options['instructions']['foo'] = 'bar'
-        agent.save!
-      }
-    }
-    
-        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
     end
     
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+      #
+  # More advanced [] that does downcase comparison.
+  #
+  def [](key)
+    begin
+      rv = self.fetch(key)
+    rescue IndexError
+      rv = nil
+    end
+    if (rv == nil)
+      begin
+        rv = self.dcase_hash[key.downcase]
+      rescue IndexError
+        rv = nil
+      end
     end
     
-            it 'honors updates coming from the UI' do
-          scenario_import.merges = {
-            '0' => {
-              'name' => 'updated name',
-              'schedule' => '6pm',
-              'keep_events_for' => 2.days.to_i.to_s,
-              'disabled' => 'false',
-              'options' => weather_agent_options.merge('api_key' => 'foo').to_json
-            }
-          }
+      #
+  # Updates the command parts for this specific packet type.
+  #
+  def update_cmd_parts(str)
+    if (md = str.match(/^(.+?)\s+(.+?)\s+HTTP\/(.+?)\r?\n?$/i))
+      self.method  = md[1]
+      self.raw_uri = URI.decode(md[2])
+      self.proto   = md[3]
     
-        it 'calls the specified method when the argument is present' do
-      argument = mock()
-      mock(argument).to_i { 1 }
-      expect(Utils.if_present(argument, :to_i)).to eq(1)
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
+        class Principal < Element
+          # @!attribute name_type
+          #   @return [Integer]
+          attr_accessor :name_type
+          # @!attribute realm
+          #   @return [String]
+          attr_accessor :realm
+          # @!attribute components
+          #   @return [Array<String>]
+          attr_accessor :components
+    
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
+          end
+    
+              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
+          def decode_asn1_pa_data(input)
+            pre_auth = []
+            input.value[0].value.each do |pre_auth_data|
+              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
+            end
+    
+              # Decodes the enc_auth_data field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_auth_data(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
+          end
+        end
+      end
     end
   end
 end
 
     
-          @log.level = 5
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:level)
-    
-      before(:each) do
-    stub_request(:get, /events.json$/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    stub_request(:get, /projects.json$/).to_return(
-      :body => JSON.dump([{name: 'test', id: 1234},{name: 'test1', id: 1235}]),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    stub_request(:get, /02:00$/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    @valid_params = { :project_id => 6789 }
-    
-        s = mock('seed')
-    s.should_receive(:to_int).and_return 0
-    srand(s)
-  end
-    
-      it 'returns true when passed ?e if the argument is a file' do
-    Kernel.test(?e, @file).should == true
-  end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-        it 'does not redirect when the registration is open' do
-      AppConfig.settings.enable_registrations = true
-    
-          context 'resharing another user\'s reshare' do
-        before do
-          @root = @post
-          @post = FactoryGirl.create(:reshare, :root => @root, :author => alice.person)
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
+          end
         end
+      end
+    end
+  end
+end
+    
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+    Then(/^the current symlink points to that specific release$/) do
+  specific_release_path = TestApp.releases_path.join(@rollback_release)
+    
+      def test_file_exists(path)
+    exists?('f', path)
+  end
+    
+        def is_question?(key)
+      value = fetch_for(key, nil)
+      !value.nil? && value.is_a?(Question)
+    end
+    
+    set_if_empty :local_user, -> { ENV['USER'] || ENV['LOGNAME'] || ENV['USERNAME'] }
+
+    
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
+    
+    run SinatraStaticServer
+
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
