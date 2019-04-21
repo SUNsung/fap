@@ -1,137 +1,177 @@
 
         
-            def path
-      @path ||= url.path
-    end
+                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
+          @checked_value   = checked_value
+          @unchecked_value = unchecked_value
+          super(object_name, method_name, template_object, options)
+        end
     
-          def stub(path, &block)
-        @stubs[path] = block
-        @stubs
+    describe BuildEnvironment do
+  alias_matcher :use_userpaths, :be_userpaths
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
-    end
     
-          def root
-        css('.nav-index-group').each do |node|
-          if heading = node.at_css('.nav-index-group-heading')
-            heading.name = 'h2'
-          end
-          node.parent.before(node.children)
-        end
-    
-            css('h2:not([id]) a[id]:not([href])').each do |node|
-          node.parent['id'] = node['id']
-          node.before(node.children).remove
-        end
-    
-            # If an active machine of the same name/provider was not
-        # found, it is already false.
-        return false if !found
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-              # If we asked for reversed ordering, then reverse it
-          machines.reverse! if options[:reverse]
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
-  end
-end
-    
-      platform_is_not :windows do
-    it 'does not expand shell variables when given multiples arguments' do
-      lambda { @object.system('echo', @shell_var) }.should output_to_fd('#{@shell_var}\n')
-    end
-  end
-    
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
-    
-    # Ensure the `pod` bin doesn’t think it needs to use Bundler.
-ENV['COCOAPODS_NO_BUNDLER'] = '1'
-    
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
+          # Returns the delta between this element's delimiter and the argument's.
+      #
+      # @note Pairs with different delimiter styles return a delta of 0
+      #
+      # @return [Integer] the delta between the two delimiters
+      def delimiter_delta(other)
+        HashElementDelta.new(self, other).delimiter_delta
       end
     
-        # also set the env LOGSTASH_HOME
-    LOGSTASH_HOME = ENV['LOGSTASH_HOME'] = ::File.expand_path(::File.join(__FILE__, '..', '..', '..'))
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
-      else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
+        def handle_switch(cop_names, names, disabled, extras, comment)
+      cop_names.each do |name|
+        names[name] ||= 0
+        if disabled
+          names[name] += 1
+        elsif names[name] > 0
+          names[name] -= 1
+        else
+          extras << [comment, name]
+        end
       end
     end
   end
 end
 
     
-      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
+          def match?(other)
+        cop_name == other.cop_name &&
+          (!qualified? || department == other.department)
+      end
     
-              it 'allow to install a specific version' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          # Returns page content without title if it was extracted.
+      #
+      def content_without_page_header(content)
+        doc = build_document(content)
+          if @h1_title
+            title = find_header_node(doc)
+            title.remove unless title.empty?
           end
-        end
+        # .inner_html will cause href escaping on UTF-8
+        doc.css('div#gollum-root').children.to_xml(@@to_xml)
       end
-    
-          it 'display a list of installed plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
+  end
+end
+
     
-      describe 'searching orders' do
-    it 'is able to search orders' do
-      fill_in 'q_number_cont', with: 'R200'
-      click_on 'Filter Results'
-      within_row(1) do
-        expect(page).to have_content('R200')
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
+    
+        # Title is based on file name when h1_title is false.
+    actual = @view.title
+    assert_equal 'H1', title
+  end
+end
+
+    
+        class MapGollum
+      def initialize(base_path)
+        @mg = Rack::Builder.new do
+          
+          map '/#{base_path}' do
+            run Precious::App
+          end
+          map '/' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          map '/*' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          
+        end
       end
     
-    desc 'clean the whole repository by removing all the generated files'
-task :clean do
-  rm_f  'Gemfile.lock'
-  rm_rf 'sandbox'
-  rm_rf 'pkg'
+            if obj && obj.errors[method].present?
+          errors = safe_join(obj.errors[method], '<br />'.html_safe)
+          content_tag(:span, errors, class: 'formError')
+        else
+          ''
+        end
+      end
     
-            include Spree::Core::ControllerHelpers::Auth
-        include Spree::Core::ControllerHelpers::Order
-        # This before_action comes from Spree::Core::ControllerHelpers::Order
-        skip_before_action :set_current_order
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
+          end
     
-              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
-                                                                                  variant: variant,
-                                                                                  quantity: params[:line_item][:quantity],
-                                                                                  options: line_item_params[:options]).value
-          if @line_item.errors.empty?
-            respond_with(@line_item, status: 201, default_template: :show)
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
           else
-            invalid_resource!(@line_item)
+            invalid_resource!(@order)
           end
         end
     
-              if params[:page] || params[:per_page]
-            @states = @states.page(params[:page]).per(params[:per_page])
-          end
+          @@payment_source_attributes = [
+        :id, :month, :year, :cc_type, :last_digits, :name
+      ]
