@@ -1,24 +1,36 @@
 
         
-            set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
-    
-    namespace :doc do
-  task :readmes do
-    Dir.glob 'lib/rack/protection/*.rb' do |file|
-      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
-      next if excluded_files.include?(file)
-      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
-      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
-      Dir.mkdir 'doc' unless File.directory? 'doc'
-      puts 'writing #{file}'
-      File.open(file, 'w') { |f| f << doc }
+            def as_json
+      @pages
     end
+    
+        private
+    
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
+    end
+    
+        puts('Generated at #{target_file}')
   end
     
-          NO_ARG_DIRECTIVES = %i(block_all_mixed_content disown_opener
-                             upgrade_insecure_requests).freeze
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
     
-      it 'accepts post requests with masked X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
-    expect(last_response).to be_ok
-  end
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
+        end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
+      end
+    end
