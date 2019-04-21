@@ -1,238 +1,201 @@
 
         
-                a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+                  if name_and_id['for']
+            name_and_id['id'] = name_and_id['for']
+          else
+            name_and_id.delete('id')
+          end
     
-        def as_json
-      @pages
+        group = Group.create!(name: 'bob')
+    group.add(moderator)
+    group.save
+    
+        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
+      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
+      return action_return
     end
     
-            name.prepend '#{breadcrumbs.join('.')}#' if breadcrumbs.present? && breadcrumbs[0] != name
-        name << '()' if %w(Function Method Constructor).include?(subtitle)
-        name
-      end
+          require 'gh_inspector'
+      require 'fastlane_core/ui/github_issue_inspector_reporter'
     
-            css('.toc-close', '.naked-list').remove
-      end
+            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
+        message = options[:message] || '#{tag} (fastlane)'
     
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
+        def doc_default_value
+      return '[*](#parameters-legend-dynamic)' if self.default_value_dynamic
+      return '' if self.default_value.nil?
+      return '`''`' if self.default_value.instance_of?(String) && self.default_value.empty?
+      return '`:#{self.default_value}`' if self.default_value.instance_of?(Symbol)
     
-        # Unsupported codec, return empty
-    else
-      dprint('UNKNOWN CODEC: #{self.codec.inspect}')
-      ''
-    end
+    # remove (double and single) quote pairs
+# un-double-double quote resulting string
+def simulate_windows_shell_unwrapping(string)
+  regex = /^('|')(([^'])(\S*)([^']))('|')$/
+  unless string.to_s.match(regex).nil?
+    string = string.to_s.match(regex)[2] # get only part in quotes
+    string.to_s.gsub!('''', ''') # remove double double quotes
   end
-    
-            # Creates a TCP connection using Rex::Socket::Tcp
-        #
-        # @return [Rex::Socket::Tcp]
-        def create_tcp_connection
-          self.connection = Rex::Socket::Tcp.create(
-            'PeerHost'   => host,
-            'PeerPort'   => port.to_i,
-            'Context'    => context,
-            'Timeout'    => timeout
-          )
-        end
-    
-                encoded
-          end
-    
-              def self.decode(input)
-            elem = self.new
-            elem.decode(input)
-          end
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-    def to_char(c)
-  '0123456789BFiuz'.slice(to_integer(c))
+  return string
 end
     
-    $pnum=[]
-def setpiece(a,pos)
-  if a.length == $p.length then
-    $no += 1
-    pboard
-    return
-  end
-  while $b[pos] != -1
-    pos += 1
-  end
-  ($pnum - a).each do |i|
-    $p[i].each do |x|
-      f = 0
-      x.each{|s|
-        if $b[pos+s] != -1
-          f=1
-          break
-        end
-      }
-      if f == 0 then
-        x.each{|s|
-          $b[pos+s] = i
-        }
-        a << i
-        setpiece(a.dup, pos)
-        a.pop
-        x.each{|s|
-          $b[pos+s] = -1
-        }
+          it 'activates an existing user' do
+        users(:bob).deactivate!
+        visit admin_users_path
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
+        expect(page).to have_no_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).to be_active
       end
-    end
-  end
-end
-    
-      if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
-    end
-  end
-    
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-          def mask_authenticity_token(session)
-        token = set_token(session)
-        mask_token(token)
-      end
-    
-          def csp_policy
-        directives = []
-    
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
-        end
-      end
-    
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+        it 'returns an active nav link' do
+      stub(self).current_page?('/things') { true }
+      nav = nav_link('Things', '/things')
+      expect(nav).to be_html_safe
+      a = Nokogiri(nav).at('li.active > a[href='/things']')
+      expect(a).to be_a Nokogiri::XML::Element
+      expect(a.text.strip).to eq('Things')
     end
     
-          def preference_field_tag(name, value, options)
-        case options[:type]
-        when :integer
-          text_field_tag(name, value, preference_field_options(options))
-        when :boolean
-          hidden_field_tag(name, 0, id: '#{name}_hidden') +
-            check_box_tag(name, 1, value, preference_field_options(options))
-        when :string
-          text_field_tag(name, value, preference_field_options(options))
-        when :password
-          password_field_tag(name, value, preference_field_options(options))
-        when :text
-          text_area_tag(name, value, preference_field_options(options))
-        else
-          text_field_tag(name, value, preference_field_options(options))
-        end
+          it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
       end
     
-            options[:class] = 'sidebar-menu-item d-block w-100'
-        options[:class] << ' selected' if is_selected
-        content_tag(:li, options) do
-          link_to(link_text, url, class: '#{'text-success' if is_selected} py-1 px-3 d-block sidebar-submenu-item')
-        end
-      end
-    
-      SPREE_GEMS.each do |gem_name|
-    rm_f  '#{gem_name}/Gemfile.lock'
-    rm_rf '#{gem_name}/pkg'
-    rm_rf '#{gem_name}/spec/dummy'
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
   end
+    
+      describe '#import and #generate_diff' do
+    let(:scenario_import) do
+      _import = ScenarioImport.new(:data => valid_data)
+      _import.set_user users(:bob)
+      _import
+    end
+    
+          @log.level = 5
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:level)
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+    Rails.application.initialize!
+    
+    module Devise
+  # Responsible for handling devise mappings and routes configuration. Each
+  # resource configured by devise_for in routes is actually creating a mapping
+  # object. You can refer to devise_for in routes for usage options.
+  #
+  # The required value in devise_for is actually not used internally, but it's
+  # inflected to find all other values.
+  #
+  #   map.devise_for :users
+  #   mapping = Devise.mappings[:user]
+  #
+  #   mapping.name #=> :user
+  #   # is the scope used in controllers and warden, given in the route as :singular.
+  #
+  #   mapping.as   #=> 'users'
+  #   # how the mapping should be search in the path, given in the route as :as.
+  #
+  #   mapping.to   #=> User
+  #   # is the class to be loaded from routes, given in the route as :class_name.
+  #
+  #   mapping.modules  #=> [:authenticatable]
+  #   # is the modules included in the class
+  #
+  class Mapping #:nodoc:
+    attr_reader :singular, :scoped_path, :path, :controllers, :path_names,
+                :class_name, :sign_out_via, :format, :used_routes, :used_helpers,
+                :failure_app, :router_name
+    
+          # Read each line as a path
+      File.new(inputs, 'r').each_line do |line|
+        # Handle each line as if it were an argument
+        input.input(line.strip)
+      end
+    end
+    
+        # npm installs dependencies in the module itself, so if you do
+    # 'npm install express' it installs dependencies (like 'connect')
+    # to: node_modules/express/node_modules/connect/...
+    #
+    # To that end, I don't think we necessarily need to include
+    # any automatic dependency information since every 'npm install'
+    # is fully self-contained. That's why you don't see any bother, yet,
+    # to include the package's dependencies in here.
+    #
+    # It's possible someone will want to decouple that in the future,
+    # but I will wait for that feature request.
+  end
+    
+      dont_obsolete_paths = []
+  option '--dont-obsolete', 'DONT_OBSOLETE_PATH',
+    'A file path for which to 'dont-obsolete' in the built PackageInfo. ' \
+    'Can be specified multiple times.' do |path|
+      dont_obsolete_paths << path
+    end
+    
+        bin_dir = attributes[:pear_bin_dir] || 'usr/bin'
+    logger.info('Setting bin_dir', :bin_dir => bin_dir)
+    safesystem('pear', '-c', config, 'config-set', 'bin_dir', bin_dir)
+    
+        args = [ tar_cmd,
+             '-C',
+             staging_path,
+             '-cf',
+             payload_tar,
+             '--owner=0',
+             '--group=0',
+             '--numeric-owner',
+             '.' ]
+    
+      def specfile(builddir)
+    '#{builddir}/pkginfo'
+  end
+    
+        if !success
+      raise ProcessFailed.new('#{program} failed (exit code #{exit_code})' \
+                              '. Full command was:#{args.inspect}')
+    end
+    return success
+  end # def safesystem
+    
+    Given /^(?:|I )am on (.+)$/ do |page_name|
+  visit path_to(page_name)
 end
     
-                log_state_changes if params[:state]
-    
-              if Cart::Update.call(order: @order, params: order_params).success?
-            user_id = params[:order][:user_id]
-            if current_api_user.has_spree_role?('admin') && user_id
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-            respond_with(@order, default_template: :show)
-          else
-            invalid_resource!(@order)
-          end
-        end
-    
-          Sidekiq.redis do |conn|
-        conn.pipelined do
-          jobs_to_requeue.each do |queue, jobs|
-            conn.rpush('queue:#{queue}', jobs)
-          end
-        end
-      end
-      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
-    rescue => ex
-      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+        def empty_file?
+      File.exist?(@filepath) && File.size(@filepath) == 0
     end
     
-          def each(&block)
-        entries.each(&block)
-      end
+        private
+    
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
+    end
