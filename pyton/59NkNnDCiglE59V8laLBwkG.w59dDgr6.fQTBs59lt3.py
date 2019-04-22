@@ -1,82 +1,96 @@
 
         
-        
-@pytest.fixture
-def runner(app):
-    '''A test runner for the app's Click commands.'''
-    return app.test_cli_runner()
+          # Print the confusion matrix
+  print('%s confusion matrix:' % set_name)
+  cm = metrics.confusion_matrix(labels, pred, labels=range(len(classes)))
+  cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100
+  print_cm(cm, labels=classes)
+  return pred
+    
+      Returns:
+    The path embeddings matrix and the path_to_index dictionary.
+  '''
+  prefix = path_embeddings_dir + '/%d' % path_dim + '_'
+  with open(prefix + 'path_vocab') as f_in:
+    vocab = f_in.read().splitlines()
+    
+        # ENCODERS
+    def encode_data(dataset_bxtxd, enc_cell, name, forward_or_reverse,
+                num_steps_to_encode):
+      '''Encode data for LFADS
+      Args:
+        dataset_bxtxd - the data to encode, as a 3 tensor, with dims
+          time x batch x data dims.
+        enc_cell: encoder cell
+        name: name of encoder
+        forward_or_reverse: string, encode in forward or reverse direction
+        num_steps_to_encode: number of steps to  encode, 0:num_steps_to_encode
+      Returns:
+        encoded data as a list with num_steps_to_encode items, in order
+      '''
+      if forward_or_reverse == 'forward':
+        dstr = '_fwd'
+        time_fwd_or_rev = range(num_steps_to_encode)
+      else:
+        dstr = '_rev'
+        time_fwd_or_rev = reversed(range(num_steps_to_encode))
     
     
-python_3 = (u'thefuck/python3-bash',
-            u'FROM python:3',
-            u'sh')
     
+      Returns:
+    mask1: mask for first sentence
+    mask2: mask for second sentence
+  '''
+  mask1_start, mask2_start = [], []
+  while sent1[0] == sent2[0]:
+    sent1 = sent1[1:]
+    sent2 = sent2[1:]
+    mask1_start.append(0.)
+    mask2_start.append(0.)
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
+      train_path = os.path.join(data_path, 'train_lm.tfrecords')
+  valid_path = os.path.join(data_path, 'test_lm.tfrecords')
     
-        assert match(command)
+              [gen_initial_state_eval, fake_gen_initial_state_eval, _] = sess.run(
+              [
+                  model.eval_final_state, model.fake_gen_final_state,
+                  model.global_step
+              ],
+              feed_dict=eval_feed)
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+      Args:
+    gen_logits: Generator logits.
+    gen_labels:  Labels for the correct token.
+    dis_predictions:  Discriminator predictions.
+    is_real_input:  Tensor indicating whether the label is present.
     
+    import tensorflow as tf
     
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+        with tf.variable_scope('rnn') as vs:
+      outputs, _, _ = tf.contrib.rnn.static_bidirectional_rnn(
+          cell_fwd, cell_bwd, rnn_inputs, state_fwd, state_bwd, scope=vs)
     
+        if temperature_unit != ha_unit:
+        temperature = convert_temperature(
+            temperature, temperature_unit, ha_unit)
     
-def fetch(version):
-    base = 'http://wheels.scipy.org'
-    tree = html.parse(base)
-    root = tree.getroot()
+        config_path = config_util.ensure_config_exists(config_dir)
+    print('Configuration file:', config_path)
+    return 0
+
     
-    
-def pack(o, stream, **kwargs):
-    '''
-    Pack object `o` and write it to `stream`
-    
-    from .base import BaseExtensionTests
-    
-    random.shuffle(docs)
-    
-        def testPosseg(self):
-        import jieba.posseg as pseg
-        for content in test_contents:
-            result = pseg.cut(content)
-            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
-            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
-        print('testPosseg', file=sys.stderr)
+        res = yield from async_setup_component(hass, automation.DOMAIN, {
+        automation.DOMAIN: {
+            'alias': 'hello',
+            'trigger': {
+                'platform': 'homeassistant',
+                'event': 'shutdown',
+            },
+            'action': {
+                'service': 'test.automation',
+            }
+        }
+    })
+    assert res
+    assert not automation.is_on(hass, 'automation.hello')
+    assert len(calls) == 0
