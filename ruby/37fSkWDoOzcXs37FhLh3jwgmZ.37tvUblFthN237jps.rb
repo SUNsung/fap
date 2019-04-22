@@ -1,50 +1,50 @@
 
         
-                    # Prepend a hidden field to make sure something will be sent back to the
-            # server if all radio buttons are unchecked.
-            if options.fetch('include_hidden', true)
-              hidden_field + rendered_collection
-            else
-              rendered_collection
-            end
-          end
+        module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-          []
-    end
+              # Setup the options hash
+          options ||= {}
     
-        def message
-      @string.force_encoding(Encoding::ASCII_8BIT)
-      'Your template was not saved as valid #{@encoding}. Please ' \
-      'either specify #{@encoding} as the encoding for your template ' \
-      'in your text editor, or mark the template with its ' \
-      'encoding by inserting the following as the first line ' \
-      'of the template:\n\n# encoding: <name of correct encoding>.\n\n' \
-      'The source of your template was:\n\n#{@string}'
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
+    
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Environment] env Vagrant::Environment object of the
+        #   environment that this configuration has been loaded into. This
+        #   gives you convenient access to things like the the root path
+        #   and so on.
+        # @param [ErrorRecorder] errors
+        def validate(env, errors)
+        end
+      end
     end
   end
-    
-          cattr_accessor :type_klass
-    
-          test 'when a child controller does not have a layout, use the parent controller layout' do
-        controller = WithStringChild.new
-        controller.process(:index)
-        assert_equal 'With String Hello string!', controller.response_body
-      end
-    
-            def create_labels
-          time = Time.zone.now
-          rows = []
-          target_id = find_target_id
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class LfsObjectsImporter
-        include ParallelScheduling
-    
-            def importer_class
-          NoteImporter
-        end
+end
+
     
             # Configures the given list of networks on the virtual machine.
         #
@@ -63,49 +63,89 @@
           raise BaseError, _key: :unsupported_configure_networks
         end
     
-              # Register a new guest class only if a name was given
-          data[:guests].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
         end
+    
+            # This registers a plugin. This should _NEVER_ be called by the public
+        # and should only be called from within Vagrant. Vagrant will
+        # automatically register V2 plugins when a name is set on the
+        # plugin.
+        def register(plugin)
+          if !@registered.include?(plugin)
+            @logger.info('Registered plugin: #{plugin.name}')
+            @registered << plugin
+          end
+        end
+    
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
+    end
+    
+      gem 'bacon'
+  gem 'mocha'
+  gem 'mocha-on-bacon'
+  gem 'prettybacon'
+  gem 'webmock'
+    
+    (deny default)
+EOS
+    
+            END_OF_OUTPUT_SIGNAL = '\n\r'.freeze
+    
+        def for(file_or_dir)
+      return @options_config if @options_config
+    
+          def match?(other)
+        cop_name == other.cop_name &&
+          (!qualified? || department == other.department)
       end
+    
+          def upload_dest
+        @upload_dest
+      end
+    
+          def date
+        first = page.last_version
+        return Time.now.strftime(DATE_FORMAT) unless first
+        first.authored_date.strftime(DATE_FORMAT)
+      end
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
+    
+    desc 'Update gemspec'
+task :gemspec => :validate do
+  # read spec file and split out manifest section
+  spec = File.read(gemspec_file)
+  head, manifest, tail = spec.split('  # = MANIFEST =\n')
+    
+      if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+      config.url = wiki_options[:plantuml_url]
     end
   end
-end
-
-    
-              # We split the arguments into two: One set containing any
-          # flags before a word, and then the rest. The rest are what
-          # get actually sent on to the subcommand.
-          argv.each_index do |i|
-            if !argv[i].start_with?('-')
-              # We found the beginning of the sub command. Split the
-              # args up.
-              main_args   = argv[0, i]
-              sub_command = argv[i]
-              sub_args    = argv[i + 1, argv.length - i + 1]
-    
-      def subscription
-    @_subscription ||= @account.subscription(
-      api_subscription_url(@account.id)
-    )
-  end
-    
-        12.times do |i|
-      day     = i.weeks.ago.to_date
-      week_id = day.cweek
-      week    = Date.commercial(day.cwyear, week_id)
-    
-      def update
-    setting.data = params[:data]
-    setting.save!
-    
-    class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
