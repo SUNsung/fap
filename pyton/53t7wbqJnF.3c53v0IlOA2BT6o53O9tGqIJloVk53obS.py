@@ -1,190 +1,132 @@
 
         
-        
-def test_objective_shapes_3d():
-    y_a = K.variable(np.random.random((5, 6, 7)))
-    y_b = K.variable(np.random.random((5, 6, 7)))
-    for obj in allobj:
-        objective_output = obj(y_a, y_b)
-        assert K.eval(objective_output).shape == (5, 6)
+            # Retrieve any AWS settings from the environment.
+    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    if not region:
+        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
     
-    # Create the dataset and its associated one-shot iterator.
-dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-dataset = dataset.repeat()
-dataset = dataset.shuffle(buffer_size)
-dataset = dataset.batch(batch_size)
-iterator = dataset.make_one_shot_iterator()
+        '''Get an elasticache connection'''
+    try:
+        conn = connect_to_region(region_name=region, **aws_connect_kwargs)
+    except boto.exception.NoAuthHandlerFound as e:
+        module.fail_json(msg=e.message)
     
-    model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
-              metrics=['accuracy'])
+        module.exit_json(**result)
     
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
+DOCUMENTATION = '''
+---
+module: bigpanda
+author: 'Hagai Kariti (@hkariti)'
+short_description: Notify BigPanda about deployments
+version_added: '1.8'
+description:
+   - Notify BigPanda when deployments start and end (successfully or not). Returns a deployment object containing all the parameters for future module calls.
+options:
+  component:
+    description:
+      - 'The name of the component being deployed. Ex: billing'
+    required: true
+    aliases: ['name']
+  version:
+    description:
+      - The deployment version.
+    required: true
+  token:
+    description:
+      - API token.
+    required: true
+  state:
+    description:
+      - State of the deployment.
+    required: true
+    choices: ['started', 'finished', 'failed']
+  hosts:
+    description:
+      - Name of affected host name. Can be a list.
+    required: false
+    default: machine's hostname
+    aliases: ['host']
+  env:
+    description:
+      - The environment name, typically 'production', 'staging', etc.
+    required: false
+  owner:
+    description:
+      - The person responsible for the deployment.
+    required: false
+  description:
+    description:
+      - Free text description of the deployment.
+    required: false
+  url:
+    description:
+      - Base URL of the API server.
+    required: False
+    default: https://api.bigpanda.io
+  validate_certs:
+    description:
+      - If C(no), SSL certificates for the target url will not be validated. This should only be used
+        on personally controlled sites using self-signed certificates.
+    required: false
+    default: 'yes'
+    type: bool
     
-            if self.home_interval:
-            boundary = dt_util.now() - self.home_interval
-            last_results = [device for device in self.last_results
-                            if device.last_update > boundary]
-            if last_results:
-                exclude_hosts = self.exclude + [device.ip for device
-                                                in last_results]
-            else:
-                exclude_hosts = self.exclude
-        else:
-            last_results = []
-            exclude_hosts = self.exclude
-        if exclude_hosts:
-            options += ' --exclude {}'.format(','.join(exclude_hosts))
+    EXAMPLES = '''
+- honeybadger_deployment:
+    token: AAAAAA
+    environment: staging
+    user: ansible
+    revision: b6826b8
+    repo: 'git@github.com:user/repo.git'
+'''
     
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
+    short_description: Manage Icinga2 feature
+description:
+    - This module can be used to enable or disable an Icinga2 feature.
+version_added: '2.3'
+author: 'Loic Blot (@nerzhul)'
+options:
+    name:
+      description:
+      - This is the feature name to enable or disable.
+      required: True
+    state:
+      description:
+      - If set to C(present) and feature is disabled, then feature is enabled.
+      - If set to C(present) and feature is already enabled, then nothing is changed.
+      - If set to C(absent) and feature is enabled, then feature is disabled.
+      - If set to C(absent) and feature is already disabled, then nothing is changed.
+      choices: [ 'present', 'absent' ]
+      default: present
+'''
     
-    CONF_ROOMID = 'roomid'
     
-        def __init__(self, app_name, app_icon, hostname, password, port):
-        '''Initialize the service.'''
-        import gntp.notifier
-        import gntp.errors
-        self.gntp = gntp.notifier.GrowlNotifier(
-            applicationName=app_name,
-            notifications=['Notification'],
-            applicationIcon=app_icon,
-            hostname=hostname,
-            password=password,
-            port=port
-        )
+def request(resource, xml=None, method=None):
+    headers = {
+        'Content-Type': 'application/xml',
+        'Accept': 'application/xml'
+    }
+    
+    
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
+    
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
+
+    
+        @nonce.decoder
+    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
         try:
-            self.gntp.register()
-        except gntp.errors.NetworkError:
-            _LOGGER.error('Unable to register with the GNTP host')
-            return
-    
-    DEFAULT_PORT = 1035
+            return jose.decode_b64jose(value)
+        except jose.DeserializationError as error:
+            # TODO: custom error
+            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
     
     
-def im_detect_bbox(model, im, target_scale, target_max_size, boxes=None):
-    '''Bounding box object detection for an image with given box proposals.
-    
-        def AddMetrics(self, metrics):
-        if not isinstance(metrics, list):
-            metrics = [metrics]
-        self.metrics = list(set(self.metrics + metrics))
-    
-    # Verify that we compute the same anchors as Shaoqing's matlab implementation:
-#
-#    >> load output/rpn_cachedir/faster_rcnn_VOC2007_ZF_stage1_rpn/anchors.mat
-#    >> anchors
-#
-#    anchors =
-#
-#       -83   -39   100    56
-#      -175   -87   192   104
-#      -359  -183   376   200
-#       -55   -55    72    72
-#      -119  -119   136   136
-#      -247  -247   264   264
-#       -35   -79    52    96
-#       -79  -167    96   184
-#      -167  -343   184   360
-    
-        sampled_fg_rois = roidb['boxes'][kp_fg_inds]
-    box_to_gt_ind_map = roidb['box_to_gt_ind_map'][kp_fg_inds]
-    
-    
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
-    '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
-        )
-    else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
-    
-        # get anchors from all levels for all scales/aspect ratios
-    foas = []
-    for lvl in range(k_min, k_max + 1):
-        stride = 2. ** lvl
-        for octave in range(scales_per_octave):
-            octave_scale = 2 ** (octave / float(scales_per_octave))
-            for idx in range(num_aspect_ratios):
-                anchor_sizes = (stride * octave_scale * anchor_scale, )
-                anchor_aspect_ratios = (aspect_ratios[idx], )
-                foa = data_utils.get_field_of_anchors(
-                    stride, anchor_sizes, anchor_aspect_ratios, octave, idx)
-                foas.append(foa)
-    all_anchors = np.concatenate([f.field_of_anchors for f in foas])
-    
-    import random
-import signal
-import subprocess
-    
-    define('num', default=10000, help='number of iterations')
-    
-    
-class FixFutureImports(fixer_base.BaseFix):
-    BM_compatible = True
-    
-        .. versionchanged:: 5.0
-       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
-    '''
-    
-        def run_policy_test(self, accessor, expected_type):
-        # With the default policy, non-main threads don't get an event
-        # loop.
-        self.assertRaises(
-            (RuntimeError, AssertionError), self.executor.submit(accessor).result
-        )
-        # Set the policy and we can get a loop.
-        asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
-        self.assertIsInstance(self.executor.submit(accessor).result(), expected_type)
-        # Clean up to silence leak warnings. Always use asyncio since
-        # IOLoop doesn't (currently) close the underlying loop.
-        self.executor.submit(lambda: asyncio.get_event_loop().close()).result()
-    
-        def set_idf_path(self, idf_path):
-        new_abs_path = _get_abs_path(idf_path)
-        if not os.path.isfile(new_abs_path):
-            raise Exception('jieba: file does not exist: ' + new_abs_path)
-        self.idf_loader.set_new_path(new_abs_path)
-        self.idf_freq, self.median_idf = self.idf_loader.get_idf()
-    
-    
-PrevStatus = {
-    'B': 'ES',
-    'M': 'MB',
-    'S': 'SE',
-    'E': 'BM'
-}
-    
-        def encode(self, arg):
-        return self.__unicode__().encode(arg)
-    
-    print('='*40)
-print('4. 词性标注')
-print('-'*40)
-    
-    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
-    
-    print('speed' , len(content)/tm_cost, ' bytes/second')
+# -- Options for Texinfo output -------------------------------------------
