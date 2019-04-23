@@ -1,129 +1,58 @@
 
         
-        def pre_pr(url)
-  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
-end
-    
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
-end
-
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-    Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
-    
-        def deprecation_message(message)
-      Jekyll.logger.warn 'Deprecation:', message
-    end
-    
-      def page_requested?
-    params[:page] == 'true'
-  end
-    
-      before_action :set_account
-  respond_to :txt
-    
-      private
-    
-      def data_params
-    return {} if params[:data].blank?
-    params.require(:data).permit(alerts: [:follow, :favourite, :reblog, :mention])
-  end
-end
-
-    
-        head + [data.length].pack('v') + data
-  end
-    
-                encoded
-          end
-    
-                if OpenSSL::HMAC.digest('MD5', k1, decrypted) != checksum
-              raise ::RuntimeError, 'RC4-HMAC decryption failed, incorrect checksum verification'
-            end
-    
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of an encrypted message.
-        class EncryptedData < Element
-          # @!attribute name_type
-          #   @return [Integer] The encryption algorithm
-          attr_accessor :etype
-          # @!attribute kvno
-          #   @return [Integer] The version number of the key
-          attr_accessor :kvno
-          # @!attribute cipher
-          #   @return [String] The enciphered text
-          attr_accessor :cipher
-    
-                self
-          end
-    
-                self
-          end
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
-end
-    
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-      describe '#index' do
-    context 'with a private post' do
-      before do
-        @alices_aspect = alice.aspects.where(name: 'generic').first
-        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
+              def self.category
+        :source_control
       end
+    
+          before :each do
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER] = build_number
+      end
+    
+          it 'shellescapes the exclude_dirs correctly' do
+        directory = 'My Dir'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
+      end
+    
+          it 'works given the path to compile_commands.json' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
+            )
+          end').runner.execute(:test)
+    
+          it 'passes an environment Hash' do
+        expect_command({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+        Fastlane::Actions.sh({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+      end
+    
+    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
+# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
+containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
+file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
+    
+    When /^I turn off class caching$/ do
+  cd('.') do
+    file = 'config/environments/test.rb'
+    config = IO.read(file)
+    config.gsub!(%r{^\s*config.cache_classes.*$},
+                 'config.cache_classes = false')
+    File.open(file, 'w'){|f| f.write(config) }
+  end
+end
+    
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
+  end
+    
+    module Paperclip
+  class AttachmentRegistry
+    include Singleton
+    
+        def self.plural_cache
+      @plural_cache ||= PluralCache.new
+    end
