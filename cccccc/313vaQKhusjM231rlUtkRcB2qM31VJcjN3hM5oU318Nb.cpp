@@ -1,76 +1,114 @@
 
         
-        
-    {  // Computes the SHA256 hash of each |block_size| chunk in |contents|, placing
-  // the results into |hashes|.
-  static void ComputeHashesForContent(const std::string& contents,
-                                      size_t block_size,
-                                      std::vector<std::string>* hashes);
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
+    
+    
+    {    Lock& lock;
+    Lock templock;
 };
     
-    decltype(__pfnDliNotifyHook2) __pfnDliNotifyHook2 = load_exe_hook;
+      auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
     
-    // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+}
     
-    IPC_MESSAGE_ROUTED3(ShellViewMsg_Object_On_Event,
-                    int /* object id */,
-                    std::string /* event name */,
-                    base::ListValue /* arguments */)
+    using google::protobuf::util::Proto3DataStripper;
     
-      static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
+    #define WRITE_CHECK(fp, ptr, count)                                            \
+  if (fp.write((ptr), (count)) != (count)) {                                   \
+    throw DL_ABORT_EX(                                                         \
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
+  }
     
-    #include 'content/nw/src/api/base/base.h'
+      std::shared_ptr<DHTNode> localNode_;
     
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
+        peerAnnounceStorage->setTaskQueue(taskQueue.get());
+    peerAnnounceStorage->setTaskFactory(taskFactory.get());
     
-    public:
-  EventListener(int id,
-                const base::WeakPtr<DispatcherHost>& dispatcher_host,
-                const base::DictionaryValue& option);
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
     
-      std::string type;
+    DNSCache::CacheEntry::~CacheEntry() = default;
     
-     protected:
-  ~NwAppCrashBrowserFunction() override {}
     
-    #include 'base/base64.h'
-#include 'base/logging.h'
-#include 'base/strings/stringprintf.h'
-#include 'base/strings/string_util.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/nw_clipboard.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-#include 'ui/base/clipboard/clipboard.h'
-#include 'ui/base/clipboard/clipboard_constants.h'
-#include 'ui/base/clipboard/scoped_clipboard_writer.h'
-#include 'ui/gfx/codec/jpeg_codec.h'
-#include 'ui/gfx/codec/png_codec.h'
-#include 'third_party/skia/include/core/SkBitmap.h'
+    {  // return true if writes with this callback can be batched with other writes
+  virtual bool AllowWriteBatching() = 0;
+};
+    
+      void set_max_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    }
+    max_delayed_write_rate_ = write_rate;
+    // update delayed_write_rate_ as well
+    delayed_write_rate_ = write_rate;
+  }
+    
+      // Write a key OUTSIDE of this transaction.
+  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
+  // here, the transaction would fail to commit.
+  s = db->Put(write_options, 'xyz', 'zzz');
+    
+    std::string kDBPath = '/tmp/rocksdb_options_file_example';
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
+    
+    
+    {
+    {
+    {  lua_State* lua_state_;
+};
+}  // namespace lua
+}  // namespace rocksdb
+#endif  // LUA
+
+    
+    // Returns the current memory usage of the specified DB instances.
+class MemoryUtil {
+ public:
+  enum UsageType : int {
+    // Memory usage of all the mem-tables.
+    kMemTableTotal = 0,
+    // Memory usage of those un-flushed mem-tables.
+    kMemTableUnFlushed = 1,
+    // Memory usage of all the table readers.
+    kTableReadersTotal = 2,
+    // Memory usage by Cache.
+    kCacheTotal = 3,
+    kNumUsageTypes = 4
+  };
+    }
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    disposeInternal
+ * Signature: (J)V
+ */
+void Java_org_rocksdb_BackupableDBOptions_disposeInternal(JNIEnv* /*env*/,
+                                                          jobject /*jopt*/,
+                                                          jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  assert(bopt != nullptr);
+  delete bopt;
+}
