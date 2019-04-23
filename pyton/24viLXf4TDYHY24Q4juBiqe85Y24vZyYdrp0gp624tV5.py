@@ -1,121 +1,105 @@
 
         
-            with open(FISH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    filled_template = template.replace('{{commands}}', '\n'.join(commands))
-    with open(FISH_COMPLETION_FILE, 'w') as f:
-        f.write(filled_template)
+        
+class ArrayMinLengthValidator(MinLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
+        'limit_value')
     
+            r = None
+        try:
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
     
-iv = key = [0x20, 0x15] + 14 * [0]
+        def __len__(self):
+        return len(self._store)
     
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
+        def test_copy(self):
+        copy = self.case_insensitive_dict.copy()
+        assert copy is not self.case_insensitive_dict
+        assert copy == self.case_insensitive_dict
     
-        infile, outfile = args
+    from .models import Response
+from .compat import urlparse, basestring
+from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
+                    get_encoding_from_headers, prepend_scheme_if_needed,
+                    get_auth_from_url, urldefragauth, select_proxy)
+from .structures import CaseInsensitiveDict
+from .cookies import extract_cookies_to_jar
+from .exceptions import (ConnectionError, ConnectTimeout, ReadTimeout, SSLError,
+                         ProxyError, RetryError, InvalidSchema, InvalidProxyURL,
+                         InvalidURL)
+from .auth import _basic_auth_str
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    PREFIX = r'''%YOUTUBE-DL(1)
-    
-    # General information about the project.
-project = u'youtube-dl'
-copyright = u'2014, Ricardo Garcia Gonzalez'
-    
-    
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
-                return
-        return params
-    
-    
-class TestThePlatformFeedSubtitles(BaseTestSubtitles):
-    url = 'http://feed.theplatform.com/f/7wvmTC/msnbc_video-p-test?form=json&pretty=true&range=-40&byGuid=n_hardball_5biden_140207'
-    IE = ThePlatformFeedIE
-    
-    
-def fix_return(node):
+        :rtype: list
     '''
-    fixup returned dictionary
     
-            rule['dest_port'] = str(rule.get('dest_port', 'Any')).lower()
-        rule['dest_ip'] = rule.get('dest_ip', 'Any').lower()
-        rule['source_port'] = str(rule.get('source_port', 'Any')).lower()
-        rule['source_ip'] = rule.get('source_ip', 'Any').lower()
-        rule['protocol'] = rule.get('protocol', 'Any').lower()
-        rule['policy'] = rule.get('policy', 'allow').lower()
-        rule['is_enable'] = rule.get('is_enable', True)
-        rule['enable_logging'] = rule.get('enable_logging', False)
-        rule['description'] = rule.get('description', 'rule added by Ansible')
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-        if purge_rules is True and len(rules) > 0:
-        result['rules_purged'] = len(rules)
-        deletions = result['rules_purged']
-        rules = list()
-        if not module.check_mode:
-            gateway.del_all_nat_rules()
-            task = gateway.save_services_configuration()
-            vca.block_until_completed(task)
-            rules = gateway.get_nat_rules()
-        result['changed'] = True
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-    
-if __name__ == '__main__':
-    main()
+      # Start the next poll (only if the last poll didn't raise an exception)
+  return True
 
     
-        if root.get('total-models') == '0':
-        return None
-    
-        # Label the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        if not name:
-            continue
-    
-            # Clear the frames array to start the next batch
-        frames = []
-
-    
-    # You can also save a copy of the new image to disk if you want by uncommenting this line
-# pil_image.save('image_with_boxes.jpg')
-
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-    from setuptools import setup
-    
-    Loosely based on https://github.com/astropy/astropy/pull/347
-'''
+    from ycm.client.base_request import BaseRequest
     
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
     
-        if results.overwrite and os.path.exists(output_directory):
-        shutil.rmtree(output_directory)
     
-    from ...utils import get_shape, get_w
+def KeywordsFromSyntaxListOutput_ContainedArgAllowed_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+phpFunctions   xxx contained gzclose yaz_syntax html_entity_decode fbsql_read_blob png2wbmp mssql_init cpdf_set_title gztell fbsql_insert_id empty cpdf_restore mysql_field_type closelog swftext ldap_search curl_errno gmp_div_r mssql_data_seek getmyinode printer_draw_pie mcve_initconn ncurses_getmaxyx defined
+                   contained replace_child has_attributes specified insertdocument assign node_name hwstat addshape get_attribute_node html_dump_mem userlist
+                   links to Function''' ), # noqa
+              has_items( 'gzclose', 'userlist', 'ldap_search' ) )
+    
+    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+    
+        def test_del_shutdown(self):
+        executor = futures.ThreadPoolExecutor(max_workers=5)
+        executor.map(abs, range(-5, 5))
+        threads = executor._threads
+        del executor
