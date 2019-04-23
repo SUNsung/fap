@@ -1,123 +1,104 @@
 
         
-              @lock.synchronize do
-        with_index_lock do
-          # Reload so we have the latest machine data. This allows other
-          # processes to update their own machines without conflicting
-          # with our own.
-          unlocked_reload
+            it 'shows the dry run pop up with previous events and allows use previously received event' do
+      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
+      agent.sources << emitter
+      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
+      agent.save!
     
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
+          describe '#import' do
+        it 'makes a new scenario for Bob' do
+          expect {
+            scenario_import.import(:skip_agents => true)
+          }.to change { users(:bob).scenarios.count }.by(1)
     
-            # Sets a human-friendly description of the plugin.
-        #
-        # @param [String] value Description of the plugin.
-        # @return [String] Description of the plugin.
-        def self.description(value=UNSET_VALUE)
-          get_or_set(:description, value)
-        end
+        it 'optionally supports treating values that start with '$' as raw JSONPath' do
+      expect(Utils.interpolate_jsonpaths('$.there.world', payload)).to eq('$.there.world')
+      expect(Utils.interpolate_jsonpaths('$.there.world', payload, :leading_dollarsign_is_jsonpath => true)).to eq('WORLD')
+    end
+  end
     
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
-        end
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
+  end
     
-            # This contains all the push implementations by name.
-        #
-        # @return [Registry<Symbol, Array<Class, Hash>>]
-        attr_reader :pushes
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
+      describe '#log_for_agent' do
+    it 'creates AgentLogs' do
+      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(log).not_to be_new_record
+      expect(log.agent).to eq(agents(:jane_website_agent))
+      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
+      expect(log.message).to eq('some message')
+      expect(log.level).to eq(4)
     end
     
-    @@ chat
-<pre id='chat'></pre>
-<form>
-  <input id='msg' placeholder='type message here...' />
-</form>
+      describe 'helpers' do
+    it 'should generate a correct request options hash' do
+      expect(@checker.send(:request_options)).to eq({headers: {'User-Agent' => 'Huginn - https://github.com/huginn/huginn', 'Authorization' => 'Bearer '1234token''}})
+    end
     
-              begin
-            lineno = frame.lineno-1
-            lines = ::File.readlines(frame.filename)
-            frame.pre_context_lineno = [lineno-CONTEXT, 0].max
-            frame.pre_context = lines[frame.pre_context_lineno...lineno]
-            frame.context_line = lines[lineno].chomp
-            frame.post_context_lineno = [lineno+CONTEXT, lines.size].min
-            frame.post_context = lines[lineno+1..frame.post_context_lineno]
-          rescue
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
           end
+        end
     
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
+            if has_vector?(request, headers)
+          warn env, 'attack prevented by #{self.class}'
+    
+      it 'sets a new csrf token for the session in env, even after a 'safe' request' do
+    get('/', {}, {})
+    expect(env['rack.session'][:csrf]).not_to be_nil
   end
     
-          def session?(env)
-        env.include? options[:session_key]
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
       end
     
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
-      end
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
-      end
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
     end
     
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
-  end
+      namespace :vm do
+    
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
+    end
