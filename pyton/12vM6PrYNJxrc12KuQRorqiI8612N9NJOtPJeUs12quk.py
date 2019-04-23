@@ -1,105 +1,109 @@
 
         
-            def save(self, must_create=False):
-        '''
-        To save, get the session key as a securely signed string and then set
-        the modified flag so that the cookie is set on the client for the
-        current request.
-        '''
-        self._session_key = self._get_session_key()
-        self.modified = True
+        
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
     
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
+@pytest.mark.functional
+def test_how_to_configure_alias(proc, TIMEOUT):
+    proc.sendline(u'unfunction fuck')
+    how_to_configure(proc, TIMEOUT)
+
     
-        app.add_node(settingslist_node)
-    app.add_directive('settingslist', SettingsListDirective)
+    You can download from:
+  https://osxfuse.github.io/
+Error: An unsatisfied requirement failed this build.'''
     
-        default_settings = {
-        'LOG_LEVEL': 'INFO',
-        'LOGSTATS_INTERVAL': 1,
-        'CLOSESPIDER_TIMEOUT': 10,
-    }
+    no_such_subcommand = '''error: no such subcommand
     
     
-class Command(ScrapyCommand):
+class TestLookupDict:
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--spider', dest='spider', default=None,
-            help='use this spider without looking for one')
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-            help='set spider argument (may be repeated)')
-        parser.add_option('--pipelines', action='store_true',
-            help='process items through pipelines')
-        parser.add_option('--nolinks', dest='nolinks', action='store_true',
-            help='don't show links to follow (extracted requests)')
-        parser.add_option('--noitems', dest='noitems', action='store_true',
-            help='don't show scraped items')
-        parser.add_option('--nocolour', dest='nocolour', action='store_true',
-            help='avoid using pygments to colorize the output')
-        parser.add_option('-r', '--rules', dest='rules', action='store_true',
-            help='use CrawlSpider rules to discover the callback')
-        parser.add_option('-c', '--callback', dest='callback',
-            help='use this callback for parsing, instead looking for a callback')
-        parser.add_option('-m', '--meta', dest='meta',
-            help='inject extra meta into the Request, it must be a valid raw json string')
-        parser.add_option('-d', '--depth', dest='depth', type='int', default=1,
-            help='maximum depth for parsing requests [default: %default]')
-        parser.add_option('-v', '--verbose', dest='verbose', action='store_true',
-            help='print each depth level one by one')
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-            e.g.:
-        @returns request
-        @returns request 2
-        @returns request 2 10
-        @returns request 0 10
-    '''
+    logging.getLogger(__name__).addHandler(NullHandler())
     
-            cookies = [self._format_cookie(x) for x in cookie_list]
-        headers = {'Set-Cookie': cookies}
-        response = Response(request.url, headers=headers)
+        def test_jwk_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url)
+        self.assertEqual(jws.signature.combined.kid, None)
+        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
     
-    from . import case, suite, util
+    # -- Options for LaTeX output ---------------------------------------------
     
-        def test_exception_in_except_clause(self):
-        def f(p):
-            1/0
-        def g(p):
-            try:
-                f(p)
-            except:
-                try: f(p)
-                except: pass
-        f_ident = ident(f)
-        g_ident = ident(g)
-        self.check_events(g, [(1, 'call', g_ident),
-                              (2, 'call', f_ident),
-                              (2, 'return', f_ident),
-                              (3, 'call', f_ident),
-                              (3, 'return', f_ident),
-                              (1, 'return', g_ident),
-                              ])
+            self.vhost1 = VirtualHost(
+            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
     
-    import os
-import subprocess
-import sys
-import sysconfig
-import tempfile
-import unittest
-from test import support
-from test.support.script_helper import (
-    spawn_python, kill_python, assert_python_ok, assert_python_failure,
-    interpreter_requires_environment
-)
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
     
-        def testSeekForwardAcrossStreams(self):
-        self.createTempFile(streams=2)
-        with BZ2File(self.filename) as bz2f:
-            self.assertRaises(TypeError, bz2f.seek)
-            bz2f.seek(len(self.TEXT) + 150)
-            self.assertEqual(bz2f.read(), self.TEXT[150:])
+            for project in RangeQuerySetWrapperWithProgressBar(orm.Project.objects.all()):
+            orm.Environment.objects.filter(
+                project_id=project.id, organization_id__isnull=True
+            ).update(organization_id=project.organization_id)
     
-    from email.message import EmailMessage
-from email.policy import SMTP
+            # Adding unique constraint on 'Distribution', fields ['release', 'name']
+        db.create_unique('sentry_distribution', ['release_id', 'name'])
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+        match = SYNTAX_GROUP_REGEX.search( line )
+    if match:
+      if looking_for_group:
+        looking_for_group = False
+      else:
+        group_name_to_group[ current_group.name ] = current_group
+    
+          # We set up a fake response.
+      with patch( 'ycm.client.base_request._JsonFromFuture',
+                  side_effect = response_method ):
+        yield
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+            _threads_queues[t] = self._work_queue
+    
+            self.assertEqual(set([CANCELLED_AND_NOTIFIED_FUTURE,
+                              EXCEPTION_FUTURE,
+                              SUCCESSFUL_FUTURE,
+                              future1]), finished)
+        self.assertEqual(set([future2]), pending)
