@@ -1,174 +1,101 @@
 
         
-          def __init__(self, zs, prior_zs):
-    '''Create a lower bound in three parts, normalized reconstruction
-    cost, normalized KL divergence cost, and their sum.
-    
-      return data_e, x0s, inputs_e
-    
-          elif FLAGS.generator_model.startswith('seq2seq'):
-        load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-        print('Restoring Generator from %s.' % load_ckpt)
-        tf.logging.info('Restoring Generator from %s.' % load_ckpt)
-        gen_encoder_init_saver = init_savers['gen_encoder_init_saver']
-        gen_decoder_init_saver = init_savers['gen_decoder_init_saver']
-        gen_encoder_init_saver.restore(sess, load_ckpt)
-        gen_decoder_init_saver.restore(sess, load_ckpt)
-    
-      # Forward Discriminator Elements.
-  if not FLAGS.dis_share_embedding:
-    embedding = [
-        v for v in tf.trainable_variables() if v.op.name == 'dis/embedding'
-    ][0]
-  fw_lstm_w_0 = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  fw_lstm_b_0 = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  fw_lstm_w_1 = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  fw_lstm_b_1 = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
-  if FLAGS.dis_share_embedding:
-    variable_mapping = {
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
-    }
-  else:
-    variable_mapping = {
-        'Model/embedding': embedding,
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
-    }
-  return variable_mapping
+            def __init__(self, **kwargs):
+        '''
+        Use keyword arguments to overwrite
+        any of the class attributes for this instance.
     
     
-FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8'
-JSON_CONTENT_TYPE = 'application/json'
-JSON_ACCEPT = '{0}, */*'.format(JSON_CONTENT_TYPE)
-DEFAULT_UA = 'HTTPie/%s' % __version__
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
     
-    
-class BasicAuthPlugin(BuiltinAuthPlugin):
-    
-    from httpie.compat import urlopen
-from httpie.downloads import (
-    parse_content_range, filename_from_content_disposition, filename_from_url,
-    get_unique_filename, ContentRangeError, Downloader,
-)
-from utils import http, MockEnvironment
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+        def test_request_body_from_file_by_path_no_data_items_allowed(
+            self, httpbin):
+        env = MockEnvironment(stdin_isatty=False)
+        r = http('POST', httpbin.url + '/post', '@' + FILE_PATH_ARG, 'foo=bar',
+                 env=env, error_exit_ok=True)
+        assert 'cannot be mixed' in r.stderr
 
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+    Copyright 2014 Steven Loria
+    
+    print('Classification report for classifier %s:\n%s\n'
+      % (classifier, metrics.classification_report(expected, predicted)))
+print('Confusion matrix:\n%s' % metrics.confusion_matrix(expected, predicted))
+    
+    # histogram
+plt.figure(4, figsize=(3, 2.2))
+plt.clf()
+plt.axes([.01, .01, .98, .98])
+plt.hist(X, bins=256, color='.5', edgecolor='.5')
+plt.yticks(())
+plt.xticks(regular_values)
+values = np.sort(values)
+for center_1, center_2 in zip(values[:-1], values[1:]):
+    plt.axvline(.5 * (center_1 + center_2), color='b')
+    
+    This example is meant to illustrate situations where k-means will produce
+unintuitive and possibly unexpected clusters. In the first three plots, the
+input data does not conform to some implicit assumption that k-means makes and
+undesirable clusters are produced as a result. In the last plot, k-means
+returns intuitive clusters despite unevenly sized blobs.
+'''
+print(__doc__)
+    
+            # Adding model 'RawEvent'
+        db.create_table(
+            'sentry_rawevent', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'event_id',
+                    self.gf('django.db.models.fields.CharField')(max_length=32, null=True)
+                ), (
+                    'datetime',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+                ('data', self.gf('sentry.db.models.fields.node.NodeField')(null=True, blank=True)),
             )
-        super().__init__(get_response)
+        )
+        db.send_create_signal('sentry', ['RawEvent'])
     
-        def create(self):
-        # Because a cache can fail silently (e.g. memcache), we don't know if
-        # we are failing to create a new session because of a key collision or
-        # because the cache is missing. So we try for a (large) number of times
-        # and then raise an exception. That's the risk you shoulder if using
-        # cache backing.
-        for i in range(10000):
-            self._session_key = self._get_new_session_key()
-            try:
-                self.save(must_create=True)
-            except CreateError:
-                continue
-            self.modified = True
-            return
-        raise RuntimeError(
-            'Unable to create a new session key. '
-            'It is likely that the cache is unavailable.')
+            # The following code is provided here to aid in writing a correct migration
+        # Changing field 'ReleaseEnvironment.project_id'
+        db.alter_column(
+            'sentry_environmentrelease', 'project_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+        )
     
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        try:
-            self.model.objects.get(session_key=session_key).delete()
-        except self.model.DoesNotExist:
-            pass
+            db.start_transaction()
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+        def backwards(self, orm):
+        # Deleting field 'ApiGrant.scope_list'
+        db.delete_column('sentry_apigrant', 'scope_list')
     
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
+        def backwards(self, orm):
+        pass
     
-                if item.get(CONF_AUDIO) is not None:
-                if isinstance(item.get(CONF_AUDIO), template.Template):
-                    output[ATTR_STREAM_URL] = item[CONF_AUDIO].async_render()
-                else:
-                    output[ATTR_STREAM_URL] = item.get(CONF_AUDIO)
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client.mac == device:
-                return client.ip
-        return None
-    
-            # Test the router is accessible.
-        data = self.get_swisscom_data()
-        self.success_init = data is not None
-    
-    ATTR_COUNTRY = 'country_code'
-ATTR_FIRST_NAME = 'first_name'
-ATTR_LAST_NAME = 'last_name'
-ATTR_EMAIL = 'email'
-ATTR_PHONE = 'phone'
-ATTR_ADDRESS = 'address'
-ATTR_ORDERS = 'orders'
-ATTR_SHOW_MENU = 'show_menu'
-ATTR_ORDER_ENTITY = 'order_entity_id'
-ATTR_ORDER_NAME = 'name'
-ATTR_ORDER_CODES = 'codes'
-    
-        def __init__(self, client_id, client_secret):
-        '''Initialize HassLaMetricManager and connect to LaMetric.'''
-        from lmnotify import LaMetricManager
+        def backwards(self, orm):
+        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
+        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
