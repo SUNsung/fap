@@ -1,122 +1,154 @@
 
         
-        
-def test_on_run_after_other_commands(usage_tracker_io, shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.get_history.return_value = ['fuck', 'ls']
-    _change_tracker(usage_tracker_io, 12)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
+            @value.setter
+    def value(self, new_value):
+        if 1 <= new_value <= 13:
+            self._value = new_value
+        else:
+            raise ValueError('Invalid card value: {}'.format(new_value))
     
-        proc.sendline(u'ehco test')
-    
-    python_2 = (u'thefuck/python2-bash',
-            u'FROM python:2',
-            u'sh')
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
     
     
-@pytest.mark.parametrize('script, output, help_text, result', [
-    ('apt-get isntall vim', invalid_operation('isntall'),
-     apt_get_help, 'apt-get install vim'),
-    ('apt saerch vim', invalid_operation('saerch'),
-     apt_help, 'apt search vim'),
-])
-def test_get_new_command(set_help, output, script, help_text, result):
-    set_help(help_text)
-    assert get_new_command(Command(script, output))[0] == result
-
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
     
     match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
 '''
     
     
 @pytest.mark.parametrize('command', [
-    Command('aws dynamdb scan', misspelled_command),
-    Command('aws dynamodb scn', misspelled_subcommand),
-    Command('aws dynamodb t-item',
-            misspelled_subcommand_with_multiple_options)])
+    Command('cargo buid', no_such_subcommand_old),
+    Command('cargo buils', no_such_subcommand)])
 def test_match(command):
     assert match(command)
     
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
+        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
+    parser.add_argument('-d', action='store', dest='directory')
+    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
+    parser.add_argument('--overwrite', action='store_true', default = False)    
+    results = parser.parse_args()
     
+            Use attention **before** lstm:
+            ```
+            tf.reset_default_graph()
     
-def b_expo_mod(a, b, c):
-    res = 0
-    while b > 0:
-        if b&1:
-            res = ((res%c) + (a%c)) % c
+    from ...utils import get_shape, get_w
     
-        # Load the Cityscapes eval script *after* setting the required env vars,
-    # since the script reads their values into global variables (at load time).
-    import cityscapesscripts.evaluation.evalInstanceLevelSemanticLabeling \
-        as cityscapes_eval
-    
-    
-# Path to data dir
-_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-    
-    
-def fpn_level_info_ResNet152_conv5():
-    return FpnLevelInfo(
-        blobs=('res5_2_sum', 'res4_35_sum', 'res3_7_sum', 'res2_2_sum'),
-        dims=(2048, 1024, 512, 256),
-        spatial_scales=(1. / 32., 1. / 16., 1. / 8., 1. / 4.)
-    )
+        return x
 
     
-    $ find . -name '*.yaml' -exec sed -i -e \
-   's/head_builder\.add_roi_2mlp_head/fast_rcnn_heads.add_roi_2mlp_head/g' {} \;
+        def __init__(self, l1=0., l2=0.):
+        '''
+        Args:
+            l1(float): L1 正则化的系数
+            l2(float): L2 正则化的系数
+        '''
+        self.l1 = np.asarray(l1, dtype=np.float32)
+        self.l2 = np.asarray(l2, dtype=np.float32)
     
-            # add fg targets
-        for i in range(rois_fg.shape[0]):
-            fg_polys_ind = fg_polys_inds[i]
-            poly_gt = polys_gt[fg_polys_ind]
-            roi_fg = rois_fg[i]
-            # Rasterize the portion of the polygon mask within the given fg roi
-            # to an M x M binary image
-            mask = segm_utils.polys_to_mask_wrt_box(poly_gt, roi_fg, M)
-            mask = np.array(mask > 0, dtype=np.int32)  # Ensure it's binary
-            masks[i, :] = np.reshape(mask, M**2)
-    else:  # If there are no fg masks (it does happen)
-        # The network cannot handle empty blobs, so we must provide a mask
-        # We simply take the first bg roi, given it an all -1's mask (ignore
-        # label), and label it with class zero (bg).
-        bg_inds = np.where(blobs['labels_int32'] == 0)[0]
-        # rois_fg is actually one background roi, but that's ok because ...
-        rois_fg = sampled_boxes[bg_inds[0]].reshape((1, -1))
-        # We give it an -1's blob (ignore label)
-        masks = -blob_utils.ones((1, M**2), int32=True)
-        # We label it with class = 0 (background)
-        mask_class_labels = blob_utils.zeros((1, ))
-        # Mark that the first roi has a mask
-        roi_has_mask[0] = 1
+    word_unk = 'aam'
+ngrams = compute_ngrams(word_unk, min_ngrams, max_ngrams)  # min_ngrams, max_ngrams = 2, 4
+word_vec = np.zeros(model.vector_size, dtype=np.float32)
+ngrams_found = 0
+for ngram in ngrams:
+    ngram_hash = ft_hash(ngram) % model.bucket
+    if ngram_hash in model.wv.hash2index:
+        word_vec += model.wv.vectors_ngrams[model.wv.hash2index[ngram_hash]]
+        ngrams_found += 1
     
-        return blob, im_scales
-
     
-        fg_inds = np.where(labels >= 1)[0]
-    bg_inds = np.where(anchor_to_gt_max < cfg.RETINANET.NEGATIVE_OVERLAP)[0]
-    labels[bg_inds] = 0
-    num_fg, num_bg = len(fg_inds), len(bg_inds)
+def evaluate_masks(
+    json_dataset,
+    all_boxes,
+    all_segms,
+    output_dir,
+    use_salt=True,
+    cleanup=False
+):
+    if cfg.CLUSTER.ON_CLUSTER:
+        # On the cluster avoid saving these files in the job directory
+        output_dir = '/tmp'
+    res_file = os.path.join(
+        output_dir, 'segmentations_' + json_dataset.name + '_results')
+    if use_salt:
+        res_file += '_{}'.format(str(uuid.uuid4()))
+    res_file += '.json'
     
-        net = core.Net('dequeue_net')
-    net.type = 'dag'
-    all_blobs = []
-    for gpu_id in range(cfg.NUM_GPUS):
-        with core.NameScope('gpu_{}'.format(gpu_id)):
-            with core.DeviceScope(muji.OnGPU(gpu_id)):
-                for blob_name in blob_names:
-                    blob = core.ScopedName(blob_name)
-                    all_blobs.append(blob)
-                    workspace.CreateBlob(blob)
-                    logger.info('Creating blob: {}'.format(blob))
-                net.DequeueBlobs(
-                    roi_data_loader._blobs_queue_name, blob_names)
-    logger.info('Protobuf:\n' + str(net.Proto()))
+    from detectron.core.config import cfg
+from detectron.datasets.json_dataset import JsonDataset
+import detectron.utils.boxes as box_utils
+import detectron.utils.keypoints as keypoint_utils
+import detectron.utils.segms as segm_utils
+    
+        optim.build_data_parallel_model(model, _single_gpu_build_func)
+    return model
+    
+    
+_RENAME = {
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
+    # Removed head_builder module in favor of the more specific fast_rcnn name
+    'head_builder.add_roi_2mlp_head':
+        'fast_rcnn_heads.add_roi_2mlp_head',
+}
+    
+    
+class CollectAndDistributeFpnRpnProposalsOp(object):
+    def __init__(self, train):
+        self._train = train
+    
+    
+def get_field_of_anchors(
+    stride, anchor_sizes, anchor_aspect_ratios, octave=None, aspect=None
+):
+    global _threadlocal_foa
+    if not hasattr(_threadlocal_foa, 'cache'):
+        _threadlocal_foa.cache = {}
+    
+        blobs['retnet_fg_num'], blobs['retnet_bg_num'] = 0.0, 0.0
+    for im_i, entry in enumerate(roidb):
+        scale = im_scales[im_i]
+        im_height = np.round(entry['height'] * scale)
+        im_width = np.round(entry['width'] * scale)
+        gt_inds = np.where(
+            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
+        assert len(gt_inds) > 0, \
+            'Empty ground truth empty for image is not allowed. Please check.'
+    
+        episode_count = 100
+    reward = 0
+    done = False
+    
+    # Top-down car dynamics simulation.
+#
+# Some ideas are taken from this great tutorial http://www.iforce2d.net/b2dtut/top-down-car by Chris Campbell.
+# This simulation is a bit more detailed, with wheels rotation.
+#
+# Created by Oleg Klimov. Licensed on the same terms as the rest of OpenAI Gym.
