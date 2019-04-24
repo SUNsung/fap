@@ -1,23 +1,26 @@
 
         
-        module Sidekiq
-  module Generators # :nodoc:
-    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
-      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+        module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
     
-          def perform(yml)
-        (target, method_name, args) = YAML.load(yml)
-        msg = target.public_send(method_name, *args)
-        # The email method can return nil, which causes ActionMailer to return
-        # an undeliverable empty message.
-        if msg
-          deliver(msg)
-        else
-          raise '#{target.name}##{method_name} returned an undeliverable mail object'
-        end
+          def releases(*args)
+        each_object(:releases, *args)
       end
     
-        # Returns the filename, the same way as ':basename.:extension' would.
-    def filename attachment, style_name
-      [ basename(attachment, style_name), extension(attachment, style_name) ].delete_if(&:empty?).join('.'.freeze)
-    end
+              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
+        end
+    
+            def collection_method
+          :issues_comments
+        end
