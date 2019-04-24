@@ -1,82 +1,65 @@
 
         
-                def render
-          error_wrapping(datetime_selector(@options, @html_options).send('select_#{select_type}').html_safe)
-        end
-    
-          def test_helpers_with_symbol
-        @controller.process(:with_symbol)
-        assert_equal 'I respond to bare_a: true', @controller.response_body
-      end
-    
-        class WithProcReturningNil < WithString
-      layout proc { nil }
-    
-        select_agent_type('Trigger Agent')
-    fill_in(:agent_name, with: 'Test Trigger Agent')
-    click_on('Toggle View')
-    
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-    describe AgentsExporter do
-  describe '#as_json' do
-    let(:name) { 'My set of Agents' }
-    let(:description) { 'These Agents work together nicely!' }
-    let(:guid) { 'some-guid' }
-    let(:tag_fg_color) { '#ffffff' }
-    let(:tag_bg_color) { '#000000' }
-    let(:icon) { 'Camera' }
-    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
-    let(:exporter) { AgentsExporter.new(
-      agents: agent_list, name: name, description: description,
-      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color, icon: icon) }
-    
-        it 'work with set FAILED_JOBS_TO_KEEP env variable' do
-      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(-1)
-      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(0)
-      expect(@keep.id).to eq(Delayed::Job.order(:failed_at)[0].id)
-    end
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
+          failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
-
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
+        it 'returns an array of likes for a post' do
+      bob.like!(@message)
+      get :index, params: {post_id: @message.id}
+      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@message.likes.map(&:id))
     end
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
+    
+            self.summary = 'The repl listens to commands on standard input'
+        self.description = <<-DESC
+          The repl listens to commands on standard input and prints their
+          result to standard output.
+          It accepts all the other ipc subcommands. The repl will signal the
+          end of output with the the ASCII CR+LF `\\n\\r`.
+        DESC
+    
+    
+    control_lines = control_contents.split('\n')
+    control_lines.each do |line|
+      key, val = line.split(/ += +/, 2)
+      if control.has_key? key
+        control[key].push(val)
+      else
+        control[key] = [val]
+      end
+    end
+    
+      # Generate the proper tar flags based on the path name.
+  def tar_compression_flag(path)
+    case path
+      when /\.tar\.bz2$/
+        return '-j'
+      when /\.tar\.gz$|\.tgz$/
+        return '-z'
+      when /\.tar\.xz$/
+        return '-J'
+      else
+        return nil
+    end
+  end # def tar_compression_flag
+end # class FPM::Package::Tar
