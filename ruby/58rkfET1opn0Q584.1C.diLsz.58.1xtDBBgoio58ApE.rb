@@ -1,42 +1,39 @@
 
         
-          describe '#merge' do
-    it 'returns itself' do
-      expect(env.merge([])).to be env
-    end
-  end
-    
-      specify '#f' do
-    expect(subject.f).to eq(f)
-  end
-    
-          <div id='post'>
-        <h3 id='post-info'>POST</h3>
-        <% if req.POST and not req.POST.empty? %>
-          <table class='req'>
-            <tr>
-              <th>Variable</th>
-              <th>Value</th>
-            </tr>
-            <% req.POST.sort_by { |k, v| k.to_s }.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-            <% } %>
-          </table>
-        <% else %>
-          <p class='no-data'>No POST data.</p>
-        <% end %>
-        <div class='clear'></div>
-      </div> <!-- /POST -->
-    <% end %>
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+            def value_for(user_id, date)
+      GivenDailyLike.find_for(user_id, date).pluck(:likes_given)[0] || 0
     end
     
-        # remove 'system' local gems used by LS
-    local_gems = gemfile.locally_installed_gems.map(&:name) - NON_PLUGIN_LOCAL_GEMS
+        def data_url_string?(str)
+      str.start_with?(DATA_URL)
+    end
+    
+        def insert(index, *names)
+      @filters.insert assert_index(index), *filter_const(names)
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            css('h1:not(:first-child)').each do |node|
+          node.name = 'h2'
+        end unless at_css('h2')
+    
+            subtitle = at_css('.hero-subtitle').try(:content)
+        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+    
+    Given /^I run a migration$/ do
+  step %[I successfully run `rake db:migrate --trace`]
+end
+    
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
+    end
