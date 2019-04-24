@@ -1,57 +1,26 @@
 
         
-          describe '#highlighted?' do
-    it 'understands hl=6-8' do
-      stub(params).[](:hl) { '6-8' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [6, 7, 8]
+            def translation_scope
+      'devise.confirmations'
     end
-    
-    describe JobsHelper do
-  let(:job) { Delayed::Job.new }
-    
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent).sort_by(&:id)).to eq([@agent1, @agent2])
-    end
-    
-      context '#parse_duration' do
-    it 'works with correct arguments' do
-      expect(Utils.parse_duration('2.days')).to eq(2.days)
-      expect(Utils.parse_duration('2.seconds')).to eq(2)
-      expect(Utils.parse_duration('2')).to eq(2)
-    end
-    
-        @checker = Agents::BasecampAgent.new(:name => 'somename', :options => @valid_params)
-    @checker.service = services(:generic)
-    @checker.user = users(:jane)
-    @checker.save!
-    
-    class Ray
-  def initialize(org, dir)
-    @org = org
-    @dir = dir
-  end
-    
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
-    
-    Given /^(?:|I )am on (.+)$/ do |page_name|
-  visit path_to(page_name)
-end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
-  end
 end
 
     
-        # Returns the extension of the file. e.g. 'jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension.
-    def extension attachment, style_name
-      ((style = attachment.styles[style_name.to_s.to_sym]) && style[:format]) ||
-        File.extname(attachment.original_filename).sub(/\A\.+/, ''.freeze)
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
     end
+    
+          def remember_me?(token, generated_at)
+        # TODO: Normalize the JSON type coercion along with the Timeoutable hook
+        # in a single place https://github.com/plataformatec/devise/blob/ffe9d6d406e79108cf32a2c6a1d0b3828849c40b/lib/devise/hooks/timeoutable.rb#L14-L18
+        if generated_at.is_a?(String)
+          generated_at = time_from_json(generated_at)
+        end
