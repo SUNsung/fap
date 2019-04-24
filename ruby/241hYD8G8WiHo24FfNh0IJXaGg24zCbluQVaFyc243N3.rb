@@ -1,140 +1,93 @@
 
         
-        module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
-    
-    DEPRECATION
-    
-        def bubble_subject(root)
-      root.children.each do |child|
-        bubble_subject(child) if child.is_a?(Tree::RuleNode) || child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode) && !child.children.empty?
-        next unless child.children.all? do |c|
-          next unless c.is_a?(Tree::RuleNode)
-          first_simple_sel(c).is_a?(Sass::Selector::Parent) && first_sseq(c).subject?
-        end
-        first_sseq(child).subject = true
-        child.children.each {|c| first_sseq(c).subject = false}
-      end
-    end
-    
-        # Wraps the given string in terminal escapes
-    # causing it to have the given color.
-    # If terminal escapes aren't supported on this platform,
-    # just returns the string instead.
-    #
-    # @param color [Symbol] The name of the color to use.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    # @param str [String] The string to wrap in the given color.
-    # @return [String] The wrapped string.
-    def color(color, str)
-      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
-    
-            # JRuby chokes when trying to import files from JARs when the path starts with './'.
-        ret.map {|f, s| [f.sub(%r{^\./}, ''), s]}
-      end
-    
-    def red(string)
-  '\033[0;31m#{string}\e[0m'
-end
-
-    
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
-    
-      def delete_target_file?
-    return true if overwrite?
-    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
-    ( 'y' == STDIN.gets.strip.downcase ? true : false)
-  end
-    
-          it 'returns true if the pipeline is a system pipeline' do
-        expect(subject.system?).to be_truthy
-      end
-    end
-    
-          context 'when the plugin doesnt exist' do
-        it 'fails to install and report an error' do
-          command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-output-impossible-plugin')
-          expect(command.stderr).to match(/Plugin not found, aborting/)
-        end
-      end
-    end
+        SUITE.each do |key, text|
+  Benchmark.ips do |x|
+    x.report('regex-check   - #{key}') { check_with_regex(text) }
+    x.report('builtin-check - #{key}') { check_with_builtin(text) }
+    x.compare!
   end
 end
-
+# ------------------------------------------------------------------------
     
-      describe 'listing orders' do
-    it 'lists existing orders' do
-      within_row(1) do
-        expect(column_text(2)).to eq 'R100'
-        expect(find('td:nth-child(3)')).to have_css '.badge-considered_risky'
-        expect(column_text(4)).to eq 'cart'
-      end
-    
-                within_row(1) { click_icon 'split' }
-            targetted_select2 @shipment2.number, from: '#s2id_item_stock_location'
-            fill_in 'item_quantity', with: 1
-            click_icon :save
-    
-          within_row(2) { click_icon :split }
-      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
-      click_icon :save
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
-    end
-  end
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
-
     
-          flash.each do |msg_type, text|
-        concat(content_tag(:div, text, class: 'alert alert-#{msg_type}')) unless ignore_types.include?(msg_type)
-      end
-      nil
+    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
+    
+                  EM.start_server(
+                opts['host'],
+                opts['livereload_port'],
+                HttpAwareConnection,
+                opts
+              ) do |ws|
+                handle_websockets_event(ws)
+              end
+    
+        def url
+      @url ||= URL.parse request.base_url
     end
     
-          # users should be able to set price when importing orders via api
-      def permitted_line_item_attributes
-        if @current_user_roles.include?('admin')
-          super + [:price, :variant_id, :sku]
-        else
-          super
-        end
+          max_length = if tag = str.slice!(/ \[.+\]\z/)
+        terminal_width - tag.length
+      else
+        terminal_width
       end
     
-            def line_item_params
-          params.require(:line_item).permit(:quantity, :variant_id, options: line_item_options)
+          private
+    
+              # Lock this machine
+          lock_file = lock_machine(uuid)
+          if !lock_file
+            raise Errors::MachineLocked,
+              name: entry.name,
+              provider: entry.provider
+          end
+    
+            def initialize(argv, env)
+          @argv = argv
+          @env  = env
+          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
         end
+    
+            # This returns all the action hooks.
+        #
+        # @return [Array]
+        def action_hooks(hook_name)
+          result = []
+    
+    def pboard
+  return # skip print
+  print 'No. #$no\n'
+  (0...COL).each{|i|
+    print '|'
+    (0...ROW-NP).each{|j|
+      x = $b[i*ROW+j]
+      if x < 0
+        print '..|'
+      else
+        printf '%2d|',x+1
       end
-    end
-  end
+    }
+    print '\n'
+  }
+  print '\n'
 end
+    
+        prefixes
+  end
+    
+      # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
