@@ -1,217 +1,139 @@
 
         
-        #include 'tensorflow/python/grappler/model_analyzer.h'
+            secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
+    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
     
-    REGISTER_OP('Add').Doc(R'doc(
-An op to test that duplicate registrations don't override previously
-registered ops.
-)doc');
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#include 'tensorflow/python/util/kernel_registry.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      const string& Name() const override;
-    
-    namespace mxnet {
-namespace io {
-    }
+    void test_ecdsa_recovery_end_to_end(void) {
+    unsigned char extra[32] = {0x00};
+    unsigned char privkey[32];
+    unsigned char message[32];
+    secp256k1_ecdsa_signature signature[5];
+    secp256k1_ecdsa_recoverable_signature rsignature[5];
+    unsigned char sig[74];
+    secp256k1_pubkey pubkey;
+    secp256k1_pubkey recpubkey;
+    int recid = 0;
     }
     
-    template<typename xpu>
-void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                                const float threshold) {
-  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
-  ::Launch(s,
-          inputs[1].Size(),         // original size
-          inputs[1].dptr<float>(),  // out array
-          inputs[0].dptr<float>(),  // compressed array
-          -1 *threshold,            // negative threshold
-          threshold);               // positive threshold
+    makeCommaSepLists('#define TINYFORMAT_ARGTYPES_%(j)d %(list)s',
+                  'class T%(i)d')
+    
+    const UniValue& UniValue::get_array() const
+{
+    if (typ != VARR)
+        throw std::runtime_error('JSON value is not an array as expected');
+    return *this;
 }
     
-       out = data / sqrt(data.shape[-1])
+        int64_t vi64 = -82;
+    UniValue v5(vi64);
+    BOOST_CHECK(v5.isNum());
+    BOOST_CHECK_EQUAL(v5.getValStr(), '-82');
     
-    namespace mxnet {
-namespace op {
-template<typename DType>
-class CuDNNLocalResponseNormOp : public Operator {
- public:
-  explicit CuDNNLocalResponseNormOp(LRNParam param) {
-    param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-  }
-    }
-    }
-    }
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(NativeOpParam param) {
-  return new NativeOp<cpu>(param);
-}
-    }
+    void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
-.describe('Apply a sparse regularization to the output a sigmoid activation function.')
-.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
-.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
+    namespace CAROTENE_NS {
+    }
     
-    #include <iostream>
-#include <vector>
+    #define SPLIT_ASM2(sgn, bits) __asm__ ( \
+                                          'vld2.' #bits ' {d0, d2}, [%[in0]]            \n\t' \
+                                          'vld2.' #bits ' {d1, d3}, [%[in1]]            \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL2(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3' \
+                                      );
+#define SPLIT_ASM3(sgn, bits) __asm__ ( \
+                                          'vld3.' #bits ' {d0, d2, d4}, [%[in0]]        \n\t' \
+                                          'vld3.' #bits ' {d1, d3, d5}, [%[in1]]        \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL3(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5' \
+                                      );
+#define SPLIT_ASM4(sgn, bits) __asm__ ( \
+                                          'vld4.' #bits ' {d0, d2, d4, d6}, [%[in0]]    \n\t' \
+                                          'vld4.' #bits ' {d1, d3, d5, d7}, [%[in1]]    \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
+                                          'vst1.' #bits ' {d6-d7}, [%[out3]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), [out3] 'r' (dst3 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL4(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
+                                      );
     
-    #include <iostream>
-#include <stack>
-#include <cassert>
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    {
+        v_dst = internal::vcge(v_src0, v_src1);
+    }
     
-    private:
-    struct Command{
-        string s;   // go, print
-        TreeNode* node;
-        Command(string s, TreeNode* node): s(s), node(node){}
-    };
+    #ifdef CAROTENE_NEON
+#include <arm_neon.h>
+#include 'intrinsics.hpp'
+#endif
+    
+    template <>
+void rshiftConst<0>(const Size2D &size,
+                    const s16 * srcBase, ptrdiff_t srcStride,
+                    u8 * dstBase, ptrdiff_t dstStride,
+                    CONVERT_POLICY cpolicy)
+{
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+            while(i + 16 <= size.width)
+        {
+            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
+    }
     
     
-// Classic Non-Recursive algorithm for inorder traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
+    {		PathCombine(userConEmuCfgPath, userConfigDirPath, L'user-ConEmu.xml');
+	}
+	else // '/c [path]' was specified and 'vendor/ConEmu.xml.default' config exists, copy Cmder 'vendor/ConEmu.xml.default' file to '[user specified path]/config/user_ConEmu.xml'.
+	{
+		if ( ! CopyFile(defaultCfgPath, userCfgPath, FALSE))
+		{
+			MessageBox(NULL,
+				(GetLastError() == ERROR_ACCESS_DENIED)
+				? L'Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml! Access Denied.'
+				: L'Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml!', MB_TITLE, MB_ICONSTOP);
+			exit(1);
+		}
+		PathCombine(userConEmuCfgPath, userConfigDirPath, L'user-ConEmu.xml');
+	}
+    
+    /// BFS
+/// No need to store level information in the queue :-)
+///
+/// Time Complexity: O(n), where n is the number of nodes in the tree
+/// Space Complexity: O(n)
 class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+    }
     }
     
-    
-int main() {
-    }
-    
-    private:
-    void preorderTraversal(TreeNode* node, vector<int> &res){
-    }
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
-};
-    
-      uint64_t single_refill_amount =
-      delayed_write_rate_ * kRefillInterval / kMicrosPerSecond;
-  if (bytes_left_ + single_refill_amount >= num_bytes) {
-    // Wait until a refill interval
-    // Never trigger expire for less than one refill interval to avoid to get
-    // time.
-    bytes_left_ = bytes_left_ + single_refill_amount - num_bytes;
-    last_refill_time_ = time_now + kRefillInterval;
-    return kRefillInterval + sleep_debt;
-  }
-    
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
-    
-      WriteOptions write_options;
-  ReadOptions read_options;
-  TransactionOptions txn_options;
-  std::string value;
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/status.h'
-    
-    #include <stdint.h>
-#include <memory>
-#include <string>
-    
-    class OptimisticTransactionDB : public StackableDB {
- public:
-  // Open an OptimisticTransactionDB similar to DB::Open().
-  static Status Open(const Options& options, const std::string& dbname,
-                     OptimisticTransactionDB** dbptr);
-    }
-    
-    using apollo::common::ErrorCode;
-    
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
-    
-    void ClusterQualityInfo702::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  int id = target_id(bytes, length);
-  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == id) {
-      auto conti_obs = conti_radar->mutable_contiobs(i);
-      conti_obs->set_longitude_dist_rms(
-          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
-      conti_obs->set_lateral_dist_rms(
-          LINEAR_RMS[lateral_dist_rms(bytes, length)]);
-      conti_obs->set_longitude_vel_rms(
-          LINEAR_RMS[longitude_vel_rms(bytes, length)]);
-      conti_obs->set_lateral_vel_rms(
-          LINEAR_RMS[lateral_vel_rms(bytes, length)]);
-      conti_obs->set_probexist(PROBOFEXIST[pdh0(bytes, length)]);
-      switch (invalid_state(bytes, length)) {
-        case 0x01:
-        case 0x02:
-        case 0x03:
-        case 0x06:
-        case 0x07:
-        case 0x0E:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
-      switch (ambig_state(bytes, length)) {
-        case 0x00:
-        case 0x01:
-        case 0x02:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
-    }
-  }
-}
-    
-    int RadarState201::radar_power(const std::uint8_t* bytes,
-                               int32_t length) const {
-  Byte t0(bytes + 3);
-  uint32_t x = t0.get_byte(0, 2);
-    }
-    
-      MatrixXd mat_golden = MatrixXd::Identity(10, 10) * 10.0;
-  EXPECT_EQ(mat, mat_golden);
-    
-    SplineSegKernel::SplineSegKernel() {
-  const int reserved_num_params = reserved_order_ + 1;
-  CalculateFx(reserved_num_params);
-  CalculateDerivative(reserved_num_params);
-  CalculateSecondOrderDerivative(reserved_num_params);
-  CalculateThirdOrderDerivative(reserved_num_params);
-}
-    
-    
-    {  double ret = x * 0.001000;
-  return ret;
-}
-    
-    void Brakemotorrpt372::Parse(const std::uint8_t* bytes, int32_t length,
-                             ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_output(
-      torque_output(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_input(
-      torque_input(bytes, length));
-}
+            while(!output.empty()){
+            res.push_back((output.top())->val);
+            output.pop();
+        }
