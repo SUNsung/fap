@@ -1,87 +1,62 @@
 
         
-              respond_to_on_destroy
-    end
-  end
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-            @email = headers[:to]
-        headers
+        
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end && loc.end.is?('}')
       end
-    
-          devise_modules_hook! do
-        include Devise::Models::Authenticatable
-    
-      def pinned?
-    path.symlink?
+    end
   end
-    
-      def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-      # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-    
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
 end
 
     
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
       end
     end
+  end
+end
+
     
-          it 'returns true if the pipeline is a system pipeline' do
-        expect(subject.system?).to be_truthy
+          # Returns the delta between this element's value and the argument's.
+      #
+      # @note Keyword splats always return a delta of 0
+      #
+      # @return [Integer] the delta between the two values
+      def value_delta(other)
+        HashElementDelta.new(self, other).value_delta
       end
-    end
     
-        def define_flush_errors
-      @klass.send(:validates_each, @name) do |record, attr, value|
-        attachment = record.send(@name)
-        attachment.send(:flush_errors)
+          # Checks whether the `when` node has a `then` keyword.
+      #
+      # @return [Boolean] whether the `when` node has a `then` keyword
+      def then?
+        loc.begin && loc.begin.is?('then')
       end
+    
+          dir = if File.directory?(file_or_dir)
+              file_or_dir
+            else
+              File.dirname(file_or_dir)
+            end
+      @path_cache[dir] ||= ConfigLoader.configuration_file_for(dir)
+      path = @path_cache[dir]
+      @object_cache[path] ||= begin
+                                print 'For #{dir}: ' if ConfigLoader.debug?
+                                ConfigLoader.configuration_from_file(path)
+                              end
     end
+  end
+end
+
+    
+          def initialize(department, cop_name)
+        @department = department.to_sym if department
+        @cop_name   = cop_name
+      end
