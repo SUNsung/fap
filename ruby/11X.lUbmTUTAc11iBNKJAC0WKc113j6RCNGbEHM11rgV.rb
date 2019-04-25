@@ -1,147 +1,132 @@
 
         
-                  add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
+           def xx(*x)
+     x.size
+   end
+end
     
-        attr_reader :paths
+        p0 = Vec.new(isect.pl.x + eps * isect.n.x,
+                isect.pl.y + eps * isect.n.y,
+                isect.pl.z + eps * isect.n.z)
+    nphi.times do |j|
+      ntheta.times do |i|
+        r = rand
+        phi = 2.0 * 3.14159265 * rand
+        x = Math.cos(phi) * Math.sqrt(1.0 - r)
+        y = Math.sin(phi) * Math.sqrt(1.0 - r)
+        z = Math.sqrt(r)
     
-          def test_declare_missing_helper
-        e = assert_raise AbstractController::Helpers::MissingHelperError do
-          AbstractHelpers.helper :missing
-        end
-        assert_equal 'helpers/missing_helper.rb', e.path
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
-    
-          test 'when specify to inherit and an :only option which match current action name and is opposite from parent controller' do
-        controller = WithOnlyConditionalFlippedAndInheriting.new
-        controller.process(:show)
-        assert_equal 'With Implied Hello show!', controller.response_body
-      end
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-        def effective_url
-      @effective_url ||= URL.parse super
     end
     
-            css('td h3', '.l-sub-section > h3', '.alert h3', '.row-margin > h3').each do |node|
-          node.name = 'h4'
-        end
-    
-      def pinned?
-    path.symlink?
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
   end
     
-      if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
+      # log-levels from the diaspora.yml for SQL and federation debug-logging
+  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
+  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
+  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
+    AppConfig.environment.logging.debug.federation? ? :debug : :info
+    
+        reversible(&method(:up_down))
+  end
+    
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
     end
   end
     
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
+      let(:valid_params) {
+    {
+      user: {
+        username:              'jdoe',
+        email:                 'jdoe@example.com',
+        password:              'password',
+        password_confirmation: 'password'
+      }
+    }
+  }
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
+    
+            close_body(body) if reaction
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
 
     
-          get :index, params: {conversation_id: @conv1.id}
-      save_fixture(html_for('body'), 'conversations_read')
+    # Add our files (should be in the current directory):
+package.input('my-executable=/usr/bin/')
+package.input('my-library.so=/usr/lib/')
+    
+        # control tar.
+    begin
+      write_pkginfo(control_path)
+      write_control_scripts(control_path)
+      tar_path(control_path, controltar_path)
+    ensure
+      FileUtils.rm_r(control_path)
     end
-  end
     
-        it 'does not redirect when the registration is open' do
-      AppConfig.settings.enable_registrations = true
+        self.attributes[:pacman_optional_depends] = control['optdepend'] || []
+    # There are other available attributes, but I didn't include them because:
+    # - makedepend: deps needed to make the arch package. But it's already
+    #   made. It just needs to be converted at this point
+    # - checkdepend: See above
+    # - makepkgopt: See above
+    # - size: can be dynamically generated
+    # - builddate: Should be changed to time of package conversion in the new
+    #   package, so this value should be thrown away.
     
-    module LogStash
-  module PluginManager
-  end
-end
+          # TODO(sissel): preinstall/postinstall
+      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
+      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
+        type, klass, path, mode, user, group = line.split
     
-    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
-  REJECTED_OPTIONS = [:path, :git, :github]
-  # These are local gems used by LS and needs to be filtered out of other plugin gems
-  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
+        cleanup_staging
+    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
+    # rest.
+    dir.input('.')
+    @staging_path = dir.staging_path
+    dir.cleanup_build
+  end # def input
     
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
+        realpath = Pathname.new(input_path).realpath.to_s
+    ::Dir.chdir(build_path) do
+      safesystem('unzip', realpath)
+    end
     
-          def page_name
-        @name.gsub('-', ' ')
-      end
-    
-          def header
-        if @header.nil?
-          if page = @page.header
-            @header = page.text_data
-          else
-            @header = false
-          end
-        end
-        @header
-      end
-    
-        end
-  end
-end
-
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
-      end
-    
-    module RuboCop
-  # Handles caching of configurations and association of inspected
-  # ruby files to configurations.
-  class ConfigStore
-    def initialize
-      # @options_config stores a config that is specified in the command line.
-      # This takes precedence over configs located in any directories
-      @options_config = nil
+        (@source.empty? || @target.empty? || options.name.empty?) &&
+      abort('Must specify package name, source and output')
