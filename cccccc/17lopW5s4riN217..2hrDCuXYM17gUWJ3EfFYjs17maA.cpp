@@ -1,247 +1,273 @@
 
         
-        // hidden_ops should be a list of Op names that should get a leading _
-// in the output. Prints the output to stdout.
-// Optional fourth argument is the name of the original C++ source file
-// where the ops' REGISTER_OP() calls reside.
-void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
-                    const std::vector<string>& hidden_ops, bool require_shapes,
-                    const string& source_file_name = '');
+        enum GARBAGE_LEVEL
+{
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
+};
     
-    // Converts a Python object to a bfloat16 value. Returns true on success,
-// returns false and reports a Python error on failure.
-bool AsBfloat16(PyObject* arg, bfloat16* output) {
-  if (PyBfloat16_Check(arg)) {
-    *output = PyBfloat16_Bfloat16(arg);
-    return true;
+    
+    {  TBLOB* blob;
+  Tesseract* tesseract;
+  BLOB_CHOICE_LIST** choices;
+};
+    
+      Pix* pix() const {
+    return pix_;
   }
-  if (PyFloat_Check(arg)) {
-    double d = PyFloat_AsDouble(arg);
-    if (PyErr_Occurred()) {
-      return false;
-    }
-    // TODO(phawkins): check for overflow
-    *output = bfloat16(d);
-    return true;
+  void set_pix(Pix* pix) {
+    pix_ = pix;
   }
-  if (TfPyInt_Check(arg)) {
-    long l = TfPyInt_AsLong(arg);  // NOLINT
-    if (PyErr_Occurred()) {
-      return false;
-    }
-    // TODO(phawkins): check for overflow
-    *output = bfloat16(static_cast<float>(l));
-    return true;
+  bool inverse() const {
+    return inverse_;
   }
-  if (PyArray_IsScalar(arg, Float)) {
-    float f;
-    PyArray_ScalarAsCtype(arg, &f);
-    *output = bfloat16(f);
-    return true;
+  void set_inverse(bool value) {
+    inverse_ = value;
   }
-  PyErr_Format(PyExc_TypeError, 'expected number, got %s',
-               arg->ob_type->tp_name);
-  return false;
-}
+  const DENORM* RootDenorm() const {
+    if (predecessor_ != nullptr)
+      return predecessor_->RootDenorm();
+    return this;
+  }
+  const DENORM* predecessor() const {
+    return predecessor_;
+  }
+  // Accessors - perhaps should not be needed.
+  float x_scale() const {
+    return x_scale_;
+  }
+  float y_scale() const {
+    return y_scale_;
+  }
+  const BLOCK* block() const {
+    return block_;
+  }
+  void set_block(const BLOCK* block) {
+    block_ = block;
+  }
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/platform/logging.h'
+    #ifndef TESSERACT_CCMAIN_OTSUTHR_H_
+#define TESSERACT_CCMAIN_OTSUTHR_H_
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-
+    // Specialization for a pair of ints in increasing order.
+using IntKDPair = KDPairInc<int, int>;
     
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    // Indicates a set of options for a device's usage, which generally must be
-// provided at StreamExecutor device-initialization time.
-//
-// These are intended to be useful-but-not-mandatorily-supported options for
-// using devices on the underlying platform. Presently, if the option requested
-// is not available on the target platform, a warning will be emitted.
-struct DeviceOptions {
- public:
-  // When it is observed that more memory has to be allocated for thread stacks,
-  // this flag prevents it from ever being deallocated. Potentially saves
-  // thrashing the thread stack memory allocation, but at the potential cost of
-  // some memory space.
-  static const unsigned kDoNotReclaimStackAllocation = 0x1;
-    }
-    
-      // Computes complex-to-real FFT in inverse direction.
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<std::complex<float>> &input,
-                     DeviceMemory<float> *output) = 0;
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<std::complex<double>> &input,
-                     DeviceMemory<double> *output) = 0;
-    
-    // A class for indicating whether an assertion was successful.  When
-// the assertion wasn't successful, the AssertionResult object
-// remembers a non-empty message that describes how it failed.
-//
-// To create an instance of this class, use one of the factory functions
-// (AssertionSuccess() and AssertionFailure()).
-//
-// This class is useful for two purposes:
-//   1. Defining predicate functions to be used with Boolean test assertions
-//      EXPECT_TRUE/EXPECT_FALSE and their ASSERT_ counterparts
-//   2. Defining predicate-format functions to be
-//      used with predicate assertions (ASSERT_PRED_FORMAT*, etc).
-//
-// For example, if you define IsEven predicate:
-//
-//   testing::AssertionResult IsEven(int n) {
-//     if ((n % 2) == 0)
-//       return testing::AssertionSuccess();
-//     else
-//       return testing::AssertionFailure() << n << ' is odd';
-//   }
-//
-// Then the failed expectation EXPECT_TRUE(IsEven(Fib(5)))
-// will print the message
-//
-//   Value of: IsEven(Fib(5))
-//     Actual: false (5 is odd)
-//   Expected: true
-//
-// instead of a more opaque
-//
-//   Value of: IsEven(Fib(5))
-//     Actual: false
-//   Expected: true
-//
-// in case IsEven is a simple Boolean predicate.
-//
-// If you expect your predicate to be reused and want to support informative
-// messages in EXPECT_FALSE and ASSERT_FALSE (negative assertions show up
-// about half as often as positive ones in our tests), supply messages for
-// both success and failure cases:
-//
-//   testing::AssertionResult IsEven(int n) {
-//     if ((n % 2) == 0)
-//       return testing::AssertionSuccess() << n << ' is even';
-//     else
-//       return testing::AssertionFailure() << n << ' is odd';
-//   }
-//
-// Then a statement EXPECT_FALSE(IsEven(Fib(6))) will print
-//
-//   Value of: IsEven(Fib(6))
-//     Actual: true (8 is even)
-//   Expected: false
-//
-// NB: Predicates that support negative Boolean assertions have reduced
-// performance in positive ones so be careful not to use them in tests
-// that have lots (tens of thousands) of positive Boolean assertions.
-//
-// To use this class with EXPECT_PRED_FORMAT assertions such as:
-//
-//   // Verifies that Foo() returns an even number.
-//   EXPECT_PRED_FORMAT1(IsEven, Foo());
-//
-// you need to define:
-//
-//   testing::AssertionResult IsEven(const char* expr, int n) {
-//     if ((n % 2) == 0)
-//       return testing::AssertionSuccess();
-//     else
-//       return testing::AssertionFailure()
-//         << 'Expected: ' << expr << ' is even\n  Actual: it's ' << n;
-//   }
-//
-// If Foo() returns 5, you will see the following message:
-//
-//   Expected: Foo() is even
-//     Actual: it's 5
-//
-class GTEST_API_ AssertionResult {
- public:
-  // Copy constructor.
-  // Used in EXPECT_TRUE/FALSE(assertion_result).
-  AssertionResult(const AssertionResult& other);
-  // Used in the EXPECT_TRUE/FALSE(bool_expression).
-  explicit AssertionResult(bool success) : success_(success) {}
-    }
-    
-      tuple(const tuple& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_), f3_(t.f3_),
-      f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_), f8_(t.f8_) {}
-    
-      const size_t len = strlen(a_c_string);
-  char* const clone = new char[ len + 1 ];
-  memcpy(clone, a_c_string, len + 1);
-    
-    
-    {  // Can we set the MyString to NULL?
-  s.Set(NULL);
-  EXPECT_STREQ(NULL, s.c_string());
-}
-
-    
-        m_destPoly.clear();
-    if (len == 1)
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
     {
-      if (node.m_jointype == jtRound)
-      {
-        double X = 1.0, Y = 0.0;
-        for (cInt j = 1; j <= steps; j++)
-        {
-          m_destPoly.push_back(IntPoint(
-            Round(m_srcPoly[0].X + X * delta),
-            Round(m_srcPoly[0].Y + Y * delta)));
-          double X2 = X;
-          X = X * m_cos - m_sin * Y;
-          Y = X2 * m_sin + Y * m_cos;
-        }
-      }
-      else
-      {
-        double X = -1.0, Y = -1.0;
-        for (int j = 0; j < 4; ++j)
-        {
-          m_destPoly.push_back(IntPoint(
-            Round(m_srcPoly[0].X + X * delta),
-            Round(m_srcPoly[0].Y + Y * delta)));
-          if (X < 0) X = 1;
-          else if (Y < 0) Y = 1;
-          else X = -1;
-        }
-      }
-      m_destPolys.push_back(m_destPoly);
-      continue;
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
     }
-    //build m_normals ...
-    m_normals.clear();
-    m_normals.reserve(len);
-    for (int j = 0; j < len - 1; ++j)
-      m_normals.push_back(GetUnitNormal(m_srcPoly[j], m_srcPoly[j + 1]));
-    if (node.m_endtype == etClosedLine || node.m_endtype == etClosedPolygon)
-      m_normals.push_back(GetUnitNormal(m_srcPoly[len - 1], m_srcPoly[0]));
-    else
-      m_normals.push_back(DoublePoint(m_normals[len - 2]));
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+    // base class that we can catch, independent of the type parameter
+struct /*interface*/ IExceptionWithCallStackBase
+{
+    virtual const char * CallStack() const = 0;
+    virtual ~IExceptionWithCallStackBase() noexcept = default;
+};
     
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+    template <class ElemType>
+TensorView<ElemType> EpochAccumulatorNode<ElemType>::EnsureAccumlator()
+{
+    if (m_accumulator->HasNoElements())
+    {
+        // Accumulator has not been resized yet, allocate with necessary size.
+        const size_t sampleSize = GetSampleLayout().GetNumElements();
+        m_accumulator->Resize(sampleSize, 1);
+        Reset();
+    }
+    size_t rank = DetermineElementwiseTensorRank();
+    return DataTensorFor(m_accumulator, rank, FrameRange());
+}
+    
+    void Assembler::extsw(const Reg64& ra, const Reg64& rs, bool rc) {
+  EmitXForm(31, rn(rs), rn(ra), rn(0), 986, rc);
+}
+    
+    #define CONTAINER_CONFIG_BODY(T, METHOD) \
+T Config::Get##METHOD(const IniSetting::Map& ini, const Hdf& config, \
+                      const std::string& name /* = '' */, \
+                      const T& defValue /* = T() */, \
+                      const bool prepend_hhvm /* = true */) { \
+  auto ini_name = IniName(name, prepend_hhvm); \
+  Hdf hdf = name != '' ? config[name] : config; \
+  T ini_ret, hdf_ret; \
+  auto value = ini_iterate(ini, ini_name); \
+  if (value.isArray() || value.isObject()) { \
+    ini_on_update(value.toVariant(), ini_ret); \
+    /** Make sure that even if we have an ini value, that if we also **/ \
+    /** have an hdf value, that it maintains its edge as beating out **/ \
+    /** ini                                                          **/ \
+    if (hdf.exists() && !hdf.isEmpty()) { \
+      hdf.configGet(hdf_ret); \
+      if (hdf_ret != ini_ret) { \
+        ini_ret = hdf_ret; \
+        IniSetting::SetSystem(ini_name, ini_get(ini_ret)); \
+      } \
+    } \
+    return ini_ret; \
+  } \
+  if (hdf.exists() && !hdf.isEmpty()) { \
+    hdf.configGet(hdf_ret); \
+    return hdf_ret; \
+  } \
+  return defValue; \
+} \
+void Config::Bind(T& loc, const IniSetting::Map& ini, const Hdf& config, \
+                  const std::string& name /* = '' */, \
+                  const T& defValue /* = T() */, \
+                  const bool prepend_hhvm /* = true */) { \
+  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
+  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
+                   IniName(name, prepend_hhvm), &loc); \
+}
+    
+    void ArrayDirectory::rewind() {
+  m_it.rewind();
+}
+    
+    namespace HPHP {
+    }
+    
+    #if !UCONFIG_NO_TRANSLITERATION
+    
+    
+    {    printf('\nIndex   Binary     Type             Operand\n' \
+           '-------------------------------------------\n');
+    for (index = 0; index<fCompiledPat->size(); index++) {
+        dumpOp(index);
+    }
+    printf('\n\n');
 #endif
+}
+    
+    void ScientificNumberFormatter::getPreExponent(
+        const DecimalFormatSymbols &dfs, UnicodeString &preExponent) {
+    preExponent.append(dfs.getConstSymbol(
+            DecimalFormatSymbols::kExponentMultiplicationSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kOneDigitSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol));
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    #ifndef __SHARED_BREAKITERATOR_H__
+#define __SHARED_BREAKITERATOR_H__
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    #ifndef __SHARED_PLURALRULES_H__
+#define __SHARED_PLURALRULES_H__
+    
+    
+    {                text.extractBetween(0, start + count, temp);
+                src = &temp;
+            } else {
+                src = &text;
+            }
+    
+    
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    U_NAMESPACE_BEGIN
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+                // Allocate new temporary chunk if needed
+            const int bitmap_size_in_bytes = src_glyph.Info.Width * src_glyph.Info.Height;
+            if (buf_bitmap_current_used_bytes + bitmap_size_in_bytes > BITMAP_BUFFERS_CHUNK_SIZE)
+            {
+                buf_bitmap_current_used_bytes = 0;
+                buf_bitmap_buffers.push_back((unsigned char*)IM_ALLOC(BITMAP_BUFFERS_CHUNK_SIZE));
+            }
+    
+        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
+    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
+    enum RasterizerFlags
+    {
+        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
+        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
+        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
+        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
+        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
+        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
+        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
+        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
+    };
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Decide GL+GLSL versions
+#if __APPLE__
+    // GL 3.2 + GLSL 150
+    const char* glsl_version = '#version 150';
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+    // GL 3.0 + GLSL 130
+    const char* glsl_version = '#version 130';
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+    
+    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    }
+    
+        io.KeyMap[ImGuiKey_Tab] = ALLEGRO_KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = ALLEGRO_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = ALLEGRO_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = ALLEGRO_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = ALLEGRO_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = ALLEGRO_KEY_PGUP;
+    io.KeyMap[ImGuiKey_PageDown] = ALLEGRO_KEY_PGDN;
+    io.KeyMap[ImGuiKey_Home] = ALLEGRO_KEY_HOME;
+    io.KeyMap[ImGuiKey_End] = ALLEGRO_KEY_END;
+    io.KeyMap[ImGuiKey_Insert] = ALLEGRO_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = ALLEGRO_KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = ALLEGRO_KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = ALLEGRO_KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = ALLEGRO_KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape] = ALLEGRO_KEY_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = ALLEGRO_KEY_A;
+    io.KeyMap[ImGuiKey_C] = ALLEGRO_KEY_C;
+    io.KeyMap[ImGuiKey_V] = ALLEGRO_KEY_V;
+    io.KeyMap[ImGuiKey_X] = ALLEGRO_KEY_X;
+    io.KeyMap[ImGuiKey_Y] = ALLEGRO_KEY_Y;
+    io.KeyMap[ImGuiKey_Z] = ALLEGRO_KEY_Z;
+    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
