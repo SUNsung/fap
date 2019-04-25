@@ -1,246 +1,493 @@
 
         
-        )DOC')
-    .Input(0, 'X', '*(type: Tensor`<float>`)* Input tensor.')
-    .Output(0, 'Y', '*(type: Tensor`<float>`)* Output tensor.');
+          void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
+    }
+    n_ -= n;
+  }
     
+    op = core.CreateOperator(
+    'Floor',
+    ['X'],
+    ['X'],
+)
     
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    Each feature has fixed lengths which are passed as lengths argument and a
+separate tensor will be produced for each feature.
+i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
+    
+    )DOC')
+    .Arg(
+        'values',
+        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
+        true /* required */)
+    .Arg(
+        'dtype',
+        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
+    .Arg(
+        'shape',
+        '*(type: [int])* Desired shape of the *output* tensor.')
+    .Arg(
+        'extra_shape',
+        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
+    .Input(
+        0,
+        'input',
+        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
     .Output(
         0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
+        'output',
+        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
+    .TensorInferenceFunction(FillerTensorInference<>);
     
-    namespace caffe2 {
+    
+    {} // namespace caffe2
+
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/logging.h'
+#include 'caffe2/core/operator.h'
+#include 'caffe2/utils/math.h'
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
     }
     
-      // Check if part from seed2 label: with low math density and left indented. We
-  // are using two checks:
-  // 1. If its left is aligned with any coordinates in indented_texts_left,
-  // which we assume have been sorted.
-  // 2. If its foreground density is over foreground_density_th.
-  bool CheckForSeed2(
-      const GenericVector<int>& indented_texts_left,
-      const float foreground_density_th,
-      ColPartition* part);
-    
-    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
-
-    
-      // Accessors.
-  int total_cost() const {
-    return total_cost_;
-  }
-  int Pathlength() const {
-    return total_steps_;
-  }
-  const DPPoint* best_prev() const {
-    return best_prev_;
-  }
-  void AddLocalCost(int new_cost) {
-    local_cost_ += new_cost;
+      ~PrefetcherIter() {
+    while (recycle_queue_.size() != 0) {
+      DataBatch *batch = recycle_queue_.front();
+      recycle_queue_.pop();
+      delete batch;
+    }
+    delete out_;
+    iter.Destroy();
   }
     
+      /*!
+  * \brief Issues quantize operation to be scheduled by the engine
+  * Compresses `from` into `to` and accumulates the quantization error
+  * into 'residual', using the quantization of type `type_`
+  * \param from the ndarray containing original data to be quantized
+  * \param to the target ndarray which contains quantized data
+  * \param residual the ndarray which accumulates quantization error
+  * \param priority Priority of the action.
+  */
+  void Quantize(const mxnet::NDArray &from, mxnet::NDArray *to,
+                mxnet::NDArray *residual, const int priority);
     
-#endif  // TESSERACT_CCSTRUCT_LINLSQ_H_
-
-    
-    #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
+      void Run(const RunContext& rctx) {
+    // setup DLTensor
+    for (size_t i = 0; i < array_loc_.size(); ++i) {
+      values_[array_loc_[i]].v_handle =
+          const_cast<DLTensor*>(&(array_data_[i].data().dltensor()));
+    }
+    // run the packed function
+    TVMRetValue rv;
+    TVMArgs args(&values_[0], &type_codes_[0], values_.size());
+    if (ctx().dev_type == Context::kGPU) {
+#if MXNET_USE_CUDA
+      // pass stream via last argument.
+      void* strm = static_cast<void*>(rctx.get_stream<gpu>()->stream_);
+      int dev_type = kDLGPU;
+      fset_stream_(dev_type, rctx.ctx.dev_id, strm);
+      func_.CallPacked(args, &rv);
+      fset_stream_(dev_type, rctx.ctx.dev_id, nullptr);
+#else
+      LOG(FATAL) << 'Please compile with CUDA enabled for cuda features';
+#endif
     } else {
-      *ss_ << pointer;
+      func_.CallPacked(args, &rv);
     }
   }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
-  }
-#endif  // GTEST_OS_SYMBIAN
-    
-    // Helper function for printing a tuple.  T must be instantiated with
-// a tuple type.
-template <typename T>
-void PrintTupleTo(const T& t, ::std::ostream* os) {
-  *os << '(';
-  TuplePrefixPrinter< ::std::tr1::tuple_size<T>::value>::
-      PrintPrefixTo(t, os);
-  *os << ')';
-}
-    
-      // Verifies that registered_tests match the test names in
-  // defined_test_names_; returns registered_tests if successful, or
-  // aborts the program otherwise.
-  const char* VerifyRegisteredTestNames(
-      const char* file, int line, const char* registered_tests);
-    
-    template <class Generator1, class Generator2, class Generator3,
-    class Generator4, class Generator5, class Generator6, class Generator7,
-    class Generator8, class Generator9>
-class CartesianProductHolder9 {
- public:
-CartesianProductHolder9(const Generator1& g1, const Generator2& g2,
-    const Generator3& g3, const Generator4& g4, const Generator5& g5,
-    const Generator6& g6, const Generator7& g7, const Generator8& g8,
-    const Generator9& g9)
-      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6), g7_(g7), g8_(g8),
-          g9_(g9) {}
-  template <typename T1, typename T2, typename T3, typename T4, typename T5,
-      typename T6, typename T7, typename T8, typename T9>
-  operator ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8,
-      T9> >() const {
-    return ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8,
-        T9> >(
-        new CartesianProductGenerator9<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-        static_cast<ParamGenerator<T1> >(g1_),
-        static_cast<ParamGenerator<T2> >(g2_),
-        static_cast<ParamGenerator<T3> >(g3_),
-        static_cast<ParamGenerator<T4> >(g4_),
-        static_cast<ParamGenerator<T5> >(g5_),
-        static_cast<ParamGenerator<T6> >(g6_),
-        static_cast<ParamGenerator<T7> >(g7_),
-        static_cast<ParamGenerator<T8> >(g8_),
-        static_cast<ParamGenerator<T9> >(g9_)));
-  }
-    }
-    
-    
-    {    return -1;
-  }
-    
-        E* element = new E(old_head->element());
-    delete old_head;
-    
-    class DBImpl;
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
+    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
+'will be used as crop_like shape reference')
+.add_arguments(CropParam::__FIELDS__())
+.set_key_var_num_args('num_args');
+}  // namespace op
+}  // namespace mxnet
+
     
-    Reader::~Reader() {
-  delete[] backing_store_;
-}
-    
-    TEST(LogTest, ReadWrite) {
-  Write('foo');
-  Write('bar');
-  Write('');
-  Write('xxxx');
-  ASSERT_EQ('foo', Read());
-  ASSERT_EQ('bar', Read());
-  ASSERT_EQ('', Read());
-  ASSERT_EQ('xxxx', Read());
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ('EOF', Read());  // Make sure reads at eof work
-}
-    
-    class Env;
-    
-    class VersionSet;
-    
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      if (param_.sampler_type == st::kBilinear) {
+        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                          sampler_,
+                                                          dtype_,
+                                                          4,
+                                                          dim));
+      }
+    }
   }
     
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
+    
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
+      }
+    });
+}  // namespace op
+}  // namespace mxnet
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
+    
+    
+    {
+    {
+    {      // Test write Symbol
+      std::vector<unsigned char> buffer2(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+      for (int i = 0; i < input.size(); i++) {
+        cbw.WriteSymbol(buffer2.data(), input[i], i);
+      }
+      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
+      std::vector<int> output2(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output2[i] = ci2[i];
+      }
+      ASSERT_TRUE(input == output2);
+    }
+  }
+}
+    
+    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
+  R_API_BEGIN();
+  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
+  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)), v));
+  R_API_END();
+  return R_NilValue;
+}
+    
+    template<typename DType>
+inline void CompressArray<DType>::Decompress(int chunk_id) {
+  int chunk_size = static_cast<int>(
+      raw_chunks_[chunk_id + 1] - raw_chunks_[chunk_id]) * sizeof(DType);
+  int encoded_size = static_cast<int>(
+      encoded_chunks_[chunk_id + 1] - encoded_chunks_[chunk_id]);
+  // decompress data
+  int src_size = LZ4_decompress_fast(
+      dmlc::BeginPtr(in_buffer_) + encoded_chunks_[chunk_id],
+      reinterpret_cast<char*>(dmlc::BeginPtr(data) + raw_chunks_[chunk_id]),
+      chunk_size);
+  CHECK_EQ(encoded_size, src_size);
+}
+    
+    class SparsePageRawFormat : public SparsePageFormat {
+ public:
+  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
+    auto& offset_vec = page->offset.HostVector();
+    if (!fi->Read(&offset_vec)) return false;
+    auto& data_vec = page->data.HostVector();
+    CHECK_NE(page->offset.Size(), 0U) << 'Invalid SparsePage file';
+    data_vec.resize(offset_vec.back());
+    if (page->data.Size() != 0) {
+      CHECK_EQ(fi->Read(dmlc::BeginPtr(data_vec),
+                        (page->data).Size() * sizeof(Entry)),
+               (page->data).Size() * sizeof(Entry))
+          << 'Invalid SparsePage file';
+    }
+    return true;
+  }
+    }
+    
+    namespace xgboost {
+namespace obj {
+    }
+    }
+    
+        // Submit command buffer
+    vkCmdEndRenderPass(fd->CommandBuffer);
+    {
+        VkPipelineStageFlags wait_stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        VkSubmitInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        info.waitSemaphoreCount = 1;
+        info.pWaitSemaphores = &image_acquired_semaphore;
+        info.pWaitDstStageMask = &wait_stage;
+        info.commandBufferCount = 1;
+        info.pCommandBuffers = &fd->CommandBuffer;
+        info.signalSemaphoreCount = 1;
+        info.pSignalSemaphores = &render_complete_semaphore;
+    }
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver.
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    #pragma once
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        len = stb_compress_chunk(input, input, input+length, length, &literals, chash, stb__hashsize-1);
+    assert(len == length);
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    
+    {    printf('DestroyContext()\n');
+    ImGui::DestroyContext();
+    return 0;
+}
+
+    
+            // Allegro's implementation of al_draw_indexed_prim() for DX9 is completely broken. Unindex our buffers ourselves.
+        // FIXME-OPT: Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 float as well..
+        static ImVector<ImDrawVertAllegro> vertices;
+        vertices.resize(cmd_list->IdxBuffer.Size);
+        for (int i = 0; i < cmd_list->IdxBuffer.Size; i++)
+        {
+            const ImDrawVert* src_v = &cmd_list->VtxBuffer[cmd_list->IdxBuffer[i]];
+            ImDrawVertAllegro* dst_v = &vertices[i];
+            dst_v->pos = src_v->pos;
+            dst_v->uv = src_v->uv;
+            unsigned char* c = (unsigned char*)&src_v->col;
+            dst_v->col = al_map_rgba(c[0], c[1], c[2], c[3]);
+        }
+    
+    using namespace  ::osquery::extensions;
+    
+      std::string content;
+  auto status = readFile('/etc/exports', content);
+  if (!status.ok()) {
+    VLOG(1) << 'Error reading /etc/exports: ' << status.toString();
+    return {};
   }
     
-    size_t num_threads = 31;
-size_t work_chunk  = 120;
-    
-    void Config::ParseIniFile(const std::string &filename, IniSettingMap &ini,
-                          const bool constants_only /* = false */,
-                          const bool is_system /* = true */ ) {
-    std::ifstream ifs(filename);
-    std::string str((std::istreambuf_iterator<char>(ifs)),
-                    std::istreambuf_iterator<char>());
-    std::string with_includes;
-    Config::ReplaceIncludesWithIni(filename, str, with_includes);
-    Config::SetParsedIni(ini, with_includes, filename, constants_only,
-                         is_system);
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+    /*
+** This routine reads a line of text from FILE in, stores
+** the text in memory obtained from malloc() and returns a pointer
+** to the text.  NULL is returned at end of file, or if malloc()
+** fails.
+**
+** If zLine is not NULL then it is a malloced buffer returned from
+** a previous call to this routine that may be reused.
+*/
+static char* local_getline(char* zLine, FILE* in) {
+  int nLine = ((zLine == nullptr) ? 0 : 100);
+  int n = 0;
     }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+      // Author: @guliashvili
+  // Creation Time: 4/09/2018
+  bool isTotalQueryCounterMonitorEnabled();
+    
+    
+    {
+    {struct mei_version {
+  uint32_t important_details[7];
+  uint16_t major;
+  uint16_t minor;
+  uint16_t hotfix;
+  uint16_t build;
+  uint16_t r_major;
+  uint16_t r_minor;
+  uint16_t r_hotfix;
+  uint16_t r_build;
+  uint16_t codes[6];
+};
+}
+}
+
+    
+    
+    {  ValidatatioMap row_map = {{'filter_name', NonEmptyString},
+                            {'chain', NormalType},
+                            {'policy', NormalType},
+                            {'target', NormalType},
+                            {'protocol', IntType},
+                            {'src_port', IntMinMaxCheck(0, 65535)},
+                            {'dst_port', IntMinMaxCheck(0, 65535)},
+                            {'src_ip', verifyEmptyStringOrIpAddress},
+                            {'src_mask', verifyEmptyStringOrIpAddress},
+                            {'iniface', NormalType},
+                            {'iniface_mask', verifyEmptyStringOrIpAddress},
+                            {'dst_ip', verifyEmptyStringOrIpAddress},
+                            {'dst_mask', verifyEmptyStringOrIpAddress},
+                            {'outiface', NormalType},
+                            {'outiface_mask', verifyEmptyStringOrIpAddress},
+                            {'match', SpecificValuesCheck{'yes', 'no'}},
+                            {'packets', NonNegativeInt},
+                            {'bytes', NonNegativeInt}};
+  validate_rows(data, row_map);
+}
+    
+    namespace osquery {
+namespace table_tests {
+    }
     }
     
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
+    TEST_F(keychainItems, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from keychain_items');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'label', NormalType}
+  //      {'description', NormalType}
+  //      {'comment', NormalType}
+  //      {'created', NormalType}
+  //      {'modified', NormalType}
+  //      {'type', NormalType}
+  //      {'path', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
 }
     
     
-void printVec(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
+    {  return Put(key_slice, value_slice);
 }
     
-    ///Definition for singly-linked list.
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
+    class DelayWriteToken : public WriteControllerToken {
+ public:
+  explicit DelayWriteToken(WriteController* controller)
+      : WriteControllerToken(controller) {}
+  virtual ~DelayWriteToken();
 };
     
-                    if( stack.size() == 0 )
-                    return false;
-    
-    /// LinkedList Test Helper Functions
-ListNode* createLinkedList(int arr[], int n){
+      static void CompactFiles(void* arg) {
+    std::unique_ptr<CompactionTask> task(
+        reinterpret_cast<CompactionTask*>(arg));
+    assert(task);
+    assert(task->db);
+    Status s = task->db->CompactFiles(
+        task->compact_options,
+        task->input_file_names,
+        task->output_level);
+    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
+    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
+      // If a compaction task with its retry_on_fail=true failed,
+      // try to schedule another compaction in case the reason
+      // is not an IO error.
+      CompactionTask* new_task = task->compactor->PickCompaction(
+          task->db, task->column_family_name);
+      task->compactor->ScheduleCompaction(new_task);
     }
+  }
     
-            if(nums.size() == 0)
-            return 0;
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
     
+      const Snapshot* snapshot = txn->GetSnapshot();
     
-int main() {
-    }
+      // Create column family, and rocksdb will persist the options.
+  ColumnFamilyHandle* cf;
+  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
+  assert(s.ok());
     
-    #include <iostream>
-#include <vector>
+      // Write a key OUTSIDE of this transaction.
+  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
+  // here, the transaction would fail to commit.
+  s = txn_db->Put(write_options, 'xyz', 'zzz');
     
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
+      // Lookup page cache by page identifier
+  //
+  // page_key   Page identifier
+  // buf        Buffer where the data should be copied
+  // size       Size of the page
+  virtual Status Lookup(const Slice& key, std::unique_ptr<char[]>* data,
+                        size_t* size) = 0;
+    
+      // Attempt to acquire lock.  If timeout is non-negative, operation may be
+  // failed after this many microseconds.
+  // Returns OK on success,
+  //         TimedOut if timed out,
+  //         or other Status on failure.
+  // If returned status is OK, TransactionDB will eventually call UnLock().
+  virtual Status TryLockFor(int64_t timeout_time) = 0;
