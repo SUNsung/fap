@@ -1,68 +1,59 @@
 
         
-                r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
+            # The URL prefix the adapter should be mount to.
+    prefix = None
     
-        req_protocol = request.scheme
-    req_site = get_current_site(request)
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
+    
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME + SEP_CREDENTIALS + PASSWORD,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+        def test_implicit_POST_stdin(self, httpbin):
+        with open(FILE_PATH) as f:
+            env = MockEnvironment(stdin_isatty=False, stdin=f)
+            r = http('--form', httpbin.url + '/post', env=env)
+        assert HTTP_OK in r
     
     
-class CloudWatchEventRule(object):
-    def __init__(self, module, name, client, schedule_expression=None,
-                 event_pattern=None, description=None, role_arn=None):
-        self.name = name
-        self.client = client
-        self.changed = False
-        self.schedule_expression = schedule_expression
-        self.event_pattern = event_pattern
-        self.description = description
-        self.role_arn = role_arn
-        self.module = module
+def test_unicode_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': UNICODE}
     
-    # Ensure rule with certain limitations
-- ipa_hbacrule:
-    name: allow_all_developers_access_to_db
-    description: Allow all developers to access any database from any host
-    hostgroup:
-    - db-server
-    usergroup:
-    - developers
-    state: present
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
     
-    # Create nested groups
-- group_by:
-    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
-    parents:
-      - el{{ ansible_distribution_major_version }}
+CLEAR_LINE = '\r\033[K'
+PROGRESS = (
+    '{percentage: 6.2f} %'
+    ' {downloaded: >10}'
+    ' {speed: >10}/s'
+    ' {eta: >8} ETA'
+)
+PROGRESS_NO_CONTENT_LENGTH = '{downloaded: >10} {speed: >10}/s'
+SUMMARY = 'Done. {downloaded} in {time:0.5f}s ({speed}/s)\n'
+SPINNER = '|/-\\'
     
-        module.exit_json(changed=False, msg='logs(s) already unfollowed')
     
-    EXAMPLES = '''
-- name: Add device to CA Spectrum
-  local_action:
-    module: spectrum_device
-    device: '{{ ansible_host }}'
-    community: secret
-    landscape: '0x100000'
-    oneclick_url: http://oneclick.example.com:8080
-    oneclick_user: username
-    oneclick_password: password
-    state: present
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
+    
+    import homeassistant.config as config_util
