@@ -1,107 +1,25 @@
 
         
-              it 'left-justifies the result if specified with $ argument is negative' do
-        format('%1$*2$b', 10, -10).should == '1010      '
-        format('%1$*2$B', 10, -10).should == '1010      '
-        format('%1$*2$d', 112, -10).should == '112       '
-        format('%1$*2$i', 112, -10).should == '112       '
-        format('%1$*2$o', 87, -10).should == '127       '
-        format('%1$*2$u', 112, -10).should == '112       '
-        format('%1$*2$x', 196, -10).should == 'c4        '
-        format('%1$*2$X', 196, -10).should == 'C4        '
+        describe GivenDailyLike do
     
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
-    
-      after :each do
-    Object.send :remove_method, :boom
-  end
-    
-          def inherited_hash_reader(name)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{name}(name)
-            _#{name}(name.tr('_', '-'))
-          end
-    
-        # Adds an entry to the exception's Sass backtrace.
-    #
-    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def add_backtrace(attrs)
-      sass_backtrace << attrs.reject {|_k, v| v.nil?}
+        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
+      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
+      return action_return
     end
     
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-            elsif masked_token?(token)
-          token = unmask_token(token)
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-      describe '#random_string' do
-    it 'outputs a string of 32 characters' do
-      expect(subject.random_string.length).to eq(32)
+        def root_url
+      context[:root_url]
     end
-  end
     
-      def migration_name
-    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
-  end
+        delegate :empty?, :blank?, to: :pages
     
-    require 'erb'
-require 'digest'
-require 'tempfile'
-require 'paperclip/version'
-require 'paperclip/geometry_parser_factory'
-require 'paperclip/geometry_detector_factory'
-require 'paperclip/geometry'
-require 'paperclip/processor'
-require 'paperclip/processor_helpers'
-require 'paperclip/tempfile'
-require 'paperclip/thumbnail'
-require 'paperclip/interpolations/plural_cache'
-require 'paperclip/interpolations'
-require 'paperclip/tempfile_factory'
-require 'paperclip/style'
-require 'paperclip/attachment'
-require 'paperclip/storage'
-require 'paperclip/callbacks'
-require 'paperclip/file_command_content_type_detector'
-require 'paperclip/media_type_spoof_detector'
-require 'paperclip/content_type_detector'
-require 'paperclip/glue'
-require 'paperclip/errors'
-require 'paperclip/missing_attachment_styles'
-require 'paperclip/validators'
-require 'paperclip/logger'
-require 'paperclip/helpers'
-require 'paperclip/has_attached_file'
-require 'paperclip/attachment_registry'
-require 'paperclip/filename_cleaner'
-require 'paperclip/rails_environment'
+              node.before(%(<div class='pre-title'>#{node['title']}</div>)) if node['title']
     
-        def self.clear
-      instance.clear
-    end
+            css('.c10', '.showcase', '.showcase-content', '.l-main-section', 'div.div', 'div[flex]', 'code-tabs', 'md-card', 'md-card-content', 'div:not([class])', 'footer', '.card-row', '.card-row-container', 'figure', 'blockquote', 'exported', 'defined', 'div.ng-scope', '.code-example header', 'section.desc', '.row', '.dart-api-entry-main', '.main-content', 'section.summary', 'span.signature').each do |node|
+          node.before(node.children).remove
+        end
+    
+            # Remove examples
+        css('.runnable-example').each do |node|
+          node.parent.remove
+        end
