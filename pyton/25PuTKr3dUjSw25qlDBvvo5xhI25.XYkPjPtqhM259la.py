@@ -1,93 +1,76 @@
 
         
         
-class TooManyRedirects(RequestException):
-    '''Too many redirects.'''
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
     
-        return inner
-    
-        def run(self):
-        try:
-            self.server_sock = self._create_socket_and_bind()
-            # in case self.port = 0
-            self.port = self.server_sock.getsockname()[1]
-            self.ready_event.set()
-            self._handle_requests()
-    
-    from urllib3.poolmanager import PoolManager, proxy_from_url
-from urllib3.response import HTTPResponse
-from urllib3.util import parse_url
-from urllib3.util import Timeout as TimeoutSauce
-from urllib3.util.retry import Retry
-from urllib3.exceptions import ClosedPoolError
-from urllib3.exceptions import ConnectTimeoutError
-from urllib3.exceptions import HTTPError as _HTTPError
-from urllib3.exceptions import MaxRetryError
-from urllib3.exceptions import NewConnectionError
-from urllib3.exceptions import ProxyError as _ProxyError
-from urllib3.exceptions import ProtocolError
-from urllib3.exceptions import ReadTimeoutError
-from urllib3.exceptions import SSLError as _SSLError
-from urllib3.exceptions import ResponseError
-from urllib3.exceptions import LocationValueError
-    
-    This module provides the capabilities for the Requests hooks system.
-    
-            close_server.set()
+        def logout(self):
+        return self._client.get('/auth/logout')
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+class Environment(BaseEnvironment):
+    '''Works like a regular Jinja2 environment but has some additional
+    knowledge of how Flask's blueprint works so that it can prepend the
+    name of the blueprint to referenced templates if necessary.
+    '''
     
-                if fail or self.network_stat != 'OK':
-                # Fail or unknown
-                if time_now - self.last_check_time < 3:
-                    return
-            else:
-                if time_now - self.last_check_time < 10:
-                    return
+            app.add_url_rule('/hello/<name>', view_func=MyView.as_view('myview'))
     
-        return out
+                version = match.group(1).strip()
     
-    __version__ = '3.0.7'
-__password__ = ''
-__hostsdeny__ = ()
-#__hostsdeny__ = ('.youtube.com', '.youku.com', '.googlevideo.com')
-__content_type__ = 'image/gif'
+        def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-    MIN_TOKEN_TYPE = UP+1
-	
-INVALID_TOKEN_TYPE = 0
+        def _colision_resolution(self, key, data=None):
+        i = 1
+        new_key = self.hash_function(key + i*i)
     
-    	return memo[m][m-1]
+            if isinstance(B,bytes):
+            B = B.decode('ascii')
     
-    
-'''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
-* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a * b
-* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
-*
-* As far as the modulo is concerned,
-* the fact : (a+b) % c = ((a%c) + (b%c)) % c
-* Now apply RULE 1 OR 2, whichever is required.
-'''
+    # Mock test below
+if False: # change to true to run this test case.
+    import sklearn.datasets as ds
+    dataset = ds.load_iris()
+    k = 3
+    heterogeneity = []
+    initial_centroids = get_initial_centroids(dataset['data'], k, seed=0)
+    centroids, cluster_assignment = kmeans(dataset['data'], k, initial_centroids, maxiter=400,
+                                        record_heterogeneity=heterogeneity, verbose=True)
+    plot_heterogeneity(heterogeneity, k)
 
     
-    if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+        return res
+    
+        s = score_euclidean(data[0], data[1])
+    print(s)
+    
+    
+def leaky_relu(x, alpha=0.1):
+    '''渗透 ReLU
+    `o = max(alpha * x, x)`
+    '''
+    return tf.nn.leaky_relu(x, alpha)
+    
+        with tf.variable_scope(name or 'attention_flow', reuse=reuse):
+        h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])  # [N, T, J, d]
+        u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])  # [N, T, J, d]
+        hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
+        h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
+        W_s = get_w([3 * d, 1])  # [3d, 1]
+    
+    # 可以通过相同的方式获取每个单词以及任一个 n-gram 的向量
+print(model.wv['hello'])
+print(model.wv['<h'])
+'''
+[-0.03481839  0.00606661  0.02581969  0.00188777  0.0325358 ]
+[ 0.04481247 -0.1784363  -0.03192253  0.07162753  0.16744071]
+'''
+print()
