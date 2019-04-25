@@ -1,139 +1,220 @@
 
         
-            secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
-    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
+        #endif // BITCOIN_QT_PLATFORMSTYLE_H
     
-    void test_ecdsa_recovery_end_to_end(void) {
-    unsigned char extra[32] = {0x00};
-    unsigned char privkey[32];
-    unsigned char message[32];
-    secp256k1_ecdsa_signature signature[5];
-    secp256k1_ecdsa_recoverable_signature rsignature[5];
-    unsigned char sig[74];
-    secp256k1_pubkey pubkey;
-    secp256k1_pubkey recpubkey;
-    int recid = 0;
+    static int secp256k1_ecdsa_sig_recover(const secp256k1_ecmult_context *ctx, const secp256k1_scalar *sigr, const secp256k1_scalar* sigs, secp256k1_ge *pubkey, const secp256k1_scalar *message, int recid) {
+    unsigned char brx[32];
+    secp256k1_fe fx;
+    secp256k1_ge x;
+    secp256k1_gej xj;
+    secp256k1_scalar rn, u1, u2;
+    secp256k1_gej qj;
+    int r;
     }
     
-    makeCommaSepLists('#define TINYFORMAT_ARGTYPES_%(j)d %(list)s',
-                  'class T%(i)d')
-    
-    const UniValue& UniValue::get_array() const
+    const UniValue& UniValue::get_obj() const
 {
-    if (typ != VARR)
-        throw std::runtime_error('JSON value is not an array as expected');
+    if (typ != VOBJ)
+        throw std::runtime_error('JSON value is not an object as expected');
     return *this;
 }
     
-        int64_t vi64 = -82;
-    UniValue v5(vi64);
-    BOOST_CHECK(v5.isNum());
-    BOOST_CHECK_EQUAL(v5.getValStr(), '-82');
+        BOOST_CHECK(arr.push_back((uint64_t) 400ULL));
+    BOOST_CHECK(arr.push_back((int64_t) -400LL));
+    BOOST_CHECK(arr.push_back((int) -401));
+    BOOST_CHECK(arr.push_back(-40.1));
     
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const s16 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    #if defined(__x86_64__) || defined(__amd64__)
+    
+    // Class to hold an array of bounding boxes for an output word and
+// the bounding box of the whole word.
+class BoxWord {
+ public:
+  BoxWord();
+  explicit BoxWord(const BoxWord& src);
+  ~BoxWord() = default;
     }
     
-    namespace CAROTENE_NS {
-    }
+      // Adds the given pix to the set of pages in the PDF file, with the given
+  // caption added to the top.
+  void AddPix(const Pix* pix, const char* caption) {
+    int depth = pixGetDepth(const_cast<Pix*>(pix));
+    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
+    Pix* pix_debug = pixAddSingleTextblock(
+        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
+    pixaAddPix(pixa_, pix_debug, L_INSERT);
+  }
     
-    #define SPLIT_ASM2(sgn, bits) __asm__ ( \
-                                          'vld2.' #bits ' {d0, d2}, [%[in0]]            \n\t' \
-                                          'vld2.' #bits ' {d1, d3}, [%[in1]]            \n\t' \
-                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
-                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
-                                          : \
-                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), \
-                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL2(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3' \
-                                      );
-#define SPLIT_ASM3(sgn, bits) __asm__ ( \
-                                          'vld3.' #bits ' {d0, d2, d4}, [%[in0]]        \n\t' \
-                                          'vld3.' #bits ' {d1, d3, d5}, [%[in1]]        \n\t' \
-                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
-                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
-                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
-                                          : \
-                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), \
-                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL3(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5' \
-                                      );
-#define SPLIT_ASM4(sgn, bits) __asm__ ( \
-                                          'vld4.' #bits ' {d0, d2, d4, d6}, [%[in0]]    \n\t' \
-                                          'vld4.' #bits ' {d1, d3, d5, d7}, [%[in1]]    \n\t' \
-                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
-                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
-                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
-                                          'vst1.' #bits ' {d6-d7}, [%[out3]]            \n\t' \
-                                          : \
-                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), [out3] 'r' (dst3 + dj), \
-                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL4(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
-                                      );
+      const UnicharAmbigsVector &dang_ambigs() const { return dang_ambigs_; }
+  const UnicharAmbigsVector &replace_ambigs() const { return replace_ambigs_; }
     
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
+    
+    
     {
-        v_dst = internal::vcge(v_src0, v_src1);
+    {
+    {  /*!
+   * \brief denotes threshold used for quantization and dequantization
+   * Must be a positive value. All positive gradients will be thresholded to `threshold_` and
+   * all negative gradients will be thresholded to -1*`threshold_`
+   */
+  float threshold_ = 0;
+};
+}  // namespace kvstore
+}  // namespace mxnet
+#endif  // MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
+
+    
+    // C callback that can be used by TVM to extract
+// the WrapAsyncCall function.
+extern 'C' MXNET_DLL int MXTVMBridge(TVMFunctionHandle pregister) {
+  using tvm::runtime::PackedFunc;
+  const PackedFunc& fregister =
+      *static_cast<PackedFunc*>(pregister);
+  fregister('WrapAsyncCall', PackedFunc(mxnet::WrapAsyncCall));
+  return 0;
+}
+
+    
+    /*!
+ *  Copyright (c) 2018 by Contributors
+ * \file transformer.cc
+ * \brief CPU implementation of the operators used in Transformer
+ */
+#include <mxnet/base.h>
+#include './transformer-inl.h'
+#include '../tensor/elemwise_unary_op.h'
+    
+    
+    {    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid = in_data[bs::kGrid].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+    // grid_tmp : (batch, h, w, 2)
+    grid_tmp = transpose(grid, Shape4(0, 2, 3, 1));
+    if (!init_cudnn_) {
+     Init(s, in_data, out_data);
+    }
+    CHECK_EQ(data.CheckContiguous(), true);
+    CHECK_EQ(out.CheckContiguous(), true);
+    CHECK_EQ(grid_tmp.CheckContiguous(), true);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
+                                            st_desc_,
+                                            &alpha,
+                                            in_desc_,
+                                            data.dptr_,
+                                            grid_tmp.dptr_,
+                                            &beta,
+                                            out_desc_,
+                                            out.dptr_));
+  }
+    
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      if (param_.sampler_type == st::kBilinear) {
+        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                          sampler_,
+                                                          dtype_,
+                                                          4,
+                                                          dim));
+      }
+    }
+  }
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(NativeOpParam param) {
+  return new NativeOp<cpu>(param);
+}
+    }
     }
     
-    #ifdef CAROTENE_NEON
-#include <arm_neon.h>
-#include 'intrinsics.hpp'
-#endif
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file identity_attach_KL_sparse_reg.cc
+ * \brief\
+*/
+#include './identity_attach_KL_sparse_reg-inl.h'
+#include <nnvm/op_attr_types.h>
     
-    template <>
-void rshiftConst<0>(const Size2D &size,
-                    const s16 * srcBase, ptrdiff_t srcStride,
-                    u8 * dstBase, ptrdiff_t dstStride,
-                    CONVERT_POLICY cpolicy)
-{
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+        deleteLinkedList(head);
+    
+        ListNode* curNode = head;
+    while(curNode != NULL){
+        ListNode* delNode = curNode;
+        curNode = curNode->next;
+        delete delNode;
     }
     
-            while(i + 16 <= size.width)
-        {
-            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
-    }
-    
-    
-    {		PathCombine(userConEmuCfgPath, userConfigDirPath, L'user-ConEmu.xml');
-	}
-	else // '/c [path]' was specified and 'vendor/ConEmu.xml.default' config exists, copy Cmder 'vendor/ConEmu.xml.default' file to '[user specified path]/config/user_ConEmu.xml'.
-	{
-		if ( ! CopyFile(defaultCfgPath, userCfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L'Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml! Access Denied.'
-				: L'Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml!', MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-		PathCombine(userConEmuCfgPath, userConfigDirPath, L'user-ConEmu.xml');
-	}
-    
-    /// BFS
-/// No need to store level information in the queue :-)
-///
-/// Time Complexity: O(n), where n is the number of nodes in the tree
-/// Space Complexity: O(n)
-class Solution {
-public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-    }
-    }
-    
-            while(!output.empty()){
-            res.push_back((output.top())->val);
-            output.pop();
+            int count[3] = {0};
+        for(int i = 0 ; i < nums.size() ; i ++){
+            assert(nums[i] >= 0 && nums[i] <= 2);
+            count[nums[i]] ++;
         }
+    
+    #include <iostream>
+    
+    
+    {    return 0;
+}
+
+    
+    
+    {    return 0;
+}
+
+    
+    // PreOrder Morris Traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(1)
+class Solution {
+    }
+    
+        // output changed array
+    std::cout << object << '\n';
+    
+        // create an array from an array_t value
+    json::array_t array_value = {'one', 'two', 3, 4.5, false};
+    json j_array_t(array_value);
