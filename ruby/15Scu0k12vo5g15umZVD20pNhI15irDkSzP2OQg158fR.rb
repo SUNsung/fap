@@ -1,37 +1,35 @@
 
         
-                def delimiter_delta
-          return 0 if first.same_line?(second)
-          return 0 if first.delimiter != second.delimiter
-    
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
-    
-    When /^I comment out the gem '([^']*)' from the Gemfile$/ do |gemname|
-  comment_out_gem_in_gemfile gemname
+        def local_require
+  require 'json'
+  JSON.pretty_generate(DATA)
 end
     
-    # The base module that gets included in ActiveRecord::Base. See the
-# documentation for Paperclip::ClassMethods for more useful information.
-module Paperclip
-  extend Helpers
-  extend Logger
-  extend ProcessorHelpers
+        def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
     
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
+        def as_json
+      @pages
     end
     
-        module ClassMethods
-      def attachment_definitions
-        Paperclip::AttachmentRegistry.definitions_for(self)
+        private
+    
+            css('.l-sub-section', '.alert', '.banner').each do |node|
+          node.name = 'blockquote'
+        end
+    
+            doc
       end
-    end
-  end
-end
+    
+    class BugTest < ActionDispatch::IntegrationTest
+  include Rack::Test::Methods
+  include Warden::Test::Helpers
+    
+            constant.required_fields(klass).each do |field|
+          failed_attributes << field unless instance.respond_to?(field)
+        end
+      end
+    
+          private
