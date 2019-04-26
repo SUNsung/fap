@@ -1,250 +1,342 @@
 
         
-        
-    {		*a_ppaucEncodingBits = image.GetEncodingBits();
-		*a_puiEncodingBitsBytes = image.GetEncodingBitsBytes();
-		*a_puiExtendedWidth = image.GetExtendedWidth();
-		*a_puiExtendedHeight = image.GetExtendedHeight();
-		*a_piEncodingTime_ms = image.GetEncodingTimeMs();
-	}
+          // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
     
-    		inline Block4x4EncodingBits_RGB8(void)
-		{
-			assert(sizeof(Block4x4EncodingBits_RGB8) == BYTES_PER_BLOCK);
-    }
-    
-    
-  /*************************************************************************/
-  /*************************************************************************/
-  /*****                                                               *****/
-  /*****                    B L U E   S T R I N G S                    *****/
-  /*****                                                               *****/
-  /*************************************************************************/
-  /*************************************************************************/
-    
-    #define AF_LATIN_HINTS_DO_VERT_SNAP( h )             \
-  AF_HINTS_TEST_OTHER( h, AF_LATIN_HINTS_VERT_SNAP )
-    
-    //use_int32: When enabled 32bit ints are used instead of 64bit ints. This
-//improve performance but coordinate values are limited to the range +/- 46340
-//#define use_int32
-    
-    #   define S_MUL(a,b) ( (a)*(b) )
-#define C_MUL(m,a,b) \
-    do{ (m).r = (a).r*(b).r - (a).i*(b).i;\
-        (m).i = (a).r*(b).i + (a).i*(b).r; }while(0)
-#define C_MULC(m,a,b) \
-    do{ (m).r = (a).r*(b).r + (a).i*(b).i;\
-        (m).i = (a).i*(b).r - (a).r*(b).i; }while(0)
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    /** 16x16 multiply-add where the result fits in 32 bits */
-#define MAC16_16(c,a,b) (ADD32((c),MULT16_16((a),(b))))
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#define MAC16_32_Q15(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),15)), SHR(MULT16_16((a),((b)&0x00007fff)),15)))
-    
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
-    }
-    
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
- public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
-    }
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+      /**
+   * @brief Given the bottom blobs, compute the top blobs and the loss.
+   *
+   * @param bottom
+   *     the input blobs, whose data fields store the input data for this layer
+   * @param top
+   *     the preshaped output blobs, whose data fields will store this layers'
+   *     outputs
+   * \return The total loss from the layer.
+   *
+   * The Forward wrapper calls the relevant device wrapper function
+   * (Forward_cpu or Forward_gpu) to compute the top blob values given the
+   * bottom blobs.  If the layer has any non-zero loss_weights, the wrapper
+   * then computes and returns the loss.
+   *
+   * Your layer should implement Forward_cpu and (optionally) Forward_gpu.
    */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
+  inline Dtype Forward(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    /**
+ * @brief Computes the classification accuracy for a one-of-many
+ *        classification task.
+ */
+template <typename Dtype>
+class AccuracyLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides AccuracyParameter accuracy_param,
+   *     with AccuracyLayer options:
+   *   - top_k (\b optional, default 1).
+   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
+   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
+   *     correct if the correct label is among the top 5 predicted labels.
+   */
+  explicit AccuracyLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
+    
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    void Assembler::stdu(const Reg64& rt, MemoryRef m) {
+  assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
+  EmitDSForm(62, rn(rt), rn(m.r.base), m.r.disp, 1);
+}
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
     }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
+  } else {
+    decoded = url_decode(data, data_len);
   }
+  return req::make<MemFile>(decoded.data(), decoded.size());
+}
+    
+    
+    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
+  // the stack frame will be wrong
+  ActRec* ar = g_context->getStackFrame();
+  const char* fn = (ar != nullptr)
+    ? ar->func()->name()->data()
+    : 'OPTIMIZED_BUILTIN';
+  raise_warning('%s(%s): failed to open stream: '
+                'wrapper does not support stream open',
+                fn, filename.data());
+  return nullptr;
+}
+    
+    #include 'hphp/runtime/base/stream-wrapper.h'
+#include 'hphp/runtime/base/runtime-error.h'
+    
+    #ifndef incl_HPHP_PERF_EVENT_H_
+#define incl_HPHP_PERF_EVENT_H_
+    
+    template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 0, rate, fillCols);
+}
+    
+    
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+    
+    
+    {};
     
     
     {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
+    {    std::ostringstream oss;
+    std::copy(line.begin() + options_index,
+              line.end(),
+              std::ostream_iterator<std::string>(oss, ' '));
+    r['options'] = oss.str();
+    results.push_back(r);
   }
 }
-}  // namespace data
-}  // namespace xgboost
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
-    }
     
-    XGBOOST_REGISTER_OBJECTIVE(LambdaRankNDCG, 'rank:ndcg')
-.describe('LambdaRank with NDCG as objective.')
-.set_body([]() { return new LambdaRankObjNDCG(); });
-    
-    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
-  // use qid to get group info
-  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
-  uint64_t last_group_id = default_max;
-  bst_uint group_size = 0;
-  this->Clear();
-  while (parser->Next()) {
-    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
-    if (batch.label != nullptr) {
-      auto& labels = info.labels_.HostVector();
-      labels.insert(labels.end(), batch.label, batch.label + batch.size);
-    }
-    if (batch.weight != nullptr) {
-      auto& weights = info.weights_.HostVector();
-      weights.insert(weights.end(), batch.weight, batch.weight + batch.size);
-    }
-    if (batch.qid != nullptr) {
-      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
-      // get group
-      for (size_t i = 0; i < batch.size; ++i) {
-        const uint64_t cur_group_id = batch.qid[i];
-        if (last_group_id == default_max || last_group_id != cur_group_id) {
-          info.group_ptr_.push_back(group_size);
-        }
-        last_group_id = cur_group_id;
-        ++group_size;
+    {
+    {    for (const auto& query : pack.getSchedule()) {
+      rc = runQuery(data, query.second.query.c_str());
+      if (rc != 0) {
+        fprintf(stderr,
+                'Could not execute query %s: %s\n',
+                query.first.c_str(),
+                query.second.query.c_str());
+        return;
       }
     }
-    }
-    }
-    
-    
-    {    return initializers;
+  });
+  return rc;
 }
     
-            DEPENDENCY_PROPERTY_OWNER(CalculatorStandardOperators);
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
     
-    #pragma once
+        flatbuffers::grpc::Message<HelloReply> response_msg;
     
     
-    {  rocksdb::CacheBench bench;
-  if (FLAGS_populate_cache) {
-    bench.PopulateCache();
-  }
-  if (bench.Run()) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
+    {}  // namespace grpc
     
-     private:
-  uint64_t NowMicrosMonotonic(Env* env);
+    int main(int /*argc*/, const char * /*argv*/ []) {
+  // Build up a serialized buffer algorithmically:
+  flatbuffers::FlatBufferBuilder builder;
+    }
     
-    using namespace rocksdb;
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
-};
-    
-    // PersistentCache
-//
-// Persistent cache interface for caching IO pages on a persistent medium. The
-// cache interface is specifically designed for persistent read cache.
-class PersistentCache {
- public:
-  typedef std::vector<std::map<std::string, double>> StatsType;
+    struct Parameters {
+  //Defines the custom parameter types for methods
+  //eg: flatbuffers uses flatbuffers.Builder as input for the client and output for the server
+  grpc::string custom_method_io_type;
     }
     
     
-    {}  // namespace rocksdb
-#endif  // !ROCKSDB_LITE
-
+    {  std::string schema;
+  schema += '// Generated from ' + file_name + '.proto\n\n';
+  if (parser.opts.include_dependence_headers) {
+    // clang-format off
+    #ifdef FBS_GEN_INCLUDES  // TODO: currently all in one file.
+    int num_includes = 0;
+    for (auto it = parser.included_files_.begin();
+         it != parser.included_files_.end(); ++it) {
+      if (it->second.empty())
+        continue;
+      auto basename = flatbuffers::StripPath(
+                        flatbuffers::StripExtension(it->second));
+      schema += 'include \'' + basename + '.fbs\';\n';
+      num_includes++;
+    }
+    if (num_includes) schema += '\n';
+    #endif
+    // clang-format on
+  }
+  // Generate code for all the enum declarations.
+  const Namespace *last_namespace = nullptr;
+  for (auto enum_def_it = parser.enums_.vec.begin();
+       enum_def_it != parser.enums_.vec.end(); ++enum_def_it) {
+    EnumDef &enum_def = **enum_def_it;
+    GenNameSpace(*enum_def.defined_namespace, &schema, &last_namespace);
+    GenComment(enum_def.doc_comment, &schema, nullptr);
+    if (enum_def.is_union)
+      schema += 'union ' + enum_def.name;
+    else
+      schema += 'enum ' + enum_def.name + ' : ';
+    schema += GenType(enum_def.underlying_type, true) + ' {\n';
+    for (auto it = enum_def.Vals().begin(); it != enum_def.Vals().end(); ++it) {
+      auto &ev = **it;
+      GenComment(ev.doc_comment, &schema, nullptr, '  ');
+      if (enum_def.is_union)
+        schema += '  ' + GenType(ev.union_type) + ',\n';
+      else
+        schema += '  ' + ev.name + ' = ' + NumToString(ev.value) + ',\n';
+    }
+    schema += '}\n\n';
+  }
+  // Generate code for all structs/tables.
+  for (auto it = parser.structs_.vec.begin(); it != parser.structs_.vec.end();
+       ++it) {
+    StructDef &struct_def = **it;
+    GenNameSpace(*struct_def.defined_namespace, &schema, &last_namespace);
+    GenComment(struct_def.doc_comment, &schema, nullptr);
+    schema += 'table ' + struct_def.name + ' {\n';
+    for (auto field_it = struct_def.fields.vec.begin();
+         field_it != struct_def.fields.vec.end(); ++field_it) {
+      auto &field = **field_it;
+      if (field.value.type.base_type != BASE_TYPE_UTYPE) {
+        GenComment(field.doc_comment, &schema, nullptr, '  ');
+        schema += '  ' + field.name + ':' + GenType(field.value.type);
+        if (field.value.constant != '0') schema += ' = ' + field.value.constant;
+        if (field.required) schema += ' (required)';
+        schema += ';\n';
+      }
+    }
+    schema += '}\n\n';
+  }
+  return schema;
+}
+    
+      bool generate() {
+    std::string code;
+    code += std::string('// ') + FlatBuffersGeneratedWarning() +
+            '\n\ninclude \'flatbuffers.lobster\'\n\n';
+    for (auto it = parser_.enums_.vec.begin(); it != parser_.enums_.vec.end();
+         ++it) {
+      auto &enum_def = **it;
+      GenEnum(enum_def, &code);
+    }
+    for (auto it = parser_.structs_.vec.begin();
+         it != parser_.structs_.vec.end(); ++it) {
+      auto &struct_def = **it;
+      GenStructPreDecl(struct_def, &code);
+    }
+    for (auto it = parser_.structs_.vec.begin();
+         it != parser_.structs_.vec.end(); ++it) {
+      auto &struct_def = **it;
+      GenStruct(struct_def, &code);
+    }
+    return SaveFile((path_ + file_name_ + '_generated.lobster').c_str(),
+                    code, false);
+  }
     
     
-    {
-    {  // Returns the approximate memory usage of different types in the input
-  // list of DBs and Cache set.  For instance, in the output map
-  // usage_by_type, usage_by_type[kMemTableTotal] will store the memory
-  // usage of all the mem-tables from all the input rocksdb instances.
-  //
-  // Note that for memory usage inside Cache class, we will
-  // only report the usage of the input 'cache_set' without
-  // including those Cache usage inside the input list 'dbs'
-  // of DBs.
-  static Status GetApproximateMemoryUsageByType(
-      const std::vector<DB*>& dbs,
-      const std::unordered_set<const Cache*> cache_set,
-      std::map<MemoryUtil::UsageType, uint64_t>* usage_by_type);
-};
-}  // namespace rocksdb
-#endif  // !ROCKSDB_LITE
-
+    {    // Finish a buffer with a given root object:
+    code_.SetValue('OFFSET_TYPELABEL', Name(struct_def) + 'Offset');
+    code_ += '#[inline]';
+    code_ += 'pub fn finish_{{STRUCT_NAME_SNAKECASE}}_buffer<'a, 'b>(';
+    code_ += '    fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,';
+    code_ += '    root: flatbuffers::WIPOffset<{{STRUCT_NAME}}<'a>>) {';
+    if (parser_.file_identifier_.length()) {
+      code_ += '  fbb.finish(root, Some({{STRUCT_NAME_CAPS}}_IDENTIFIER));';
+    } else {
+      code_ += '  fbb.finish(root, None);';
+    }
+    code_ += '}';
+    code_ += '';
+    code_ += '#[inline]';
+    code_ += 'pub fn finish_size_prefixed_{{STRUCT_NAME_SNAKECASE}}_buffer'
+             '<'a, 'b>('
+             'fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>, '
+             'root: flatbuffers::WIPOffset<{{STRUCT_NAME}}<'a>>) {';
+    if (parser_.file_identifier_.length()) {
+      code_ += '  fbb.finish_size_prefixed(root, '
+               'Some({{STRUCT_NAME_CAPS}}_IDENTIFIER));';
+    } else {
+      code_ += '  fbb.finish_size_prefixed(root, None);';
+    }
+    code_ += '}';
+  }
     
-      // Attempt to acquire lock.  If timeout is non-negative, operation may be
-  // failed after this many microseconds.
-  // Returns OK on success,
-  //         TimedOut if timed out,
-  //         or other Status on failure.
-  // If returned status is OK, TransactionDB will eventually call UnLock().
-  virtual Status TryLockFor(int64_t timeout_time) = 0;
+      // Releases the ownership of the buffer pointer.
+  // Returns the size, offset, and the original grpc_slice that
+  // allocated the buffer. Also see grpc_slice_unref().
+  uint8_t *ReleaseRaw(size_t &size, size_t &offset, grpc_slice &slice) {
+    uint8_t *buf = FlatBufferBuilder::ReleaseRaw(size, offset);
+    slice = slice_allocator_.slice_;
+    slice_allocator_.slice_ = grpc_empty_slice();
+    return buf;
+  }
