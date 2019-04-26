@@ -1,172 +1,185 @@
 
         
-        bool UvTaskRunner::PostDelayedTask(const base::Location& from_here,
-                                   base::OnceClosure task,
-                                   base::TimeDelta delay) {
-  auto* timer = new uv_timer_t;
-  timer->data = this;
-  uv_timer_init(loop_, timer);
-  uv_timer_start(timer, UvTaskRunner::OnTimeout, delay.InMilliseconds(), 0);
-  tasks_[timer] = std::move(task);
-  return true;
-}
+          static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
     
-    // All instances of TrackableObject will be kept in a weak map and can be got
-// from its ID.
-template <typename T>
-class TrackableObject : public TrackableObjectBase,
-                        public mate::EventEmitter<T> {
- public:
-  // Mark the JS object as destroyed.
-  void MarkDestroyed() {
-    v8::Local<v8::Object> wrapper = Wrappable<T>::GetWrapper();
-    if (!wrapper.IsEmpty()) {
-      wrapper->SetAlignedPointerInInternalField(0, nullptr);
-    }
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
   }
-    }
-    
-    void AutoUpdater::CheckForUpdates() {}
-    
-    #include 'atom/browser/net/url_request_about_job.h'
-    
-    int LaunchProgram(const StringVector& relauncher_args,
-                  const StringVector& argv);
-    
-      PROCESS_BASIC_INFORMATION pbi;
-  LONG status =
-      NtQueryInformationProcess(handle, ProcessBasicInformation, &pbi,
-                                sizeof(PROCESS_BASIC_INFORMATION), NULL);
-  if (!NT_SUCCESS(status)) {
-    LOG(ERROR) << 'NtQueryInformationProcess failed';
-    return NULL;
-  }
-    
-    
-struct Config {
-  /*
-   * Normalizes hdf string names to their ini counterparts
-   *
-   * We have special handling for a few hdf strings such as those containing
-   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
-   */
-  static std::string IniName(const Hdf& config,
-                             const bool prepend_hhvm = true);
-  static std::string IniName(const std::string& config,
-                             const bool prepend_hhvm = true);
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
-}
-    
-    #include 'hphp/util/stack-trace.h'
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
     
     
     {
-    {}  // namespace obj
-}  // namespace xgboost
-    
-      inline static void LimitSizeLevel
-    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
-    size_t& nlevel = *out_nlevel;
-    size_t& limit_size = *out_limit_size;
-    nlevel = 1;
-    while (true) {
-      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
-      size_t n = (1ULL << nlevel);
-      if (n * limit_size >= maxn) break;
-      ++nlevel;
-    }
-    // check invariant
-    size_t n = (1ULL << nlevel);
-    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
-    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
-  }
-    
-    BatchSet SimpleDMatrix::GetColumnBatches() {
-  // column page doesn't exist, generate it
-  if (!column_page_) {
-    auto page = dynamic_cast<SimpleCSRSource*>(source_.get())->page_;
-    column_page_.reset(
-        new SparsePage(page.GetTranspose(source_->info.num_col_)));
-  }
-  auto begin_iter =
-      BatchIterator(new SimpleBatchIteratorImpl(column_page_.get()));
-  return BatchSet(begin_iter);
+    {   private:
+    const grpc::string name_;
+    const int value_;
+  };
+  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
 }
     
-      // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+    #include <mach/mach.h>
     
-      ExtensionManager_getQueryColumns_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-    
-    typedef struct _ExtensionManager_getQueryColumns_result__isset {
-  _ExtensionManager_getQueryColumns_result__isset() : success(false) {}
-  bool success :1;
-} _ExtensionManager_getQueryColumns_result__isset;
-    
-          auto history_file =
-          (fs::path(osquery::osqueryHomeDirectory()) / '.history')
-              .make_preferred()
-              .string();
-      linenoiseHistorySetMaxLen(100);
-      linenoiseHistoryLoad(history_file.c_str());
-      linenoiseSetCompletionCallback(tableCompletionFunction);
-    
-    /// Gets supported hardwareDriver from system storage controllers.
-static inline void getSmartCtlDeviceType(
-    const std::vector<std::string>& storage_drivers,
-    std::vector<hardwareDriver>& types) {
-  for (const auto& driver : storage_drivers) {
-    auto hw_driver = kSmartExplicitDriverToDevice.find(driver);
-    if (hw_driver != kSmartExplicitDriverToDevice.end()) {
-      types.push_back(hw_driver->second);
+    namespace grpc {
+namespace load_reporter {
     }
-  }
+    }
+    
+    LoadRecordValue::LoadRecordValue(grpc::string metric_name, uint64_t num_calls,
+                                 double total_metric_value) {
+  call_metrics_.emplace(std::move(metric_name),
+                        CallMetricValue(num_calls, total_metric_value));
 }
+    
+        UnicodeString &displayScripts(UnicodeString &dest) const; // append script names to dest string.
+    ScriptSet & parseScripts(const UnicodeString &scriptsString, UErrorCode &status);  // Replaces ScriptSet contents.
+    
+        /**
+     * Returns TRUE if this object is equal to rhs.
+     */
+    UBool equals(const SignificantDigitInterval &rhs) const {
+        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
+    }
+    
+    
+    {    // Now we need some adjustment
+    if (savingsDST > 0) {
+        if ((nonExistingTimeOpt & kStdDstMask) == kStandard
+            || ((nonExistingTimeOpt & kStdDstMask) != kDaylight && (nonExistingTimeOpt & kFormerLatterMask) != kLatter)) {
+            date -= getDSTSavings();
+            recalc = TRUE;
+        }
+    } else {
+        if ((duplicatedTimeOpt & kStdDstMask) == kDaylight
+                || ((duplicatedTimeOpt & kStdDstMask) != kStandard && (duplicatedTimeOpt & kFormerLatterMask) == kFormer)) {
+            date -= getDSTSavings();
+            recalc = TRUE;
+        }
+    }
+    if (recalc) {
+        day = uprv_floor(date / U_MILLIS_PER_DAY);
+        millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
+        Grego::dayToFields(day, year, month, dom, dow);
+        savingsDST = getOffset(GregorianCalendar::AD, year, month, dom,
+                          (uint8_t) dow, millis,
+                          Grego::monthLength(year, month),
+                          status) - rawOffsetGMT;
+    }
+}
+    
+    SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
+: fDateIgnorables(NULL),
+  fTimeIgnorables(NULL),
+  fOtherIgnorables(NULL)
+{
+    fDateIgnorables  = new UnicodeSet(UNICODE_STRING('[-,./[:whitespace:]]', 20), status);
+    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING('[-.:[:whitespace:]]', 19),  status);
+    fOtherIgnorables = new UnicodeSet(UNICODE_STRING('[:whitespace:]', 14),       status);
+    }
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
+    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create a JSON number from number_unsigned_t
+    json::number_integer_t value_unsigned_t = 17;
+    json j_unsigned_t(value_unsigned_t);
+    
+    
+    {
+    {    printer->Print(file->GetTrailingComments('//').c_str());
+  }
+  return output;
+}
+    
+      // Shortcut for creating monster with all fields set:
+  auto orc = CreateMonster(builder, &position, 150, 80, name, inventory,
+                           Color_Red, weapons, Equipment_Weapon, axe.Union());
+    
+    // Represents any type in the IDL, which is a combination of the BaseType
+// and additional information for vectors/structs_.
+struct Type {
+  explicit Type(BaseType _base_type = BASE_TYPE_NONE, StructDef *_sd = nullptr,
+                EnumDef *_ed = nullptr)
+      : base_type(_base_type),
+        element(BASE_TYPE_NONE),
+        struct_def(_sd),
+        enum_def(_ed) {}
+    }
+    
+      // Generate table constructors, conditioned on its members' types.
+  void GenTableBuilders(const StructDef &struct_def,
+                        std::string *code_ptr) {
+    std::string &code = *code_ptr;
+    code += 'def ' + NormalizedName(struct_def) +
+            'Start(b_:flatbuffers_builder):\n    b_.StartObject(' +
+            NumToString(struct_def.fields.vec.size()) + ')\n';
+    for (auto it = struct_def.fields.vec.begin();
+        it != struct_def.fields.vec.end(); ++it) {
+      auto &field = **it;
+      if (field.deprecated) continue;
+      auto offset = it - struct_def.fields.vec.begin();
+      code += 'def ' + NormalizedName(struct_def) + 'Add' +
+              MakeCamel(NormalizedName(field)) + '(b_:flatbuffers_builder, ' +
+              NormalizedName(field) + ':' + LobsterType(field.value.type) +
+              '):\n    b_.Prepend' + GenMethod(field.value.type) + 'Slot(' +
+              NumToString(offset) + ', ' + NormalizedName(field) + ', ' +
+              field.value.constant + ')\n';
+      if (field.value.type.base_type == BASE_TYPE_VECTOR) {
+        code += 'def ' + NormalizedName(struct_def) + 'Start' +
+                MakeCamel(NormalizedName(field)) +
+                'Vector(b_:flatbuffers_builder, n_:int):\n    b_.StartVector(';
+        auto vector_type = field.value.type.VectorType();
+        auto alignment = InlineAlignment(vector_type);
+        auto elem_size = InlineSize(vector_type);
+        code += NumToString(elem_size) + ', n_, ' + NumToString(alignment) +
+                ')\n';
+        if (vector_type.base_type != BASE_TYPE_STRUCT ||
+            !vector_type.struct_def->fixed) {
+          code += 'def ' + NormalizedName(struct_def) + 'Create' +
+                  MakeCamel(NormalizedName(field)) +
+                  'Vector(b_:flatbuffers_builder, v_:[' +
+                  LobsterType(vector_type) + ']):\n    b_.StartVector(' +
+                  NumToString(elem_size) + ', v_.length, ' +
+                  NumToString(alignment) +
+                  ')\n    reverse(v_) e_: b_.Prepend' +
+                  GenMethod(vector_type) +
+                  '(e_)\n    b_.EndVector(v_.length)\n';
+        }
+      }
+    }
+    code += 'def ' + NormalizedName(struct_def) +
+            'End(b_:flatbuffers_builder):\n    b_.EndObject()\n\n';
+  }
+    
+      static std::string GenTypeBasic(const Type &type) {
+    static const char *ctypename[] = {
+    // clang-format off
+        #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
+            CTYPE, JTYPE, GTYPE, NTYPE, PTYPE, RTYPE) \
+            #NTYPE,
+                FLATBUFFERS_GEN_TYPES(FLATBUFFERS_TD)
+        #undef FLATBUFFERS_TD
+      // clang-format on
+    };
+    return ctypename[type.base_type];
+  }
