@@ -1,737 +1,344 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
-    
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
-    
-    
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rbx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
+        // Get render process host.
+RenderProcessHost* GetRenderProcessHost() {
+  RenderProcessHost* render_process_host = NULL;
+  std::vector<Shell*> windows = Shell::windows();
+  for (size_t i = 0; i < windows.size(); ++i) {
+    if (!windows[i]->is_devtools()) {
+      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
+      break;
     }
-}
-    
-    // Print literal part of format string and return next format spec
-// position.
-//
-// Skips over any occurrences of '%%', printing a literal '%' to the
-// output.  The position of the first % character of the next
-// nontrivial format spec is returned, or the end of string.
-inline const char* printFormatStringLiteral(std::ostream& out, const char* fmt)
-{
-    const char* c = fmt;
-    for(;; ++c)
-    {
-        switch(*c)
-        {
-            case '\0':
-                out.write(fmt, c - fmt);
-                return c;
-            case '%':
-                out.write(fmt, c - fmt);
-                if(*(c+1) != '%')
-                    return c;
-                // for '%%', tack trailing % onto next literal section.
-                fmt = ++c;
-                break;
-            default:
-                break;
-        }
-    }
-}
-    
-    const std::string& UniValue::get_str() const
-{
-    if (typ != VSTR)
-        throw std::runtime_error('JSON value is not a string as expected');
-    return getValStr();
-}
-    
-    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
-std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
-    
-    public:
-    static const size_t OUTPUT_SIZE = 20;
-    
-    #include <stdio.h>
-#include 'db/dbformat.h'
-#include 'port/port.h'
-#include 'util/coding.h'
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-    
-    {
-    {}  // namespace
-}  // namespace leveldb
-    
-     public:
-  LogTest() : reading_(false),
-              writer_(new Writer(&dest_)),
-              reader_(new Reader(&source_, &report_, true/*checksum*/,
-                      0/*initial_offset*/)) {
   }
-    
-      // Fragment the record if necessary and emit it.  Note that if slice
-  // is empty, we still want to iterate once to emit a single
-  // zero-length record
-  Status s;
-  bool begin = true;
-  do {
-    const int leftover = kBlockSize - block_offset_;
-    assert(leftover >= 0);
-    if (leftover < kHeaderSize) {
-      // Switch to a new block
-      if (leftover > 0) {
-        // Fill the trailer (literal below relies on kHeaderSize being 7)
-        assert(kHeaderSize == 7);
-        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
-      }
-      block_offset_ = 0;
-    }
     }
     
-    static bool GetInternalKey(Slice* input, InternalKey* dst) {
-  Slice str;
-  if (GetLengthPrefixedSlice(input, &str)) {
-    dst->DecodeFrom(str);
-    return true;
-  } else {
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
+}
+    
+    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+    }
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    
+    {}  // namespace nwapi
+    
+    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
+  if (command_id < 0)
     return false;
-  }
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
-#define STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
-    
-    
-    {}  // namespace mxnet
-    
-    // true implementation
-template<typename xpu, typename OP>
-void EvalBinary_(const TBlob &lhs, const TBlob &rhs,
-                 TBlob *ret, RunContext ctx) {
-  using namespace mshadow::expr;
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  CHECK_EQ(ret->type_flag_, lhs.type_flag_)
-    << 'Only support input/output with the same data type';
-  CHECK_EQ(ret->type_flag_, rhs.type_flag_)
-    << 'Only support input/output with the same data type';
-  MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
-    ret->FlatTo2D<xpu, DType>(s)
-      = F<typename OP::mshadow_op>(lhs.FlatTo2D<xpu, DType>(s),
-                                   rhs.FlatTo2D<xpu, DType>(s));
-  });
-}
-    
-    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
-.describe(R'code(
-    
-    #include <algorithm>
-#include <vector>
-#include './bilinear_sampler-inl.h'
-namespace mxnet {
-namespace op {
-#if defined(__CUDACC__) && MXNET_USE_CUDNN == 1 && CUDNN_MAJOR >= 5
-template<typename DType>
-class CuDNNBilinearSamplerOp : public Operator {
- public:
-  explicit CuDNNBilinearSamplerOp(BilinearSamplerParam param) {
-    this->param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-    sampler_ = CUDNN_SAMPLER_BILINEAR;
-  }
-    }
-    }
     }
     
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
     
-    {
-    {
-    { private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    CHECK_EQ(in_data.size(), 1U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
-      unsigned lrn_n = param_.nsize;
-      double alpha = param_.alpha;
-      double beta = param_.beta;
-      double lrn_k = param_.knorm;
-      CHECK_EQ(data.shape_, out.shape_);
-      CUDNN_CALL(cudnnCreateLRNDescriptor(&lrn_desc_));
-      CUDNN_CALL(cudnnSetLRNDescriptor(lrn_desc_,
-                                       lrn_n,
-                                       alpha,
-                                       beta,
-                                       lrn_k));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&shape_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(shape_desc_,
-                                            CUDNN_TENSOR_NCHW,
-                                            dtype_,
-                                            data.shape_[0],
-                                            data.shape_[1],
-                                            data.shape_[2],
-                                            data.shape_[3]));
-    }
-  }
-  bool init_cudnn_;
-  LRNParam param_;
-  cudnnDataType_t dtype_;
-  cudnnLRNDescriptor_t lrn_desc_;
-  cudnnTensorDescriptor_t shape_desc_;
-};  // class CuDNNLocalResponseNormOp
-}  // namespace op
-}  // namespace mxnet
-#endif  // MXNET_OPERATOR_CUDNN_LRN_INL_H_
-
-    
-    template<typename xpu>
-void NDArrayOp<xpu>::Backward(const OpContext &ctx,
-                    const std::vector<TBlob> &out_grad,
-                    const std::vector<TBlob> &in_data,
-                    const std::vector<TBlob> &out_data,
-                    const std::vector<OpReqType> &req,
-                    const std::vector<TBlob> &in_grad,
-                    const std::vector<TBlob> &aux_args) {
-  using namespace mshadow;
-  Context ndctx = get_ctx();
-  std::vector<void*> ptrs;
-  std::vector<Engine::VarHandle> ndvar;
-  std::vector<int> tags;
-  for (auto& i : req) CHECK_NE(i, kAddTo);
-    }
-    
-        bool Trainer::TrainLocalMinibatch(const std::unordered_map<Variable, ValuePtr>& arguments, std::unordered_map<Variable, ValuePtr>& outputsToFetch, bool sweepEnd, const DeviceDescriptor& computeDevice /*= DeviceDescriptor::UseDefaultDevice()*/)
-    {
-        bool emptyMinibatch = arguments.empty() || (arguments.begin()->second == nullptr);
-        if (emptyMinibatch) // Nothing to train with.
-        {
-            m_prevMinibatchNumSamples = 0;
-            return false;
-        }
-    }
-    
-            DestType *destData = dest.data();
-        if (elementCount > dest.size())
-            RuntimeError('Copy: The output buffer size (%zu) is smaller than the number (%zu) of source elements to copy.', dest.size(), elementCount);
-    
-        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override;
-    
-      /*! \brief return corresponding element set given the node_id */
-  inline const Elem& operator[](unsigned node_id) const {
-    const Elem& e = elem_of_each_node_[node_id];
-    CHECK(e.begin != nullptr)
-        << 'access element that is not in the set';
-    return e;
-  }
-  // clear up things
-  inline void Clear() {
-    row_indices_.clear();
-    elem_of_each_node_.clear();
-  }
-  // initialize node id 0->everything
-  inline void Init() {
-    CHECK_EQ(elem_of_each_node_.size(), 0U);
-    }
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
   } else {
-    CHECK(qrecycle_.Pop(out_page));
-  }
-}
-}  // namespace data
-}  // namespace xgboost
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-      bool Read(SparsePage* page,
-            dmlc::SeekStream* fi,
-            const std::vector<bst_uint>& sorted_index_set) override {
-    if (!fi->Read(&disk_offset_)) return false;
-    auto& offset_vec = page->offset.HostVector();
-    auto& data_vec = page->data.HostVector();
-    // setup the offset
-    offset_vec.clear();
-    offset_vec.push_back(0);
-    for (unsigned int fid : sorted_index_set) {
-      CHECK_LT(fid + 1, disk_offset_.size());
-      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
-      offset_vec.push_back(offset_vec.back() + size);
-    }
-    data_vec.resize(offset_vec.back());
-    // read in the data
-    size_t begin = fi->Tell();
-    size_t curr_offset = 0;
-    for (size_t i = 0; i < sorted_index_set.size();) {
-      bst_uint fid = sorted_index_set[i];
-      if (disk_offset_[fid] != curr_offset) {
-        CHECK_GT(disk_offset_[fid], curr_offset);
-        fi->Seek(begin + disk_offset_[fid] * sizeof(Entry));
-        curr_offset = disk_offset_[fid];
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
       }
-      size_t j, size_to_read = 0;
-      for (j = i; j < sorted_index_set.size(); ++j) {
-        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
-          size_to_read += offset_vec[j + 1] - offset_vec[j];
-        } else {
-          break;
-        }
-      }
+      ++menu_item_iterator;
     }
-    }
-    
-    struct LambdaRankParam : public dmlc::Parameter<LambdaRankParam> {
-  int num_pairsample;
-  float fix_list_weight;
-  // declare parameters
-  DMLC_DECLARE_PARAMETER(LambdaRankParam) {
-    DMLC_DECLARE_FIELD(num_pairsample).set_lower_bound(1).set_default(1)
-        .describe('Number of pair generated for each instance.');
-    DMLC_DECLARE_FIELD(fix_list_weight).set_lower_bound(0.0f).set_default(0.0f)
-        .describe('Normalize the weight of each list by this value,'
-                  ' if equals 0, no effect will happen');
-  }
-};
-    
-      // localnode
-  // 8bytes reserved
-  readBytes(fp, buf, buf.size(), 8);
-  // localnode ID
-  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-  auto localNode = std::make_shared<DHTNode>(buf);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
-    
-    DHTRoutingTableSerializer::~DHTRoutingTableSerializer() = default;
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
-    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
-    const std::shared_ptr<PeerStorage>& peerStorage)
-{
-  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
-  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
-  task->setPeerStorage(peerStorage);
-  setCommonProperty(task);
-  return task;
-}
-    
-    void DHTTokenUpdateCommand::preProcess()
-{
-  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
-      getDownloadEngine()->isHaltRequested()) {
-    enableExit();
   }
 }
     
-    std::vector<DNSCache::AddrEntry>::const_iterator
-DNSCache::CacheEntry::find(const std::string& addr) const
-{
-  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return i;
+     protected:
+  ~NwClipboardClearSyncFunction() override;
+    
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
+    
+        switch(CV_MAT_DEPTH(kernel_type))
+    {
+    case CV_8U:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_16U:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (uint16_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_32S:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (int32_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_32F:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (float*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_64F:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (double*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    default:
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
     }
-  }
-  return addrEntries_.end();
-}
     
-      for (unsigned i = 0; i < iter; ++i) {
-    FB_LOG_EVERY_MS(INFO, -1) << 'every -1ms';
-  }
-    
-    namespace folly {
+        struct Margin {
+        Margin() : left(0), right(0), top(0), bottom(0) {}
+        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
+            : left(left_), right(right_), top(top_), bottom(bottom_) {}
     }
     
-    exception_wrapper::VTable const exception_wrapper::uninit_{
-    &noop_<void, exception_wrapper const*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*>,
-    &noop_<void, exception_wrapper const*>,
-    &uninit_type_,
-    &noop_<std::exception const*, exception_wrapper const*>,
-    &noop_<exception_wrapper, exception_wrapper const*>};
-    
-    #pragma once
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        v_dst = internal::vabdq(v_src0, v_src1);
+    }
     
     
-    {} // namespace std
+    {} //namespace CAROTENE_NS
 
     
-    #include <folly/DefaultKeepAliveExecutor.h>
+            map = (u8*)(mag_buf[2] + mapstep*cn);
+        memset(map, 1, mapstep);
+        memset(map + mapstep*(size.height + 1), 1, mapstep);
+    }
+    inline void firstRow(const Size2D &size, s32 cn,
+                         const u8 *, ptrdiff_t,
+                         s16* dxBase, ptrdiff_t dxStride,
+                         s16* dyBase, ptrdiff_t dyStride,
+                         s32** mag_buf)
+    {
+        s32* _norm = mag_buf[1] + 1;
+    
+             uint8x8_t vline1_u8 = vqmovn_u16(vline1_u16);
+         uint8x8_t vline2_u8 = vqmovn_u16(vline2_u16);
     
     
-    {  T* get() const {
-    return p_;
-  }
-  T* operator->() const {
-    return p_;
-  }
-  explicit operator bool() const {
-    return p_ == nullptr ? false : true;
-  }
-  bool operator==(const counted_ptr<T, Atom>& p) const {
-    return get() == p.get();
+    {            vst1q_s16(dst + j, v_dst0);
+            vst1q_s16(dst + j + 8, v_dst1);
+        }
+        for (; j < roiw8; j += 8)
+        {
+            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
+            vst1q_s16(dst + j, v_dst);
+        }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(u16, u8, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
+            'vmovl.u16 q3, d4                                      \n\t'
+            'vmovl.u16 q4, d5                                      \n\t'
+            'vcvt.f32.u32 q5, q3                                   \n\t'
+            'vcvt.f32.u32 q6, q4                                   \n\t'
+            'vmul.f32 q7, q5, q0                                   \n\t'
+            'vmul.f32 q8, q6, q0                                   \n\t'
+            'vadd.f32 q9, q7, q1                                   \n\t'
+            'vadd.f32 q10, q8, q1                                  \n\t'
+            'vcvt.s32.f32 q11, q9                                  \n\t'
+            'vcvt.s32.f32 q12, q10                                 \n\t'
+            'vqmovn.s32 d26, q11                                   \n\t'
+            'vqmovn.s32 d27, q12                                   \n\t'
+            'vqmovun.s16 d28, q13                                  \n\t'
+             'vst1.8 {d28}, [%[dst]]                               \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i),
+              [dst] 'r' (_dst + i + 0),
+               'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
+        );
+    }
+})
+#else
+CVTS_FUNC(u16, u8, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        uint16x8_t vline = vld1q_u16(_src + i);
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
+        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
+        uint8x8_t vRes = vqmovun_s16(vcombine_s16(vRes1, vRes2));
+        vst1_u8(_dst + i, vRes);
+    }
+})
+#endif
+    
+                uint32x4_t vequ1 = vceqq_u32(vreinterpretq_u32_u64(vm1), vc0);
+    
+            if( i == 3 )
+            continue;
+    
+    inline float32x2_t vrsqrt_f32(float32x2_t val)
+{
+    float32x2_t e = vrsqrte_f32(val);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    return e;
+}
+    
+    
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
   }
 };
     
-        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-#if defined(__clang__)
-        // Clang cannot allocate eax:edx register pairs but it has sync intrinsics
-        storage_type old_val = storage;
-        while (true)
-        {
-            storage_type val = __sync_val_compare_and_swap(&storage, old_val, v);
-            if (val == old_val)
-                return val;
-            old_val = val;
-        }
-#elif !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-        uint32_t scratch;
-        __asm__ __volatile__
-        (
-            'movl %%ebx, %[scratch]\n\t'
-            'movl %%eax, %%ebx\n\t'
-            'movl %%edx, %%ecx\n\t'
-            'movl %[dest], %%eax\n\t'
-            'movl 4+%[dest], %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b %[dest]\n\t'
-            'jne 1b\n\t'
-            'movl %[scratch], %%ebx\n\t'
-            : '+A' (v), [scratch] '=m' (scratch), [dest] '+o' (storage)
-            :
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
-        );
-        return v;
-#else // defined(__PIC__)
-        __asm__ __volatile__
-        (
-            'movl %[dest], %%eax\n\t'
-            'movl 4+%[dest], %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b %[dest]\n\t'
-            'jne 1b\n\t'
-            : '=A' (v), [dest] '+o' (storage)
-            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
-        return v;
-#endif // defined(__PIC__)
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-        uint32_t scratch;
-        __asm__ __volatile__
-        (
-            'movl %%ebx, %[scratch]\n\t'
-            'movl %%eax, %%ebx\n\t'
-            'movl %%edx, %%ecx\n\t'
-            'movl 0(%[dest]), %%eax\n\t'
-            'movl 4(%[dest]), %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-            'movl %[scratch], %%ebx\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-            : '+A,A' (v), [scratch] '=m,m' (scratch)
-            : [dest] 'D,S' (&storage)
-#else
-            : '+A' (v), [scratch] '=m' (scratch)
-            : [dest] 'D' (&storage)
-#endif
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
-        );
-        return v;
-#else // defined(__PIC__)
-        __asm__ __volatile__
-        (
-            'movl 0(%[dest]), %%eax\n\t'
-            'movl 4(%[dest]), %%edx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg8b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-            : '=A,A' (v)
-            : 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
-#else
-            : '=A' (v)
-            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
-#endif
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
-        return v;
-#endif // defined(__PIC__)
-#endif
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+            vector<int> res;
+        if( root == NULL )
+            return res;
+    
+            stack<TreeNode*> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
     }
     
-    #include <boost/memory_order.hpp>
-#include <boost/atomic/capabilities.hpp>
-#include <boost/atomic/detail/operations.hpp>
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+    using namespace std;
+    
+    using namespace std;
+    
+    using namespace std;
+    
+    
+    {    return 0;
+}
+    
+    
+    {        return const_cast<int16_t*>(DataBuffer<int16_t>());
+    }
+    
+    
+    {            if (std::find(combinedFunctionArgs.begin(), combinedFunctionArgs.end(), m_trainingSampleCountVar) == combinedFunctionArgs.end())
+                combinedFunctionArgs.push_back(m_trainingSampleCountVar);
+        }
+    
+    
+    {        assert(m_fd == -1);
+        for (;;)
+        {
+            // opening a lock file
+            int fd = open(m_fileName.c_str(), O_WRONLY | O_CREAT, 0666);
+            if (fd < 0)
+                RuntimeError('Acquire: Failed to open lock file %s: %s.', m_fileName.c_str(), strerror(errno));
+            // locking it with the fcntl API
+            memset(&m_lock, 0, sizeof(m_lock));
+            m_lock.l_type = F_WRLCK;
+            // BUG: fcntl call with F_SETLKW doesn't always reliably detect when lock is released
+            // As a workaround, using alarm() for interupting fcntl if it waits more than 1 second
+            setupTimeout(1);
+            int r = fcntl(fd, wait ? F_SETLKW : F_SETLK, &m_lock);
+            if (errno == EINTR)
+            {
+                sleep(1);
+                // retrying in the case of signal or timeout
+                close(fd);
+                continue;
+            }
+            if (r != 0)
+            {
+                // acquire failed
+                close(fd);
+                umask(mask);
+                return false;
+            }
+            // we own the exclusive lock on file descriptor, but we need to double-check
+            // that the lock file wasn't deleted and/or re-created;
+            // checking this by comparing inode numbers
+            struct stat before, after;
+            fstat(fd, &before);
+            if (stat(m_fileName.c_str(), &after) != 0 || before.st_ino != after.st_ino)
+            {
+                // we have a race with 'unlink' call in Release()
+                // our lock is held to the previous instance of the file;
+                // this is not a problem, we just need to retry locking the new file
+                close(fd);
+                continue;
+            }
+            else
+            {
+                // lock acquired successfully
+                m_fd = fd;
+                umask(mask);
+                return true;
+            }
+        }
+    }
+    
+    void NetworkManager::OnNetworkStatusChange(_In_ Object^ /*sender*/)
+{
+    NetworkBehaviorChanged(GetNetworkAccessBehavior());
+}
