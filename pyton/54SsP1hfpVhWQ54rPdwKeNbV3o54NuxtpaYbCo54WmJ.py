@@ -1,163 +1,166 @@
 
         
-            def append_to_front(self, node):
-        pass
+        
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
-        def __init__(self, vehicle_size, license_plate, spot_size):
-        self.vehicle_size = vehicle_size
-        self.license_plate = license_plate
-        self.spot_size
-        self.spots_taken = []
     
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
+@pytest.fixture
+def set_help(mocker):
+    mock = mocker.patch('subprocess.Popen')
     
-    import scrapy
-from scrapy.crawler import CrawlerProcess
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.misc import walk_modules
-from scrapy.utils.project import inside_project, get_project_settings
-from scrapy.utils.python import garbage_collect
-from scrapy.settings.deprecated import check_deprecated_settings
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+def test_get_new_command():
+    new_command = get_new_command(Command('sudo apt update', match_output))
+    assert new_command == 'sudo apt list --upgradable'
     
-            sfile = sys.modules[spidercls.__module__].__file__
-        sfile = sfile.replace('.pyc', '.py')
-        self.exitcode = os.system('%s '%s'' % (editor, sfile))
+    
+def test_match():
+    assert match(Command('apt list --upgradable', match_output))
+    assert match(Command('sudo apt list --upgradable', match_output))
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--headers', dest='headers', action='store_true', \
-            help='print response HTTP headers instead of body')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
-    
-    from importlib import import_module
-from os.path import join, dirname, abspath, exists, splitext
-    
-            if not aws_access_key_id:
-            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
-        if not aws_secret_access_key:
-            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
-    
-            dfd.addBoth(lambda _: slot.scheduler.close(reason))
-        dfd.addErrback(log_failure('Scheduler close failure'))
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
-
-    
-    def get_api_key(page):
-    match = match1(page, pattern_inline_api_key)
-    # this happens only when the url points to a gallery page
-    # that contains no inline api_key(and never makes xhr api calls)
-    # in fact this might be a better approch for getting a temporary api key
-    # since there's no place for a user to add custom infomation that may
-    # misguide the regex in the homepage
-    if not match:
-        return match1(get_html('https://flickr.com'), pattern_inline_api_key)
-    return match
-    
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls(url, title, ext, size, output_dir, merge=False)
-    
-    # YouTube media encoding options, in descending quality order.
-# taken from http://en.wikipedia.org/wiki/YouTube#Quality_and_codecs, 3/22/2013.
-youtube_codecs = [
-    {'itag': 38, 'container': 'MP4', 'video_resolution': '3072p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '3.5-5', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
-    {'itag': 46, 'container': 'WebM', 'video_resolution': '1080p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
-    {'itag': 37, 'container': 'MP4', 'video_resolution': '1080p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '3-4.3', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
-    {'itag': 102, 'container': 'WebM', 'video_resolution': '720p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '2', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
-    {'itag': 45, 'container': 'WebM', 'video_resolution': '720p', 'video_encoding': '', 'video_profile': '', 'video_bitrate': '', 'audio_encoding': '', 'audio_bitrate': ''},
-    {'itag': 22, 'container': 'MP4', 'video_resolution': '720p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
-    {'itag': 84, 'container': 'MP4', 'video_resolution': '720p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '152'},
-    {'itag': 120, 'container': 'FLV', 'video_resolution': '720p', 'video_encoding': 'AVC', 'video_profile': 'Main@L3.1', 'video_bitrate': '2', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
-    {'itag': 85, 'container': 'MP4', 'video_resolution': '520p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '152'},
-    {'itag': 44, 'container': 'WebM', 'video_resolution': '480p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '1', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
-    {'itag': 35, 'container': 'FLV', 'video_resolution': '480p', 'video_encoding': 'H.264', 'video_profile': 'Main', 'video_bitrate': '0.8-1', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
-    {'itag': 101, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
-    {'itag': 100, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
-    {'itag': 43, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '0.5', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
-    {'itag': 34, 'container': 'FLV', 'video_resolution': '360p', 'video_encoding': 'H.264', 'video_profile': 'Main', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
-    {'itag': 82, 'container': 'MP4', 'video_resolution': '360p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
-    {'itag': 18, 'container': 'MP4', 'video_resolution': '270p/360p', 'video_encoding': 'H.264', 'video_profile': 'Baseline', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
-    {'itag': 6, 'container': 'FLV', 'video_resolution': '270p', 'video_encoding': 'Sorenson H.263', 'video_profile': '', 'video_bitrate': '0.8', 'audio_encoding': 'MP3', 'audio_bitrate': '64'},
-    {'itag': 83, 'container': 'MP4', 'video_resolution': '240p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
-    {'itag': 13, 'container': '3GP', 'video_resolution': '', 'video_encoding': 'MPEG-4 Visual', 'video_profile': '', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': ''},
-    {'itag': 5, 'container': 'FLV', 'video_resolution': '240p', 'video_encoding': 'Sorenson H.263', 'video_profile': '', 'video_bitrate': '0.25', 'audio_encoding': 'MP3', 'audio_bitrate': '64'},
-    {'itag': 36, 'container': '3GP', 'video_resolution': '240p', 'video_encoding': 'MPEG-4 Visual', 'video_profile': 'Simple', 'video_bitrate': '0.17', 'audio_encoding': 'AAC', 'audio_bitrate': '38'},
-    {'itag': 17, 'container': '3GP', 'video_resolution': '144p', 'video_encoding': 'MPEG-4 Visual', 'video_profile': 'Simple', 'video_bitrate': '0.05', 'audio_encoding': 'AAC', 'audio_bitrate': '24'},
-]
-fmt_level = dict(
-    zip(
-        [str(codec['itag'])
-            for codec in
-                youtube_codecs],
-        range(len(youtube_codecs))))
-    
-    if args.quiet:
-    jieba.setLogLevel(60)
-if args.pos:
-    import jieba.posseg
-    posdelim = args.pos
-    def cutfunc(sentence, _, HMM=True):
-        for w, f in jieba.posseg.cut(sentence, HMM):
-            yield w + posdelim + f
-else:
-    cutfunc = jieba.cut
+    RETURN = '''
+server_certificate_id:
+    description: The 21 character certificate id
+    returned: success
+    type: str
+    sample: 'ADWAJXWTZAXIPIMQHMJPO'
+certificate_body:
+    description: The asn1der encoded PEM string
+    returned: success
+    type: str
+    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
+server_certificate_name:
+    description: The name of the server certificate
+    returned: success
+    type: str
+    sample: 'server-cert-name'
+arn:
+    description: The Amazon resource name of the server certificate
+    returned: success
+    type: str
+    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
+path:
+    description: The path of the server certificate
+    returned: success
+    type: str
+    sample: '/'
+expiration:
+    description: The date and time this server certificate will expire, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2017-06-15T12:00:00+00:00'
+upload_date:
+    description: The date and time this server certificate was uploaded, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2015-04-25T00:36:40+00:00'
+'''
     
     
-class ChineseTokenizer(Tokenizer):
+def _attach_monitoring_policy_server(module, oneandone_conn, monitoring_policy_id, servers):
+    '''
+    Attaches servers to a monitoring policy.
+    '''
+    try:
+        attach_servers = []
     
-    print('-'*40)
-print(' 搜索模式')
-print('-'*40)
+        if purge_rules is True and len(rules) > 0:
+        result['rules_purged'] = len(rules)
+        deletions = result['rules_purged']
+        rules = list()
+        if not module.check_mode:
+            gateway.del_all_nat_rules()
+            task = gateway.save_services_configuration()
+            vca.block_until_completed(task)
+            rules = gateway.get_nat_rules()
+        result['changed'] = True
     
-    USAGE = 'usage:    python extract_tags_idfpath.py [file name] -k [top k]'
+        module = AnsibleModule(argument_spec=argument_spec,
+                           supports_check_mode=True,
+                           )
     
-    while True:
-    line = sys.stdin.readline()
-    if line=='':
-        break
-    line = line.strip()
-    for word in jieba.cut(line):
-        print(word)
     
-    ACTION_HEADER_PREFIX = 'DynamoDBStreams_20120810'
+def get_role_dict(description=None):
+    data = {}
+    if description is not None:
+        data['description'] = description
+    return data
     
-    # sender thread and queue
-SENDER_THREAD = None
-EVENT_QUEUE = queue.Queue()
+    EXAMPLES = '''
+- airbrake_deployment:
+    token: AAAAAA
+    environment: staging
+    user: ansible
+    revision: '4.2'
+'''
     
-        kinesis = aws_stack.connect_to_service('kinesis')
-    aws_stack.create_kinesis_stream(TEST_STREAM_NAME)
+    '''
     
-        @property
-    def running(self):
-        return not self._stop_event.is_set()
+        name = module.params['name']
+    state = module.params['state']
+    timeout = module.params['timeout']
+    
+        if info['status'] == 401:
+        module.fail_json(msg='failed to authenticate to Oneclick server')
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
+    
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
+    
+    
+def _count_nonzero_coefficients(estimator):
+    a = estimator.coef_.toarray()
+    return np.count_nonzero(a)
+    
+    '''
+print(__doc__)
+    
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
+    
+    agglo.fit(X)
+X_reduced = agglo.transform(X)
+    
+        plt.figure(figsize=(6, 4))
+    for i in range(X_red.shape[0]):
+        plt.text(X_red[i, 0], X_red[i, 1], str(y[i]),
+                 color=plt.cm.nipy_spectral(labels[i] / 10.),
+                 fontdict={'weight': 'bold', 'size': 9})
+    
+    
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
+    
+    REWRITE_HTTPS_ARGS = [
+    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,NE,R=permanent]']
+'''Apache version<2.3.9 rewrite rule arguments used for redirections to
+https vhost'''
+    
+    
+# -- Options for Texinfo output -------------------------------------------
