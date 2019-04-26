@@ -1,398 +1,228 @@
 
         
-        // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
-    
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+        
+    {    return;
   }
+    
+      /// Retrieve the array of protocol conformances, which line up with the
+  /// requirements of the generic signature.
+  ArrayRef<ProtocolConformanceRef> getConformances() const {
+    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
+  MutableArrayRef<ProtocolConformanceRef> getConformances() {
+    return MutableArrayRef<ProtocolConformanceRef>(
+                              getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
+    
+      DefaultCacheKey CKey(Key, &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    if (Entry->second == Value)
+      return;
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
+  }
+    
+      if (*BufferPtr == '\n')
+    return 1;
+    
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
+  }
+    
+    
+    
+    void ModuleWrapJobAction::anchor() {}
+    
+    #ifndef SWIFT_DRIVER_TOOLCHAINS_H
+#define SWIFT_DRIVER_TOOLCHAINS_H
+    
+      /// Emits an error for each file in \p unusedPrimaryFiles.
+  ///
+  /// \returns true if \p unusedPrimaryFiles is non-empty.
+  bool diagnoseUnusedPrimaryFiles(std::set<StringRef> unusedPrimaryFiles);
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    #include <gtest/gtest.h>
+    
+    void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
+}
+    
+    template<typename A>
+struct type_equals_<A, A> : public true_ {
+};
+    
+    
+    {  // Yes || Yes == true.
+  value = or_<true_, true_>::value;
+  EXPECT_TRUE(value);
+  // Yes || No == true.
+  value = or_<true_, false_>::value;
+  EXPECT_TRUE(value);
+  // No || Yes == true.
+  value = or_<false_, true_>::value;
+  EXPECT_TRUE(value);
+  // No || No == false.
+  value = or_<false_, false_>::value;
+  EXPECT_FALSE(value);
 }
     
     
     {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+    {    reflection->MutableUnknownFields(message)->Clear();
   }
-}
-    
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
-    
-    NwAppClearCacheFunction::~NwAppClearCacheFunction() {
-}
-    
-    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
-}
-    
-      // Appends the TestPartResult object to the TestPartResultArray
-  // received in the constructor.
-  //
-  // This method is from the TestPartResultReporterInterface
-  // interface.
-  virtual void ReportTestPartResult(const TestPartResult& result);
  private:
-  void Init();
-    
-    #endif  // 0
-    
-    // Suppresses MSVC warnings 4072 (unreachable code) for the code following
-// statement if it returns or throws (or doesn't return or throw in some
-// situations).
-#define GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement) \
-  if (::testing::internal::AlwaysTrue()) { statement; }
-    
-      template <GTEST_9_TYPENAMES_(U)>
-  tuple& operator=(const GTEST_9_TUPLE_(U)& t) {
-    return CopyFrom(t);
-  }
-    
-      // Returns true iff n is a prime number.
-  virtual bool IsPrime(int n) const = 0;
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    
-    {  return clone;
-}
-    
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
+  virtual bool ShouldBeClear(const FieldDescriptor *field) = 0;
 };
     
-    namespace xgboost {
-namespace common {
-/*!
- * \brief experimental wsummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType>
-struct WQSummary {
-  /*! \brief an entry in the sketch summary */
-  struct Entry {
-    /*! \brief minimum rank */
-    RType rmin;
-    /*! \brief maximum rank */
-    RType rmax;
-    /*! \brief maximum weight */
-    RType wmin;
-    /*! \brief the value of data */
-    DType value;
-    // constructor
-    XGBOOST_DEVICE Entry() {}  // NOLINT
-    // constructor
-    XGBOOST_DEVICE Entry(RType rmin, RType rmax, RType wmin, DType value)
-        : rmin(rmin), rmax(rmax), wmin(wmin), value(value) {}
-    /*!
-     * \brief debug function,  check Valid
-     * \param eps the tolerate level for violating the relation
-     */
-    inline void CheckValid(RType eps = 0) const {
-      CHECK(rmin >= 0 && rmax >= 0 && wmin >= 0) << 'nonneg constraint';
-      CHECK(rmax- rmin - wmin > -eps) <<  'relation constraint: min/max';
-    }
-    /*! \return rmin estimation for v strictly bigger than value */
-    XGBOOST_DEVICE inline RType RMinNext() const {
-      return rmin + wmin;
-    }
-    /*! \return rmax estimation for v strictly smaller than value */
-    XGBOOST_DEVICE inline RType RMaxPrev() const {
-      return rmax - wmin;
-    }
-  };
-  /*! \brief input data queue before entering the summary */
-  struct Queue {
-    // entry in the queue
-    struct QEntry {
-      // value of the instance
-      DType value;
-      // weight of instance
-      RType weight;
-      // default constructor
-      QEntry() = default;
-      // constructor
-      QEntry(DType value, RType weight)
-          : value(value), weight(weight) {}
-      // comparator on value
-      inline bool operator<(const QEntry &b) const {
-        return value < b.value;
-      }
-    };
-    // the input queue
-    std::vector<QEntry> queue;
-    // end of the queue
-    size_t qtail;
-    // push data to the queue
-    inline void Push(DType x, RType w) {
-      if (qtail == 0 || queue[qtail - 1].value != x) {
-        queue[qtail++] = QEntry(x, w);
-      } else {
-        queue[qtail - 1].weight += w;
-      }
-    }
-    inline void MakeSummary(WQSummary *out) {
-      std::sort(queue.begin(), queue.begin() + qtail);
-      out->size = 0;
-      // start update sketch
-      RType wsum = 0;
-      // construct data with unique weights
-      for (size_t i = 0; i < qtail;) {
-        size_t j = i + 1;
-        RType w = queue[i].weight;
-        while (j < qtail && queue[j].value == queue[i].value) {
-          w += queue[j].weight; ++j;
-        }
-        out->data[out->size++] = Entry(wsum, wsum + w, w, queue[i].value);
-        wsum += w; i = j;
-      }
-    }
-  };
-  /*! \brief data field */
-  Entry *data;
-  /*! \brief number of elements in the summary */
-  size_t size;
-  // constructor
-  WQSummary(Entry *data, size_t size)
-      : data(data), size(size) {}
-  /*!
-   * \return the maximum error of the Summary
-   */
-  inline RType MaxError() const {
-    RType res = data[0].rmax - data[0].rmin - data[0].wmin;
-    for (size_t i = 1; i < size; ++i) {
-      res = std::max(data[i].RMaxPrev() - data[i - 1].RMinNext(), res);
-      res = std::max(data[i].rmax - data[i].rmin - data[i].wmin, res);
-    }
-    return res;
+    std::string ReadFile(const std::string& name) {
+  std::ifstream file(name.c_str());
+  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
+      << name
+      << '', please make sure you are running this command from the benchmarks'
+      << ' directory.\n';
+  return std::string((std::istreambuf_iterator<char>(file)),
+                     std::istreambuf_iterator<char>());
+}
+    
+    #include <string>
+#include <set>
+#include <vector>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    SEXP XGBoosterEvalOneIter_R(SEXP handle, SEXP iter, SEXP dmats, SEXP evnames) {
+  const char *ret;
+  R_API_BEGIN();
+  CHECK_EQ(length(dmats), length(evnames))
+      << 'dmats and evnams must have same length';
+  int len = length(dmats);
+  std::vector<void*> vec_dmats;
+  std::vector<std::string> vec_names;
+  std::vector<const char*> vec_sptr;
+  for (int i = 0; i < len; ++i) {
+    vec_dmats.push_back(R_ExternalPtrAddr(VECTOR_ELT(dmats, i)));
+    vec_names.push_back(std::string(CHAR(asChar(VECTOR_ELT(evnames, i)))));
   }
-  /*!
-   * \brief query qvalue, start from istart
-   * \param qvalue the value we query for
-   * \param istart starting position
-   */
-  inline Entry Query(DType qvalue, size_t &istart) const { // NOLINT(*)
-    while (istart < size && qvalue > data[istart].value) {
-      ++istart;
-    }
-    if (istart == size) {
-      RType rmax = data[size - 1].rmax;
-      return Entry(rmax, rmax, 0.0f, qvalue);
-    }
-    if (qvalue == data[istart].value) {
-      return data[istart];
-    } else {
-      if (istart == 0) {
-        return Entry(0.0f, 0.0f, 0.0f, qvalue);
-      } else {
-        return Entry(data[istart - 1].RMinNext(),
-                     data[istart].RMaxPrev(),
-                     0.0f, qvalue);
-      }
-    }
+  for (int i = 0; i < len; ++i) {
+    vec_sptr.push_back(vec_names[i].c_str());
   }
-  /*! \return maximum rank in the summary */
-  inline RType MaxRank() const {
-    return data[size - 1].rmax;
-  }
-  /*!
-   * \brief copy content from src
-   * \param src source sketch
-   */
-  inline void CopyFrom(const WQSummary &src) {
-    size = src.size;
-    std::memcpy(data, src.data, sizeof(Entry) * size);
-  }
-  inline void MakeFromSorted(const Entry* entries, size_t n) {
-    size = 0;
-    for (size_t i = 0; i < n;) {
-      size_t j = i + 1;
-      // ignore repeated values
-      for (; j < n && entries[j].value == entries[i].value; ++j) {}
-      data[size++] = Entry(entries[i].rmin, entries[i].rmax, entries[i].wmin,
-                           entries[i].value);
-      i = j;
+  CHECK_CALL(XGBoosterEvalOneIter(R_ExternalPtrAddr(handle),
+                                asInteger(iter),
+                                BeginPtr(vec_dmats),
+                                BeginPtr(vec_sptr),
+                                len, &ret));
+  R_API_END();
+  return mkString(ret);
+}
+    
+      inline static void LimitSizeLevel
+    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
+    size_t& nlevel = *out_nlevel;
+    size_t& limit_size = *out_limit_size;
+    nlevel = 1;
+    while (true) {
+      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
+      size_t n = (1ULL << nlevel);
+      if (n * limit_size >= maxn) break;
+      ++nlevel;
     }
+    // check invariant
+    size_t n = (1ULL << nlevel);
+    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
+    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
   }
-  /*!
-   * \brief debug function, validate whether the summary
-   *  run consistency check to check if it is a valid summary
-   * \param eps the tolerate error level, used when RType is floating point and
-   *        some inconsistency could occur due to rounding error
-   */
-  inline void CheckValid(RType eps) const {
-    for (size_t i = 0; i < size; ++i) {
-      data[i].CheckValid(eps);
-      if (i != 0) {
-        CHECK(data[i].rmin >= data[i - 1].rmin + data[i - 1].wmin) << 'rmin range constraint';
-        CHECK(data[i].rmax >= data[i - 1].rmax + data[i].wmin) << 'rmax range constraint';
-      }
+    
+    XGBOOST_REGISTER_OBJECTIVE(PairwiseRankObj, 'rank:pairwise')
+.describe('Pairwise rank objective.')
+.set_body([]() { return new PairwiseRankObj(); });
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
     }
-  }
-  /*!
-   * \brief set current summary to be pruned summary of src
-   *        assume data field is already allocated to be at least maxsize
-   * \param src source summary
-   * \param maxsize size we can afford in the pruned sketch
-   */
-    }
-    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    /*! \brief interface of objective function */
-class ObjFunction {
- public:
-  /*! \brief virtual destructor */
-  virtual ~ObjFunction() = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Configure the objective with the specified parameters.
-   * \param args arguments to the objective function.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief Get gradient over each of predictions, given existing information.
-   * \param preds prediction of current round
-   * \param info information about labels, weights, groups in rank
-   * \param iteration current iteration number.
-   * \param out_gpair output of get gradient, saves gradient and second order gradient in
-   */
-  virtual void GetGradient(const HostDeviceVector<bst_float>& preds,
-                           const MetaInfo& info,
-                           int iteration,
-                           HostDeviceVector<GradientPair>* out_gpair) = 0;
+    int main()
+{
+    // create JSON values
+    json object = {{'one', 1}, {'two', 2}};
+    json null;
     }
     
-    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
-  // use qid to get group info
-  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
-  uint64_t last_group_id = default_max;
-  bst_uint group_size = 0;
-  this->Clear();
-  while (parser->Next()) {
-    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
-    if (batch.label != nullptr) {
-      auto& labels = info.labels_.HostVector();
-      labels.insert(labels.end(), batch.label, batch.label + batch.size);
-    }
-    if (batch.weight != nullptr) {
-      auto& weights = info.weights_.HostVector();
-      weights.insert(weights.end(), batch.weight, batch.weight + batch.size);
-    }
-    if (batch.qid != nullptr) {
-      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
-      // get group
-      for (size_t i = 0; i < batch.size; ++i) {
-        const uint64_t cur_group_id = batch.qid[i];
-        if (last_group_id == default_max || last_group_id != cur_group_id) {
-          info.group_ptr_.push_back(group_size);
-        }
-        last_group_id = cur_group_id;
-        ++group_size;
-      }
-    }
-    }
-    }
+    #include 'gtest/gtest.h'
     
-    TEST(c_api, XGDMatrixCreateFromMatDT) {
-  std::vector<int> col0 = {0, -1, 3};
-  std::vector<float> col1 = {-4.0f, 2.0f, 0.0f};
-  const char *col0_type = 'int32';
-  const char *col1_type = 'float32';
-  std::vector<void *> data = {col0.data(), col1.data()};
-  std::vector<const char *> types = {col0_type, col1_type};
-  DMatrixHandle handle;
-  XGDMatrixCreateFromDT(data.data(), types.data(), 3, 2, &handle,
-                        0);
-  std::shared_ptr<xgboost::DMatrix> *dmat =
-      static_cast<std::shared_ptr<xgboost::DMatrix> *>(handle);
-  xgboost::MetaInfo &info = (*dmat)->Info();
-  ASSERT_EQ(info.num_col_, 2);
-  ASSERT_EQ(info.num_row_, 3);
-  ASSERT_EQ(info.num_nonzero_, 6);
-    }
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+}
+    
+    /**
+ * @file
+ **/
+#include 'modules/planning/math/smoothing_spline/piecewise_linear_constraint.h'
+    
+    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
+  spline_func_ = spline_func;
+  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
+  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
+  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
+}
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
