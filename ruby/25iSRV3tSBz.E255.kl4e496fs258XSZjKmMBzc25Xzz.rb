@@ -1,61 +1,58 @@
 
         
-                  expect(weather_agent.name).to eq('a weather agent')
-          expect(weather_agent.schedule).to eq('5pm')
-          expect(weather_agent.keep_events_for).to eq(14.days)
-          expect(weather_agent.propagate_immediately).to be_falsey
-          expect(weather_agent).to be_disabled
-          expect(weather_agent.memory).to be_empty
-          expect(weather_agent.options).to eq(weather_agent_options)
+              expect(agent.controllers).to eq([bob_scheduler_agent])
+    end
+  end
     
-        it 'should convert the 'escape' method correctly' do
-      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
-                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
-      )
+        it 'interpolates jsonpath expressions between matching <>'s' do
+      expect(Utils.interpolate_jsonpaths('hello <$.there.world> this <escape works>', payload)).to eq('hello WORLD this should+work')
     end
     
-        it 'should revert extract and template options for an updated WebsiteAgent' do
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-      ConvertWebsiteAgentTemplateForMerge.new.down
-      agent.reload
-      expect(agent.options).to include('extract' => reverted_extract,
-                                       'template' => reverted_template)
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
+    else
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
     end
   end
 end
 
     
-    describe Agents::AftershipAgent do
-  before do
+        reversible(&method(:up_down))
+  end
     
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+  end
+end
+    
+      def navigate_to(page_name)
+    path = path_to(page_name)
+    if path.is_a?(Hash)
+      visit(path[:path])
+      await_elem = path[:special_elem]
+      find(await_elem.delete(:selector), await_elem)
+    else
+      visit(path)
     end
+  end
     
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
-    
-          max_length = if tag = str.slice!(/ \[.+\]\z/)
-        terminal_width - tag.length
-      else
-        terminal_width
-      end
-    
-            css('.filetree .children').each do |node|
-          node.css('.file').each do |n|
-            n.content = '  #{n.content}'
-          end
-        end
-    
-            css('.nav-index-section').each do |node|
-          node.content = node.content
-        end
-    
-    namespace :bower do
-    
-        def log_processed(name)
-      puts green '    #{name}'
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
     end
+  end
+end
+
     
         it 'returns an array of likes for a post' do
       bob.like!(@message)
@@ -63,89 +60,68 @@ end
       expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@message.likes.map(&:id))
     end
     
-        it 'succeeds for notification dropdown' do
-      Timecop.travel(6.seconds.ago) do
-        @notification.touch
-      end
-      get :index, format: :json
-      expect(response).to be_success
-      response_json = JSON.parse(response.body)
-      note_html = Nokogiri::HTML(response_json['notification_list'][0]['also_commented']['note_html'])
-      timeago_content = note_html.css('time')[0]['data-time-ago']
-      expect(response_json['unread_count']).to be(1)
-      expect(response_json['unread_count_by_type']).to eq(
-        'also_commented'       => 1,
-        'comment_on_post'      => 0,
-        'contacts_birthday'    => 0,
-        'liked'                => 0,
-        'mentioned'            => 0,
-        'mentioned_in_comment' => 0,
-        'reshared'             => 0,
-        'started_sharing'      => 0
-      )
-      expect(timeago_content).to include(@notification.updated_at.iso8601)
-      expect(response.body).to match(/note_html/)
-    end
+          code = InvitationCode.create(user: bob)
+      code.update_attributes(count: 0)
     
-        def self.find_by_name_with_wildcards(pattern)
-      re = transform_pattern_into_re(pattern)
-      ::Gem::Specification.find_all.select do |specification|
-        specification.name =~ re
+          def built_in_scm_plugin_class_name
+        'Capistrano::SCM::#{scm_name.to_s.capitalize}'
       end
-    end
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
+            def to_h
+          @properties
         end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
     
-          it 'returns true if the pipeline is a system pipeline' do
-        expect(subject.system?).to be_truthy
-      end
-    end
+    describe 'Orders Listing', type: :feature do
+  stub_authorization!
     
-          context 'when the plugin doesnt exist' do
-        it 'fails to install and report an error' do
-          command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-output-impossible-plugin')
-          expect(command.stderr).to match(/Plugin not found, aborting/)
-        end
-      end
-    end
-  end
-end
-
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
-
-    
-            def delta(first, second, alignment = :left)
-          case alignment
-          when :left
-            first.column - second.column
-          when :right
-            first.last_column - second.last_column
+              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
+                                                                                  variant: variant,
+                                                                                  quantity: params[:line_item][:quantity],
+                                                                                  options: line_item_params[:options]).value
+          if @line_item.errors.empty?
+            respond_with(@line_item, status: 201, default_template: :show)
           else
-            0
+            invalid_resource!(@line_item)
           end
         end
     
-        def each_directive
-      return if processed_source.comments.nil?
+        Zlib::GzipWriter.open(temp_bpath) do |target_writer|
+      open(bpath, 'rb') do |file|
+        until(file.eof?())
+          target_writer.write(file.read(4096))
+        end
+      end
+    end
+    
+        # Write +COMPACT_MANIFEST, without the 'files' section.
+    File.open(staging_path('+COMPACT_MANIFEST'), 'w+') do |file|
+      file.write(pkgdata.to_json + '\n')
+    end
+    
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
+    
+      option '--optional-depends', 'PACKAGE',
+    'Add an optional dependency to the pacman package.', :multivalued => true
+    
+        # Copy 'files' from builddir to :output/files
+    Find.find('files', 'manifests') do |path|
+      logger.info('Copying path: #{path}')
+      if File.directory?(path)
+        ::Dir.mkdir(File.join(params[:output], path))
+      else
+        FileUtils.cp(path, File.join(params[:output], path))
+      end
+    end
+  end # def build!
