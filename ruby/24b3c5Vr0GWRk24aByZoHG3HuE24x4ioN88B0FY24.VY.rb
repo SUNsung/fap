@@ -1,94 +1,103 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
+            it 'allows to delete a user' do
+      visit admin_users_path
+      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
+      expect(page).to have_text('User 'bob' was deleted.')
+      expect(page).to have_no_text('bob@example.com')
+    end
     
-              def render_collection_for(builder_class, &block)
-            options = @options.stringify_keys
-            rendered_collection = render_collection do |item, value, text, default_html_options|
-              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
+        it 'returns a label 'Disabled' if a given agent is disabled' do
+      stub(@agent).disabled? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Disabled'
+    end
     
-            def initialize(object_name, method_name, template_object, content_or_options = nil, options = nil)
-          options ||= {}
+          @agent1.update!(disabled: true)
     
-        %w(<< concat push insert unshift).each do |method|
-      class_eval <<-METHOD, __FILE__, __LINE__ + 1
-        def #{method}(*args)
-          paths.#{method}(*typecast(args))
+      def update
+    response, status = process_push_request
+    render plain: response, status: status
+  end
+    
+        12.times do |i|
+      day     = i.weeks.ago.to_date
+      week_id = day.cweek
+      week    = Date.commercial(day.cwyear, week_id)
+    
+      def request_locale
+    preferred_locale || compatible_locale
+  end
+    
+      def reset_period_offset
+    api_throttle_data[:period] - request_time.to_i % api_throttle_data[:period]
+  end
+end
+
+    
+      included do
+    before_action :set_session_activity
+  end
+    
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
+    end
+    
+          def preference_field_options(options)
+        field_options = case options[:type]
+                        when :integer
+                          {
+                            size: 10,
+                            class: 'input_integer form-control'
+                          }
+                        when :boolean
+                          {}
+                        when :string
+                          {
+                            size: 10,
+                            class: 'input_string form-control'
+                          }
+                        when :password
+                          {
+                            size: 10,
+                            class: 'password_string form-control'
+                          }
+                        when :text
+                          {
+                            rows: 15,
+                            cols: 85,
+                            class: 'form-control'
+                          }
+                        else
+                          {
+                            size: 10,
+                            class: 'input_string form-control'
+                          }
+                        end
+    
+          expect(page).to have_content('R200')
+      expect(page).to have_content('incomplete@example.com')
+    end
+    
+          # Order Form
+      expect(page).not_to have_css('.edit-item')
+      # Order Tabs
+      expect(page).not_to have_link('Details')
+      expect(page).not_to have_link('Customer')
+      expect(page).not_to have_link('Adjustments')
+      expect(page).not_to have_link('Payments')
+      expect(page).not_to have_link('Returns')
+    end
+    
+          within_row(1) { click_icon :split }
+      wait_for_ajax
+      targetted_select2 'LA', from: '#s2id_item_stock_location'
+      click_icon :'save-split'
+      wait_for_ajax
+      expect(page.find('#shipment_#{order.shipments.first.id}')).to be_present
+    
+            def order
+          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
+          authorize! :update, @order, order_token
         end
-      METHOD
-    end
-    
-        # Render but returns a valid Rack body. If fibers are defined, we return
-    # a streaming body that renders the template piece by piece.
-    #
-    # Note that partials are not supported to be rendered with streaming,
-    # so in such cases, we just wrap them in an array.
-    def render_body(context, options)
-      if options.key?(:partial)
-        [render_partial(context, options)]
-      else
-        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
-      end
-    end
-    
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
-    end
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-        def pipeline_context(response)
-      options.merge url: response.url
-    end
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-    # skip over blogs that aren't found
-unavailable = []
-fast_forwards = [
-  'Baidu Research',
-  'Booking.com',
-  'Fynd',
-  'Graphcool',
-  'LinkedIn',
-  'Medallia',
-  'OmniTI',
-  'Paperless Post',
-  'Pluralsight',
-  'Prolific Interactive',
-  'Quora',
-  'Robert Elder Software',
-  'Simple',
-  'SlideShare',
-  'SourceClear',
-  'Viget',
-  'Zalando',
-  'Zapier',
-  'Zynga',
-  'Dave Beazley',
-  'Edan Kwan',
-  'Grzegorz Gajos',
-  'Joe Armstrong',
-  'Kai Hendry',
-  'LiveOverflow'
-]
-    
-      private
-    
-      parameter '[PLUGIN] ...', 'Plugin name(s) to upgrade to latest version', :attribute_name => :plugins_arg
-  option '--[no-]verify', :flag, 'verify plugin validity before installation', :default => true
-  option '--local', :flag, 'force local-only plugin update. see bin/logstash-plugin package|unpack', :default => false
