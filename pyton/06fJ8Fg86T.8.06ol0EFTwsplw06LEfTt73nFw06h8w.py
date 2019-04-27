@@ -1,155 +1,215 @@
 
         
         
-# Note that with N small, (as it is 25 above), the finite size effects
-# will have pretty dramatic effects on the dynamics of the random RNN.
-# If you want more complex dynamics, you'll have to run the script a
-# lot, or increase N (or g).
+class TooManyRedirects(RequestException):
+    '''Too many redirects.'''
     
-      print ('loading data from ' + data_path + ' with stem ' + data_fname_stem)
-  for fname in fnames:
-    if fname.startswith(data_fname_stem):
-      data_dict = read_data(os.path.join(data_path,fname))
-      idx = len(data_fname_stem) + 1
-      key = fname[idx:]
-      data_dict['data_dim'] = data_dict['train_data'].shape[2]
-      data_dict['num_steps'] = data_dict['train_data'].shape[1]
-      dataset_dict[key] = data_dict
     
-        self.bos_chars = self._convert_word_to_char_ids(self.bos_char)
-    self.eos_chars = self._convert_word_to_char_ids(self.eos_char)
+class CaseInsensitiveDict(MutableMapping):
+    '''A case-insensitive ``dict``-like object.
     
-      def __init__(self, test_data_name='wsc273'):
-    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
-    self.vocab = utils.CharsVocabulary(vocab_file, 50)
-    assert test_data_name in ['pdp60', 'wsc273'], (
-        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
-    self.test_data_name = test_data_name
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-      def word_to_id(self, word):
-    if word in self._word_to_id:
-      return self._word_to_id[word]
-    else:
-      if word.lower() in self._word_to_id:
-        return self._word_to_id[word.lower()]
-    return self.unk
+            if 'digest' in s_auth.lower() and self._thread_local.num_401_calls < 2:
     
-    Launch command:
-  python generate_samples.py
-  --data_dir=/tmp/data/imdb  --data_set=imdb
-  --batch_size=256 --sequence_length=20 --base_directory=/tmp/imdb
-  --hparams='gen_rnn_size=650,dis_rnn_size=650,gen_num_layers=2,
-  gen_vd_keep_prob=1.0' --generator_model=seq2seq_vd
-  --discriminator_model=seq2seq_vd --is_present_rate=0.5
-  --maskgan_ckpt=/tmp/model.ckpt-45494
-  --seq2seq_share_embedding=True --dis_share_embedding=True
-  --attention_option=luong --mask_strategy=contiguous --baseline_method=critic
-  --number_epochs=4
-'''
     
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
-    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
-    is_training:  Whether the model is training.
-    reuse (Optional):  Whether to reuse the model.
+    builtin_str = str
+    bytes = str
+    str = unicode
+    basestring = basestring
+    numeric_types = (int, long, float)
+    integer_types = (int, long)
     
-      Args:
-    hparams:  MaskGAN hyperparameters.
-    learning_rate:  tf.Variable scalar learning rate.
-    final_gen_objective:  Scalar final REINFORCE objective for the sequence.
-    averages_op:  ExponentialMovingAverage apply average op to
-      maintain the baseline.
-    global_step:  global_step tf.Variable.
+        return {
+        'platform': platform_info,
+        'implementation': implementation_info,
+        'system_ssl': system_ssl_info,
+        'using_pyopenssl': pyopenssl is not None,
+        'pyOpenSSL': pyopenssl_info,
+        'urllib3': urllib3_info,
+        'chardet': chardet_info,
+        'cryptography': cryptography_info,
+        'idna': idna_info,
+        'requests': {
+            'version': requests_version,
+        },
+    }
     
-      else:
-    raise NotImplementedError
     
-        module : AnsibleModule object
-    oneandone_conn: authenticated oneandone object
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
+    
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
+    
+            # Nothing matches :-/
+        raise InvalidSchema('No connection adapters were found for '%s'' % url)
+    
+            >>> from_key_val_list([('key', 'val')])
+        OrderedDict([('key', 'val')])
+        >>> from_key_val_list('string')
+        ValueError: cannot encode objects that are not 2-tuples
+        >>> from_key_val_list({'key': 'val'})
+        OrderedDict([('key', 'val')])
+    
+        rule_data = dict(
+        [(rf, module.params.get(rf)) for rf in CloudWatchEventRuleManager.RULE_FIELDS]
+    )
+    targets = module.params.get('targets')
+    state = module.params.get('state')
+    
+    
+def _modify_port(module, oneandone_conn, monitoring_policy_id, port_id, port):
+    '''
+    Modifies a monitoring policy port.
     '''
     try:
-        name = module.params.get('name')
-        description = module.params.get('description')
-        rules = module.params.get('rules')
-        wait = module.params.get('wait')
-        wait_timeout = module.params.get('wait_timeout')
-        wait_interval = module.params.get('wait_interval')
+        if module.check_mode:
+            cm_port = oneandone_conn.get_monitoring_policy_port(
+                monitoring_policy_id=monitoring_policy_id,
+                port_id=port_id)
+            if cm_port:
+                return True
+            return False
     
-        ipa_dnszone = client.dnszone_find(zone_name)
+            feature_enable_str = 'enable' if self.state == 'present' else 'disable'
     
-        # Send the data to bigpanda
-    data = json.dumps(body)
-    headers = {'Authorization': 'Bearer %s' % token, 'Content-Type': 'application/json'}
-    try:
-        response, info = fetch_url(module, request_url, data=data, headers=headers)
-        if info['status'] == 200:
-            module.exit_json(changed=True, **deployment)
-        else:
-            module.fail_json(msg=json.dumps(info))
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+    notes:
+    - Requires the LogEntries agent which can be installed following the instructions at logentries.com
+'''
+EXAMPLES = '''
+# Track nginx logs
+- logentries:
+    path: /var/log/nginx/access.log
+    state: present
+    name: nginx-access-log
     
-    import time
-import re
+        elif not running and state == 'started':
+        if module.check_mode:
+            module.exit_json(changed=True)
+        status = run_command('start')
+        if status in ['initializing', 'running'] or 'start pending' in status:
+            module.exit_json(changed=True, name=name, state=state)
+        module.fail_json(msg='%s process not started' % name, status=status)
     
-        key = module.params['key']
-    event = module.params['event']
+        # get the attributes
+    model_handle = model.get('mh')
     
-        IOLoop.instance().start()
+        n_features = 10
+    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
+                                            [n_features], precompute=True)
     
-            self._thread_identity = 0
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
     
-    For each function or class described in `tornado.platform.interface`,
-the appropriate platform-specific implementation exists in this module.
-Most code that needs access to this functionality should do e.g.::
+    # The data that we are interested in is made of 8x8 images of digits, let's
+# have a look at the first 4 images, stored in the `images` attribute of the
+# dataset.  If we were working from image files, we could load them using
+# matplotlib.pyplot.imread.  Note that each image must have the same size. For these
+# images, we know which digit they represent: it is given in the 'target' of
+# the dataset.
+images_and_labels = list(zip(digits.images, digits.target))
+for index, (image, label) in enumerate(images_and_labels[:4]):
+    plt.subplot(2, 4, index + 1)
+    plt.axis('off')
+    plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
+    plt.title('Training: %i' % label)
     
-    # canonical names are on the right side
-LANGUAGE_ALIAS = {
-    'asm'       :   'assembly',
-    'assembler' :   'assembly',
-    'c++'       :   'cpp',
-    'c#'        :   'csharp',
-    'clisp'     :   'lisp',
-    'coffeescript': 'coffee',
-    'cplusplus' :   'cpp',
-    'dlang'     :   'd',
-    'f#'        :   'fsharp',
-    'golang'    :   'go',
-    'javascript':   'js',
-    'objc'      :   'objective-c',
-    'p6'        :   'perl6',
-    'sh'        :   'bash',
-    'visualbasic':  'vb',
-    'vba'       :   'vb',
-    'wolfram'   :   'mathematica',
-    'mma'       :   'mathematica',
-    'wolfram-mathematica': 'mathematica',
-    'm'         :   'octave',
-}
+    X_restored = agglo.inverse_transform(X_reduced)
+images_restored = np.reshape(X_restored, images.shape)
+plt.figure(1, figsize=(4, 3.5))
+plt.clf()
+plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
+for i in range(4):
+    plt.subplot(3, 4, i + 1)
+    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
+    plt.xticks(())
+    plt.yticks(())
+    if i == 1:
+        plt.title('Original data')
+    plt.subplot(3, 4, 4 + i + 1)
+    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
+               interpolation='nearest')
+    if i == 1:
+        plt.title('Agglomerated data')
+    plt.xticks(())
+    plt.yticks(())
     
-    from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
-from adapter import Adapter
+    n_clusters = 5
+np.random.seed(0)
     
-        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-    headers = [(name, value) for (name, value) in resp.raw.headers.items()
-               if name.lower() not in excluded_headers]
+    labels_unique = np.unique(labels)
+n_clusters_ = len(labels_unique)
     
-        def is_cache_needed(self):
-        '''
-        Return True if answers should be cached.
-        Return False if answers should not be cached.
-        '''
-        return self._cache_needed
     
-        def is_found(self, topic):
-        return (
-            topic in self.get_list()
-            or topic.endswith('/:list')
+def __feet_to_meters(feet: float) -> float:
+    '''Convert feet to meters.'''
+    return feet * 0.3048
+    
+            # The following code is provided here to aid in writing a correct migration
+        # Changing field 'Environment.project_id'
+        db.alter_column(
+            'sentry_environment', 'project_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
         )
     
-            cmd = [os.path.join(MYDIR, 'bin/get-answer-for-question')] + topic
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0].decode('utf-8')
-        return answer
+            # Adding field 'ApiToken.refresh_token'
+        db.add_column(
+            'sentry_apitoken',
+            'refresh_token',
+            self.gf('django.db.models.fields.CharField')(max_length=64, unique=True, null=True),
+            keep_default=False
+        )
     
-            return '%s/%s' % (section_name, rest)
+        def backwards(self, orm):
+        # Removing unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
+        db.delete_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
+    
+        complete_apps = ['sentry']
+
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
+        db.add_column(
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
+            keep_default=False
+        )
