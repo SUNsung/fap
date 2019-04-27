@@ -1,151 +1,89 @@
 
         
-          # Four initially random vectors for the special tokens: <PAD>, <UNK>, <X>, <Y>
-  special_embeddings = np.random.normal(0, 0.1, (4, dim))
-  embeddings = np.vstack((special_embeddings, embeddings))
-  embeddings = embeddings.astype(np.float32)
-    
-    matplotlib.rcParams['image.interpolation'] = 'nearest'
-DATA_DIR = 'rnn_synth_data_v1.0'
-    
-      def __init__(self, filename, max_word_length):
-    super(CharsVocabulary, self).__init__(filename)
-    self._max_word_length = max_word_length
-    chars_set = set()
-    
-      if FLAGS.output_masked_logs:
-    samples = write_masked_log(log, id_to_word, sequence_eval, p)
-  else:
-    samples = write_unmasked_log(log, id_to_word, sequence_eval)
-  return samples
-    
-    from models import bidirectional_zaremba
-from models import cnn
-from models import critic_vd
-from models import feedforward
-from models import rnn
-from models import rnn_nas
-from models import rnn_vd
-from models import rnn_zaremba
-from models import seq2seq
-from models import seq2seq_nas
-from models import seq2seq_vd
-from models import seq2seq_zaremba
+            return render_template('auth/login.html')
     
     
-def retrieve_init_savers(hparams):
-  '''Retrieve a dictionary of all the initial savers for the models.
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+    '/1/delete',
+))
+def test_login_required(client, path):
+    response = client.post(path)
+    assert response.headers['Location'] == 'http://localhost/auth/login'
     
-      # Dictionary mapping.
-  if model == 'gen':
-    variable_mapping = {
-        'Model/embedding': embedding,
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
-        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
-        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1,
-        'Model/softmax_w': softmax_w,
-        'Model/softmax_b': softmax_b
-    }
-  else:
-    if FLAGS.dis_share_embedding:
-      variable_mapping = {
-          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
-          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
-          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
-          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1
-      }
-    else:
-      variable_mapping = {
-          'Model/embedding': embedding,
-          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
-          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
-          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
-          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1
-      }
-    
-    
-@function.Defun(func_name='attn_mul_fun', noinline=True)
-def _attn_mul_fun(keys, query):
-  return tf.reduce_sum(keys * query, [2])
-    
-      with tf.variable_scope('dis', reuse=reuse):
-    cell_fwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    cell_bwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    if FLAGS.zoneout_drop_prob > 0.0:
-      cell_fwd = zoneout.ZoneoutWrapper(
-          cell_fwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
-      cell_bwd = zoneout.ZoneoutWrapper(
-          cell_bwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
-    
-        if RESULT and ('info_dict' not in test or 'age_limit' not in test['info_dict'] or
-                   test['info_dict']['age_limit'] != 18):
-        print('\nPotential missing age_limit check: {0}'.format(test['name']))
-    
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    new_version = {}
-    
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
-    
-    import io
-import sys
-import re
-    
-        outfile, = args
-    
-        return ret
-    
-        def test_socks4(self):
-        self.assertTrue(isinstance(self._get_ip('socks4'), compat_str))
-    
-        def short_desc(self):
+        def context_processor(self, f):
+        '''Like :meth:`Flask.context_processor` but for a blueprint.  This
+        function is only executed for requests handled by a blueprint.
         '''
-        A short description of the command
-        '''
-        return ''
+        self.record_once(lambda s: s.app.template_context_processors
+            .setdefault(self.name, []).append(f))
+        return f
     
     
-class TextTestResult(_TextTestResult):
-    def printSummary(self, start, stop):
-        write = self.stream.write
-        writeln = self.stream.writeln
+def has_level_handler(logger):
+    '''Check if there is a handler in the logging chain that will handle the
+    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
+    '''
+    level = logger.getEffectiveLevel()
+    current = logger
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+            return list(result)
     
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
+    
+@pytest.fixture
+def purge_module(request):
+    def inner(name):
+        request.addfinalizer(lambda: sys.modules.pop(name, None))
+    
+    
+def source_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/blob/master/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, text, refuri=ref, **options)
+    return [node], []
+    
+    
+def __feet_to_meters(feet: float) -> float:
+    '''Convert feet to meters.'''
+    return feet * 0.3048
+    
+        elif bump_type == 'dev':
+        # Convert 0.67.3 to 0.67.4.dev0
+        # Convert 0.67.3.b5 to 0.67.4.dev0
+        # Convert 0.67.3.dev0 to 0.67.3.dev1
+        if version.is_devrelease:
+            to_change['dev'] = ('dev', version.dev + 1)
         else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
+            to_change['pre'] = ('dev', 0)
+            to_change['release'] = _bump_release(version.release, 'minor')
     
-        def _build_response(self, body, request):
-        request.meta['download_latency'] = self.headers_time-self.start_time
-        status = int(self.status)
-        headers = Headers(self.response_headers)
-        respcls = responsetypes.from_args(headers=headers, url=self._url)
-        return respcls(url=self._url, status=status, headers=headers, body=body)
+        w, x, y, z = quat[..., 0], quat[..., 1], quat[..., 2], quat[..., 3]
+    Nq = np.sum(quat * quat, axis=-1)
+    s = 2.0 / Nq
+    X, Y, Z = x * s, y * s, z * s
+    wX, wY, wZ = w * X, w * Y, w * Z
+    xX, xY, xZ = x * X, x * Y, x * Z
+    yY, yZ, zZ = y * Y, y * Z, z * Z
+    
+    class DoubleWrapperError(Error):
+    pass
+    
+            def __del__(self):
+            self.close()
+    ```
+    
+        rng = np.random.RandomState()
+    rng.seed(_int_list_from_bigint(hash_seed(seed)))
+    return rng, seed
+    
+            if done:
+            if self.autoreset:
+                self.before_reset()
+                self.after_reset(observation)
+    
+                # Physically correct is to always apply friction_limit until speed is equal.
+            # But dt is finite, that will lead to oscillations if difference is already near zero.
+            f_force *= 205000*SIZE*SIZE  # Random coefficient to cut oscillations in few steps (have no effect on friction_limit)
+            p_force *= 205000*SIZE*SIZE
+            force = np.sqrt(np.square(f_force) + np.square(p_force))
