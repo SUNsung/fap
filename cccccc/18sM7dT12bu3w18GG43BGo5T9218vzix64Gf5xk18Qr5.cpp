@@ -1,62 +1,80 @@
 
         
-          // Construct a generic signature builder by collecting the constraints
-  // from the requirement and the context of the conformance together,
-  // because both define the capabilities of the requirement.
-  GenericSignatureBuilder builder(ctx);
+        void absDiff(const Size2D &size,
+             const u8 *src0Base, ptrdiff_t src0Stride,
+             const u8 *src1Base, ptrdiff_t src1Stride,
+             u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u8>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
     
-    #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
-
+    #define SPLIT_ASM2(sgn, bits) __asm__ ( \
+                                          'vld2.' #bits ' {d0, d2}, [%[in0]]            \n\t' \
+                                          'vld2.' #bits ' {d1, d3}, [%[in1]]            \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL2(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3' \
+                                      );
+#define SPLIT_ASM3(sgn, bits) __asm__ ( \
+                                          'vld3.' #bits ' {d0, d2, d4}, [%[in0]]        \n\t' \
+                                          'vld3.' #bits ' {d1, d3, d5}, [%[in1]]        \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL3(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5' \
+                                      );
+#define SPLIT_ASM4(sgn, bits) __asm__ ( \
+                                          'vld4.' #bits ' {d0, d2, d4, d6}, [%[in0]]    \n\t' \
+                                          'vld4.' #bits ' {d1, d3, d5, d7}, [%[in1]]    \n\t' \
+                                          'vst1.' #bits ' {d0-d1}, [%[out0]]            \n\t' \
+                                          'vst1.' #bits ' {d2-d3}, [%[out1]]            \n\t' \
+                                          'vst1.' #bits ' {d4-d5}, [%[out2]]            \n\t' \
+                                          'vst1.' #bits ' {d6-d7}, [%[out3]]            \n\t' \
+                                          : \
+                                          : [out0] 'r' (dst0 + dj), [out1] 'r' (dst1 + dj), [out2] 'r' (dst2 + dj), [out3] 'r' (dst3 + dj), \
+                                            [in0]  'r' (src + sj), [in1]  'r' (src + sj + MUL4(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
+                                      );
     
-    void InputAction::anchor() {}
-    
-        struct Margin {
-        Margin() : left(0), right(0), top(0), bottom(0) {}
-        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
-            : left(left_), right(right_), top(top_), bottom(bottom_) {}
-    }
-    
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
     {
-        v_dst = internal::vabdq(v_src0, v_src1);
+        v_dst = internal::vcgtq(v_src0, v_src1);
     }
     
-        f32* laneb = internal::alignPtr(laneA + cn * (size.width + 2), 32);
-    f32* laneB = internal::alignPtr(laneb + cn * (size.width + 2), 32);
+             vline_f32 = vaddq_f32(vline_f32, vhalf);
+         vline_s32 = vcvtq_s32_f32(vline_f32);
     
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
-    
-                for( ; i <= lim; i += 4 )
-            {
-                internal::prefetch(src0 + i);
-                internal::prefetch(src1 + i);
-                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
-            }
+            const u8* prev = buf[(i - 4 + 3)%3];
+        const u8* pprev = buf[(i - 5 + 3)%3];
+        cornerpos = cpbuf[(i - 4 + 3)%3];
+        ncorners = cornerpos[-1];
     
     
-    {} // namespace CAROTENE_NS
-
-    
-            size_t x = 0;
-        for (; x <= colsn - 4; x += 4)
-        {
-            internal::prefetch(internal::getRowPtr(ln2 + x, srcStride, x % 5 - 2));
-            uint16x4_t v0 = vld1_u16(ln0+x);
-            uint16x4_t v1 = vld1_u16(ln1+x);
-            uint16x4_t v2 = vld1_u16(ln2+x);
-            uint16x4_t v3 = vld1_u16(ln3+x);
-            uint16x4_t v4 = vld1_u16(ln4+x);
-    }
+    {            vst1q_u32(lane + x, v);
+        }
+        for (; x < colsn; ++x)
+            lane[x] = ln0[x] + ln4[x] + 4*(ln1[x] + ln3[x]) + 6*ln2[x];
     
     inline float32x2_t vrecp_f32(float32x2_t val)
 {
@@ -66,237 +84,257 @@
     return reciprocal;
 }
     
-        for (ptrdiff_t y = 0; y < height; ++y)
-    {
-        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
-        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
-        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
+    bool os_detect_blob(BLOBNBOX* bbox, OrientationDetector* o,
+                    ScriptDetector* s, OSResults*,
+                    tesseract::Tesseract* tess);
     
+    // ReadNextBox factors out the code to interpret a line of a box
+// file so that applybox and unicharset_extractor interpret the same way.
+// This function returns the next valid box file utf8 string and coords
+// and returns true, or false on eof (and closes the file).
+// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
+// for valid utf-8 and allows space or tab between fields.
+// utf8_str is set with the unichar string, and bounding box with the box.
+// If there are page numbers in the file, it reads them all.
+bool ReadNextBox(int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+// As ReadNextBox above, but get a specific page number. (0-based)
+// Use -1 to read any page number. Files without page number all
+// read as if they are page 0.
+bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
     
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
-}
+      // Inserts a new box before the given index.
+  // Recomputes the bounding box.
+  void InsertBox(int index, const TBOX& box);
     
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
-    
-    std::string InfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG';
-}
-    
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-    
-    {      // LevelDB's default cache size is a combined 4 MB
-      std::string WAL_checkpoint = 'PRAGMA wal_autocheckpoint = 4096';
-      status = sqlite3_exec(db_, WAL_stmt.c_str(), nullptr, nullptr, &err_msg);
-      ExecErrorCheck(status, err_msg);
-      status = sqlite3_exec(db_, WAL_checkpoint.c_str(), nullptr, nullptr,
-                            &err_msg);
-      ExecErrorCheck(status, err_msg);
-    }
-    
-    /**
- * \brief The class sets caffe's mode before doing forward/backward
- * \tparam xpu The device that the op will be executed on.
- */
-class CaffeMode {
- public:
-  template<typename xpu> static void SetMode();
-};
-    
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
- */
-class ImageAugmenter {
- public:
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
-   */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
-    }
-    }
-    
-    
-template<typename xpu>
-inline void KhatriRaoCompute(const nnvm::NodeAttrs &attrs,
-                             const OpContext &ctx,
-                             const std::vector<TBlob> &inputs,
-                             const std::vector<OpReqType> &req,
-                             const std::vector<TBlob> &outputs) {
-  using namespace mxnet_op;
-  CHECK_EQ(outputs.size(), 1U);
-  MSHADOW_TYPE_SWITCH(outputs[0].type_flag_, DType, {
-      KhatriRaoCompute_<xpu, DType>(attrs, ctx, inputs, req, outputs);
-  });
-}
-    
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
-    
-            static NDShape GetUnpackedShape(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout)
-        {
-            // Determine unpacked shape
-            auto unpackedShape = sampleShape;
-            if (packedDataLayout)
-            {
-                if (sampleDynamicAxes.empty())
-                    LogicError('A PackedValue object that has a layout must have at least one dynamic axis.');
-    }
-    }
-    
-    class Timer
-{
-public:
-    Timer()
-        : m_start(0), m_end(0)
-    {
-    }
-    }
-    
-        // Overrides
-    OrbitCamera *clone() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    OrbitCamera();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~OrbitCamera();
-    
-    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
-    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
-    
-        if (targetGrid && targetGrid->getReuseGrid() > 0)
-    {
-        if (targetGrid->isActive() && targetGrid->getGridSize().width == _gridSize.width
-            && targetGrid->getGridSize().height == _gridSize.height)
-        {
-            targetGrid->reuse();
-        }
-        else
-        {
-            CCASSERT(0, 'Invalid grid parameters!');
-        }
-    }
+      // Returns the covariance.
+  double covariance() const {
+    if (total_weight > 0.0)
+      return (sigxy - sigx * sigy / total_weight) / total_weight;
     else
-    {
-        if (targetGrid && targetGrid->isActive())
-        {
-            targetGrid->setActive(false);
-        }
+      return 0.0;
+  }
+  double x_variance() const {
+    if (total_weight > 0.0)
+      return (sigxx - sigx * sigx / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double y_variance() const {
+    if (total_weight > 0.0)
+      return (sigyy - sigy * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+    
+      public:
+    REJ() = default;
+    
+    // A collection of utility functions for arrays of UNICHAR_IDs that are
+// terminated by INVALID_UNICHAR_ID.
+class UnicharIdArrayUtils {
+ public:
+  // Compares two arrays of unichar ids. Returns -1 if the length of array1 is
+  // less than length of array2, if any array1[i] is less than array2[i].
+  // Returns 0 if the arrays are equal, 1 otherwise.
+  // The function assumes that the arrays are terminated by INVALID_UNICHAR_ID.
+  static inline int compare(const UNICHAR_ID *ptr1, const UNICHAR_ID *ptr2) {
+    for (;;) {
+      const UNICHAR_ID val1 = *ptr1++;
+      const UNICHAR_ID val2 = *ptr2++;
+      if (val1 != val2) {
+        if (val1 == INVALID_UNICHAR_ID) return -1;
+        if (val2 == INVALID_UNICHAR_ID) return 1;
+        if (val1 < val2) return -1;
+        return 1;
+      }
+      if (val1 == INVALID_UNICHAR_ID) return 0;
+    }
+  }
     }
     
-        /**
-    @brief Get the center position of twirl action.
-    @return The center position of twirl action.
-    */
-    const Vec2& getPosition() const { return _position; }
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
+    }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
+    
+    
+    {    // Find the maximum element. Its index is guaranteed to be greater than
+    // the index of the parent of the last element, since by the heap invariant
+    // the parent must be less than or equal to the children.
+    int worst_index = heap_size - 1;
+    int end_parent = ParentNode(worst_index);
+    for (int i = worst_index - 1; i > end_parent; --i) {
+      if (heap_[worst_index] < heap_[i]) worst_index = i;
+    }
+    return worst_index;
+  }
+    
+    // We print a protobuf using its ShortDebugString() when the string
+// doesn't exceed this many characters; otherwise we print it using
+// DebugString() for better readability.
+const size_t kProtobufOneLinerMaxLength = 50;
+    
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
+ public:
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
+    }
+    
+    // If *pstr starts with the given prefix, modifies *pstr to be right
+// past the prefix and returns true; otherwise leaves *pstr unchanged
+// and returns false.  None of pstr, *pstr, and prefix can be NULL.
+GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32>
+struct Types32 {
+  typedef T1 Head;
+  typedef Types31<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32> Tail;
+};
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
+    
+    // Tests the Set method.
+TEST(MyString, Set) {
+  MyString s;
+    }
+    
+            static int Initialize();
+        static void RegisterHosts();
+        static INarratorAnnouncementHost^ GetHostProducer();
+    
+    #include 'ICurrencyHttpClient.h'
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    double ObjectGeneralInfo60B::lateral_dist(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+      x <<= 4;
+  x |= t;
+    
     /**
-    @brief Set the center position of twirl action.
-    @param position The center position of twirl action will be set.
-    */
-    void setPosition(const Vec2& position);
+ * @file
+ **/
     
-    void ActionInstant::step(float /*dt*/)
-{
-    float updateDt = 1;
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendActionEventToJS(this, kActionUpdate, (void *)&updateDt))
-            return;
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     2, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -2,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -1,  2, -1,  0,  0,  0,  0,  0,  0,  0,
+     1, -2,  1,  0,  0,  0,  0,  0,  0,  0,
+     0, -1,  2, -1,  0,  0,  0,  0,  0,  0,
+     0,  1, -2,  1,  0,  0,  0,  0,  0,  0,
+     0,  0, -1,  2, -1,  0,  0,  0,  0,  0,
+     0,  0,  1, -2,  1,  0,  0,  0,  0,  0,
+     0,  0,  0, -1,  2, -1,  0,  0,  0,  0,
+     0,  0,  0,  1, -2,  1,  0,  0,  0,  0,
+     0,  0,  0,  0, -1,  2, -1,  0,  0,  0,
+     0,  0,  0,  0,  1, -2,  1,  0,  0,  0,
+     0,  0,  0,  0,  0, -1,  2, -1,  0,  0,
+     0,  0,  0,  0,  0,  1, -2,  1,  0,  0,
+     0,  0,  0,  0,  0,  0, -1,  2, -1,  0,
+     0,  0,  0,  0,  0,  0,  1, -2,  1,  0,
+     0,  0,  0,  0,  0,  0,  0, -1,  2, -1,
+     0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+      MatrixXd offset_golden = MatrixXd::Zero(10, 1);
+  offset_golden(0, 0) = -10000.0;
+    
+      x <<= 0;
+  x >>= 0;
+    
+    // config detail: {'name': 'encoder_temperature', 'offset': -40.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
+// '[-32808|32727]', 'bit': 7, 'type': 'int', 'order': 'motorola',
+// 'physical_unit': 'deg C'}
+int Brakemotorrpt271::encoder_temperature(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
-#endif
-    update(updateDt);
-}
+    
+      Brakerpt6c brake;
+  brake.Parse(bytes, length, &chassis_detail);
     
     
-    {     actionAllocWithHashElement(element);
- 
-     CCASSERT(! ccArrayContainsObject(element->actions, action), 'action already be added!');
-     ccArrayAppendObject(element->actions, action);
- 
-     action->startWithTarget(target);
-}
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
+    {  bool ret = x;
+  return ret;
 }
