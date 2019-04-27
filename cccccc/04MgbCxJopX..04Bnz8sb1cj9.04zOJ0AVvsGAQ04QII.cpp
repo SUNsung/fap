@@ -1,305 +1,371 @@
 
         
-        bool IsUrlArg(const base::CommandLine::CharType* arg) {
-  // the first character must be a letter for this to be a URL
-  auto c = *arg;
-  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-    for (auto* p = arg + 1; *p; ++p) {
-      c = *p;
+        
+    {}  // namespace grpc
+    
+    Status ProtoServerReflection::ServerReflectionInfo(
+    ServerContext* context,
+    ServerReaderWriter<ServerReflectionResponse, ServerReflectionRequest>*
+        stream) {
+  ServerReflectionRequest request;
+  ServerReflectionResponse response;
+  Status status;
+  while (stream->Read(&request)) {
+    switch (request.message_request_case()) {
+      case ServerReflectionRequest::MessageRequestCase::kFileByFilename:
+        status = GetFileByName(context, request.file_by_filename(), &response);
+        break;
+      case ServerReflectionRequest::MessageRequestCase::kFileContainingSymbol:
+        status = GetFileContainingSymbol(
+            context, request.file_containing_symbol(), &response);
+        break;
+      case ServerReflectionRequest::MessageRequestCase::
+          kFileContainingExtension:
+        status = GetFileContainingExtension(
+            context, &request.file_containing_extension(), &response);
+        break;
+      case ServerReflectionRequest::MessageRequestCase::
+          kAllExtensionNumbersOfType:
+        status = GetAllExtensionNumbers(
+            context, request.all_extension_numbers_of_type(),
+            response.mutable_all_extension_numbers_response());
+        break;
+      case ServerReflectionRequest::MessageRequestCase::kListServices:
+        status =
+            ListService(context, response.mutable_list_services_response());
+        break;
+      default:
+        status = Status(StatusCode::UNIMPLEMENTED, '');
     }
     }
     }
     
-    class WebRequest : public mate::TrackableObject<WebRequest> {
+    #include <utility>
+    
+    #include <grpc/support/port_platform.h>
+    
+    namespace grpc {
+    }
+    
+    
+    {}  // namespace leveldb
+    
+    class StdoutPrinter : public WritableFile {
  public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
-    }
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
+};
     
-    class Event : public Wrappable<Event>, public content::WebContentsObserver {
- public:
-  static Handle<Event> Create(v8::Isolate* isolate);
-    }
     
-    void AutoUpdater::SetDelegate(Delegate* delegate) {
-  delegate_ = delegate;
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
+    }
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
 }
     
     
-    {}  // namespace in_app_purchase
+    {  // No copying allowed
+  MemTableIterator(const MemTableIterator&);
+  void operator=(const MemTableIterator&);
+};
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
-    
-    #include 'atom/browser/net/url_request_about_job.h'
-    
-    // Author: qrczak@google.com (Marcin Kowalczyk)
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
+    // Snapshots are kept in a doubly-linked list in the DB.
+// Each SnapshotImpl corresponds to a particular sequence number.
+class SnapshotImpl : public Snapshot {
+ public:
+  SnapshotImpl(SequenceNumber sequence_number)
+      : sequence_number_(sequence_number) {}
     }
     
-    // ===================================================================
+    #include <set>
+#include <utility>
+#include <vector>
+#include 'db/dbformat.h'
     
-    
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/stubs/substitute.h>
-    
-      // write central directory
-  io::CodedOutputStream output(raw_output_);
-  for (int i = 0; i < num_entries; ++i) {
-    const string &filename = files_[i].name;
-    uint16 filename_size = filename.size();
-    uint32 crc32 = files_[i].crc32;
-    uint32 size = files_[i].size;
-    uint32 offset = files_[i].offset;
+    namespace mxnet {
     }
     
-    #define IMPL_ADDWEIGHTED(type)                                \
-void addWeighted(const Size2D &,                              \
-                 const type *, ptrdiff_t,                     \
-                 const type *, ptrdiff_t,                     \
-                 type *, ptrdiff_t,                           \
-                 f32, f32, f32)                               \
-{                                                             \
-    internal::assertSupportedConfiguration();                 \
+      // override set_default
+  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
+    caffe::NetParameter net_param;
+    if (!ReadProtoFromTextContent(value, &net_param))
+      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    }
+    
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
+    
+    
+    {    // one-liner channel-wise normalization
+    switch (data.shape_[0]) {
+      case 4:
+        if (meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[3] = ((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else {
+          outimg_[3] = ((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        }
+      case 3:
+        if (meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[2] = ((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else {
+          outimg_[2] = ((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        }
+      case 2:
+        if (meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[1] = ((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else {
+          outimg_[1] = ((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        }
+      case 1:
+        if (meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[0] = ((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else {
+          outimg_[0] = ((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        }
+        break;
+      default:
+        LOG(FATAL) << 'Expected image channels range 1-4, got ' << data.shape_[0];
+    }
+  }
+    
+    inline void Quantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
+                             const std::vector<mxnet::TBlob> &inputs,
+                             const float threshold) {
+  Quantize2BitKernelLaunch(s, inputs, threshold);
 }
     
+    /*!
+ * \file tvm_bridge.cc
+ * \brief Bridge to run TVM's PackedFunc in MXNet's async engine.
+ *
+ *  This bridge is mainly used to expose MXNet's async engine push to
+ *  TVM. It only uses TVM runtime in aheader only mode, which means
+ *  there is no link dependencies.
+ *
+ *  Support for TVM is optional even when this code
+ *  is always compiled and built with the project.
+ *  We choose this strategy because we do not yet want
+ *  llvm as dependency(which TVM uses). So instead we expose hook
+ *  to TVM and let user use this feature when they have TVM installed.
+ *
+ *  We do require TVM and MXNet to be built with same C++ ABI of std::function
+ */
+#define TVM_RUNTIME_HEADER_ONLY 1
+#include <tvm/runtime/packed_func.h>
+#include <mxnet/c_api.h>
+#include <mxnet/ndarray.h>
+#include <mxnet/engine.h>
     
+        info = MXNET_LAPACK_posv<DType>(MXNET_LAPACK_ROW_MAJOR, 'U',
+      k, out.size(1), hadamard_prod.dptr_, hadamard_prod.stride_,
+      out.dptr_, out.stride_);
+  } else {
+    Tensor<cpu, 2, DType> kr(Shape2(out.size(1), out.size(0)));
+    AllocSpace(&kr);
+    khatri_rao(kr, ts_arr);
+    
+    
+    {    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid = in_data[bs::kGrid].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+    // grid_tmp : (batch, h, w, 2)
+    grid_tmp = transpose(grid, Shape4(0, 2, 3, 1));
+    if (!init_cudnn_) {
+     Init(s, in_data, out_data);
+    }
+    CHECK_EQ(data.CheckContiguous(), true);
+    CHECK_EQ(out.CheckContiguous(), true);
+    CHECK_EQ(grid_tmp.CheckContiguous(), true);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
+                                            st_desc_,
+                                            &alpha,
+                                            in_desc_,
+                                            data.dptr_,
+                                            grid_tmp.dptr_,
+                                            &beta,
+                                            out_desc_,
+                                            out.dptr_));
+  }
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_spatial_transformer-inl.h
+ * \brief
+ * \author Wei Wu
+*/
+#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+    
+    template<>
+Operator* CreateOp<gpu>(NDArrayOpParam param) {
+  return new NDArrayOp<gpu>(param);
+}
+#endif  // MXNET_USE_CUDA
+    
+    // implementing configure.
+template<typename PairIter>
+inline void GradientBooster::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
+    
+        const auto ngroup = static_cast<bst_omp_uint>(gptr.size() - 1);
+    #pragma omp parallel
     {
-    {}}
+      // parall construct, declare random number generator here, so that each
+      // thread use its own random number generator, seed by thread id and current iteration
+      common::RandomEngine rnd(iter * 1111 + omp_get_thread_num());
+    }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s8, f32, 16,
-,
+    TEST(ByteTest, ByteToString) {
+  unsigned char value = 0x34;
+  EXPECT_EQ('34', Byte::byte_to_hex(value));
+  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
+  uint32_t int_value = 0xE13A;
+  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+}
+    
+    #include 'modules/common/time/time.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    
+    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_dist_rms(
+          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
+      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
+      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
+      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
+      obs->set_longitude_accel_rms(
+          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
+      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
+      obs->set_oritation_angle_rms(
+          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
+      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
+      obs->set_meas_state(meas_state(bytes, length));
+      break;
+    }
+  }
+}
+    
+    void SplineSegKernel::CalculateThirdOrderDerivative(const uint32_t num_params) {
+  kernel_third_order_derivative_ =
+      Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 3; r < kernel_third_order_derivative_.rows(); ++r) {
+    for (int c = 3; c < kernel_third_order_derivative_.cols(); ++c) {
+      kernel_third_order_derivative_(r, c) =
+          (r * r - r) * (r - 2) * (c * c - c) * (c - 2) / (r + c - 5.0);
+    }
+  }
+}
+    
+      Byte t1(bytes + 1);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Byte t2(bytes + 2);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+        while ((n = (node_t*) swHeap_pop(pq)))
+    {
+        ASSERT_EQ(_map[n->val], n->pri);
+        free(n);
+    }
+    
+    static void RedisQtAddRead(void *);
+static void RedisQtDelRead(void *);
+static void RedisQtAddWrite(void *);
+static void RedisQtDelWrite(void *);
+static void RedisQtCleanup(void *);
+    
+    TEST(coroutine_channel, pop_timeout)
 {
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vmovl.s8 q1, d0                                       \n\t'
-             'vmovl.s8 q2, d1                                       \n\t'
-             'vmovl.s16 q3, d2                                      \n\t'
-             'vmovl.s16 q4, d3                                      \n\t'
-             'vmovl.s16 q5, d4                                      \n\t'
-             'vmovl.s16 q6, d5                                      \n\t'
-             'vcvt.f32.s32 q7, q3                                   \n\t'
-             'vcvt.f32.s32 q8, q4                                   \n\t'
-             'vcvt.f32.s32 q9, q5                                   \n\t'
-             'vcvt.f32.s32 q10, q6                                  \n\t'
-             'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
-             'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
-             'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
-             'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 4),
-               [dst3] 'r' (_dst + i + 8),
-               [dst4] 'r' (_dst + i + 12)
-             : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
-         );
-     }
-})
-#else
-CVT_FUNC(s8, f32, 16,
-,
+    coro_test([](void *arg)
+    {
+        Channel chan(1);
+        void *ret;
+    }
+    }
+    
+    enum
 {
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         int8x16_t vline_s8 = vld1q_s8(_src + i);
-    }
-    }
-    
-    
-    {        for (; i < size.width; ++i)
-            result += s32(src0[i]) * s32(src1[i]);
-    }
-    return result;
-#else
-    (void)_size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    
-                uint16x8_t v_maxmask = vceqq_u16(v_src, v_maxval8);
-            uint16x8_t v_minmask = vceqq_u16(v_src, v_minval8);
-            uint16x8_t v_mask = vorrq_u16(v_maxmask, v_minmask);
-    
-    namespace {
-    }
+    EVENT_onStart = 1u << 1,
+    EVENT_onShutdown = 1u << 2,
+    EVENT_onWorkerStart = 1u << 3,
+    EVENT_onWorkerStop = 1u << 4,
+    EVENT_onConnect = 1u << 5,
+    EVENT_onReceive = 1u << 6,
+    EVENT_onPacket = 1u << 7,
+    EVENT_onClose = 1u << 8,
+    EVENT_onTask = 1u << 9,
+    EVENT_onFinish = 1u << 10,
+    EVENT_onPipeMessage = 1u << 11,
+};
     
         /**
-     * System registration hook.
+     * 协程2
      */
-    static void registerIDs();
-    
-    int32_t ScriptSet::hashCode() const {
-    int32_t hash = 0;
-    for (int32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        hash ^= bits[i];
-    }
-    return hash;
-}
-    
-    void SearchIterator::setText(const UnicodeString &text, UErrorCode &status)
-{
-    if (U_SUCCESS(status)) {
-        if (text.length() == 0) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        else {
-            m_text_        = text;
-            m_search_->text = m_text_.getBuffer();
-            m_search_->textLength = m_text_.length();
-        }
-    }
-}
-    
-    U_NAMESPACE_END
-    
-    int32_t
-SimpleDateFormat::skipPatternWhiteSpace(const UnicodeString& text, int32_t pos) const {
-    const UChar* s = text.getBuffer();
-    return (int32_t)(PatternProps::skipWhiteSpace(s + pos, text.length() - pos) - s);
-}
-    
-    // Bitwise comparison for the collation keys.
-UCollationResult
-CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
-{
-  if(U_SUCCESS(status)) {
-    const uint8_t *src = getBytes();
-    const uint8_t *tgt = target.getBytes();
-    }
-    }
-    
-    U_NAMESPACE_END
-    
-    /**
- * Implement UnicodeMatcher
- */
-UnicodeString& StringMatcher::toPattern(UnicodeString& result,
-                                        UBool escapeUnprintable) const
-{
-    result.truncate(0);
-    UnicodeString str, quoteBuf;
-    if (segmentNumber > 0) {
-        result.append((UChar)40); /*(*/
-    }
-    for (int32_t i=0; i<pattern.length(); ++i) {
-        UChar keyChar = pattern.charAt(i);
-        const UnicodeMatcher* m = data->lookupMatcher(keyChar);
-        if (m == 0) {
-            ICU_Utility::appendToRule(result, keyChar, FALSE, escapeUnprintable, quoteBuf);
-        } else {
-            ICU_Utility::appendToRule(result, m->toPattern(str, escapeUnprintable),
-                         TRUE, escapeUnprintable, quoteBuf);
-        }
-    }
-    if (segmentNumber > 0) {
-        result.append((UChar)41); /*)*/
-    }
-    // Flush quoteBuf out to result
-    ICU_Utility::appendToRule(result, -1,
-                              TRUE, escapeUnprintable, quoteBuf);
-    return result;
-}
-    
-    #include 'unicode/unistr.h'
-#include 'unicode/unifunct.h'
-#include 'unicode/unimatch.h'
-#include 'unicode/unirepl.h'
-    
-    // Enforce cdecl calling convention for functions called by the standard library, in case compilation settings changed the default to e.g. __vectorcall
-#ifdef _MSC_VER
-#define IMGUI_CDECL __cdecl
-#else
-#define IMGUI_CDECL
-#endif
-    
-    void ImGui::PlotEx(ImGuiPlotType plot_type, const char* label, float (*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, const char* overlay_text, float scale_min, float scale_max, ImVec2 frame_size)
-{
-    ImGuiWindow* window = GetCurrentWindow();
-    if (window->SkipItems)
-        return;
-    }
-    
-    
-    {        // Extend texture height and mark missing glyphs as non-packed so we won't render them.
-        // FIXME: We are not handling packing failure here (would happen if we got off TEX_HEIGHT_MAX or if a single if larger than TexWidth?)
-        for (int glyph_i = 0; glyph_i < src_tmp.GlyphsCount; glyph_i++)
-            if (src_tmp.Rects[glyph_i].was_packed)
-                atlas->TexHeight = ImMax(atlas->TexHeight, src_tmp.Rects[glyph_i].y + src_tmp.Rects[glyph_i].h);
-    }
-    
-    #pragma once
-    
-        stb_compress_inner(input, length);
-    
-        VkGraphicsPipelineCreateInfo info = {};
-    info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    info.flags = g_PipelineCreateFlags;
-    info.stageCount = 2;
-    info.pStages = stage;
-    info.pVertexInputState = &vertex_info;
-    info.pInputAssemblyState = &ia_info;
-    info.pViewportState = &viewport_info;
-    info.pRasterizationState = &raster_info;
-    info.pMultisampleState = &ms_info;
-    info.pDepthStencilState = &depth_info;
-    info.pColorBlendState = &blend_info;
-    info.pDynamicState = &dynamic_state;
-    info.layout = g_PipelineLayout;
-    info.renderPass = g_RenderPass;
-    err = vkCreateGraphicsPipelines(g_Device, g_PipelineCache, 1, &info, g_Allocator, &g_Pipeline);
-    check_vk_result(err);
-    
-    #include <inttypes.h>
-#include <sys/types.h>
-#include <stdio.h>
-    
-    std::unique_ptr<WriteControllerToken>
-WriteController::GetCompactionPressureToken() {
-  ++total_compaction_pressure_;
-  return std::unique_ptr<WriteControllerToken>(
-      new CompactionPressureToken(this));
-}
-    
-      // close DB
-  delete cf;
-  delete db;
-    
-      // The name of the DB instance where the thread is currently
-  // involved with.  It would be set to empty string if the thread
-  // does not involve in any DB operation.
-  const std::string db_name;
-    
-      // Builds an openable snapshot of RocksDB on the same disk, which
-  // accepts an output directory on the same disk, and under the directory
-  // (1) hard-linked SST files pointing to existing live SST files
-  // SST files will be copied if output directory is on a different filesystem
-  // (2) a copied manifest files and other files
-  // The directory should not already exist and will be created by this API.
-  // The directory will be an absolute path
-  // log_size_for_flush: if the total log file size is equal or larger than
-  // this value, then a flush is triggered for all the column families. The
-  // default value is 0, which means flush is always triggered. If you move
-  // away from the default, the checkpoint may not contain up-to-date data
-  // if WAL writing is not always enabled.
-  // Flush will always trigger if it is 2PC.
-  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
-                                  uint64_t log_size_for_flush = 0);
+    Coroutine::create([](void *arg)
+    {
+        G_a.x = 100;
+        G_a.y = nullptr;
+    });
