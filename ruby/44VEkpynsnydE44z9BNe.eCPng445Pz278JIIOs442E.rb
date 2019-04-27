@@ -1,123 +1,94 @@
 
         
-            def suggest_ruby_reinstall(e)
-      ui = FastlaneCore::UI
-      ui.error('-----------------------------------------------------------------------')
-      ui.error(e.to_s)
-      ui.error('')
-      ui.error('SSL errors can be caused by various components on your local machine.')
-      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
-        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
-        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
+        task :default => :test
+task :spec => :test
+    
+    module Sinatra
+  # Sinatra::ShowExceptions catches all exceptions raised from the app it
+  # wraps. It shows a useful backtrace with the sourcefile and clickable
+  # context, the whole Rack environment and the request data.
+  #
+  # Be careful when you use this on public-facing sites as it could reveal
+  # information helpful to attackers.
+  class ShowExceptions < Rack::ShowExceptions
+    @@eats_errors = Object.new
+    def @@eats_errors.flush(*) end
+    def @@eats_errors.puts(*) end
+    
+          def empty_cookie(host, path)
+        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
       end
-      ui.error('')
-      ui.error('The best solution is to use the self-contained fastlane version.')
-      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
-      ui.error(' - Use Homebrew')
-      ui.error('    - update brew with `brew update`')
-      ui.error('    - install fastlane using:')
-      ui.error('      - `brew cask install fastlane`')
-      ui.error(' - Use One-Click-Installer:')
-      ui.error('    - download fastlane at https://download.fastlane.tools')
-      ui.error('    - extract the archive and double click the `install`')
-      ui.error('-----------------------------------------------------------')
-      ui.error('for more details on ways to install fastlane please refer the documentation:')
-      ui.error('-----------------------------------------------------------')
-      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
-      ui.error('-----------------------------------------------------------')
-      ui.error('')
-      ui.error('You can also install a new version of Ruby')
-      ui.error('')
-      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
-      ui.error('- If you use system Ruby:')
-      ui.error('  - Run `brew update && brew install ruby`')
-      ui.error('- If you use rbenv with ruby-build:')
-      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
-      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
-      ui.error('- If you use rvm:')
-      ui.error('  - First run `rvm osx-ssl-certs update all`')
-      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
-      ui.error('')
-      ui.error('If that doesn't fix your issue, please google for the following error message:')
-      ui.error('  '#{e}'')
-      ui.error('-----------------------------------------------------------------------')
+    
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
     end
     
-          optional = false if optional.nil?
-      sensitive = false if sensitive.nil?
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+      end
     
-          global_option('--verbose') { FastlaneCore::Globals.verbose = true }
+          post_install_messages.compact.each do |message|
+        PluginManager.ui.info(message)
+      end
     
-            # This method is expected to return a class that is used for
-        # configuring the provisioner. This return value is expected to be
-        # a subclass of {Config}.
-        #
-        # @return [Config]
-        def self.config_class
-        end
-    
-            # Capture all bad configuration calls and save them for an error
-        # message later during validation.
-        def method_missing(name, *args, &block)
-          return super if @__finalized
-    
-            # Defines additional command line commands available by key. The key
-        # becomes the subcommand, so if you register a command 'foo' then
-        # 'vagrant foo' becomes available.
-        #
-        # @param [String] name Subcommand key.
-        def self.command(name, **opts, &block)
-          # Validate the name of the command
-          if name.to_s !~ /^[-a-z0-9]+$/i
-            raise InvalidCommandName, 'Commands can only contain letters, numbers, and hyphens'
-          end
-    
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
-    
-      # Compile a file on disk to CSS.
-  #
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  #
-  # @overload compile_file(filename, options = {})
-  #   Return the compiled CSS rather than writing it to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @return [String] The compiled CSS.
-  #
-  # @overload compile_file(filename, css_filename, options = {})
-  #   Write the compiled CSS to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @param css_filename [String] The location to which to write the compiled CSS.
-  def self.compile_file(filename, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    css_filename = args.shift
-    result = Sass::Engine.for_file(filename, options).render
-    if css_filename
-      options[:css_filename] ||= css_filename
-      open(css_filename, 'w') {|css_file| css_file.write(result)}
-      nil
-    else
-      result
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+      end
     end
   end
 end
+
     
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
+          def footer
+        if @footer.nil?
+          if page = @page.footer
+            @footer = page.text_data
+          else
+            @footer = false
+          end
+        end
+        @footer
+      end
+    
+          # Extracts title from page if present.
+      #
+      def page_header_from_content(content)
+        doc   = build_document(content)
+        title = find_header_node(doc).inner_text.strip
+        title = nil if title.empty?
+        title
+      end
+    
+      test 'utf-8 kcode' do
+    assert_equal 'μ†ℱ'.scan(/./), ['μ', '†', 'ℱ']
+  end
+    
+        assert body.include?('<span class='username'>Charles Pence</span>'), '/latest_changes should include the Author Charles Pence'
+    assert body.include?('a8ad3c0'), '/latest_changes should include the :latest_changes_count commit'
+    assert !body.include?('60f12f4'), '/latest_changes should not include more than latest_changes_count commits'
+    assert body.include?('<a href='Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e'>Data-Two.csv</a>'), '/latest_changes include links to modified files in #{body}'
+    assert body.include?('<a href='Hobbit/874f597a5659b4c3b153674ea04e406ff393975e'>Hobbit.md</a>'), '/latest_changes should include links to modified pages in #{body}'
+  end
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
     end
+    
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
+    end
+  end
+end
