@@ -1,367 +1,352 @@
 
         
-        TEST(MovableMessageTest, Noexcept) {
-  EXPECT_TRUE(
-      std::is_nothrow_move_constructible<protobuf_unittest::TestAllTypes>());
-  EXPECT_TRUE(std::is_nothrow_move_assignable<protobuf_unittest::TestAllTypes>());
-}
-    
-    #include <google/protobuf/stubs/common.h>
-#include <gtest/gtest.h>
-    
-    
-    {
-    {
-    {
-}  // namespace internal
-}  // namespace protobuf
-}  // namespace google
-    
-    #ifdef _WIN32
-#ifndef STDIN_FILENO
-#define STDIN_FILENO 0
-#endif
-#ifndef STDOUT_FILENO
-#define STDOUT_FILENO 1
-#endif
-#endif
-    
-        std::vector<std::pair<string,string>> option_pairs;
-    ParseGeneratorParameter(parameter, &option_pairs);
-    
-    
-    {
-    {    cout << 'Is this a mobile, home, or work phone? ';
-    string type;
-    getline(cin, type);
-    if (type == 'mobile') {
-      phone_number->set_type(tutorial::Person::MOBILE);
-    } else if (type == 'home') {
-      phone_number->set_type(tutorial::Person::HOME);
-    } else if (type == 'work') {
-      phone_number->set_type(tutorial::Person::WORK);
-    } else {
-      cout << 'Unknown phone type.  Using default.' << endl;
-    }
-  }
-  *person->mutable_last_updated() = TimeUtil::SecondsToTimestamp(time(NULL));
-}
-    
-    #ifndef B2_TRIANGLE_H
-#define B2_TRIANGLE_H
-    
-    		Image				*m_pimageSource;
-		unsigned int		m_uiSourceH;
-		unsigned int		m_uiSourceV;
-		ErrorMetric			m_errormetric;
-		ColorFloatRGBA		m_afrgbaSource[PIXELS];		// vertical scan
-    
-    		m_pblockParent = a_pblockParent;
-    
-      The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+        void absDiff(const Size2D &size,
+             const s8 *src0Base, ptrdiff_t src0Stride,
+             const s8 *src1Base, ptrdiff_t src1Stride,
+             s8 *dstBase, ptrdiff_t dstStride)
 {
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
-    
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
-    
-    size_t DataReader::GetCurrentSamplePosition()
-{
-    // BUGBUG: composition of old readers is not supported.
-    // Returning just for the last reader.
-    return m_dataReaders[m_ioNames.back()]->GetCurrentSamplePosition();
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiffSigned<s8>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-    // TODO: can this be static?
-template <class ElemType>
-void Microsoft::MSR::CNTK::UpdateRunningAverage(ComputationNode<ElemType>& newInput,
-                                                TensorView<ElemType>& runningAverage, size_t& runningCount)
-{
-    FrameRange fr(newInput.GetMBLayout());
-    // Set gaps to zero, since we are reducing in time.
-    newInput.MaskMissingValueColumnsToZero(fr);
+                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
+            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst0))),
+                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst0))));
+    
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        v_dst = internal::vqaddq(v_src0, v_src1);
     }
     
-        template <class ElemType>
-    MemRequestInfo<ElemType>* GetMemInfo(shared_ptr<Matrix<ElemType>> *pMatrixPtr)
+    
+    {        vs1 = vmlaq_f32(vgamma, vs1, valpha);
+        vs1 = vmlaq_f32(vs1, vs2, vbeta);
+        v_dst = vcvtq_u32_f32(vs1);
+    }
+    
+    
     {
-        vector<MemRequestInfo<ElemType>>& memInfoVec = GetMemRequestInfoVec<ElemType>();
-        // iterate through the vector and find the pointer memInfo
-        for (auto& memInfo : memInfoVec)
+    {        for (; dj < size.width; sj += 2, ++dj)
         {
-            if (memInfo.pMatrixPtrs[0] == pMatrixPtr)
-                return &memInfo;
+            dst[dj] = src[sj + coi];
         }
-        return nullptr;
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)coi;
+#endif
+}
+    
+    #define COMBINE(sgn,bits,n) void combine##n(const Size2D &size                                              \
+                                        FILL_LINES##n(FARG, sgn##bits),                                     \
+                                        sgn##bits * dstBase, ptrdiff_t dstStride)                           \
+{                                                                                                           \
+    internal::assertSupportedConfiguration();                                                               \
+    (void)size;                                                                                             \
+    FILL_LINES##n(VOID, sgn##bits)                                                                          \
+    (void)dstBase;                                                                                          \
+    (void)dstStride;                                                                                        \
+}
+#define COMBINE64(sgn,n) COMBINE(sgn,64,n)
+    
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
     }
     
-    #include 'unicode/utypes.h'
+                for( ; i <= lim; i += 4 )
+            {
+                internal::prefetch(src0 + i);
+                internal::prefetch(src1 + i);
+                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
+            }
     
-        UBool      test(UScriptCode script, UErrorCode &status) const;
-    ScriptSet &Union(const ScriptSet &other);
-    ScriptSet &set(UScriptCode script, UErrorCode &status);
-    ScriptSet &reset(UScriptCode script, UErrorCode &status);
-    ScriptSet &intersect(const ScriptSet &other);
-    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
-    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
-    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
     
-    void SearchIterator::setAttribute(USearchAttribute       attribute,
-                                  USearchAttributeValue  value,
-                                  UErrorCode            &status)
-{
-    if (U_SUCCESS(status)) {
-        switch (attribute)
+    {	MessageBox(NULL, message, MB_TITLE, MB_OK | MB_ICONERROR);
+	exit(1);
+}
+    
+        private:
+        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
         {
-        case USEARCH_OVERLAP :
-            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_CANONICAL_MATCH :
-            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_ELEMENT_COMPARISON :
-            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
-                m_search_->elementComparisonType = (int16_t)value;
-            } else {
-                m_search_->elementComparisonType = 0;
+            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
+            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
+            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
+            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
+            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
+        }
+    
+    
+    {        auto originalConstantValue = Value();
+        auto constantValueCPU = originalConstantValue->DeepClone(DeviceDescriptor::CPUDevice(), true);
+        NDArrayViewPtr newConstantValue = CloneAsDataType(constantValueCPU, dataType, true);
+        return Constant(newConstantValue->DeepClone(originalConstantValue->Device(), originalConstantValue->IsReadOnly()), Name());
+    }
+    
+    template <class ElemType>
+struct greater_than_mem_req_size
+{
+    inline bool operator() (const MemRequestInfo<ElemType>& info1, const MemRequestInfo<ElemType>& info2)
+    {
+        return (info1.matrixSize > info2.matrixSize);
+    }
+};
+    
+    
+    {                //    Save state to this URX_LB_CONT op, so failure to match will repeat the loop.
+                //      (successful match will fall off the end of the loop.)
+                fp = StateSave(fp, fp->fPatIdx-3, status);
+                fp->fInputIdx = lbStartIdx;
             }
             break;
-        default:
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+    
+        if(attributeHasBeenSetExplicitly(UCOL_ALTERNATE_HANDLING)) {
+        appendAttribute(result, 'A', getAttribute(UCOL_ALTERNATE_HANDLING, errorCode), errorCode);
+    }
+    // ATTR_VARIABLE_TOP not supported because 'B' was broken.
+    // See ICU tickets #10372 and #10386.
+    if(attributeHasBeenSetExplicitly(UCOL_CASE_FIRST)) {
+        appendAttribute(result, 'C', getAttribute(UCOL_CASE_FIRST, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_NUMERIC_COLLATION)) {
+        appendAttribute(result, 'D', getAttribute(UCOL_NUMERIC_COLLATION, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_CASE_LEVEL)) {
+        appendAttribute(result, 'E', getAttribute(UCOL_CASE_LEVEL, errorCode), errorCode);
+    }
+    if(attributeHasBeenSetExplicitly(UCOL_FRENCH_COLLATION)) {
+        appendAttribute(result, 'F', getAttribute(UCOL_FRENCH_COLLATION, errorCode), errorCode);
+    }
+    // Note: UCOL_HIRAGANA_QUATERNARY_MODE is deprecated and never changes away from default.
+    length = uloc_getKeywordValue(resultLocale, 'collation', subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'K', subtag, length, errorCode);
+    length = uloc_getLanguage(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'L', subtag, length, errorCode);
+    if(attributeHasBeenSetExplicitly(UCOL_NORMALIZATION_MODE)) {
+        appendAttribute(result, 'N', getAttribute(UCOL_NORMALIZATION_MODE, errorCode), errorCode);
+    }
+    length = uloc_getCountry(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'R', subtag, length, errorCode);
+    if(attributeHasBeenSetExplicitly(UCOL_STRENGTH)) {
+        appendAttribute(result, 'S', getAttribute(UCOL_STRENGTH, errorCode), errorCode);
+    }
+    length = uloc_getVariant(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'V', subtag, length, errorCode);
+    length = uloc_getScript(resultLocale, subtag, UPRV_LENGTHOF(subtag), &errorCode);
+    appendSubtag(result, 'Z', subtag, length, errorCode);
+    
+    //----------------------------------------------------------------------------
+//
+//  ScriptSet implementation
+//
+//----------------------------------------------------------------------------
+ScriptSet::ScriptSet() {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        bits[i] = 0;
+    }
+}
+    
+    
+    {
+    {        if (matchlength > 0) {
+            // if matchlength is 0 we are at the start of the iteration
+            if (m_search_->isOverlap) {
+                offset ++;
+            }
+            else {
+                offset += matchlength;
+            }
         }
+        return handleNext(offset, status);
     }
-    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
+    return USEARCH_DONE;
 }
     
-    Format* SelectFormat::clone() const
-{
-    return new SelectFormat(*this);
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
 }
     
-    SharedBreakIterator::SharedBreakIterator(
-        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
     
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
 private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
 };
     
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
     
-        /**
-     * Get maximum significant digits. 0 means no minimum.
-     */
-    int32_t getMin() const {
-        return fMin;
-    }
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
     
-    int32_t 
-SmallIntFormatter::estimateDigitCount(
-        int32_t positiveValue, const IntDigitCountRange &range) {
-    if (positiveValue >= gMaxFastInt) {
-        return range.getMax();
-    }
-    return range.pin(gDigitCount[positiveValue]);
-}
-    
-    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
-static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
-static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
-static const UChar gFew[] = { 0x66, 0x65, 0x77 };
-static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
-static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
-    
-    /**
- * UnicodeFunctor API
- */
-void StringReplacer::setData(const TransliterationRuleData* d) {
-    data = d;
-    int32_t i = 0;
-    while (i<output.length()) {
-        UChar32 c = output.char32At(i);
-        UnicodeFunctor* f = data->lookup(c);
-        if (f != NULL) {
-            f->setData(data);
-        }
-        i += U16_LENGTH(c);
-    }
-}
-    
-    
-  virtual ~Extension_shutdown_presult() throw();
-    
-    
-    {};
-    
-    class ExtensionException;
-    
-    
-    {
-    {
-    {  for (const auto& share_line : osquery::split(content, '\n')) {
-    genNFSShare(share_line, results);
+      void IncInitialized() {
+    num_initialized_++;
   }
-  return results;
-}
-}
-}
+    
+    struct CompactionIterationStats {
+  // Compaction statistics
+    }
+    
+     protected:
+  WriteController* controller_;
+    
+      // verify the values are still there
+  std::string value;
+  for (int i = 1000; i < 99999; ++i) {
+    db->Get(ReadOptions(), std::to_string(i),
+                           &value);
+    assert(value == std::string(500, 'a' + (i % 26)));
+  }
+    
+    int main() {
+  DBOptions db_opt;
+  db_opt.create_if_missing = true;
+    }
+    
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
+    }
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
+    
+    
+    {}  // namespace rocksdb
 
     
-    /*
-** This routine reads a line of text from FILE in, stores
-** the text in memory obtained from malloc() and returns a pointer
-** to the text.  NULL is returned at end of file, or if malloc()
-** fails.
-**
-** If zLine is not NULL then it is a malloced buffer returned from
-** a previous call to this routine that may be reused.
-*/
-static char* local_getline(char* zLine, FILE* in) {
-  int nLine = ((zLine == nullptr) ? 0 : 100);
-  int n = 0;
-    }
-    
-    #include <osquery/core.h>
-#include <osquery/utils/expected/expected.h>
-#include <osquery/utils/status/status.h>
-    
-    namespace osquery {
-namespace table_tests {
-    }
-    }
-    
-    class kernelExtensions : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
+    namespace rocksdb {
+namespace lua {
+class LuaStateWrapper {
+ public:
+  explicit LuaStateWrapper(const std::string& lua_script) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, {});
   }
-};
+  LuaStateWrapper(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, libraries);
+  }
+  lua_State* GetLuaState() const { return lua_state_; }
+  ~LuaStateWrapper() { lua_close(lua_state_); }
+    }
+    }
+    }
     
-    // Sanity check integration test for kernel_integrity
-// Spec file: specs/linux/kernel_integrity.table
     
-        /* Sets the Eye value of the Camera. 
-     * 
-     * @param eye The Eye value of the Camera.
-     * @js NA
-     */
-    void setEye(const Vec3 &eye);
-    void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
-     *
-     * @return The Eye value of the Camera.
-     * @js NA
-     */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
-     *
-     * @param center The Center value of the Camera.
-     * @js NA
-     */
-    void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
-     *
-     * @return The Center value of the Camera.
-     * @js NA
-     */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
-     *
-     * @param up The Up value of the Camera.
-     * @js NA
-     */
-    void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
-     *
-     * @return The Up value of the Camera.
-     * @js NA
-     */
-    const Vec3& getUp() const { return _up; }
+    {}  // namespace rocksdb
+    
+        // 1st element (which should be 0,0) should be here too
+    
+    p = pReverse->getControlPointAtIndex(pReverse->count()-1);
+    pReverse->removeControlPointAtIndex(pReverse->count()-1);
+    
+    p = -p;
+    pReverse->insertControlPoint(p, 0);
+    
+    for (ssize_t i = 1; i < pReverse->count(); ++i)
+    {
+        Vec2 current = pReverse->getControlPointAtIndex(i);
+        current = -current;
+        Vec2 abs = current + p;
+        pReverse->replaceControlPoint(abs, i);
+        
+        p = abs;
+    }
     
         /**
-    @brief Create an action with duration, grid size.
-    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
+    @brief Get the amplitude rate of ripple effect.
+    @return The amplitude rate of ripple effect.
     */
-    static PageTurn3D* create(float duration, const Size& gridSize);
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of ripple effect.
+    @param fAmplitudeRate The amplitude rate of ripple effect.
+    */
+    void setAmplitudeRate(float fAmplitudeRate) { _amplitudeRate = fAmplitudeRate; }
     
-    // implementation of SplitCols
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
     
-    
-    {    frame->autorelease();
-    return frame;
-}
-    
-        /** Gets the units of time the frame takes.
-     *
-     * @return The units of time the frame takes.
-     */
-    float getDelayUnits() const { return _delayUnits; };
-    
-    /** Sets the units of time the frame takes.
-     *
-     * @param delayUnits The units of time the frame takes.
-     */
-    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
-    
-    /** @brief Gets user information
-     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
-     * If UserInfo is nil, then no notification will be broadcast.
-     *
-     * @return A dictionary as UserInfo
-     */
-    const ValueMap& getUserInfo() const { return _userInfo; };
-    ValueMap& getUserInfo() { return _userInfo; };
-    
-    /** Sets user information.
-     * @param userInfo A dictionary as UserInfo.
-     */
-    void setUserInfo(const ValueMap& userInfo)
-    {
-        _userInfo = userInfo;
-    }
-    
+        //
     // Overrides
-    virtual AnimationFrame *clone() const override;
+    //
+    virtual ProgressFromTo* clone() const override;
+    virtual ProgressFromTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
     
 CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    AnimationFrame();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~AnimationFrame();
+    ProgressFromTo() {}
+    virtual ~ProgressFromTo() {}
     
-    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
-    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+        // Overrides
+	virtual TurnOffTiles* clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
     
-    NS_CC_BEGIN
+CC_CONSTRUCTOR_ACCESS:
+    TurnOffTiles() {}
+    virtual ~TurnOffTiles();
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
