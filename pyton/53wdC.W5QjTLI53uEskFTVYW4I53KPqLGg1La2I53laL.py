@@ -1,95 +1,137 @@
 
         
-        RETURN = '''
-rule:
-    description: CloudWatch Event rule data
-    returned: success
-    type: dict
-    sample:
-      arn: 'arn:aws:events:us-east-1:123456789012:rule/MyCronTask'
-      description: 'Run my scheduled task'
-      name: 'MyCronTask'
-      schedule_expression: 'cron(0 20 * * ? *)'
-      state: 'ENABLED'
-targets:
-    description: CloudWatch Event target(s) assigned to the rule
-    returned: success
-    type: list
-    sample: '[{ 'arn': 'arn:aws:lambda:us-east-1:123456789012:function:MyFunction', 'id': 'MyTargetId' }]'
-'''
+        model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu', name='features'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
     
-        Basic Usage:
-        >>> import boto3
-        >>> iam = boto3.client('iam')
-        >>> name = 'server-cert-name'
-        >>> results = get_server_certs(iam, name)
-        {
-            'upload_date': '2015-04-25T00:36:40+00:00',
-            'server_certificate_id': 'ADWAJXWTZAXIPIMQHMJPO',
-            'certificate_body': '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----',
-            'server_certificate_name': 'server-cert-name',
-            'expiration': '2017-06-15T12:00:00+00:00',
-            'path': '/',
-            'arn': 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
-        }
-    '''
-    results = dict()
-    try:
-        if name:
-            server_certs = [iam.get_server_certificate(ServerCertificateName=name)['ServerCertificate']]
+        if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
+    
+    
+def test_mnist():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        assert len(x_train) == len(y_train) == 60000
+        assert len(x_test) == len(y_test) == 10000
+    
+        # Merge outputs under expected scope.
+    with tf.device('/cpu:0' if cpu_merge else '/gpu:%d' % target_gpu_ids[0]):
+        merged = []
+        for name, outputs in zip(output_names, all_outputs):
+            merged.append(concatenate(outputs,
+                                      axis=0, name=name))
+        return Model(model.inputs, merged)
+
+    
+        def __init__(self, filters,
+                 kernel_size,
+                 strides=(1, 1),
+                 padding='valid',
+                 data_format=None,
+                 dilation_rate=(1, 1),
+                 activation='tanh',
+                 recurrent_activation='hard_sigmoid',
+                 use_bias=True,
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 unit_forget_bias=True,
+                 kernel_regularizer=None,
+                 recurrent_regularizer=None,
+                 bias_regularizer=None,
+                 kernel_constraint=None,
+                 recurrent_constraint=None,
+                 bias_constraint=None,
+                 dropout=0.,
+                 recurrent_dropout=0.,
+                 **kwargs):
+        super(ConvLSTM2DCell, self).__init__(**kwargs)
+        self.filters = filters
+        self.kernel_size = conv_utils.normalize_tuple(kernel_size, 2, 'kernel_size')
+        self.strides = conv_utils.normalize_tuple(strides, 2, 'strides')
+        self.padding = conv_utils.normalize_padding(padding)
+        self.data_format = K.normalize_data_format(data_format)
+        self.dilation_rate = conv_utils.normalize_tuple(dilation_rate, 2,
+                                                        'dilation_rate')
+        self.activation = activations.get(activation)
+        self.recurrent_activation = activations.get(recurrent_activation)
+        self.use_bias = use_bias
+    
+    from __future__ import print_function
+import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
+    
+        item = nodes.list_item()
+    item += p
+    return item
+    
+            editor = self.settings['EDITOR']
+        try:
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
+    
+                # trustRoot set to platformTrust() will use the platform's root CAs.
+            #
+            # This means that a website like https://www.cacert.org will be rejected
+            # by default, since CAcert.org CA certificate is seldom shipped.
+            return optionsForClientTLS(hostname.decode('ascii'),
+                                       trustRoot=platformTrust(),
+                                       extraCertificateOptions={
+                                            'method': self._ssl_method,
+                                       })
+    
+            if not self._has_ajax_crawlable_variant(response):
+            return response
+    
+    # `import qtpy` sys.exit()s if DISPLAY is not in the environment.
+# Thus, we need to detect the presence of $DISPLAY manually
+# and not load qtpy if it is absent.
+HAS_DISPLAY = os.getenv('DISPLAY', False)
+CHECK_CMD = 'where' if platform.system() == 'Windows' else 'which'
+    
+        @classmethod
+    def construct_from_string(cls, string):
+        if string == cls.name:
+            return cls()
         else:
-            server_certs = iam.list_server_certificates()['ServerCertificateMetadataList']
+            raise TypeError('Cannot construct a '{}' from '
+                            ''{}''.format(cls, string))
     
-            firewall_policy_obj = oneandone.client.FirewallPolicy(
-            name=name,
-            description=description
-        )
-    
-    - bigpanda:
-    component: '{{ deployment.component }}'
-    version: '{{ deployment.version }}'
-    token: '{{ deployment.token }}'
-    state: finished
-  delegate_to: localhost
-'''
-    
-        le_path = module.get_bin_path('le', True, ['/usr/local/bin'])
-    
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
-    
-    
-def b_expo_mod(a, b, c):
-    res = 1
-    while b > 0:
-        if b&1:
-            res = ((res%c) * (a%c)) % c
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
-    
-                try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.filter(
-                        environment__in=from_envs,
-                    ).update(environment=to_env)
-            except IntegrityError:
-                for ep in orm.EnvironmentProject.objects.filter(environment__in=from_envs):
-                    try:
-                        with transaction.atomic():
-                            orm.EnvironmentProject.objects.filter(
-                                id=ep.id,
-                            ).update(environment=to_env)
-                    except IntegrityError:
-                        ep.delete()
-    
-        def _forwards(self, orm):
-        'Write your forwards methods here.'
+        ('8px', '6pt'),
+    ('1.25pc', '15pt'),
+    ('.25in', '18pt'),
+    ('02.54cm', '72pt'),
+    ('25.4mm', '72pt'),
+    ('101.6q', '72pt'),
+    ('101.6q', '72pt'),
+])
+@pytest.mark.parametrize('relative_to',  # invariant to inherited size
+                         [None, '16pt'])
+def test_css_absolute_font_size(size, relative_to, resolved):
+    if relative_to is None:
+        inherited = None
+    else:
+        inherited = {'font-size': relative_to}
+    assert_resolves('font-size: {size}'.format(size=size),
+                    {'font-size': resolved}, inherited=inherited)
