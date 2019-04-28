@@ -1,201 +1,114 @@
 
         
-                  if name_and_id['for']
-            name_and_id['id'] = name_and_id['for']
-          else
-            name_and_id.delete('id')
-          end
+          desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
     
-        group = Group.create!(name: 'bob')
-    group.add(moderator)
-    group.save
-    
-        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
-    end
-    
-          require 'gh_inspector'
-      require 'fastlane_core/ui/github_issue_inspector_reporter'
-    
-            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
-        message = options[:message] || '#{tag} (fastlane)'
-    
-        def doc_default_value
-      return '[*](#parameters-legend-dynamic)' if self.default_value_dynamic
-      return '' if self.default_value.nil?
-      return '`''`' if self.default_value.instance_of?(String) && self.default_value.empty?
-      return '`:#{self.default_value}`' if self.default_value.instance_of?(Symbol)
-    
-    # remove (double and single) quote pairs
-# un-double-double quote resulting string
-def simulate_windows_shell_unwrapping(string)
-  regex = /^('|')(([^'])(\S*)([^']))('|')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
-    string.to_s.gsub!('''', ''') # remove double double quotes
-  end
-  return string
-end
-    
-          it 'activates an existing user' do
-        users(:bob).deactivate!
-        visit admin_users_path
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
-        expect(page).to have_no_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).to be_active
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
     end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-        it 'returns an active nav link' do
-      stub(self).current_page?('/things') { true }
-      nav = nav_link('Things', '/things')
-      expect(nav).to be_html_safe
-      a = Nokogiri(nav).at('li.active > a[href='/things']')
-      expect(a).to be_a Nokogiri::XML::Element
-      expect(a.text.strip).to eq('Things')
+        def URIEncodePair(cc1, cc2, result, index)
+      u = ((cc1 >> 6) & 0xF) + 1;
+      w = (cc1 >> 2) & 0xF;
+      x = cc1 & 3;
+      y = (cc2 >> 6) & 0xF;
+      z = cc2 & 63;
+      octets = Array.new(4);
+      octets[0] = (u >> 2) + 240;
+      octets[1] = (((u & 3) << 4) | w) + 128;
+      octets[2] = ((x << 4) | y) + 128;
+      octets[3] = z + 128;
+      return URIEncodeOctets(octets, result, index);
     end
     
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
+          def line_class(line)
+        if line =~ /^@@/
+          'gc'
+        elsif line =~ /^\+/
+          'gi'
+        elsif line =~ /^\-/
+          'gd'
+        else
+          ''
+        end
       end
     
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+      def self.assets_path
+    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
   end
     
-      describe '#import and #generate_diff' do
-    let(:scenario_import) do
-      _import = ScenarioImport.new(:data => valid_data)
-      _import.set_user users(:bob)
-      _import
-    end
-    
-          @log.level = 5
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:level)
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+        if info.include?('repository')
+      self.url = info['repository']['url']
     else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      self.url = 'https://npmjs.org/package/#{self.name}'
     end
-  end
     
-    Rails.application.initialize!
-    
-    module Devise
-  # Responsible for handling devise mappings and routes configuration. Each
-  # resource configured by devise_for in routes is actually creating a mapping
-  # object. You can refer to devise_for in routes for usage options.
-  #
-  # The required value in devise_for is actually not used internally, but it's
-  # inflected to find all other values.
-  #
-  #   map.devise_for :users
-  #   mapping = Devise.mappings[:user]
-  #
-  #   mapping.name #=> :user
-  #   # is the scope used in controllers and warden, given in the route as :singular.
-  #
-  #   mapping.as   #=> 'users'
-  #   # how the mapping should be search in the path, given in the route as :as.
-  #
-  #   mapping.to   #=> User
-  #   # is the class to be loaded from routes, given in the route as :class_name.
-  #
-  #   mapping.modules  #=> [:authenticatable]
-  #   # is the modules included in the class
-  #
-  class Mapping #:nodoc:
-    attr_reader :singular, :scoped_path, :path, :controllers, :path_names,
-                :class_name, :sign_out_via, :format, :used_routes, :used_helpers,
-                :failure_app, :router_name
-    
-          # Read each line as a path
-      File.new(inputs, 'r').each_line do |line|
-        # Handle each line as if it were an argument
-        input.input(line.strip)
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
+        end
       end
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
     end
     
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
-  end
+        File.write(build_path('comment'),  self.description + '\n')
     
-      dont_obsolete_paths = []
-  option '--dont-obsolete', 'DONT_OBSOLETE_PATH',
-    'A file path for which to 'dont-obsolete' in the built PackageInfo. ' \
-    'Can be specified multiple times.' do |path|
-      dont_obsolete_paths << path
+      # Load the package information like name, version, dependencies.
+  def load_package_info(setup_py)
+    if !attributes[:python_package_prefix].nil?
+      attributes[:python_package_name_prefix] = attributes[:python_package_prefix]
     end
     
-        bin_dir = attributes[:pear_bin_dir] || 'usr/bin'
-    logger.info('Setting bin_dir', :bin_dir => bin_dir)
-    safesystem('pear', '-c', config, 'config-set', 'bin_dir', bin_dir)
-    
-        args = [ tar_cmd,
-             '-C',
-             staging_path,
-             '-cf',
-             payload_tar,
-             '--owner=0',
-             '--group=0',
-             '--numeric-owner',
-             '.' ]
-    
-      def specfile(builddir)
-    '#{builddir}/pkginfo'
-  end
-    
-        if !success
-      raise ProcessFailed.new('#{program} failed (exit code #{exit_code})' \
-                              '. Full command was:#{args.inspect}')
+      def default_output
+    v = version
+    v = '#{epoch}:#{v}' if epoch
+    if iteration
+      '#{name}_#{v}-#{iteration}_#{architecture}.#{type}'
+    else
+      '#{name}_#{v}_#{architecture}.#{type}'
     end
-    return success
-  end # def safesystem
+  end # def default_output
+end # class FPM::Deb
     
-    Given /^(?:|I )am on (.+)$/ do |page_name|
-  visit path_to(page_name)
-end
+      def initialize(package_name, opts = {}, &block)
+    @options = OpenStruct.new(:name => package_name.to_s)
+    @source, @target = opts.values_at(:source, :target).map(&:to_s)
+    @directory = File.expand_path(opts[:directory].to_s)
     
-        def empty_file?
-      File.exist?(@filepath) && File.size(@filepath) == 0
-    end
-    
-        private
-    
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
-    end
+          name, prefix = split_name name
