@@ -1,152 +1,182 @@
 
         
-                RESULT = ('.' + domain + '\n' in LIST or '\n' + domain + '\n' in LIST)
+            def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+        def __exit__(self, exc_type, exc_value, traceback):
+        self.proc.kill()
+        self.proc.wait()
+        time.sleep(0.2)
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
+    
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
     
     
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
+    class ScrapyClientTLSOptions(ClientTLSOptions):
+        '''
+        SSL Client connection creator ignoring certificate verification errors
+        (for genuinely invalid certificates or bugs in verification code).
+    
+        def __init__(self, request, timeout=180):
+        self._url = urldefrag(request.url)[0]
+        # converting to bytes to comply to Twisted interface
+        self.url = to_bytes(self._url, encoding='ascii')
+        self.method = to_bytes(request.method, encoding='ascii')
+        self.body = request.body or None
+        self.headers = Headers(request.headers)
+        self.response_headers = None
+        self.timeout = request.meta.get('download_timeout') or timeout
+        self.start_time = time()
+        self.deferred = defer.Deferred().addCallback(self._build_response, request)
+    
+            # XXX: Google parses at least first 100k bytes; scrapy's redirect
+        # middleware parses first 4k. 4k turns out to be insufficient
+        # for this middleware, and parsing 100k could be slow.
+        # We use something in between (32K) by default.
+        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
+    
+        @certbot_util.patch_get_utility()
+    def test_noninteractive(self, mock_util):
+        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
+        try:
+            self._call(self.vhosts)
+        except errors.MissingCommandlineFlag as e:
+            self.assertTrue('vhost ambiguity' in str(e))
+    
+    Certbot will emit a warning if it detects that the credentials file can be
+accessed by other users on your system. The warning reads 'Unsafe permissions
+on credentials configuration file', followed by the path to the credentials
+file. This warning will be emitted each time Certbot uses the credentials file,
+including for renewal, and cannot be silenced except by addressing the issue
+(e.g., by using a command like ``chmod 600`` to restrict access to the file).
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This patterns also effect to html_static_path and html_extra_path
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+    
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-dns-cloudxns', u'certbot-dns-cloudxns Documentation',
+     [author], 1)
+]
+    
+        function_parameters = zip(
+        images_to_check,
+        itertools.repeat(model),
+    )
+    
+    # Get a reference to the Raspberry Pi camera.
+# If this fails, make sure you have a camera connected to the RPi and that you
+# enabled your camera in raspi-config and rebooted first.
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
+    
+    requirements = [
+    'face_recognition_models>=0.3.0',
+    'Click>=6.0',
+    'dlib>=19.7',
+    'numpy',
+    'Pillow'
+]
+    
+    
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+                # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
+    
+    
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+    
+        # Draw a label with a name below the face
+    text_width, text_height = draw.textsize(name)
+    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+    
+        def find_all_path(self, start, end, path=None):
+        path = path or []
+        path.append(start)
+        if start == end:
+            return [path]
+        paths = []
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpaths = self.find_all_path(node, end, path[:])
+                paths.extend(newpaths)
+        return paths
+    
+        def on_operator_inservice(self):
+        raise UnsupportedTransition
     
     
 def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
-    
-        def test_cmdline_umlauts(self):
-        p = subprocess.Popen(
-            [sys.executable, 'youtube_dl/__main__.py', encodeArgument('ä'), '--version'],
-            cwd=rootDir, stdout=_DEV_NULL, stderr=subprocess.PIPE)
-        _, stderr = p.communicate()
-        self.assertFalse(stderr)
-    
-            If `sign` is incorrect, /validate call throws an HTTP 556 error
-        '''
-        logger = WarningLogger()
-        ie = IqiyiIEWithCredentials(FakeYDL({'logger': logger}))
-        ie._login()
-        self.assertTrue('unable to log in:' in logger.messages[0])
-    
-        def test_nosubtitles(self):
-        self.DL.expect_warning('video doesn\'t have subtitles')
-        self.url = 'http://www.ceskatelevize.cz/ivysilani/ivysilani/10441294653-hyde-park-civilizace/214411058091220'
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertFalse(subtitles)
-    
-        if state == 'absent':
-        if not snapshot_id:
-            module.fail_json(msg='snapshot_id must be set when state is absent')
-        try:
-            ec2.delete_snapshot(snapshot_id)
-        except boto.exception.BotoServerError as e:
-            # exception is raised if snapshot does not exist
-            if e.error_code == 'InvalidSnapshot.NotFound':
-                module.exit_json(changed=False)
-            else:
-                module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
-    
-        creds, params = get_google_cloud_credentials(module)
-    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
-    pubsub_client.user_agent = 'ansible-pubsub-0.1'
-    
-    - oneandone_moitoring_policy:
-    auth_token: oneandone_private_api_key
-    monitoring_policy: ansible monitoring policy updated
-    remove_ports:
-     - port_id
-    state: update
-    
-            rule['original_port'] = str(rule.get('original_port', 'any')).lower()
-        rule['original_ip'] = rule.get('original_ip', 'any').lower()
-        rule['translated_ip'] = rule.get('translated_ip', 'any').lower()
-        rule['translated_port'] = str(rule.get('translated_port', 'any')).lower()
-        rule['protocol'] = rule.get('protocol', 'any').lower()
-        rule['rule_type'] = rule.get('rule_type', 'DNAT').lower()
-    
-            rc, out = self._exec([feature_enable_str, self.feature_name])
-    
-        removed_count = 0
+    shapes = (CircleShape(1, 2, 3, DrawingAPI1()), CircleShape(5, 7, 11, DrawingAPI2()))
     
     
-def send_deploy_event(module, key, revision_id, deployed_by='Ansible', deployed_to=None, repository=None):
-    '''Send a deploy event to Stackdriver'''
-    deploy_api = 'https://event-gateway.stackdriver.com/v1/deployevent'
+class SalesManager:
+    def talk(self):
+        print('Sales Manager ready to talk')
     
-        # Display the resulting image
-    cv2.imshow('Video', frame)
+        def test_extended_property_values_cloning(self):
+        sample_object_1 = self.prototype.clone()
+        sample_object_1.some_value = 'test string'
+        sample_object_2 = self.prototype.clone()
+        self.assertRaises(AttributeError, lambda: sample_object_2.some_value)
     
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
+    from past.builtins import basestring
+import logging
+import numpy as np
+    
+        # conv 1x1 -> GN (no ReLU)
+    cur = model.ConvGN(
+        cur,
+        prefix + '_branch2c',
+        dim_inner,
+        dim_out,
+        kernel=1,
+        group_gn=get_group_gn(dim_out),
+        stride=1,
+        pad=0,
+    )
+    return cur
 
     
-        raw_detections_batched = _raw_face_locations_batched(images, number_of_times_to_upsample, batch_size)
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
-    
-            # If you had more than 2 faces, you could make this logic a lot prettier
-        # but I kept it simple for the demo
-        name = None
-        if match[0]:
-            name = 'Lin-Manuel Miranda'
-        elif match[1]:
-            name = 'Alex Lacamoire'
-    
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    # This is an example of running face recognition on a single image
-# and drawing a box around each person that was identified.
-    
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0].rect.top(), 259, delta=25)
-        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 552, delta=25)
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-    
-def search(txt, inverse_index, word_freq=None):
-    '''
-    
-        Args:
-        x(tf.Tensor):
-        n_unit_ls(list of int):
-        act_fn:
-        name(str):
-    '''
-    # n_layer = len(n_unit_list)
-    name = name or 'dense'
-    for i, n_unit in enumerate(n_unit_ls):
-        x = dense(x, n_unit, act_fn=act_fn, name='{}-{}'.format(name, i))
-    
-        def __call__(self, x):
-        '''
-        Args:
-            x: 注意 x.dtype == float32
-        '''
-        # x = tf.cast(x, dtype=tf.float32)  # 交给外部处理
-        loss_regularization = 0.
-        if self.l1:
-            loss_regularization += tf.reduce_sum(self.l1 * tf.abs(x))
-        if self.l2:
-            loss_regularization += tf.reduce_sum(self.l2 * tf.square(x))
-        return loss_regularization
-    
-    References:
-    https://www.tensorflow.org/api_guides/python/array_ops
-    keras.backend
-'''
+def add_roi_Xconv1fc_gn_head(model, blob_in, dim_in, spatial_scale):
+    '''Add a X conv + 1fc head, with GroupNorm'''
+    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
+    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
+    roi_feat = model.RoIFeatureTransform(
+        blob_in, 'roi_feat',
+        blob_rois='rois',
+        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
+        resolution=roi_size,
+        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
