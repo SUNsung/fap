@@ -1,183 +1,169 @@
 
         
-          def predict_with_score(self, session, inputs):
-    '''Predict the classification of the test set.
+        
+def check_format(filename):
+    '''
+    validates that each line is formatted correctly,
+    appending to error list as needed
+    '''
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
+            else:
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        if len(segments) < num_segments:
+            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
+                len(segments), num_segments))
+            continue
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
     
-      return data_wxhx3
+        @property
+    def body(self):
+        body = self._orig.body
+        if isinstance(body, str):
+            # Happens with JSON/form request data parsed from the command line.
+            body = body.encode('utf8')
+        return body or b''
 
     
-    model = IntegrationToBoundModel(N)
-inputs_ph_t = [tf.placeholder(tf.float32,
-                              shape=[None, 1]) for _ in range(ntimesteps)]
-state = tf.zeros([batch_size, N])
-saver = tf.train.Saver()
-    
-        us = np.zeros([1, ntime_steps])
-    for t in range(ntime_steps):
-      x_t = alpha*x_tm1 + np.dot(W,r_tm1) + b
-      if input_time is not None and t == input_time:
-        us[0,t] = input_magnitude
-        x_t += Bin * us[0,t] # DCS is this what was used?
-      r_t = np.tanh(x_t)
-      x_tm1 = x_t
-      r_tm1 = r_t
-      rs[:,t] = r_t
-    return rs, us
+            '''
+        assert with_headers or with_body
+        self.msg = msg
+        self.with_headers = with_headers
+        self.with_body = with_body
+        self.on_body_chunk_downloaded = on_body_chunk_downloaded
     
     
-def _DumpEmb(vocab):
-  '''Dump the softmax weights and word embeddings to files.
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
     
-def create_discriminator(hparams,
-                         sequence,
-                         is_training,
-                         reuse=None,
-                         initial_state=None,
-                         inputs=None,
-                         present=None):
-  '''Create the Discriminator model specified by the FLAGS and hparams.
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
     
-      Args:
-    hparams:  MaskGAN hyperparameters.
-    learning_rate:  tf.Variable scalar learning rate.
-    final_gen_objective:  Scalar final REINFORCE objective for the sequence.
-    averages_op:  ExponentialMovingAverage apply average op to
-      maintain the baseline.
-    global_step:  global_step tf.Variable.
+    import pytest
     
-        elif FLAGS.discriminator_model == 'seq2seq_vd':
-      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      print('Restoring Discriminator from %s.' % load_ckpt)
-      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
-      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
-      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
-      dis_encoder_init_saver.restore(sess, load_ckpt)
-      dis_decoder_init_saver.restore(sess, load_ckpt)
     
-        def test_encode_override(self):
-        self.assertEqual('y', self.field.encode('y'))
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
-        :param str vhost_path: Augeas virtual host path
+        @property
+    def auth(self):
+        auth = self.get('auth', None)
+        if not auth or not auth['type']:
+            return
     
-            # Make sure calls made to mocked function were correct
-        self.assertEqual(
-            mock_setup_cert.call_args_list[0], mock.call(self.achalls[0]))
-        self.assertEqual(
-            mock_setup_cert.call_args_list[1], mock.call(self.achalls[1]))
+            self.output.write(
+            CLEAR_LINE
+            + ' '
+            + SPINNER[self._spinner_pos]
+            + ' '
+            + self._status_line
+        )
+        self.output.flush()
     
-            # Put the blurred face region back into the frame image
-        frame[top:bottom, left:right] = face_image
-    
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
+                appid = random.choice(self.working_appid_list)
+            return str(appid)
         else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
-    else:
-        test_image(image_to_check, model)
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
     
-            face_names = []
-        for face_encoding in face_encodings:
-            # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = 'Unknown'
-    
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
-    
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-    with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-    
-    # coco (val5k)
-# INFO roidb.py: 220: 1        person: 21296
-# INFO roidb.py: 220: 2       bicycle: 628
-# INFO roidb.py: 220: 3           car: 3818
-# INFO roidb.py: 220: 4    motorcycle: 732
-# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
-# INFO roidb.py: 220: 6           bus: 564
-# INFO roidb.py: 220: 7         train: 380
-# INFO roidb.py: 220: 8         truck: 828
-    
-    
-def _do_matlab_eval(json_dataset, salt, output_dir='output'):
-    import subprocess
-    logger.info('-----------------------------------------------------')
-    logger.info('Computing results with the official MATLAB eval code.')
-    logger.info('-----------------------------------------------------')
-    info = voc_info(json_dataset)
-    path = os.path.join(
-        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
-    cmd = 'cd {} && '.format(path)
-    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
-    cmd += '-r 'dbstop if error; '
-    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
-       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
-               output_dir)
-    logger.info('Running:\n{}'.format(cmd))
-    subprocess.call(cmd, shell=True)
-    
-        conv_body_func(model)
-    blobs_fpn, dim_fpn, spatial_scales_fpn = add_fpn(
-        model, fpn_level_info_func()
-    )
-    
-    
-def add_keypoint_losses(model):
-    '''Add Mask R-CNN keypoint specific losses.'''
-    # Reshape input from (N, K, H, W) to (NK, HW)
-    model.net.Reshape(
-        ['kps_score'], ['kps_score_reshaped', '_kps_score_old_shape'],
-        shape=(-1, cfg.KRCNN.HEATMAP_SIZE * cfg.KRCNN.HEATMAP_SIZE)
-    )
-    # Softmax across **space** (woahh....space!)
-    # Note: this is not what is commonly called 'spatial softmax'
-    # (i.e., softmax applied along the channel dimension at each spatial
-    # location); This is softmax applied over a set of spatial locations (i.e.,
-    # each spatial location is a 'class').
-    kps_prob, loss_kps = model.net.SoftmaxWithLoss(
-        ['kps_score_reshaped', 'keypoint_locations_int32', 'keypoint_weights'],
-        ['kps_prob', 'loss_kps'],
-        scale=cfg.KRCNN.LOSS_WEIGHT / cfg.NUM_GPUS,
-        spatial=0
-    )
-    if not cfg.KRCNN.NORMALIZE_BY_VISIBLE_KEYPOINTS:
-        # Discussion: the softmax loss above will average the loss by the sum of
-        # keypoint_weights, i.e. the total number of visible keypoints. Since
-        # the number of visible keypoints can vary significantly between
-        # minibatches, this has the effect of up-weighting the importance of
-        # minibatches with few visible keypoints. (Imagine the extreme case of
-        # only one visible keypoint versus N: in the case of N, each one
-        # contributes 1/N to the gradient compared to the single keypoint
-        # determining the gradient direction). Instead, we can normalize the
-        # loss by the total number of keypoints, if it were the case that all
-        # keypoints were visible in a full minibatch. (Returning to the example,
-        # this means that the one visible keypoint contributes as much as each
-        # of the N keypoints.)
-        model.StopGradient(
-            'keypoint_loss_normalizer', 'keypoint_loss_normalizer'
+        def __init__(self):
+        ca_certs = os.path.join(current_path, 'cacert.pem')
+        openssl_context = SSLContext(
+            logger, ca_certs=ca_certs,
+            cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
+                           '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
         )
-        loss_kps = model.net.Mul(
-            ['loss_kps', 'keypoint_loss_normalizer'], 'loss_kps_normalized'
-        )
-    loss_gradients = blob_utils.get_loss_gradients(model, [loss_kps])
-    model.AddLosses(loss_kps)
-    return loss_gradients
+        host_manager = HostManagerBase()
+        connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
+                                         debug=True)
+        self.check_ip = CheckIp(logger, config, connect_creator)
     
-    from caffe2.python import muji
     
-        blobs['retnet_fg_num'], blobs['retnet_bg_num'] = 0.0, 0.0
-    for im_i, entry in enumerate(roidb):
-        scale = im_scales[im_i]
-        im_height = np.round(entry['height'] * scale)
-        im_width = np.round(entry['width'] * scale)
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        assert len(gt_inds) > 0, \
-            'Empty ground truth empty for image is not allowed. Please check.'
+def test_teredo(probe_nat=True, probe_server=True):
+    if pteredor_is_running:
+        return 'Script is running, please retry later.'
+    
+    URLFETCH_MAX = 2
+URLFETCH_MAXSIZE = 4*1024*1024
+URLFETCH_DEFLATE_MAXSIZE = 4*1024*1024
+URLFETCH_TIMEOUT = 60
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+        def setText(self, text):
+        self.text = text
+    
+    from copy import deepcopy
+from hamcrest import assert_that, contains_string, equal_to
+    
+    from concurrent.futures import _base
+    
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
