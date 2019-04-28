@@ -1,114 +1,130 @@
 
         
-            # noinspection PyProtectedMember
-    @property
-    def headers(self):
-        original = self._orig.raw._original_response
-    
-        # noinspection PyMethodOverriding
-    def get_auth(self, username, password):
-        return HTTPBasicAuth(username, password)
+            def __init__(self, employee_id, name):
+        super(Operator, self).__init__(employee_id, name, Rank.DIRECTOR)
     
     
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
+class Transaction(object):
     
-    error_msg = None
+        return g.db
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
-    if twisted_version >= (14, 0, 0):
+        Defines all the global objects that are proxies to the current
+    active context.
     
-    import time
-import threading
+                datestr, codename = match.groups()
+            return version, parse_date(datestr), codename
     
-        def close(self):
-        self.fd.close()
     
-        ANTLR generates code that throws exceptions upon recognition error and
-    also generates code to catch these exceptions in each rule.  If you
-    want to quit upon first error, you can turn off the automatic error
-    handling mechanism using rulecatch action, but you still need to
-    override methods mismatch and recoverFromMismatchSet.
+def is_setting_index(node):
+    if node.tagname == 'index':
+        # index entries for setting directives look like:
+        # [(u'pair', u'SETTING_NAME; setting', u'std:setting-SETTING_NAME', '')]
+        entry_type, info, refid = node['entries'][0][:3]
+        return entry_type == 'pair' and info.endswith('; setting')
+    return False
     
-    In general, the recognition exceptions can track where in a grammar a
-    problem occurred and/or what was the expected input.  While the parser
-    knows its state (such as current input symbol and line info) that
-    state can change before the exception is reported so current token index
-    is computed and stored at exception time.  From this info, you can
-    perhaps print an entire line of input not just a single token, for example.
-    Better to just say the recognizer had a problem and then let the parser
-    figure out a fancy report.
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
     
-    '''
+            Default OpenSSL method is TLS_METHOD (also called SSLv23_METHOD)
+        which allows TLS protocol negotiation
     
-            # mmmhhh,... perhaps look at the first argument
-        # (f_locals[co_varnames[0]]?) and test if it's a (sub)class of
-        # requested recognizer...
-        
-        rules = []
-        for frame in reversed(inspect.stack()):
-            code = frame[0].f_code
-            codeMod = inspect.getmodule(code)
-            if codeMod is None:
-                continue
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
+            '''
+        self.log_request(code)
+        self.send_response_only(code, message)
+        self.send_header('Server', self.version_string())
+        self.send_header('Date', self.date_time_string())
     
-        def _colision_resolution(self, key, data=None):
-        i = 1
-        new_key = self.hash_function(data)
+        # 'Return a suite of all test cases contained in the TestCase-derived
+    # class testCaseClass'
+    #
+    # Make sure it does the right thing even if no tests were found
+    def test_loadTestsFromTestCase__no_matches(self):
+        class Foo(unittest.TestCase):
+            def foo_bar(self): pass
     
-                if new_key is None:
-                break
+        binop = { 'Add':'+', 'Sub':'-', 'Mult':'*', 'MatMult':'@', 'Div':'/', 'Mod':'%',
+                    'LShift':'<<', 'RShift':'>>', 'BitOr':'|', 'BitXor':'^', 'BitAnd':'&',
+                    'FloorDiv':'//', 'Pow': '**'}
+    def _BinOp(self, t):
+        self.write('(')
+        self.dispatch(t.left)
+        self.write(' ' + self.binop[t.op.__class__.__name__] + ' ')
+        self.dispatch(t.right)
+        self.write(')')
     
-                if (arr[i-1] <= j):
-                dp[i][j] = dp[i][j] or dp[i-1][j-arr[i-1]]
+    for excname in MULTIPROCESSING_EXCEPTIONS:
+    NAME_MAPPING[('multiprocessing', excname)] = ('multiprocessing.context', excname)
     
-        def predict(self, x):
-        '''
-        predict:
-        @param x: a floating point value to predict the label of
-        the prediction function works by recursively calling the predict function
-        of the appropriate subtrees based on the tree's decision boundary
-        '''
-        if self.prediction is not None:
-            return self.prediction
-        elif self.left or self.right is not None:
-            if x >= self.decision_boundary:
-                return self.right.predict(x)
-            else:
-                return self.left.predict(x)
-        else:
-            print('Error: Decision tree not yet trained')
-            return None
+        def test_tokenize(self):
+        import tokenize as tokenize_module
+        encoding = object()
+        encoding_used = None
+        def mock_detect_encoding(readline):
+            return encoding, [b'first', b'second']
     
-    def revise_centroids(data, k, cluster_assignment):
-    new_centroids = []
-    for i in range(k):
-        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
-        member_data_points = data[cluster_assignment==i]
-        # Compute the mean of the data points. Fill in the blank (RHS only)
-        centroid = member_data_points.mean(axis=0)
-        new_centroids.append(centroid)
-    new_centroids = np.array(new_centroids)
+        # Fetch the records to be pickled.
+    cursor.execute('SELECT * FROM memos')
+    memos = [MemoRecord(key, task) for key, task in cursor]
+    # Save the records using our custom DBPickler.
+    file = io.BytesIO()
+    DBPickler(file).dump(memos)
     
-    return new_centroids
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
     
-        return res
+    def test():
+    manager = MyManager()
+    manager.start()
+    
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = __short_version__
+# The full version, including alpha/beta/rc tags.
+release = __version__
+    
+    
+def convert(value: float, unit_1: str, unit_2: str) -> float:
+    '''Convert one unit of measurement to another.'''
+    if unit_1 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
+    if unit_2 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
+    
+        yield from hass.async_start()
+    assert automation.is_on(hass, 'automation.hello')
+    assert len(calls) == 1
