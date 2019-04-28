@@ -1,79 +1,121 @@
 
         
-              def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
-    
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
+                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
+          @checked_value   = checked_value
+          @unchecked_value = unchecked_value
+          super(object_name, method_name, template_object, options)
         end
     
-            def sidekiq_worker_class
-          ImportNoteWorker
+            def render
+          error_wrapping(datetime_selector(@options, @html_options).send('select_#{select_type}').html_safe)
         end
     
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
-end
-
-    
-          it 'returns true if the pipeline is a system pipeline' do
-        expect(subject.system?).to be_truthy
-      end
-    end
-    
-      namespace :acceptance do
-    desc 'Run all acceptance'
-    task :all do
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/*_spec.rb']]))
-    end
-    
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
+              content = if block_given?
+            @template_object.capture(builder, &block)
+          elsif @content.present?
+            @content.to_s
+          else
+            render_component(builder)
           end
     
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
-    end
+        class AbstractInvalidHelpers < AbstractHelpers
+      include ActionController::Helpers
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Given(/^servers with the roles app and web$/) do
+  begin
+    vagrant_cli_command('up')
+  rescue
+    nil
   end
 end
-
     
-        context 'opening brace on same line as first element' do
-      it 'allows closing brace on different line from last element' do
-        expect_no_offenses(construct(false, true))
+    module VagrantHelpers
+  extend self
+    
+        def version
+      ['--version', '-V',
+       'Display the program version.',
+       lambda do |_value|
+         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
+         exit
+       end]
+    end
+    
+          def response
+        return @response if defined? @response
+    
+          def warn_set_scm_is_deprecated
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure your project is compatible with future versions of Capistrano,
+remove the :scm setting and instead add these lines to your Capfile after
+`require 'capistrano/deploy'`:
+    
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
+    
+          def decode_token(token)
+        Base64.strict_decode64(token)
       end
     
-          CopAnalysis.new(analysis.line_ranges + [(line..line)],
-                      analysis.start_line_number)
-    end
-    
-          # @object_cache maps configuration file paths to
-      # configuration objects so we only need to load them once.
-      @object_cache = {}
-    end
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        def each_definition
-      @attachments.each do |klass, attachments|
-        attachments.each do |name, options|
-          yield klass, name, options
-        end
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
       end
+    
+      it 'should not set the Content Security Policy for other content types' do
+    headers = get('/', {}, 'wants' => 'text/foo').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
+    
+        def URIEncodePair(cc1, cc2, result, index)
+      u = ((cc1 >> 6) & 0xF) + 1;
+      w = (cc1 >> 2) & 0xF;
+      x = cc1 & 3;
+      y = (cc2 >> 6) & 0xF;
+      z = cc2 & 63;
+      octets = Array.new(4);
+      octets[0] = (u >> 2) + 240;
+      octets[1] = (((u & 3) << 4) | w) + 128;
+      octets[2] = ((x << 4) | y) + 128;
+      octets[3] = z + 128;
+      return URIEncodeOctets(octets, result, index);
     end
+    
+        @wiki.clear_cache
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+    #############################################################################
+#
+# Helper functions
+#
+#############################################################################
+    
+          ws  = WorkSpace.new(binding)
+      irb = Irb.new(ws)
+    
+    module Precious
+  module Helpers
