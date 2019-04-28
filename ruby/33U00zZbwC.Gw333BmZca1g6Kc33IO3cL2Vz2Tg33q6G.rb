@@ -1,66 +1,17 @@
 
         
-        def docs_folder
-  'docs'
-end
-    
-    require 'erb'
-    
-                # stream_file_data would free us from keeping livereload.js in memory
-            # but JRuby blocks on that call and never returns
-            send_data(reload_body)
-            close_connection_after_writing
-          else
-            body = 'This port only serves livereload.js over HTTP.\n'
-            headers = [
-              'HTTP/1.1 400 Bad Request',
-              'Content-Type: text/plain',
-              'Content-Length: #{body.bytesize}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-            send_data(body)
-            close_connection_after_writing
-          end
+                  Gitlab::Git
+            .diff_line_code(file_path, diff_line.new_pos, diff_line.old_pos)
         end
-        # rubocop:enable Metrics/MethodLength
-      end
-    end
-  end
-end
-
     
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
+            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
     
-      devise_scope :user do
-    get '/some/route' => 'some_devise_controller'
-  end
-    
-    ActiveRecord::Base.establish_connection( adapter: :sqlite3, database:  ':memory:')
-    
-          def add_fragment_back_to_path(uri, path)
-        [path, uri.fragment].compact.join('#')
-      end
-    end
-  end
-end
-
-    
-        def strategies
-      @strategies ||= STRATEGIES.values_at(*self.modules).compact.uniq.reverse
-    end
-    
-            # Removes reset_password token
-        def clear_reset_password_token
-          self.reset_password_token = nil
-          self.reset_password_sent_at = nil
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
         end
     
       def show
@@ -72,35 +23,34 @@ end
     end
   end
     
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-        unless active_session.web_push_subscription.nil?
-      active_session.web_push_subscription.destroy!
-      active_session.update!(web_push_subscription: nil)
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
     end
     
-      def send_export_file
-    respond_to do |format|
-      format.csv { send_data export_data, filename: export_filename }
-    end
-  end
+      #
+  # More advanced []= that does downcase storage.
+  #
+  def []=(key, value)
+    stored = false
     
-      def set_locale
-    I18n.locale = default_locale
-    I18n.locale = current_user.locale if user_signed_in?
-  rescue I18n::InvalidLocale
-    I18n.locale = default_locale
-  end
+              sent = 0
+          case protocol
+          when 'tcp'
+            sent = send_request_tcp(req)
+          when 'udp'
+            sent = send_request_udp(req)
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
     
-        def load_imports
-      if options.show_tasks && Rake::Task.task_defined?('load:defaults')
-        invoke 'load:defaults'
-        set(:stage, '')
-        Dir[deploy_config_path].each { |f| add_import f }
-      end
-    
-          def response
-        return @response if defined? @response
-    
-          attr_reader :validators
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
