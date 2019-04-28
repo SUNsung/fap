@@ -1,172 +1,281 @@
 
         
-            def __call__(self, x):
-        regularization = 0.
-        if self.l1:
-            regularization += K.sum(self.l1 * K.abs(x))
-        if self.l2:
-            regularization += K.sum(self.l2 * K.square(x))
-        return regularization
+        
+class BlackJackCard(Card):
+    
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
     
-def test_boston_housing():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
+class QueryApi(object):
+    
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
+    
+            status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
+        )
+        headers = [status_line]
+        try:
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
+    
+        The message bytes are converted to an encoding suitable for
+    `self.env.stdout`. Unicode errors are replaced and binary data
+    is suppressed. The body is always streamed by line.
+    
+        def get_auth(self, username=None, password=None):
+        '''
+        If `auth_parse` is set to `True`, then `username`
+        and `password` contain the parsed credentials.
     
     
-def create_model(kernel_regularizer=None, activity_regularizer=None):
-    model = Sequential()
-    model.add(Dense(num_classes,
-                    kernel_regularizer=kernel_regularizer,
-                    activity_regularizer=activity_regularizer,
-                    input_shape=(data_dim,)))
-    return model
+class HTTPBasicAuth(requests.auth.HTTPBasicAuth):
     
-            self.kernel_regularizer = regularizers.get(kernel_regularizer)
-        self.recurrent_regularizer = regularizers.get(recurrent_regularizer)
-        self.bias_regularizer = regularizers.get(bias_regularizer)
-    
-    outputs = Activation('sigmoid', name='decoder_output')(x)
-    
-    Gets to 98.40% test accuracy after 20 epochs
-(there is *a lot* of margin for parameter tuning).
-2 seconds per epoch on a K520 GPU.
-'''
-    
-    model1 = create_network(num_classes=num_classes, **network1)
-history_model1 = model1.fit(x_train,
-                            y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
-    
-        # Display the results
-    for top, right, bottom, left in face_locations:
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
     
     
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-        :param img: A list of images (each as a numpy array)
-    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
-    :param batch_size: How many images to include in each GPU processing batch.
-    :return: A list of tuples of found face locations in css (top, right, bottom, left) order
-    '''
-    def convert_cnn_detections_to_css(detections):
-        return [_trim_css_to_bounds(_rect_to_css(face.rect), images[0].shape) for face in detections]
+        plugin_manager.register(Plugin)
     
-    # Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+    
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
+    
+                for prefix in SESSION_IGNORED_HEADER_PREFIXES:
+                if name.lower().startswith(prefix.lower()):
+                    break
+            else:
+                self['headers'][name] = value
+    
+        def ensure_absent(self):
+        '''Ensures the rule and targets are absent'''
+        rule_description = self.rule.describe()
+        if not rule_description:
+            # Rule doesn't exist so don't need to delete
+            return
+        self.rule.delete()
+    
+    
+DOCUMENTATION = '''
+---
+module: ec2_snapshot
+short_description: creates a snapshot from an existing volume
+description:
+    - creates an EC2 snapshot from an existing EBS volume
+version_added: '1.5'
+options:
+  volume_id:
+    description:
+      - volume from which to take the snapshot
+    required: false
+  description:
+    description:
+      - description to be applied to the snapshot
+    required: false
+  instance_id:
+    description:
+    - instance that has the required volume to snapshot mounted
+    required: false
+  device_name:
+    description:
+    - device name of a mounted volume to be snapshotted
+    required: false
+  snapshot_tags:
+    description:
+      - a hash/dictionary of tags to add to the snapshot
+    required: false
+    version_added: '1.6'
+  wait:
+    description:
+      - wait for the snapshot to be ready
+    type: bool
+    required: false
+    default: yes
+    version_added: '1.5.1'
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+      - specify 0 to wait forever
+    required: false
+    default: 0
+    version_added: '1.5.1'
+  state:
+    description:
+      - whether to add or create a snapshot
+    required: false
+    default: present
+    choices: ['absent', 'present']
+    version_added: '1.9'
+  snapshot_id:
+    description:
+      - snapshot id to remove
+    required: false
+    version_added: '1.9'
+  last_snapshot_min_age:
+    description:
+      - If the volume's most recent snapshot has started less than `last_snapshot_min_age' minutes ago, a new snapshot will not be created.
+    required: false
+    default: 0
+    version_added: '2.0'
+    
+            elif desired_state == 'disabled':
+            if current_state == HOST_ABSENT:
+                self.fail(msg='absent host cannot be put in disabled state')
+            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.OFFLINE]:
+                if one.host.status(host.ID, HOST_STATUS.DISABLED):
+                    self.wait_for_host_state(host, [HOST_STATES.DISABLED])
+                    result['changed'] = True
+                else:
+                    self.fail(msg='could not disable host')
+            elif current_state in [HOST_STATES.DISABLED]:
+                pass
+            else:
+                self.fail(msg='unknown host state %s, cowardly refusing to change state to disable' % current_state_name)
+    
+    
+def nat_rules_to_dict(nat_rules):
+    result = []
+    for rule in nat_rules:
+        gw_rule = rule.get_GatewayNatRule()
+        result.append(
+            dict(
+                rule_type=rule.get_RuleType().lower(),
+                original_ip=gw_rule.get_OriginalIp().lower(),
+                original_port=(gw_rule.get_OriginalPort().lower() or 'any'),
+                translated_ip=gw_rule.get_TranslatedIp().lower(),
+                translated_port=(gw_rule.get_TranslatedPort().lower() or 'any'),
+                protocol=(gw_rule.get_Protocol().lower() or 'any')
+            )
+        )
+    return result
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
+            if service is not None:
+            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberservice_hbacsvc', []), service,
+                                            client.hbacrule_add_service,
+                                            client.hbacrule_remove_service, 'hbacsvc') or changed
     
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
+        try:
+        data = urlencode(params)
+        response, info = fetch_url(module, url, data=data)
+    except Exception as e:
+        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
+    else:
+        if info['status'] == 201:
+            module.exit_json(changed=True)
+        else:
+            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+    # (c) 2013, Darryl Stoflet <stoflet@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    
+        ##################################################################
+    # deploy requires revision_id
+    # annotation requires msg
+    # We verify these manually
+    ##################################################################
+    
+        def test_decode_bad(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    
+            # Force reload if files were modified
+        # This is needed to recalculate augeas directive span
+        if save_files:
+            for sf in save_files:
+                self.aug.remove('/files/'+sf)
+            self.aug.load()
+        if title and not temporary:
+            self.finalize_checkpoint(title)
+    
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-dns-cloudflare', u'certbot-dns-cloudflare Documentation',
+     [author], 1)
+]
+    
+    
+setup_locate_faces = '''
+import face_recognition
+    
+            # Draw a label with a name below the face
+        text_width, text_height = draw.textsize(name)
+        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+        draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+        # Write the resulting image to the output video file
+    print('Writing frame {} / {}'.format(frame_number, length))
+    output_movie.write(frame)
     
-        # 载入用户上传的图片
-    img = face_recognition.load_image_file(file_stream)
-    # 为用户上传的图片中的人脸编码
-    unknown_face_encodings = face_recognition.face_encodings(img)
+            self.assertEqual(len(detected_faces), 1)
+        self.assertAlmostEqual(detected_faces[0][0], 144, delta=25)
+        self.assertAlmostEqual(detected_faces[0][1], 608, delta=25)
+        self.assertAlmostEqual(detected_faces[0][2], 389, delta=25)
+        self.assertAlmostEqual(detected_faces[0][3], 363, delta=25)
     
-        filenames = []
-    for (dirpath, dnames, fnames) in os.walk(path):
-        for fname in fnames:
-            if fname.endswith('.md'):
-                filenames.append(os.sep.join([dirpath, fname]))
+        # Sparkle the eyes
+    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
+    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
     
-    from ycm.client.base_request import BaseRequest
-    
-    import time
-from threading import Thread
-from ycm.client.base_request import BaseRequest
-    
-        Args:
-        executor_reference: A weakref.ref to the ProcessPoolExecutor that owns
-            this thread. Used to determine if the ProcessPoolExecutor has been
-            garbage collected and that this function can exit.
-        process: A list of the multiprocessing.Process instances used as
-            workers.
-        pending_work_items: A dict mapping work ids to _WorkItems e.g.
-            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
-        work_ids_queue: A queue.Queue of work ids e.g. Queue([5, 6, ...]).
-        call_queue: A multiprocessing.Queue that will be filled with _CallItems
-            derived from _WorkItems for processing by the process workers.
-        result_queue: A multiprocessing.Queue of _ResultItems generated by the
-            process workers.
-    '''
-    nb_shutdown_processes = [0]
-    def shutdown_one_process():
-        '''Tell a worker to terminate, which will in turn wake us again'''
-        call_queue.put(None)
-        nb_shutdown_processes[0] += 1
-    while True:
-        _add_call_item_to_queue(pending_work_items,
-                                work_ids_queue,
-                                call_queue)
+    # This is an example of running face recognition on a single image
+# and drawing a box around each person that was identified.
