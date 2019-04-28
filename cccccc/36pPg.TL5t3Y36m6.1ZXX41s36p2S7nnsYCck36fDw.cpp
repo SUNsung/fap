@@ -1,171 +1,212 @@
 
         
-        Status::Status(const Status& other)
-    : error_code_(other.error_code_), error_message_(other.error_message_) {
-}
-    
-    TEST(StatusOr, TestDefaultCtor) {
-  StatusOr<int> thing;
-  EXPECT_FALSE(thing.ok());
-  EXPECT_EQ(Status::UNKNOWN, thing.status());
-}
-    
-    //#define IMGUI_UNLIMITED_FRAME_RATE
-#ifdef _DEBUG
-#define IMGUI_VULKAN_DEBUG_REPORT
-#endif
-    
-        // Select GPU
-    {
-        uint32_t gpu_count;
-        err = vkEnumeratePhysicalDevices(g_Instance, &gpu_count, NULL);
-        check_vk_result(err);
-        IM_ASSERT(gpu_count > 0);
-    }
-    
-        // 2. For every requested codepoint, check for their presence in the font data, and handle redundancy or overlaps between source fonts to avoid unused glyphs.
-    int total_glyphs_count = 0;
-    for (int src_i = 0; src_i < src_tmp_array.Size; src_i++)
-    {
-        ImFontBuildSrcData& src_tmp = src_tmp_array[src_i];
-        ImFontBuildDstData& dst_tmp = dst_tmp_array[src_tmp.DstIndex];
-        src_tmp.GlyphsSet.Resize(src_tmp.GlyphsHighest + 1);
-        if (dst_tmp.GlyphsSet.Storage.empty())
-            dst_tmp.GlyphsSet.Resize(dst_tmp.GlyphsHighest + 1);
-    }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
-
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-    }
-    
-    static void ImGui_ImplGlfw_UpdateGamepads()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    memset(io.NavInputs, 0, sizeof(io.NavInputs));
-    if ((io.ConfigFlags & ImGuiConfigFlags_NavEnableGamepad) == 0)
-        return;
-    }
-    
-    // Data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGISwapChain*          g_pSwapChain = NULL;
-static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    bool FlipX3D::initWithSize(const Size& gridSize, float duration)
-{
-    if (gridSize.width != 1 || gridSize.height != 1)
-    {
-        // Grid size must be (1,1)
-        CCASSERT(0, 'Grid size must be (1,1)');
-    }
-    }
-    
-    #include '2d/CCAction.h'
-#include '2d/CCAnimation.h'
-#include 'base/CCProtocols.h'
-#include 'base/CCVector.h'
-    
-        if (element)
-    {
-        auto limit = element->actions->num;
-        for (int i = 0; i < limit; ++i)
-        {
-            Action *action = static_cast<Action*>(element->actions->arr[i]);
-    }
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
+        // Verify that ByteSink is subclassable and Flush() overridable.
+class FlushingByteSink : public StringByteSink {
+ public:
+  explicit FlushingByteSink(string* dest) : StringByteSink(dest) {}
+  virtual void Flush() { Append('z', 1); }
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(FlushingByteSink);
 };
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    class GoGoProtoGenerator : public CodeGenerator {
+ public:
+  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
+                           const string& parameter,
+                           GeneratorContext* context,
+                           string* error) const {
+    for (int i = 0; i < files.size(); i++) {
+      for (auto file : files) {
+        bool can_generate =
+            (new_pool_.FindFileByName(file->name()) == nullptr);
+        for (int j = 0; j < file->dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->public_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->public_dependency(j)->name()) != nullptr);
+        }
+        for (int j = 0; j < file->weak_dependency_count(); j++) {
+          can_generate &= (new_pool_.FindFileByName(
+              file->weak_dependency(j)->name()) != nullptr);
+        }
+        if (can_generate) {
+          Generate(file, parameter, context, error);
+          break;
+        }
+      }
+    }
+    }
+    }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+      cout << 'Enter name: ';
+  getline(cin, *person->mutable_name());
     
-    #include <opencv2/core/core.hpp> // cv::Mat
-#include <opencv2/highgui/highgui.hpp> // CV_LOAD_IMAGE_ANYDEPTH, CV_IMWRITE_PNG_COMPRESSION
-#include <openpose/core/common.hpp>
-#include <openpose/filestream/enumClasses.hpp>
+        private:
+        std::unordered_set<StreamInformation> m_streamInfos;
+        bool m_epochEndReached;
+        size_t m_numWorkers;
+        size_t m_workerRank;
+        size_t m_prevMinibatchSize;
+        size_t m_maxNumSamplesToRead;
+        size_t m_maxNumSweepsToRead;
+        size_t m_truncationLength;
+        size_t m_maxErrors;
+        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
     
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Utils.h'
+#include 'Matrix.h'
+#include <algorithm>
+#include 'TensorShape.h'
+    
+            Dictionary initConfig;
+        initConfig[InitializerTypeAttributeName] = initializerTypeName;
+        initConfig[ScaleAttributeName] = scale;
+        // Initializers are sometimes created as default arguments in python.
+        // If the value for an automatically-selected seed is assigned here, 
+        // subsequent calls to SetFixedRandomSeed will be ignored.
+        initConfig[RandomSeedAttributeName] = (size_t)seed;        
+        return initConfig;
+    }
+    
+    static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, int outputRank, int filterRank, unsigned long seed)
+    {
+        if (scale <= 0)
+            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
+                initializerTypeName.c_str());
+    
+        // return the randomized feature bounds for a time range
+    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
+    {
+        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
+        size_t tend = min(te + randomizationrange / 2, map.size());
+        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    }
+    
+    // ===================================================================
+// ComputationNetworkWithEdits
+// scripting wrapper to construct by modifying an input network (aka 'Edit')
+// ===================================================================
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
+    {
+        auto sliceInputValue  = InputRef(0).ValueFor(fr);
+        auto sliceOutputValue =           ValueFor(fr); // row vector
+    }
+    
+                Gradient().Resize(nInput, nOutput);
+            Gradient().SetValue(1.0);
+            for (size_t i = 0; i < 2; i++)
+            {
+                Input(i)->Gradient().Resize(Input(i)->Value().GetNumRows(), Input(i)->Value().GetNumCols());
+                Input(i)->Gradient().SetValue(0);
+            }
+            for (size_t i = 0; i < 2; i++)
+                BackpropTo(i, FrameRange(m_pMBLayout));
+    
+    
+    {
+    {        // Do the work
+        m_transposedOutput->RNNBackwardData(*m_transposedDOutput, paramW, *m_transposedDInput, m_rnnAttributes, *m_reserve, *m_workspace);
+        m_BackwardDataCalledYet = true;
+    }
+    if (inputIndex == 0) // parameters
+    {
+        Matrix<ElemType>& paramDW = InputRef(0).Gradient();
+        m_transposedOutput->RNNBackwardWeights(*m_transposedInput, *m_transposedOutput, paramDW, m_rnnAttributes, *m_reserve, *m_workspace);
+    }
+    else if (inputIndex == 1) // data
+    {
+        // all of the work was done above, where RNNBackwardData is called. Now, just unpack the result.
+        if (m_rnnAttributes.IsSpatialRecurrence())
+        {
+            TensorShape tmp;
+            TransposeHelper(m_transposedDInput, shapeXT, InputRef(1).GradientPtr(), tmp);
+        }
+        else
+        {
+            InputRef(1).Gradient().DoScatterColumnsOf(1.0, *(this->m_packingIndex), *m_transposedDInput, 1.0, /*idxHaveDups*/ false);
+        }
+    }
+}
+    
+    
+    {    default:
+        assert(false && L'Unexpected AutomationNotificationKind');
+    }
+    
+                static void OnVirtualKeyShiftChordPropertyChanged(
+                Windows::UI::Xaml::DependencyObject^ target,
+                MyVirtualKey oldValue,
+                MyVirtualKey newValue);
+    
+    #pragma once
+    
+            ~TraceActivity()
+        {
+            if (m_activity != nullptr)
+            {
+                // Write the activity's STOP event.
+                m_activity.StopActivity(m_activityName, m_fields);
+                m_activity = nullptr;
+            }
+        }
+    
+    namespace CalculatorApp
+{
+    namespace DataLoaders
+    {
+        class CurrencyHttpClient : public ICurrencyHttpClient
+        {
         public:
-        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
-                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+            CurrencyHttpClient();
+    }
+    }
+    }
+    
+                // store history in app data functions
+            Platform::String^ SerializeHistoryItem(_In_ std::shared_ptr<CalculationManager::HISTORYITEM> const &item);
+            void SaveHistory();
+    
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    using ::apollo::canbus::ChassisDetail;
+    
+    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
+    
+      const auto mat = kernel.kernel_matrix() / (2.0 * 1.0 / std::pow(0.1, 6));
+  const auto offset = kernel.offset_matrix();
+    
+    
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+    
+    
+    {  double ret = x * 0.001000;
+  return ret;
+}
+    
+    
+    {  Headlight_rpt_77::Output_valueType ret =
+      static_cast<Headlight_rpt_77::Output_valueType>(x);
+  return ret;
+}
+    
+    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
+// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
