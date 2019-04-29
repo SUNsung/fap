@@ -1,152 +1,146 @@
 
         
-        train_model.fit(epochs=epochs,
-                steps_per_epoch=steps_per_epoch)
+          return values_b_txn
     
-    model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
-model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(num_classes, activation='softmax'))
+          while cur_pos < num_steps:
+        if cur_stream[i] is None or len(cur_stream[i][0]) <= 1:
+          try:
+            cur_stream[i] = list(generator.next())
+          except StopIteration:
+            # No more data, exhaust current streams and quit
+            no_more_data = True
+            break
+    
+        softmax = self.sess.run(self.tensors['softmax_out'], feed_dict={
+        self.tensors['inputs_in']: input_ids,
+        self.tensors['char_inputs_in']: input_char_ids
+    })
+    
+        self._word_char_ids = np.zeros([num_words, max_word_length], dtype=np.int32)
+    
+        if FLAGS.prefix_label and use_prefix:
+      label = sequence_example.context.feature['class'].int64_list.value[0]
+      review_words = [EOS_INDEX + 1 + label]
+    else:
+      review_words = []
+    review_words.extend([
+        f.int64_list.value[0]
+        for f in sequence_example.feature_lists.feature_list['token_id'].feature
+    ])
+    all_words.append(review_words)
+  return all_words
+    
+        state_fwd = cell_fwd.zero_state(FLAGS.batch_size, tf.float32)
+    state_bwd = cell_bwd.zero_state(FLAGS.batch_size, tf.float32)
+    
+    
+@pytest.fixture(autouse=True)
+def logs(mocker):
+    return mocker.patch('thefuck.entrypoints.not_configured.logs',
+                        new_callable=MagicMock)
+    
+    
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    \tDid you mean `build`?
+'''
+    
+    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
+parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
+    ('foo{}', 'foo{}', 'foo{}'),
+    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
+    
+        try:
+        oids, array_oids = get_hstore_oids(connection.alias)
+        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
+    except ProgrammingError:
+        # Hstore is not available on the database.
+        #
+        # If someone tries to create an hstore field it will error there.
+        # This is necessary as someone may be using PSQL without extensions
+        # installed but be using other features of contrib.postgres.
+        #
+        # This is also needed in order to create the connection in order to
+        # install the hstore extension.
+        pass
+    
+    
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
+    
+        fpath = os.path.join(path, 'test')
+    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
+    
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape[1:])(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x)
+    x2 = np.transpose(x, (0, 3, 1, 2))
+    inputs2 = Input(shape=x2.shape[1:])
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape[1:])(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2)
+    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
+    
+    
+def test_fashion_mnist():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+        assert len(x_train) == len(y_train) == 60000
+        assert len(x_test) == len(y_test) == 10000
+    
+        return x_train, y_train
     
     history = model.fit(x_train, y_train,
                     batch_size=batch_size,
                     epochs=epochs,
                     verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
+                    validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
     
-    model1 = create_network(num_classes=num_classes, **network1)
-history_model1 = model1.fit(x_train,
-                            y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
     
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
-    '''
-    
-            while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
-    
-            print('Enter the first string: ', end='')
-        S1 = raw_input().strip()
-    
-    	if len(sys.argv) == 1:
-		try:
-			n = int(raw_input('Enter a number: '))
-			print(partition(n))
-		except ValueError:
-			print('Please enter a number.')
-	else:
-		try:
-			n = int(sys.argv[1])
-			print(partition(n))
-		except ValueError:
-			print('Please pass a number.')
-    
-    	digest = reformatHex(a0) + reformatHex(b0) + reformatHex(c0) + reformatHex(d0)
-	return digest
-    
-        # Loop through each person in the training set
-    for class_dir in os.listdir(train_dir):
-        if not os.path.isdir(os.path.join(train_dir, class_dir)):
-            continue
-    
-    from ..utils import get_w, get_shape
-from ..initializers import constant
+            # Adding field 'ApiToken.refresh_token'
+        db.add_column(
+            'sentry_apitoken',
+            'refresh_token',
+            self.gf('django.db.models.fields.CharField')(max_length=64, unique=True, null=True),
+            keep_default=False
+        )
     
     
-def conv2d(x, kernel_size, out_channels,
-           act_fn=relu,
-           strides=1,
-           padding='SAME',
-           name=None,
-           reuse=None):
-    '''2-D 卷积层
-    Input shape:  [batch_size, in_h, in_w, in_channels]
-    Output shape: [batch_size, out_h, out_w, out_channels]
-    
-    
-    
-    
-def process_code(read_filehandle, text_filehandle, line, linenum, sourcefile, codedir, name, index, indent_depth):
-    fenced = (line.strip() == '```')
-    if fenced:
-        try:
-            line = read_filehandle.next()
-            linenum += 1
-            text_filehandle.write('\n')
-        except StopIteration:
-            return ('', linenum)
-    start_linenum = linenum
-    has_actual_code = False
-    has_question_marks = False
-    linebuffer = []
-    while ((fenced and line.strip() != '```') or (not fenced and is_inside_code(line, indent_depth))):
-        # copy comments to plain text for spell check
-        comment_idx = line.find('//')
-        no_comment_line = line
-        if comment_idx >= 0:
-            no_comment_line = line[:comment_idx].strip()
-            text_filehandle.write(line[comment_idx + 2:])
-        else:
-            # write empty line so line numbers stay stable
-            text_filehandle.write('\n')
-    
-        def textrank(self, sentence, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'), withFlag=False):
-        '''
-        Extract keywords from sentence using TextRank algorithm.
-        Parameter:
-            - topK: return how many top keywords. `None` for all possible words.
-            - withWeight: if True, return a list of (word, weight);
-                          if False, return a list of words.
-            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v'].
-                        if the POS of w is not in this list, it will be filtered.
-            - withFlag: if True, return a list of pair(word, weight) like posseg.cut
-                        if False, return a list of words
-        '''
-        self.pos_filt = frozenset(allowPOS)
-        g = UndirectWeightedGraph()
-        cm = defaultdict(int)
-        words = tuple(self.tokenizer.cut(sentence))
-        for i, wp in enumerate(words):
-            if self.pairfilter(wp):
-                for j in xrange(i + 1, i + self.span):
-                    if j >= len(words):
-                        break
-                    if not self.pairfilter(words[j]):
-                        continue
-                    if allowPOS and withFlag:
-                        cm[(wp, words[j])] += 1
-                    else:
-                        cm[(wp.word, words[j].word)] += 1
-    
-    s = '此外，公司拟对全资子公司吉林欧亚置业有限公司增资4.3亿元，增资后，吉林欧亚置业注册资本由7000万元增加到5亿元。吉林欧亚置业主要经营范围为房地产开发及百货零售等业务。目前在建吉林欧亚城市商业综合体项目。2013年，实现营业收入0万元，实现净利润-139.13万元。'
-for x, w in jieba.analyse.extract_tags(s, withWeight=True):
-    print('%s %s' % (x, w))
-    
-    file_name = args[0]
-    
-    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
-    
-        def testCutForSearch(self):
-        for content in test_contents:
-            result = jieba.cut_for_search(content)
-            assert isinstance(result, types.GeneratorType), 'Test CutForSearch Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test CutForSearch error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testCutForSearch', file=sys.stderr)
-    
-    jieba.enable_parallel()
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
+        db.add_column(
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
+            keep_default=False
+        )
