@@ -1,127 +1,68 @@
 
         
-            def add_card(self, card):
-        self.cards.append(card)
+        
+def quat2euler(quat):
+    ''' Convert Quaternion to Euler Angles.  See rotation.py for notes '''
+    return mat2euler(quat2mat(quat))
     
-        def move_to_front(self, node):
-        pass
+    class Unregistered(Error):
+    '''Raised when the user requests an item from the registry that does
+    not actually exist.
+    '''
+    pass
     
-            Transform key and value to the form:
+    import sys, gym, time
     
-        def move_to_front(self, node):
-        ...
+    # Top-down car dynamics simulation.
+#
+# Some ideas are taken from this great tutorial http://www.iforce2d.net/b2dtut/top-down-car by Chris Campbell.
+# This simulation is a bit more detailed, with wheels rotation.
+#
+# Created by Oleg Klimov. Licensed on the same terms as the rest of OpenAI Gym.
     
-        def create_signature(self):
-        # Create signature based on url and contents
-        pass
+        def parse(self, argv):
+        command_help = getdoc(self.command_class)
+        options = docopt_full_help(command_help, argv, **self.options)
+        command = options['COMMAND']
+    
+        def __init__(self, obj_name, obj, log_name=None, max_lines=10):
+        self.obj_name = obj_name
+        self.obj = obj
+        self.max_lines = max_lines
+        self.log = logging.getLogger(log_name or __name__)
+    
+        with open(opts.filename, 'r') as fh:
+        new_format = migrate(fh.read())
     
     
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
+def create_custom_host_file(client, filename, content):
+    dirname = os.path.dirname(filename)
+    container = client.create_container(
+        'busybox:latest',
+        ['sh', '-c', 'echo -n '{}' > {}'.format(content, filename)],
+        volumes={dirname: {}},
+        host_config=client.create_host_config(
+            binds={dirname: {'bind': dirname, 'ro': False}},
+            network_mode='none',
+        ),
+    )
+    try:
+        client.start(container)
+        exitcode = client.wait(container)['StatusCode']
     
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
+        def test_network_external_overlay_ensure(self):
+        net = Network(
+            self.client, 'composetest', 'foonet',
+            driver='overlay', external=True
+        )
     
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
-        else:
-            s.delete()  # Clear sessions with no data.
-        return s
+        def tearDown(self):
+        del self.project
+        del self.db
+        super(ResilienceTest, self).tearDown()
     
-        @classmethod
-    def get_session_store_class(cls):
-        from django.contrib.sessions.backends.db import SessionStore
-        return SessionStore
+    import logging
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    import unittest
     
-        for line in input_file:
-        linestrip = line.strip()
-        if len(linestrip) == 0:
-            in_exercise_region = False
-        elif linestrip.startswith('# TASK:'):
-            in_exercise_region = True
-    
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
-    
-        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
-               vmin=0)
-    plt.xticks(range(n_clusters), labels, rotation=45)
-    plt.yticks(range(n_clusters), labels)
-    plt.colorbar()
-    plt.suptitle('Interclass %s distances' % metric, size=18)
-    plt.tight_layout()
-    
-        if cfg.MODEL.FASTER_RCNN:
-        if model.train:
-            # Add op that generates training labels for in-network RPN proposals
-            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
-        else:
-            # Alias rois to rpn_rois for inference
-            model.net.Alias('rpn_rois', 'rois')
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-    # Example usage:
-# data_loader_benchmark.par \
-#   NUM_GPUS 2 \
-#   TRAIN.DATASETS '('voc_2007_trainval',)' \
-#   TRAIN.PROPOSAL_FILES /path/to/voc_2007_trainval/proposals.pkl \
-#   DATA_LOADER.NUM_THREADS 4 \
-#   DATA_LOADER.MINIBATCH_QUEUE_SIZE 64 \
-#   DATA_LOADER.BLOBS_QUEUE_CAPACITY 8
+            assert expected == actual
