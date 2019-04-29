@@ -12,195 +12,151 @@ import optparse
 import os
 import sys
     
-            if in_options:
-            if line.lstrip().startswith('-'):
-                split = re.split(r'\s{2,}', line.lstrip())
-                # Description string may start with `-` as well. If there is
-                # only one piece then it's a description bit not an option.
-                if len(split) > 1:
-                    option, description = split
-                    split_option = option.split(' ')
+    from test.helper import try_rm
     
-            if 'skip' in test_case:
-            print_skipping(test_case['skip'])
-            return
-        for other_ie in other_ies:
-            if not other_ie.working():
-                print_skipping('test depends on %sIE, marked as not WORKING' % other_ie.ie_key())
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    
+class CITextExtension(CreateExtension):
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
                 return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
     
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
-
-    
-            # Arguments
-            input_shape: Keras tensor (future input to layer)
-                or list/tuple of Keras tensors to reference
-                for weight shape computations.
+        @property
+    def auto_id(self):
         '''
-        self.built = True
+        Calculate and return the ID attribute for this BoundField, if the
+        associated Form has specified auto_id. Return an empty string otherwise.
+        '''
+        auto_id = self.form.auto_id  # Boolean or string
+        if auto_id and '%s' in str(auto_id):
+            return auto_id % self.html_name
+        elif auto_id:
+            return self.html_name
+        return ''
     
-        # Perform keypoints detection on the horizontally flipped image
-    if cfg.TEST.KPS_AUG.H_FLIP:
-        heatmaps_hf = im_detect_keypoints_hflip(
-            model, im, cfg.TEST.SCALE, cfg.TEST.MAX_SIZE, boxes
-        )
-        add_heatmaps_t(heatmaps_hf)
+    from .compat import is_py2, builtin_str, str
     
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-def voc_info(json_dataset):
-    year = json_dataset.name[4:8]
-    image_set = json_dataset.name[9:]
-    devkit_path = get_devkit_dir(json_dataset.name)
-    assert os.path.exists(devkit_path), \
-        'Devkit directory {} not found'.format(devkit_path)
-    anno_path = os.path.join(
-        devkit_path, 'VOC' + year, 'Annotations', '{:s}.xml')
-    image_set_path = os.path.join(
-        devkit_path, 'VOC' + year, 'ImageSets', 'Main', image_set + '.txt')
-    return dict(
-        year=year,
-        image_set=image_set,
-        devkit_path=devkit_path,
-        anno_path=anno_path,
-        image_set_path=image_set_path)
+        def __ne__(self, other):
+        return not self == other
 
     
-    '''Handle mapping from old network building function names to new names.
+    '''
+requests.compat
+~~~~~~~~~~~~~~~
     
-        # ==========================================================================
-    # classification tower with logits and prob prediction
-    # ==========================================================================
-    for lvl in range(k_min, k_max + 1):
-        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
-        # classification tower stack convolution starts
-        for nconv in range(cfg.RETINANET.NUM_CONVS):
-            suffix = 'n{}_fpn{}'.format(nconv, lvl)
-            dim_in, dim_out = dim_in, dim_in
-            if lvl == k_min:
-                bl_out = model.Conv(
-                    bl_in,
-                    'retnet_cls_conv_' + suffix,
-                    dim_in,
-                    dim_out,
-                    3,
-                    stride=1,
-                    pad=1,
-                    weight_init=('GaussianFill', {
-                        'std': 0.01
-                    }),
-                    bias_init=('ConstantFill', {
-                        'value': 0.
-                    })
-                )
+    :copyright: (c) 2012 by Kenneth Reitz.
+:license: Apache2, see LICENSE for more details.
+'''
+    
+        def __init__(self):
+        self.settings = None  # set in scrapy.cmdline
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
+    
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
             else:
-                bl_out = model.ConvShared(
-                    bl_in,
-                    'retnet_cls_conv_' + suffix,
-                    dim_in,
-                    dim_out,
-                    3,
-                    stride=1,
-                    pad=1,
-                    weight='retnet_cls_conv_n{}_fpn{}_w'.format(nconv, k_min),
-                    bias='retnet_cls_conv_n{}_fpn{}_b'.format(nconv, k_min)
-                )
-            bl_in = model.Relu(bl_out, bl_out)
-            bl_feat = bl_in
-        # cls tower stack convolution ends. Add the logits layer now
-        if lvl == k_min:
-            retnet_cls_pred = model.Conv(
-                bl_feat,
-                'retnet_cls_pred_fpn{}'.format(lvl),
-                dim_in,
-                cls_pred_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight_init=('GaussianFill', {
-                    'std': 0.01
-                }),
-                bias_init=bias_init
-            )
-        else:
-            retnet_cls_pred = model.ConvShared(
-                bl_feat,
-                'retnet_cls_pred_fpn{}'.format(lvl),
-                dim_in,
-                cls_pred_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight='retnet_cls_pred_fpn{}_w'.format(k_min),
-                bias='retnet_cls_pred_fpn{}_b'.format(k_min)
-            )
-        if not model.train:
-            if cfg.RETINANET.SOFTMAX:
-                model.net.GroupSpatialSoftmax(
-                    retnet_cls_pred,
-                    'retnet_cls_prob_fpn{}'.format(lvl),
-                    num_classes=cls_pred_dim
-                )
-            else:
-                model.net.Sigmoid(
-                    retnet_cls_pred, 'retnet_cls_prob_fpn{}'.format(lvl)
-                )
-        if cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
-            bbox_feat_list.append(bl_feat)
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-    from detectron.core.config import cfg
-from detectron.modeling.generate_anchors import generate_anchors
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-import detectron.modeling.FPN as FPN
-import detectron.utils.blob as blob_utils
+            # set Content-Length based len of body
+        if self.body is not None:
+            self.headers['Content-Length'] = len(self.body)
+            # just in case a broken http/1.1 decides to keep connection alive
+            self.headers.setdefault('Connection', 'close')
+        # Content-Length must be specified in POST method even with no body
+        elif self.method == b'POST':
+            self.headers['Content-Length'] = 0
+    
+        def _has_ajax_crawlable_variant(self, response):
+        '''
+        Return True if a page without hash fragment could be 'AJAX crawlable'
+        according to https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
+        '''
+        body = response.text[:self.lookup_bytes]
+        return _has_ajaxcrawlable_meta(body)
+    
+        def process_request(self, request, spider):
+        if request.meta.get('dont_merge_cookies', False):
+            return
+    
+    import josepy as jose
+import pytz
+    
+        def ensure_augeas_state(self):
+        '''Makes sure that all Augeas dom changes are written to files to avoid
+        loss of configuration directives when doing additional augeas parsing,
+        causing a possible augeas.load() resulting dom reset
+        '''
+    
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
+    
+    Certbot will emit a warning if it detects that the credentials file can be
+accessed by other users on your system. The warning reads 'Unsafe permissions
+on credentials configuration file', followed by the path to the credentials
+file. This warning will be emitted each time Certbot uses the credentials file,
+including for renewal, and cannot be silenced except by addressing the issue
+(e.g., by using a command like ``chmod 600`` to restrict access to the file).
     
     
-def get_field_of_anchors(
-    stride, anchor_sizes, anchor_aspect_ratios, octave=None, aspect=None
-):
-    global _threadlocal_foa
-    if not hasattr(_threadlocal_foa, 'cache'):
-        _threadlocal_foa.cache = {}
-    
-        # Compute anchor labels:
-    # label=1 is positive, 0 is negative, -1 is don't care (ignore)
-    labels = np.empty((num_inside, ), dtype=np.float32)
-    labels.fill(-1)
-    if len(gt_boxes) > 0:
-        # Compute overlaps between the anchors and the gt boxes overlaps
-        anchor_by_gt_overlap = box_utils.bbox_overlaps(anchors, gt_boxes)
-        # Map from anchor to gt box that has highest overlap
-        anchor_to_gt_argmax = anchor_by_gt_overlap.argmax(axis=1)
-        # For each anchor, amount of overlap with most overlapping gt box
-        anchor_to_gt_max = anchor_by_gt_overlap[
-            np.arange(num_inside), anchor_to_gt_argmax]
+def parametric_relu(x, channel_shared=False, alpha_init=constant(0.), name='parametric_relu', reuse=None):
+    '''参数化 ReLU
     
     
-if __name__ == '__main__':
-    main()
-
-    
-        def start_tree(self, tree, filename):
-        self.found_future_import = False
-    
-        The default `asyncio` event loop policy only automatically creates
-    event loops in the main threads. Other threads must create event
-    loops explicitly or `asyncio.get_event_loop` (and therefore
-    `.IOLoop.current`) will fail. Installing this policy allows event
-    loops to be created automatically on any thread, matching the
-    behavior of Tornado versions prior to 5.0 (or 5.0 on Python 2).
-    
-        def match(self, request: httputil.HTTPServerRequest) -> Optional[Dict[str, Any]]:
-        # Look for default host if not behind load balancer (for debugging)
-        if 'X-Real-Ip' not in request.headers:
-            if self.host_pattern.match(self.application.default_host):
-                return {}
-        return None
+def permute(x, perm):
+    '''
+    Examples:
+        x.shape == [128, 32, 1]
+        x = permute(x, [0, 2, 1])
+        x.shape == [128, 1, 32]
