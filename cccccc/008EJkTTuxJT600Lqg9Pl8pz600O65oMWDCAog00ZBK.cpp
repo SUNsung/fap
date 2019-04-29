@@ -1,213 +1,391 @@
 
         
-        private:
-    Ui::SignVerifyMessageDialog *ui;
-    WalletModel *model;
-    const PlatformStyle *platformStyle;
+        
+    {}  // namespace tensorflow
+
     
-    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
-    int n;
-    unsigned char rkey[64];
-    if (keylen <= 64) {
-        memcpy(rkey, key, keylen);
-        memset(rkey + keylen, 0, 64 - keylen);
-    } else {
-        secp256k1_sha256_t sha256;
-        secp256k1_sha256_initialize(&sha256);
-        secp256k1_sha256_write(&sha256, key, keylen);
-        secp256k1_sha256_finalize(&sha256, rkey);
-        memset(rkey + 32, 0, 32);
+    
+    {}  // namespace tensorflow
+
+    
+    namespace tensorflow {
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#include 'tensorflow/python/util/kernel_registry.h'
+    
+    namespace stream_executor {
+namespace cuda {
     }
     }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-// Parse and return an integer from the string c, as atoi()
-// On return, c is set to one past the end of the integer.
-inline int parseIntAndAdvance(const char*& c)
-{
-    int i = 0;
-    for(;*c >= '0' && *c <= '9'; ++c)
-        i = 10*i + (*c - '0');
-    return i;
-}
+      // Updates the plan's work area with space allocated by a new scratch
+  // allocator. This facilitates plan reuse with scratch allocators.
+  //
+  // This requires that the plan was originally created using a scratch
+  // allocator, as otherwise scratch space will have been allocated internally
+  // by cuFFT.
+  virtual void UpdatePlanWithScratchAllocator(
+      Stream *stream, Plan *plan, ScratchAllocator *scratch_allocator) = 0;
     
-    namespace bech32
-{
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
-};
-    
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-    
-    {}  // namespace config
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    // Return the name of the info log file for 'dbname'.
-std::string InfoLogFileName(const std::string& dbname);
-    
-    #include 'db/filename.h'
-    
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(uint64_t bytes, const char* reason);
-  void ReportDrop(uint64_t bytes, const Status& reason);
-    
-    
-    {      counter++;
-      if (empty) {
-        empty = false;
-        t.meta.smallest.DecodeFrom(key);
-      }
-      t.meta.largest.DecodeFrom(key);
-      if (parsed.sequence > t.max_sequence) {
-        t.max_sequence = parsed.sequence;
-      }
-    }
-    if (!iter->status().ok()) {
-      status = iter->status();
-    }
-    delete iter;
-    Log(options_.info_log, 'Table #%llu: %d entries %s',
-        (unsigned long long) t.meta.number,
-        counter,
-        status.ToString().c_str());
-    
-    class MemTable;
-    
-    
-    {      // LevelDB's default cache size is a combined 4 MB
-      std::string WAL_checkpoint = 'PRAGMA wal_autocheckpoint = 4096';
-      status = sqlite3_exec(db_, WAL_stmt.c_str(), nullptr, nullptr, &err_msg);
-      ExecErrorCheck(status, err_msg);
-      status = sqlite3_exec(db_, WAL_checkpoint.c_str(), nullptr, nullptr,
-                            &err_msg);
-      ExecErrorCheck(status, err_msg);
-    }
-    
-      virtual void PrintDefaultValueString(std::ostream &os) const {  // NOLINT(*)
-    std::string s;
-    caffe::NetParameter np;
-    // Avoid wasting time making a copy -- just push in out default object's pointer
-    np.mutable_layer()->AddAllocated(const_cast<::caffe::LayerParameter *>(&default_value_));
-    google::protobuf::TextFormat::PrintToString(np, &s);
-    np.mutable_layer()->ReleaseLast();
-    os << '\'' << s << '\'';
-  }
-    
-    
-    {
-    {
-    {  bool init_cudnn_;
-  cudnnDataType_t dtype_;
-  cudnnSpatialTransformerDescriptor_t st_desc_;
-  cudnnTensorDescriptor_t in_desc_;
-  cudnnTensorDescriptor_t out_desc_;
-  cudnnSamplerType_t sampler_;
-  #if CUDNN_MAJOR >= 5
-  cudnnTensorFormat_t format_;
-  #endif
-  BilinearSamplerParam param_;
-};
-#endif  // __CUDACC__ && CUDNN
-}  // namespace op
-}  // namespace mxnet
-    
-    namespace mxnet {
-namespace op {
-template<typename DType>
-class CuDNNLocalResponseNormOp : public Operator {
+    // Allows to represent a value that is either a host scalar or a scalar stored
+// on the GPU device.
+template <typename ElemT>
+class HostOrDeviceScalar {
  public:
-  explicit CuDNNLocalResponseNormOp(LRNParam param) {
-    param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
+  // Not marked as explicit because when using this constructor, we usually want
+  // to set this to a compile-time constant.
+  HostOrDeviceScalar(ElemT value) : value_(value), is_pointer_(false) {}
+  explicit HostOrDeviceScalar(const DeviceMemory<ElemT>& pointer)
+      : pointer_(pointer), is_pointer_(true) {
+    CHECK_EQ(1, pointer.ElementCount());
   }
     }
+    
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief experimental wsummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType>
+struct WQSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief maximum weight */
+    RType wmin;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    XGBOOST_DEVICE Entry() {}  // NOLINT
+    // constructor
+    XGBOOST_DEVICE Entry(RType rmin, RType rmax, RType wmin, DType value)
+        : rmin(rmin), rmax(rmax), wmin(wmin), value(value) {}
+    /*!
+     * \brief debug function,  check Valid
+     * \param eps the tolerate level for violating the relation
+     */
+    inline void CheckValid(RType eps = 0) const {
+      CHECK(rmin >= 0 && rmax >= 0 && wmin >= 0) << 'nonneg constraint';
+      CHECK(rmax- rmin - wmin > -eps) <<  'relation constraint: min/max';
+    }
+    /*! \return rmin estimation for v strictly bigger than value */
+    XGBOOST_DEVICE inline RType RMinNext() const {
+      return rmin + wmin;
+    }
+    /*! \return rmax estimation for v strictly smaller than value */
+    XGBOOST_DEVICE inline RType RMaxPrev() const {
+      return rmax - wmin;
+    }
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // entry in the queue
+    struct QEntry {
+      // value of the instance
+      DType value;
+      // weight of instance
+      RType weight;
+      // default constructor
+      QEntry() = default;
+      // constructor
+      QEntry(DType value, RType weight)
+          : value(value), weight(weight) {}
+      // comparator on value
+      inline bool operator<(const QEntry &b) const {
+        return value < b.value;
+      }
+    };
+    // the input queue
+    std::vector<QEntry> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      if (qtail == 0 || queue[qtail - 1].value != x) {
+        queue[qtail++] = QEntry(x, w);
+      } else {
+        queue[qtail - 1].weight += w;
+      }
+    }
+    inline void MakeSummary(WQSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = 0;
+      // start update sketch
+      RType wsum = 0;
+      // construct data with unique weights
+      for (size_t i = 0; i < qtail;) {
+        size_t j = i + 1;
+        RType w = queue[i].weight;
+        while (j < qtail && queue[j].value == queue[i].value) {
+          w += queue[j].weight; ++j;
+        }
+        out->data[out->size++] = Entry(wsum, wsum + w, w, queue[i].value);
+        wsum += w; i = j;
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  // constructor
+  WQSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*!
+   * \return the maximum error of the Summary
+   */
+  inline RType MaxError() const {
+    RType res = data[0].rmax - data[0].rmin - data[0].wmin;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].RMaxPrev() - data[i - 1].RMinNext(), res);
+      res = std::max(data[i].rmax - data[i].rmin - data[i].wmin, res);
+    }
+    return res;
+  }
+  /*!
+   * \brief query qvalue, start from istart
+   * \param qvalue the value we query for
+   * \param istart starting position
+   */
+  inline Entry Query(DType qvalue, size_t &istart) const { // NOLINT(*)
+    while (istart < size && qvalue > data[istart].value) {
+      ++istart;
+    }
+    if (istart == size) {
+      RType rmax = data[size - 1].rmax;
+      return Entry(rmax, rmax, 0.0f, qvalue);
+    }
+    if (qvalue == data[istart].value) {
+      return data[istart];
+    } else {
+      if (istart == 0) {
+        return Entry(0.0f, 0.0f, 0.0f, qvalue);
+      } else {
+        return Entry(data[istart - 1].RMinNext(),
+                     data[istart].RMaxPrev(),
+                     0.0f, qvalue);
+      }
+    }
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const WQSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void MakeFromSorted(const Entry* entries, size_t n) {
+    size = 0;
+    for (size_t i = 0; i < n;) {
+      size_t j = i + 1;
+      // ignore repeated values
+      for (; j < n && entries[j].value == entries[i].value; ++j) {}
+      data[size++] = Entry(entries[i].rmin, entries[i].rmax, entries[i].wmin,
+                           entries[i].value);
+      i = j;
+    }
+  }
+  /*!
+   * \brief debug function, validate whether the summary
+   *  run consistency check to check if it is a valid summary
+   * \param eps the tolerate error level, used when RType is floating point and
+   *        some inconsistency could occur due to rounding error
+   */
+  inline void CheckValid(RType eps) const {
+    for (size_t i = 0; i < size; ++i) {
+      data[i].CheckValid(eps);
+      if (i != 0) {
+        CHECK(data[i].rmin >= data[i - 1].rmin + data[i - 1].wmin) << 'rmin range constraint';
+        CHECK(data[i].rmax >= data[i - 1].rmax + data[i].wmin) << 'rmax range constraint';
+      }
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+    }
     }
     }
     
     
-    {  x <<= 2;
-  x |= t;
-  double ret = x * OBJECT_VREL_RES + OBJECT_VREL_LONG_MIN;
-  return ret;
+    {  /*!
+   * \brief transform prediction values, this is only called when Eval is called,
+   *  usually it redirect to PredTransform
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
+    this->PredTransform(io_preds);
+  }
+  /*!
+   * \brief transform probability value back to margin
+   * this is used to transform user-set base_score back to margin
+   * used by gradient boosting
+   * \return transformed value
+   */
+  virtual bst_float ProbToMargin(bst_float base_score) const {
+    return base_score;
+  }
+  /*!
+   * \brief Create an objective function according to name.
+   * \param name Name of the objective.
+   */
+  static ObjFunction* Create(const std::string& name);
+};
+    
+    class SparsePageRawFormat : public SparsePageFormat {
+ public:
+  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
+    auto& offset_vec = page->offset.HostVector();
+    if (!fi->Read(&offset_vec)) return false;
+    auto& data_vec = page->data.HostVector();
+    CHECK_NE(page->offset.Size(), 0U) << 'Invalid SparsePage file';
+    data_vec.resize(offset_vec.back());
+    if (page->data.Size() != 0) {
+      CHECK_EQ(fi->Read(dmlc::BeginPtr(data_vec),
+                        (page->data).Size() * sizeof(Entry)),
+               (page->data).Size() * sizeof(Entry))
+          << 'Invalid SparsePage file';
+    }
+    return true;
+  }
+    }
+    
+    const SparsePage& SimpleCSRSource::Value() const {
+  return page_;
 }
     
-    namespace apollo {
-namespace localization {
-namespace msf {
-    }
-    }
+    class SimpleBatchIteratorImpl : public BatchIteratorImpl {
+ public:
+  explicit SimpleBatchIteratorImpl(SparsePage* page) : page_(page) {}
+  const SparsePage& operator*() const override {
+    CHECK(page_ != nullptr);
+    return *page_;
+  }
+  void operator++() override { page_ = nullptr; }
+  bool AtEnd() const override { return page_ == nullptr; }
+  SimpleBatchIteratorImpl* Clone() override {
+    return new SimpleBatchIteratorImpl(*this);
+  }
     }
     
-    //
-// CallFuncND
-//
+        VkPipelineColorBlendStateCreateInfo blend_info = {};
+    blend_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    blend_info.attachmentCount = 1;
+    blend_info.pAttachments = color_attachment;
     
-    void ActionManager::actionAllocWithHashElement(tHashElement *element)
-{
-    // 4 actions per Node by default
-    if (element->actions == nullptr)
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+
+    
+    // Set default OpenGL3 loader to be gl3w
+#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
+#define IMGUI_IMPL_OPENGL_LOADER_GL3W
+#endif
+    
+        ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
+
+    
+        // Create shaders
+    const GLchar* vertex_shader_with_version[2] = { g_GlslVersionString, vertex_shader };
+    g_VertHandle = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(g_VertHandle, 2, vertex_shader_with_version, NULL);
+    glCompileShader(g_VertHandle);
+    CheckShader(g_VertHandle, 'vertex shader');
+    
+        // Rendering
+    ImGui::Render();
+    ImGuiIO& io = ImGui::GetIO();
+    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+    
+    
+    {    // exception out_of_range.401
+    try
     {
-        element->actions = ccArrayNew(4);
-    }else 
-    if (element->actions->num == element->actions->max)
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
     {
-        ccArrayDoubleCapacity(element->actions);
+        std::cout << e.what() << '\n';
     }
-    }
+}
+
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
     
-    void TurnOffTiles::update(float time)
-{
-    unsigned int l = (unsigned int)(time * (float)_tilesCount);
-    }
+    // ============
+    // string types
+    // ============
     
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
