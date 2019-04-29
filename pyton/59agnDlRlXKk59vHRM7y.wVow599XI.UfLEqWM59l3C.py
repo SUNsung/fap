@@ -1,165 +1,183 @@
 
         
-        # The controller will be more powerful if it can see the encoding of the entire
-# trial.  However, this allows the controller to create inferred inputs that are
-# acausal with respect to the actual data generation process.  E.g. the data
-# generator could have an input at time t, but the controller, after seeing the
-# entirety of the trial could infer that the input is coming a little before
-# time t, because there are no restrictions on the data the controller sees.
-# One can force the controller to be causal (with respect to perturbations in
-# the data generator) so that it only sees forward encodings of the data at time
-# t that originate at times before or at time t.  One can also control the data
-# the controller sees by using an input lag (forward encoding at time [t-tlag]
-# for controller input at time t.  The same can be done in the reverse direction
-# (controller input at time t from reverse encoding at time [t+tlag], in the
-# case of an acausal controller).  Setting this lag > 0 (even lag=1) can be a
-# powerful way of avoiding very spiky decodes. Finally, one can manually control
-# whether the factors at time t-1 are fed to the controller at time t.
-#
-# If you don't care about any of this, and just want to smooth your data, set
-#    do_causal_controller = False
-#    do_feed_factors_to_controller = True
-#    causal_input_lag = 0
-flags.DEFINE_boolean('do_causal_controller',
-                     DO_CAUSAL_CONTROLLER,
-                     'Restrict the controller create only causal inferred \
-                     inputs?')
-# Strictly speaking, feeding either the factors or the rates to the controller
-# violates causality, since the g0 gets to see all the data. This may or may not
-# be only a theoretical concern.
-flags.DEFINE_boolean('do_feed_factors_to_controller',
-                     DO_FEED_FACTORS_TO_CONTROLLER,
-                     'Should factors[t-1] be input to controller at time t?')
-flags.DEFINE_string('feedback_factors_or_rates', FEEDBACK_FACTORS_OR_RATES,
-                    'Feedback the factors or the rates to the controller? \
-                     Acceptable values: 'factors' or 'rates'.')
-flags.DEFINE_integer('controller_input_lag', CONTROLLER_INPUT_LAG,
-                     'Time lag on the encoding to controller t-lag for \
-                     forward, t+lag for reverse.')
+                # Create flat baselines to compare the variation over batch size
+        all_times['pca'].extend([results_dict['pca']['time']] *
+                                len(batch_sizes))
+        all_errors['pca'].extend([results_dict['pca']['error']] *
+                                 len(batch_sizes))
+        all_times['rpca'].extend([results_dict['rpca']['time']] *
+                                 len(batch_sizes))
+        all_errors['rpca'].extend([results_dict['rpca']['error']] *
+                                  len(batch_sizes))
+        for batch_size in batch_sizes:
+            ipca = IncrementalPCA(n_components=n_components,
+                                  batch_size=batch_size)
+            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
+                                                                   ipca)]}
+            all_times['ipca'].append(results_dict['ipca']['time'])
+            all_errors['ipca'].append(results_dict['ipca']['error'])
     
-    model = IntegrationToBoundModel(N)
-inputs_ph_t = [tf.placeholder(tf.float32,
-                              shape=[None, 1]) for _ in range(ntimesteps)]
-state = tf.zeros([batch_size, N])
-saver = tf.train.Saver()
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
-      # In the data workup in the paper, Chethan did intra condition
-  # averaging, so let's do that here.
-  avg_data_all = {}
-  for name, conditions in conditions_all.items():
-    dataset = datasets[name]
-    avg_data_all[name] = {}
-    for cname in conditions:
-      td_idxs = np.argwhere(np.array(dataset['condition_labels_train'])==cname)
-      data = np.squeeze(dataset['train_data'][td_idxs,:,:], axis=1)
-      avg_data = np.mean(data, axis=0)
-      avg_data_all[name][cname] = avg_data
+    data, rows, columns = make_biclusters(
+    shape=(300, 300), n_clusters=5, noise=5,
+    shuffle=False, random_state=0)
     
-      @property
-  def vocab(self):
-    return self._vocab
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
+    
+        plt.figure(figsize=(6, 4))
+    for i in range(X_red.shape[0]):
+        plt.text(X_red[i, 0], X_red[i, 1], str(y[i]),
+                 color=plt.cm.nipy_spectral(labels[i] / 10.),
+                 fontdict={'weight': 'bold', 'size': 9})
+    
+    for center_1, center_2 in zip(regular_values[:-1], regular_values[1:]):
+    plt.axvline(.5 * (center_1 + center_2), color='b', linestyle='--')
+    
+    plt.subplot(223)
+plt.scatter(X_varied[:, 0], X_varied[:, 1], c=y_pred)
+plt.title('Unequal Variance')
+    
+    import random
+    
+        def bulk_insert(self, values):
+        i = 1
+        self.__aux_list = values
+        for value in values:
+            self.insert_data(value)
+            self._step_by_step(i)
+            i += 1
+    
+    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
+	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
+	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+		return TEMPORARY_ARRAY
+	else:
+		return LONGEST_SUB
+    
+    TAG = 'K-MEANS-CLUST/ '
+    
+    def getLetterCount(message):
+    letterCount = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0,
+                   'I': 0, 'J': 0, 'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0,
+                   'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 'W': 0, 'X': 0,
+                   'Y': 0, 'Z': 0}
+    for letter in message.upper():
+        if letter in LETTERS:
+            letterCount[letter] += 1
+    
+    site_info = 'CKPlayer General'
+download = ckplayer_download
+download_playlist = playlist_not_supported('ckplayer')
 
     
-            self._id_to_word.append(word_name)
-        self._word_to_id[word_name] = idx
-        idx += 1
+    __all__ = ['cntv_download', 'cntv_download_by_id']
     
-        # rnn_vd derived from the same code base as rnn_zaremba.
-    elif (FLAGS.discriminator_model == 'rnn_zaremba' or
-          FLAGS.discriminator_model == 'rnn_vd'):
-      dis_variable_maps = variable_mapping.rnn_zaremba(hparams, model='dis')
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
+        mime, ext, size = url_info(real_url)
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
-    
-    try:
-    import simplejson as json
-except ImportError:
-    import json
-    
-        if implementation == 'CPython':
-        implementation_version = platform.python_version()
-    elif implementation == 'PyPy':
-        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
-                                               sys.pypy_version_info.minor,
-                                               sys.pypy_version_info.micro)
-        if sys.pypy_version_info.releaselevel != 'final':
-            implementation_version = ''.join([
-                implementation_version, sys.pypy_version_info.releaselevel
-            ])
-    elif implementation == 'Jython':
-        implementation_version = platform.python_version()  # Complete Guess
-    elif implementation == 'IronPython':
-        implementation_version = platform.python_version()  # Complete Guess
-    else:
-        implementation_version = 'Unknown'
-    
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
+    site_info = 'ifeng.com'
+download = ifeng_download
+download_playlist = playlist_not_supported('ifeng')
 
     
+            :param default_name: The default name for the log file.
+        '''
+        if not callable(self.namer):
+            result = default_name
+        else:
+            result = self.namer(default_name)
+        return result
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+    
+if __name__ == '__main__':
+    unittest.main()
 
     
+        def test_bad_params(self):
+        # Test invalid parameter combinations.
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'wbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'xbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', encoding='utf-8')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', errors='ignore')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', newline='\n')
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        (
-            'application/xml',
-            ('application/xml', {})
-        ),
-        (
-            'application/json ; charset=utf-8',
-            ('application/json', {'charset': 'utf-8'})
-        ),
-        (
-            'application/json ; Charset=utf-8',
-            ('application/json', {'charset': 'utf-8'})
-        ),
-        (
-            'text/plain',
-            ('text/plain', {})
-        ),
-        (
-            'multipart/form-data; boundary = something ; boundary2=\'something_else\' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-                'multipart/form-data; boundary = something ; boundary2='something_else' ; no_equals ',
-                ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'multipart/form-data; boundary = something ; \'boundary2=something_else\' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'multipart/form-data; boundary = something ; 'boundary2=something_else' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'application/json ; ; ',
-            ('application/json', {})
-        )
-    ))
-def test__parse_content_type_header(value, expected):
-    assert _parse_content_type_header(value) == expected
+    
+def main():
+    parser = ArgumentParser(description='''\
+Send the contents of a directory as a MIME message.
+Unless the -o option is given, the email is sent by forwarding to your local
+SMTP server, which then does the normal delivery process.  Your local machine
+must be running an SMTP server.
+''')
+    parser.add_argument('-d', '--directory',
+                        help='''Mail the contents of the specified directory,
+                        otherwise use the current directory.  Only the regular
+                        files in the directory are sent, and we don't recurse to
+                        subdirectories.''')
+    parser.add_argument('-o', '--output',
+                        metavar='FILE',
+                        help='''Print the composed message to FILE instead of
+                        sending the message to the SMTP server.''')
+    parser.add_argument('-s', '--sender', required=True,
+                        help='The value of the From: header (required)')
+    parser.add_argument('-r', '--recipient', required=True,
+                        action='append', metavar='RECIPIENT',
+                        default=[], dest='recipients',
+                        help='A To: header value (at least one required)')
+    args = parser.parse_args()
+    directory = args.directory
+    if not directory:
+        directory = '.'
+    # Create the message
+    msg = EmailMessage()
+    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
+    msg['To'] = ', '.join(args.recipients)
+    msg['From'] = args.sender
+    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+    
+if __name__ == '__main__':
+    freeze_support()
+    test()
+
+    
+        pool = context.Pool(processes=processes)
+    
+    # Open video file
+video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
+    
+    # Show the picture
+pil_image.show()
