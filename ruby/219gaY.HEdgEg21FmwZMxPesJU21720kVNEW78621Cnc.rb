@@ -1,135 +1,85 @@
 
         
-              GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    end
-    
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
-    
-          def self.category
-        :source_control
-      end
-    
-          it 'adds docset_copyright param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_copyright: 'DocSet copyright'
-          )
-        end').runner.execute(:test)
-    
-          it 'sets the project directory to other and the toolchain to Swift_2_3' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          carthage(toolchain: 'com.apple.dt.toolchain.Swift_2_3', project_directory: 'other')
-        end').runner.execute(:test)
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0]} #{path[1]}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path})
-          end').runner.execute(:test)
-        end
-      end
-    
-    # Contributors should always provide a changelog when submitting a PR
-if github.pr_body.length < 5
-  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
-end
-    
-    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
-task :clean do
-  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
-end
-    
-    class SinatraStaticServer < Sinatra::Base
-    
-    
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+                def sidekiq_worker_class
+          ImportDiffNoteWorker
         end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
     
-        # resize to a new geometry
-    # @param geometry [String] the Paperclip geometry definition to resize to
-    # @example
-    #   Paperclip::Geometry.new(150, 150).resize_to('50x50!')
-    #   #=> Paperclip::Geometry(50, 50)
-    def resize_to(geometry)
-      new_geometry = Paperclip::Geometry.parse geometry
-      case new_geometry.modifier
-      when '!', '#'
-        new_geometry
-      when '>'
-        if new_geometry.width >= self.width && new_geometry.height >= self.height
-          self
-        else
-          scale_to new_geometry
-        end
-      when '<'
-        if new_geometry.width <= self.width || new_geometry.height <= self.height
-          self
-        else
-          scale_to new_geometry
-        end
+            a_split <=> b_split
       else
-        scale_to new_geometry
+        a.casecmp(b)
       end
     end
+  end
+end
+
     
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
-      end
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
     end
     
-        # Returns the id of the instance in a split path form. e.g. returns
-    # 000/001/234 for an id of 1234.
-    def id_partition attachment, style_name
-      case id = attachment.instance.id
-      when Integer
-        if id < ID_PARTITION_LIMIT
-          ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+        def request_all(urls, &block)
+      if options[:rate_limit]
+        if @@rate_limiter
+          @@rate_limiter.limit = options[:rate_limit]
         else
-          ('%012d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+          @@rate_limiter = RateLimiter.new(options[:rate_limit])
+          Typhoeus.before(&@@rate_limiter.to_proc)
         end
-      when String
-        id.scan(/.{3}/).first(3).join('/'.freeze)
-      else
-        nil
       end
+    
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
+      end
+    
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
     end
+    
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+    
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+  end
+    
+      def delete_target_file?
+    return true if overwrite?
+    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
+    ( 'y' == STDIN.gets.strip.downcase ? true : false)
+  end
+    
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+      end
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
