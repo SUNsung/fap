@@ -1,96 +1,68 @@
 
         
-            # This will detect the proper guest OS for the machine and set up
-    # the class to actually execute capabilities.
-    def detect!
-      guest_name = @machine.config.vm.guest
-      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
-    rescue Errors::CapabilityHostExplicitNotDetected => e
-      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
-    rescue Errors::CapabilityHostNotDetected
-      raise Errors::GuestNotDetected
-    end
+        def global_require
+  JSON.pretty_generate(DATA)
+end
     
-            # Download a file from the remote machine to the local machine.
-        #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
-        end
-    
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
-        end
+      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
+    cmd = g.split('-').last
+    p.command(cmd.to_sym) do |c|
+      c.syntax cmd
+      c.action do
+        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
+          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
       end
     end
   end
-end
-
     
-      def hub_topic
-    params['hub.topic']
-  end
+            def stop
+          # There is only one EventMachine instance per Ruby process so stopping
+          # it here will stop the reactor thread we have running.
+          EM.stop if EM.reactor_running?
+          Jekyll.logger.debug 'LiveReload Server:', 'halted'
+        end
     
-      private
+      gem.licenses      = ['MIT']
     
-      before_action :require_user!
-    
-      UPDATE_SIGN_IN_HOURS = 24
-    
-    def mkpieces
-  piece(0,[],[0])
-  $p.each do |a|
-    a0 = a[0]
-    a[1] = ud(a0)
-    a[2] = rl(a0)
-    a[3] = ud(rl(a0))
-    a[4] = xy(a0)
-    a[5] = ud(xy(a0))
-    a[6] = rl(xy(a0))
-    a[7] = ud(rl(xy(a0)))
-    a.sort!
-    a.uniq!
-  end
-  $p.uniq!.sort! {|x,y| x[0] <=> y[0] }
+    Given(/config stage file has line '(.*?)'/) do |line|
+  TestApp.append_to_deploy_file(line)
 end
     
-    desc 'generate gemspec'
-task 'rack-protection.gemspec' do
-  require 'rack/protection/version'
-  content = File.binread 'rack-protection.gemspec'
-    
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
-        end
-      end
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
-      end
-    
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+      class Configuration
+    def self.env
+      @env ||= new
     end
-  end
-end
+    
+          def gets
+        return unless $stdin.tty?
+    
+    module Capistrano
+  class Configuration
+    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
+    # with `fetch`. Does internal bookkeeping to help identify user mistakes
+    # like spelling errors or unused variables that may lead to unexpected
+    # behavior.
+    class Variables
+      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
+      IGNORED_LOCATIONS = [
+        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
+        '#{CAPISTRANO_LOCATION}/configuration.rb:',
+        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
+        '/dsl.rb:',
+        '/forwardable.rb:'
+      ].freeze
+      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
+    
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
