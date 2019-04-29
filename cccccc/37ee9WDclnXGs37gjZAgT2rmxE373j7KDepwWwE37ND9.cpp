@@ -1,389 +1,414 @@
 
         
-          // Save a copy of the blamer bundle so we can try to reconstruct it below.
-  BlamerBundle *orig_bb =
-      word->blamer_bundle ? new BlamerBundle(*word->blamer_bundle) : nullptr;
+        #define TEGRA_ABSDIFF(src1, sz1, src2, sz2, dst, sz, w, h) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::absDiff(CAROTENE_NS::Size2D(w, h), \
+                     src1, sz1, \
+                     src2, sz2, \
+                     dst, sz), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
+        void minMaxVals(const Size2D &size,
+                    const s32 *srcBase, ptrdiff_t srcStride,
+                    s32 * minVal, s32 * maxVal);
     
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
-}
-    
-        DIR128 & operator= (         //assign of int16_t
-    int16_t value) {               //value to assign
-      value %= MODULUS;          //modulo arithmetic
-      if (value < 0)
-        value += MODULUS;        //done properly
-      dir = (int8_t) value;
-      return *this;
+            //horizontal convolution (2 lines from previous iteration)
+        if (i > 0)
+        {
+            f32* dstb = internal::getRowPtr(dstBase, dstStride, i-1);
+            x = 0;
+            for (; x <= colsn - 4; x += 4)
+            {
+                internal::prefetch(laneA + x + cn);
+                internal::prefetch(laneB + x + cn);
+box3x3f32_horiz:
+                float32x4_t lane0a = vld1q_f32(laneA + x - cn);
+                float32x4_t lane2a = vld1q_f32(laneA + x + cn);
+                float32x4_t lane1a = vld1q_f32(laneA + x);
     }
-    int8_t operator- (             //subtraction
-      const DIR128 & minus) const//for signed result
-    {
-                                 //result
-      int16_t result = dir - minus.dir;
-    }
-    
-    
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
-  }
-    
-    namespace leveldb {
     }
     
+    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
+#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
+#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
+#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
     
-    {    // The previous incarnation may not have written any MANIFEST
-    // records after allocating this log number.  So we manually
-    // update the file number allocation counter in VersionSet.
-    versions_->MarkFileNumberUsed(logs[i]);
-  }
-    
-      // Constant after construction
-  Env* const env_;
-  const InternalKeyComparator internal_comparator_;
-  const InternalFilterPolicy internal_filter_policy_;
-  const Options options_;  // options_.comparator == &internal_comparator_
-  const bool owns_info_log_;
-  const bool owns_cache_;
-  const std::string dbname_;
-    
-      // When start user key is prefix of limit user key
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foobar', 200, kTypeValue)));
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-          case kEof:
-        if (in_fragmented_record) {
-          // This can be caused by the writer dying immediately after
-          // writing a physical record but before completing the next; don't
-          // treat it as a corruption, just ignore the entire logical record.
-          scratch->clear();
+                v_src0 = internal::vld1q(src0 + x);
+            v_src1 = internal::vld1q(src1 + x);
+            op(v_src0, v_src1, v_dst);
+            internal::vst1q(dst + x, v_dst);
+            x+=16;
         }
-        return false;
+        if( x + 8 < width)
+        {
+            vec64  v_src0, v_src1;
+            uvec64 v_dst;
     
-    namespace log {
-    }
-    
-    class MemTable {
- public:
-  // MemTables are reference counted.  The initial reference count
-  // is zero and the caller must call Ref() at least once.
-  explicit MemTable(const InternalKeyComparator& comparator);
-    }
-    
-    
-    {}  // namespace leveldb
-
-    
-        // master data structure
-    std::list<QueryUrls> m_queryUrls;
-    // buffer for sorting
-    std::vector<Url> m_urlSorter;
-    // lookup table for position based weights
-    std::vector<ElemType> m_logWeights;
-    
-    
-    {                    if (!memAllocInfoVec.empty())
-                    {
-                        // the memory allocation vector is sorted by size. We find the largest available buffer that doesn't have time overlap
-                        auto workingAlloc = memAllocInfoVec.end();
-                        for (auto iter = memAllocInfoVec.begin(); iter != memAllocInfoVec.end(); iter++)
-                        {
-                            if (!CheckOverlap(make_pair(memInfo.allocStep, memInfo.releaseStep), iter->occupancy))
-                                workingAlloc = iter;
-                        }
-                        if (workingAlloc == memAllocInfoVec.end())  // nothing works 
-                        {
-                            vector<pair<int, int>> occ;
-                            occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                            memAllocInfoVec.push_back(ma);  // add as the last one 
-                            memInfo.SetMemoryId(memoryCounter);
-                            memoryCounter++;
-                        }
-                        else
-                        {
-                            workingAlloc->occupancy.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            memInfo.SetMemoryId(workingAlloc->memoryId);
-                        }
-                    }
-                    else
-                    {
-                        vector<pair<int, int>> occ;
-                        occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                        MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                        memAllocInfoVec.push_back(ma);
-                        memInfo.SetMemoryId(memoryCounter);
-                        memoryCounter++;
-                    }
-                }
-    
-    #include <unordered_set>
-#include <map>
-#include <string>
-#include <vector>
-#include <stdexcept>
-#include <list>
-#include <memory>
-#include <algorithm>
-#include <utility>
-#include <assert.h>
-    
-        if (r['free_space'].empty()) {
-      r['free_space'] = '-1';
-    }
-    
-    /**
- * @brief Serialize a QueryDataTyped object into a JSON array.
- *
- * @param q the QueryDataTyped to serialize.
- * @param cols the TableColumn vector indicating column order.
- * @param doc the managed JSON document.
- * @param arr [output] the output JSON array.
- * @param asNumeric true iff numeric values are serialized as such
- *
- * @return Status indicating the success or failure of the operation.
- */
-Status serializeQueryData(const QueryDataTyped& q,
-                          JSON& doc,
-                          rapidjson::Document& arr,
-                          bool asNumeric);
-    
-      bool needs_replacement = false;
-  for (size_t i = 0; i < data.length(); i++) {
-    if (((unsigned char)data[i]) < 0x20 || ((unsigned char)data[i]) >= 0x80) {
-      needs_replacement = true;
-      escaped += '\\x';
-      escaped += hex_chars[(((unsigned char)data[i])) >> 4];
-      escaped += hex_chars[((unsigned char)data[i] & 0x0F) >> 0];
-    } else {
-      escaped += data[i];
-    }
-  }
-    
-    /**
- * @brief Register osquery operation 'custom' functions.
- */
-void registerOperationExtensions(sqlite3* db);
-    
-    QueryDataTyped getTestDBExpectedResults() {
-  QueryDataTyped d;
-  RowTyped row1;
-  row1['username'] = 'mike';
-  row1['age'] = 23LL;
-  d.push_back(row1);
-  RowTyped row2;
-  row2['username'] = 'matt';
-  row2['age'] = 24LL;
-  d.push_back(row2);
-  return d;
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
 }
     
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
     
-    {  // Expect the decorators to be disabled by default.
-  QueryLogItem item;
-  getDecorations(item.decorations);
-  EXPECT_EQ(item.decorations.size(), 0U);
-}
+    #include <limits>
     
-    #include <boost/algorithm/string.hpp>
-#include <boost/asio.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/io/detail/quoted_manip.hpp>
-#include <boost/regex.hpp>
-#include <boost/uuid/string_generator.hpp>
+    
+    {} // namespace
     
     #include <string>
-    
-        /**
-     *  unicode to utf8 convertor with zero dependency inspired by java sdk character source
-     * */
-    void utf16_convert_to_utf8_string(uint16_t *utf16, int length, char* decodingBuffer, std::string& utf8);
-    void utf16_convert_to_utf8_quote_string(uint16_t *utf16, int length, char* decodingBuffer, std::string& utf8);
+#include <vector>
     
     
-// TRACED_FOREACH(type, var, container) expands to a loop that assigns |var|
-// every item in the |container| and adds a SCOPED_TRACE() message for the
-// |var| while inside the loop body.
-#define TRACED_FOREACH(_type, _var, _container)                          \
-  for (_type const _var : _container)                                    \
-    for (bool _done = false; !_done;)                                    \
-      for (SCOPED_TRACE(::testing::Message() << #_var << ' = ' << _var); \
-           !_done; _done = true)
+<details>
     
-      // Check if the code entry is a Smi. If yes, we interpret it as an
-  // optimisation marker. Otherwise, interpret it as a weak reference to a code
-  // object.
-  Label optimized_code_slot_is_smi(this), optimized_code_slot_is_weak_ref(this);
-  Branch(TaggedIsSmi(maybe_optimized_code_entry), &optimized_code_slot_is_smi,
-         &optimized_code_slot_is_weak_ref);
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    #include 'b2Triangle.h'
+#include 'b2Polygon.h'
+    
+    #ifndef B2_TRIANGLE_H
+#define B2_TRIANGLE_H
+    
+    		m_fError = -1.0f;
+    
+    #ifndef FASTLZ_H
+#define FASTLZ_H
+    
+    #   define S_MUL(a,b) ( (a)*(b) )
+#define C_MUL(m,a,b) \
+    do{ (m).r = (a).r*(b).r - (a).i*(b).i;\
+        (m).i = (a).r*(b).i + (a).i*(b).r; }while(0)
+#define C_MULC(m,a,b) \
+    do{ (m).r = (a).r*(b).r + (a).i*(b).i;\
+        (m).i = (a).i*(b).r - (a).r*(b).i; }while(0)
+    
+    /* This appears to be the same speed as C99's fabsf() but it's more portable. */
+#define ABS16(x) ((float)fabs(x))
+#define ABS32(x) ((float)fabs(x))
     
     
-    { protected:
-  void MathRoundingOperation(
-      Node* context, Node* x,
-      TNode<Float64T> (CodeStubAssembler::*float64op)(SloppyTNode<Float64T>));
-  void MathUnaryOperation(
-      Node* context, Node* x,
-      TNode<Float64T> (CodeStubAssembler::*float64op)(SloppyTNode<Float64T>));
-  void MathMaxMin(Node* context, Node* argc,
-                  TNode<Float64T> (CodeStubAssembler::*float64op)(
-                      SloppyTNode<Float64T>, SloppyTNode<Float64T>),
-                  double default_val);
-};
-    
-    #include 'android_native_app_glue.h'
-#include 'animal_generated.h' // Includes 'flatbuffers/flatbuffers.h'.
-    
-    static std::string GenType(const Type &type, bool underlying = false) {
-  switch (type.base_type) {
-    case BASE_TYPE_STRUCT:
-      return type.struct_def->defined_namespace->GetFullyQualifiedName(
-          type.struct_def->name);
-    case BASE_TYPE_VECTOR: return '[' + GenType(type.VectorType()) + ']';
-    default:
-      if (type.enum_def && !underlying) {
-        return type.enum_def->defined_namespace->GetFullyQualifiedName(
-            type.enum_def->name);
-      } else {
-        return kTypeNames[type.base_type];
-      }
-  }
+    {    return;
 }
     
-    template<typename T, typename U>
-void TestEq(T expval, U val, const char *exp, const char *file, int line,
-            const char *func = 0) {
-  if (U(expval) != val) {
-    TestFail(flatbuffers::NumToString(expval).c_str(),
-             flatbuffers::NumToString(val).c_str(), exp, file, line, func);
-  }
+            int res = 1;
+        int index = nextDifferentCharacterIndex(nums, 1);
+        int i = 1;
+        while(index < nums.size()){
+            res ++;
+            nums[i++] = nums[index];
+            index = nextDifferentCharacterIndex(nums, index + 1);
+        }
+    
+    
+    {    return 0;
 }
-    
-    #include <cstdlib>
-#include <iostream>
-#include 'flatbuffers/util.h'
-    
-    // SliceAllocator is a gRPC-specific allocator that uses the `grpc_slice`
-// refcounted slices to manage memory ownership. This makes it easy and
-// efficient to transfer buffers to gRPC.
-class SliceAllocator : public Allocator {
- public:
-  SliceAllocator() : slice_(grpc_empty_slice()) {}
-    }
-    
-    
-#ifndef FLATBUFFERS_GENERATED_NAMESPACETEST2_NAMESPACEA_H_
-#define FLATBUFFERS_GENERATED_NAMESPACETEST2_NAMESPACEA_H_
-    
-    #include 'flatbuffers/idl.h'
-#include 'test_init.h'
-    
-    
-    {      if (false == not_fit) {
-        TEST_OUTPUT_LINE('Stage 1 failed: Parser(%d) != Regex(%d)', orig_done,
-                         recheck.res);
-        TEST_EQ_STR(orig_back.c_str(),
-                    input.substr(recheck.pos, recheck.len).c_str());
-        TEST_EQ_FUNC(orig_done, recheck.res);
-      }
-    }
-    
-    #include <istream>
-#include <utility>
-    
-    
-    {	CharStreamIOException(ANTLR_USE_NAMESPACE(std)exception& e)
-		: CharStreamException(e.what()), io(e) {}
-	~CharStreamIOException() throw() {}
-};
-    
-    	// Borland C++ builder seems to need the decl's of the first two...
-	virtual void initialize(int t,const ANTLR_USE_NAMESPACE(std)string& txt);
-	virtual void initialize(RefAST t);
-	virtual void initialize(RefToken t);
-    
-    	ANTLR_USE_NAMESPACE(std)string getMarkedChars() const;
-    
-    	// Expected BitSet / not BitSet
-	MismatchedCharException(
-		int c,
-		BitSet set_,
-		bool matchNot,
-		CharScanner* scanner_
-	);
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/MismatchedTokenException.hpp#2 $
- */
-    
-    	NoViableAltException(RefAST t);
-	NoViableAltException(RefToken t,const ANTLR_USE_NAMESPACE(std)string& fileName_);
-    
-    #include 'phonenumbers/alternate_format.h'
-    
-    
-    {  const char* last = ptr_ + std::min(length_ - s.length_, pos) + s.length_;
-  const char* result = std::find_end(ptr_, last, s.ptr_, s.ptr_ + s.length_);
-  return result != last ? static_cast<size_t>(result - ptr_) : npos;
-}
-    
-      template <typename To>
-  static NoType Test(...);
-    
-    #include <pthread.h>
-    
-      const PhoneNumberUtil& phone_util_;
-  scoped_ptr<const DefaultMapStorage> storage_;
     
     
     {
-    {}  // namespace phonenumbers
-}  // namespace i18n
+    {        ListNode* tail = head->next;
+        ListNode* ret = reverse(head->next, index - 1, left);
+        tail->next = head;
+        return ret;
+    }
+};
+    
+            stack<TreeNode*> stack;
+        stack.push(root);
+        while(!stack.empty()){
+            TreeNode* curNode = stack.top();
+            stack.pop();
+            res.push_back(curNode->val);
+    }
+    
+    
+void print_vec(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
+}
+    
+      const dmlc::RowBlock<IndexType>& Value() const override {
+    return out_;
+  }
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    
+    {/*!
+ * \brief Macro to register objective function.
+ *
+ * \code
+ * // example of registering a objective
+ * XGBOOST_REGISTER_OBJECTIVE(LinearRegression, 'reg:linear')
+ * .describe('Linear regression objective')
+ * .set_body([]() {
+ *     return new RegLossObj(LossType::kLinearSquare);
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_OBJECTIVE(UniqueId, Name)                      \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::ObjFunctionReg &              \
+  __make_ ## ObjFunctionReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::ObjFunctionReg>::Get()->__REGISTER__(Name)
+}  // namespace xgboost
+#endif  // XGBOOST_OBJECTIVE_H_
 
     
-    namespace i18n {
-namespace phonenumbers {
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
+  }
+}
+    
+        const auto ngroup = static_cast<bst_omp_uint>(gptr.size() - 1);
+    #pragma omp parallel
+    {
+      // parall construct, declare random number generator here, so that each
+      // thread use its own random number generator, seed by thread id and current iteration
+      common::RandomEngine rnd(iter * 1111 + omp_get_thread_num());
     }
+    
+    float SimpleDMatrix::GetColDensity(size_t cidx) {
+  size_t column_size = 0;
+  // Use whatever version of column batches already exists
+  if (sorted_column_page_) {
+    auto batch = this->GetSortedColumnBatches();
+    column_size = (*batch.begin())[cidx].size();
+  } else {
+    auto batch = this->GetColumnBatches();
+    column_size = (*batch.begin())[cidx].size();
+  }
     }
     
     
-    {  // Returns whether the given national number (a string containing only decimal
-  // digits) matches the national number pattern defined in the given
-  // PhoneNumberDesc message.
-  virtual bool MatchNationalNumber(const string& number,
-                                   const PhoneNumberDesc& number_desc,
-                                   bool allow_prefix_match) const = 0;
-};
+    {    return ret;
+}
+    
+    
+    {    delete ret;
+    return nullptr;
+}
+    
+        //
+    // Overrides
+    //
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    virtual Place* reverse() const override;
+    virtual Place* clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    Place(){}
+    virtual ~Place(){}
+    
+    NS_CC_BEGIN
+    
+    
+    {    for (int i = 0; i < _gridSize.width; ++i)
+    {
+        for ( int j = 0; j < _gridSize.height; ++j)
+        {
+            tileArray->position.set((float)i, (float)j);
+            tileArray->startPosition.set((float)i, (float)j);
+            tileArray->delta = getDelta(Size(i, j));
+            ++tileArray;
+        }
+    }
+}
+    
+        /** 
+    * @brief Initializes the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
+    
+    void ActionTween::startWithTarget(Node *target)
+{
+    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
+    ActionInterval::startWithTarget(target);
+    _delta = _to - _from;
+}
+    
+     @since v0.99.2
+ */
+class CC_DLL ActionTween : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
+     */
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
+    }
+    
+    
+    {}
+    
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+    private:
+    void parseVersion1(const ValueMap& animations);
+    void parseVersion2(const ValueMap& animations);
