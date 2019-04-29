@@ -1,165 +1,144 @@
 
         
-        
-    {}  // namespace api
-    
-    void AutoUpdater::QuitAndInstall() {}
-#endif
-    
-    #include 'base/macros.h'
-#include 'build/build_config.h'
-#include 'native_mate/arguments.h'
-    
-    bool URLRequestAboutJob::GetMimeType(std::string* mime_type) const {
-  *mime_type = 'text/html';
-  return true;
-}
-    
-    
-    {  if (!active_ && !pending_damage_rect_.IsEmpty() && paint)
-    OnPaint(gfx::Rect(viewport_pixel_size_));
-}
-    
-      PROCESS_BASIC_INFORMATION pbi;
-  LONG status =
-      NtQueryInformationProcess(handle, ProcessBasicInformation, &pbi,
-                                sizeof(PROCESS_BASIC_INFORMATION), NULL);
-  if (!NT_SUCCESS(status)) {
-    LOG(ERROR) << 'NtQueryInformationProcess failed';
-    return NULL;
-  }
-    
-    decltype(__pfnDliNotifyHook2) __pfnDliNotifyHook2 = load_exe_hook;
-    
-    // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    namespace content {
-class RenderFrameHost;
-}
-    
-    
-#ifndef CONTENT_NW_SRC_API_EVENT_EVENT_H_
-#define CONTENT_NW_SRC_API_EVENT_EVENT_H_
-    
-    bool MenuDelegate::HasIcon(int command_id) {
-  if (command_id < 0)
-    return false;
+        namespace leveldb {
     }
     
-    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
-      Profile::FromBrowserContext(context_));
-    }
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
     
-          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
-      if (data.type == TYPE_PNG &&
-        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
-        error_ = 'Failed to decode as PNG';
-        return false;
-      } else if (data.type == TYPE_JPEG) {
-        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
-        if (tmp_bitmap == NULL) {
-          error_ = 'Failed to decode as JPEG';
-          return false;
+      // Record metadata for testing initial offset functionality
+  static size_t initial_offset_record_sizes_[];
+  static uint64_t initial_offset_last_record_offsets_[];
+  static int num_initial_offset_records_;
+    
+    
+void printVec(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
+}
+    
+            ListNode* p = dummyHead;
+        ListNode* q = dummyHead;
+        for(int i = 0 ; i < n + 1 ; i ++){
+            assert(q);
+            q = q->next;
         }
-        bitmap = std::move(tmp_bitmap);
-      }
     
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+    
+    {    return 0;
+}
+
+    
+    #include <iostream>
+#include <vector>
+    
+        TreeNode* root = new TreeNode(1);
+    root->right = new TreeNode(2);
+    root->right->left = new TreeNode(3);
+    vector<int> res = Solution().preorderTraversal(root);
+    print_vec(res);
+    
+            stack<Command> stack;
+        stack.push(Command('go', root) );
+        while(!stack.empty()){
+            Command command = stack.top();
+            stack.pop();
+    }
+    
+    
+    {    return 0;
 }
     
-    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
-template <typename Dtype>
-class GaussianFiller : public Filler<Dtype> {
- public:
-  explicit GaussianFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    CHECK(blob->count());
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
-        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
-    int sparse = this->filler_param_.sparse();
-    CHECK_GE(sparse, -1);
-    if (sparse >= 0) {
-      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
-      // These have num == channels == 1; width is number of inputs; height is
-      // number of outputs.  The 'sparse' variable specifies the mean number
-      // of non-zero input weights for a given output.
-      CHECK_GE(blob->num_axes(), 1);
-      const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
-      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
-      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
-      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
-      for (int i = 0; i < blob->count(); ++i) {
-        data[i] *= mask[i];
-      }
+            TreeNode* p = root;
+        while(p != NULL || !stack.empty()){
+            if(p != NULL){
+                stack.push(p);
+                output.push(p);
+                p = p->right;
+            }
+            else{
+                p = stack.top();
+                stack.pop();
+                p = p->left;
+            }
+        }
+    
+        // 5. Start packing
+    // Pack our extra data rectangles first, so it will be on the upper-left corner of our texture (UV will have small values).
+    const int TEX_HEIGHT_MAX = 1024 * 32;
+    const int num_nodes_for_packing_algorithm = atlas->TexWidth - atlas->TexGlyphPadding;
+    ImVector<stbrp_node> pack_nodes;
+    pack_nodes.resize(num_nodes_for_packing_algorithm);
+    stbrp_context pack_context;
+    stbrp_init_target(&pack_context, atlas->TexWidth, TEX_HEIGHT_MAX, pack_nodes.Data, pack_nodes.Size);
+    ImFontAtlasBuildPackCustomRects(atlas, &pack_context);
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+    #define STB__TRY(t,p)  /* avoid retrying a match we already tried */ \
+    if (p ? dist != q-t : 1)                             \
+    if ((m = stb_matchlen(t, q, match_max)) > best)     \
+    if (stb__nc(m,q-(t)))                                \
+    best = m, dist = q - (t)
+    
+    // About Desktop OpenGL function loaders:
+//  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
+//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
+//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
+    
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+        for (int n = 0; n < 20; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+    
+    {
+    {}} // namespace
+    
+      void __set_min_sdk_version(const std::string& val);
+    
+    static inline std::ostream& operator<<(
+    std::ostream& stream, const std::vector<hardwareDriver>& devs) {
+  for (const auto& dev : devs) {
+    stream << ' ' << dev.driver;
   }
     }
     
-      vector<shared_ptr<Batch<Dtype> > > prefetch_;
-  BlockingQueue<Batch<Dtype>*> prefetch_free_;
-  BlockingQueue<Batch<Dtype>*> prefetch_full_;
-  Batch<Dtype>* prefetch_current_;
+    // Sanity check integration test for iokit_devicetree
+// Spec file: specs/darwin/iokit_devicetree.table
     
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
+    namespace osquery {
+namespace table_tests {
     }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    TEST_F(KernelInfo, test_sanity) {
+  QueryData data = execute_query('select * from kernel_info');
+  ValidatatioMap row_map = {{'version', NonEmptyString},
+                            {'arguments', NormalType},
+                            {'path', NormalType},
+                            {'device', NonEmptyString}};
+  validate_rows(data, row_map);
+}
+    
+    // Sanity check integration test for keychain_acls
+// Spec file: specs/darwin/keychain_acls.table
