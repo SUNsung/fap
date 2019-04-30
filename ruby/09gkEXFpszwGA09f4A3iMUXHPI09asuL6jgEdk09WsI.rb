@@ -1,138 +1,117 @@
 
         
-            context '(de)activating users' do
-      it 'does not show deactivation buttons for the current user' do
-        visit admin_users_path
-        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+            it 'calls the specified method when the argument is present' do
+      argument = mock()
+      mock(argument).to_i { 1 }
+      expect(Utils.if_present(argument, :to_i)).to eq(1)
+    end
+  end
+end
+
+    
+      describe 'path request must exist' do
+    it 'should check that validation added if path does not exist' do
+      opts = @opts.tap { |o| o.delete('path') }
+      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
+      @checker.user = users(:bob)
+      expect(@checker.save).to eq false
+      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
+    end
+  end
+    
+        def at_xpath(*args)
+      doc.at_xpath(*args)
+    end
+    
+        def initialize(name = nil, path = nil, type = nil)
+      self.name = name
+      self.path = path
+      self.type = type
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+        def build_pages
+      history = Set.new initial_urls.map(&:downcase)
+      instrument 'running.scraper', urls: initial_urls
+    
+          def initial_urls
+        super + self.class.base_urls[1..-1].deep_dup
       end
     
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+    
+          def actual_path
+        $PROGRAM_NAME
+      end
     end
   end
+end
+
     
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
+          def has_footer
+        @footer = (@page.footer || false) if @footer.nil? && @page
+        !!@footer
+      end
     
-          describe '#import' do
-        it 'uses the existing scenario, updating its data' do
-          expect {
-            scenario_import.import(:skip_agents => true)
-            expect(scenario_import.scenario).to eq(existing_scenario)
-          }.not_to change { users(:bob).scenarios.count }
+          def previous_link
+      end
     
-      describe '#hour_to_schedule_name' do
-    it 'for 0h' do
-      expect(@scheduler.send(:hour_to_schedule_name, 0)).to eq('midnight')
-    end
-    
-      let :agent do
-    Agents::WebsiteAgent.create!(
-      user: users(:bob),
-      name: 'xkcd',
-      options: valid_options,
-      keep_events_for: 2.days
-    )
-  end
-    
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
-    
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
-    end
-  end
-    
-      describe '#receive' do
-    it 'sends a message' do
-      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
-      @checker.receive([@event])
-    end
-    
-        alias log puts
-    
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-    
-      def down
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id
-  end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-    When /^I put in my password in '([^']*)'$/ do |field|
- step %(I fill in '#{field}' with '#{@me.password}')
+    def normal(text)
+  text.gsub!(' ', '')
+  text.gsub!('\n', '')
+  text
 end
     
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
-    else
-      visit(path)
-    end
-  end
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
     
-          sign_in alice, scope: :user
-    end
+    desc 'Open an irb session preloaded with this library'
+task :console do
+  sh 'irb -rubygems -r ./lib/#{name}.rb'
+end
     
-        context 'on my own post' do
-      before do
-        aspect_to_post = alice.aspects.where(:name => 'generic').first
-        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
+      s.test_files = s.files.select { |path| path =~ /^test\/test_.*\.rb/ }
+end
+
+    
+            if obj && obj.errors[method].present?
+          errors = safe_join(obj.errors[method], '<br />'.html_safe)
+          content_tag(:span, errors, class: 'formError')
+        else
+          ''
+        end
       end
     
-    package = FPM::Package::Dir.new
+            context 'receiving shipment can backorder' do
+          it 'adds more to the backorder' do
+            product.master.stock_items.last.update_column(:backorderable, true)
+            product.master.stock_items.last.update_column(:count_on_hand, 0)
+            expect(@shipment2.reload.backordered?).to eq(false)
     
-      TAR_CHUNK_SIZE = 512
-  TAR_TYPEFLAG_OFFSET = 156
-  TAR_NAME_OFFSET_START = 0
-  TAR_NAME_OFFSET_END = 99
-  TAR_LENGTH_OFFSET_START = 124
-  TAR_LENGTH_OFFSET_END = 135
-  TAR_CHECKSUM_OFFSET_START = 148
-  TAR_CHECKSUM_OFFSET_END = 155
-  TAR_MAGIC_START = 257
-  TAR_MAGIC_END = 264
-  TAR_UID_START = 108
-  TAR_UID_END = 115
-  TAR_GID_START = 116
-  TAR_GID_END = 123
-  TAR_UNAME_START = 265
-  TAR_UNAME_END = 296
-  TAR_GNAME_START = 297
-  TAR_GNAME_END = 328
-  TAR_MAJOR_START = 329
-  TAR_MAJOR_END = 336
-  TAR_MINOR_START = 337
-  TAR_MINOR_END = 344
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
     
-      option '--channel', 'CHANNEL_URL',
-    'The pear channel url to use instead of the default.'
+            def order
+          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
+          authorize! :update, @order, order_token
+        end
     
-        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
-    safesystem('pkg_create', *args)
+            def find_order(lock = false)
+          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
+        end
     
-        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
-    libs.each do |file|
-      base = staging_path(File.join(attributes[:prefix]))
-      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
-      File.chmod(0755, File.join(base, file))
-    end
+            def index
+          @products = if params[:ids]
+                        product_scope.where(id: params[:ids].split(',').flatten)
+                      else
+                        product_scope.ransack(params[:q]).result
+                      end
