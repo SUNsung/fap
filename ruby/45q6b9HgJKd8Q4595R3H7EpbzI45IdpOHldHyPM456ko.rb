@@ -1,188 +1,165 @@
 
         
-          it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
+            def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            message: '#{message}'
+          })
+        end').runner.execute(:test)
+    
+          it 'adds html_anchors param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            html_anchors: 'some anchors'
+          )
+        end').runner.execute(:test)
+    
+          it 'handles extension and extensions parameters correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
+      end
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
+    else
+      return str
+    end
   end
+  module_function :shellescape
 end
 
     
-        it 'has a default when options[:name] is nil' do
-      expect(AgentsExporter.new(:name => nil).filename).to eq('exported-agents.json')
+          it 'uses the correct command to import it' do
+        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
+        `ls`
+    
+    # The * turns the array into a parameter list
+# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
+# We need to use that, because otherwise invocations like
+# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
+exec(*exec_arr)
+
+    
+          command :revoke_expired do |c|
+        c.syntax = 'fastlane cert revoke_expired'
+        c.description = 'Revoke expired iOS code signing certificates'
+    
+      # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    yield resource if block_given?
+    
+      protected
+    
+        # Include the chosen devise modules in your model:
+    #
+    #   devise :database_authenticatable, :confirmable, :recoverable
+    #
+    # You can also give any of the devise configuration values in form of a hash,
+    # with specific values for this model. Please check your Devise initializer
+    # for a complete description on those values.
+    #
+    def devise(*modules)
+      options = modules.extract_options!.dup
+    
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
+    
+        def create
+      authorize ReportNote, :create?
+    
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
+  end
+    
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    else
+      ['Unknown mode: #{hub_mode}', 422]
     end
+  end
     
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
+      def body
+    @_body ||= request.body.read
+  end
     
-        def initialize(machine, guests, capabilities)
-      @capabilities = capabilities
-      @guests       = guests
-      @machine      = machine
-    end
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
-    end
-    
-        desc 'Removes the stored VCR fixture'
-    task :clean_vcr do
-      sh 'rm -f spec/fixtures/vcr/tarballs.yml'
-    end
-    
-    abstract_target 'Abstract Target' do
-    use_modular_headers!
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @short_output = argv.flag?('short')
-          super
-        end
-    
-    Gem::Specification.new do |s|
-  s.platform    = Gem::Platform::RUBY
-  s.name        = '<%= file_name %>'
-  s.version     = <%= class_name %>.version
-  s.summary     = 'Add extension summary here'
-  s.description = 'Add (optional) extension description here'
-  s.required_ruby_version = '>= 2.3.3'
-    
-      before { ensure_order_totals }
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
 end
     
-        context 'with params 'include=default_billing_address'' do
-      before { get '/api/v2/storefront/account?include=default_billing_address', headers: headers }
-    
-      describe '#show' do
-    context 'as a guest user' do
-      before { get '/api/v2/storefront/order_status/#{order.number}' }
-    
-          it 'returns taxons by roots' do
-        expect(json_response['data'].size).to eq(1)
-        expect(json_response['data'][0]).to have_type('taxon')
-        expect(json_response['data'][0]).to have_id(taxonomy.root.id.to_s)
-        expect(json_response['data'][0]).to have_relationship(:parent).with_data(nil)
-        expect(json_response['data'][0]).to have_relationships(:parent, :taxonomy, :children, :products, :image)
-      end
+          sign_in alice, scope: :user
     end
     
-    # Requires supporting ruby files with custom matchers and macros, etc,
-# in spec/support/ and its subdirectories.
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
+    # Set some attributes
+package.name = 'my-service'
+package.version = '1.0'
     
-            if requires_authentication? && api_key.blank? && order_token.blank?
-          must_specify_api_key and return
-        elsif order_token.blank? && (requires_authentication? || api_key.present?)
-          invalid_api_key and return
-        else
-          # An anonymous user
-          @current_api_user = Spree.user_class.new
+        # concat both into one.
+    File.open(target_path, 'wb') do |target_writer|
+      open(temp_apath, 'rb') do |file|
+        until(file.eof?())
+          target_writer.write(file.read(4096))
         end
       end
-    
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
-          end
+      open(temp_bpath, 'rb') do |file|
+        until(file.eof?())
+          target_writer.write(file.read(4096))
         end
-    
-    # and write them both.
-begin
-  output_packages.each do |output_package|
-    output = output_package.to_s
-    output_package.output(output)
-    
-      private
-  # Copy a file or directory to a destination
-  #
-  # This is special because it respects the full path of the source.
-  # Aditionally, hardlinks will be used instead of copies.
-  #
-  # Example:
-  #
-  #     clone('/tmp/hello/world', '/tmp/example')
-  #
-  # The above will copy, recursively, /tmp/hello/world into
-  # /tmp/example/hello/world
-  def clone(source, destination)
-    logger.debug('Cloning path', :source => source, :destination => destination)
-    # Edge case check; abort if the temporary directory is the source.
-    # If the temporary dir is the same path as the source, it causes
-    # fpm to recursively (and forever) copy the staging directory by
-    # accident (#542).
-    if File.expand_path(source) == File.expand_path(::Dir.tmpdir)
-      raise FPM::InvalidPackageConfiguration,
-        'A source directory cannot be the root of your temporary ' \
-        'directory (#{::Dir.tmpdir}). fpm uses the temporary directory ' \
-        'to stage files during packaging, so this setting would have ' \
-        'caused fpm to loop creating staging directories and copying ' \
-        'them into your package! Oops! If you are confused, maybe you could ' \
-        'check your TMPDIR, TMP, or TEMP environment variables?'
+      end
     end
-    
-    class FPM::Package::NPM < FPM::Package
-  class << self
-    include FPM::Util
   end
-  # Flags '--foo' will be accessable  as attributes[:npm_foo]
-  option '--bin', 'NPM_EXECUTABLE',
-    'The path to the npm executable you wish to run.', :default => 'npm'
     
-      dont_obsolete_paths = []
-  option '--dont-obsolete', 'DONT_OBSOLETE_PATH',
-    'A file path for which to 'dont-obsolete' in the built PackageInfo. ' \
-    'Can be specified multiple times.' do |path|
-      dont_obsolete_paths << path
-    end
+      end
     
-        # Arch has no notion of vendor, so...
-    #self.vendor =
+          def self.has_issues_with_add_symlink?
+        return !::Gem::Package::TarWriter.public_instance_methods.include?(:add_symlink)
+      end
+    end # module TarWriter
+  end # module Issues
+end # module FPM
     
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
-    
-        # Unpack the tarball to the staging path
-    args = ['-cf', output_path, '-C', staging_path]
-    tar_compression_flag(output_path).tap do |flag|
-      args << flag unless flag.nil?
-    end
-    args << '.'
-    
-      # wrapper around mknod ffi calls
-  def mknod_w(path, mode, dev)
-    rc = -1
-    case %x{uname -s}.chomp
-    when 'Linux'
-      # bits/stat.h #define _MKNOD_VER_LINUX  0
-      rc = xmknod(0, path, mode, FFI::MemoryPointer.new(dev))
-    else
-      rc = mknod(path, mode, dev)
-    end
-    rc
-  end
+        context 'when an article has a single comment thread with multiple commenters' do
+      before do
+        child_of_child_of_child_by_og
+        child_of_child_of_child_by_other
+        child2_of_child_of_child_by_og
+        parent_comment_by_other
+        sign_in original_commenter
+        patch '/comment_mutes/#{parent_comment_by_og.id}', params: { comment: { receive_notifications: 'false' } }
+      end
