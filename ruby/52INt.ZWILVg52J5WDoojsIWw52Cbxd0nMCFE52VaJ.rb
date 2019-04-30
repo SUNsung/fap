@@ -1,64 +1,87 @@
 
         
-            group.add(moderator)
-    group.save
+        # Test if processing content string without any Liquid constructs, via Liquid,
+# is slower than checking whether constructs exist ( using `String#include?` )
+# and return-ing the 'plaintext' content string as is..
+#
+# Ref: https://github.com/jekyll/jekyll/pull/6735
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+    module Jekyll
+  module Deprecator
+    extend self
     
-      def test_font_helper_with_suffix_sharp
-    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
-  end
+    module Jekyll
+  module Drops
+    class UnifiedPayloadDrop < Drop
+      mutable true
     
-    When /^I fill out forgot password form with '([^']*)'$/ do |email|
-  fill_forgot_password_form(email)
-end
+    package = FPM::Package::Dir.new
     
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
+        # Provide any template values as methods on the package.
+    if template_scripts?
+      template_value_list.each do |key, value|
+        (class << output; self; end).send(:define_method, key) { value }
+      end
+    end
+    
+      option '--channel-update', :flag,
+    'call 'pear channel-update' prior to installation'
+    
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
+      end
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
+        end
+      end
+    
+    # Support for self extracting sh files (.sh files)
+#
+# This class only supports output of packages.
+#
+# The sh package is a single sh file with a tar payload concatenated to the end.
+# The script can unpack the tarball to install it and call optional post install scripts.
+class FPM::Package::Sh < FPM::Package
+    
+        process.wait if process.alive?
+    
+          self
+    end # def add_symlink
   end
 end
 
     
-    RSpec::Matchers.define :have_path_in do |expected|
-  match do |actual|
-    await_condition { expected.include? actual.current_path }
+    When /^I reset Bundler environment variable$/ do
+  BUNDLE_ENV_VARS.each do |key|
+    ENV[key] = nil
   end
+end
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+    # The base module that gets included in ActiveRecord::Base. See the
+# documentation for Paperclip::ClassMethods for more useful information.
+module Paperclip
+  extend Helpers
+  extend Logger
+  extend ProcessorHelpers
     
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
     end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
+        def initialize(klass, name, options)
+      @klass = klass
+      @name = name
+      @options = options
     end
