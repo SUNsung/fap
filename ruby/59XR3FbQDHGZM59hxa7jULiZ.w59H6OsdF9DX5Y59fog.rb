@@ -1,82 +1,129 @@
 
         
-            def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
+          #
+  # More advanced [] that does downcase comparison.
+  #
+  def [](key)
+    begin
+      rv = self.fetch(key)
+    rescue IndexError
+      rv = nil
+    end
+    if (rv == nil)
+      begin
+        rv = self.dcase_hash[key.downcase]
+      rescue IndexError
+        rv = nil
+      end
     end
     
-        def finalize_session
-      @threads.map(&:join)
+        data =
+    [   # Maximum access
+      0x00, 0x00,
+      # Reserved
+      0x00, 0x00
+    ].pack('C*') +
+    console_session_id +
+    [
+      0x00, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x01, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x02, 0x00, 0x00, 0x08,
+      # No Encryption
+      0x00, 0x00, 0x00, 0x00
+    ].pack('C*')
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
+    
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+              # Decodes the nonce field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_nonce(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
+          end
+        end
+      end
     end
   end
 end
-
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+          # Returns the else branch of the `case` statement, if any.
+      #
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
+      end
     
-        it 'recognizes an array as the only element of a command' do
-      command = command_from_args(['/usr/local/bin/git', 'git'])
-      expect(command).to eq('/usr/local/bin/git')
+    module RuboCop
+  module AST
+    # Common functionality for nodes that are parameterized:
+    # `send`, `super`, `zsuper`, `def`, `defs`
+    module ParameterizedNode
+      # Checks whether this node's arguments are wrapped in parentheses.
+      #
+      # @return [Boolean] whether this node's arguments are
+      #                   wrapped in parentheses
+      def parenthesized?
+        loc.end && loc.end.is?(')')
+      end
+    
+        def options_config=(options_config)
+      loaded_config = ConfigLoader.load_file(options_config)
+      @options_config = ConfigLoader.merge_with_default(loaded_config,
+                                                        options_config)
     end
     
-    # Here be helper
+            raise InvalidBadge, identifier if parts.size > 2
     
-    shelljoin_testcases = [
-  {
-    'it' => '(#1) on array with entry with space',
-    'it_result' => {
-      'windows' => 'wraps this entry in double quotes',
-      'other'   => 'escapes the space in this entry'
-    },
-    'input' => ['a', 'b c', 'd'],
-    'expect' => {
-      'windows' => 'a 'b c' d',
-      'other'   => 'a b\ c d'
-    }
-  },
-  {
-    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
-    'it_result' => {
-      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
-      'other'   => 'escapes the double quotes and escapes the space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a '''b'' c' d',
-      'other'   => 'a \'b\'\ c d'
-    }
-  },
-  {
-    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
-    'it_result' => {
-      'windows' => 'no changes',
-      'other'   => 'escapes the single quotes and space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a \''b' c\' d',
-      'other'   => 'a \\'b\\'\\ c d'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
-  {
-    'it' => '(#4) on array with entry that is `$$`',
-    'it_result' => {
-      'windows' => 'the result includes the process id',
-      'other'   => 'the result includes the process id'
-    },
-    'input' => ['ps', '-p', $$],
-    'expect' => {
-      'windows' => 'ps -p #{$$}',
-      'other'   => 'ps -p #{$$}'
-    }
-  }
-]
+    $contexts = []
     
-    module Cert
-  class CommandsGenerator
-    include Commander::Methods
+        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
+    
+    module Gollum
+  VERSION = '4.1.4'
