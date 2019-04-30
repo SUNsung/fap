@@ -1,117 +1,94 @@
-# Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    require 'benchmark/ips'
-require 'pathutil'
-    
-                # stream_file_data would free us from keeping livereload.js in memory
-            # but JRuby blocks on that call and never returns
-            send_data(reload_body)
-            close_connection_after_writing
-          else
-            body = 'This port only serves livereload.js over HTTP.\n'
-            headers = [
-              'HTTP/1.1 400 Bad Request',
-              'Content-Type: text/plain',
-              'Content-Length: #{body.bytesize}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-            send_data(body)
-            close_connection_after_writing
-          end
+
+        
+                def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
         end
-        # rubocop:enable Metrics/MethodLength
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+            retval
       end
-    end
+    
+        # Extract each header value pair
+    header.split(/\r\n/mn).each { |str|
+      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
+        if (self[md[1]])
+          self[md[1]] << ', ' + md[2]
+        else
+          self[md[1]] = md[2]
+        end
+      end
+    }
   end
+    
+        # Extract the data from the packet (full or mini)
+    data = audio_packet_data(pkt)
+    
+    IAX_IE_CALLED_NUMBER  = 1
+IAX_IE_CALLING_NUMBER = 2
+IAX_IE_AUTH_METHODS   = 3
+IAX_IE_CALLING_NAME   = 4
+IAX_IE_USERNAME       = 6
+IAX_IE_DESIRED_CODEC  = 9
+IAX_IE_ORIGINAL_DID   = 10
+IAX_IE_ACTUAL_CODECS  = 8
+IAX_IE_PROTO_VERSION  = 11
+IAX_IE_REG_REFRESH    = 19
+IAX_IE_CHALLENGE_DATA = 15
+IAX_IE_CHALLENGE_RESP = 16
+IAX_IE_APPARENT_ADDR  = 18
+IAX_IE_REGREJ_CAUSE   = 22
+IAX_IE_HANGUP_CAUSE   = 42
+    
+                cipher = OpenSSL::Cipher.new('rc4')
+            cipher.decrypt
+            cipher.key = k3
+            decrypted = cipher.update(data) + cipher.final
+    
+              # @!attribute key
+          #   @return [Integer] The type of encryption key
+          attr_accessor :type
+          # @!attribute value
+          #   @return [String] the key itself
+          attr_accessor :value
+    
+                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
+    
+              # Decodes the error_code field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
+          end
+    
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
+          end
+    
+    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
+task :clean do
+  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
 end
-
     
-            expect(new_source)
-          .to eq('#{prefix}#{open}#{a}, # a\n#{b}#{close} # b\n#{suffix}')
-      end
     
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
-      end
-    
-        # Short circuit for a `fpm --version` or `fpm -v` short invocation that 
-    # is the user asking us for the version of fpm.
-    if run_args == [ '-v' ] || run_args == [ '--version' ]
-      puts FPM::VERSION
-      return 0
-    end
-    
-      # write all scripts to .scripts (tar and dir)
-  def write_scripts
-    scripts_path = File.join(staging_path, '.scripts')
-    target_scripts = [:before_install, :after_install, :before_remove, :after_remove]
-    if target_scripts.any? {|name| script?(name)}
-      ::Dir.mkdir(scripts_path)
-      target_scripts.each do |name|
-        next unless script?(name)
-        out = File.join(scripts_path, name.to_s)
-        logger.debug('Writing script', :source => name, :target => out)
-        File.write(out, script(name))
-        File.chmod(0755, out)
-      end
-    end
-  end
-    
-    class FPM::Package::NPM < FPM::Package
-  class << self
-    include FPM::Util
-  end
-  # Flags '--foo' will be accessable  as attributes[:npm_foo]
-  option '--bin', 'NPM_EXECUTABLE',
-    'The path to the npm executable you wish to run.', :default => 'npm'
-    
-        # Add any facets or actuators that are needed.
-    # TODO(jcraig): add manpage actuator to enable install wo/ man pages
-    
-      # Output this package to the given path.
-  def output(output_path)
-    output_check(output_path)
-    
-      # Where we keep metadata and post install scripts and such
-  def fpm_meta_path
-    @fpm_meta_path ||= begin
-                         path = File.join(staging_path, '.fpm')
-                         FileUtils.mkdir_p(path)
-                         path
-                       end
-  end
-end
-
-    
-      def specfile(builddir)
-    '#{builddir}/pkginfo'
-  end
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for zip.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-        stdout_r_str = nil
-    exit_code = execmd(args, :stdin=>false, :stderr=>false) do |stdout|
-      stdout_r_str = stdout.read
-    end
-    success = (exit_code == 0)
