@@ -1,92 +1,159 @@
 
         
-        
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+            # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        return g.db
+        return (x_train, y_train), (x_test, y_test)
+
     
-    import pytest
-from flaskr import create_app
-from flaskr.db import get_db, init_db
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    inputs = Input(shape=x.shape)
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x[np.newaxis])[0].shape == x.shape
     
-        seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
+        ```python
+         ..
+         # Not needed to change the device scope for model definition:
+         model = Xception(weights=None, ..)
     
-    
-def test_when_cant_configure_automatically(shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=False)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
-    
-        assert proc.expect([TIMEOUT, u'test'])
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
     
-def test_match():
-    command = Command('brew install sshfs', output)
-    assert match(command)
+def test_invalid_convert_kernel():
+    with pytest.raises(ValueError):
+        conv_utils.convert_kernel(np.zeros((10, 20)))
     
-    # 词向量和 n-gram 向量是分开存储的
-print(len(model.wv.vectors))  # 7
-print(len(model.wv.vectors_ngrams))  # 57
-# gensim 好像没有提供直接获取所有 ngrams tokens 的方法
+        def test_post(self):
+        params = urllib.parse.urlencode(
+            {'spam' : 1, 'eggs' : 'python', 'bacon' : 123456})
+        headers = {'Content-type' : 'application/x-www-form-urlencoded'}
+        res = self.request('/cgi-bin/file2.py', 'POST', params, headers)
     
-    define('num', default=100, help='number of iterations')
-define('dump', default=False, help='print template generated code and exit')
+        ################################################################
+    ### Tests for TestLoader.loadTestsFromName()
+    
+    try:
+    WindowsError
+except NameError:
+    pass
+else:
+    PYTHON2_EXCEPTIONS += ('WindowsError',)
+    
+    # Send the message via local SMTP server.
+with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
+
+    
+    ##
     
     
-def main():
-    parse_command_line()
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
+    test()
+
     
-            def find_handler(self, request, **kwargs):
-            handler = GetResource if request.method == 'GET' else PostResource
-            return self.app.get_handler_delegate(request, handler, path_args=[request.path])
+        Args:
+        x(tf.Tensor):
+        kernel_size(int or list of int):
+        out_channels(int):
+        act_fn(function):
+        strides(int or list of int):
+        padding(str):
+        name(str):
+        reuse(bool):
     
-    ``{% block *name* %}...{% end %}``
-    Indicates a named, replaceable block for use with ``{% extends %}``.
-    Blocks in the parent template will be replaced with the contents of
-    the same-named block in a child template.::
+    from ...utils import get_shape, get_w
     
     
-class TwitterClientLoginHandler(TwitterClientHandler):
-    @gen.coroutine
-    def get(self):
-        if self.get_argument('oauth_token', None):
-            user = yield self.get_authenticated_user()
-            if user is None:
-                raise Exception('user is None')
-            self.finish(user)
-            return
-        yield self.authorize_redirect()
+def repeat(x, n):
+    '''
+    Examples:
+        x.shape == [batch_size, n_input]
+        x = repeat(x, n_step)
+        x.shape == [batch_size, n_step, n_input]
+    
+    Win1251BulgarianModel = {
+  'char_to_order_map': win1251BulgarianCharToOrderMap,
+  'precedence_matrix': BulgarianLangModel,
+  'typical_positive_ratio': 0.969392,
+  'keep_english_letter': False,
+  'charset_name': 'windows-1251',
+  'language': 'Bulgarian',
+}
+
+    
+        def get_confidence(self):
+        return self.distribution_analyzer.get_confidence()
+
+    
+    
+class SingleByteCharSetProber(CharSetProber):
+    SAMPLE_SIZE = 64
+    SB_ENOUGH_REL_THRESHOLD = 1024  #  0.25 * SAMPLE_SIZE^2
+    POSITIVE_SHORTCUT_THRESHOLD = 0.95
+    NEGATIVE_SHORTCUT_THRESHOLD = 0.05
+    
+            # If we've seen escape sequences, use the EscCharSetProber, which
+        # uses a simple state machine to check for known escape sequences in
+        # HZ and ISO-2022 encodings, since those are the only encodings that
+        # use such sequences.
+        if self._input_state == InputState.ESC_ASCII:
+            if not self._esc_charset_prober:
+                self._esc_charset_prober = EscCharSetProber(self.lang_filter)
+            if self._esc_charset_prober.feed(byte_str) == ProbingState.FOUND_IT:
+                self.result = {'encoding':
+                               self._esc_charset_prober.charset_name,
+                               'confidence':
+                               self._esc_charset_prober.get_confidence(),
+                               'language':
+                               self._esc_charset_prober.language}
+                self.done = True
+        # If we've seen high bytes (i.e., those with values greater than 127),
+        # we need to do more complicated checks using all our multi-byte and
+        # single-byte probers that are left.  The single-byte probers
+        # use character bigram distributions to determine the encoding, whereas
+        # the multi-byte probers use a combination of character unigram and
+        # bigram distributions.
+        elif self._input_state == InputState.HIGH_BYTE:
+            if not self._charset_probers:
+                self._charset_probers = [MBCSGroupProber(self.lang_filter)]
+                # If we're checking non-CJK encodings, use single-byte prober
+                if self.lang_filter & LanguageFilter.NON_CJK:
+                    self._charset_probers.append(SBCSGroupProber())
+                self._charset_probers.append(Latin1Prober())
+            for prober in self._charset_probers:
+                if prober.feed(byte_str) == ProbingState.FOUND_IT:
+                    self.result = {'encoding': prober.charset_name,
+                                   'confidence': prober.get_confidence(),
+                                   'language': prober.language}
+                    self.done = True
+                    break
+            if self.WIN_BYTE_DETECTOR.search(byte_str):
+                self._has_win_bytes = True
+    
+        def __unicode__(self):
+        if self.request_id is not None:
+            msg = self._message or '<empty message>'
+            return u'Request {0}: {1}'.format(self.request_id, msg)
+        else:
+            return self._message
+    
+    class BrokenRecordableEnv(object):
+    metadata = {'render.modes': [None, 'rgb_array']}
+    
+    if not os.path.isfile(ROLLOUT_FILE):
+    logger.info('No rollout file found. Writing empty json file to {}'.format(ROLLOUT_FILE))
+    with open(ROLLOUT_FILE, 'w') as outfile:
+        json.dump({}, outfile, indent=2)
