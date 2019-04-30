@@ -1,122 +1,95 @@
 
         
-            else:
-        sys.stdout.write('.')
-    sys.stdout.flush()
-    
-        infile, outfile = args
-    
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
-    
-        outfile, = args
-    
-        def test_cmdline_umlauts(self):
-        p = subprocess.Popen(
-            [sys.executable, 'youtube_dl/__main__.py', encodeArgument('ä'), '--version'],
-            cwd=rootDir, stdout=_DEV_NULL, stderr=subprocess.PIPE)
-        _, stderr = p.communicate()
-        self.assertFalse(stderr)
-    
-            If `sign` is incorrect, /validate call throws an HTTP 556 error
-        '''
-        logger = WarningLogger()
-        ie = IqiyiIEWithCredentials(FakeYDL({'logger': logger}))
-        ie._login()
-        self.assertTrue('unable to log in:' in logger.messages[0])
-    
-        elif args.form and not args.files:
-        # If sending files, `requests` will set
-        # the `Content-Type` for us.
-        default_headers['Content-Type'] = FORM_CONTENT_TYPE
-    return default_headers
-    
-        http://docs.python-requests.org/en/latest/user/advanced/#transport-adapters
-    
-        def register(self, *plugins):
-        for plugin in plugins:
-            self._plugins.append(plugin)
-    
-        '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
-    
-    
-@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
-def test_digest_auth(httpbin_both, argument_name):
-    r = http(argument_name + '=digest', '--auth=user:password',
-             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-        def test_POST_with_data_auto_JSON_headers(self, httpbin):
-        r = http('POST', httpbin.url + '/post', 'a=b')
-        assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        assert r.json['headers']['Content-Type'] == 'application/json'
-    
-        def load(self):
-        super(Config, self).load()
-        self._migrate_implicit_content_type()
-    
-        if last_snapshot_min_age > 0:
+            def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
         try:
-            current_snapshots = ec2.get_all_snapshots(filters={'volume_id': volume_id})
-        except boto.exception.BotoServerError as e:
-            module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
+            self.model.objects.get(session_key=session_key).delete()
+        except self.model.DoesNotExist:
+            pass
     
-        try:
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-        iam = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_kwargs)
-    except botocore.exceptions.ClientError as e:
-        module.fail_json(msg='Boto3 Client Error - ' + str(e.msg))
+        results_dir = os.path.join(output_dir, 'results')
+    if not os.path.exists(results_dir):
+        os.mkdir(results_dir)
     
-            try:
-            lambda_facts.update(function_list=client.list_functions(**params)['Functions'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(function_list=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get function list')
+    # Required dataset entry keys
+_IM_DIR = 'image_directory'
+_ANN_FN = 'annotation_file'
     
-        module : AnsibleModule object
-    oneandone_conn: authenticated oneandone object
-    '''
-    try:
-        mp_id = module.params.get('name')
-        monitoring_policy_id = get_monitoring_policy(oneandone_conn, mp_id)
-        if module.check_mode:
-            if monitoring_policy_id is None:
-                _check_mode(module, False)
-            _check_mode(module, True)
-        monitoring_policy = oneandone_conn.delete_monitoring_policy(monitoring_policy_id)
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six.moves.urllib.parse import urlencode
-from ansible.module_utils._text import to_native
-from ansible.module_utils.urls import fetch_url
+def _write_voc_results_files(json_dataset, all_boxes, salt):
+    filenames = []
+    image_set_path = voc_info(json_dataset)['image_set_path']
+    assert os.path.exists(image_set_path), \
+        'Image set path does not exist: {}'.format(image_set_path)
+    with open(image_set_path, 'r') as f:
+        image_index = [x.strip() for x in f.readlines()]
+    # Sanity check that order of images in json dataset matches order in the
+    # image set
+    roidb = json_dataset.get_roidb()
+    for i, entry in enumerate(roidb):
+        index = os.path.splitext(os.path.split(entry['image'])[1])[0]
+        assert index == image_index[i]
+    for cls_ind, cls in enumerate(json_dataset.classes):
+        if cls == '__background__':
+            continue
+        logger.info('Writing VOC results for: {}'.format(cls))
+        filename = _get_voc_results_file_template(json_dataset,
+                                                  salt).format(cls)
+        filenames.append(filename)
+        assert len(all_boxes[cls_ind]) == len(image_index)
+        with open(filename, 'wt') as f:
+            for im_ind, index in enumerate(image_index):
+                dets = all_boxes[cls_ind][im_ind]
+                if type(dets) == list:
+                    assert len(dets) == 0, \
+                        'dets should be numpy.ndarray or empty list'
+                    continue
+                # the VOCdevkit expects 1-based indices
+                for k in range(dets.shape[0]):
+                    f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
+                            format(index, dets[k, -1],
+                                   dets[k, 0] + 1, dets[k, 1] + 1,
+                                   dets[k, 2] + 1, dets[k, 3] + 1))
+    return filenames
     
-        if module.check_mode:
-        device = dict(
-            model_handle=None,
-            address=device_ip,
-            landscape='0x%x' % int(module.params.get('landscape'), 16))
-        module.exit_json(changed=True, device=device)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
     
-        if temperature_unit != ha_unit:
-        temperature = convert_temperature(
-            temperature, temperature_unit, ha_unit)
+    
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+    from detectron.datasets import json_dataset
+from detectron.datasets import roidb as roidb_utils
+from detectron.utils import blob as blob_utils
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+    
+        if (sim.model.eq_type is None or
+        sim.model.eq_obj1id is None or
+        sim.model.eq_obj2id is None):
+        return
+    for eq_type, obj1_id, obj2_id in zip(sim.model.eq_type,
+                                         sim.model.eq_obj1id,
+                                         sim.model.eq_obj2id):
+        if eq_type != mujoco_py.const.EQ_WELD:
+            continue
+    
+    def key_press(key, mod):
+    global human_agent_action, human_wants_restart, human_sets_pause
+    if key==0xff0d: human_wants_restart = True
+    if key==32: human_sets_pause = not human_sets_pause
+    a = int( key - ord('0') )
+    if a <= 0 or a >= ACTIONS: return
+    human_agent_action = a
+    
+                # WHEEL_MOMENT_OF_INERTIA*np.square(w.omega)/2 = E -- energy
+            # WHEEL_MOMENT_OF_INERTIA*w.omega * domega/dt = dE/dt = W -- power
+            # domega = dt*W/WHEEL_MOMENT_OF_INERTIA/w.omega
+            w.omega += dt*ENGINE_POWER*w.gas/WHEEL_MOMENT_OF_INERTIA/(abs(w.omega)+5.0)  # small coef not to divide by zero
+            self.fuel_spent += dt*ENGINE_POWER*w.gas
