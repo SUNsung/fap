@@ -1,130 +1,112 @@
 
         
-          def test_symlink_exists(path)
-    exists?('L', path)
-  end
+                  def initialize(template_object, object_name, method_name, object, tag_value)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @tag_value = tag_value
+          end
     
-            private
+        def at_css(*args)
+      doc.at_css(*args)
+    end
     
-          def trace_set(key)
-        return unless fetch(:print_config_variables, false)
-        puts 'Config variable set: #{key.inspect} => #{values[key].inspect}'
-      end
+        def push(*names)
+      @filters.push *filter_const(names)
+    end
+    
+        def to_json
+      JSON.generate(as_json)
     end
   end
 end
 
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
+        def effective_url
+      @effective_url ||= URL.parse super
     end
     
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        def load_capybara_selenium
+      require 'capybara/dsl'
+      require 'selenium/webdriver'
+      Capybara.register_driver :chrome do |app|
+        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
+        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
       end
-    
-        flags = []
-    args = []
-    while rc_args.size > 0 do
-      arg = rc_args.shift
-      opt = self.class.find_option(arg)
-      if opt and not opt.flag?
-        flags.push(arg)
-        flags.push(rc_args.shift)
-      elsif opt or arg[0] == '-'
-        flags.push(arg)
-      else
-        args.push(arg)
-      end
+      Capybara.javascript_driver = :chrome
+      Capybara.current_driver = :chrome
+      Capybara.run_server = false
+      Capybara
     end
     
-        platforms.each do |platform|
-      logger.info('Generating service manifest.', :platform => platform.class.name)
-      platform.program = command.first
-      platform.name = attributes[:pleaserun_name]
-      platform.args = command[1..-1]
-      platform.description = if attributes[:description_given?]
-        attributes[:description]
-      else
-        platform.name
-      end
-      pleaserun_attributes.each do |attribute_name|
-        attribute = 'pleaserun_#{attribute_name}'.to_sym
-        if attributes.has_key?(attribute) and not attributes[attribute].nil?
-          platform.send('#{attribute_name}=', attributes[attribute])
-        end
-      end
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
     
-      # This method is used by the puppet manifest template
-  def puppetsort(hash)
-    # TODO(sissel): Implement sorting that follows the puppet style guide
-    # Such as, 'ensure' goes first, etc.
-    return hash.to_a
-  end # def puppetsort
-    
-        # Make one file. The installscript can unpack itself.
-    `cat #{install_script} #{payload} > #{output_path}`
-    FileUtils.chmod('+x', output_path)
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
   end
     
-        # Write the scripts, too.
-    write_scripts
+    Then(/^the tasks folder is created$/) do
+  path = TestApp.test_app_path.join('lib/capistrano/tasks')
+  expect(Dir.exist?(path)).to be true
+end
     
-      # Output a zipfile.
-  def output(output_path)
-    output_check(output_path)
-    realpath = Pathname.new(output_path).realdirpath.to_s
-    ::Dir.chdir(staging_path) do
-      safesystem('zip', '-9r', realpath, '.')
-    end
-  end # def output
-end # class FPM::Package::Tar
+    World(VagrantHelpers)
 
     
-        (@source.empty? || @target.empty? || options.name.empty?) &&
-      abort('Must specify package name, source and output')
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
+        end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
+      end
     
-        return process.exit_code
-  end # def execmd
+          def roles_for(names)
+        options = extract_options(names)
+        s = Filter.new(:role, names).filter(servers_by_key.values)
+        s.select { |server| server.select?(options) }
+      end
+    
+          class ValidatedQuestion < Question
+        def initialize(validator)
+          @validator = validator
+        end
+    
+    set_if_empty :default_env, {}
+set_if_empty :keep_releases, 5
+    
+          def title
+        'Create a new page'
+      end
+    
+          def remove_page_extentions(page_path)
+        Gollum::Markup.formats.values.each do |format|
+          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
+        end
+        return page_path
+      end
+    
+          attr_reader :name, :path
+    
+    # Commit file to wiki, overwriting previous versions of that file
+def commit_test_file(wiki, dir, filename, ext, content)
+  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
+  committer.add_to_index(dir, filename, ext, content, true)
+    committer.after_commit do |committer, sha|
+      wiki.clear_cache
+      committer.update_working_dir(dir, filename, ext)
+    end
+  committer.commit
+end
+
+    
+    #############################################################################
+#
+# Custom tasks (add your own tasks here)
+#
+#############################################################################
