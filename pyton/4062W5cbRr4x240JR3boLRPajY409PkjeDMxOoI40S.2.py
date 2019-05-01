@@ -1,135 +1,141 @@
 
         
-        def main():
-    print('Making key files...')
-    makeKeyFiles('rsa', 1024)
-    print('Key files generation successful.')
+        
+def build_completion(opt_parser):
+    commands = []
+    
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    try:
+    input = raw_input
+except NameError:
+    pass
+    
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+from youtube_dl.version import __version__
+version = __version__
+# The full version, including alpha/beta/rc tags.
+release = version
+    
+    from __future__ import unicode_literals
+    
+            jsi = JSInterpreter('function f(){return 19 & 21;}')
+        self.assertEqual(jsi.call_function('f'), 17)
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-class EditDistance:
+def test_index(client, auth):
+    response = client.get('/')
+    assert b'Log In' in response.data
+    assert b'Register' in response.data
+    
+        This function's response will be pretty printed if the
+    ``JSONIFY_PRETTYPRINT_REGULAR`` config parameter is set to True or the
+    Flask app is running in debug mode. Compressed (not pretty) formatting
+    currently means no indents and no spaces after separators.
+    
+    from __future__ import absolute_import
+    
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
+    
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
+    
+        def long_desc(self):
+        return 'Run the spider defined in the given file'
+    
+    from scrapy import twisted_version
+    
+        def download_request(self, request, spider):
+        p = urlparse_cached(request)
+        scheme = 'https' if request.meta.get('is_secure') else 'http'
+        bucket = p.hostname
+        path = p.path + '?' + p.query if p.query else p.path
+        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
+        if self.anon:
+            request = request.replace(url=url)
+        elif self._signer is not None:
+            import botocore.awsrequest
+            awsrequest = botocore.awsrequest.AWSRequest(
+                method=request.method,
+                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
+                headers=request.headers.to_unicode_dict(),
+                data=request.body)
+            self._signer.add_auth(awsrequest)
+            request = request.replace(
+                url=url, headers=awsrequest.headers.items())
+        else:
+            signed_headers = self.conn.make_request(
+                    method=request.method,
+                    bucket=bucket,
+                    key=unquote(p.path),
+                    query_args=unquote(p.query),
+                    headers=request.headers,
+                    data=request.body)
+            request = request.replace(url=url, headers=signed_headers)
+        return self._download_http(request, spider)
+
+    
+    logger = logging.getLogger(__name__)
+    
+                ret[i, :] = i_label, i_score
+    
+    from ..activations import relu
+from ..utils import get_wb, get_shape
+    
+        Returns:
+    
+    
+def permute(x, perm):
     '''
-    Use :
-    solver              = EditDistance()
-    editDistanceResult  = solver.solve(firstString, secondString)
-    '''
+    Examples:
+        x.shape == [128, 32, 1]
+        x = permute(x, [0, 2, 1])
+        x.shape == [128, 1, 32]
     
-    #Some examples
-    
-        return diff
-
-    
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
-
-    
-    site = Bigthink()
-download = site.download_by_url
-
-    
-    from ..common import *
-    
-                    moz_ec_name = search_dict(sym_to_name, 'mozEcName')
-                push = search_dict(sym_to_name, 'push')
-                patt = '{}\.{}\('(.+?)'\)'.format(moz_ec_name, push)
-                ec_list = re.findall(patt, code)
-                [magic_list.append(sym_to_name[ec]) for ec in ec_list]
-        return magic_list
-    
-        url = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
-    ]))
-    
-        def update_url(self, received):
-        args = self.common_args.copy()
-        play_type = 'seek' if received else 'play'
-        received = received if received else -1
-        args['ls'] = play_type
-        args['start'] = received + 1
-        args['lt'] = self.get_date_str()
-        if self.enc_mode:
-            ssl_ts, sign = self.get_sign(self.media_url)
-            extra_args = dict(h=sign, r=ssl_ts, p=self.__class__.ENCRYPT_MOD_VER)
-            args.update(extra_args)
-        return '{}?{}'.format(self.media_url, parse.urlencode(args))
-    
-    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-# old pattern /uuid.shtml
-# now it could be #uuid
-    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
-    if id:
-        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
-    
-    site = Infoq()
-download = site.download_by_url
-download_playlist = site.download_by_url
-
-    
-            self._built = False
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def highway_conv2d(x, kernel_size,
-                   act_fn=relu,
-                   strides=1,
-                   padding='SAME',
-                   carry_bias=-1.0,
-                   name=None):
-    '''用于 conv2d 的 highway
-    Input shape:  [batch_size, in_h, in_w, in_channels]
-    Output shape: [batch_size, in_h, in_w, in_channels]
-    
-        with tf.variable_scope(name or 'attention_flow', reuse=reuse):
-        h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])  # [N, T, J, d]
-        u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])  # [N, T, J, d]
-        hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
-        h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
-        W_s = get_w([3 * d, 1])  # [3d, 1]
-    
-    word_unk = 'aam'
-ngrams = compute_ngrams(word_unk, min_ngrams, max_ngrams)  # min_ngrams, max_ngrams = 2, 4
-word_vec = np.zeros(model.vector_size, dtype=np.float32)
-ngrams_found = 0
-for ngram in ngrams:
-    ngram_hash = ft_hash(ngram) % model.bucket
-    if ngram_hash in model.wv.hash2index:
-        word_vec += model.wv.vectors_ngrams[model.wv.hash2index[ngram_hash]]
-        ngrams_found += 1
+def _CreateInitialGroupMap():
+  def AddToGroupMap( name, parent ):
+    new_group = SyntaxGroup( name )
+    group_name_to_group[ name ] = new_group
+    parent.children.append( new_group )
     
     
-@gen.engine
-def run_tests():
-    url = options.url + '/getCaseCount'
-    control_ws = yield websocket_connect(url, None)
-    num_tests = int((yield control_ws.read_message()))
-    logging.info('running %d cases', num_tests)
-    msg = yield control_ws.read_message()
-    assert msg is None
-    
-        def _curl_debug(self, debug_type: int, debug_msg: str) -> None:
-        debug_types = ('I', '<', '>', '<', '>')
-        if debug_type == 0:
-            debug_msg = native_str(debug_msg)
-            curl_log.debug('%s', debug_msg.strip())
-        elif debug_type in (1, 2):
-            debug_msg = native_str(debug_msg)
-            for line in debug_msg.splitlines():
-                curl_log.debug('%s %s', debug_types[debug_type], line)
-        elif debug_type == 4:
-            curl_log.debug('%s %r', debug_types[debug_type], debug_msg)
-    
-    ``{% whitespace *mode* %}``
-    Sets the whitespace mode for the remainder of the current file
-    (or until the next ``{% whitespace %}`` directive). See
-    `filter_whitespace` for available options. New in Tornado 4.3.
-'''
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_MultipleMessages_test( post_vim_message ):
+  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' },
+                                      { 'message': 'this is another one' } ] ,
+                                    None ),
+               equal_to( True ) )
