@@ -1,68 +1,74 @@
 
         
-        def global_require
-  JSON.pretty_generate(DATA)
+        module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class CollectionRadioButtons < Base # :nodoc:
+        include CollectionHelpers
+    
+          test 'when layout is overwritten by false in render, render no layout' do
+        controller = WithString.new
+        controller.process(:overwrite_false)
+        assert_equal 'Hello string!', controller.response_body
+      end
+    
+          def link_to_edit(resource, options = {})
+        url = options[:url] || edit_object_url(resource)
+        options[:data] = { action: 'edit' }
+        options[:class] = 'btn btn-primary btn-sm'
+        link_to_with_icon('edit', Spree.t(:edit), url, options)
+      end
+    
+          before do
+        order1.promotions << promotion
+        order1.save
+        visit spree.admin_orders_path
+      end
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
 end
     
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
+          else
+            invalid_resource!(@order)
+          end
+        end
+    
+              if @product.errors.empty?
+            respond_with(@product.reload, status: 200, default_template: :show)
+          else
+            invalid_resource!(@product)
+          end
+        end
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+    module OctopressFilters
+  def self.pre_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      input = BacktickCodeBlock::render_code_block(page.content)
+      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
+        TemplateWrapper::safe_wrap($1)
       end
     end
   end
-    
-            def stop
-          # There is only one EventMachine instance per Ruby process so stopping
-          # it here will stop the reactor thread we have running.
-          EM.stop if EM.reactor_running?
-          Jekyll.logger.debug 'LiveReload Server:', 'halted'
-        end
-    
-      gem.licenses      = ['MIT']
-    
-    Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
-end
-    
-      class Configuration
-    def self.env
-      @env ||= new
+  def self.post_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      page.output = TemplateWrapper::unwrap(page.output)
     end
-    
-          def gets
-        return unless $stdin.tty?
-    
-    module Capistrano
-  class Configuration
-    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
-    # with `fetch`. Does internal bookkeeping to help identify user mistakes
-    # like spelling errors or unused variables that may lead to unexpected
-    # behavior.
-    class Variables
-      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
-      IGNORED_LOCATIONS = [
-        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
-        '#{CAPISTRANO_LOCATION}/configuration.rb:',
-        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
-        '/dsl.rb:',
-        '/forwardable.rb:'
-      ].freeze
-      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
-    
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
-      end
-    end
+  end
