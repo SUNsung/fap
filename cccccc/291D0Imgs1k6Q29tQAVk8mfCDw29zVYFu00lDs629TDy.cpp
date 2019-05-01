@@ -1,144 +1,276 @@
 
         
-        namespace leveldb {
-    }
-    
-    #include <stdio.h>
-#include 'leveldb/dumpfile.h'
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
-    
-      // Record metadata for testing initial offset functionality
-  static size_t initial_offset_record_sizes_[];
-  static uint64_t initial_offset_last_record_offsets_[];
-  static int num_initial_offset_records_;
+        class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
     
     
-void printVec(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
-}
-    
-            ListNode* p = dummyHead;
-        ListNode* q = dummyHead;
-        for(int i = 0 ; i < n + 1 ; i ++){
-            assert(q);
-            q = q->next;
-        }
-    
-    
-    {    return 0;
-}
+    {}  // namespace grpc
 
     
-    #include <iostream>
-#include <vector>
+    Status ProtoServerReflection::ListService(ServerContext* context,
+                                          ListServiceResponse* response) {
+  if (services_ == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Services not found.');
+  }
+  for (auto it = services_->begin(); it != services_->end(); ++it) {
+    ServiceResponse* service_response = response->add_service();
+    service_response->set_name(*it);
+  }
+  return Status::OK;
+}
     
-        TreeNode* root = new TreeNode(1);
-    root->right = new TreeNode(2);
-    root->right->left = new TreeNode(3);
-    vector<int> res = Solution().preorderTraversal(root);
-    print_vec(res);
+      Status GetFileContainingSymbol(
+      ServerContext* context, const grpc::string& symbol,
+      reflection::v1alpha::ServerReflectionResponse* response);
     
-            stack<Command> stack;
-        stack.push(Command('go', root) );
-        while(!stack.empty()){
-            Command command = stack.top();
-            stack.pop();
-    }
+    
+    {}  // namespace
+    
+    ThreadPoolInterface* CreateDefaultThreadPool();
+    
+    #include <grpc/support/time.h>
+#include <grpcpp/support/config.h>
+#include <grpcpp/support/time.h>
     
     
     {    return 0;
 }
     
-            TreeNode* p = root;
-        while(p != NULL || !stack.empty()){
-            if(p != NULL){
-                stack.push(p);
-                output.push(p);
-                p = p->right;
-            }
-            else{
-                p = stack.top();
-                stack.pop();
-                p = p->left;
-            }
+    int main() {
+    }
+    
+    /// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+    
+    
+    {
+    {        return res;
+    }
+};
+    
+    
+    {
+    {        return res;
+    }
+};
+    
+    using namespace std;
+    
+    public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
+    
+    /// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+        if (fInputUniStrMaybeMutable) {
+        if (compat_SyncMutableUTextContents(fInputText)) {
+        fInputLength = utext_nativeLength(fInputText);
+        reset();
         }
-    
-        // 5. Start packing
-    // Pack our extra data rectangles first, so it will be on the upper-left corner of our texture (UV will have small values).
-    const int TEX_HEIGHT_MAX = 1024 * 32;
-    const int num_nodes_for_packing_algorithm = atlas->TexWidth - atlas->TexGlyphPadding;
-    ImVector<stbrp_node> pack_nodes;
-    pack_nodes.resize(num_nodes_for_packing_algorithm);
-    stbrp_context pack_context;
-    stbrp_init_target(&pack_context, atlas->TexWidth, TEX_HEIGHT_MAX, pack_nodes.Data, pack_nodes.Size);
-    ImFontAtlasBuildPackCustomRects(atlas, &pack_context);
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-    #define STB__TRY(t,p)  /* avoid retrying a match we already tried */ \
-    if (p ? dist != q-t : 1)                             \
-    if ((m = stb_matchlen(t, q, match_max)) > best)     \
-    if (stb__nc(m,q-(t)))                                \
-    best = m, dist = q - (t)
-    
-    // About Desktop OpenGL function loaders:
-//  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
-//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
-//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
     
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        const Locale &locale,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
+}
     
-        for (int n = 0; n < 20; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+    U_NAMESPACE_END
+    
+    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
     }
+}
+    
+     public:
+    
+      uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
     
     
-    {
-    {}} // namespace
-    
-      void __set_min_sdk_version(const std::string& val);
-    
-    static inline std::ostream& operator<<(
-    std::ostream& stream, const std::vector<hardwareDriver>& devs) {
-  for (const auto& dev : devs) {
-    stream << ' ' << dev.driver;
+    {    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin('deregisterExtension', ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
   }
+    
+      xfer += oprot->writeFieldBegin('response', ::apache::thrift::protocol::T_LIST, 2);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_MAP, static_cast<uint32_t>(this->response.size()));
+    std::vector<std::map<std::string, std::string> > ::const_iterator _iter18;
+    for (_iter18 = this->response.begin(); _iter18 != this->response.end(); ++_iter18)
+    {
+      {
+        xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*_iter18).size()));
+        std::map<std::string, std::string> ::const_iterator _iter19;
+        for (_iter19 = (*_iter18).begin(); _iter19 != (*_iter18).end(); ++_iter19)
+        {
+          xfer += oprot->writeString(_iter19->first);
+          xfer += oprot->writeString(_iter19->second);
+        }
+        xfer += oprot->writeMapEnd();
+      }
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+    
+      for (const auto& iter : line_exports) {
+    Row r;
+    r['share'] = iter;
+    r['readonly'] = (readonly) ? '1' : '0';
     }
     
-    // Sanity check integration test for iokit_devicetree
-// Spec file: specs/darwin/iokit_devicetree.table
+      // Get the hash value for the kernel's .text memory segment
+  auto f2 = osquery::readFile(kKernelTextHashPath, content);
+  if (f2.ok()) {
+    boost::trim(content);
+    text_segment_hash = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
+    return results;
+  }
+    
+    
+    {
+    {} // namespace perf_event_open
+} // namespace osquery
+
+    
+      // Author: @guliashvili
+  // Creation Time: 5/09/2018
+  bool isPosixProfilingEnabled();
     
     namespace osquery {
 namespace table_tests {
     }
     }
     
-    TEST_F(KernelInfo, test_sanity) {
-  QueryData data = execute_query('select * from kernel_info');
-  ValidatatioMap row_map = {{'version', NonEmptyString},
-                            {'arguments', NormalType},
-                            {'path', NormalType},
-                            {'device', NonEmptyString}};
-  validate_rows(data, row_map);
+    // Sanity check integration test for kernel_modules
+// Spec file: specs/linux/kernel_modules.table
+    
+    void Speed::setInnerAction(ActionInterval *action)
+{
+    if (_innerAction != action)
+    {
+        CC_SAFE_RELEASE(_innerAction);
+        _innerAction = action;
+        CC_SAFE_RETAIN(_innerAction);
+    }
 }
     
-    // Sanity check integration test for keychain_acls
-// Spec file: specs/darwin/keychain_acls.table
+        /** Creates an action with a Cardinal Spline array of points and tension.
+     * @param duration In seconds.
+     * @param points An PointArray.
+     * @param tension Goodness of fit.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * In js: var create(var t,var table)
+     * In lua: local create(local t, local table)
+     * @endcode
+     */
+    static CardinalSplineTo* create(float duration, PointArray* points, float tension);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~CardinalSplineTo();
+    /**
+     * @js ctor
+     * @lua NA
+     */
+    CardinalSplineTo();
+    
+    EaseBezierAction* EaseBezierAction::create(cocos2d::ActionInterval* action)
+{
+    EaseBezierAction *ret = new (std::nothrow) EaseBezierAction();
+    if (ret && ret->initWithAction(action))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    }
+    
+    /**
+@brief Liquid action.
+@details This action is used for take effect on the target node as liquid.
+        You can create the action by these parameters:
+        duration, grid size, waves count, amplitude of the liquid effect.
+*/
+class CC_DLL Liquid : public Grid3DAction
+{
+public:
+    /**
+    @brief Create the action with amplitude, grid size, waves count and duration.
+    @param duration Specify the duration of the Liquid action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param waves Specify the waves count of the Liquid action.
+    @param amplitude Specify the amplitude of the Liquid action.
+    @return If the creation success, return a pointer of Liquid action; otherwise, return nil.
+    */
+    static Liquid* create(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    }
+    
+        /** Removes an action given its tag and the target.
+     *
+     * @param tag       The action's tag.
+     * @param target    A certain target.
+     */
+    virtual void removeActionByTag(int tag, Node *target);
+    
+    /** Removes all actions given its tag and the target.
+     *
+     * @param tag       The actions' tag.
+     * @param target    A certain target.
+     * @js NA
+     */
+    virtual void removeAllActionsByTag(int tag, Node *target);
+    
+    NS_CC_END
+    
+        virtual void transformTile(const Vec2& pos, float distance) override;
+    
+     @code
+     // scaleA and scaleB are equivalents
+     auto scaleA = ScaleTo::create(2, 3);                 // (duration, to)
+     auto scaleB = ActionTween::create(2, 'scale', 1, 3); // (duration, key, from, to)
+ @endcode
