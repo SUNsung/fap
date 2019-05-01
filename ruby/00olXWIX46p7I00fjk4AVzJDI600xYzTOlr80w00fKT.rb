@@ -1,36 +1,44 @@
-        def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
+
+        
+            def update
+      authorize @user, :change_email?
     
-                options = options.dup
-            options[:field_name]           = @method_name
-            options[:include_position]     = true
-            options[:prefix]             ||= @object_name
-            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
+      def process_salmon
+    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
+  end
+end
+
     
-                content
-          end
-        end
+      def show
+    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
-        end
+        def dependencies
+      @dependencies ||= [Cask::CaskLoader.load('adobe-air')]
+    end
     
-            assert_equal size, cache.size
-      end
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
     
-          def mask_authenticity_token(session)
-        token = set_token(session)
-        mask_token(token)
-      end
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
     
-      it 'should ignore CSP3 no arg directives unless they are set to true' do
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :block_all_mixed_content => false, :disown_opener => 'false', :upgrade_insecure_requests => 'foo'
+        def type_from_file_command
+      @type_from_file_command ||=
+        FileCommandContentTypeDetector.new(@filepath).detect
+    end
+  end
+end
+
+    
+        # Returns the extension of the file. e.g. 'jpg' for 'file.jpg'
+    # If the style has a format defined, it will return the format instead
+    # of the actual extension.
+    def extension attachment, style_name
+      ((style = attachment.styles[style_name.to_s.to_sym]) && style[:format]) ||
+        File.extname(attachment.original_filename).sub(/\A\.+/, ''.freeze)
+    end
