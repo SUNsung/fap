@@ -1,127 +1,267 @@
 
         
-          // A light version of SplitCPHor: instead of really doing the part split, we
-  // simply compute the union bounding box of each split part.
-  void SplitCPHorLite(ColPartition* part, GenericVector<TBOX>* splitted_boxes);
-    
-    const PageIterator& PageIterator::operator=(const PageIterator& src) {
-  page_res_ = src.page_res_;
-  tesseract_ = src.tesseract_;
-  include_upper_dots_ = src.include_upper_dots_;
-  include_lower_dots_ = src.include_lower_dots_;
-  scale_ = src.scale_;
-  scaled_yres_ = src.scaled_yres_;
-  rect_left_ = src.rect_left_;
-  rect_top_ = src.rect_top_;
-  rect_width_ = src.rect_width_;
-  rect_height_ = src.rect_height_;
-  delete it_;
-  it_ = new PAGE_RES_IT(*src.it_);
-  BeginWord(src.blob_index_);
-  return *this;
+        base::StringPiece GetStringResource(int resource_id) {
+  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
 }
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-      // blow away the copied chopped_word, as we want to work with
-  // the blobs from the input chopped_word so seam_arrays can be merged.
-  TWERD *chopped = word->chopped_word;
-  TWERD *chopped2 = new TWERD;
-  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
-  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
-    chopped2->blobs.push_back(chopped->blobs[i]);
-  }
-  chopped->blobs.truncate(split_pt);
-  word->chopped_word = nullptr;
-  delete word2->chopped_word;
-  word2->chopped_word = nullptr;
-    
-      // Set the resolution of the source image in pixels per inch.
-  // This should be called right after SetImage(), and will let us return
-  // appropriate font sizes for the text.
-  void SetSourceYResolution(int ppi) {
-    yres_ = ppi;
-    estimated_res_ = ppi;
-  }
-  int GetSourceYResolution() const {
-    return yres_;
-  }
-  int GetScaledYResolution() const {
-    return scale_ * yres_;
-  }
-  // Set the resolution of the source image in pixels per inch, as estimated
-  // by the thresholder from the text size found during thresholding.
-  // This value will be used to set internal size thresholds during recognition
-  // and will not influence the output 'point size.' The default value is
-  // the same as the source resolution. (yres_)
-  void SetEstimatedResolution(int ppi) {
-    estimated_res_ = ppi;
-  }
-  // Returns the estimated resolution, including any active scaling.
-  // This value will be used to set internal size thresholds during recognition.
-  int GetScaledEstimatedResolution() const {
-    return scale_ * estimated_res_;
-  }
-    
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
+    class ObjectManager;
     
     
-    {}  // namespace tesseract.
+    {} // namespace extensions
+#endif
 
     
+    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
+  if (property_ == nullptr || rhs.property_ == nullptr) {
+    return property_ == rhs.property_;
+  } else {
+    return index_ == rhs.index_;
+  }
+}
+    
     #include <grpc/support/port_platform.h>
+    
+    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
+  if (b->idx.named.grpc_server_stats_bin != nullptr) {
+    ServerStatsDeserialize(
+        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
+            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
+        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
+        elapsed_time);
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
+  }
+}
+    
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/time.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
+    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
+// The units of the stats should be the same.
+std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+    
+    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
     
     namespace grpc {
     }
     
-    const ViewDescriptor& ClientCompletedRpcsMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/client/completed_rpcs/minute')
-          .set_measure(kRpcClientRoundtripLatencyMeasureName)
-          .set_aggregation(Aggregation::Count())
-          .add_column(ClientMethodTagKey())
-          .add_column(ClientStatusTagKey());
-  return descriptor;
+    
+    {}  // namespace grpc
+    
+    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
+  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
+    return system_clock::time_point::max();
+  }
+  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
+  system_clock::time_point tp;
+  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
+  tp +=
+      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
+  return tp;
 }
     
-    class ProtoServerReflection final
-    : public reflection::v1alpha::ServerReflection::Service {
+      std::string Key(int i) {
+    char buf[100];
+    snprintf(buf, sizeof(buf), 'key%06d', i);
+    return std::string(buf);
+  }
+    
+    #include 'db/builder.h'
+    
+    #include <stdint.h>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+    
+    typedef uint64_t SequenceNumber;
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_READER_H_
+#define STORAGE_LEVELDB_DB_LOG_READER_H_
+    
+    #endif  // STORAGE_LEVELDB_DB_MEMTABLE_H_
+
+    
+    
+    {
+    {  void ArchiveFile(const std::string& fname) {
+    // Move into another directory.  E.g., for
+    //    dir/foo
+    // rename to
+    //    dir/lost/foo
+    const char* slash = strrchr(fname.c_str(), '/');
+    std::string new_dir;
+    if (slash != nullptr) {
+      new_dir.assign(fname.data(), slash - fname.data());
+    }
+    new_dir.append('/lost');
+    env_->CreateDir(new_dir);  // Ignore error
+    std::string new_file = new_dir;
+    new_file.append('/');
+    new_file.append((slash == nullptr) ? fname.c_str() : slash + 1);
+    Status s = env_->RenameFile(fname, new_file);
+    Log(options_.info_log, 'Archiving %s: %s\n',
+        fname.c_str(), s.ToString().c_str());
+  }
+};
+}  // namespace
+    
+    TableCache::TableCache(const std::string& dbname,
+                       const Options& options,
+                       int entries)
+    : env_(options.env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+    
+    // WriteBatchInternal provides static methods for manipulating a
+// WriteBatch that we don't want in the public WriteBatch interface.
+class WriteBatchInternal {
  public:
-  ProtoServerReflection();
+  // Return the number of entries in the batch.
+  static int Count(const WriteBatch* batch);
     }
     
+     public:
+  enum Order {
+    SEQUENTIAL,
+    RANDOM
+  };
+  enum DBState {
+    FRESH,
+    EXISTING
+  };
     
-    {  m_last_elem_pos += 1;
-  return offset;
-}
     
-    /**
- * Parts of the language can individually be made stricter, warning or
- * erroring when there's dangerous/unintuive usage; for example,
- * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
- */
-enum class HackStrictOption {
-  OFF, // PHP5 behavior
-  WARN,
-  ON
+  bool ReadProtoFromTextContent(const std::string& text,
+                                ::google::protobuf::Message* proto) const {
+    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
+    return success;
+  }
+    
+    
+    {
+    {
+    {  /*!
+   * \brief Worker threads.
+   */
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
 };
-    
-    #endif // HPHP_DATA_STREAM_WRAPPER_H
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
 
+    
+      // Note that out is of the same shape as the transpose of
+  // the Khatri-Rao product
+  //
+  // When input is transposed, we could first put the transpose of
+  // the Khatri-Rao product in out, then call the linear solver, which
+  // will update the out's content to the final result;
+  //
+  // If the input is not transposed, we need to create an intermediate
+  // tensor to store the Khatri-Rao product, call the linear solver with
+  // MXNET_LAPACK_COL_MAJOR as the matrix layout, and transpose
+  // the final result into out
+    
+       out = data / sqrt(data.shape[-1])
+    
+    #include './crop-inl.h'
+    
+      virtual void Forward(const OpContext &ctx,
+                       const std::vector<TBlob> &in_data,
+                       const std::vector<OpReqType> &req,
+                       const std::vector<TBlob> &out_data,
+                       const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
+    Shape<4> grid_shape = Shape4(out.size(0), out.size(2), out.size(3), 2);
+    Tensor<gpu, 3, DType> loc = in_data[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
+    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
+                                .get_with_shape<gpu, 4, DType>(grid_shape, s);
+    if (!init_cudnn_) {
+     Init(s, in_data, out_data);
+    }
+    CHECK_EQ(data.CheckContiguous(), true);
+    CHECK_EQ(out.CheckContiguous(), true);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    if (param_.transform_type == st::kAffine) {
+      CUDNN_CALL(cudnnSpatialTfGridGeneratorForward(s->dnn_handle_,
+                                                    st_desc_,
+                                                    loc.dptr_,
+                                                    grid.dptr_));
+    }
+    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
+                                            st_desc_,
+                                            &alpha,
+                                            in_desc_,
+                                            data.dptr_,
+                                            grid.dptr_,
+                                            &beta,
+                                            out_desc_,
+                                            out.dptr_));
+  }
+    
+    DMLC_REGISTER_PARAMETER(NDArrayOpParam);
+    
+    
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
+      }
+    });
+}  // namespace op
+}  // namespace mxnet
+    
+    
+    {
+    {    private:
+        std::wstring m_activityName;
+        winrt::Windows::Foundation::Diagnostics::LoggingChannel m_channel;
+        winrt::Windows::Foundation::Diagnostics::LoggingFields m_fields;
+        winrt::Windows::Foundation::Diagnostics::LoggingActivity m_activity;
+    };
+}
+
+    
+    
+    {}
     
     
     {  /**
@@ -133,135 +273,72 @@ enum class HackStrictOption {
   }
 };
     
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
-
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
     
-    namespace CNTK
+    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
+  const char* prefix = 'glob://';
+  const char* path_str = path.data();
+  int path_len = path.length();
+    }
+    
+    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
+#define HPHP_GLOB_STREAM_WRAPPER_H
+    
+    /*
+ * If the given AtomicHashMap has more than one submap allocated, log a perf
+ * warning with its name.
+ *
+ * A single unique done flag should exist for each map being checked, to avoid
+ * logging more than once (process, map) pair.
+ */
+template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done);
+    
+    bool Waves3D::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude)
 {
-    class CompositeMinibatchSource final : public MinibatchSource
+    if (Grid3DAction::initWithDuration(duration, gridSize))
     {
-        static const std::wstring PositionAttributeName;
-        static const std::wstring DistributedAfterSampleCountAttributeName;
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
     }
     }
     
-        NDArrayViewPtr NDArrayView::DeepClone(const DeviceDescriptor& device, bool readOnly/* = false*/) const
-    {
-        NDArrayViewPtr newView = MakeSharedObject<NDArrayView>(this->GetDataType(), this->GetStorageFormat(), this->Shape(), device);
-        switch (m_dataType)
-        {
-        case DataType::Float:
-        {
-            auto newMatrix = newView->GetWritableMatrix<float>();
-            auto thisMatrix = GetMatrix<float>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Double:
-        {
-            auto newMatrix = newView->GetWritableMatrix<double>();
-            auto thisMatrix = GetMatrix<double>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Float16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<half>();
-            auto thisMatrix = GetMatrix<half>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int8:
-        {
-            auto newMatrix = newView->GetWritableMatrix<char>();
-            auto thisMatrix = GetMatrix<char>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<short>();
-            auto thisMatrix = GetMatrix<short>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        default:
-            LogicError('NDArrayView::DeepClone: Unsupported DataType %s', DataTypeName(m_dataType));
-            break;
-        }
-    }
-    
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
-    {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
-    }
-    
-        template <typename ElementType>
-    /*static*/ ValuePtr Value::Create(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/)
-    {
-        if (oneHotSequences.size() == 0)
-            InvalidArgument('Value::Create:: The number of sequences must be > 0');
-    }
-    
-    
-    {                if ((filterRank + outputRank) > shape.Rank())
-                    InvalidArgument('Sum of filter rank (%d) and output rank (%d) of the parameter initializer cannot exceed the Parameter shape '%S' rank (%d)', filterRank, outputRank, shape.AsString().c_str(), (int)shape.Rank());
-            }
-    
-    #define NOMINMAX
-#include 'Windows.h' // for HANDLE
-    
-    template <class ElemType>
-class EnvironmentInputNode : public ComputationNodeNonLooping<ElemType>, public NumInputs<0>
+    // main loop
+void ActionManager::update(float dt)
 {
-    typedef ComputationNodeNonLooping<ElemType> Base; UsingComputationNodeMembersBoilerplate;
-    static const std::wstring TypeName() { return L'EnvironmentInput'; }
+    for (tHashElement *elt = _targets; elt != nullptr; )
+    {
+        _currentTarget = elt;
+        _currentTargetSalvaged = false;
+    }
     }
     
-    U_NAMESPACE_END
+    http://www.cocos2d-x.org
     
-    SelectFormat::SelectFormat(const UnicodeString& pat,
-                           UErrorCode& status) : msgPattern(status) {
-   applyPattern(pat, status);
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif /* #if !UCONFIG_NO_COLLATION */
-
-    
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
-};
+    @since v0.99.5
+@js cc.animationCache
+*/
+class CC_DLL AnimationCache : public Ref
+{
+public:
+    /**
+     * @js ctor
+     */
+    AnimationCache();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~AnimationCache();
+    /** Returns the shared instance of the Animation cache 
+	 @js NA
+	*/
+    static AnimationCache* getInstance();
     }
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
-    }
-  }
-  return true;
-}
-    
-    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
-  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
