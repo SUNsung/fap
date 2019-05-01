@@ -1,129 +1,86 @@
 
         
-          #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
+        Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
+  end
+end
+
+    
+          def site
+        @site_drop ||= SiteDrop.new(@obj)
       end
-    end
     
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
-    
-              # Decodes the nonce field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_nonce(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_value(input)
-            input.value[0].value
-          end
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
         end
       end
     end
   end
 end
+
     
-          # Returns the else branch of the `case` statement, if any.
-      #
-      # @return [Node] the else branch node of the `case` statement
-      # @return [nil] if the case statement does not have an else branch.
-      def else_branch
-        node_parts[-1]
+      def translation_scope
+    'devise.omniauth_callbacks'
+  end
+end
+
+    
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+              path
+        end
       end
     
-    module RuboCop
-  module AST
-    # Common functionality for nodes that are parameterized:
-    # `send`, `super`, `zsuper`, `def`, `defs`
-    module ParameterizedNode
-      # Checks whether this node's arguments are wrapped in parentheses.
+          klass.devise_modules.each do |mod|
+        constant = const_get(mod.to_s.classify)
+    
+          module ClassMethods
+        # Attempt to find a user by password reset token. If a user is found, return it
+        # If a user is not found, return nil
+        def with_reset_password_token(token)
+          reset_password_token = Devise.token_generator.digest(self, :reset_password_token, token)
+          to_adapter.find_first(reset_password_token: reset_password_token)
+        end
+    
+      # Disable automatic flushing of the log to improve performance.
+  # config.autoflush_log = false
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
+    
+          DOUBLE_SPLAT = '**'.freeze
+    
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
       #
-      # @return [Boolean] whether this node's arguments are
-      #                   wrapped in parentheses
-      def parenthesized?
-        loc.end && loc.end.is?(')')
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
       end
     
-        def options_config=(options_config)
-      loaded_config = ConfigLoader.load_file(options_config)
-      @options_config = ConfigLoader.merge_with_default(loaded_config,
-                                                        options_config)
-    end
-    
-            raise InvalidBadge, identifier if parts.size > 2
-    
-    $contexts = []
-    
-        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
-    
-    module Gollum
-  VERSION = '4.1.4'
+        def extra_enabled_comments_with_names(extras, names)
+      each_directive do |comment, cop_names, disabled|
+        next unless comment_only_line?(comment.loc.expression.line)
