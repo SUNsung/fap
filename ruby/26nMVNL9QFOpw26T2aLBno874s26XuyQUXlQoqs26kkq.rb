@@ -1,45 +1,44 @@
 
         
-                # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-      end
+              get :index, params: {conversation_id: @conv1.id}
+      save_fixture(html_for('body'), 'conversations_read')
     end
+  end
+    
+      describe '#create' do
+    let(:stranger) { FactoryGirl.create(:user) }
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
   end
 end
 
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
-      end
+      # create list of plugins to update
+  def plugins_to_update(previous_gem_specs_map)
+    if update_all?
+      previous_gem_specs_map.values.map{|spec| spec.name}
+    else
+      # If the plugins isn't available in the gemspec or in 
+      # the gemfile defined with a local path, we assume the plugins is not
+      # installed.
+      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
+      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
+      plugins_arg
     end
   end
-end
-
     
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
+        desc 'Generate a valid ssh-config'
+    task :ssh_config do
+      require 'json'
+      # Loop until the Vagrant box finishes SSH bootstrap
+      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
+          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
       end
-    
-      it_behaves_like 'any rack application'
-    
-    Given /^I run a paperclip generator to add a paperclip '([^']*)' to the '([^']*)' model$/ do |attachment_name, model_name|
-  step %[I successfully run `rails generate paperclip #{model_name} #{attachment_name}`]
-end
-    
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
-  end
+      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
+      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+    end
