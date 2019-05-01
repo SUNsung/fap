@@ -1,304 +1,184 @@
 
         
-        
-    {}  // namespace api
+        // Instantiate a class with float and double specifications.
+#define INSTANTIATE_CLASS(classname) \
+  char gInstantiationGuard##classname; \
+  template class classname<float>; \
+  template class classname<double>
     
-     private:
-  display::Screen* screen_;
     
-      // Removes this instance from the weak map.
-  void RemoveFromWeakMap() {
-    if (weak_map_ && weak_map_->Has(weak_map_id()))
-      weak_map_->Remove(weak_map_id());
-  }
-    
-    #include 'content/public/browser/javascript_dialog_manager.h'
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-
-    
-    void OffscreenViewProxy::SetBitmap(const SkBitmap& bitmap) {
-  if (view_bounds_.width() == bitmap.width() &&
-      view_bounds_.height() == bitmap.height() && observer_) {
-    view_bitmap_.reset(new SkBitmap(bitmap));
-    observer_->OnProxyViewPaint(view_bounds_);
-  }
-}
-    
-    #ifndef NDEBUG
-/// Verify that the types of fields are valid within a given generic signature.
-static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
-  for (auto &field : Fields) {
-    auto ty = field.getLoweredType();
-    // Layouts should never refer to archetypes, since they represent an
-    // abstract generic type layout.
-    assert(!ty->hasArchetype()
-           && 'SILLayout field cannot have an archetype type');
-    assert(!ty->hasTypeVariable()
-           && 'SILLayout cannot contain constraint system type variables');
-    if (!ty->hasTypeParameter())
-      continue;
-    field.getLoweredType().findIf([Sig](Type t) -> bool {
-      if (auto gpt = t->getAs<GenericTypeParamType>()) {
-        // Check that the generic param exists in the generic signature.
-        assert(Sig && 'generic param in nongeneric layout?');
-        assert(std::find(Sig.getGenericParams().begin(),
-                         Sig.getGenericParams().end(),
-                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
-               && 'generic param not declared in generic signature?!');
-      }
-      return false;
-    });
-  }
-}
-#endif
-    
-    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
+/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
+template <typename Dtype>
+class ConstantFiller : public Filler<Dtype> {
+ public:
+  explicit ConstantFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    const int count = blob->count();
+    const Dtype value = this->filler_param_.value();
+    CHECK(count);
+    for (int i = 0; i < count; ++i) {
+      data[i] = value;
     }
-    
-    
-    {  return Begin + oldSize;
-}  
-
-    
-    #ifndef VERB
-#  define VERB(Word)
-#endif
-    
-    enum class ChildKind { Left, Right, Further, Root };
-    
-    
-bool Mangle::isNonAscii(StringRef str) {
-  for (unsigned char c : str) {
-    if (c >= 0x80)
-      return true;
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
-  return false;
-}
-    
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
-}
-    
-    // Section 6.1: Bias adaptation function
-    
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
-    
-    #endif  // TESSERACT_CSTRUCT_BOXWORD_H_
-
-    
-    
-// Returns the median value of the vector, given that the values are
-// circular, with the given modulus. Values may be signed or unsigned,
-// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
-// NOTE that the array is shuffled, but the time taken is linear.
-// An assumption is made that most of the values are spread over no more than
-// half the range, but wrap-around is accounted for if the median is near
-// the wrap-around point.
-// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
-// T must be an integer or float/double type.
-template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
-  LLSQ stats;
-  T halfrange = static_cast<T>(modulus / 2);
-  int num_elements = v->size();
-  for (int i = 0; i < num_elements; ++i) {
-    stats.add((*v)[i], (*v)[i] + halfrange);
-  }
-  bool offset_needed = stats.y_variance() < stats.x_variance();
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] += halfrange;
-    }
-  }
-  int median_index = v->choose_nth_item(num_elements / 2);
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] -= halfrange;
-    }
-  }
-  return (*v)[median_index];
-}
-    
-    #ifndef TESSERACT_CCSTRUCT_OCRPARA_H_
-#define TESSERACT_CCSTRUCT_OCRPARA_H_
-    
-    CallCredentials::~CallCredentials() {}
-    
-    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
-  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
-}
-    
-    MeasureDouble RpcClientReceivedBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientReceivedBytesPerRpcMeasureName,
-      'Total bytes received across all response messages per RPC', kUnitBytes);
-  return measure;
-}
-    
-    #include 'opencensus/stats/stats.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
-    
-    
-    { private:
-  CensusContext context_;
-  // server method
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // Pointer to the grpc_call element
-  grpc_call* gc_;
-  // Authorization context for the call.
-  grpc_auth_context* auth_context_;
-  // Metadata element for census stats.
-  grpc_linked_mdelem census_bin_;
-  // recv callback
-  grpc_metadata_batch* recv_initial_metadata_;
-  grpc_closure* initial_on_done_recv_initial_metadata_;
-  grpc_closure on_done_recv_initial_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  absl::Time start_time_;
-  absl::Duration elapsed_time_;
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference it when adding metatdata to
-  // response.
-  char stats_buf_[kMaxServerStatsLen];
 };
     
-      const protobuf::Descriptor* desc =
-      descriptor_pool_->FindMessageTypeByName(request->containing_type());
-  if (desc == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Type not found.');
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
   }
     
-    #endif  // !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #endif  // CAFFE_BIAS_LAYER_HPP_
 
     
-      void __set_success(const ExtensionResponse& val);
+    #endif  // CAFFE_CONV_LAYER_HPP_
+
     
-    #include 'ExtensionManager.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    #endif
+
+    
+    class ScriptDetector {
+ public:
+  ScriptDetector(const GenericVector<int>* allowed_scripts,
+                 OSResults* osr, tesseract::Tesseract* tess);
+  void detect_blob(BLOB_CHOICE_LIST* scores);
+  bool must_stop(int orientation);
+ private:
+  OSResults* osr_;
+  static const char* korean_script_;
+  static const char* japanese_script_;
+  static const char* fraktur_script_;
+  int korean_id_;
+  int japanese_id_;
+  int katakana_id_;
+  int hiragana_id_;
+  int han_id_;
+  int hangul_id_;
+  int latin_id_;
+  int fraktur_id_;
+  tesseract::Tesseract* tess_;
+  const GenericVector<int>* allowed_scripts_;
+};
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
     }
     
+      // Constrained fit with a supplied direction vector. Finds the best line_pt,
+  // that is one of the supplied points having the median cross product with
+  // direction, ignoring points that have a cross product outside of the range
+  // [min_dist, max_dist]. Returns the resulting error metric using the same
+  // reduced set of points.
+  // *Makes use of floating point arithmetic*
+  double ConstrainedFit(const FCOORD& direction,
+                        double min_dist, double max_dist,
+                        bool debug, ICOORD* line_pt);
     
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->version);
-          this->__isset.version = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->sdk_version);
-          this->__isset.sdk_version = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->min_sdk_version);
-          this->__isset.min_sdk_version = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
+    // A CostFunc that takes the variance of step into account in the cost.
+int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
+  if (prev == nullptr || prev == this) {
+    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
+    return 0;
   }
-    
-    #include <vector>
-#include <string>
+    }
     
     
-    {      if (entry.first == serial->second) {
-        matched = true;
-        row['disk_id'] = entry.second['disk_id'];
-        row['driver_type'] = entry.second['driver_type'];
+    {}  // namespace tesseract
+    
+    namespace tesseract {
+    }
+    
+      void DeleteUnusedObjects() {
+    mu_.Lock();
+    for (int i = cache_.size() - 1; i >= 0; i--) {
+      if (cache_[i].count <= 0) {
+        delete cache_[i].object;
+        cache_.remove(i);
       }
     }
+    mu_.Unlock();
+  }
     
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t pid,
-                                  int cpu,
-                                  int group_fd,
-                                  unsigned long const flags);
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
     
-    #pragma once
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    namespace osquery {
-namespace table_tests {
-    }
-    }
+        // serialize the JSON arrays
+    std::cout << j_array_t << '\n';
+    std::cout << j_vec << '\n';
+    std::cout << j_valarray << '\n';
+    std::cout << j_deque << '\n';
+    std::cout << j_list << '\n';
+    std::cout << j_flist << '\n';
+    std::cout << j_array << '\n';
+    std::cout << j_set << '\n';
+    std::cout << j_uset << '\n';
+    std::cout << j_mset << '\n';
+    std::cout << j_umset << '\n\n';
