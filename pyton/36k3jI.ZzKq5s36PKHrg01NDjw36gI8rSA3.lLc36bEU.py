@@ -1,318 +1,248 @@
 
         
-        
-class SpendingByCategory(MRJob):
+            # register the database commands
+    from flaskr import db
+    db.init_app(app)
     
     
-class DefaultCategories(Enum):
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+    '''Log in a registered user by adding the user id to the session.'''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
     
-        def create_signature(self):
-        # Create signature based on url and contents
-        pass
+        return render_template('blog/create.html')
     
-        ie_htmls = []
-    for ie in youtube_dl.list_extractors(age_limit=None):
-        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
-        ie_desc = getattr(ie, 'IE_DESC', None)
-        if ie_desc is False:
-            continue
-        elif ie_desc is not None:
-            ie_html += ': {}'.format(ie.IE_DESC)
-        if not ie.working():
-            ie_html += ' (Currently broken)'
-        ie_htmls.append('<li>{}</li>'.format(ie_html))
-    
-        infile, outfile = args
-    
-    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-    
-from test.helper import FakeYDL
-from youtube_dl.cache import Cache
-    
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['it']))
-        self.assertEqual(md5(subtitles['it']), 'b1d90a98755126b61e667567a1f6680a')
-    
-        def format_headers(self, headers):
-        for p in self.enabled_plugins:
-            headers = p.format_headers(headers)
-        return headers
-    
-        def __iter__(self):
-        '''Return an iterator over `self.msg`.'''
-        if self.with_headers:
-            yield self.get_headers()
-            yield b'\r\n\r\n'
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-            def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
-    
-    import pytest
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+        with client:
+        auth.logout()
+        assert 'user_id' not in session
 
     
-        def test_request_body_from_file_by_path_no_data_items_allowed(
-            self, httpbin):
-        env = MockEnvironment(stdin_isatty=False)
-        r = http('POST', httpbin.url + '/post', '@' + FILE_PATH_ARG, 'foo=bar',
-                 env=env, error_exit_ok=True)
-        assert 'cannot be mixed' in r.stderr
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
+    
+        return logger
 
     
-    alpha = 0.1
-# alpha = 0.01
     
-    
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
-    
-                tstart = time()
-            clf.fit(X_train, y_train)
-            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                      y_test)
-            sgd_results[i, j, 1] = time() - tstart
-    
-    from sklearn.datasets import make_checkerboard
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralBiclustering
-from sklearn.metrics import consensus_score
-    
-    # Create a graph capturing local connectivity. Larger number of neighbors
-# will give more homogeneous clusters to the cost of computation
-# time. A very large number of neighbors gives more evenly distributed
-# cluster sizes, but may not impose the local manifold structure of
-# the data
-knn_graph = kneighbors_graph(X, 30, include_self=False)
-    
-    # Plot the ground truth
-fig = plt.figure(fignum, figsize=(4, 3))
-ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-    
-    import numpy as np
-import matplotlib.pyplot as plt
-    
-        # TODO: decoder should check that nonce is in the protected header
-    
-            :raises .errors.PluginError: If there is a problem with the input or
-            the function is unable to correctly revert the configuration
-    
-        @certbot_util.patch_get_utility()
-    def test_select_correct(self, mock_util):
-        mock_util().checklist.return_value = (
-            display_util.OK, [self.vhosts[3].display_repr(),
-                              self.vhosts[2].display_repr()])
-        vhs = select_vhost_multiple([self.vhosts[3],
-                                     self.vhosts[2],
-                                     self.vhosts[1]])
-        self.assertTrue(self.vhosts[2] in vhs)
-        self.assertTrue(self.vhosts[3] in vhs)
-        self.assertFalse(self.vhosts[1] in vhs)
-    
-    # If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
-    
-    .. code-block:: bash
-   :caption: To acquire a certificate for ``example.com``, waiting 60 seconds
-             for DNS propagation
-    
-    # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
-    
-        def test___code__(self):
-        num_one, num_two = 7, 8
-        def a(): pass
-        def b(): return 12
-        def c(): return num_one
-        def d(): return num_two
-        def e(): return num_one, num_two
-        for func in [a, b, c, d, e]:
-            self.assertEqual(type(func.__code__), types.CodeType)
-        self.assertEqual(c(), 7)
-        self.assertEqual(d(), 8)
-        d.__code__ = c.__code__
-        self.assertEqual(c.__code__, d.__code__)
-        self.assertEqual(c(), 7)
-        # self.assertEqual(d(), 7)
-        try:
-            b.__code__ = c.__code__
-        except ValueError:
-            pass
-        else:
-            self.fail('__code__ with different numbers of free vars should '
-                      'not be possible')
-        try:
-            e.__code__ = d.__code__
-        except ValueError:
-            pass
-        else:
-            self.fail('__code__ with different numbers of free vars should '
-                      'not be possible')
-    
-        def test_get(self):
-        self.con = http.client.HTTPConnection(self.HOST, self.PORT)
-        self.con.connect()
-    
-            suite = loader.loadTestsFromName('sdasfasfasdf')
-        expected = 'No module named 'sdasfasfasdf''
-        error, test = self.check_deferred_error(loader, suite)
-        self.assertIn(
-            expected, error,
-            'missing error string in %r' % error)
-        self.assertRaisesRegex(ImportError, expected, test.sdasfasfasdf)
-    
-        def _FunctionDef(self, t):
-        self.__FunctionDef_helper(t, 'def')
-    
-    
-# Does a path exist?
-# This is false for dangling symbolic links on systems that support them.
-def exists(path):
-    '''Test whether a path exists.  Returns False for broken symbolic links'''
-    try:
-        os.stat(path)
-    except (OSError, ValueError):
-        return False
-    return True
-    
-        If the resulting string contains path separators, an exception is raised.
+class FlaskCliRunner(CliRunner):
+    '''A :class:`~click.testing.CliRunner` for testing a Flask app's
+    CLI commands. Typically created using
+    :meth:`~flask.Flask.test_cli_runner`. See :ref:`testing-cli`.
     '''
-    parent, file_name = os.path.split(path)
-    if parent:
-        raise ValueError('{!r} must be only a file name'.format(path))
-    else:
-        return file_name
+    def __init__(self, app, **kwargs):
+        self.app = app
+        super(FlaskCliRunner, self).__init__(**kwargs)
     
-    from email.policy import default
     
-        # Create queues
-    task_queue = Queue()
-    done_queue = Queue()
+@pytest.fixture(params=(True, False))
+def limit_loader(request, monkeypatch):
+    '''Patch pkgutil.get_loader to give loader without get_filename or archive.
     
-    for i, face_distance in enumerate(face_distances):
-    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
-    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
-    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
-    print()
+    
+def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Mean absolute error')
+    
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
+    
+    # #############################################################################
+# Main code
+regression_data = generate_data('regression')
+classification_data = generate_data('classification', sparse=True)
+configurations = [
+    {'estimator': SGDClassifier,
+     'tuned_params': {'penalty': 'elasticnet', 'alpha': 0.001, 'loss':
+                      'modified_huber', 'fit_intercept': True, 'tol': 1e-3},
+     'changing_param': 'l1_ratio',
+     'changing_param_values': [0.25, 0.5, 0.75, 0.9],
+     'complexity_label': 'non_zero coefficients',
+     'complexity_computer': _count_nonzero_coefficients,
+     'prediction_performance_computer': hamming_loss,
+     'prediction_performance_label': 'Hamming Loss (Misclassification Ratio)',
+     'postfit_hook': lambda x: x.sparsify(),
+     'data': classification_data,
+     'n_samples': 30},
+    {'estimator': NuSVR,
+     'tuned_params': {'C': 1e3, 'gamma': 2 ** -15},
+     'changing_param': 'nu',
+     'changing_param_values': [0.1, 0.25, 0.5, 0.75, 0.9],
+     'complexity_label': 'n_support_vectors',
+     'complexity_computer': lambda x: len(x.support_vectors_),
+     'data': regression_data,
+     'postfit_hook': lambda x: x,
+     'prediction_performance_computer': mean_squared_error,
+     'prediction_performance_label': 'MSE',
+     'n_samples': 30},
+    {'estimator': GradientBoostingRegressor,
+     'tuned_params': {'loss': 'ls'},
+     'changing_param': 'n_estimators',
+     'changing_param_values': [10, 50, 100, 200, 500],
+     'complexity_label': 'n_trees',
+     'complexity_computer': lambda x: x.n_estimators,
+     'data': regression_data,
+     'postfit_hook': lambda x: x,
+     'prediction_performance_computer': mean_squared_error,
+     'prediction_performance_label': 'MSE',
+     'n_samples': 30},
+]
+for conf in configurations:
+    prediction_performances, prediction_times, complexities = \
+        benchmark_influence(conf)
+    plot_influence(conf, prediction_performances, prediction_times,
+                   complexities)
 
     
-        # Write the resulting image to the output video file
-    print('Writing frame {} / {}'.format(frame_number, length))
-    output_movie.write(frame)
+    First example
+-------------
+The first example illustrates how robust covariance estimation can help
+concentrating on a relevant cluster when another one exists. Here, many
+observations are confounded into one and break down the empirical covariance
+estimation.
+Of course, some screening tools would have pointed out the presence of two
+clusters (Support Vector Machines, Gaussian Mixture Models, univariate
+outlier detection, ...). But had it been a high-dimensional example, none
+of these could be applied that easily.
     
-    # Get a reference to the Raspberry Pi camera.
-# If this fails, make sure you have a camera connected to the RPi and that you
-# enabled your camera in raspi-config and rebooted first.
+    An example showing how the scikit-learn can be used to recognize images of
+hand-written digits.
+    
+    iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+    
+    from sklearn import manifold, datasets
+    
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
+    
+    # 你需要在sudo raspi-config中把camera功能打开
 camera = picamera.PiCamera()
 camera.resolution = (320, 240)
 output = np.empty((240, 320, 3), dtype=np.uint8)
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+            # Or instead, use the known face with the smallest distance to the new face
+        face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+        best_match_index = np.argmin(face_distances)
+        if matches[best_match_index]:
+            name = known_face_names[best_match_index]
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+    
+class FaceswapFormatter(logging.Formatter):
+    ''' Override formatter to strip newlines and multiple spaces from logger
+        Messages that begin with 'R|' should be handled as is
+    '''
+    def format(self, record):
+        if record.msg.startswith('R|'):
+            record.msg = record.msg[2:]
+            record.strip_spaces = False
+        elif record.strip_spaces:
+            record.msg = re.sub(' +', ' ', record.msg.replace('\n', '\\n').replace('\r', '\\r'))
+        return super().format(record)
+    
+    
+def icnr_keras(shape, dtype=None):
+    '''
+    Custom initializer for subpix upscaling
+    From https://github.com/kostyaev/ICNR
+    Note: upscale factor is fixed to 2, and the base initializer is fixed to random normal.
+    '''
+    # TODO Roll this into ICNR_init when porting GAN 2.2
+    shape = list(shape)
+    scale = 2
+    initializer = tf.keras.initializers.RandomNormal(0, 0.02)
+    
+                    if channels < self.group:
+                    raise ValueError('Input channels should be larger than group size' +
+                                     '; Received input channels: ' + str(channels) +
+                                     '; Group size: ' + str(self.group))
+    
+            var_x = self.blocks.upscale(var_x, decoder_complexity, **kwargs)
+        var_x = SpatialDropout2D(0.25)(var_x)
+        var_x = self.blocks.upscale(var_x, decoder_complexity, **kwargs)
+        if self.lowmem:
+            var_x = SpatialDropout2D(0.15)(var_x)
+        else:
+            var_x = SpatialDropout2D(0.25)(var_x)
+        var_x = self.blocks.upscale(var_x, decoder_complexity // 2, **kwargs)
+        var_x = self.blocks.upscale(var_x, decoder_complexity // 4, **kwargs)
+        var_x = Conv2D(3, kernel_size=5, padding='same', activation='sigmoid')(var_x)
+        outputs = [var_x]
+    
+            if self.config.get('mask_type', None):
+            var_y = input_
+            var_y = self.blocks.upscale(var_y, 512)
+            var_y = self.blocks.upscale(var_y, 256)
+            var_y = self.blocks.upscale(var_y, self.input_shape[0])
+            var_y = Conv2D(1, kernel_size=5, padding='same', activation='sigmoid')(var_y)
+            outputs.append(var_y)
+        return KerasModel(input_, outputs=outputs)
 
     
-    import face_recognition
-import picamera
-import numpy as np
+        def reset_session(self):
+        ''' Reset currently training sessions '''
+        logger.debug('Reset current training session')
+        self.clear_session()
+        session = get_config().session
+        if not session.initialized:
+            logger.debug('Training not running')
+            print('Training not running')
+            return
+        msg = 'Currently running training session'
+        self.session = session
+        self.set_session_summary(msg)
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+    # Fallback URL to use when a non-existing Lambda is invoked. If this matches
+# `dynamodb://<table_name>`, then the invocation is recorded in the corresponding
+# DynamoDB table. If this matches `http(s)://...`, then the Lambda invocation is
+# forwarded as a POST request to that URL.
+LAMBDA_FALLBACK_URL = os.environ.get('LAMBDA_FALLBACK_URL', '').strip()
     
-        :param file: image file name or file object to load
-    :param mode: format to convert the image to. Only 'RGB' (8-bit RGB, 3 channels) and 'L' (black and white) are supported.
-    :return: image contents as numpy array
-    '''
-    im = PIL.Image.open(file)
-    if mode:
-        im = im.convert(mode)
-    return np.array(im)
+                # subprocess.Popen is not thread-safe, hence use a mutex here.. (TODO: mutex still needed?)
+            with mutex_popen:
+                stdin_arg = subprocess.PIPE if stdin else None
+                stdout_arg = open(outfile, 'wb') if isinstance(outfile, six.string_types) else outfile
+                stderr_arg = stderr
+                if tty:
+                    master_fd, slave_fd = pty.openpty()
+                    stdin_arg = slave_fd
+                    stdout_arg = stderr_arg = None
     
-        # Global variables
-    Global = Manager().Namespace()
-    Global.buff_num = 1
-    Global.read_num = 1
-    Global.write_num = 1
-    Global.frame_delay = 0
-    Global.is_exit = False
-    read_frame_list = Manager().dict()
-    write_frame_list = Manager().dict()
+        # create ES domain
+    es_client.create_elasticsearch_domain(DomainName=TEST_DOMAIN_NAME)
+    assert_true(TEST_DOMAIN_NAME in
+        [d['DomainName'] for d in es_client.list_domain_names()['DomainNames']])
     
-    # Load an image with an unknown face
-unknown_image = face_recognition.load_image_file('two_people.jpg')
+    
+class SSMTest(unittest.TestCase):
+    def test_describe_parameters(self):
+        ssm_client = aws_stack.connect_to_service('ssm')
+    
+        def test_extract_path_params(self):
+        params = apigateway_listener.extract_path_params('/foo/bar', '/foo/{param1}')
+        self.assertEqual(params, {'param1': 'bar'})
