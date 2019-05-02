@@ -1,9 +1,12 @@
 
         
-          url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
+                  lfs_objects.each do |object|
+            yield object
+          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
+        end
+      end
+    end
+  end
 end
-    
-          GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(2)
-      expect(limit_reached_for(user.id, dt)).to eq(true)
