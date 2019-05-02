@@ -1,115 +1,133 @@
 
         
-          def migration_version
-    if Rails.version.start_with? '5'
-      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
+            def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
+    
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
+    
+          private
+    
+            css('.l-sub-section', '.alert', '.banner').each do |node|
+          node.name = 'blockquote'
+        end
+    
+        self.audio_buff = []
+    
+                k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+            k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+    
+              # Retrieves the element instance fields
+          #
+          # @return [Array]
+          def attributes
+            self.class.attributes
+          end
+    
+                self
+          end
+    
+    namespace :bower do
+    
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
+    end
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+    namespace :doc do
+  task :readmes do
+    Dir.glob 'lib/rack/protection/*.rb' do |file|
+      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
+      next if excluded_files.include?(file)
+      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
+      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
+      Dir.mkdir 'doc' unless File.directory? 'doc'
+      puts 'writing #{file}'
+      File.open(file, 'w') { |f| f << doc }
     end
   end
-end
-
     
-      module ClassMethods
-    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
-    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
-    # The attribute returns a Paperclip::Attachment object which handles the management of
-    # that file. The intent is to make the attachment as much like a normal attribute. The
-    # thumbnails will be created when the new file is assigned, but they will *not* be saved
-    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
-    # called on it, the attachment will *not* be deleted until +save+ is called. See the
-    # Paperclip::Attachment documentation for more specifics. There are a number of options
-    # you can set to change the behavior of a Paperclip attachment:
-    # * +url+: The full URL of where the attachment is publicly accessible. This can just
-    #   as easily point to a directory served directly through Apache as it can to an action
-    #   that can control permissions. You can specify the full domain and path, but usually
-    #   just an absolute path is sufficient. The leading slash *must* be included manually for
-    #   absolute paths. The default value is
-    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
-    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
-    #     :url => '/:class/:attachment/:id/:style_:filename'
-    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
-    #   Note: When using the +s3+ storage option, the +url+ option expects
-    #   particular values. See the Paperclip::Storage::S3#url documentation for
-    #   specifics.
-    # * +default_url+: The URL that will be returned if there is no attachment assigned.
-    #   This field is interpolated just as the url is. The default value is
-    #   '/:attachment/:style/missing.png'
-    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
-    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
-    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
-    #   geometry strings at the ImageMagick website
-    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
-    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
-    #   inside the dimensions and then crop the rest off (weighted at the center). The
-    #   default value is to generate no thumbnails.
-    # * +default_style+: The thumbnail style that will be used by default URLs.
-    #   Defaults to +original+.
-    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
-    #                       :default_style => :normal
-    #     user.avatar.url # => '/avatars/23/normal_me.png'
-    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
-    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
-    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
-    #   record is destroyed. Defaults to +false+.
-    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
-    #   to a command line error. This will override the global setting for this attachment.
-    #   Defaults to true.
-    # * +convert_options+: When creating thumbnails, use this free-form options
-    #   array to pass in various convert command options.  Typical options are '-strip' to
-    #   remove all Exif data from the image (save space for thumbnails and avatars) or
-    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
-    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
-    #   Note that this option takes a hash of options, each of which correspond to the style
-    #   of thumbnail being generated. You can also specify :all as a key, which will apply
-    #   to all of the thumbnails being generated. If you specify options for the :original,
-    #   it would be best if you did not specify destructive options, as the intent of keeping
-    #   the original around is to regenerate all the thumbnails when requirements change.
-    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
-    #                                :convert_options => {
-    #                                  :all => '-strip',
-    #                                  :negative => '-negate'
-    #                                }
-    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
-    #   It is recommended that :convert_options option be included in the hash passed to each
-    #   :styles for compatibility with future versions.
-    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
-    #   shell quoting for safety. If your options require a space, please pre-split them
-    #   and pass an array to :convert_options instead.
-    # * +storage+: Chooses the storage backend where the files will be stored. The current
-    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
-    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
-    #   for backend-specific options.
-    #
-    # It's also possible for you to dynamically define your interpolation string for :url,
-    # :default_url, and :path in your model by passing a method name as a symbol as a argument
-    # for your has_attached_file definition:
-    #
-    #   class Person
-    #     has_attached_file :avatar, :default_url => :default_url_by_gender
-    #
-    #     private
-    #
-    #     def default_url_by_gender
-    #       '/assets/avatars/default_#{gender}.png'
-    #     end
-    #   end
-    def has_attached_file(name, options = {})
-      HasAttachedFile.define_on(self, name, options)
+      let!(:order) { create(:order_ready_to_ship, number: 'R100', state: 'complete', line_items_count: 5) }
+    
+                result = update_service.call(
+              order: spree_current_order,
+              params: params,
+              # defined in https://github.com/spree/spree/blob/master/core/lib/spree/core/controller_helpers/strong_parameters.rb#L19
+              permitted_attributes: permitted_checkout_attributes,
+              request_env: request.headers.env
+            )
+    
+    # Set some attributes
+package.name = 'my-service'
+package.version = '1.0'
+    
+        # do channel-update if requested
+    if attributes[:pear_channel_update?]
+      channel = attributes[:pear_channel] || 'pear'
+      logger.info('Updating the channel', :channel => channel)
+      safesystem('pear', '-c', config, 'channel-update', channel)
     end
+    
+        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
+    libs.each do |file|
+      base = staging_path(File.join(attributes[:prefix]))
+      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
+      File.chmod(0755, File.join(base, file))
+    end
+    
+      option '--downcase-name', :flag, 'Should the target package name be in ' \
+    'lowercase?', :default => true
+  option '--downcase-dependencies', :flag, 'Should the package dependencies ' \
+    'be in lowercase?', :default => true
+    
+        # Make one file. The installscript can unpack itself.
+    `cat #{install_script} #{payload} > #{output_path}`
+    FileUtils.chmod('+x', output_path)
   end
-end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
+        template = template('solaris.erb')
+    File.open('#{build_path}/pkginfo', 'w') do |pkginfo|
+      pkginfo.puts template.result(binding)
     end
     
-        def add_required_validations
-      options = Paperclip::Attachment.default_options.deep_merge(@options)
-      if options[:validate_media_type] != false
-        name = @name
-        @klass.validates_media_type_spoof_detection name,
-          :if => ->(instance){ instance.send(name).dirty? }
+        # FIXME: don't assume current directory writeable
+    FileUtils.touch(['fpm-dummy.tmp'])
+    ['ar', 'gar'].each do |ar|
+      ['-qc', '-qcD'].each do |ar_create_opts|
+        FileUtils.rm_f(['fpm-dummy.ar.tmp'])
+        # Return this combination if it creates archives without uids or timestamps.
+        # Exitstatus will be nonzero if the archive can't be created,
+        # or its table of contents doesn't match the regular expression.
+        # Be extra-careful about locale and timezone when matching output.
+        system('#{ar} #{ar_create_opts} fpm-dummy.ar.tmp fpm-dummy.tmp 2>/dev/null && env TZ=UTC LANG=C LC_TIME=C #{ar} -tv fpm-dummy.ar.tmp | grep '0/0.*1970' > /dev/null 2>&1')
+        if $?.exitstatus == 0
+           @@ar_cmd = [ar, ar_create_opts]
+           @@ar_cmd_deterministic = true
+           return @@ar_cmd
+        end
       end
     end
+    # If no combination of ar and options omits timestamps, fall back to default.
+    @@ar_cmd = ['ar', '-qc']
+    return @@ar_cmd
+  ensure
+    # Clean up
+    FileUtils.rm_f(['fpm-dummy.ar.tmp', 'fpm-dummy.tmp'])
+  end # def ar_cmd
+    
+          prefix = ''
+      if name.bytesize > 100 then
+        parts = name.split('/', -1) # parts are never empty here
+        name = parts.pop            # initially empty for names with a trailing slash ('foo/.../bar/')
+        prefix = parts.join('/')    # if empty, then it's impossible to split (parts is empty too)
+        while !parts.empty? && (prefix.bytesize > 155 || name.empty?)
+          name = parts.pop + '/' + name
+          prefix = parts.join('/')
+        end
