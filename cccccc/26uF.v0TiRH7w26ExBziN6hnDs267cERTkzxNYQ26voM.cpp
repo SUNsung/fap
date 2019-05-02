@@ -1,219 +1,128 @@
 
         
-        	// Set path to vendored ConEmu config file
-	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
-    
-    namespace php { struct Unit; struct Program; }
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    
-struct Config {
-  /*
-   * Normalizes hdf string names to their ini counterparts
-   *
-   * We have special handling for a few hdf strings such as those containing
-   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
-   */
-  static std::string IniName(const Hdf& config,
-                             const bool prepend_hhvm = true);
-  static std::string IniName(const std::string& config,
-                             const bool prepend_hhvm = true);
-    }
-    
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
-  }
-  return String(entry.d_name, CopyString);
+        void MapLiteTestUtil::ExpectMapFieldsSet(const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsSet<unittest::MapEnumLite,
+                                      unittest::MAP_ENUM_BAR_LITE,
+                                      unittest::MAP_ENUM_BAZ_LITE>(message);
 }
     
-    
-    {  auto glob = HHVM_FN(glob)(String(path_str, path_len, CopyString));
-  if (!glob.isArray()) {
-    return nullptr;
-  }
-  return req::make<ArrayDirectory>(glob.toArray());
+    TEST(StatusOr, TestPointerCopyCtorStatusOk) {
+  const int kI = 0;
+  StatusOr<const int*> original(&kI);
+  StatusOr<const int*> copy(original);
+  EXPECT_EQ(original.status(), copy.status());
+  EXPECT_EQ(original.ValueOrDie(), copy.ValueOrDie());
 }
     
-    #endif
+    template <class T, T v> const T integral_constant<T, v>::value;
+    
+      const string& name() const { return name_; }
+    
+    template <typename T1, typename T2, typename T3>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+    
+      // Gets the message associated with the test part.
+  const char* message() const { return message_.c_str(); }
+    
+    // If the type list contains only one type, you can write that type
+// directly without Types<...>:
+//   TYPED_TEST_CASE(FooTest, int);
+    
+      // An enumeration of possible roles that may be taken when a death
+  // test is encountered.  EXECUTE means that the death test logic should
+  // be executed immediately.  OVERSEE means that the program should prepare
+  // the appropriate environment for a child process to execute the death
+  // test, then wait for it to complete.
+  enum TestRole { OVERSEE_TEST, EXECUTE_TEST };
+    
+    #include <string.h>
+    
+    
+#endif  // GTEST_SAMPLES_SAMPLE2_H_
 
     
-    U_NAMESPACE_BEGIN
-    
-        /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     * @param text          the buffer holding transliterated and
-     *                      untransliterated text
-     * @param offset        the start and limit of the text, the position
-     *                      of the cursor, and the start and limit of transliteration.
-     * @param incremental   if true, assume more text may be coming after
-     *                      pos.contextLimit. Otherwise, assume the text is complete.
-     */
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
-                                     UBool isIncremental) const;
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    UBool SearchIterator::operator==(const SearchIterator &that) const
-{
-    if (this == &that) {
-        return TRUE;
+      // Removes the head of the queue and returns it.  Returns NULL if
+  // the queue is empty.
+  E* Dequeue() {
+    if (size_ == 0) {
+      return NULL;
     }
-    return (m_breakiterator_            == that.m_breakiterator_ &&
-            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
-            m_search_->isOverlap        == that.m_search_->isOverlap &&
-            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
-            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
-            m_search_->matchedLength    == that.m_search_->matchedLength &&
-            m_search_->textLength       == that.m_search_->textLength &&
-            getOffset() == that.getOffset() &&
-            (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(UChar)) == 0));
-}
+    }
     
-    UnicodeString&
-SelectFormat::format(const Formattable& obj,
-                   UnicodeString& appendTo,
-                   FieldPosition& pos,
-                   UErrorCode& status) const
-{
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    if (obj.getType() == Formattable::kString) {
-        return format(obj.getString(status), appendTo, pos, status);
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return appendTo;
-    }
+    
+    {DMLC_REGISTER_DATA_PARSER(uint32_t, real_t, dense_libsvm,
+  data::CreateDenseLibSVMParser<uint32_t __DMLC_COMMA real_t>);
+}  // namespace dmlc
+
+    
+    // implementing configure.
+template<typename PairIter>
+inline void GradientBooster::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
 }
     
     
-/**
- * A formatter for small, positive integers.
- */
-class U_I18N_API SmallIntFormatter : public UMemory {
-public:
-    /**
-     * Estimates the actual digit count needed to format positiveValue
-     * using the given range of digit counts.
-     * Returns a value that is at least the actual digit count needed.
+    {} // namespace aria2
+
+    
+      virtual std::unique_ptr<Dict> getResponse() = 0;
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+    namespace aria2 {
+    }
+    
+    class DHTTask;
+    
+    #include <cstring>
+    
+    public:
+  DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                        std::chrono::seconds interval);
+    
+    
+    {} // namespace aria2
+
+    
+      // do nothing; we don't use this message as outgoing message.
+  virtual bool send() CXX11_OVERRIDE;
+    
+        /** Replaces an existing controlPoint at index.
      *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
+     * @js NA
+     * @param controlPoint A control point.
+     * @param index Replace the point to array in index.
      */
-    static int32_t estimateDigitCount(
-            int32_t positiveValue, const IntDigitCountRange &range);
+    void replaceControlPoint(const Vec2& controlPoint, ssize_t index);
+    
+    NS_CC_END
+
+    
+    /**
+ * @addtogroup actions
+ * @{
+ */
     }
     
+    NS_CC_BEGIN
     
-    {    status = U_MEMORY_ALLOCATION_ERROR;
-}
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
-    
-     public:
-    
-        for (int32_t i=0; i<output.length(); ++i) {
-        if (hasCursor && i == cursor) {
-            ICU_Utility::appendToRule(rule, (UChar)0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        UChar c = output.charAt(i); // Ok to use 16-bits here
-    }
-    
-    
-    {};
-    
-    void ExtensionException::__set_uuid(const ExtensionRouteUUID val) {
-  this->uuid = val;
-}
-std::ostream& operator<<(std::ostream& out, const ExtensionException& obj)
-{
-  obj.printTo(out);
-  return out;
-}
-    
-    
-    {
-    {}} // namespace
-    
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
-    }
-  }
-    
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
-    
-      Status refresh();
-    
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t pid,
-                                  int cpu,
-                                  int group_fd,
-                                  unsigned long const flags);
-    
-    
-    {  auto dst = std::vector<TestMessage>{};
-  auto status =
-      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
-          &buf[0], tail, head, buf.size(), dst);
-  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
-  ASSERT_EQ(dst.size(), test_size);
-  for (std::size_t i = 0; i < test_size; ++i) {
-    EXPECT_EQ(dst[i].c_, 't');
-    EXPECT_EQ(dst[i].d_, 'i');
-  }
-  EXPECT_EQ(dst[0].a_, 1);
-  EXPECT_EQ(dst[0].b_, 2);
-  EXPECT_EQ(dst[1].a_, 3);
-  EXPECT_EQ(dst[1].b_, 4);
-  EXPECT_EQ(dst[2].a_, 5);
-  EXPECT_EQ(dst[2].b_, 6);
-}
-    
-    LinuxProbesControl::LinuxProbesControl(
-    PerfEventCpuMap cpu_to_perf_output_map,
-    ebpf::PerfOutputsPoll<events::syscall::Event> output_poll)
-    : cpu_to_perf_output_map_(std::move(cpu_to_perf_output_map)),
-      output_poll_(std::move(output_poll)) {}
+        /** Adds an animation from a plist file.
+     * Make sure that the frames were previously loaded in the SpriteFrameCache.
+     * @since v1.1
+     * @js addAnimations
+     * @lua addAnimations
+     * @param plist An animation from a plist file.
+     */
+    void addAnimationsWithFile(const std::string& plist);
