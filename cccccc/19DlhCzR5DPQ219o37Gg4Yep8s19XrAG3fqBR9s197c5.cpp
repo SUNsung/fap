@@ -1,143 +1,75 @@
 
         
-          // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
-    
-      double m() const;  // get gradient
-  double c(double m) const;            // get constant
-  double rms(double m, double c) const;            // get error
-  double pearson() const;  // get correlation coefficient.
-    
-    
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
-  }
-    
-    struct Options;
-struct FileMetaData;
-    
-    std::string LogFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'log');
+        
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    // Make the CURRENT file point to the descriptor file with the
-// specified number.
-Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number);
     
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return item->is_modified_;
 }
-
     
-      kFullType = 1,
-    
-     public:
-  LogTest() : reading_(false),
-              writer_(new Writer(&dest_)),
-              reader_(new Reader(&source_, &report_, true/*checksum*/,
-                      0/*initial_offset*/)) {
-  }
-    
-      KeyComparator comparator_;
-  int refs_;
-  Arena arena_;
-  Table table_;
-    
-    
-    {
-    {  void ArchiveFile(const std::string& fname) {
-    // Move into another directory.  E.g., for
-    //    dir/foo
-    // rename to
-    //    dir/lost/foo
-    const char* slash = strrchr(fname.c_str(), '/');
-    std::string new_dir;
-    if (slash != nullptr) {
-      new_dir.assign(fname.data(), slash - fname.data());
-    }
-    new_dir.append('/lost');
-    env_->CreateDir(new_dir);  // Ignore error
-    std::string new_file = new_dir;
-    new_file.append('/');
-    new_file.append((slash == nullptr) ? fname.c_str() : slash + 1);
-    Status s = env_->RenameFile(fname, new_file);
-    Log(options_.info_log, 'Archiving %s: %s\n',
-        fname.c_str(), s.ToString().c_str());
-  }
-};
-}  // namespace
-    
-    
-    { private:
-  // Dummy head of doubly-linked list of snapshots
-  SnapshotImpl head_;
-};
-    
-    
-    {  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-};
-    
-    struct FileStreamWrapper final : Stream::Wrapper {
-  static req::ptr<MemFile> openFromCache(const String& filename,
-                                         const String& mode);
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  int access(const String& path, int mode) override {
-    return ::access(File::TranslatePath(path).data(), mode);
-  }
-  int stat(const String& path, struct stat* buf) override {
-    return ::stat(File::TranslatePath(path).data(), buf);
-  }
-  int lstat(const String& path, struct stat* buf) override {
-    return ::lstat(File::TranslatePath(path).data(), buf);
-  }
-  int unlink(const String& path) override;
-  int rename(const String& oldname, const String& newname) override;
-  int mkdir(const String& path, int mode, int options) override;
-  int rmdir(const String& path, int /*options*/) override {
-    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
-    return ret;
-  }
-  bool isNormalFileStream() const override { return true; }
+    namespace {
     }
     
-    namespace HPHP {
+    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
+}
+    
+    namespace parallel {
     }
+    
+    void Assembler::and(const Reg64& ra, const Reg64& rs, const Reg64& rb,
+                     bool rc) {
+  EmitXForm(31, rn(rs), rn(ra), rn(rb), 28, rc);
+}
+    
+    // Deserializing an array could give back a different ArrayKind than we need,
+// so we have to go with the slow case of calling a collection constructor.
+NEVER_INLINE
+Object createFromSerialized(CollectionType colType, APCHandle* handle) {
+  auto const col = Object::attach(collections::alloc(colType));
+  auto const arr = handle->toLocal();
+  switch (colType) {
+  case CollectionType::ImmVector:
+  case CollectionType::Vector:
+    static_cast<BaseVector*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmSet:
+  case CollectionType::Set:
+    static_cast<BaseSet*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmMap:
+  case CollectionType::Map:
+    static_cast<BaseMap*>(col.get())->init(arr);
+    break;
+  case CollectionType::Pair:
+    not_reached();
+    break;
+  }
+  return col;
+}
+    
+        if (!slash && !semi) {
+      raise_warning('rfc2397: invalid meta data');
+      return nullptr;
+    }
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include 'hphp/runtime/base/stream-wrapper-registry.h'
+    
+    #include <sys/types.h>
     
     template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
+void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
+                        int64_t rate, F fillCols) {
+  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
+  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
+  if (!StructuredLog::coinflip(effectiveRate)) return;
+    }
