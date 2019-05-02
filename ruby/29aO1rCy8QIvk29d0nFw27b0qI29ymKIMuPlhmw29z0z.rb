@@ -1,81 +1,90 @@
 
         
-        class User < ActiveRecord::Base
-  devise :database_authenticatable
-end
+          # Override prefixes to consider the scoped view.
+  # Notice we need to check for the request due to a bug in
+  # Action Controller tests that forces _prefixes to be
+  # loaded before even having a request object.
+  #
+  # This method should be public as it is in ActionPack
+  # itself. Changing its visibility may break other gems.
+  def _prefixes #:nodoc:
+    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
+      ['#{devise_mapping.scoped_path}/#{controller_name}'] + super
+    else
+      super
+    end
+  end
     
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
+end
+
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
         end
       end
     
-                authentication_keys_changed || encrypted_password_changed
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+      def lease_seconds_or_default
+    (params['hub.lease_seconds'] || 1.day).to_i.seconds
+  end
+    
+      def show
+    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
+  end
+    
+      def setting
+    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
+  end
+end
+
+    
+      included do
+    before_action :authenticate_user!
+    before_action :load_export
+  end
+    
+              it 'does not split anything if the input quantity is garbage' do
+            expect(order.shipments.first.stock_location.id).to eq(stock_location.id)
+    
+            def current
+          @order = find_current_order
+          if @order
+            respond_with(@order, default_template: :show, locals: { root_object: @order })
+          else
+            head :no_content
           end
+        end
+    
+              def remove_store_credit_service
+            Spree::Api::Dependencies.storefront_checkout_remove_store_credit_service.constantize
+          end
+    
+          def variant_attributes
+        if @current_user_roles&.include?('admin')
+          @@variant_attributes + [:cost_price]
         else
-          def clear_reset_password_token?
-            encrypted_password_changed = respond_to?(:encrypted_password_changed?) && encrypted_password_changed?
-            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
-              respond_to?('#{attribute}_changed?') && send('#{attribute}_changed?')
-            end
-    
-    (allow file-write*
-  (literal
-    '/dev/dtracehelper'
-    '/dev/null'
-  )
-  (regex
-    #'^<%= Pod::Config.instance.project_root %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
-    #'^/dev/tty'
-    #'^/private/var'
-  )
-)
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+          @@variant_attributes
+        end
+      end
     end
   end
 end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
