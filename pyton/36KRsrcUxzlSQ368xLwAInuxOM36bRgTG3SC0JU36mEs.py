@@ -1,217 +1,210 @@
 
         
-            # Raises
-        ValueError: in case of invalid `label_mode`.
+            def park_vehicle(self, vehicle):
+        pass
+    
+        def override_category_budget(self, category, amount):
+        self.categories_to_budget_map[category] = amount
+
+    
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
+    
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
+    
+        def process_query(self, query):
+        query = self.parse_query(query)
+        results = self.memory_cache.get(query)
+        if results is None:
+            results = self.reverse_index_cluster.process_search(query)
+            self.memory_cache.set(query, results)
+        return results
+    
+        def insert_crawled_link(self, url, signature):
+        '''Add the given link to `crawled_links`.'''
+        pass
+    
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
+    
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
+    
+    
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+        class Plugin(AuthPlugin):
+        auth_type = 'test-require-false'
+        auth_require = False
+    
+        config['implicit_content_type'] = 'form'
+    config.save()
+    config.load()
+    assert 'implicit_content_type' not in config
+    assert config['default_options'] == ['--form']
+    
+    
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
+    
+    
+class BaseConfigDict(dict):
+    
+    from .compat import is_py2, builtin_str, str
+    
+    
+class SSLError(ConnectionError):
+    '''An SSL error occurred.'''
+    
+    
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
+    
+            # XXX should the partial digests be encoded too?
+        base = 'username='%s', realm='%s', nonce='%s', uri='%s', ' \
+               'response='%s'' % (self.username, realm, nonce, path, respdig)
+        if opaque:
+            base += ', opaque='%s'' % opaque
+        if algorithm:
+            base += ', algorithm='%s'' % algorithm
+        if entdig:
+            base += ', digest='%s'' % entdig
+        if qop:
+            base += ', qop='auth', nc=%s, cnonce='%s'' % (ncvalue, cnonce)
+    
+    import sys
+    
+    from .utils import override_environ
+    
+            with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(b'hehehe, not received')
+            sock.close()
+    
+    
+# From mitsuhiko/werkzeug (used with permission).
+def unquote_header_value(value, is_filename=False):
+    r'''Unquotes a header value.  (Reversal of :func:`quote_header_value`).
+    This does not use the real unquoting but what browsers are actually
+    using for quoting.
+    
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
+        else:
+            # If this is a new file
+            if newfilename != _filename:
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.linkextractors import LinkExtractor
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
+    
+    
+class ScrapesContract(Contract):
+    ''' Contract to check presence of fields in scraped items
+        @scrapes page_name page_body
     '''
-    if label_mode not in ['fine', 'coarse']:
-        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
+    
+        def test_encode(self):
+        self.assertEqual('x', self.field.encode('x'))
+    
+        def test_jwk_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url)
+        self.assertEqual(jws.signature.combined.kid, None)
+        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
     
     
-def load_data():
-    '''Loads the Fashion-MNIST dataset.
-    
-    print('Evaluate IRNN...')
-model = Sequential()
-model.add(SimpleRNN(hidden_units,
-                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
-                    recurrent_initializer=initializers.Identity(gain=1.0),
-                    activation='relu',
-                    input_shape=x_train.shape[1:]))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-rmsprop = RMSprop(lr=learning_rate)
-model.compile(loss='categorical_crossentropy',
-              optimizer=rmsprop,
-              metrics=['accuracy'])
-    
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-    
-    
-def train_model(model, train, test, num_classes):
-    x_train = train[0].reshape((train[0].shape[0],) + input_shape)
-    x_test = test[0].reshape((test[0].shape[0],) + input_shape)
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-    x_train /= 255
-    x_test /= 255
-    print('x_train shape:', x_train.shape)
-    print(x_train.shape[0], 'train samples')
-    print(x_test.shape[0], 'test samples')
-    
-        # Arguments
-        y_true: tensor of true targets.
-        y_pred: tensor of predicted targets.
-    
-    
-def test_deconv_length():
-    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
-    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
-    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
-    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
-    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
-    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
-    
-    
-def test_array32():
-    check_array(5, (1 << 16))
-    
-            exp = pd.DatetimeIndex(['2011-01-01 09:00', '2011-01-01 10:00',
-                                '2011-01-01 11:00'])
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
-    
-        expected = pd.Series([1, 2, inc, 4])
-    tm.assert_series_equal(s, expected)
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/', None),
+    'josepy': ('https://josepy.readthedocs.io/en/latest/', None),
+}
 
     
     
-class _ABCGeneric(type):
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
     
+    import homeassistant.config as config_util
     
-def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'address': None,
-    'port': None
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
+    VALID_UNITS = [
+    LENGTH_KILOMETERS,
+    LENGTH_MILES,
+    LENGTH_FEET,
+    LENGTH_METERS,
+]
     
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, response ) )
-    
-      def _adjust_thread_count( self ):
-    # When the executor gets lost, the weakref callback will wake up
-    # the worker threads.
-    def weakref_cb( _, q=self._work_queue ):
-      q.put( None )
-    # TODO(bquinlan): Should avoid creating new threads if there are more
-    # idle threads than items in the work queue.
-    if len( self._threads ) < self._max_workers:
-      t = threading.Thread( target=_worker,
-                            args=( weakref.ref( self, weakref_cb ),
-                                   self._work_queue ) )
-      t.daemon = True
-      t.start()
-      self._threads.add( t )
-    
-            if max_workers is None:
-            self._max_workers = multiprocessing.cpu_count()
-        else:
-            self._max_workers = max_workers
-    
-    def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The interpreter is shutting down OR
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if _shutdown or executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
-    
-    
-def mocap_set_action(sim, action):
-    '''The action controls the robot using mocaps. Specifically, bodies
-    on the robot (for example the gripper wrist) is controlled with
-    mocap bodies. In this case the action is the desired difference
-    in position and orientation (quaternion), in world coordinates,
-    of the of the target body. The mocap is positioned relative to
-    the target body according to the delta, and the MuJoCo equality
-    constraint optimizer tries to center the welded body on the mocap.
-    '''
-    if sim.model.nmocap > 0:
-        action, _ = np.split(action, (sim.model.nmocap * 7, ))
-        action = action.reshape(sim.model.nmocap, 7)
-    
-    env.render()
-env.unwrapped.viewer.window.on_key_press = key_press
-env.unwrapped.viewer.window.on_key_release = key_release
-    
-        # You provide the directory to write to (can be an existing
-    # directory, including one with existing data -- all monitor files
-    # will be namespaced). You can also dump to a tempdir if you'd
-    # like: tempfile.mkdtemp().
-    outdir = '/tmp/random-agent-results'
-    env = wrappers.Monitor(env, directory=outdir, force=True)
-    env.seed(0)
-    agent = RandomAgent(env.action_space)
-    
-        def steer(self, s):
-        'control: steer s=-1..1, it takes time to rotate steering wheel from side to side, s is target position'
-        self.wheels[0].steer = s
-        self.wheels[1].steer = s
-    
-    import six
-import texttable
-    
-    
-def format_return(result, max_lines):
-    if isinstance(result, (list, tuple, set)):
-        return '({0} with {1} items)'.format(type(result).__name__, len(result))
-    
-        >>> timeparse('1m24s')
-    84
-    >>> timeparse('1.2 minutes')
-    72
-    >>> timeparse('1.2 seconds')
-    1.2
-    '''
-    match = re.match(r'\s*' + TIMEFORMAT + r'\s*$', sval, re.I)
-    if not match or not match.group(0).strip():
-        return
-    
-    
-def create_host_file(client, filename):
-    with open(filename, 'r') as fh:
-        content = fh.read()
-    
-            self.project.up()
-        container = self.db.containers()[0]
-        assert container.get_mount('/var/db')['Source'] == self.host_path
-    
-        def test_tls_verify_flag_no_override(self):
-        environment = Environment({
-            'DOCKER_TLS_VERIFY': 'true',
-            'COMPOSE_TLS_VERSION': 'TLSv1',
-            'DOCKER_CERT_PATH': self.cert_path
-        })
-        options = {'--tls': True, '--tlsverify': False}
+        res = yield from async_setup_component(hass, automation.DOMAIN, {
+        automation.DOMAIN: {
+            'alias': 'hello',
+            'trigger': {
+                'platform': 'homeassistant',
+                'event': 'shutdown',
+            },
+            'action': {
+                'service': 'test.automation',
+            }
+        }
+    })
+    assert res
+    assert not automation.is_on(hass, 'automation.hello')
+    assert len(calls) == 0
