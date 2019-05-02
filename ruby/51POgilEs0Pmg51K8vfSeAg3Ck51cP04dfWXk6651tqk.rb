@@ -1,101 +1,166 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-          })
-        end').runner.execute(:test)
-    
-          it 'raises an exception when the default compile_commands.json is not present' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            oclint
-          end').runner.execute(:test)
-        end.to raise_error('Could not find json compilation database at path 'compile_commands.json'')
-      end
-    
-        # An optional block which is called when a new value is set.
-    #   Check value is valid. This could be type checks or if a folder/file exists
-    #   You have to raise a specific exception if something goes wrong. Use `user_error!` for the message: UI.user_error!('your message')
-    attr_accessor :verify_block
-    
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
-    
-            def id_for_already_imported_cache(note)
-          note.id
-        end
+          #
+  # More advanced [] that does downcase comparison.
+  #
+  def [](key)
+    begin
+      rv = self.fetch(key)
+    rescue IndexError
+      rv = nil
+    end
+    if (rv == nil)
+      begin
+        rv = self.dcase_hash[key.downcase]
+      rescue IndexError
+        rv = nil
       end
     end
-  end
-end
-
     
-            attr_reader :attributes
-    
-            attr_reader :attributes
-    
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+      #
+  # Split the URI into the resource being requested and its query string.
+  #
+  def update_uri_parts
+    # If it has a query string, get the parts.
+    if ((self.raw_uri) and (md = self.raw_uri.match(/(.+?)\?(.*)$/)))
+      self.uri_parts['QueryString'] = parse_cgi_qstring(md[2])
+      self.uri_parts['Resource']    = md[1]
+    # Otherwise, just assume that the URI is equal to the resource being
+    # requested.
     else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      self.uri_parts['QueryString'] = {}
+      self.uri_parts['Resource']    = self.raw_uri
     end
+    
+                encoded
+          end
+    
+              private
+    
+                seq = OpenSSL::ASN1::Sequence.new(seqs)
+    
+              # Decodes the start_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_start_time(input)
+            input.value[0].value
+          end
+    
+              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_etype(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the pa_data field
+          #
+          # @return [String]
+          def encode_pa_data
+            elems = []
+            pa_data.each do |data|
+              elems << data.encode
+            end
+    
+              # Encodes the from
+          #
+          # @return [OpenSSL::ASN1::GeneralizedTime]
+          def encode_from
+            OpenSSL::ASN1::GeneralizedTime.new(from)
+          end
+    
+              # Decodes the cname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_cname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+    
+              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
+          end
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
   end
     
-      # Helper for use after calling send_*_instructions methods on a resource.
-  # If we are in paranoid mode, we always act as if the resource was valid
-  # and instructions were sent.
-  def successfully_sent?(resource)
-    notice = if Devise.paranoid
-      resource.errors.clear
-      :send_paranoid_instructions
-    elsif resource.errors.empty?
-      :send_instructions
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Then(/^the repo is cloned$/) do
+  run_vagrant_command(test_dir_exists(TestApp.repo_path))
+end
+    
+        require 'capistrano/scm/#{scm_name}'
+    install_plugin #{built_in_scm_plugin_class_name}
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+      it 'returns the source' do
+    expect(subject.source).to eq(source)
+  end
+    
+    shared_examples 'logstash update' do |logstash|
+  describe 'logstash-plugin update on #{logstash.hostname}' do
+    before :each do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
     
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
+          # Returns the else branch of the `case` statement, if any.
+      #
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
       end
     
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
+            self
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
       end
     end
   end
 end
 
     
-        # Outputs the post.date as formatted html, with hooks for CSS styling.
-    #
-    #  +date+ is the date object to format as HTML.
-    #
-    # Returns string
-    def date_to_html_string(date)
-      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
-      result << date.strftime('<span class='day'>%d</span> ')
-      result << date.strftime('<span class='year'>%Y</span> ')
-      result
-    end
+      test 'change custom.css path if page-file-dir is set' do
+    Precious::App.set(:wiki_options, { :css => true, :page_file_dir => 'docs'})
+    page = 'docs/yaycustom'
+    text = 'customized!'
     
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+        post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+    
+      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
