@@ -1,276 +1,178 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-    
-      template<typename T> T* AddListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i==listerners_.end()) {
-      T* listener_object = new T(this);
-      listerners_[T::id] = listener_object;
-      return listener_object;
-    }
-    return NULL;
-  }
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/nw_shell.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'ui/gfx/point.h'
-#include 'vector'
-#include 'gtk/gtk.h'
-    
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
-      }
-    }
-    }
-    }
-    
-    void MenuItem::SetEnabled(bool enabled) {
-  is_enabled_ = enabled;
-  if (menu_)
-    menu_->UpdateStates();
+        
+    {  // Assuming T is defined in namespace foo, in the next statement,
+  // the compiler will consider all of:
+  //
+  //   1. foo::operator<< (thanks to Koenig look-up),
+  //   2. ::operator<< (as the current namespace is enclosed in ::),
+  //   3. testing::internal2::operator<< (thanks to the using statement above).
+  //
+  // The operator<< whose type matches T best will be picked.
+  //
+  // We deliberately allow #2 to be a candidate, as sometimes it's
+  // impossible to define #1 (e.g. when foo is ::std, defining
+  // anything in it is undefined behavior unless you are a compiler
+  // vendor.).
+  *os << value;
 }
     
-    void NwAppQuitFunction::DoJob(ExtensionService* service, std::string extension_id) {
-  if (base::FeatureList::IsEnabled(::features::kNWNewWin)) {
-    chrome::CloseAllBrowsersAndQuit(true);
-    return;
+    // The 'Types' template argument below must have spaces around it
+// since some compilers may choke on '>>' when passing a template
+// instance (e.g. Types<int>)
+# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
+  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTestCase<CaseName, \
+          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
+          ::testing::internal::TypeList< Types >::type>::Register(\
+              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
+    
+    // The default case.
+template <typename ToPrint, typename OtherOperand>
+class FormatForComparison {
+ public:
+  static ::std::string Format(const ToPrint& value) {
+    return ::testing::PrintToString(value);
   }
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-                                                        FROM_HERE,
-                                                        base::Bind(&ExtensionService::TerminateExtension,
-                                                                   service->AsWeakPtr(),
-                                                                   extension_id));
-}
-    
-          rect = gfx_display.work_area();
-      DisplayGeometry& work_area = displayResult->work_area;
-      work_area.x = rect.x();
-      work_area.y = rect.y();
-      work_area.width = rect.width();
-      work_area.height = rect.height();
-    
-      /**
-   * Caffe's thread local state will be initialized using the current
-   * thread values, e.g. device id, solver index etc. The random seed
-   * is initialized using caffe_rng_rand.
-   */
-  void StartInternalThread();
-    
-      /**
-   * @brief Returns the exact number of bottom blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of bottom blobs.
-   */
-  virtual inline int ExactNumBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of bottom blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of bottom blobs.
-   */
-  virtual inline int MinBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of bottom blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of bottom blobs.
-   */
-  virtual inline int MaxBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the exact number of top blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of top blobs.
-   */
-  virtual inline int ExactNumTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of top blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of top blobs.
-   */
-  virtual inline int MinTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of top blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of top blobs.
-   */
-  virtual inline int MaxTopBlobs() const { return -1; }
-  /**
-   * @brief Returns true if the layer requires an equal number of bottom and
-   *        top blobs.
-   *
-   * This method should be overridden to return true if your layer expects an
-   * equal number of bottom and top blobs.
-   */
-  virtual inline bool EqualNumBottomTopBlobs() const { return false; }
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  int count_;
-  int num_concats_;
-  int concat_input_size_;
-  int concat_axis_;
 };
     
-    #include 'caffe/layers/lrn_layer.hpp'
+      // Formats an int value as '%02d'.
+  static std::string FormatIntWidth2(int value);  // '%02d' for width == 2
     
-    #ifndef DOCQUAL_H
-#define DOCQUAL_H
-    
-    #include 'tesseractclass.h'
-#ifdef _OPENMP
-#include <omp.h>
-#endif  // _OPENMP
-    
-      // Merges the boxes from start to end, not including end, and deletes
-  // the boxes between start and end.
-  void MergeBoxes(int start, int end);
-    
-      // Simple accessors.
-  bool empty() const {
-    return heap_.empty();
-  }
-  int size() const {
-    return heap_.size();
-  }
-  int size_reserved() const {
-    return heap_.size_reserved();
-  }
-  void clear() {
-    // Clear truncates to 0 to keep the number reserved in tact.
-    heap_.truncate(0);
-  }
-  // Provides access to the underlying vector.
-  // Caution! any changes that modify the keys will invalidate the heap!
-  GenericVector<Pair>* heap() {
-    return &heap_;
-  }
-  // Provides read-only access to an element of the underlying vector.
-  const Pair& get(int index) const {
-    return heap_[index];
-  }
-    
-      // Decrement the count for t.
-  // Return whether we knew about the given pointer.
-  bool Free(T *t) {
-    if (t == nullptr) return false;
-    mu_.Lock();
-    for (int i = 0; i < cache_.size(); i++) {
-      if (cache_[i].object == t) {
-        --cache_[i].count;
-        mu_.Unlock();
-        return true;
-      }
+    template <GTEST_3_TYPENAMES_(T)>
+class GTEST_3_TUPLE_(T) {
+ public:
+  template <int k> friend class gtest_internal::Get;
     }
-    mu_.Unlock();
-    return false;
-  }
     
-      void update();
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
+
     
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
-    const std::shared_ptr<DHTBucket>& bucket,
-    const std::shared_ptr<DHTNode>& newNode)
+      // Adds an element to the end of the queue.  A copy of the element is
+  // created using the copy constructor, and then stored in the queue.
+  // Changes made to the element in the queue doesn't affect the source
+  // object, and vice versa.
+  void Enqueue(const E& element) {
+    QueueNode<E>* new_node = new QueueNode<E>(element);
+    }
+    
+        /**
+     * Sets minimum significant digits. 0 or negative means no minimum.
+     */
+    void setMin(int32_t count) {
+        fMin = count <= 0 ? 0 : count;
+    }
+    
+    #include 'unicode/unistr.h'
+    
+    
+    {    /**
+     * Formats positiveValue using the given range of digit counts.
+     * Always uses standard digits '0' through '9'. Formatted value is
+     * left padded with '0' as necessary to achieve minimum digit count.
+     * Does not produce any grouping separators or trailing decimal point.
+     * Calling format to format a value with a particular digit count range
+     * when canFormat indicates that the same value and digit count range
+     * cannot be formatted results in undefined behavior.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UnicodeString &format(
+            int32_t positiveValue,
+            const IntDigitCountRange &range,
+            UnicodeString &appendTo);
+    
+};
+    
+    int32_t
+CollationKey::hashCode() const
 {
-  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
+    // (Cribbed from UnicodeString)
+    // We cache the hashCode; when it becomes invalid, due to any change to the
+    // string, we note this by setting it to kInvalidHashCode. [LIU]
+    }
     
-    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
-{
-  periodicTaskQueue2_.addTask(task);
-}
+            VkSubmitInfo end_info = {};
+        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        end_info.commandBufferCount = 1;
+        end_info.pCommandBuffers = &command_buffer;
+        err = vkEndCommandBuffer(command_buffer);
+        check_vk_result(err);
+        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
+        check_vk_result(err);
     
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
+        // 7. Allocate texture
+    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
+    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
+    atlas->TexPixelsAlpha8 = (unsigned char*)IM_ALLOC(atlas->TexWidth * atlas->TexHeight);
+    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
+    
+    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    
+    {     // Show/hide OSD keyboard
+    if (io.WantTextInput)
+    {
+        // Some text input widget is active?
+        if (!g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = true;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 1);    // show OSD keyboard
+        }
+    }
+    else
+    {
+        // No text input widget is active
+        if (g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = false;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 0);    // hide OSD keyboard
+        }
+    }
 }
+
+    
+    #ifdef _MSC_VER
+#pragma warning (disable: 4505) // unreferenced local function has been removed (stb stuff)
+#endif
