@@ -1,161 +1,295 @@
 
         
-        REGISTER_CUDA_OPERATOR(LC2D, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LC2DGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
-    
-    
-void printVec(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
-}
-    
-    
-    {private:
-    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
-        for( ; p < nums.size() ; p ++ )
-            if( nums[p] != nums[p - 1] )
-                break;
-        return p;
+        class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
-};
     
-    
-void printArr(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
-}
-    
-    
-    {
-    {        delete dummyHead1;
-        delete dummyHead2;
-        return ret;
-    }
-};
-    
-    
-    {    return 0;
-}
+    #endif  // CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
 
     
     
-// InOrder Morris Traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(1)
-class Solution {
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+     protected:
+  ~NwObjDestroyFunction() override;
+    
+      // implement nw.Screen.startMonitor()
+  class NwScreenStartMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStartMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-                int new_level_num = 0;
-            vector<int> level;
-            for(int i = 0; i < level_num; i ++){
-                TreeNode* node = q.front();
-                q.pop();
-                level.push_back(node->val);
+    namespace caffe2 {
     }
     
-    #include <iostream>
-#include <vector>
+    Each feature has fixed lengths which are passed as lengths argument and a
+separate tensor will be produced for each feature.
+i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
     
-    using namespace std;
+    )DOC')
+    .Arg(
+        'values',
+        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
+        true /* required */)
+    .Arg(
+        'dtype',
+        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
+    .Arg(
+        'shape',
+        '*(type: [int])* Desired shape of the *output* tensor.')
+    .Arg(
+        'extra_shape',
+        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
+    .Input(
+        0,
+        'input',
+        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
+    .Output(
+        0,
+        'output',
+        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
+    .TensorInferenceFunction(FillerTensorInference<>);
     
-    using namespace CalculatorApp::Common::Automation;
-using namespace Windows::UI::Xaml::Automation;
-using namespace Windows::UI::Xaml::Automation::Peers;
-using namespace Windows::UI::Xaml::Controls;
+    				cmderOptions.cmderCfgRoot = cmderCfgRoot;
     
-    namespace CalculatorApp
-{
-    EngineResourceProvider::EngineResourceProvider()
-    {
-        m_resLoader = ResourceLoader::GetForViewIndependentUse('CEngineStrings');
+    // TODO(jorlow): Many of these belong more in the environment class rather than
+//               here. We should try moving them and see if it affects perf.
+    
+    namespace leveldb {
     }
-    }
     
-    std::shared_ptr<IExpressionCommand> CommandDeserializer::Deserialize(_In_ CalculationManager::CommandType cmdType)
-{
-    switch (cmdType)
-    {
-    case CalculationManager::CommandType::OperandCommand:
-    }
-    }
+      // Delete everything
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Delete(WriteOptions(), Key(i)));
+  }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
     
-                static void OnVirtualKeyControlChordPropertyChanged(
-                Windows::UI::Xaml::DependencyObject^ target,
-                MyVirtualKey oldValue,
-                MyVirtualKey newValue);
+      // Implementations of the DB interface
+  virtual Status Put(const WriteOptions&, const Slice& key, const Slice& value);
+  virtual Status Delete(const WriteOptions&, const Slice& key);
+  virtual Status Write(const WriteOptions& options, WriteBatch* updates);
+  virtual Status Get(const ReadOptions& options, const Slice& key,
+                     std::string* value);
+  virtual Iterator* NewIterator(const ReadOptions&);
+  virtual const Snapshot* GetSnapshot();
+  virtual void ReleaseSnapshot(const Snapshot* snapshot);
+  virtual bool GetProperty(const Slice& property, std::string* value);
+  virtual void GetApproximateSizes(const Range* range, int n, uint64_t* sizes);
+  virtual void CompactRange(const Slice* begin, const Slice* end);
     
-    #include 'pch.h'
-#include 'NetworkManager.h'
-    
-    #include 'ICurrencyHttpClient.h'
-    
-    
-    {    // exception out_of_range.401
-    try
-    {
-        // try to write at a nonexisting key
-        object.at('the fast') = 'il rapido';
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-}
-
-    
-    using json = nlohmann::json;
-    
-    using apollo::common::ErrorCode;
-    
-    using apollo::drivers::canbus::Byte;
-    
-    void SplineSegKernel::CalculateDerivative(const uint32_t num_params) {
-  kernel_derivative_ = Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 1; r < kernel_derivative_.rows(); ++r) {
-    for (int c = 1; c < kernel_derivative_.cols(); ++c) {
-      kernel_derivative_(r, c) = r * c / (r + c - 1.0);
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = {'', 'k', 'hello', 'longggggggggggggggggggggg'};
+  const uint64_t seq[] = {1,
+                          2,
+                          3,
+                          (1ull << 8) - 1,
+                          1ull << 8,
+                          (1ull << 8) + 1,
+                          (1ull << 16) - 1,
+                          1ull << 16,
+                          (1ull << 16) + 1,
+                          (1ull << 32) - 1,
+                          1ull << 32,
+                          (1ull << 32) + 1};
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
     }
   }
 }
     
-      Byte t2(bytes + 2);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-      Byte t2(bytes + 6);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-      Byte t3(bytes + 3);
-  t = t3.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+    #include 'db/dbformat.h'
+#include 'port/port.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
     
     
+    {        // Update font info
+        FT_Size_Metrics metrics = Face->size->metrics;
+        Info.PixelHeight = (uint32_t)pixel_height;
+        Info.Ascender = (float)FT_CEIL(metrics.ascender);
+        Info.Descender = (float)FT_CEIL(metrics.descender);
+        Info.LineSpacing = (float)FT_CEIL(metrics.height);
+        Info.LineGap = (float)FT_CEIL(metrics.height - metrics.ascender + metrics.descender);
+        Info.MaxAdvanceWidth = (float)FT_CEIL(metrics.max_advance);
+    }
+    
+    struct GLFWwindow;
+    
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX12 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    Speed* Speed::create(ActionInterval* action, float speed)
+{
+    Speed *ret = new (std::nothrow) Speed();
+    if (ret && ret->initWithAction(action, speed))
     {
-    {
-    {
-    {  Brake_rpt_6c::Brake_on_offType ret =
-      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
-  return ret;
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
     
-    void Headlightrpt77::Parse(const std::uint8_t* bytes, int32_t length,
-                           ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_output_value(
-      output_value(bytes, length));
-  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_manual_input(
-      manual_input(bytes, length));
-  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_commanded_value(
-      commanded_value(bytes, length));
+        /** Replace the interior action.
+     *
+     * @param action The new action, it will replace the running action.
+     */
+    void setInnerAction(ActionInterval *action);
+    /** Return the interior action.
+     *
+     * @return The interior action.
+     */
+    ActionInterval* getInnerAction() const { return _innerAction; }
+    
+    
+    {    for (i = 0; i < (_gridSize.width+1); ++i)
+    {
+        for (j = 0; j < (_gridSize.height+1); ++j)
+        {
+            Vec3 v = getOriginalVertex(Vec2(i, j));
+            Vec2 vect = _position - Vec2(v.x,v.y);
+            float r = vect.getLength();
+            
+            if (r < _radius)
+            {
+                r = _radius - r;
+                float rate = powf(r / _radius, 2);
+                v.z += (sinf( time*(float)M_PI * _waves * 2 + r * 0.1f) * _amplitude * _amplitudeRate * rate);
+            }
+            
+            setVertex(Vec2(i, j), v);
+        }
+    }
+}
+    
+    CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
+{
+    auto ret = new (std::nothrow) CallFuncN();
+    }
+    
+        /** Set the selector target.
+     *
+     * @param sel The selector target.
+     */
+    void setTargetCallback(Ref* sel)
+    {
+        if (sel != _selectorTarget)
+        {
+            CC_SAFE_RETAIN(sel);
+            CC_SAFE_RELEASE(_selectorTarget);
+            _selectorTarget = sel;
+        }
+    }
+    //
+    // Overrides
+    //
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    virtual CallFunc* reverse() const override;
+    virtual CallFunc* clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    CallFunc()
+    : _selectorTarget(nullptr)
+    , _callFunc(nullptr)
+    , _function(nullptr)
+    {
+    }
+    virtual ~CallFunc();
+    
+    
+    {    if (element->actions->num == 0)
+    {
+        if (_currentTarget == element)
+        {
+            _currentTargetSalvaged = true;
+        }
+        else
+        {
+            deleteHashElement(element);
+        }
+    }
+}
+    
+    
+    {// end of actions group
+/// @}
+    
+    float Animation::getDuration(void) const
+{
+    return _totalDelayUnits * _delayPerUnit;
+}
+    
+        // shader stuff
+    setGLProgramState(GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP, texture));
+    
+    #include '2d/CCNode.h'
+#include 'base/CCProtocols.h'
+#include 'base/ccTypes.h'
+#include 'renderer/CCQuadCommand.h'
+    
+    
+    {    //turn the result into simply polygon (AKA, fix overlap)
+    
+    //clamp into the specified rect
+    ClipperLib::Clipper cl;
+    cl.StrictlySimple(true);
+    cl.AddPath(p->Contour, ClipperLib::ptSubject, true);
+    //create the clipping rect
+    ClipperLib::Path clamp;
+    clamp.push_back(ClipperLib::IntPoint(0, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, rect.size.height/_scaleFactor * PRECISION));
+    clamp.push_back(ClipperLib::IntPoint(0, rect.size.height/_scaleFactor * PRECISION));
+    cl.AddPath(clamp, ClipperLib::ptClip, true);
+    cl.Execute(ClipperLib::ctIntersection, out);
+    
+    std::vector<Vec2> outPoints;
+    ClipperLib::PolyNode* p2 = out.GetFirst();
+    while(p2->IsHole()){
+        p2 = p2->GetNext();
+    }
+    for(const auto& pt : p2->Contour)
+    {
+        outPoints.push_back(Vec2(pt.X/PRECISION, pt.Y/PRECISION));
+    }
+    return outPoints;
 }
