@@ -1,192 +1,168 @@
 
         
-        // Instantiate a class with float and double specifications.
-#define INSTANTIATE_CLASS(classname) \
-  char gInstantiationGuard##classname; \
-  template class classname<float>; \
-  template class classname<double>
-    
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    
-      // Adds a creator.
-  static void AddCreator(const string& type, Creator creator) {
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 0)
-        << 'Layer type ' << type << ' already registered.';
-    registry[type] = creator;
-  }
-    
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
-    }
-    
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
-    
-    #endif  // DMLC_ENABLE_STD_THREAD
+        
+    {}  // end namespace tensorflow
 
     
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
+    
+    {}  // namespace tensorflow
+    
+    // Creates a numpy array in 'ret' and copies the content of tensor 't'
+// into 'ret'.
+Status ConvertTensorToNdarray(const Tensor& t, PyObject** ret);
+    
+    // Safe container for an owned PyObject. On destruction, the reference count of
+// the contained object will be decremented.
+using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
+Safe_PyObjectPtr make_safe(PyObject* o);
+    
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+      // Synchronize with spinlocks.
+  static const unsigned kScheduleSpin = 0x02;
+  // Synchronize with spinlocks that also call CPU yield instructions.
+  static const unsigned kScheduleYield = 0x04;
+  // Synchronize with a 'synchronization primitive' (e.g. mutex).
+  static const unsigned kScheduleBlockingSync = 0x08;
+    
+    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
+// case with any set of parameters you want. Google Test defines a number
+// of functions for generating test parameters. They return what we call
+// (surprise!) parameter generators. Here is a  summary of them, which
+// are all in the testing namespace:
+//
+//
+//  Range(begin, end [, step]) - Yields values {begin, begin+step,
+//                               begin+step+step, ...}. The values do not
+//                               include end. step defaults to 1.
+//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
+//  ValuesIn(container)        - Yields values from a C-style array, an STL
+//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
+//  Bool()                     - Yields sequence {false, true}.
+//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
+//                               for the math savvy) of the values generated
+//                               by the N generators.
+//
+// For more details, see comments at the definitions of these functions below
+// in this file.
+//
+// The following statement will instantiate tests from the FooTest test case
+// each with parameter values 'meeny', 'miny', and 'moe'.
+    
+    template <typename T>
+class TypeWithoutFormatter<T, kProtobuf> {
+ public:
+  static void PrintValue(const T& value, ::std::ostream* os) {
+    const ::testing::internal::string short_str = value.ShortDebugString();
+    const ::testing::internal::string pretty_str =
+        short_str.length() <= kProtobufOneLinerMaxLength ?
+        short_str : ('\n' + value.DebugString());
+    *os << ('<' + pretty_str + '>');
   }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
 };
     
-    void SimpleCSRSource::BeforeFirst() {
-  at_first_ = true;
+      // Gets the line in the source file where the test part took place,
+  // or -1 if it's unknown.
+  int line_number() const { return line_number_; }
+    
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_)};
+    return ValuesIn(array);
+  }
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+// Currently we support at most $n types in a list, and at most $n
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
+    
+    #include 'sample2.h'
+    
+      size_t Length() const {
+    return c_string_ == NULL ? 0 : strlen(c_string_);
+  }
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    
+    {}  // namespace xgboost
+#endif  // XGBOOST_TREE_UPDATER_H_
+
+    
+    SEXP XGBoosterPredict_R(SEXP handle, SEXP dmat, SEXP option_mask, SEXP ntree_limit) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGBoosterPredict(R_ExternalPtrAddr(handle),
+                            R_ExternalPtrAddr(dmat),
+                            asInteger(option_mask),
+                            asInteger(ntree_limit),
+                            &olen, &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
-    BatchSet SimpleDMatrix::GetRowBatches() {
-  auto cast = dynamic_cast<SimpleCSRSource*>(source_.get());
-  auto begin_iter = BatchIterator(new SimpleBatchIteratorImpl(&(cast->page_)));
-  return BatchSet(begin_iter);
-}
+      /*!
+   * \brief feature contributions to individual predictions; the output will be a vector
+   *         of length (nfeats + 1) * num_output_group * nsample, arranged in that order
+   * \param dmat feature matrix
+   * \param out_contribs output vector to hold the contributions
+   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
+   *    we do not limit number of trees
+   * \param approximate use a faster (inconsistent) approximation of SHAP values
+   * \param condition condition on the condition_feature (0=no, -1=cond off, 1=cond on).
+   * \param condition_feature feature to condition on (i.e. fix) during calculations
+   */
+  virtual void PredictContribution(DMatrix* dmat,
+                           std::vector<bst_float>* out_contribs,
+                           unsigned ntree_limit = 0, bool approximate = false,
+                           int condition = 0, unsigned condition_feature = 0) = 0;
     
-        // print values
-    std::cout << object << '\n';
-    std::cout << null << '\n';
+    // This is a helpful data structure to define parameters
+// You do not have to use it.
+// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
+// for introduction of this module.
+struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
+  float scale_neg_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
+    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
+        .describe('Scale the weight of negative examples by this factor');
+  }
+};
