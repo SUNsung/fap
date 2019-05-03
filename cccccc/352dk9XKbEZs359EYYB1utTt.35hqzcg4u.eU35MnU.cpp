@@ -1,403 +1,209 @@
 
         
-        // Parses a set of comma-delimited name/value pairs.
-void ParseGeneratorParameter(const string& text,
-                             std::vector<std::pair<string, string> >* output) {
-  std::vector<string> parts = Split(text, ',', true);
+          // base::SingleThreadTaskRunner:
+  bool PostDelayedTask(const base::Location& from_here,
+                       base::OnceClosure task,
+                       base::TimeDelta delay) override;
+  bool RunsTasksInCurrentSequence() const override;
+  bool PostNonNestableDelayedTask(const base::Location& from_here,
+                                  base::OnceClosure task,
+                                  base::TimeDelta delay) override;
+    
+    
+    {}  // namespace api
+    
+    namespace atom {
     }
     
-      auto* message1_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
-  TestUtil::SetAllFields(message1_on_arena);
-  const auto* nested = &message1_on_arena->optional_nested_message();
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/net/atom_network_delegate.h'
+#include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
     
-    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
-    string comments = location.leading_comments.empty() ?
-        location.trailing_comments : location.leading_comments;
-    if (comments.empty()) {
-        return;
-    }
-    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
-    // node of a summary element, not part of an attribute.
-    comments = StringReplace(comments, '&', '&amp;', true);
-    comments = StringReplace(comments, '<', '&lt;', true);
-    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
-    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
-    // but that needs to be part of a bigger effort to understand the markdown better anyway.
-    printer->Print('/// <summary>\n');
-    bool last_was_empty = false;
-    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
-    // to preserve the blank lines themselves, as this is relevant in the markdown.
-    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
-    // (We don't skip 'just whitespace' lines, either.)
-    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-        string line = *it;
-        if (line.empty()) {
-            last_was_empty = true;
-        } else {
-            if (last_was_empty) {
-                printer->Print('///\n');
-            }
-            last_was_empty = false;
-            printer->Print('///$line$\n', 'line', *it);
-        }
-    }
-    printer->Print('/// </summary>\n');
+      int32_t weak_map_id_ = 0;
+    
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
 }
     
-    EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
-    SourceGeneratorBase(descriptor->file(), options),
-    descriptor_(descriptor) {
-}
     
-      desired_output_for_decode = 'abcdefghIJ';
-  expected = string('\x0A\x0', 2);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
-    
-    bool GzipOutputStream::Flush() {
-  zerror_ = Deflate(Z_FULL_FLUSH);
-  // Return true if the flush succeeded or if it was a no-op.
-  return  (zerror_ == Z_OK) ||
-      (zerror_ == Z_BUF_ERROR && zcontext_.avail_in == 0 &&
-       zcontext_.avail_out != 0);
-}
-    
-      // Before Next() is called, the initial token should always be TYPE_START.
-  EXPECT_EQ(Tokenizer::TYPE_START, tokenizer.current().type);
-  EXPECT_EQ('', tokenizer.current().text);
-  EXPECT_EQ(0, tokenizer.current().line);
-  EXPECT_EQ(0, tokenizer.current().column);
-  EXPECT_EQ(0, tokenizer.current().end_column);
-    
-    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
-    
-    ```
-    
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
-    
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
-    
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
-    
-    #include 'paramsd.h'
-#include <cstdio>            // for fclose, fopen, fprintf, sprintf, FILE
-#include <cstdlib>           // for atoi, strtod
-#include <cstring>           // for strcmp, strcspn, strlen, strncpy
-#include <map>               // for map, _Rb_tree_iterator, map<>::iterator
-#include <memory>            // for unique_ptr
-#include <utility>           // for pair
-#include 'genericvector.h'   // for GenericVector
-#include 'params.h'          // for ParamsVectors, StringParam, BoolParam
-#include 'scrollview.h'      // for SVEvent, ScrollView, SVET_POPUP
-#include 'svmnode.h'         // for SVMenuNode
-#include 'tesseractclass.h'  // for Tesseract
-    
-      // Inserts a new box before the given index.
-  // Recomputes the bounding box.
-  void InsertBox(int index, const TBOX& box);
-    
-      // Accessors.
-  int total_cost() const {
-    return total_cost_;
-  }
-  int Pathlength() const {
-    return total_steps_;
-  }
-  const DPPoint* best_prev() const {
-    return best_prev_;
-  }
-  void AddLocalCost(int new_cost) {
-    local_cost_ += new_cost;
-  }
-    
-      // Returns the direction of the fitted line as a unit vector, using the
-  // least mean squared perpendicular distance. The line runs through the
-  // mean_point, i.e. a point p on the line is given by:
-  // p = mean_point() + lambda * vector_fit() for some real number lambda.
-  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
-  // and may be negated without changing its meaning, since a line is only
-  // unique to a range of pi radians.
-  // Modernists prefer to think of this as an Eigenvalue problem, but
-  // Pearson had the simple solution in 1901.
-  //
-  // Note that this is equivalent to returning the Principal Component in PCA,
-  // or the eigenvector corresponding to the largest eigenvalue in the
-  // covariance matrix.
-  FCOORD vector_fit() const;
-    
-     private:
-  // Free allocated memory and clear pointers.
-  void Clear();
-  // Setup default values.
-  void Init();
-    
-    
-    {
-    {
-    {			}
-			if (decomposed[i].IsUsable()){
-				decomposed[i].AddTo(*toAdd);
-				
-				bd->CreateFixture((const b2FixtureDef*)toAdd);
-			} else if (B2_POLYGON_REPORT_ERRORS){
-				printf('Didn't add unusable polygon.  Dumping vertices:\n');
-				decomposed[i].print();
-			}
-Skip:
-			;
-        }
-		delete[] pdarray;
-        delete[] decomposed;
-		return;// pdarray; //needs to be deleted after body is created
-}
-    
-    		Image image(a_pafSourceRGBA, a_uiSourceWidth,
-					a_uiSourceHeight,
-					a_eErrMetric);
-		image.m_bVerboseOutput = a_bVerboseOutput;
-		image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
-    
-    		// if a border pixel
-		if (isnan(a_frgbaSourcePixel.fA))
-		{
-			return 0.0f;
-		}
-    
-    
-#endif /* AFBLUE_H_ */
-    
-    #define SAMP_MIN -SAMP_MAX
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    
-    {
-    {
-    {}  // namespace caffe
-}  // namespace op
-}  // namespace mxnet
+    {}  // namespace atom
 
     
     
-    {  /*! \brief MNISTCass iter params */
-  CaffeDataParam param_;
-  /*! \brief Shape scalar values */
-  index_t batch_size_, channels_, width_, height_;
-  /*! \brief Caffe data layer */
-  boost::shared_ptr<caffe::Layer<Dtype> >  caffe_data_layer_;
-  /*! \brief batch data blob */
-  mxnet::TBlob batch_data_;
-  /*! \brief batch label blob */
-  mxnet::TBlob batch_label_;
-  /*! \brief Output blob data for this iteration */
-  TBlobBatch out_;
-  /*! \brief Bottom and top connection-point blob data */
-  std::vector<::caffe::Blob<Dtype>*> bottom_, top_;
-  /*! \brief Cleanup these blobs on exit */
-  std::list<std::unique_ptr<::caffe::Blob<Dtype>>> cleanup_blobs_;
-  /*! \brief type flag of the tensor blob */
-  const int type_flag_;
-  /*! \brief Blobs done so far */
-  std::atomic<size_t>  loc_;
-};  // class CaffeDataIter
+    {}  // namespace atom
     
-      void HandleOpReq(mshadow::Stream<xpu>*s, OpReqType req, const TBlob& in_g) {
-    if ((req == kWriteInplace) || (req == kWriteTo)) {
-      mshadow::Tensor<xpu, 2, Dtype> grad = in_g.FlatTo2D<xpu, Dtype>(s);
-      grad = 0;
+      aura::Window* root_window = view->GetRootWindow();
+  if (!root_window || !aura::client::GetDragDropClient(root_window))
+    return;
+    
+    namespace tesseract {
+    }
+    
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
     }
   }
     
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
- */
-class ImageAugmenter {
- public:
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
-   */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
-    }
-    }
     
-        if (param_.mean_r > 0.0f || param_.mean_g > 0.0f ||
-        param_.mean_b > 0.0f || param_.mean_a > 0.0f) {
-      // subtract mean per channel
-      data[0] -= param_.mean_r;
-      if (data.shape_[0] >= 3) {
-        data[1] -= param_.mean_g;
-        data[2] -= param_.mean_b;
-      }
-      if (data.shape_[0] == 4) {
-        data[3] -= param_.mean_a;
-      }
-    } else if (!meanfile_ready_ || param_.mean_img.length() == 0) {
-      // do not subtract anything
-    } else {
-      CHECK(meanfile_ready_);
-      data -= meanimg_;
-    }
-    
-    /*
- * Before using the parallel module, you can configure these to change
- * how much parallelism is used.
- */
-extern size_t num_threads;
-extern size_t work_chunk;
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
-  }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
 };
     
-    // implementing configure.
-template<typename PairIter>
-inline void GradientBooster::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
+      // Sets up the DENORM to execute a non-linear transformation based on
+  // preserving an even distribution of stroke edges. The transformation
+  // operates only within the given box, scaling input coords within the box
+  // non-linearly to a box of target_width by target_height, with all other
+  // coords being clipped to the box edge. As with SetupNormalization above,
+  // final_xshift and final_yshift are applied after scaling, and the bottom-
+  // left of box is used as a pre-scaling origin.
+  // x_coords is a collection of the x-coords of vertical edges for each
+  // y-coord starting at box.bottom().
+  // y_coords is a collection of the y-coords of horizontal edges for each
+  // x-coord starting at box.left().
+  // Eg x_coords[0] is a collection of the x-coords of edges at y=bottom.
+  // Eg x_coords[1] is a collection of the x-coords of edges at y=bottom + 1.
+  // The second-level vectors must all be sorted in ascending order.
+  void SetupNonLinear(const DENORM* predecessor, const TBOX& box,
+                      float target_width, float target_height,
+                      float final_xshift, float final_yshift,
+                      const GenericVector<GenericVector<int> >& x_coords,
+                      const GenericVector<GenericVector<int> >& y_coords);
     
-      /*! \return the default evaluation metric for the objective */
-  virtual const char* DefaultEvalMetric() const = 0;
-  // the following functions are optional, most of time default implementation is good enough
-  /*!
-   * \brief transform prediction values, this is only called when Prediction is called
-   * \param io_preds prediction values, saves to this vector as well
-   */
-  virtual void PredTransform(HostDeviceVector<bst_float> *io_preds) {}
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
+  }
+    
+      /* Reject modes generated after NN_ACCEPT but before MM_ACCEPT */
+  R_HYPHEN,        // TEMP Post NN dodgy hyphen or full stop
+  R_DUBIOUS,       // TEMP Post NN dodgy chars
+  R_NO_ALPHANUMS,  // TEMP No alphanumerics in word after NN
+  R_MOSTLY_REJ,    // TEMP Most of word rejected so rej the rest
+  R_XHT_FIXUP,     // TEMP Xht tests unsure
     
       bool Read(SparsePage* page,
             dmlc::SeekStream* fi,
             const std::vector<bst_uint>& sorted_index_set) override {
     if (!fi->Read(&disk_offset_)) return false;
-    this->LoadIndexValue(fi);
     auto& offset_vec = page->offset.HostVector();
     auto& data_vec = page->data.HostVector();
+    // setup the offset
     offset_vec.clear();
     offset_vec.push_back(0);
-    for (bst_uint cid : sorted_index_set) {
-      offset_vec.push_back(
-          offset_vec.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
+    for (unsigned int fid : sorted_index_set) {
+      CHECK_LT(fid + 1, disk_offset_.size());
+      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
+      offset_vec.push_back(offset_vec.back() + size);
     }
     data_vec.resize(offset_vec.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), disk_offset_.back());
+    // read in the data
+    size_t begin = fi->Tell();
+    size_t curr_offset = 0;
+    for (size_t i = 0; i < sorted_index_set.size();) {
+      bst_uint fid = sorted_index_set[i];
+      if (disk_offset_[fid] != curr_offset) {
+        CHECK_GT(disk_offset_[fid], curr_offset);
+        fi->Seek(begin + disk_offset_[fid] * sizeof(Entry));
+        curr_offset = disk_offset_[fid];
+      }
+      size_t j, size_to_read = 0;
+      for (j = i; j < sorted_index_set.size(); ++j) {
+        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
+          size_to_read += offset_vec[j + 1] - offset_vec[j];
+        } else {
+          break;
+        }
+      }
     }
+    }
+    
+    struct LambdaRankParam : public dmlc::Parameter<LambdaRankParam> {
+  int num_pairsample;
+  float fix_list_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(LambdaRankParam) {
+    DMLC_DECLARE_FIELD(num_pairsample).set_lower_bound(1).set_default(1)
+        .describe('Number of pair generated for each instance.');
+    DMLC_DECLARE_FIELD(fix_list_weight).set_lower_bound(0.0f).set_default(0.0f)
+        .describe('Normalize the weight of each list by this value,'
+                  ' if equals 0, no effect will happen');
+  }
+};
+    
+    TEST(c_api, XGDMatrixCreateFromMat_omp) {
+  std::vector<int> num_rows = {100, 11374, 15000};
+  for (auto row : num_rows) {
+    int num_cols = 50;
+    int num_missing = 5;
+    DMatrixHandle handle;
+    std::vector<float> data(num_cols * row, 1.5);
+    for (int i = 0; i < num_missing; i++) {
+      data[i] = std::numeric_limits<float>::quiet_NaN();
+    }
+    }
+    }
+    
+        inline void producer_remove(Coroutine *co)
+    {
+        producer_queue.remove(co);
+    }
+    
+        cache.set('test2', val2);
+    ASSERT_EQ(cache.get('test2').get(), val2.get());
+    val2.reset();
+    ASSERT_EQ(dtor_num, 1);
+    ASSERT_EQ(cache.get('test'), nullptr);
+    
+    
+    {
+    {    inline void clear()
+    {
+        cache_list.clear();
+        cache_map.clear();
+    }
+};
+}
+    
+    TEST(coroutine_gethostbyname, resolve_without_cache)
+{
+    coro_test([](void *arg)
+    {
+        set_dns_cache_capacity(0);
+    }
+    }
+    
+    TEST(coroutine_channel, pop_yield)
+{
+    Channel chan(1);
+    }
+    
+    using namespace swoole;
+    
+    static void timer1(swTimer *timer, swTimer_node *tnode)
+{
+    static int count = 0;
+    printf('#%d\thello world\n', count);
+    if (count > 9)
+    {
+        swoole_timer_clear(tnode->id);
+    }
+    count++;
+}
