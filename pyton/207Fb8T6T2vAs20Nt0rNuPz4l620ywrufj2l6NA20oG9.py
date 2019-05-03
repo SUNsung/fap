@@ -1,70 +1,124 @@
 
         
-                # Removing unique constraint on 'RawEvent', fields ['project', 'event_id']
-        db.delete_unique('sentry_rawevent', ['project_id', 'event_id'])
+            def __eq__(self, other):
+        if isinstance(other, Mapping):
+            other = CaseInsensitiveDict(other)
+        else:
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
     
-            for renv in dupe_release_envs:
-            release_id = renv['release_id']
-            organization_id = renv['organization_id']
-            environment_id = renv['environment_id']
-            renvs = list(
-                orm.ReleaseEnvironment.objects.filter(
-                    release_id=release_id,
-                    organization_id=organization_id,
-                    environment_id=environment_id,
-                ).order_by('first_seen')
-            )
-            to_renv = renvs[0]
-            from_renvs = renvs[1:]
-            last_seen = max([re.last_seen for re in renvs])
-            orm.ReleaseEnvironment.objects.filter(
-                id=to_renv.id,
-            ).update(last_seen=last_seen)
-            orm.ReleaseEnvironment.objects.filter(
-                id__in=[re.id for re in from_renvs],
-            ).delete()
+    
+class TestCaseInsensitiveDict:
+    
+        def _accept_connection(self):
+        try:
+            ready, _, _ = select.select([self.server_sock], [], [], self.WAIT_EVENT_TIMEOUT)
+            if not ready:
+                return None
+    
+        return authstr
+    
+        def update(self, other):
+        '''Updates this jar with cookies from another CookieJar or dict-like'''
+        if isinstance(other, cookielib.CookieJar):
+            for cookie in other:
+                self.set_cookie(copy.copy(cookie))
+        else:
+            super(RequestsCookieJar, self).update(other)
+    
+    
+def test_digestauth_401_only_sent_once():
+    '''Ensure we correctly respond to a 401 challenge once, and then
+    stop responding if challenged again.
+    '''
+    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
+                b'Content-Length: 0\r\n'
+                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
+                b', opaque='372825293d1c26955496c80ed6426e9e', '
+                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
+    
+        @certbot_util.patch_get_utility()
+    def test_select_correct(self, mock_util):
+        mock_util().checklist.return_value = (
+            display_util.OK, [self.vhosts[3].display_repr(),
+                              self.vhosts[2].display_repr()])
+        vhs = select_vhost_multiple([self.vhosts[3],
+                                     self.vhosts[2],
+                                     self.vhosts[1]])
+        self.assertTrue(self.vhosts[2] in vhs)
+        self.assertTrue(self.vhosts[3] in vhs)
+        self.assertFalse(self.vhosts[1] in vhs)
+    
+    Certbot will emit a warning if it detects that the credentials file can be
+accessed by other users on your system. The warning reads 'Unsafe permissions
+on credentials configuration file', followed by the path to the credentials
+file. This warning will be emitted each time Certbot uses the credentials file,
+including for renewal, and cannot be silenced except by addressing the issue
+(e.g., by using a command like ``chmod 600`` to restrict access to the file).
+    
+    
+# -- Options for Texinfo output -------------------------------------------
+    
+       certbot certonly \\
+     --dns-digitalocean \\
+     --dns-digitalocean-credentials ~/.secrets/certbot/digitalocean.ini \\
+     --dns-digitalocean-propagation-seconds 60 \\
+     -d example.com
     
     
 class Migration(SchemaMigration):
     def forwards(self, orm):
-        # Adding field 'ApiGrant.scope_list'
-        db.add_column(
-            'sentry_apigrant',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
-    
-            # Adding model 'DSymApp'
+        # Adding model 'GroupCommitResolution'
         db.create_table(
-            'sentry_dsymapp', (
+            'sentry_groupcommitresolution', (
                 (
                     'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
                         primary_key=True
                     )
                 ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), ('app_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
-                ('sync_id', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
-                ('data', self.gf('jsonfield.fields.JSONField')(default={})), (
-                    'platform',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        default=0
-                    )
+                    'group_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
                 ), (
-                    'last_synced',
-                    self.gf('django.db.models.fields.DateTimeField')()
+                    'commit_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
                 ), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
+                    'datetime', self.gf('django.db.models.fields.DateTimeField')(
+                        db_index=True
+                    )
                 ),
             )
         )
-        db.send_create_signal('sentry', ['DSymApp'])
+        db.send_create_signal('sentry', ['GroupCommitResolution'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+    
+            # User chose to not deal with backwards NULL issues for 'Environment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'Environment.project_id' and its values cannot be restored.'
+        )
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
+    
+            # Deleting field 'ApiAuthorization.scope_list'
+        db.delete_column('sentry_apiauthorization', 'scope_list')
     
         models = {
         'sentry.activity': {
@@ -117,14 +171,14 @@ class Migration(SchemaMigration):
             }),
             'client_id': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''224ad6adff31470a9e43e87388cb3332adc0f38b62224fbd9d2c5827625885d2'',
+                    'default': ''6949fb4996184c5abf84d6e2206deb2028847544b25745dcb59f9788f860cd4b'',
                     'unique': 'True',
                     'max_length': '64'
                 }
             ),
             'client_secret': (
                 'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''8958c588f498407288eb88a09d633c1ed7a93edf651846b4a7657dd7545ffb3e''
+                    'default': ''120099c387964b1c826925621112bec1d8dbb441c0f24233b2487fa1350c03d7''
                 }
             ),
             'date_added':
@@ -142,7 +196,7 @@ class Migration(SchemaMigration):
             }),
             'name': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''Granulose Denyse'',
+                    'default': ''Transitive Clemente'',
                     'max_length': '64',
                     'blank': 'True'
                 }
@@ -214,14 +268,14 @@ class Migration(SchemaMigration):
             ),
             'code': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''04511aab0b6545fd862d97b0e0b392fe'',
+                    'default': ''c52f5a5dc7dd41448dc017bd251144dc'',
                     'max_length': '64',
                     'db_index': 'True'
                 }
             ),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 5, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 23, 0, 0)',
                     'db_index': 'True'
                 }
             ),
@@ -312,7 +366,7 @@ class Migration(SchemaMigration):
             }),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 5, 5, 0, 0)',
+                    'default': 'datetime.datetime(2017, 4, 22, 0, 0)',
                     'null': 'True'
                 }
             ),
@@ -322,7 +376,7 @@ class Migration(SchemaMigration):
             }),
             'refresh_token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''a0bcb70d00954a2a8b671d27fd8406fed2c9b6641f6646be8d433b203aed97d0'',
+                    'default': ''4f556f8dc184403fa0cd07e85a1a388204ca73f817294a0a9652081c86929bca'',
                     'max_length': '64',
                     'unique': 'True',
                     'null': 'True'
@@ -338,7 +392,7 @@ class Migration(SchemaMigration):
             }),
             'token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''46b15f4812734479b5978e2b78119dcc66e3a0b7e5c945e88a415e12a90adfb2'',
+                    'default': ''da4ff55914c148c1b652ef734ac727adc0fc7dc596a2445199009467c7d51337'',
                     'unique': 'True',
                     'max_length': '64'
                 }
@@ -532,7 +586,7 @@ class Migration(SchemaMigration):
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 12, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 30, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -2495,33 +2549,6 @@ class Migration(SchemaMigration):
                 }
             )
         },
-        'sentry.releaseheadcommit': {
-            'Meta': {
-                'unique_together': '(('repository_id', 'release'),)',
-                'object_name': 'ReleaseHeadCommit'
-            },
-            'commit': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Commit']'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'repository_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
-        },
         'sentry.releaseproject': {
             'Meta': {
                 'unique_together': '(('project', 'release'),)',
@@ -2667,12 +2694,6 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '128'
             }),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']',
-                    'null': 'True'
-                }
-            ),
             'project': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.Project']'
@@ -2939,7 +2960,7 @@ class Migration(SchemaMigration):
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'niTW4OgDa3WpF4EtCz2kBurkK7XVfn4Y'',
+                    'default': 'u'MJgpqztt1JFwT0a7mqP7bJys66oGvuWt'',
                     'max_length': '32'
                 }
             )
@@ -3043,10 +3064,39 @@ class Migration(SchemaMigration):
     
 class Migration(SchemaMigration):
     def forwards(self, orm):
-        # Adding field 'CommitAuthor.external_id'
+        # Adding model 'Distribution'
+        db.create_table(
+            'sentry_distribution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'organization_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        db_index=True
+                    )
+                ), (
+                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Release']
+                    )
+                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['Distribution'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
         db.add_column(
-            'sentry_commitauthor',
-            'external_id',
-            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
             keep_default=False
         )
