@@ -1,123 +1,47 @@
 
         
-        import youtube_dl
+            def _print_response(self, response, opts):
+        if opts.headers:
+            self._print_headers(response.request.headers, b'>')
+            print('>')
+            self._print_headers(response.headers, b'<')
+        else:
+            self._print_bytes(response.body)
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
-
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
     
+            self._download_http = httpdownloadhandler(settings).download_request
     
-if __name__ == '__main__':
-    main()
-
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
     
-        def test_cbc_decrypt(self):
-        data = bytes_to_intlist(
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
-        )
-        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
-        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
     
+    # Initialize some variables
+face_locations = []
+face_encodings = []
+face_names = []
+process_this_frame = True
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+        # If a match was found in known_face_encodings, just use the first one.
+    # if True in matches:
+    #     first_match_index = matches.index(True)
+    #     name = known_face_names[first_match_index]
     
-    
-@pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
-    
-        seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
-    
-        @app.route('/')
-    def index():
-        raise Exception('dummy')
-    
-    
-def conv2d(x, kernel_size, out_channels,
-           act_fn=relu,
-           strides=1,
-           padding='SAME',
-           name=None,
-           reuse=None):
-    '''2-D 卷积层
-    Input shape:  [batch_size, in_h, in_w, in_channels]
-    Output shape: [batch_size, out_h, out_w, out_channels]
-    
-            self._built = False
-    
-    References:
-    https://github.com/fomorians/highway-fcn
-    https://github.com/fomorians/highway-cnn
-'''
-import tensorflow as tf
-    
-    import numpy as np
-import tensorflow as tf
-    
-    *What does this example do?
-To understand the implementation of this pattern in Python, it is
-important to know that, in Python, instance attributes are stored in a
-attribute dictionary called __dict__. Usually, each instance will have
-its own dictionary, but the Borg pattern modifies this so that all
-instances have the same dictionary.
-In this example, the __shared_state attribute will be the dictionary
-shared between all instances, and this is ensured by assigining
-__shared_state to the __dict__ variable when initializing a new
-instance (i.e., in the __init__ method). Other attributes are usually
-added to the instance's attribute dictionary, but, since the attribute
-dictionary itself is shared (which is __shared_state), all other
-attributes will also be shared.
-For this reason, when the attribute self.state is modified using
-instance rm2, the value of self.state in instance rm1 also changes. The
-same happens if self.state is modified using rm3, which is an
-instance from a subclass.
-Notice that even though they share attributes, the instances are not
-the same, as seen by their ids.
-    
-    
-class GreekGetter(object):
-    
-        def test_provider_shall_update_affected_subscribers_with_published_subscription(cls):
-        pro = Provider()
-        pub = Publisher(pro)
-        sub1 = Subscriber('sub 1 name', pro)
-        sub1.subscribe('sub 1 msg 1')
-        sub1.subscribe('sub 1 msg 2')
-        sub2 = Subscriber('sub 2 name', pro)
-        sub2.subscribe('sub 2 msg 1')
-        sub2.subscribe('sub 2 msg 2')
-        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
-            pro.update()
-            cls.assertEqual(mock_subscriber1_run.call_count, 0)
-            cls.assertEqual(mock_subscriber2_run.call_count, 0)
-        pub.publish('sub 1 msg 1')
-        pub.publish('sub 1 msg 2')
-        pub.publish('sub 2 msg 1')
-        pub.publish('sub 2 msg 2')
-        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
-            pro.update()
-            expected_sub1_calls = [call('sub 1 msg 1'), call('sub 1 msg 2')]
-            mock_subscriber1_run.assert_has_calls(expected_sub1_calls)
-            expected_sub2_calls = [call('sub 2 msg 1'), call('sub 2 msg 2')]
-            mock_subscriber2_run.assert_has_calls(expected_sub2_calls)
+        args = parser.parse_args()
