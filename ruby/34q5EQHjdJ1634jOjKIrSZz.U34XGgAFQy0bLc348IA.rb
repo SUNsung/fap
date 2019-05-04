@@ -1,8 +1,9 @@
 
         
-            def puts(*args)
-      STDERR.puts *args unless @silence
-    end
+            it 'outputs control links to agents within the incoming set, but not outside it' do
+      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
+      agents(:jane_rain_notifier_agent).save!
     
-      # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
