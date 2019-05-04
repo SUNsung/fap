@@ -1,85 +1,48 @@
 
         
-                def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
+        @@ chat
+<pre id='chat'></pre>
+<form>
+  <input id='msg' placeholder='type message here...' />
+</form>
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
     
-            a_split <=> b_split
-      else
-        a.casecmp(b)
-      end
-    end
-  end
-end
-
+    desc 'generate documentation'
+task :doc => 'doc:all'
     
-        def initialize(content)
-      @content = content
-      @html = document? ? parse_as_document : parse_as_fragment
-    end
+          attr_reader :app, :options
     
-        def request_all(urls, &block)
-      if options[:rate_limit]
-        if @@rate_limiter
-          @@rate_limiter.limit = options[:rate_limit]
-        else
-          @@rate_limiter = RateLimiter.new(options[:rate_limit])
-          Typhoeus.before(&@@rate_limiter.to_proc)
-        end
-      end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
-        end
-      end
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
-    end
-    
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+      it 'should not set the Content Security Policy for other content types' do
+    headers = get('/', {}, 'wants' => 'text/foo').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
   end
     
-      def delete_target_file?
-    return true if overwrite?
-    puts('File #{target_file} exist, do you want to overwrite it? (Y/N)')
-    ( 'y' == STDIN.gets.strip.downcase ? true : false)
-  end
+        it 'denies requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
     
-        class << self
-      def elastic_pack_base_uri
-        env_url = ENV['LOGSTASH_PACK_URL']
-        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
-      end
+    module Grape
+  module DSL
+    module Helpers
+      extend ActiveSupport::Concern
+      include Grape::DSL::Configuration
     
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
+        def initialize_cancan_ability
+      klass = resource.namespace.cancan_ability_class
+      klass = klass.constantize if klass.is_a? String
+      klass.new user
+    end
     
-      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
+        def self.config
+      {
+        path: ActiveAdmin.application.default_namespace || '/',
+        controllers: ActiveAdmin::Devise.controllers,
+        path_names: { sign_in: 'login', sign_out: 'logout' },
+        sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
+      }
+    end
