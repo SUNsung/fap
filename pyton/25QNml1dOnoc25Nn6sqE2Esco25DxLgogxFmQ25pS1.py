@@ -1,82 +1,56 @@
 
         
-          # Sample neuron subsets.  The assumption is the PC axes of the RNN
-  # are not unit aligned, so sampling units is adequate to sample all
-  # the high-variance PCs.
-  P_sxn = np.eye(S,N)
-  for m in range(n):
-    P_sxn = np.roll(P_sxn, S, axis=1)
+        
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
-        self.bos_chars = self._convert_word_to_char_ids(self.bos_char)
-    self.eos_chars = self._convert_word_to_char_ids(self.eos_char)
-    
-        test_data = utils.parse_commonsense_reasoning_test(test_data_name)
-    self.question_ids, self.sentences, self.labels = test_data
-    self.all_probs = []  # aggregate single-model prediction here.
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument operation: Invalid choice, valid choices are:
     
     
-if __name__ == '__main__':
-  tf.app.run()
-
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert match(Command(script.format(filename.format(ext)), ''))
     
-      decoder_embedding = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'gen/decoder/rnn/embedding'
-  ][0]
-  decoder_lstm_w_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  decoder_lstm_w_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
-  decoder_softmax_b = [
-      v for v in tf.trainable_variables()
-      if v.op.name == 'gen/decoder/rnn/softmax_b'
-  ][0]
+        This environment is described in section 6.1 of:
+    A Bayesian Framework for Reinforcement Learning by Malcolm Strens (2000)
+    http://ceit.aut.ac.ir/~shiry/lecture/machine-learning/papers/BRL-2000.pdf
+    '''
+    def __init__(self, n=5, slip=0.2, small=2, large=10):
+        self.n = n
+        self.slip = slip  # probability of 'slipping' an action
+        self.small = small  # payout for 'backwards' action
+        self.large = large  # payout at end of chain for 'forwards' action
+        self.state = 0  # Start at beginning of the chain
+        self.action_space = spaces.Discrete(2)
+        self.observation_space = spaces.Discrete(self.n)
+        self.seed()
     
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_USERNAME, default='admin'): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string
-})
+    class ResetNotAllowed(Exception):
+    '''When the monitor is active, raised when the user tries to step an
+    environment that's not yet done.
+    '''
+    pass
     
+        ```
+    closer = Closer()
+    class Example(object):
+        def __init__(self):
+            self._id = closer.register(self)
     
-def get_service(hass, config, discovery_info=None):
-    '''Get the CiscoSpark notification service.'''
-    return CiscoSparkNotificationService(
-        config.get(CONF_TOKEN),
-        config.get(CONF_ROOMID))
-    
-    
-class CommandLineNotificationService(BaseNotificationService):
-    '''Implement the notification service for the Command Line service.'''
-    
-                if self.add_timestamp:
-                text = '{} {}\n'.format(dt_util.utcnow().isoformat(), message)
-            else:
-                text = '{}\n'.format(message)
-            file.write(text)
-
-    
-            if resp.status_code == 400:
-            _LOGGER.error('At least one parameter is missing')
-        elif resp.status_code == 402:
-            _LOGGER.error('Too much SMS send in a few time')
-        elif resp.status_code == 403:
-            _LOGGER.error('Wrong Username/Password')
-        elif resp.status_code == 500:
-            _LOGGER.error('Server error, try later')
-
-    
-    VALID_COLORS = {'yellow', 'green', 'red', 'purple', 'gray', 'random'}
-VALID_FORMATS = {'text', 'html'}
+    def update_rollout_dict(spec, rollout_dict):
+    '''
+    Takes as input the environment spec for which the rollout is to be generated,
+    and the existing dictionary of rollouts. Returns True iff the dictionary was
+    modified.
+    '''
+    # Skip platform-dependent
+    if should_skip_env_spec_for_tests(spec):
+        logger.info('Skipping tests for {}'.format(spec.id))
+        return False
