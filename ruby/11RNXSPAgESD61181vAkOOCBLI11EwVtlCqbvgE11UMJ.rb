@@ -1,108 +1,95 @@
 
         
-          context 'with a user' do
-    let(:user) { Fabricate(:user) }
-    
-        # See {CapabilityHost#capability}
-    def capability(*args)
-      super
-    rescue Errors::CapabilityNotFound => e
-      raise Errors::GuestCapabilityNotFound,
-        cap: e.extra_data[:cap],
-        guest: name
-    rescue Errors::CapabilityInvalid => e
-      raise Errors::GuestCapabilityInvalid,
-        cap: e.extra_data[:cap],
-        guest: name
-    end
-    
-            # Set the root class up to be ourself, so that we can reference this
-        # from within methods which are probably in subclasses.
-        ROOT_CLASS = self
-    
-            # This contains all the command plugins by name, and returns
-        # the command class and options. The command class is wrapped
-        # in a Proc so that it can be lazy loaded.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        attr_reader :commands
-    
-      #
-  # The raw command string associated with the header which will vary between
-  # requests and responses.
-  #
-  attr_accessor :junk_headers
-  attr_accessor :cmd_string
-  attr_accessor :fold
-    
-      # add junk end of URI
-  attr_accessor :junk_end_of_uri
-    
-              sent = 0
-          case protocol
-          when 'tcp'
-            sent = send_request_tcp(req)
-          when 'udp'
-            sent = send_request_udp(req)
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
-    
-              # Encodes the authenticator field
-          #
-          # @return [String]
-          def encode_authenticator
-            authenticator.encode
-          end
+                def importer_class
+          IssueAndLabelLinksImporter
         end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LfsObjectsImporter
+        include ParallelScheduling
+    
+            def importer_class
+          NoteImporter
+        end
+    
+            # Builds a diff note from a GitHub API response.
+        #
+        # note - An instance of `Sawyer::Resource` containing the note details.
+        def self.from_api_response(note)
+          matches = note.html_url.match(NOTEABLE_ID_REGEX)
+    
+            # Builds an issue from a GitHub API response.
+        #
+        # issue - An instance of `Sawyer::Resource` containing the issue
+        #         details.
+        def self.from_api_response(issue)
+          user =
+            if issue.user
+              Representation::User.from_api_response(issue.user)
+            end
+    
+            alias_method :issuable_type, :noteable_type
       end
     end
   end
 end
+
     
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        puts('Unpacking #{package_file}')
     
-                seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-          # Returns the else branch of the `case` statement, if any.
-      #
-      # @return [Node] the else branch node of the `case` statement
-      # @return [nil] if the case statement does not have an else branch.
-      def else_branch
-        node_parts[-1]
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
+        end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
       end
+    end
     
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
+      describe '#system?' do
+    context 'when the pipeline is a system pipeline' do
+      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+    
+        platforms.types.each do |type|
+      desc 'Run acceptance test in #{type} machines'
+      task type do
+        ENV['LS_TEST_PLATFORM']=type
+        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
       end
+    end
     
-          # Checks whether any of the key value pairs in the `hash` literal are on
-      # the same line.
-      #
-      # @note A multiline `pair` is considered to be on the same line if it
-      #       shares any of its lines with another `pair`
-      #
-      # @return [Boolean] whether any `pair` nodes are on the same line
-      def pairs_on_same_line?
-        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
-      end
+        after(:all) do
+      logstash.uninstall
+    end
     
-          DOUBLE_SPLAT = '**'.freeze
+          within_row(2) { click_icon :split }
+      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
+      click_icon :save
+      wait_for_ajax
+      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
+    end
+  end
+end
+
     
-      <form method='post' action='/msg'>
-    <input type='text' name='msg'>
-    <input type='submit' value='Add Message'>
-  </form>
+        for_each_gem do |gem_path|
+      sh 'gem push '#{gem_path}''
+    end
+  end
+end
     
-      # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
+              if @product.errors.empty?
+            respond_with(@product.reload, status: 200, default_template: :show)
+          else
+            invalid_resource!(@product)
+          end
+        end
