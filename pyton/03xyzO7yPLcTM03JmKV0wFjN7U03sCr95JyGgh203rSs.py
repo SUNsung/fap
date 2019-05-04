@@ -1,124 +1,103 @@
 
         
-        
-def check_format(filename):
+            def create(self):
+        # Because a cache can fail silently (e.g. memcache), we don't know if
+        # we are failing to create a new session because of a key collision or
+        # because the cache is missing. So we try for a (large) number of times
+        # and then raise an exception. That's the risk you shoulder if using
+        # cache backing.
+        for i in range(10000):
+            self._session_key = self._get_new_session_key()
+            try:
+                self.save(must_create=True)
+            except CreateError:
+                continue
+            self.modified = True
+            return
+        raise RuntimeError(
+            'Unable to create a new session key. '
+            'It is likely that the cache is unavailable.')
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
     '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
+    
+        def __getitem__(self, key):
+        # We allow fall-through here, so values default to None
+    
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
+    
+    from base64 import b64encode
+    
+        builtin_str = str
+    str = str
+    bytes = bytes
+    basestring = (str, bytes)
+    numeric_types = (int, float)
+    integer_types = (int,)
+
+    
+        def get_full_url(self):
+        # Only return the response's URL if the user hadn't set the Host
+        # header
+        if not self._r.headers.get('Host'):
+            return self._r.url
+        # If they did set it, retrieve it and reconstruct the expected domain
+        host = to_native_string(self._r.headers['Host'], encoding='utf-8')
+        parsed = urlparse(self._r.url)
+        # Reconstruct the URL as we expect it
+        return urlunparse([
+            parsed.scheme, host, parsed.path, parsed.params, parsed.query,
+            parsed.fragment
+        ])
+    
+    
+@pytest.mark.parametrize(
+    'url, expected', (
+            ('http://192.168.0.1:5000/', True),
+            ('http://192.168.0.1/', True),
+            ('http://172.16.1.1/', True),
+            ('http://172.16.1.1:5000/', True),
+            ('http://localhost.localdomain:5000/v1.0/', True),
+            ('http://google.com:6000/', True),
+            ('http://172.16.1.12/', False),
+            ('http://172.16.1.12:5000/', False),
+            ('http://google.com:5000/v1.0/', False),
+            ('file:///some/path/on/disk', True),
+    ))
+def test_should_bypass_proxies(url, expected, monkeypatch):
+    '''Tests for function should_bypass_proxies to check if proxy
+    can be bypassed or not
     '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        if len(segments) < num_segments:
-            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
-                len(segments), num_segments))
-            continue
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
+    monkeypatch.setenv('no_proxy', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
+    monkeypatch.setenv('NO_PROXY', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
+    assert should_bypass_proxies(url, no_proxy=None) == expected
     
-            :param conn: The urllib3 connection object associated with the cert.
-        :param url: The requested URL.
-        :param verify: Either a boolean, in which case it controls whether we verify
-            the server's TLS certificate, or a string, in which case it must be a path
-            to a CA bundle to use
-        :param cert: The SSL certificate to verify.
-        '''
-        if url.lower().startswith('https') and verify:
-    
-        def __init__(self, username, password):
-        self.username = username
-        self.password = password
-    
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
-    
-        @property
-    def host(self):
-        return self.get_host()
+            if 400 <= self.status_code < 500:
+            http_error_msg = u'%s Client Error: %s for url: %s' % (self.status_code, reason, self.url)
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-        def test_server_closes(self):
-        '''the server closes when leaving the context manager'''
-        with Server.basic_response_server() as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-    
-            ('hTTp://u:p@Some.Host/path', 'socks5://some.host.proxy', all_proxies),
-        ('hTTp://u:p@Other.Host/path', 'socks5://http.proxy', all_proxies),
-        ('hTTp:///path', 'socks5://http.proxy', all_proxies),
-        ('hTTps://Other.Host', 'socks5://http.proxy', all_proxies),
-    
-                # Update self to reflect the auth changes.
-            self.__dict__.update(r.__dict__)
-    
-                if new_key is None:
-                break
-    
-    #Some examples
-    
-        for i in range(1, s+1):
-        dp[0][i] = False
-    
-    def getFrequencyOrder(message):
-    letterToFreq = getLetterCount(message)
-    freqToLetter = {}
-    for letter in LETTERS:
-        if letterToFreq[letter] not in freqToLetter:
-            freqToLetter[letterToFreq[letter]] = [letter]
-        else:
-            freqToLetter[letterToFreq[letter]].append(letter)
-    
-    
-class TestGetProfile(unittest.TestCase):
-    def setUp(self):
-        sys.setprofile(None)
-    
-    import pickle
-import sqlite3
-from collections import namedtuple
-    
-    def worker(input, output):
-    for func, args in iter(input.get, 'STOP'):
-        result = calculate(func, args)
-        output.put(result)
+# From mitsuhiko/werkzeug (used with permission).
+def unquote_header_value(value, is_filename=False):
+    r'''Unquotes a header value.  (Reversal of :func:`quote_header_value`).
+    This does not use the real unquoting but what browsers are actually
+    using for quoting.
