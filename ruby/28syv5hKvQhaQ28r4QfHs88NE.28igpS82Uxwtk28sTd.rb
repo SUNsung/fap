@@ -1,6 +1,64 @@
 
         
-          describe '#scenario_label' do
+                is_swift = FastlaneCore::FastlaneFolder.swift?
+        fastlane_client_language = is_swift ? :swift : :ruby
+        action_launch_context = FastlaneCore::ActionLaunchContext.context_for_action_name(@program[:name], fastlane_client_language: fastlane_client_language, args: ARGV)
+        FastlaneCore.session.action_launched(launch_context: action_launch_context)
+    
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
+      end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            message: '#{message}',
+            commit: '#{commit}'
+          })
+        end').runner.execute(:test)
+    
+          it 'handles the exclude_dirs parameter with multiple  elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle', 'Packages/'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle --exclude-dir Packages/')
+      end
+    end
+  end
+end
+
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
+puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+    
+          it 'activates an existing user' do
+        users(:bob).deactivate!
+        visit admin_users_path
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
+        expect(page).to have_no_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).to be_active
+      end
+    end
+  end
+end
+
+    
+        it 'returns a label 'Yes' if a given agent is working' do
+      stub(@agent).working? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Yes'
+    end
+    
+      describe '#scenario_label' do
     it 'creates a scenario label with the scenario name' do
       expect(scenario_label(scenario)).to eq(
         '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
@@ -12,73 +70,81 @@
       expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
     end
     
-            context 'when the schema_version is less than 1' do
-          before do
-            valid_parsed_weather_agent_data[:keep_events_for] = 2
-            valid_parsed_data.delete(:schema_version)
-          end
+          it 'runs until stop is called' do
+        mock.instance_of(Rufus::Scheduler).join
+        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
+        @agent_runner.run
+      end
     
-        it 'for the afternoon' do
-      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
     end
   end
     
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+        @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
+    }
+    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
     }
   end
     
-        def initialize(filters = nil)
-      @filters = filters ? filters.dup : []
+          Utils.sort_tuples!(tuples, orders)
+      expect(tuples).to eq expected
     end
+  end
     
-        attr_accessor :name, :type, :path
-    
-          def process_url?(url)
-        base_urls.any? { |base_url| base_url.contains?(url) }
-      end
-    
-            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
-          node.css('> li > h3').each do |h3|
-            next if h3.content.present?
-            h3.content = h3.next_element.content
-            h3.next_element.remove
-          end
-        end
-      end
+        it 'should raise error when response has an error' do
+      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
     end
   end
 end
 
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
-        end
-    
-    Given(/^I make (\d+) deployments$/) do |count|
-  step 'all linked files exists in shared path'
-    
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
+        def length
+      @entries.length
     end
     
-          def print_deprecation_warnings_if_applicable
-        if using_default_scm?
-          warn_add_git_to_capfile unless scm_plugin_installed?
-        elsif built_in_scm_name?
-          warn_set_scm_is_deprecated
-        elsif third_party_scm_name?
-          warn_third_party_scm_must_be_upgraded
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            css('.l-sub-section', '.alert', '.banner').each do |node|
+          node.name = 'blockquote'
         end
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
       end
     
-    set_if_empty :pty, false
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
+    
+            def show
+          expires_in 15.minutes, public: true
+          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
+          headers['Surrogate-Key'] = 'product_id=1'
+          respond_with(@product)
+        end
