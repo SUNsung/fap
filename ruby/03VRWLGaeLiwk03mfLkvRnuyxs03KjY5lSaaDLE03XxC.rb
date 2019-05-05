@@ -1,124 +1,65 @@
-  </body>
-</html>
-HTML
+
+        
+                  def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
     
-            # For a description of the protocol see
-        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
-        def reload(pages)
-          pages.each do |p|
-            json_message = JSON.dump(
-              :command => 'reload',
-              :path    => p.url,
-              :liveCSS => true
-            )
+      # normalize out multiple slashes, directory traversal, and self referrential directories
+  def normalize!(str)
+    i = 0
+    while (str.gsub!(/(\/\.\/|\/\w+\/\.\.\/|\/\/)/,'/')); i += 1; end
+    i
+  end
     
-            parsed_expr = parse_expression(expression)
-        @context.stack do
-          groups = input.group_by do |item|
-            @context[variable] = item
-            parsed_expr.render(@context)
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
           end
-          grouped_array(groups)
         end
       end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
     end
+  end
+end
     
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
+    else
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
     end
   end
 end
 
     
-            context 'when the schema_version is less than 1' do
-          it 'translates keep_events_for from days to seconds' do
-            valid_parsed_data.delete(:schema_version)
-            valid_parsed_data[:agents] = [valid_parsed_weather_agent_data.merge(keep_events_for: 5)]
-    
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
-    
-        it 'has a default when options[:name] is nil' do
-      expect(AgentsExporter.new(:name => nil).filename).to eq('exported-agents.json')
-    end
-    
-        it 'should revert extract and template options for an updated WebsiteAgent' do
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-      ConvertWebsiteAgentTemplateForMerge.new.down
-      agent.reload
-      expect(agent.options).to include('extract' => reverted_extract,
-                                       'template' => reverted_template)
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
   end
 end
 
     
-      describe 'helpers' do
-    it 'should generate a correct request options hash' do
-      expect(@checker.send(:request_options)).to eq({headers: {'User-Agent' => 'Huginn - https://github.com/huginn/huginn', 'Authorization' => 'Bearer '1234token''}})
-    end
+    # This is the version that ships with OS X 10.10, so be sure we test against it.
+# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
+# so we use a fork that makes a trivial change to a macro invocation.
+gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
     
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
+      puts '== Installing dependencies =='
+  system! 'gem install bundler --conservative'
+  system('bundle check') || system!('bundle install')
     
-        attr_reader :filters
-    
-        def effective_path
-      @effective_path ||= effective_url.path
-    end
-  end
-end
-
-    
-            css('.file').each do |node|
-          node.content = node.content.strip
-        end
-    
-      def set_account
-    @account = Account.find(params[:id])
-  end
-end
-
-    
-        web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data,
-      user_id: active_session.user_id,
-      access_token_id: active_session.access_token_id
-    )
-    
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
-    
-      included do
-    before_action :set_rate_limit_headers, if: :rate_limited_request?
-  end
-    
-    require 'builder'
-require 'feedbag'
-require 'json'
-require 'nokogiri'
-    
-        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
-                   args: [
-                           '--mode=silent',
-                         ],
-                   sudo: true
-  end
-    
-            private
+      # Code is not reloaded between requests.
+  config.cache_classes = true
