@@ -1,114 +1,85 @@
 
         
-                a_length = a_split.length
-        b_length = b_split.length
+                  def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
     
-        def relative_url_string?(str)
-      str !~ SCHEME_RGX && !fragment_url_string?(str) && !data_url_string?(str)
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+        DATA_URL = 'data:'.freeze
+    
+          request_all initial_urls do |response|
+        next unless data = handle_response(response)
+        yield data
+        next unless data[:internal_urls].present?
+        next_urls = data[:internal_urls].select { |url| history.add?(url.downcase) }
+        instrument 'queued.scraper', urls: next_urls
+        next_urls
+      end
     end
     
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
-    
-        def initialize
-      @pages = {}
+            self.base_url.scheme = effective_base_url.scheme
+        self.base_url.host = effective_base_url.host
+        self.base_url.path = effective_base_url.path
+        super
+      ensure
+        self.base_url.scheme = original_scheme
+        self.base_url.host = original_host
+        self.base_url.path = original_path
+      end
     end
     
-        def with_filters(*filters)
-      stack = FilterStack.new
-      stack.push(*filters)
-      pipeline.instance_variable_set :@filters, stack.to_a.freeze
-      yield
-    ensure
-      @pipeline = nil
-    end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+            css('pre[language]').each do |node|
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip
+          node['data-language'] = 'html' if node.content.start_with?('<')
+          node.remove_attribute('language')
+          node.remove_attribute('format')
         end
-      end
     
-      # GET /resource/unlock?unlock_token=abcdef
-  def show
-    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
-    yield resource if block_given?
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
-      end
-    
-          def timeout_in
-        self.class.timeout_in
-      end
-    
-          # Read each line as a path
-      File.new(inputs, 'r').each_line do |line|
-        # Handle each line as if it were an argument
-        input.input(line.strip)
+          def mod
+        return @mod if defined?(@mod)
+        @mod = slug[/api\/([\w\-\.]+)\//, 1]
+        @mod.remove! 'angular2.' if @mod
+        @mod
       end
     end
-    
-        # Create the .txz package archive from the files in staging_path.
-    File.open(output_path, 'wb') do |file|
-      XZ::StreamWriter.new(file) do |xz|
-        FPM::Util::TarWriter.new(xz) do |tar|
-          # The manifests must come first for pkg.
-          add_path(tar, '+COMPACT_MANIFEST',
-                   File.join(staging_path, '+COMPACT_MANIFEST'))
-          add_path(tar, '+MANIFEST',
-                   File.join(staging_path, '+MANIFEST'))
-    
-      dont_obsolete_paths = []
-  option '--dont-obsolete', 'DONT_OBSOLETE_PATH',
-    'A file path for which to 'dont-obsolete' in the built PackageInfo. ' \
-    'Can be specified multiple times.' do |path|
-      dont_obsolete_paths << path
-    end
-    
-      public(:input)
-end # class FPM::Package::PleaseRun
+  end
+end
 
     
-        output = ::Dir.chdir(setup_dir) do
-      tmp = build_path('metadata.json')
-      setup_cmd = 'env PYTHONPATH=#{pylib} #{attributes[:python_bin]} ' \
-        'setup.py --command-packages=pyfpm get_metadata --output=#{tmp}'
+            css('.toplang', '#quickview', '.top').remove
     
-        # Make one file. The installscript can unpack itself.
-    `cat #{install_script} #{payload} > #{output_path}`
-    FileUtils.chmod('+x', output_path)
-  end
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
     
+        def analyze_rest(analysis, line)
+      if (start_line = analysis.start_line_number)
+        return CopAnalysis.new(analysis.line_ranges + [start_line..line], nil)
+      end
     
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
     
-        desc 'Package #{@name}' unless ::Rake.application.last_description
+              if Cart::Update.call(order: @order, params: order_params).success?
+            user_id = params[:order][:user_id]
+            if current_api_user.has_spree_role?('admin') && user_id
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
+            respond_with(@order, default_template: :show)
+          else
+            invalid_resource!(@order)
+          end
+        end
