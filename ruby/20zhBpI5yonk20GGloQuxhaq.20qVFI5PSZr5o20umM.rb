@@ -1,109 +1,190 @@
 
         
-                class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+                  if options['multiple']
+            add_default_name_and_id_for_value(@checked_value, options)
+            options.delete('multiple')
+          else
+            add_default_name_and_id(options)
           end
-        end
     
-          cattr_accessor :type_klass
+                options = options.dup
+            options[:field_name]           = @method_name
+            options[:include_position]     = true
+            options[:prefix]             ||= @object_name
+            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
     
-          def test_helpers_with_block
-        @controller.process(:with_block)
-        assert_equal 'Hello World', @controller.response_body
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+          it 'adds use-submodules flag to command if use_submodules is set to true' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              use_submodules: true
+            )
+          end').runner.execute(:test)
+    
+          it 'handles the extensions parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.m')
       end
     
-          # A single page of data and the corresponding page number.
-      Page = Struct.new(:objects, :number)
+          it 'works with select regex when regex is string' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: \'\/AppDelegate\'
+            )
+          end').runner.execute(:test)
     
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
-          end
-    
-          # Returns the database ID for the object.
-      #
-      # This method will return `nil` if no ID could be found.
-      def database_id
-        val = Caching.read(cache_key)
-    
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-    
-            def labels?
-          label_names && label_names.any?
-        end
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-        def to_json
-      JSON.generate(as_json)
+        def to_s
+      [@key, @description].join(': ')
     end
     
-        def at_css(*args)
-      doc.at_css(*args)
+        def url
+      @url ||= URL.parse request.base_url
     end
     
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
+        def initial_paths
+      self.class.initial_paths
     end
     
-            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
-          node.css('> li > h3').each do |h3|
-            next if h3.content.present?
-            h3.content = h3.next_element.content
-            h3.next_element.remove
-          end
+        def process_url?(url)
+      base_url.contains?(url)
+    end
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+    When /^(?:|I )fill in '([^']*)' for '([^']*)'$/ do |value, field|
+  fill_in(field, :with => value)
+end
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
+    end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+        # The aspect ratio of the dimensions.
+    def aspect
+      width / height
+    end
+    
+        it 'accepts jsfiddle link with a / at the end' do
+      jsfiddle_link = 'http://jsfiddle.net/link2twenty/v2kx9jcd/'
+      expect do
+        generate_new_liquid(jsfiddle_link)
+      end.not_to raise_error
+    end
+    
+      def redirect_to_with_return_to(url, *args)
+    if params[:return_to].blank? || !params[:return_to].starts_with?('/')
+      redirect_to url_with_return_to(url), *args
+    else
+      redirect_to url_with_return_to(url), *args
+    end
+  end
+    
+      def create
+    if params[:direction] == 'incoming'
+      session[:test_in_from] = params[:message][:from] if params[:message]
+      @message = IncomingMessagePrototype.new(@server, request.ip, 'web-ui', params[:message])
+      @message.attachments = [{:name => 'test.txt', :content_type => 'text/plain', :data => 'Hello world!'}]
+    else
+      session[:test_out_to] = params[:message][:to] if params[:message]
+      @message = OutgoingMessagePrototype.new(@server, request.ip, 'web-ui', params[:message])
+    end
+    if result = @message.create_messages
+      if result.size == 1
+        redirect_to_with_json organization_server_message_path(organization, @server, result.first.last[:id]), :notice => 'Message was queued successfully'
+      else
+        redirect_to_with_json [:queue, organization, @server], :notice => 'Messages queued successfully '
+      end
+    else
+      respond_to do |wants|
+        wants.html do
+          flash.now[:alert] = 'Your message could not be sent. Ensure that all fields are completed fully. #{result.errors.inspect}'
+          render 'new'
         end
+        wants.json do
+          render :json => {:flash => {:alert => 'Your message could not be sent. Please check all field are completed fully.'}}
+        end
+      end
+    
+      private
+    
+      def create_with_token
+    result = JWT.decode(params[:token], Postal.signing_key.to_s, 'HS256')[0]
+    if result['timestamp'] > 1.minute.ago.to_f
+      login(User.find(result['user'].to_i))
+      redirect_to root_path
+    else
+      destroy
+    end
+  rescue JWT::VerificationError
+    destroy
+  end
+    
+      def new
+    @smtp_endpoint = @server.smtp_endpoints.build
+  end
+    
+          unless options[:other] == false
+        s << '<optgroup label='Other Options'>'
+        Route::MODES.each do |mode|
+          next if mode == 'Endpoint'
+          selected = (selected_value == mode ? 'selected='selected'' : '')
+          text = t('route_modes.#{mode.underscore}')
+          s << '<option value='#{mode}' #{selected}>#{text}</option>'
+        end
+        s << '</optgroup>'
+      end
+    
+        def tmux_select_first_pane
+      '#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}'
+    end
+    
+      context 'hook value is string' do
+    before { project.yaml[hook_name] = 'echo 'on hook'' }
+    
+        context 'tmux_command is not specified' do
+      it 'returns the default' do
+        expect(project.tmux_command).to eq 'tmux'
       end
     end
   end
-end
-
     
-        def dependencies
-      @dependencies ||= [Cask::CaskLoader.load('adobe-air')]
-    end
+      orig_stdout = $stdout
+  orig_stderr = $stderr
     
-        def role(name, hosts, options={})
-      if name == :all
-        raise ArgumentError, '#{name} reserved name for role. Please choose another name'
+          it 'returns default-path' do
+        expect(described_class.default_path_option).to eq 'default-path'
       end
-    
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
-      end
-    
-    # Now, add our init-scripts, systemd services, and so on:
-pleaserun = package.convert(FPM::Package::PleaseRun)
-pleaserun.input ['/usr/bin/my-executable', '--foo-from', 'bar']
-    
-    class FPM::Package::Puppet < FPM::Package
-  def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -m}.chomp
     end
-    return @architecture
-  end # def architecture
-    
-        logger.debug('Running command', :args => args2)
+  end
