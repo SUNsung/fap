@@ -1,111 +1,102 @@
 
         
-            def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
+                  def initialize(template_object, object_name, method_name, object,
+                         sanitized_attribute_name, text, value, input_html_options)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @sanitized_attribute_name = sanitized_attribute_name
+            @text = text
+            @value = value
+            @input_html_options = input_html_options
+          end
+    
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+        # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
     end
     
-            if h1 = at_css('h1')
-          h1.prepend_child(css('.view-source', '.improve-docs'))
+            # Create an environment so we can determine the active
+        # machines...
+        found = false
+        env = vagrant_env(home_path)
+        env.active_machines.each do |name, provider|
+          if name.to_s == self.name.to_s &&
+            provider.to_s == self.provider.to_s
+            found = true
+            break
+          end
         end
     
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-        def resource_params
-      params.require(:email_domain_block).permit(:domain)
-    end
-  end
-end
-
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-      def session_needs_update?
-    !current_session.nil? && current_session.updated_at < UPDATE_SIGN_IN_HOURS.hours.ago
-  end
-end
-
-    
-      class Mention < ApplicationRecord
-  end
-    
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
-    else
-      visit(path)
-    end
-  end
-    
-        it 'generates the aspects_manage fixture', :fixture => true do
-      get :index, params: {a_id: @aspect.id}
-      save_fixture(html_for('body'), 'aspects_manage')
-    end
-    
-            it 'reshares the absolute root' do
-          post_request!
-          expect(@post.reshares.count).to eq(0)
-          expect(@root.reshares.count).to eq(2)
+              result
         end
-      end
-    end
-  end
     
-        # @param msg [String] The error message
-    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def initialize(msg, attrs = {})
-      @message = msg
-      @sass_backtrace = []
-      add_backtrace(attrs)
-    end
+            # This contains all the guests and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :guests
     
-        def handle_load_error(err)
-      dep = err.message[/^no such file to load -- (.*)/, 1]
-      raise err if @options[:trace] || dep.nil? || dep.empty?
-      $stderr.puts <<MESSAGE
-Required dependency #{dep} not found!
-    Run 'gem install #{dep}' to get it.
-  Use --trace for backtrace.
-MESSAGE
-      exit 1
-    end
-  end
-end
-
-    
-          opts.on('-s', '--stdin', :NONE,
-              'Read input from standard input instead of an input file.',
-              'This is the default if no input file is specified. Requires --from.') do
-        @options[:input] = $stdin
-      end
-    
-      gem.licenses      = ['MIT']
-    
-          def initialize(values={})
-        @trusted_keys = []
-        @fetched_keys = []
-        @locations = {}
-        @values = values
-        @trusted = true
-      end
-    
-    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
-  validate(strategy) do |key, _value|
-    warn(
-      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
-      'Capistrano 3.7.0.\n'\
-      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
-    )
+      puts '* [Sinatra](#sinatra)'
+  title = Regexp.new('(?<=\* )(.*)') # so Ruby 1.8 doesn't complain
+  File.binread(a.readme).scan(/^##.*/) do |line|
+    puts line.gsub(/#(?=#)/, '    ').gsub('#', '*').gsub(title) { '[#{$1}](##{link($1)})' }
   end
 end
     
-        def redis(&block)
-      Sidekiq.redis(&block)
+        it 'redirects requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/')
     end
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+    module LogStash
+  module PluginManager
+  end
+end
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    end
+    
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
