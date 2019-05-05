@@ -1,272 +1,237 @@
 
         
-        
-    {  std::move(self->tasks_[timer]).Run();
-  self->tasks_.erase(timer);
-  uv_timer_stop(timer);
-  uv_close(reinterpret_cast<uv_handle_t*>(timer), UvTaskRunner::OnClose);
-}
+          image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
-    namespace api {
-    }
-    
-    
-    {}  // namespace api
-    
-    
-    {}  // namespace atom
-    
-    void AutoUpdater::CheckForUpdates() {}
-    
-    #ifndef ATOM_BROWSER_LIB_POWER_OBSERVER_H_
-#define ATOM_BROWSER_LIB_POWER_OBSERVER_H_
-    
-    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-
-    
-    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
-                                       net::NetworkDelegate* network_delegate)
-    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
-    
-      if (transparent_) {
-    bitmap_->eraseColor(SK_ColorTRANSPARENT);
-  } else {
-    bitmap_->eraseColor(SK_ColorWHITE);
-  }
-    
-    // In the relauncher process, performs the necessary synchronization steps
-// with the parent by setting up a kqueue to watch for it to exit, writing a
-// byte to the pipe, and then waiting for the exit notification on the kqueue.
-// If anything fails, this logs a message and returns immediately. In those
-// situations, it can be assumed that something went wrong with the parent
-// process and the best recovery approach is to attempt relaunch anyway.
-void RelauncherSynchronizeWithParent();
-    
-    #ifndef ATOM_BROWSER_UI_COCOA_VIEWS_DELEGATE_MAC_H_
-#define ATOM_BROWSER_UI_COCOA_VIEWS_DELEGATE_MAC_H_
-    
-    #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-    
-    // static
-void App::EmitReopenEvent() {
-  std::set<RenderProcessHost*> rphs;
-  std::set<RenderProcessHost*>::iterator it;
-    }
-    
-      int id() const { return id_; }
-  std::string extension_id_;
-  ObjectManager* object_manager() const { return object_manager_.get(); }
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    #include 'content/nw/src/api/menu/menu_delegate.h'
-    
-      GdkRectangle screen_rect;
-  gdk_screen_get_monitor_geometry(screen, monitor, &screen_rect);
-    
-    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
-  content::WebContents* web_contents =
-    content::WebContents::FromRenderFrameHost(rfh);
-  if (!web_contents) {
-    LOG(ERROR) << 'Menu: couldn't find WebContents';
-    return NULL;
-  }
-  return web_contents->GetFullscreenRenderWidgetHostView()
-             ? web_contents->GetFullscreenRenderWidgetHostView()
-                   ->GetNativeView()
-             : web_contents->GetNativeView();
-}
-    
-    namespace extensions {
-class AppWindowRegistry;
-class ExtensionService;
-    }
-    
-    
-    {} // namespace extensions
-#endif
-
-    
-    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    template <typename T>
-struct AbsDiff
-{
-    typedef T type;
-    }
-    
-    
-#include 'common.hpp'
-#include 'vtransform.hpp'
-    
-    void add(const Size2D &size,
-         const s16 * src0Base, ptrdiff_t src0Stride,
-         const s16 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<s16, s32>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<s16, s32>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
-                     const typename VecTraits<s32>::vec64 & v_src1,
-                     typename VecTraits<s32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_s32(v_src0);
-        float32x2_t vs2 = vcvt_f32_s32(v_src1);
-    }
-    
-                float32x4_t lane0b = vld1q_f32(laneB + x - cn);
-            float32x4_t lane2b = vld1q_f32(laneB + x + cn);
-            float32x4_t lane1b = vld1q_f32(laneB + x);
-    
-    void extract3(const Size2D &size,
-              const u8 * srcBase, ptrdiff_t srcStride,
-              u8 * dstBase, ptrdiff_t dstStride,
-              u32 coi)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    bool isSupportedConfiguration()
-{
-#ifdef CAROTENE_NEON
-    return true;
-#else
-    return false;
-#endif
-}
-    
-            while(i + 16 <= size.width)
-        {
-            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
-    }
-    
-    inline uint8x8_t vqtbl1_u8 (uint8x16_t a, uint8x8_t b)
-{
-#ifdef __aarch64__
-    // AArch64 supports this natively
-    return ::vqtbl1_u8(a, b);
-#else
-    union { uint8x16_t v; uint8x8x2_t w; } u = { a };
-    return vtbl2_u8(u.w, b);
-#endif
-}
-    
-    
-    {    Rational Sinh(Rational const& rat);
-    Rational Cosh(Rational const& rat);
-    Rational Tanh(Rational const& rat);
-    Rational ASinh(Rational const& rat);
-    Rational ACosh(Rational const& rat);
-    Rational ATanh(Rational const& rat);
-}
-
-    
-    void LiveRegionHost::Announce(NarratorAnnouncement^ announcement)
-{
-    if (m_host == nullptr)
-    {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-                static void OnVirtualKeyControlShiftChordPropertyChanged(
-                Windows::UI::Xaml::DependencyObject^ target,
-                MyVirtualKey oldValue,
-                MyVirtualKey newValue);
-    
-    
-    {        Windows::Globalization::Fonts::LanguageFontGroup^ m_fontGroup;
-        Platform::String^ m_language;
-        Windows::UI::Xaml::FlowDirection m_flowDirection;
-        bool m_overrideFontApiValues;
-        Platform::String^ m_fontFamilyOverride;
-        Windows::UI::Text::FontWeight m_fontWeightOverride;
-        double m_uiTextFontScaleFactorOverride;
-        double m_uiCaptionFontScaleFactorOverride;
-    };
-    
-      uint64_t sleep_debt = 0;
-  uint64_t time_since_last_refill = 0;
-  if (last_refill_time_ != 0) {
-    if (last_refill_time_ > time_now) {
-      sleep_debt = last_refill_time_ - time_now;
-    } else {
-      time_since_last_refill = time_now - last_refill_time_;
-      bytes_left_ +=
-          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
-                                kMicrosPerSecond * delayed_write_rate_);
-      if (time_since_last_refill >= kRefillInterval &&
-          bytes_left_ > num_bytes) {
-        // If refill interval already passed and we have enough bytes
-        // return without extra sleeping.
-        last_refill_time_ = time_now;
-        bytes_left_ -= num_bytes;
-        return 0;
+      inline int offset(const vector<int>& indices) const {
+    CHECK_LE(indices.size(), num_axes());
+    int offset = 0;
+    for (int i = 0; i < num_axes(); ++i) {
+      offset *= shape(i);
+      if (indices.size() > i) {
+        CHECK_GE(indices[i], 0);
+        CHECK_LT(indices[i], shape(i));
+        offset += indices[i];
       }
     }
+    return offset;
+  }
+  /**
+   * @brief Copy from a source Blob.
+   *
+   * @param source the Blob to copy from
+   * @param copy_diff if false, copy the data; if true, copy the diff
+   * @param reshape if false, require this Blob to be pre-shaped to the shape
+   *        of other (and die otherwise); if true, Reshape this Blob to other's
+   *        shape if necessary
+   */
+  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
+      bool reshape = false);
+    
+      /**
+   * @brief Does layer-specific setup: your layer should implement this function
+   *        as well as Reshape.
+   *
+   * @param bottom
+   *     the preshaped input blobs, whose data fields store the input data for
+   *     this layer
+   * @param top
+   *     the allocated but unshaped output blobs
+   *
+   * This method should do one-time layer specific setup. This includes reading
+   * and processing relevent parameters from the <code>layer_param_</code>.
+   * Setting up the shapes of top blobs and internal buffers should be done in
+   * <code>Reshape</code>, which will be called before the forward pass to
+   * adjust the top blob sizes.
+   */
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+    
+    
+    {}  // namespace caffe
+    
+    
+    { protected:
+  TransformationParameter transform_param_;
+  shared_ptr<DataTransformer<Dtype> > data_transformer_;
+  bool output_labels_;
+};
+    
+    
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+#include 'caffe/layers/power_layer.hpp'
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
+    
+    template <typename T, class Context>
+class BernoulliJSDOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+    
+    {  if (op->send_message() != nullptr) {
+    ++sent_message_count_;
+  }
+  if (op->recv_message() != nullptr) {
+    recv_message_ = op->op()->payload->recv_message.recv_message;
+    initial_on_done_recv_message_ =
+        op->op()->payload->recv_message.recv_message_ready;
+    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
+  }
+  if (op->recv_trailing_metadata() != nullptr) {
+    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
+    initial_on_done_recv_trailing_metadata_ =
+        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
+    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
+        &on_done_recv_trailing_metadata_;
+  }
+  // Call next op.
+  grpc_call_next_op(elem, op->op());
+}
+    
+    #include <grpc/support/port_platform.h>
+    
+    
+    {  RpcServerStatsEncoding() = delete;
+  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
+  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
+};
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
   }
     
-    #include <string>
+    #include <grpc/support/port_platform.h>
     
-      MyFilter filter;
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  FILETIME idle, kernel, user;
+  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
+    total = FiletimeToInt(kernel) + FiletimeToInt(user);
+    busy = total - FiletimeToInt(idle);
+  }
+  return std::make_pair(busy, total);
+}
     
-      delete db;
+    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
+  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
+    return system_clock::time_point::max();
+  }
+  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
+  system_clock::time_point tp;
+  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
+  tp +=
+      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
+  return tp;
+}
     
-      // Set a new snapshot in the transaction
-  txn->SetSnapshot();
-  txn->SetSavePoint();
-  read_options.snapshot = txn_db->GetSnapshot();
+    
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
+}
+    
+    TEST(ProtocolDataTest, CheckSum) {
+  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
+  const uint8_t result =
+      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
+  EXPECT_EQ(0xE7, result);
+}
     
     
-    {}  // namespace rocksdb
+    {  double ret = x * OBJECT_AREL_RES + OBJECT_AREL_LAT_MIN;
+  return ret;
+}
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/object_general_info_60b.h'
+    
+    const PolynomialXd& Spline1dSeg::ThirdOrderDerivative() const {
+  return third_order_derivative_;
+}
+    
+    
+    {  bool ret = x;
+  return ret;
+}
+    
+    // config detail: {'name': 'output_value', 'enum': {0:
+// 'OUTPUT_VALUE_HEADLIGHTS_OFF', 1: 'OUTPUT_VALUE_LOW_BEAMS', 2:
+// 'OUTPUT_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
+// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 23, 'type': 'enum',
+// 'order': 'motorola', 'physical_unit': ''}
+Headlight_rpt_77::Output_valueType Headlightrpt77::output_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
+    }
