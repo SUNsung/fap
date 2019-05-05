@@ -1,105 +1,54 @@
 
         
-        
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
+            def __getattr__(self, name):
+        if name != self._testMethodName:
+            return super(_FailedTest, self).__getattr__(name)
+        def testFailure():
+            raise self._exception
+        return testFailure
     
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
+            loader = unittest.TestLoader()
+        suite = loader.loadTestsFromName('testcase_1.testfoo', m)
+        expected = 'type object 'MyTestCase' has no attribute 'testfoo''
+        error, test = self.check_deferred_error(loader, suite)
+        self.assertIn(
+            expected, error,
+            'missing error string in %r' % error)
+        self.assertRaisesRegex(AttributeError, expected, test.testfoo)
     
-        def __len__(self):
-        return len(self._store)
+            self._copy_file_without_generated_symbols(SYMBOL_FILE, output)
     
-        def test_copy(self):
-        copy = self.case_insensitive_dict.copy()
-        assert copy is not self.case_insensitive_dict
-        assert copy == self.case_insensitive_dict
     
-    from .models import Response
-from .compat import urlparse, basestring
-from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
-                    get_encoding_from_headers, prepend_scheme_if_needed,
-                    get_auth_from_url, urldefragauth, select_proxy)
-from .structures import CaseInsensitiveDict
-from .cookies import extract_cookies_to_jar
-from .exceptions import (ConnectionError, ConnectTimeout, ReadTimeout, SSLError,
-                         ProxyError, RetryError, InvalidSchema, InvalidProxyURL,
-                         InvalidURL)
-from .auth import _basic_auth_str
+# This follows symbolic links, so both islink() and isdir() can be true
+# for the same path on systems that support symlinks
+def isfile(path):
+    '''Test whether a path is a regular file'''
+    try:
+        st = os.stat(path)
+    except (OSError, ValueError):
+        return False
+    return stat.S_ISREG(st.st_mode)
     
-        :rtype: list
+        If a name, the module is imported.  If the passed or imported module
+    object is not a package, raise an exception.
     '''
+    if hasattr(package, '__spec__'):
+        if package.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(
+                package.__spec__.name))
+        else:
+            return package
+    else:
+        module = import_module(package)
+        if module.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(package))
+        else:
+            return module
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-      # Start the next poll (only if the last poll didn't raise an exception)
-  return True
-
-    
-    from ycm.client.base_request import BaseRequest
-    
-    
-def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found but not loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
-    
-    
-def KeywordsFromSyntaxListOutput_ContainedArgAllowed_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-phpFunctions   xxx contained gzclose yaz_syntax html_entity_decode fbsql_read_blob png2wbmp mssql_init cpdf_set_title gztell fbsql_insert_id empty cpdf_restore mysql_field_type closelog swftext ldap_search curl_errno gmp_div_r mssql_data_seek getmyinode printer_draw_pie mcve_initconn ncurses_getmaxyx defined
-                   contained replace_child has_attributes specified insertdocument assign node_name hwstat addshape get_attribute_node html_dump_mem userlist
-                   links to Function''' ), # noqa
-              has_items( 'gzclose', 'userlist', 'ldap_search' ) )
-    
-    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-    
-        def test_del_shutdown(self):
-        executor = futures.ThreadPoolExecutor(max_workers=5)
-        executor.map(abs, range(-5, 5))
-        threads = executor._threads
-        del executor
+        def testPeekBytesIO(self):
+        with BytesIO(self.DATA) as bio:
+            with BZ2File(bio) as bz2f:
+                pdata = bz2f.peek()
+                self.assertNotEqual(len(pdata), 0)
+                self.assertTrue(self.TEXT.startswith(pdata))
+                self.assertEqual(bz2f.read(), self.TEXT)
