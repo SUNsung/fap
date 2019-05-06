@@ -1,202 +1,123 @@
 
         
-        #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
+        //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        stb_out4(0);       // 64-bit length requires 32-bit leading 0
+    stb_out4(length);
+    stb_out4(stb__window);
     
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include <algorithm>
-#include <string>
-#include <vector>
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
     
-// Write all (changed_) parameters to a config file.
-void ParamsEditor::WriteParams(char *filename,
-                               bool changes_only) {
-  FILE *fp;                      // input file
-  char msg_str[255];
-                                 // if file exists
-  if ((fp = fopen (filename, 'rb')) != nullptr) {
-    fclose(fp);
-    sprintf (msg_str, 'Overwrite file ' '%s' '? (Y/N)', filename);
-    int a = sv_window_->ShowYesNoDialog(msg_str);
-    if (a == 'n') {
-      return;
-    }  // don't write
-  }
+    {        UINT64 fenceValue = g_fenceLastSignaledValue + 1;
+        g_pd3dCommandQueue->Signal(g_fence, fenceValue);
+        g_fenceLastSignaledValue = fenceValue;
+        frameCtxt->FenceValue = fenceValue;
     }
     
-      // Clean up the bounding boxes from the polygonal approximation by
-  // expanding slightly, then clipping to the blobs from the original_word
-  // that overlap. If not null, the block provides the inverse rotation.
-  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
     
-    // A simple class to provide a dynamic programming solution to a class of
-// 1st-order problems in which the cost is dependent only on the current
-// step and the best cost to that step, with a possible special case
-// of using the variance of the steps, and only the top choice is required.
-// Useful for problems such as finding the optimal cut points in a fixed-pitch
-// (vertical or horizontal) situation.
-// Skeletal Example:
-// DPPoint* array = new DPPoint[width];
-// for (int i = 0; i < width; i++) {
-//   array[i].AddLocalCost(cost_at_i)
-// }
-// DPPoint* best_end = DPPoint::Solve(..., array);
-// while (best_end != nullptr) {
-//   int cut_index = best_end - array;
-//   best_end = best_end->best_prev();
-// }
-// delete [] array;
-class DPPoint {
- public:
-  // The cost function evaluates the total cost at this (excluding this's
-  // local_cost) and if it beats this's total_cost, then
-  // replace the appropriate values in this.
-  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
+    
+    {     // Show/hide OSD keyboard
+    if (io.WantTextInput)
+    {
+        // Some text input widget is active?
+        if (!g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = true;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 1);    // show OSD keyboard
+        }
     }
-    
-            m_combinedTrainingFunction->Save(tempModelFile);
-        std::wstring trainerStateCheckpointFilePath = GetTrainerStateCheckpointFilePath(modelFilePath);
-        std::wstring tempCheckpointFile = trainerStateCheckpointFilePath + L'.tmp';
-    
-        virtual const char * CallStack() const override { return m_callStack.c_str(); }
-    
-    #include 'DHTAbstractTask.h'
-#include 'a2time.h'
-    
-    class DHTNode;
-class DHTBucket;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTBucketTreeNode;
-    
-    
-    {  const int clen = bittorrent::getCompactLength(family_);
-  // nodes
-  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
-                                                             eoi = nodes_.end();
-       i != eoi; ++i) {
-    const std::shared_ptr<DHTNode>& node = *i;
-    // Write IP address + port in Compact IP-address/port info form.
-    unsigned char compactPeer[COMPACT_LEN_IPV6];
-    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
-                                             node->getPort());
-    if (compactlen != clen) {
-      memset(compactPeer, 0, clen);
+    else
+    {
+        // No text input widget is active
+        if (g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = false;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 0);    // hide OSD keyboard
+        }
     }
-    uint8_t clen1 = clen;
-    // 1byte compact peer format length
-    WRITE_CHECK(fp, &clen1, sizeof(clen1));
-    // 7bytes reserved
-    WRITE_CHECK(fp, zero, 7);
-    // clen bytes compact peer
-    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
-    // 24-clen bytes reserved
-    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
-    // 20bytes: node ID
-    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
-    // 4bytes reserved
-    WRITE_CHECK(fp, zero, 4);
-  }
-  if (fp.close() == EOF) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  if (!File(filenameTemp).renameTo(filename)) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  A2_LOG_INFO('DHT routing table was saved successfully');
 }
+
     
-    class DHTTaskFactoryImpl : public DHTTaskFactory {
-private:
-  std::shared_ptr<DHTNode> localNode_;
-    }
+        // create values of different floating-point types
+    json::number_float_t v_ok = 3.141592653589793;
+    json::number_float_t v_nan = NAN;
+    json::number_float_t v_infinity = INFINITY;
     
-    
-    {} // namespace aria2
-    
-    class DHTUnknownMessage : public DHTMessage {
-private:
-  unsigned char* data_;
-  size_t length_;
-  std::string ipaddr_;
-  uint16_t port_;
-    }
-    
-    #include 'gtest/gtest.h'
-    
-    TEST(ByteTest, GetValue) {
-  unsigned char byte_value = 0x1A;
+    TEST(ByteTest, CopyConstructor) {
+  unsigned char byte_value = 0xFF;
   Byte value(&byte_value);
-  EXPECT_EQ(0x05, value.get_byte(1, 3));
-  EXPECT_EQ(0x01, value.get_byte(1, 1));
-  EXPECT_EQ(0x00, value.get_byte(8, 1));
-  EXPECT_EQ(0x00, value.get_byte(-1, 1));
-  EXPECT_EQ(0x1A, value.get_byte(0, 10));
+  Byte another_value(value);
+  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
+  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
 }
     
-      x <<= 3;
+    
+    {  Byte t1(bytes + 2);
+  uint32_t t = t1.get_byte(3, 5);
+  x <<= 5;
   x |= t;
-    
-      MatrixXd offset_golden(10, 1);
-  offset_golden << 0, -40, -80, -120, -160, -200, -240, -280, -320, -360;
-    
-    
-    {  // Report Messages
-  AddRecvProtocolData<Accelrpt68, true>();
-  AddRecvProtocolData<Brakemotorrpt170, true>();
-  AddRecvProtocolData<Brakemotorrpt271, true>();
-  AddRecvProtocolData<Brakemotorrpt372, true>();
-  AddRecvProtocolData<Brakerpt6c, true>();
-  AddRecvProtocolData<Datetimerpt83, true>();
-  AddRecvProtocolData<Globalrpt6a, true>();
-  AddRecvProtocolData<Headlightrpt77, true>();
-  AddRecvProtocolData<Hornrpt79, true>();
-  AddRecvProtocolData<Latlonheadingrpt82, true>();
-  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
-  AddRecvProtocolData<Shiftrpt66, true>();
-  AddRecvProtocolData<Steeringmotorrpt173, true>();
-  AddRecvProtocolData<Steeringmotorrpt274, true>();
-  AddRecvProtocolData<Steeringmotorrpt375, true>();
-  AddRecvProtocolData<Steeringrpt16e, true>();
-  AddRecvProtocolData<Turnrpt64, true>();
-  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
-  AddRecvProtocolData<Wheelspeedrpt7a, true>();
-  AddRecvProtocolData<Wiperrpt91, true>();
-  AddRecvProtocolData<Yawraterpt81, true>();
-}
-    
-    using ::apollo::drivers::canbus::Byte;
-    
-    
-    {
-    {
-    {
-    {  Brake_rpt_6c::Brake_on_offType ret =
-      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
+  double ret = x * CLUSTER_DIST_RES + CLUSTER_DIST_LONG_MIN;
   return ret;
 }
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+        auto it_lower = std::lower_bound(
+        speed_limit_.speed_limit_points().begin(),
+        speed_limit_.speed_limit_points().end(), s,
+        [](const std::pair<double, double>& point, const double curr_s) {
+          return point.first < curr_s;
+        });
+    
+    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateSecondOrderDerivative(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
+  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
