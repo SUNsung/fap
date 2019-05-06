@@ -1,273 +1,291 @@
 
         
-        enum GARBAGE_LEVEL
-{
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
+        // Names that corresponds to a single input parameter.
+class ParamNames {
+ public:
+  // Create param based on Arg.
+  ParamNames(const string& name, const string& rename_to) : name_(name) {
+    rename_to_ = AvoidPythonReserved(rename_to);
+  }
+    }
+    
+    // NumPy casts
+    
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
+    
+    struct TFTensorDeleter {
+  void operator()(TF_Tensor* p) const { TF_DeleteTensor(p); }
 };
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
-};
+    /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
     
-      Pix* pix() const {
-    return pix_;
-  }
-  void set_pix(Pix* pix) {
-    pix_ = pix;
-  }
-  bool inverse() const {
-    return inverse_;
-  }
-  void set_inverse(bool value) {
-    inverse_ = value;
-  }
-  const DENORM* RootDenorm() const {
-    if (predecessor_ != nullptr)
-      return predecessor_->RootDenorm();
-    return this;
-  }
-  const DENORM* predecessor() const {
-    return predecessor_;
-  }
-  // Accessors - perhaps should not be needed.
-  float x_scale() const {
-    return x_scale_;
-  }
-  float y_scale() const {
-    return y_scale_;
-  }
-  const BLOCK* block() const {
-    return block_;
-  }
-  void set_block(const BLOCK* block) {
-    block_ = block;
+      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
+    const auto& inode = idx[nid];
+    if (inode.source->op() != ewise_plus_op) continue;
+    int sid = storage_id[idx.entry_id(inode.inputs[0])];
+    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
+    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
+    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
+    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
+    if (ref_count[eid_rhs] != 1) continue;
+    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
+    // TODO(haibin) support inplace addto for Dynamic Storage
+    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
+    CHECK_NE(storage_id[eid_rhs], sid);
+    storage_id[eid_rhs] = sid;
+    addto_entry[eid_rhs] = 1;
+    storage_inplace_index[eid_rhs] = -1;
+    skip_plus_node[nid] = 1;
   }
     
-    #ifndef TESSERACT_CCMAIN_OTSUTHR_H_
-#define TESSERACT_CCMAIN_OTSUTHR_H_
     
-    // Specialization for a pair of ints in increasing order.
-using IntKDPair = KDPairInc<int, int>;
-    
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
     {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
-    }
-    
-    // base class that we can catch, independent of the type parameter
-struct /*interface*/ IExceptionWithCallStackBase
-{
-    virtual const char * CallStack() const = 0;
-    virtual ~IExceptionWithCallStackBase() noexcept = default;
+    {/*! \brief typedef the factory function of data iterator */
+typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
+/*!
+ * \brief Registry entry for DataIterator factory functions.
+ */
+struct ImageAugmenterReg
+    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
+                                        ImageAugmenterFactory> {
 };
+//--------------------------------------------------------------
+// The following part are API Registration of Iterators
+//--------------------------------------------------------------
+/*!
+ * \brief Macro to register image augmenter
+ *
+ * \code
+ * // example of registering a mnist iterator
+ * REGISTER_IMAGE_AUGMENTER(aug_default)
+ * .describe('default augmenter')
+ * .set_body([]() {
+ *     return new DefaultAugmenter();
+ *   });
+ * \endcode
+ */
+#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
+  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_USE_OPENCV
     
-    template <class ElemType>
-TensorView<ElemType> EpochAccumulatorNode<ElemType>::EnsureAccumlator()
-{
-    if (m_accumulator->HasNoElements())
+    template<typename xpu>
+void Quantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                              const float threshold) {
+  mxnet::op::mxnet_op::Kernel<quantize_2bit, xpu>
+    ::Launch(s,
+            inputs[2].Size(),         // compressed array size
+            inputs[0].Size(),         // original size
+            inputs[2].dptr<float>(),  // compressed array
+            inputs[0].dptr<float>(),  // original array
+            inputs[1].dptr<float>(),  // residual array
+            -1 *threshold,            // negative threshold
+            threshold);               // positive threshold
+}
+    
+      /*!
+  * \brief Issues dequantize operation to be scheduled by the engine
+  * Decompresses `from` into `to` using current parameters of `type` and `threshold`
+  * \param from the ndarray containing quantized data
+  * \param to the target ndarray which contains final dequantized data
+  * \param priority Priority of the action.
+  */
+  void Dequantize(const mxnet::NDArray &from, mxnet::NDArray *to, const int priority);
+    
+      for (auto& blob : in_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(0);
+  }
+  for (auto& blob : out_data) {
+    NDArray* nd = new NDArray(blob, ndctx.dev_id);
+    ptrs.push_back(reinterpret_cast<void*>(nd));
+    ndvar.push_back(nd->var());
+    tags.push_back(1);
+  }
+  std::sort(ndvar.begin(), ndvar.end());
+  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
+    
+    
+    
+        Rational Pow(Rational const& base, Rational const& pow);
+    Rational Root(Rational const& base, Rational const& root);
+    Rational Fact(Rational const& rat);
+    Rational Mod(Rational const& a, Rational const& b);
+    
+    
+    {    m_hasExponent = true; // Entering exponent
+    return true;
+}
+    
+    
     {
-        // Accumulator has not been resized yet, allocate with necessary size.
-        const size_t sampleSize = GetSampleLayout().GetNumElements();
-        m_accumulator->Resize(sampleSize, 1);
-        Reset();
-    }
-    size_t rank = DetermineElementwiseTensorRank();
-    return DataTensorFor(m_accumulator, rank, FrameRange());
-}
-    
-    void Assembler::extsw(const Reg64& ra, const Reg64& rs, bool rc) {
-  EmitXForm(31, rn(rs), rn(ra), rn(0), 986, rc);
-}
-    
-    #define CONTAINER_CONFIG_BODY(T, METHOD) \
-T Config::Get##METHOD(const IniSetting::Map& ini, const Hdf& config, \
-                      const std::string& name /* = '' */, \
-                      const T& defValue /* = T() */, \
-                      const bool prepend_hhvm /* = true */) { \
-  auto ini_name = IniName(name, prepend_hhvm); \
-  Hdf hdf = name != '' ? config[name] : config; \
-  T ini_ret, hdf_ret; \
-  auto value = ini_iterate(ini, ini_name); \
-  if (value.isArray() || value.isObject()) { \
-    ini_on_update(value.toVariant(), ini_ret); \
-    /** Make sure that even if we have an ini value, that if we also **/ \
-    /** have an hdf value, that it maintains its edge as beating out **/ \
-    /** ini                                                          **/ \
-    if (hdf.exists() && !hdf.isEmpty()) { \
-      hdf.configGet(hdf_ret); \
-      if (hdf_ret != ini_ret) { \
-        ini_ret = hdf_ret; \
-        IniSetting::SetSystem(ini_name, ini_get(ini_ret)); \
-      } \
-    } \
-    return ini_ret; \
-  } \
-  if (hdf.exists() && !hdf.isEmpty()) { \
-    hdf.configGet(hdf_ret); \
-    return hdf_ret; \
-  } \
-  return defValue; \
-} \
-void Config::Bind(T& loc, const IniSetting::Map& ini, const Hdf& config, \
-                  const std::string& name /* = '' */, \
-                  const T& defValue /* = T() */, \
-                  const bool prepend_hhvm /* = true */) { \
-  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
-  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
-                   IniName(name, prepend_hhvm), &loc); \
-}
-    
-    void ArrayDirectory::rewind() {
-  m_it.rewind();
-}
-    
-    namespace HPHP {
-    }
-    
-    #if !UCONFIG_NO_TRANSLITERATION
-    
-    
-    {    printf('\nIndex   Binary     Type             Operand\n' \
-           '-------------------------------------------\n');
-    for (index = 0; index<fCompiledPat->size(); index++) {
-        dumpOp(index);
-    }
-    printf('\n\n');
-#endif
-}
-    
-    void ScientificNumberFormatter::getPreExponent(
-        const DecimalFormatSymbols &dfs, UnicodeString &preExponent) {
-    preExponent.append(dfs.getConstSymbol(
-            DecimalFormatSymbols::kExponentMultiplicationSymbol));
-    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kOneDigitSymbol));
-    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol));
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    #ifndef __SHARED_BREAKITERATOR_H__
-#define __SHARED_BREAKITERATOR_H__
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    #ifndef __SHARED_PLURALRULES_H__
-#define __SHARED_PLURALRULES_H__
-    
-    
-    {                text.extractBetween(0, start + count, temp);
-                src = &temp;
-            } else {
-                src = &text;
-            }
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    U_NAMESPACE_BEGIN
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-                // Allocate new temporary chunk if needed
-            const int bitmap_size_in_bytes = src_glyph.Info.Width * src_glyph.Info.Height;
-            if (buf_bitmap_current_used_bytes + bitmap_size_in_bytes > BITMAP_BUFFERS_CHUNK_SIZE)
-            {
-                buf_bitmap_current_used_bytes = 0;
-                buf_bitmap_buffers.push_back((unsigned char*)IM_ALLOC(BITMAP_BUFFERS_CHUNK_SIZE));
-            }
-    
-        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
-    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
-    enum RasterizerFlags
-    {
-        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
-        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
-        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
-        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
-        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
-        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
-        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
-        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
+    {        CommandBINEDITSTART = 700,
+        CommandBINPOS0 = 700,
+        CommandBINPOS1 = 701,
+        CommandBINPOS2 = 702,
+        CommandBINPOS3 = 703,
+        CommandBINPOS4 = 704,
+        CommandBINPOS5 = 705,
+        CommandBINPOS6 = 706,
+        CommandBINPOS7 = 707,
+        CommandBINPOS8 = 708,
+        CommandBINPOS9 = 709,
+        CommandBINPOS10 = 710,
+        CommandBINPOS11 = 711,
+        CommandBINPOS12 = 712,
+        CommandBINPOS13 = 713,
+        CommandBINPOS14 = 714,
+        CommandBINPOS15 = 715,
+        CommandBINPOS16 = 716,
+        CommandBINPOS17 = 717,
+        CommandBINPOS18 = 718,
+        CommandBINPOS19 = 719,
+        CommandBINPOS20 = 720,
+        CommandBINPOS21 = 721,
+        CommandBINPOS22 = 722,
+        CommandBINPOS23 = 723,
+        CommandBINPOS24 = 724,
+        CommandBINPOS25 = 725,
+        CommandBINPOS26 = 726,
+        CommandBINPOS27 = 727,
+        CommandBINPOS28 = 728,
+        CommandBINPOS29 = 729,
+        CommandBINPOS30 = 730,
+        CommandBINPOS31 = 731,
+        CommandBINPOS32 = 732,
+        CommandBINPOS33 = 733,
+        CommandBINPOS34 = 734,
+        CommandBINPOS35 = 735,
+        CommandBINPOS36 = 736,
+        CommandBINPOS37 = 737,
+        CommandBINPOS38 = 738,
+        CommandBINPOS39 = 739,
+        CommandBINPOS40 = 740,
+        CommandBINPOS41 = 741,
+        CommandBINPOS42 = 742,
+        CommandBINPOS43 = 743,
+        CommandBINPOS44 = 744,
+        CommandBINPOS45 = 745,
+        CommandBINPOS46 = 746,
+        CommandBINPOS47 = 747,
+        CommandBINPOS48 = 748,
+        CommandBINPOS49 = 749,
+        CommandBINPOS50 = 750,
+        CommandBINPOS51 = 751,
+        CommandBINPOS52 = 752,
+        CommandBINPOS53 = 753,
+        CommandBINPOS54 = 754,
+        CommandBINPOS55 = 755,
+        CommandBINPOS56 = 756,
+        CommandBINPOS57 = 757,
+        CommandBINPOS58 = 758,
+        CommandBINPOS59 = 759,
+        CommandBINPOS60 = 760,
+        CommandBINPOS61 = 761,
+        CommandBINPOS62 = 762,
+        CommandBINPOS63 = 763,
+        CommandBINEDITEND = 763
     };
+}
+
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Decide GL+GLSL versions
-#if __APPLE__
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = '#version 150';
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = '#version 130';
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
-#endif
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
+    {
+    if (b->cdigit > 1 || b->mant[0] != 1 || b->exp != 0)
+    {
+        // b is not one.
+        if ((*pa)->cdigit > 1 || (*pa)->mant[0] != 1 || (*pa)->exp != 0)
+        {
+            // pa and b are both not one.
+            _divnumx(pa, b, precision);
         }
+        else
+        {
+            // if pa is one and b is not one, just copy b, and adjust the sign.
+            int32_t sign = (*pa)->sign;
+            DUPNUM(*pa, b);
+            (*pa)->sign *= sign;
+        }
+    }
+    else
+    {
+        // b is one so don't divide, but set the sign.
+        (*pa)->sign *= b->sign;
+    }
+}
     
-    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
+    
+    {
+    {    private:
+        static bool IsNativeUDF(const Dictionary& dict);
+    };
+}
+
+    
+                if ((oldOutputRank != SentinelValueForInferParamInitRank) && (oldOutputRank != outputRank))
+                InvalidArgument('Output rank of a non-uniform random initialier cannot be overridden if it has been already specified!');
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
     }
     
-        io.KeyMap[ImGuiKey_Tab] = ALLEGRO_KEY_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = ALLEGRO_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = ALLEGRO_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = ALLEGRO_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = ALLEGRO_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = ALLEGRO_KEY_PGUP;
-    io.KeyMap[ImGuiKey_PageDown] = ALLEGRO_KEY_PGDN;
-    io.KeyMap[ImGuiKey_Home] = ALLEGRO_KEY_HOME;
-    io.KeyMap[ImGuiKey_End] = ALLEGRO_KEY_END;
-    io.KeyMap[ImGuiKey_Insert] = ALLEGRO_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = ALLEGRO_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = ALLEGRO_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = ALLEGRO_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = ALLEGRO_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape] = ALLEGRO_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = ALLEGRO_KEY_A;
-    io.KeyMap[ImGuiKey_C] = ALLEGRO_KEY_C;
-    io.KeyMap[ImGuiKey_V] = ALLEGRO_KEY_V;
-    io.KeyMap[ImGuiKey_X] = ALLEGRO_KEY_X;
-    io.KeyMap[ImGuiKey_Y] = ALLEGRO_KEY_Y;
-    io.KeyMap[ImGuiKey_Z] = ALLEGRO_KEY_Z;
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    // Same as above but with additional information about required streams.
+void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, const std::unordered_set<InputStreamDescription>& streamDescriptions, size_t requestedEpochSamples)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, streamDescriptions, requestedEpochSamples);
+}
+    
+    #include <functional>
+#include <stdexcept>
