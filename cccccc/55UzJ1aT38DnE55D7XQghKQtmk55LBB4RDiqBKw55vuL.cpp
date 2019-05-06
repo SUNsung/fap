@@ -1,186 +1,367 @@
 
         
-        #include 'tensorflow/core/framework/op.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Creates a numpy array with shapes specified by dim_size and dims and content
-// in data. The array does not own the memory, and destructor will be called to
-// release it. If the status is not ok the caller is responsible for releasing
-// the memory.
-Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result);
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
+        void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
 }
     
-    
-    {  VLOG(2) << 'building executor';
-  port::StatusOr<std::unique_ptr<StreamExecutor>> result = factory();
-  if (!result.ok()) {
-    VLOG(2) << 'failed to get build executor: ' << result.status();
-    // If construction failed, leave the cache Entry around, but with a null
-    // executor.
-    return result.status();
+      // Returns all objects in this class's weak map.
+  static std::vector<v8::Local<v8::Object>> GetAll(v8::Isolate* isolate) {
+    if (weak_map_)
+      return weak_map_->Values(isolate);
+    else
+      return std::vector<v8::Local<v8::Object>>();
   }
-  entry->configurations.emplace_back(config, std::move(result.ValueOrDie()));
-  return entry->configurations.back().second.get();
+    
+    
+    {}  // namespace atom
+    
+      static std::string GetFeedURL();
+  static void SetFeedURL(mate::Arguments* args);
+  static void CheckForUpdates();
+  static void QuitAndInstall();
+    
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
+    
+    namespace base {
+class FilePath;
 }
     
-      // Looks up 'config' in the cache. Returns a pointer to the existing executor,
-  // if already present, or creates it using 'factory', if it does not.
-  // Factories may be executed concurrently for different device ordinals.
-  typedef port::StatusOr<std::unique_ptr<StreamExecutor>> ExecutorFactory();
-  port::StatusOr<StreamExecutor*> GetOrCreate(
-      const StreamExecutorConfig& config,
-      const std::function<ExecutorFactory>& factory);
+    // Initialization funciton called by caffeOp & caffeLoss
+template<typename Dtype>
+void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    v->push_back(new ::caffe::Blob<Dtype>());
+}
     
-        typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
+    // specialize define for Layer Parameter
+template<>
+class FieldEntry<caffe::LayerParameter>
+    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
+ public:
+  // parent class
+  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
+    }
     
-        void operator() (const typename VecTraits<s32>::vec128 & v_src0,
-                     const typename VecTraits<s32>::vec128 & v_src1,
-                     typename VecTraits<s32>::vec128 & v_dst) const
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
+    
+    // these gpu functions are defined in gradient_compression.cu
+void Quantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                      const float threshold);
+void Dequantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                        const float threshold);
+    
+    
+    {  if (has('dist')) {
+#if MXNET_USE_DIST_KVSTORE
+    kv = new kvstore::KVStoreDist(use_device_comm);
+    if (!has('_async') && kv->IsWorkerNode() && kv->get_rank() == 0) {
+      // configure the server to be the sync mode
+      kv->SendCommandToServers(static_cast<int>(kvstore::CommandType::kSyncMode), '');
+    }
+#else
+    LOG(FATAL) << 'compile with USE_DIST_KVSTORE=1 to use ' << tname;
+    return nullptr;
+#endif  // MXNET_USE_DIST_KVSTORE
+  } else {
+    if (has('nccl')) {
+#if MXNET_USE_NCCL
+      kv = new kvstore::KVStoreNCCL();
+#else
+      LOG(FATAL) << 'compile with USE_NCCL=1 to use ' << tname;
+      return nullptr;
+#endif
+    } else {
+      kv =  new kvstore::KVStoreLocal(use_device_comm);
+    }
+  }
+  kv->type_ = tname;
+  return kv;
+}
+    
+    template <>
+void EvalBroadcast<DEVICE>(TBlob const& src, TBlob* ret, int size, RunContext ctx) {
+  typedef DEVICE xpu;
+  mshadow::Stream<xpu>* s = ctx.get_stream<xpu>();
+  mshadow::Tensor<xpu, 3> out = ret->get<xpu, 3, real_t>(s);
+  mshadow::Tensor<xpu, 2> in = src.get<xpu, 2, real_t>(s);
+  out = mshadow::expr::broadcast_with_axis(in, 0, size);
+}
+    
+        info = MXNET_LAPACK_posv<DType>(MXNET_LAPACK_ROW_MAJOR, 'U',
+      k, out.size(1), hadamard_prod.dptr_, hadamard_prod.stride_,
+      out.dptr_, out.stride_);
+  } else {
+    Tensor<cpu, 2, DType> kr(Shape2(out.size(1), out.size(0)));
+    AllocSpace(&kr);
+    khatri_rao(kr, ts_arr);
+    
+       out = data / sqrt(data.shape[-1])
+    
+    Operator *IdentityAttachKLSparseRegProp::CreateOperator(Context ctx) const {
+  DO_BIND_DISPATCH(CreateOp, param_);
+}
+    
+    
     {
-        float32x4_t vs1 = vcvtq_f32_s32(v_src0);
-        float32x4_t vs2 = vcvtq_f32_s32(v_src1);
+    {        // For now reusing the shim to allow prefetch.
+        // Please only use a subset of the shim interface that includes
+        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
+        // Shim will be deleted in the future versions.
+        std::shared_ptr<ReaderShim<float>> m_shim;
+        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
+    };
+}
+
+    
+        void NDMask::Clear()
+    {
+        // Clear the mask by marking all samples as Valid
+        GetMatrix()->SetValue((char)MaskKind::Valid);
     }
     
-    void assertSupportedConfiguration(bool parametersSupported)
+                m_totalSummaries++;
+            auto now = std::chrono::high_resolution_clock::now();
+            size_t durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastResetTime).count();
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+    
+            static NDShape GetUnpackedShape(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout)
+        {
+            // Determine unpacked shape
+            auto unpackedShape = sampleShape;
+            if (packedDataLayout)
+            {
+                if (sampleDynamicAxes.empty())
+                    LogicError('A PackedValue object that has a layout must have at least one dynamic axis.');
+    }
+    }
+    
+            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
+            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
+            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
+                seed.Value<size_t>() = Internal::GenerateRandomSeed();
+        }
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_handle != NULL);
+        int rc = 0;
+        rc = ::ReleaseMutex(m_handle);
+        if ((rc == RELEASEMUTEX_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        rc = ::CloseHandle(m_handle);
+        if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to close handler %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        m_handle = NULL;
+    }
+    
+    namespace aria2 {
+    }
+    
+    bool DHTRoutingTable::addNode(const std::shared_ptr<DHTNode>& node, bool good)
 {
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
+  A2_LOG_DEBUG(fmt('Trying to add node:%s', node->toString().c_str()));
+  if (*localNode_ == *node) {
+    A2_LOG_DEBUG('Adding node with the same ID with localnode is not allowed.');
+    return false;
+  }
+  auto treeNode = dht::findTreeNodeFor(root_.get(), node->getID());
+  while (1) {
+    const std::shared_ptr<DHTBucket>& bucket = treeNode->getBucket();
+    if (bucket->addNode(node)) {
+      A2_LOG_DEBUG('Added DHTNode.');
+      return true;
     }
-    }
-    
-    typedef void (* rshiftConstFunc)(const Size2D &size,
-                                const s16 * srcBase, ptrdiff_t srcStride,
-                                u8 * dstBase, ptrdiff_t dstStride,
-                                CONVERT_POLICY cpolicy);
-    
-    void FAST(const Size2D &size,
-          u8 *srcBase, ptrdiff_t srcStride,
-          KeypointStore *keypoints,
-          u8 threshold, bool nonmax_suppression)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    //keypoints.clear();
-    }
-    
-    #include <arm_neon.h>
-    
-    #include <grpc/grpc_security.h>
-    
-    #include <grpcpp/support/channel_arguments.h>
-    
-    
-    {}  // namespace grpc
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-    
-    {    size_t pos = kVersionIdSize;
-    while (pos < buf.size()) {
-      size_t bytes_read =
-          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
-      if (bytes_read == 0) {
-        break;
-      } else {
-        pos += bytes_read;
+    else if (bucket->splitAllowed()) {
+      A2_LOG_DEBUG(fmt('Splitting bucket. Range:%s-%s',
+                       util::toHex(bucket->getMinID(), DHT_ID_LENGTH).c_str(),
+                       util::toHex(bucket->getMaxID(), DHT_ID_LENGTH).c_str()));
+      treeNode->split();
+      ++numBucket_;
+      if (treeNode->getLeft()->isInRange(node->getID())) {
+        treeNode = treeNode->getLeft();
+      }
+      else {
+        treeNode = treeNode->getRight();
       }
     }
-    return pos;
+    else {
+      if (good) {
+        bucket->cacheNode(node);
+        A2_LOG_DEBUG(fmt('Cached node=%s', node->toString().c_str()));
+      }
+      return false;
+    }
   }
-    
-    
-    { private:
-  CensusContext context_;
-  // server method
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // Pointer to the grpc_call element
-  grpc_call* gc_;
-  // Authorization context for the call.
-  grpc_auth_context* auth_context_;
-  // Metadata element for census stats.
-  grpc_linked_mdelem census_bin_;
-  // recv callback
-  grpc_metadata_batch* recv_initial_metadata_;
-  grpc_closure* initial_on_done_recv_initial_metadata_;
-  grpc_closure on_done_recv_initial_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  absl::Time start_time_;
-  absl::Duration elapsed_time_;
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference it when adding metatdata to
-  // response.
-  char stats_buf_[kMaxServerStatsLen];
-};
-    
-    
-    {  std::vector<const protobuf::FieldDescriptor*> extensions;
-  descriptor_pool_->FindAllExtensions(desc, &extensions);
-  for (auto it = extensions.begin(); it != extensions.end(); it++) {
-    response->add_extension_number((*it)->number());
-  }
-  response->set_base_type_name(type);
-  return Status::OK;
+  return false;
 }
     
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+      std::shared_ptr<DHTNode> localNode_;
+    
+    class DownloadEngine;
+class Command;
+    
+      virtual std::shared_ptr<DHTTask>
+  createNodeLookupTask(const unsigned char* targetID) = 0;
     
     
-    {    // exception out_of_range.401
-    try
+    {} // namespace aria2
+    
+    void DHTTokenUpdateCommand::preProcess()
+{
+  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
+      getDownloadEngine()->isHaltRequested()) {
+    enableExit();
+  }
+}
+    
+      // always return false
+  virtual bool isReply() const CXX11_OVERRIDE;
+    
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+}
+    
+    
     {
-        // try to write at a nonexisting key
-        object.at('the fast') = 'il rapido';
-    }
-    catch (json::out_of_range& e)
     {
-        std::cout << e.what() << '\n';
+    {}  // namespace conti_radar
+}  // namespace drivers
+}  // namespace apollo
+
+    
+      MatrixXd offset_golden(10, 1);
+  offset_golden << 0, -40, -80, -120, -160, -200, -240, -280, -320, -360;
+    
+    void Brakemotorrpt170::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_motor_current(
+      motor_current(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_shaft_position(
+      shaft_position(bytes, length));
+}
+    
+    
+    {
+    {
+    {
+    {  double ret = x * 0.001000;
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    // config detail: {'name': 'usr_can_timeout', 'offset': 0.0, 'precision': 1.0,
+// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 5,
+// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
+bool Globalrpt6a::usr_can_timeout(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(5, 1);
     }
+    
+    #include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {
+    {  int ret = x;
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = (rand() % (20000 * 37));
+        if (key % 37 == 0)
+        {
+            continue;
+        }
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_EQ(ret, 0);
+    }
+    
+    void my_onShutdown(swServer *serv)
+{
+    swNotice('Server is shutdown');
 }
