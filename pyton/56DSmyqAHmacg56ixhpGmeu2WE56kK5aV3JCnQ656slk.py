@@ -1,20 +1,20 @@
 
         
         
-__licence__ = 'BSD (3 clause)'
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
-        def __exit__(self, Type, value, traceback):
-        if self.item is not None:
-            self._queue.put(self.item)
-            self.item = None
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
     
-        def add(self, graphic):
-        self.graphics.append(graphic)
+        rv = parse_changelog()
     
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
+        with app.app_context():
+        pass
