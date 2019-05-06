@@ -1,155 +1,160 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
-}
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+          // Gets the outcome of the test part.
+  Type type() const { return type_; }
     
     
-    {}  // namespace tensorflow
-
+    { private:
+  // The key supplied by the user.
+  std::string key_;
+  // The value supplied by the user.
+  std::string value_;
+};
     
-      // Attempt to get the next record at 'current_offset()'. Populates status
-  // with OK on success, OUT_OF_RANGE for end of file, DATA_LOSS for some
-  // kinds of truncated reads, or another code for other errors
-  // (e.g., filesystem errors).
-  void GetNext(TF_Status* status);
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-      // Creates a 2d FFT plan.
-  virtual std::unique_ptr<Plan> Create2dPlan(Stream *stream, uint64 num_x,
-                                             uint64 num_y, Type type,
-                                             bool in_place_fft) = 0;
-    
-    /*
- * Call a function on each element of `inputs', in parallel.
- *
- * If `func' throws an exception, some of the work will not be
- * attempted.
- */
-template<class Func, class Item>
-void for_each(const std::vector<Item>& inputs, Func func) {
-  std::atomic<bool> failed{false};
-  std::atomic<size_t> index{0};
+    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4,
+          typename T5>
+AssertionResult AssertPred5Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  const char* e5,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4,
+                                  const T5& v5) {
+  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
     }
     
-    /* using override */ using HPHP::jit::Reg64;
-/* using override */ using HPHP::jit::RegXMM;
-/* using override */ using HPHP::jit::RegSF;
-/* using override */ using HPHP::jit::MemoryRef;
-/* using override */ using HPHP::jit::Immed;
-/* using override */ using HPHP::CodeAddress;
-/* using override */ using HPHP::jit::ConditionCode;
+    // Constructs and returns the message for an equality assertion
+// (e.g. ASSERT_EQ, EXPECT_STREQ, etc) failure.
+//
+// The first four parameters are the expressions used in the assertion
+// and their values, as strings.  For example, for ASSERT_EQ(foo, bar)
+// where foo is 5 and bar is 6, we have:
+//
+//   expected_expression: 'foo'
+//   actual_expression:   'bar'
+//   expected_value:      '5'
+//   actual_value:        '6'
+//
+// The ignoring_case parameter is true iff the assertion is a
+// *_STRCASEEQ*.  When it's true, the string ' (ignoring case)' will
+// be inserted into the message.
+GTEST_API_ AssertionResult EqFailure(const char* expected_expression,
+                                     const char* actual_expression,
+                                     const std::string& expected_value,
+                                     const std::string& actual_value,
+                                     bool ignoring_case);
     
-    Object APCCollection::createObject() const {
-  if (m_arrayHandle->isTypedValue()) {
-    Variant local(m_arrayHandle->toLocal());
-    assertx(local.isArray());
-    return Object::attach(
-      collections::alloc(m_colType, local.getArrayData())
-    );
-  }
+        void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType(*current1_, *current2_, *current3_,
+            *current4_);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+          current1_ == end1_ ||
+          current2_ == end2_ ||
+          current3_ == end3_ ||
+          current4_ == end4_;
     }
     
-      static const APCCollection* fromHandle(const APCHandle* handle) {
-    assertx(handle->checkInvariants());
-    assertx(handle->kind() == APCKind::SharedCollection);
-    static_assert(offsetof(APCCollection, m_handle) == 0, '');
-    return reinterpret_cast<const APCCollection*>(handle);
-  }
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
+//
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
+};
     
+    #include 'gtest/gtest.h'
     
-struct Config {
-  /*
-   * Normalizes hdf string names to their ini counterparts
-   *
-   * We have special handling for a few hdf strings such as those containing
-   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
-   */
-  static std::string IniName(const Hdf& config,
-                             const bool prepend_hhvm = true);
-  static std::string IniName(const std::string& config,
-                             const bool prepend_hhvm = true);
-    }
+            virtual const std::unordered_set<StreamInformation>& StreamInfos() override { return m_streamInfos; }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////n
-    }
-    
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
-}
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
-    
-    INarratorAnnouncementHost^ LiveRegionHost::MakeHost()
+    // Exception wrapper to include native call stack string
+template <class E>
+class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
 {
-    return ref new LiveRegionHost();
+public:
+    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
+        E(msg), m_callStack(callstack)
+    { }
+    }
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+    // -----------------------------------------------------------------------
+// SumColumnElements (input)
+// Sums up all elements in each sample (column) of the input. Every sample
+// will be reduced to a scalar. This is equivalent to multiplying with a row of ones.
+// This is deprecated, in favor of ReduceElements().
+// -----------------------------------------------------------------------
+    
+    // -----------------------------------------------------------------------
+// SequenceDecoderNode (label, position_dependent_score, transition_score)
+// Decoder that matches CRF training.
+//  - label : output label vector of [0:T-1]
+//  - position_dependent_score : score from position dependent node,
+//    in the R-CRF case, it is the RNN output score before softmax
+//  - transition score : score from the transition node,
+//    in the R-CRF case, it is the transition probability between labels
+// -----------------------------------------------------------------------
+    
+    Waves3D* Waves3D::clone() const
+{
+    // no copy constructor
+    return Waves3D::create(_duration, _gridSize, _waves, _amplitude);
 }
     
+    NS_CC_END
     
-    {
-    {    private:
-        static int s_init;
-        static INarratorAnnouncementHost^ s_hostProducer;
-        static std::vector<INarratorAnnouncementHost^> s_hosts;
-    };
-}
+                coords.bl.z = (sinf(time * (float)M_PI  *_waves * 2 + 
+                (coords.bl.y+coords.bl.x) * .01f) * _amplitude * _amplitudeRate );
+            coords.br.z    = coords.bl.z;
+            coords.tl.z = coords.bl.z;
+            coords.tr.z = coords.bl.z;
+    
+    http://www.cocos2d-x.org
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CC_ANIMATION_H__
+#define __CC_ANIMATION_H__
+    
+    
+NS_CC_END
 
     
-            DEPENDENCY_PROPERTY_OWNER(LocalizationService);
     
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
-    
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
+    {private:
+    Map<std::string, Animation*> _animations;
+    static AnimationCache* s_sharedAnimationCache;
+};
