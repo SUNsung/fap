@@ -1,134 +1,119 @@
 
         
-                val.to_i if val.present?
+                private
+    
+          def test_clears_up_previous_helpers
+        @controller.process(:with_symbol)
+        assert_equal 'I respond to bare_a: false', @controller.response_body
       end
     
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+        class WithSymbolAndNoMethod < Base
+      layout :no_method
     
-            expose_attribute :noteable_id, :noteable_type, :author, :note,
-                         :created_at, :updated_at, :github_id
+    # Test if processing content string without any Liquid constructs, via Liquid,
+# is slower than checking whether constructs exist ( using `String#include?` )
+# and return-ing the 'plaintext' content string as is..
+#
+# Ref: https://github.com/jekyll/jekyll/pull/6735
     
-        def path
-      @path ||= url.path
-    end
-    
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
-  end
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
 end
 
     
-      def hub_topic_params
-    @_hub_topic_params ||= Rails.application.routes.recognize_path(hub_topic_uri.path)
-  end
-    
-      def setting
-    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
-  end
-end
-
-    
-      def export_filename
-    '#{controller_name}.csv'
-  end
-end
-
-    
-      def symlinked?(symlink_path, target_path)
-    '[ #{symlink_path} -ef #{target_path} ]'
-  end
-    
-        def roles_for(names)
-      servers.roles_for(names)
-    end
-    
-          def value_or_default
-        if response.empty?
-          default
-        else
-          response
+            each_page(method, *args) do |page|
+          page.objects.each do |object|
+            yield object
+          end
         end
       end
     
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+            def collection_options
+          { state: 'all', sort: 'created', direction: 'asc' }
+        end
       end
-      # rubocop:enable Security/MarshalLoad
+    end
+  end
+end
+
     
-          def trusted_keys
-        @trusted_keys.dup
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LabelLinksImporter
+        attr_reader :issue, :project, :client, :label_finder
+    
+            def collection_method
+          :lfs_objects
+        end
+    
+            def collection_method
+          :issues_comments
+        end
+    
+            def labels?
+          label_names && label_names.any?
+        end
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+          if chall.nil?
+        dprint('REGAUTH: No challenge data received')
+        return
       end
     
-      table td.code       {width:750px}
-  table td.code div   {width:750px;overflow:hidden}
-</style>
-</head>
-<body>
-  <div id='wrap'>
-    <div id='header'>
-      <img src='<%= env['SCRIPT_NAME'] %>/__sinatra__/500.png' alt='application error' height='161' width='313' />
-      <div id='summary'>
-        <h1><strong><%=h exception.class %></strong> at <strong><%=h path %>
-          </strong></h1>
-        <h2><%=h exception.message %></h2>
-        <ul>
-          <li class='first'><strong>file:</strong> <code>
-            <%=h frames.first.filename.split('/').last %></code></li>
-          <li><strong>location:</strong> <code><%=h frames.first.function %>
-            </code></li>
-          <li class='last'><strong>line:
-            </strong> <%=h frames.first.lineno %></li>
-        </ul>
-      </div>
-      <div class='clear'></div>
-    </div>
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
     
-        it 'Reads referrer from Host header when Referer header is missing' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      expect(subject.referrer(env)).to eq('foo.com')
+              # Encrypts the Rex::Proto::Kerberos::Model::AuthorizationData
+          #
+          # @param etype [Integer] the crypto schema to encrypt
+          # @param key [String] the key to encrypt
+          # @return [String] the encrypted result
+          # @raise [NotImplementedError] if encryption schema isn't supported
+          def encrypt(etype, key)
+            data = self.encode
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+        it 'accepts jsfiddle link with a custom-tab parameter' do
+      expect do
+        generate_new_liquid(jsfiddle_link_with_custom_tabs)
+      end.not_to raise_error
     end
