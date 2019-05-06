@@ -1,225 +1,191 @@
 
         
-        
-    {        if (specialized)
-          return ProtocolConformanceRef(specialized);
-      }
+        REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
     
-    #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/DenseMap.h'
-#include 'llvm/Support/Mutex.h'
+    RANGES dimensions description:
+1: represents list of examples within a batch
+2: represents list features
+3: two values which are start and length or a range (to be applied on DATA)
     
-      // If the base name is vacuous or is a keyword and there are two or
-  // fewer words in the base name, don't split.
-  auto newBaseName = baseName.substr(0, endOfBaseName);
-  {
-    auto newWords = camel_case::getWords(newBaseName);
-    auto newWordsIter = newWords.begin();
-    bool isKeyword = !canBeMemberName(*newWordsIter);
-    bool isVacuous = isVacuousName(*newWordsIter);
-    if (isKeyword || isVacuous) {
-      // Just one word?
-      ++newWordsIter;
-      if (newWordsIter == newWords.end()) return false;
-    }
-    }
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/logging.h'
+#include 'caffe2/core/operator.h'
+#include 'caffe2/utils/math.h'
     
-    void GeneratePCHJobAction::anchor() {}
-
     
-      /**
-   * @brief Set the data_ shared_ptr to point to the SyncedMemory holding the
-   *        data_ of Blob other -- useful in Layer%s which simply perform a copy
-   *        in their Forward pass.
-   *
-   * This deallocates the SyncedMemory holding this Blob's data_, as
-   * shared_ptr calls its destructor when reset with the '=' operator.
-   */
-  void ShareData(const Blob& other);
-  /**
-   * @brief Set the diff_ shared_ptr to point to the SyncedMemory holding the
-   *        diff_ of Blob other -- useful in Layer%s which simply perform a copy
-   *        in their Forward pass.
-   *
-   * This deallocates the SyncedMemory holding this Blob's diff_, as
-   * shared_ptr calls its destructor when reset with the '=' operator.
-   */
-  void ShareDiff(const Blob& other);
-    
-    // Convert macro to string
-#define STRINGIFY(m) #m
-#define AS_STRING(m) STRINGIFY(m)
-    
-    namespace caffe {
-    }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times ...) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (M) @f$
-   *      the inputs @f$ x_2 @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (M \times ...) @f$:
-   *      the reindexed array @f$
-   *        y = x_1[x_2]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #endif  // CAFFE_CONV_LAYER_HPP_
-
-    
-            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
-            size_t minibatchSizeInSamples,
-            size_t minibatchSizeInSequences,
-            size_t numberOfWorkers,
-            size_t workerRank,
-            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
-    
-        void Trainer::AddProgressWriters(const std::vector<ProgressWriterPtr>& progressWriters)
     {
-        for (auto& learner : m_parameterLearners->ParameterLearners()) 
-        {
-            learner->AddProgressWriters(progressWriters);
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
+    
+    // logistic loss for binary classification task
+struct LogisticClassification : public LogisticRegression {
+  static const char* DefaultEvalMetric() { return 'error'; }
+};
+    
+    SEXP XGBoosterCreate_R(SEXP dmats) {
+  SEXP ret;
+  R_API_BEGIN();
+  int len = length(dmats);
+  std::vector<void*> dvec;
+  for (int i = 0; i < len; ++i) {
+    dvec.push_back(R_ExternalPtrAddr(VECTOR_ELT(dmats, i)));
+  }
+  BoosterHandle handle;
+  CHECK_CALL(XGBoosterCreate(BeginPtr(dvec), dvec.size(), &handle));
+  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _BoosterFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
+    
+    
+    {  /*! \brief push up temp */
+  inline void PushTemp() {
+    temp.Reserve(limit_size * 2);
+    for (size_t l = 1; true; ++l) {
+      this->InitLevel(l + 1);
+      // check if level l is empty
+      if (level[l].size == 0) {
+        level[l].SetPrune(temp, limit_size);
+        break;
+      } else {
+        // level 0 is actually temp space
+        level[0].SetPrune(temp, limit_size);
+        temp.SetCombine(level[0], level[l]);
+        if (temp.size > limit_size) {
+          // try next level
+          level[l].size = 0;
+        } else {
+          // if merged record is still smaller, no need to send to next level
+          level[l].CopyFrom(temp); break;
         }
-        m_progressWriters.insert(progressWriters.begin(), progressWriters.end());
+      }
     }
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
-{
-public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
+  }
+  /*! \brief get the summary after finalize */
+  inline void GetSummary(SummaryContainer *out) {
+    if (level.size() != 0) {
+      out->Reserve(limit_size * 2);
+    } else {
+      out->Reserve(inqueue.queue.size());
     }
+    inqueue.MakeSummary(out);
+    if (level.size() != 0) {
+      level[0].SetPrune(*out, limit_size);
+      for (size_t l = 1; l < level.size(); ++l) {
+        if (level[l].size == 0) continue;
+        if (level[0].size == 0) {
+          level[0].CopyFrom(level[l]);
+        } else {
+          out->SetCombine(level[0], level[l]);
+          level[0].SetPrune(*out, limit_size);
+        }
+      }
+      out->CopyFrom(level[0]);
+    } else {
+      if (out->size > limit_size) {
+        temp.Reserve(limit_size);
+        temp.SetPrune(*out, limit_size);
+        out->CopyFrom(temp);
+      }
+    }
+  }
+  // used for debug, check if the sketch is valid
+  inline void CheckValid(RType eps) const {
+    for (size_t l = 1; l < level.size(); ++l) {
+      level[l].CheckValid(eps);
+    }
+  }
+  // initialize level space to at least nlevel
+  inline void InitLevel(size_t nlevel) {
+    if (level.size() >= nlevel) return;
+    data.resize(limit_size * nlevel);
+    level.resize(nlevel, Summary(nullptr, 0));
+    for (size_t l = 0; l < level.size(); ++l) {
+      level[l].data = dmlc::BeginPtr(data) + l * limit_size;
+    }
+  }
+  // input data queue
+  typename Summary::Queue inqueue;
+  // number of levels
+  size_t nlevel;
+  // size of summary in each level
+  size_t limit_size;
+  // the level of each summaries
+  std::vector<Summary> level;
+  // content of the summary
+  std::vector<Entry> data;
+  // temporal summary, used for temp-merge
+  SummaryContainer temp;
+};
     
-        double ElapsedSeconds();
-    
-                // replace input if needed
-            let iter = replacements.find(input);
-            if (iter != replacements.end())
-            {
-                assert(input->GetEnvironmentPtr()); // must be in some network if mapped
-                input = iter->second;
-                numRelinked++;
-                node->SetInput(i, input);
-            }
-    
-    template <class ElemType>
-EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(DEVICEID_TYPE deviceId, const wstring& name)
-    : Base(deviceId, name), m_numSamples(0)
-{
-    m_accumulator = make_shared<Matrix<ElemType>>(deviceId);
+    // implementing configure.
+template<typename PairIter>
+inline void GradientBooster::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
 }
     
-    protected:
-    vector<MemRequestInfo<float>> m_memRequestInfoFloatVec; 
-    vector<MemRequestInfo<double>> m_memRequestInfoDoubleVec;
-    vector<MemRequestInfo<half>> m_memRequestInfoHalfVec;
-    set<DEVICEID_TYPE> m_deviceIDSet; 
-    int m_stepCounter; 
+    DMLC_REGISTRY_FILE_TAG(rank_obj);
     
-    void DateCalculator::RaiseLiveRegionChangedAutomationEvent(_In_ bool isDateDiffMode)
-{
-    TextBlock^ resultTextBlock = (isDateDiffMode ? DateDiffAllUnitsResultLabel : DateResultLabel);
-    String^ automationName = AutomationProperties::GetName(resultTextBlock);
-    TextBlockAutomationPeer::FromElement(resultTextBlock)->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
+    
+    {    // By default ImGuiFreeType will use IM_ALLOC()/IM_FREE().
+    // However, as FreeType does lots of allocations we provide a way for the user to redirect it to a separate memory heap if desired:
+    IMGUI_API void SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* user_data), void (*free_func)(void* ptr, void* user_data), void* user_data = NULL);
+}
+
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    
+    // Specific OpenGL versions
+//#define IMGUI_IMPL_OPENGL_ES2     // Auto-detected on Emscripten
+//#define IMGUI_IMPL_OPENGL_ES3     // Auto-detected on iOS/Android
+    
+    
+    {    CreateRenderTarget();
+    return true;
 }
     
-    using namespace CalculatorApp::Common;
-using namespace Windows::Storage::Streams;
-    
-    //
-// CalculatorStandardOperators.xaml.h
-// Declaration of the CalculatorStandardOperators class
-//
-    
-            CalculatorApp::Calculator^ m_calculator;
-        CalculatorApp::UnitConverter^ m_converter;
-        CalculatorApp::DateCalculator^ m_dateCalculator;
-        Windows::Foundation::EventRegistrationToken _windowSizeEventToken;
-        Windows::Foundation::EventRegistrationToken m_hardwareButtonsBackPressedToken;
-        Windows::Foundation::EventRegistrationToken m_colorValuesChangedToken;
-        CalculatorApp::ViewModel::ApplicationViewModel^ m_model;
-        Windows::UI::ViewManagement::UISettings^ m_uiSettings;
-    
-        private:
-        Windows::UI::Xaml::Controls::MenuFlyout^ m_memoryItemFlyout;
-        Windows::Foundation::Rect m_visibleBounds;
-        Windows::Foundation::Rect m_coreBounds;
-        bool m_isErrorVisualState;
-    
-      void sendMessage();
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-    
-    {} // namespace aria2
-    
-        uint16_t port;
-    auto connection = make_unique<DHTConnectionImpl>(family);
-    {
-      port = e->getBtRegistry()->getUdpPort();
-      const std::string& addr = e->getOption()->get(
-          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
-      // If UDP port is already used, use the same port
-      // number. Normally IPv4 port is available, then IPv6 port is
-      // (especially for port >= 1024). We don't loose much by doing
-      // this. We did the same thing in TCP socket. See BtSetup.cc.
-      bool rv;
-      if (port == 0) {
-        auto sgl =
-            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
-        sgl.normalize();
-        rv = connection->bind(port, addr, sgl);
-      }
-      else {
-        rv = connection->bind(port, addr);
-      }
-      if (!rv) {
-        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
-      }
-      localNode->setPort(port);
-    }
-    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
-                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
-    auto tracker = std::make_shared<DHTMessageTracker>();
-    auto routingTable = make_unique<DHTRoutingTable>(localNode);
-    auto factory = make_unique<DHTMessageFactoryImpl>(family);
-    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
-    auto receiver = make_unique<DHTMessageReceiver>(tracker);
-    auto taskQueue = make_unique<DHTTaskQueueImpl>();
-    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
-    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
-    auto tokenTracker = make_unique<DHTTokenTracker>();
-    // For now, UDPTrackerClient was enabled along with DHT
-    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
-    const auto messageTimeout =
-        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
-    // wiring up
-    tracker->setRoutingTable(routingTable.get());
-    tracker->setMessageFactory(factory.get());
-    
-    #include 'common.h'
-    
-    class DHTTaskQueue {
-public:
-  virtual ~DHTTaskQueue() = default;
-    }
-    
-    public:
-  DHTTaskQueueImpl();
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port) const
+    void CreateRenderTarget()
 {
-  return generateToken(infoHash, ipaddr, port, secret_[0]);
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+    pBackBuffer->Release();
 }
+    
+    bool ImGui::InputTextMultiline(const char* label, std::string* str, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    }
+    
+    bool ImGui_Marmalade_CreateDeviceObjects()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
