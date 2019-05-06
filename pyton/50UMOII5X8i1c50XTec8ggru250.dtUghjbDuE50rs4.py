@@ -1,97 +1,84 @@
 
         
-            READY = 0
-    IN_PROGRESS = 1
-    COMPLETE = 2
+        # the data, split between train and test sets
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loaded_model = keras.models.load_model(model_filename)
+        loaded_model.predict(np.random.rand(128, 2))
+    
+            # helper function
+        def get_tuple_shape(nb_channels):
+            result = list(state_shape)
+            if self.cell.data_format == 'channels_first':
+                result[1] = nb_channels
+            elif self.cell.data_format == 'channels_last':
+                result[3] = nb_channels
+            else:
+                raise KeyError
+            return tuple(result)
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
     
     
-class DefaultCategories(Enum):
+class Command(ScrapyCommand):
     
     
-class RemoveDuplicateUrls(MRJob):
-    
-        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
-        self.pages = pages
-        self.data_store = data_store
-        self.reverse_index_queue = reverse_index_queue
-        self.doc_index_queue = doc_index_queue
-    
-    
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
-    )
-    
-        try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
+def _import_file(filepath):
+    abspath = os.path.abspath(filepath)
+    dirname, file = os.path.split(abspath)
+    fname, fext = os.path.splitext(file)
+    if fext != '.py':
+        raise ValueError('Not a Python source file: %s' % abspath)
+    if dirname:
+        sys.path = [dirname] + sys.path
+    try:
+        module = import_module(fname)
     finally:
-        plugin_manager.unregister(Plugin)
-
-    
-    from httpie import ExitStatus
-from utils import http, HTTP_OK
+        if dirname:
+            sys.path.pop(0)
+    return module
     
     
-class AjaxCrawlMiddleware(object):
-    '''
-    Handle 'AJAX crawlable' pages marked as crawlable via meta tag.
-    For more info see https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
+class ScrapesContract(Contract):
+    ''' Contract to check presence of fields in scraped items
+        @scrapes page_name page_body
     '''
     
-        def backwards(self, orm):
     
+class S3DownloadHandler(object):
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'ProcessingIssue'
-        db.create_table(
-            'sentry_processingissue', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), (
-                    'checksum',
-                    self.gf('django.db.models.fields.CharField')(max_length=40, db_index=True)
-                ), ('type', self.gf('django.db.models.fields.CharField')(max_length=30)),
-                ('data', self.gf('sentry.db.models.fields.gzippeddict.GzippedDictField')()), (
-                    'datetime',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ProcessingIssue'])
+        @nonce.decoder
+    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
+        try:
+            return jose.decode_b64jose(value)
+        except jose.DeserializationError as error:
+            # TODO: custom error
+            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
     
-            db.start_transaction()
+    # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+#html_last_updated_fmt = '%b %d, %Y'
     
-        complete_apps = ['sentry']
+    '''
 
     
-            # Adding unique constraint on 'Distribution', fields ['release', 'name']
-        db.create_unique('sentry_distribution', ['release_id', 'name'])
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
+    site_info = 'CBS.com'
+download = cbs_download
+download_playlist = playlist_not_supported('cbs')
