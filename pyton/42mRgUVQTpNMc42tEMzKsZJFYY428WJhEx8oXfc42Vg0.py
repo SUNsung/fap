@@ -1,202 +1,163 @@
 
         
-        
-def login_required(view):
-    '''View decorator that redirects anonymous users to the login page.'''
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
+                webpage = webpage.decode('utf8', 'replace')
     
-        if db is not None:
-        db.close()
+    password = key
+new_key = aes_encrypt(password, key_expansion(password))
+r = openssl_encode('aes-128-ctr', new_key, iv)
+print('aes_decrypt_text 16')
+print(repr(r))
     
-        with client:
-        auth.logout()
-        assert 'user_id' not in session
-
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
-            :param name: the optional name of the filter, otherwise the
-                     function name will be used.
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    from youtube_dl.extractor import _ALL_CLASSES
+from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
+    
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+    
+    
+import hashlib
+import io
+import json
+import socket
+    
+        def warning(self, msg):
+        self.messages.append(msg)
+    
+        def test_allsubtitles(self):
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['en']))
+        self.assertEqual(md5(subtitles['en']), '97e7670cbae3c4d26ae8bcc7fdd78d4b')
+    
+            label_suffix overrides the form's label_suffix.
         '''
-        def register_template(state):
-            state.app.jinja_env.filters[name or f.__name__] = f
-        self.record_once(register_template)
-    
-    import os
-from warnings import warn
-    
-    
-def _find_app():
-    top = _app_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_app_ctx_err_msg)
-    return top.app
-    
-    
-class TagTuple(JSONTag):
-    __slots__ = ()
-    key = ' t'
-    
-        def get_json(self, force=False, silent=False, cache=True):
-        '''Parse and return the data as JSON. If the mimetype does not
-        indicate JSON (:mimetype:`application/json`, see
-        :meth:`is_json`), this returns ``None`` unless ``force`` is
-        true. If parsing fails, :meth:`on_json_loading_failed` is called
-        and its return value is used as the return value.
-    
-    
-@pytest.fixture(autouse=True)
-def catch_deprecation_warnings(recwarn):
-    yield
-    gc.collect()
-    assert not recwarn.list, '\n'.join(str(w.message) for w in recwarn.list)
-
-    
-        def fetch_aws_state(self):
-        '''Retrieves rule and target state from AWS'''
-        aws_state = {
-            'rule': {},
-            'targets': [],
-            'changed': self.rule.changed
-        }
-        rule_description = self.rule.describe()
-        if not rule_description:
-            return aws_state
-    
-            last_snapshot_min_age = last_snapshot_min_age * 60  # Convert to seconds
-        snapshot = _get_most_recent_snapshot(current_snapshots,
-                                             max_snapshot_age_secs=last_snapshot_min_age)
-    try:
-        # Create a new snapshot if we didn't find an existing one to use
-        if snapshot is None:
-            snapshot = ec2.create_snapshot(volume_id, description=description)
-            changed = True
-        if wait:
-            if not _create_with_wait(snapshot, wait_timeout):
-                module.fail_json(msg='Timed out while creating snapshot.')
-        if snapshot_tags:
-            for k, v in snapshot_tags.items():
-                snapshot.add_tag(k, v)
-    except boto.exception.BotoServerError as e:
-        module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
-    
-    EXAMPLES = '''
-# Add or change a subnet group
-- elasticache_subnet_group:
-    state: present
-    name: norwegian-blue
-    description: My Fancy Ex Parrot Subnet Group
-    subnets:
-      - subnet-aaaaaaaa
-      - subnet-bbbbbbbb
-    
-        for (index, rule) in enumerate(desired_rules):
-        try:
-            if rule != current_rules[index]:
-                updates.append((index, rule))
-        except IndexError:
-            additions.append(rule)
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        # Send the data to bigpanda
-    data = json.dumps(body)
-    headers = {'Authorization': 'Bearer %s' % token, 'Content-Type': 'application/json'}
-    try:
-        response, info = fetch_url(module, request_url, data=data, headers=headers)
-        if info['status'] == 200:
-            module.exit_json(changed=True, **deployment)
+        contents = contents or self.label
+        if label_suffix is None:
+            label_suffix = (self.field.label_suffix if self.field.label_suffix is not None
+                            else self.form.label_suffix)
+        # Only add the suffix if the label does not end in punctuation.
+        # Translators: If found as last label character, these punctuation
+        # characters will prevent the default label_suffix to be appended to the label
+        if label_suffix and contents and contents[-1] not in _(':?.!'):
+            contents = format_html('{}{}', contents, label_suffix)
+        widget = self.field.widget
+        id_ = widget.attrs.get('id') or self.auto_id
+        if id_:
+            id_for_label = widget.id_for_label(id_)
+            if id_for_label:
+                attrs = {**(attrs or {}), 'for': id_for_label}
+            if self.field.required and hasattr(self.form, 'required_css_class'):
+                attrs = attrs or {}
+                if 'class' in attrs:
+                    attrs['class'] += ' ' + self.form.required_css_class
+                else:
+                    attrs['class'] = self.form.required_css_class
+            attrs = flatatt(attrs) if attrs else ''
+            contents = format_html('<label{}>{}</label>', attrs, contents)
         else:
-            module.fail_json(msg=json.dumps(info))
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+            contents = conditional_escape(contents)
+        return mark_safe(contents)
     
-                if re.search('already enabled', out) is None:
-                change_applied = True
-        else:
-            if rc == 0:
-                change_applied = True
-            # RC is not 0 for this already disabled feature, handle it as no change applied
-            elif re.search('Cannot disable feature '%s'. Target file .* does not exist' % self.feature_name, out):
-                change_applied = False
-            else:
-                self.module.fail_json(msg='Failed to disable feature. Command returns %s' % out)
+        for node in doctree.traverse(settingslist_node):
+        settings_list = nodes.bullet_list()
+        settings_list.extend([make_setting_element(d, app, fromdocname)
+                              for d in sorted(env.scrapy_all_settings,
+                                              key=itemgetter('setting_name'))
+                              if fromdocname != d['docname']])
+        node.replace_self(settings_list)
     
-        elif state == 'restarted':
-        if module.check_mode:
-            module.exit_json(changed=True)
-        status = run_command('restart')
-        if status in ['initializing', 'running'] or 'restart pending' in status:
-            module.exit_json(changed=True, name=name, state=state)
-        module.fail_json(msg='%s process not restarted' % name, status=status)
+        if match:
+        newfilename = match.group(1)
+        errortype = match.group(2)
     
-        if len(sys.argv) > 1:
-        ip = sys.argv[1]
-    else:
-        ip = '46.134.208.94'
-        ip = '2001:ee0:3203:a::12'
-        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
-    print('test ip:%s' % ip)
+            idx = 0
+        while True:
+            url = urls[idx % len(urls)]
+            yield Request(url, dont_filter=True)
+            idx += 1
     
-    current_path = os.path.dirname(os.path.abspath(__file__))
+            if opts.pdb:
+            failure.startDebugMode()
     
-        def test_no_leading_slash(self):
-        # http://bugs.python.org/issue2254
-        res = self.request('cgi-bin/file1.py')
-        self.assertEqual(
-            (b'Hello World' + self.linesep, 'text/html', HTTPStatus.OK),
-            (res.read(), res.getheader('Content-type'), res.status))
+        def syntax(self):
+        return '[options] <spider>'
     
-            readline = self.get_readline((b'\xef\xbb\xbfprint(something)\n',))
-        encoding, consumed_lines = detect_encoding(readline)
-        self.assertEqual(encoding, 'utf-8-sig')
-        self.assertEqual(consumed_lines, [b'print(something)\n'])
+                /patt/regex/replacement
+    
+        def response(self, flow):
+        if self.stream:
+            self.stream.add(flow)
+            self.active_flows.discard(flow)
     
     
-# Is a path a directory?
-# This follows symbolic links, so both islink() and isdir()
-# can be true for the same path on systems that support symlinks
-def isdir(s):
-    '''Return true if the pathname refers to an existing directory.'''
-    try:
-        st = os.stat(s)
-    except (OSError, ValueError):
-        return False
-    return stat.S_ISDIR(st.st_mode)
+def domain_match(a: str, b: str) -> bool:
+    if cookiejar.domain_match(a, b):  # type: ignore
+        return True
+    elif cookiejar.domain_match(a, b.strip('.')):  # type: ignore
+        return True
+    return False
     
-    def noop(x):
-    pass
-    
-    
-if __name__ == '__main__':
-    freeze_support()
-    test()
-
-    
-    test_encode_face = '''
-encoding = face_recognition.face_encodings(image, known_face_locations=face_locations)[0]
-'''
-    
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-        pool.starmap(test_image, function_parameters)
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+        @classmethod
+    def make_dummy(cls, address):
+        return cls.from_state(dict(
+            id=str(uuid.uuid4()),
+            address=address,
+            ip_address=address,
+            cert=None,
+            sni=address[0],
+            alpn_proto_negotiated=None,
+            tls_version=None,
+            source_address=('', 0),
+            tls_established=False,
+            timestamp_start=None,
+            timestamp_tcp_setup=None,
+            timestamp_tls_setup=None,
+            timestamp_end=None,
+            via=None
+        ))
