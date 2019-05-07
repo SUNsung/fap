@@ -1,216 +1,175 @@
 
         
-        
-def build_lazy_ie(ie, name):
-    valid_url = getattr(ie, '_VALID_URL', None)
-    s = ie_template.format(
-        name=name,
-        bases=', '.join(map(get_base_name, ie.__bases__)),
-        valid_url=valid_url,
-        module=ie.__module__)
-    if ie.suitable.__func__ is not InfoExtractor.suitable.__func__:
-        s += '\n' + getsource(ie.suitable)
-    if hasattr(ie, '_make_valid_url'):
-        # search extractors
-        s += make_valid_template.format(valid_url=ie._make_valid_url())
-    return s
+            if text.endswith('>'):
+        words, text = text[:-1].rsplit('<', 1)
+        words = words.strip()
+    else:
+        words = None
     
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+        return app
+
+    
+        if db is not None:
+        db.close()
     
     
-# Import youtube_dl
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
-sys.path.insert(0, ROOT_DIR)
-import youtube_dl
-    
-        # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
+@pytest.fixture
+def runner(app):
+    '''A test runner for the app's Click commands.'''
+    return app.test_cli_runner()
     
     
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('a', 'test', b'Incorrect username.'),
-    ('test', 'a', b'Incorrect password.'),
-))
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
+def test_delete(client, auth, app):
+    auth.login()
+    response = client.post('/1/delete')
+    assert response.headers['Location'] == 'http://localhost/'
     
-            current = current.parent
+            if add_version_option:
+            params.append(version_option)
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+        Defines all the global objects that are proxies to the current
+    active context.
+    
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    # I don't know how to call the player directly so I just put it here
+# just in case anyone touchs it -- Beining@Aug.24.2016
+#download = site.download_by_url
+#download_playlist = site.download_by_url
+    
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
+    '''
+    
+    import json
+    
+            for p in js_path:
+            if 'mtool' in p or 'mcore' in p:
+                js_text = get_content(p)
+                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+    
+        title = r1(r'<meta property='og:title' content='(.*?)'>', html)
+    
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    
+        def prepare(self, **kwargs):
+        if re.search(r'imgur\.com/a/', self.url):
+            # album
+            content = get_content(self.url)
+            album = match1(content, r'album\s*:\s*({.*}),') or \
+                    match1(content, r'image\s*:\s*({.*}),')
+            album = json.loads(album)
+            count = album['album_images']['count']
+            images = album['album_images']['images']
+            ext = images[0]['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
+                            for i in images],
+                    'size': sum([i['size'] for i in images]),
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
+                            for i in images],
+                    'container': 'jpg'
+                }
+            }
+            self.title = album['title']
     
     
-def test_app_context_provides_current_app(app):
-    with app.app_context():
-        assert flask.current_app._get_current_object() == app
-    assert flask._app_ctx_stack.top is None
+class Migration(DataMigration):
+    def forwards(self, orm):
+        'Write your forwards methods here.'
+        db.commit_transaction()
+    
+            # Adding model 'ApiAuthorization'
+        db.create_table(
+            'sentry_apiauthorization', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ApiApplication'], null=True
+                    )
+                ), (
+                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.User']
+                    )
+                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ApiAuthorization'])
     
     
-def setup(app):
-    app.add_crossref_type(
-        directivename = 'setting',
-        rolename      = 'setting',
-        indextemplate = 'pair: %s; setting',
+def make_handler(value):
+    return BitHandler(
+        keys=(
+            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
+            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
+            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
+        ),
+        value=value,
     )
-    app.add_crossref_type(
-        directivename = 'signal',
-        rolename      = 'signal',
-        indextemplate = 'pair: %s; signal',
-    )
-    app.add_crossref_type(
-        directivename = 'command',
-        rolename      = 'command',
-        indextemplate = 'pair: %s; command',
-    )
-    app.add_crossref_type(
-        directivename = 'reqmeta',
-        rolename      = 'reqmeta',
-        indextemplate = 'pair: %s; reqmeta',
-    )
-    app.add_role('source', source_role)
-    app.add_role('commit', commit_role)
-    app.add_role('issue', issue_role)
-    app.add_role('rev', rev_role)
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+            print('Success: test_insertion_sort')
     
-        def syntax(self):
-        return '[options] <spider_file>'
+            print('Success: test_selection_sort\n')
     
-        def test_builtin__qualname__(self):
-        import time
+            print('Success: test_queue_from_stacks')
     
-            self.nocgi_path = os.path.join(self.parent_dir, 'nocgi.py')
-        with open(self.nocgi_path, 'w') as fp:
-            fp.write(cgi_file1 % self.pythonexe)
-        os.chmod(self.nocgi_path, 0o777)
+            print('Test: Pop general case')
+        assert_equal(stacks.pop(), 5)
+        assert_equal(stacks.pop(), 3)
     
-        def _generate_symbols(self, grammar_file, target_symbol_py_file):
-        proc = subprocess.Popen([sys.executable,
-                                 GEN_SYMBOL_FILE,
-                                 grammar_file,
-                                 target_symbol_py_file], stderr=subprocess.PIPE)
-        stderr = proc.communicate()[1]
-        return proc.returncode, stderr
+    		print('Test: delete')
+		myTree.delete(5)
+		assert_equal(myTree.treeIsEmpty(), True)
+		
+		print('Test: more complex deletions')
+		[myTree.insert(x) for x in range(1, 5)]
+		myTree.delete(2)
+		assert_equal(myTree.root.rightChild.data, 3)
+		print('Test: delete invalid value')
+		assert_equal(myTree.delete(100), False)
     
-    
-# Return the longest prefix of all list elements.
-def commonprefix(m):
-    'Given a list of pathnames, returns the longest common leading component'
-    if not m: return ''
-    # Some people pass in a list of pathname parts to operate in an OS-agnostic
-    # fashion; don't try to translate in that case as that's an abuse of the
-    # API and they are already doing what they need to be OS-agnostic and so
-    # they most likely won't be using an os.PathLike object in the sublists.
-    if not isinstance(m[0], (list, tuple)):
-        m = tuple(map(os.fspath, m))
-    s1 = min(m)
-    s2 = max(m)
-    for i, c in enumerate(s1):
-        if c != s2[i]:
-            return s1[:i]
-    return s1
-    
-    
-Package = Union[str, ModuleType]
-Resource = Union[str, os.PathLike]
-    
-    from argparse import ArgumentParser
-    
-    # An imaginary module that would make this work and be safe.
-from imaginary import magic_html_parser
-    
-    # register the generator function baz; use `GeneratorProxy` to make proxies
-MyManager.register('baz', baz, proxytype=GeneratorProxy)
-    
-    #
-#
-#
-    
-    
-def get_serializer(serializer):
-    ''' Return requested serializer '''
-    if serializer == 'json':
-        return JSONSerializer
-    if serializer == 'pickle':
-        return PickleSerializer
-    if serializer == 'yaml' and yaml is not None:
-        return YAMLSerializer
-    if serializer == 'yaml' and yaml is None:
-        logger.warning('You must have PyYAML installed to use YAML as the serializer.'
-                       'Switching to JSON as the serializer.')
-    return JSONSerializer
-    
-        # << MANIPULATION >> #
-    
-            # creates a toplevel window
-        self.topwidget = tk.Toplevel(widget)
-        if platform.system() == 'Darwin':
-            # For Mac OS
-            self.topwidget.tk.call('::tk::unsupported::MacWindowStyle',
-                                   'style', self.topwidget._w,
-                                   'help', 'none')
-    
-            for side in ('a', 'b'):
-            decoder = self.networks['decoder_{}'.format(side)].network
-            output = decoder(self.networks['encoder'].network(inputs[0]))
-            autoencoder = KerasModel(inputs, output)
-            self.add_predictor(side, autoencoder)
-        logger.debug('Initialized model')
-    
-            var_x = input_
-        var_x = self.blocks.conv(var_x, encoder_complexity, use_instance_norm=True, **kwargs)
-        var_x = self.blocks.conv(var_x, encoder_complexity * 2, use_instance_norm=True, **kwargs)
-        var_x = self.blocks.conv(var_x, encoder_complexity * 4, **kwargs)
-        var_x = self.blocks.conv(var_x, encoder_complexity * 6, **kwargs)
-        var_x = self.blocks.conv(var_x, encoder_complexity * 8, **kwargs)
-        var_x = Dense(self.encoder_dim,
-                      kernel_initializer=self.kernel_initializer)(Flatten()(var_x))
-        var_x = Dense(dense_shape * dense_shape * dense_dim,
-                      kernel_initializer=self.kernel_initializer)(var_x)
-        var_x = Reshape((dense_shape, dense_shape, dense_dim))(var_x)
-        return KerasModel(input_, var_x)
-    
-            while True:
-            if navigation['last_request'] == 0:
-                break
-            elif navigation['frame_idx'] in (0, navigation['max_frame']):
-                break
-            elif skip_mode == 'standard':
-                break
-            elif (skip_mode == 'no faces'
-                  and not self.alignments.frame_has_faces(frame)):
-                break
-            elif (skip_mode == 'multi-faces'
-                  and self.alignments.frame_has_multiple_faces(frame)):
-                break
-            elif (skip_mode == 'has faces'
-                  and self.alignments.frame_has_faces(frame)):
-                break
-            else:
-                self.interface.iterate_frame('navigation',
-                                             navigation['last_request'])
-                frame = frame_list[navigation['frame_idx']]['frame_fullname']
-    
-        @property
-    def aligned_face(self):
-        ''' Return aligned detected face '''
-        return self.aligned['face']
+        def extract_min(self):
+        if not self.array:
+            return None
+        minimum = sys.maxsize
+        for index, node in enumerate(self.array):
+            if node.key < minimum:
+                minimum = node.key
+                minimum_index = index
+        return self.array.pop(minimum_index)
