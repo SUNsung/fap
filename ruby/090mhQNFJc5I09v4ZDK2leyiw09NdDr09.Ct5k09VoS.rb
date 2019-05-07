@@ -1,57 +1,57 @@
-        cmd = ['git tag']
-    
-    # for each blog URL, check if rss URL exists
-matches.each do |match|
-  name = match[0]
-  web_url = match[1]
-    
-      test 'clean path with leading slash' do
-    assert_equal '/Mordor', clean_path('/Mordor')
-  end
-    
-        post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
-    follow_redirect!
-    assert last_response.ok?
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
+
+        
+                  def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          end
+      end
     end
   end
 end
+
     
-    package = FPM::Package::Dir.new
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class DateSelect < Base # :nodoc:
+        def initialize(object_name, method_name, template_object, options, html_options)
+          @html_options = html_options
     
-        # magic
-    header[TAR_MAGIC_START..TAR_MAGIC_END] = 'ustar\0' + '00'
+              def initialize(template_object, object_name, method_name, object, tag_value)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @tag_value = tag_value
+          end
     
-        # Populate files + checksums, then write +MANIFEST.
-    pkgdata['files'] = {}
-    checksums.each do |f, shasum|
-      # pkg expands % URL-style escapes, so make sure to escape % as %25
-      pkgdata['files']['/' + f.gsub('%', '%25')] = shasum
+        def extract_to_dir(unpack_dir, basename:, verbose:)
+      system_command! AIR_APPLICATION_INSTALLER,
+                      args:    ['-silent', '-location', unpack_dir, path],
+                      verbose: verbose
     end
+  end
+end
+
     
-        settings['prefix'] = staging_path(attributes[:prefix])
-    FileUtils.mkdir_p(settings['prefix'])
+    def testpath(path)
+  File.join(TEST_DIR, path)
+end
     
-      def output(output_path)
-    output_check(output_path)
+        # Title is based on file name when h1_title is false.
+    actual = @view.title
+    assert_equal 'H1', title
+  end
+end
+
     
-          # TODO(sissel): preinstall/postinstall
-      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
-      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
-        type, klass, path, mode, user, group = line.split
+      # piece file back together and write
+  manifest = '  s.files = %w[\n#{files}\n  ]\n'
+  spec = [head, manifest, tail].join('  # = MANIFEST =\n')
+  File.open(gemspec_file, 'w') { |io| io.write(spec) }
+  puts 'Updated #{gemspec_file}'
+end
     
-    # Some utility functions
-module FPM::Util
-  extend FFI::Library
-  ffi_lib FFI::Library::LIBC
-    
-      if FPM::Issues::TarWriter.has_issues_with_add_symlink?
-    # Backport Symlink Support to TarWriter
-    # https://github.com/rubygems/rubygems/blob/4a778c9c2489745e37bcc2d0a8f12c601a9c517f/lib/rubygems/package/tar_writer.rb#L239-L253
-    def add_symlink(name, target, mode)
-      check_closed
+      class DuplicatePageError < Error
+    attr_accessor :dir
+    attr_accessor :existing_path
+    attr_accessor :attempted_path
