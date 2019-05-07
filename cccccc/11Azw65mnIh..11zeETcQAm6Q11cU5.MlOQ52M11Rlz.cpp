@@ -1,887 +1,165 @@
 
         
         
-    {        return true;
-      }
-    
-    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
- public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
-    }
-    
-      int AddEntry(const base::DictionaryValue& entry);
-  void RemoveEntry(int id);
-    
-     private:
-  display::Screen* screen_;
-    
-      AtomQuotaPermissionContext();
-    
-      // There is a new update which has been downloaded.
-  virtual void OnUpdateDownloaded(const std::string& release_notes,
-                                  const std::string& release_name,
-                                  const base::Time& release_date,
-                                  const std::string& update_url) {}
-    
-    #if defined(OS_LINUX)
-typedef PowerObserverLinux PowerObserver;
-#else
-typedef base::PowerObserver PowerObserver;
-#endif  // defined(OS_LINUX)
-    
-    const SkBitmap* OffscreenViewProxy::GetBitmap() const {
-  return view_bitmap_.get();
-}
-    
-    
-    {  if (event.filter != EVFILT_PROC || event.fflags != NOTE_EXIT ||
-      event.ident != static_cast<uintptr_t>(parent_pid)) {
-    LOG(ERROR) << 'kevent (monitor): unexpected event, filter ' << event.filter
-               << ', fflags ' << event.fflags << ', ident ' << event.ident;
-    return;
+    {  if (op->send_message() != nullptr) {
+    ++sent_message_count_;
   }
-}
-    
-    /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
-    
-    namespace Ui {
-    class OpenURIDialog;
-}
-    
-    static void secp256k1_ge_set_all_gej_var(secp256k1_ge *r, const secp256k1_gej *a, size_t len, const secp256k1_callback *cb) {
-    secp256k1_fe *az;
-    secp256k1_fe *azi;
-    size_t i;
-    size_t count = 0;
-    az = (secp256k1_fe *)checked_malloc(cb, sizeof(secp256k1_fe) * len);
-    for (i = 0; i < len; i++) {
-        if (!a[i].infinity) {
-            az[count++] = a[i].z;
-        }
-    }
-    }
-    
-        // C escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
-            {'Foo', 'Bar\nBaz\t'},
-            {'Spam', '\rEggs'},
-            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
-            {'Final', 'Check'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Escaped=\'Escape\\\\\'', {
-            {'Valid', 'Mapping'},
-            {'Escaped', 'Escape\\'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Bare=\'Escape\\\'', {});
-    CheckParseTorReplyMapping(
-        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
-            {'OneOctal', 'OneEnd\1'},
-            {'TwoOctal', 'TwoEnd\11'},
-        });
-    
-        shl	NUM_BLKS, 6	; convert to bytes
-    jz	done_hash
-    add	NUM_BLKS, INP	; pointer to end of data
-    mov	[rsp + _INP_END], NUM_BLKS
-    
-    
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
-}
-    
-    using google::protobuf::util::GogoDataStripper;
-    
-    class GoGoProtoGenerator : public CodeGenerator {
- public:
-  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        bool can_generate =
-            (new_pool_.FindFileByName(file->name()) == nullptr);
-        for (int j = 0; j < file->dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->public_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->public_dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->weak_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->weak_dependency(j)->name()) != nullptr);
-        }
-        if (can_generate) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
-    
-      {
-    // Read the existing address book.
-    fstream input(argv[1], ios::in | ios::binary);
-    if (!address_book.ParseFromIstream(&input)) {
-      cerr << 'Failed to parse address book.' << endl;
-      return -1;
-    }
+  if (op->recv_message() != nullptr) {
+    recv_message_ = op->op()->payload->recv_message.recv_message;
+    initial_on_done_recv_message_ =
+        op->op()->payload->recv_message.recv_message_ready;
+    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
   }
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    OPERATOR_SCHEMA(Im2Col)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc('The Im2Col operator from Matlab.')
-    .TensorInferenceFunction(
-        [](const OperatorDef& def, const vector<TensorShape>& in) {
-          ArgumentHelper helper(def);
-          auto pad = helper.GetSingleArgument<int>('pad', 0);
-          auto kernel_h = helper.GetSingleArgument<int>(
-              'kernel_h', helper.GetSingleArgument<int>('kernel', 0));
-          auto kernel_w = helper.GetSingleArgument<int>(
-              'kernel_w', helper.GetSingleArgument<int>('kernel', 0));
-          auto dilation_h = helper.GetSingleArgument<int>(
-              'dilation_h', helper.GetSingleArgument<int>('dilation', 1));
-          auto dilation_w = helper.GetSingleArgument<int>(
-              'dilation_w', helper.GetSingleArgument<int>('dilation', 1));
-          auto stride_h = helper.GetSingleArgument<int>(
-              'stride_h', helper.GetSingleArgument<int>('stride', 1));
-          auto stride_w = helper.GetSingleArgument<int>(
-              'stride_w', helper.GetSingleArgument<int>('stride', 1));
-          auto order = StringToStorageOrder(
-              helper.GetSingleArgument<string>('order', 'NCHW'));
-    }
-    
-    // Overloaded PrintTo() for tuples of various arities.  We support
-// tuples of up-to 10 fields.  The following implementation works
-// regardless of whether tr1::tuple is implemented using the
-// non-standard variadic template feature or not.
-    
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    #define GTEST_IMPL_FORMAT_C_STRING_AS_POINTER_(CharType)                \
-  template <typename OtherOperand>                                      \
-  class FormatForComparison<CharType*, OtherOperand> {                  \
-   public:                                                              \
-    static ::std::string Format(CharType* value) {                      \
-      return ::testing::PrintToString(static_cast<const void*>(value)); \
-    }                                                                   \
+  if (op->recv_trailing_metadata() != nullptr) {
+    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
+    initial_on_done_recv_trailing_metadata_ =
+        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
+    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
+        &on_done_recv_trailing_metadata_;
   }
-    
-    // Suppresses MSVC warnings 4072 (unreachable code) for the code following
-// statement if it returns or throws (or doesn't return or throw in some
-// situations).
-#define GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement) \
-  if (::testing::internal::AlwaysTrue()) { statement; }
-    
-      void capture(T* ptr) {
-    value_ = ptr;
-    link_.join_new();
-  }
-    
-     private:
-  void CalculatePrimesUpTo(int max) {
-    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
-    is_prime_[0] = is_prime_[1] = false;
-    }
-    
-      // Now, we have that n is odd and n >= 3.
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
+  // Call next op.
+  grpc_call_next_op(elem, op->op());
 }
     
-    // Return the name of the descriptor file for the db named by
-// 'dbname' and the specified incarnation number.  The result will be
-// prefixed with 'dbname'.
-std::string DescriptorFileName(const std::string& dbname, uint64_t number);
-    
-    TEST(LogTest, BadLength) {
-  const int kPayloadSize = kBlockSize - kHeaderSize;
-  Write(BigString('bar', kPayloadSize));
-  Write('foo');
-  // Least significant size byte is stored in header[4].
-  IncrementByte(4, 1);
-  ASSERT_EQ('foo', Read());
-  ASSERT_EQ(kBlockSize, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('bad record length'));
-}
-    
-    class WritableFile;
-    
-      const SequenceNumber sequence_number_;
-    
-      // Set the count for the number of entries in the batch.
-  static void SetCount(WriteBatch* batch, int n);
-    
-    
-//--------------------------------------------------------------------------
-//
-//   Clone
-//
-//--------------------------------------------------------------------------
-RegexPattern  *RegexPattern::clone() const {
-    RegexPattern  *copy = new RegexPattern(*this);
-    return copy;
-}
-    
-    U_NAMESPACE_END
-    
-        static const int32_t gDigitCount[] = {
-        1,1,1,1,1,1,1,1,
-        1,1,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4};
-    
-    ExitConstrDeleteAll: // Remove all sets and return error
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
-    
-    class  UnicodeSet;
-    
-    const char *StandardPlural::getKeyword(Form p) {
-    U_ASSERT(ZERO <= p && p < COUNT);
-    return gKeywords[p];
-}
-    
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CLIENT_FILTER_H */
 
     
     
-    {  int ret = x;
-  return ret;
+    {}  // namespace grpc
+
+    
+      Status GetFileByName(ServerContext* context, const grpc::string& file_name,
+                       reflection::v1alpha::ServerReflectionResponse* response);
+    
+    #endif  // GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
+
+    
+    #include 'src/core/lib/debug/stats.h'
+    
+    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
+                          gpr_timespec* to) {
+  high_resolution_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == high_resolution_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
+    return;
+  }
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
 }
     
-    
-    {  bool ret = (x == 0x1);
-  return ret;
+    SEXP XGBoosterDumpModel_R(SEXP handle, SEXP fmap, SEXP with_stats, SEXP dump_format) {
+  SEXP out;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const char **res;
+  const char *fmt = CHAR(asChar(dump_format));
+  CHECK_CALL(XGBoosterDumpModelEx(R_ExternalPtrAddr(handle),
+                                CHAR(asChar(fmap)),
+                                asInteger(with_stats),
+                                fmt,
+                                &olen, &res));
+  out = PROTECT(allocVector(STRSXP, olen));
+  if (!strcmp('json', fmt)) {
+    std::stringstream stream;
+    stream <<  '[\n';
+    for (size_t i = 0; i < olen; ++i) {
+      stream << res[i];
+      if (i < olen - 1) {
+        stream << ',\n';
+      } else {
+        stream << '\n';
+      }
+    }
+    stream <<  ']';
+    SET_STRING_ELT(out, 0, mkChar(stream.str().c_str()));
+  } else {
+    for (size_t i = 0; i < olen; ++i) {
+      std::stringstream stream;
+      stream <<  'booster[' << i <<']\n' << res[i];
+      SET_STRING_ELT(out, i, mkChar(stream.str().c_str()));
+    }
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
     
-    void Accelrpt68::Parse(const std::uint8_t* bytes, int32_t length,
-                       ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_manual_input(
-      manual_input(bytes, length));
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_commanded_value(
-      commanded_value(bytes, length));
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_output_value(
-      output_value(bytes, length));
-}
+    XGBOOST_REGISTER_OBJECTIVE(LambdaRankObjMAP, 'rank:map')
+.describe('LambdaRank with MAP as objective.')
+.set_body([]() { return new LambdaRankObjMAP(); });
     
-      Byte t2(bytes + 6);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    class JStringCache;
-    
-    namespace WeexCore {
+        // Compute the difference in effects when conditioning on each of the features on and off
+    // see: Axiomatic characterizations of probabilistic and
+    //      cardinal-probabilistic interaction indices
+    PredictContribution(p_fmat, &contribs_diag, model, ntree_limit, approximate, 0, 0);
+    for (size_t i = 0; i < ncolumns + 1; ++i) {
+      PredictContribution(p_fmat, &contribs_off, model, ntree_limit, approximate, -1, i);
+      PredictContribution(p_fmat, &contribs_on, model, ntree_limit, approximate, 1, i);
     }
     
-      void ExecuteAction();
+        std::unique_ptr<DHTRoutingTable> routingTable;
     
+    void DHTResponseMessage::fillMessage(Dict* msgDict)
+{
+  msgDict->put(R, getResponse());
+}
     
+    #include <string>
+#include <vector>
+#include <memory>
+    
+      uint32_t temp32;
+  uint64_t temp64;
+  // time
+  if (version == 2) {
+    READ_CHECK(fp, &temp32, sizeof(temp32));
+    serializedTime_.setTimeFromEpoch(ntohl(temp32));
+    // 4bytes reserved
+    readBytes(fp, buf, buf.size(), 4);
+  }
+  else {
+    READ_CHECK(fp, &temp64, sizeof(temp64));
+    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
+  }
+    
+    DHTRoutingTableSerializer::~DHTRoutingTableSerializer() = default;
+    
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+    class DHTTaskFactory {
+public:
+  virtual ~DHTTaskFactory() = default;
+    }
+    
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
+    
+    std::vector<DNSCache::AddrEntry>::iterator
+DNSCache::CacheEntry::find(const std::string& addr)
+{
+  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
+    if ((*i).addr_ == addr) {
+      return i;
+    }
+  }
+  return addrEntries_.end();
+}
+    
+        template <typename OutputIterator>
+    void getAllGoodAddrs(OutputIterator out) const
     {
-    { public:
-  std::string page_id_;
-  std::string ref_;
-  std::vector<std::pair<std::string, std::string>> *attrs_;
-};
-}  // namespace WeexCore
-    
-    #include <map>
-#include <string>
+      for (auto& elem : addrEntries_) {
+        if (elem.good_) {
+          *out++ = elem.addr_;
+        }
+      }
+    }
