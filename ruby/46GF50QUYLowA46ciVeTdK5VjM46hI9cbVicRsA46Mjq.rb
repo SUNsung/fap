@@ -1,97 +1,180 @@
 
         
-              it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
-      end
-    
-        it 'returns a Glyphicon icon element with an addidional class' do
-      icon = icon_tag('glyphicon-help', class: 'text-info')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
-    end
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-        stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
-    
-          a = '        Events will have the fields you specified.  Your options look like:\n\n            {\n      \'url\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@src\'\n      },\n      \'title\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@title\'\n      }\n    }\'\n'
-      expect(Utils.unindent(a)).to eq('Events will have the fields you specified.  Your options look like:\n\n    {\n      \'url\': {\n\'css\': \'#comic img\',\n\'value\': \'@src\'\n      },\n      \'title\': {\n\'css\': \'#comic img\',\n\'value\': \'@title\'\n      }\n    }\'')
-    end
-  end
-    
-        it 'should generate the correct projects url' do
-      expect(@checker.send(:projects_url)).to eq('https://basecamp.com/12345/api/v1/projects.json')
-    end
-    
-        ntheta    = NAO_SAMPLES
-    nphi      = NAO_SAMPLES
-    eps       = 0.0001
-    occlusion = 0.0
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
+        def local_require
+  require 'json'
+  JSON.pretty_generate(DATA)
 end
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
+    Jekyll::PluginManager.require_from_bundler
+    
+        def deprecation_message(message)
+      Jekyll.logger.warn 'Deprecation:', message
+    end
+    
+          def parse_expression(str)
+        Liquid::Variable.new(str, Liquid::ParseContext.new)
       end
     
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
+            def importer_class
+          IssueAndLabelLinksImporter
+        end
+    
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+          # Associates the given database ID with the current object.
       #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
       end
     
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
+          def initialize(app)
+        @app = app
+      end
     
-          each_mentioned_cop do |cop_name, disabled, line, single_line|
-        analyses[cop_name] =
-          analyze_cop(analyses[cop_name], disabled, line, single_line)
+        self.code    = code.to_i
+    self.message = message
+    self.proto   = proto
+    
+        # Convert u-law into signed PCM
+    when IAX_CODEC_G711_MULAW
+      Rex::Proto::IAX2::Codecs::MuLaw.decode(buff)
+    
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
+    
+              # Decodes the auth_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_auth_time(input)
+            input.value[0].value
+          end
+    
+              # Encodes the etype
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_etype
+            bn = OpenSSL::BN.new(etype.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
+    
+          # Returns an array of all the keys in the `hash` literal.
+      #
+      # @return [Array<Node>] an array of keys in the `hash` literal
+      def keys
+        each_key.to_a
       end
     
     module RuboCop
-  module Cop
-    # Identifier of all cops containing a department and cop name.
-    #
-    # All cops are identified by their badge. For example, the badge
-    # for `RuboCop::Cop::Layout::Tab` is `Layout/Tab`. Badges can be
-    # parsed as either `Department/CopName` or just `CopName` to allow
-    # for badge references in source files that omit the department
-    # for RuboCop to infer.
-    class Badge
-      # Error raised when a badge parse fails.
-      class InvalidBadge < Error
-        MSG = 'Invalid badge %<badge>p. ' \
-              'Expected `Department/CopName` or `CopName`.'.freeze
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+            cop_names.each do |cop_name|
+          yield qualified_cop_name(cop_name), disabled, comment_line_number,
+                single_line
+        end
+      end
+    end
+    
+      option ['-t', '--output-type'], 'OUTPUT_TYPE',
+    'the type of package you want to create (deb, rpm, solaris, etc)',
+    :attribute_name => :output_type
+  option ['-s', '--input-type'], 'INPUT_TYPE',
+    'the package type to use as input (gem, rpm, python, etc)',
+    :attribute_name => :input_type
+  option ['-C', '--chdir'], 'CHDIR',
+    'Change directory to here before searching for files',
+    :attribute_name => :chdir
+  option '--prefix', 'PREFIX',
+    'A path to prefix files with when building the target package. This may ' \
+    'not be necessary for all input packages. For example, the 'gem' type ' \
+    'will prefix with your gem directory automatically.'
+  option ['-p', '--package'], 'OUTPUT', 'The package file path to output.'
+  option ['-f', '--force'], :flag, 'Force output even if it will overwrite an ' \
+    'existing file', :default => false
+  option ['-n', '--name'], 'NAME', 'The name to give to the package'
+    
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
+    
+      # Take a flat package as input
+  def input(input_path)
+    # TODO: Fail if it's a Distribution pkg or old-fashioned
+    expand_dir = File.join(build_path, 'expand')
+    # expand_dir must not already exist for pkgutil --expand
+    safesystem('pkgutil --expand #{input_path} #{expand_dir}')
+    
+        # do channel-discover if required
+    if !attributes[:pear_channel].nil?
+      logger.info('Custom channel specified', :channel => attributes[:pear_channel])
+      channel_list = safesystemout('pear', '-c', config, 'list-channels')
+      if channel_list !~ /#{Regexp.quote(attributes[:pear_channel])}/
+        logger.info('Discovering new channel', :channel => attributes[:pear_channel])
+        safesystem('pear', '-c', config, 'channel-discover', attributes[:pear_channel])
+      end
+      input_package = '#{attributes[:pear_channel]}/#{input_package}'
+      logger.info('Prefixing package name with channel', :package => input_package)
+    end
+    
+          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
+      target = File.join(base, 'files')
+      actions_script = File.join(base, 'install_actions.sh')
+      ::PleaseRun::Installer.install_files(platform, target, false)
+      ::PleaseRun::Installer.write_actions(platform, actions_script)
+    end
+    
+        args.flatten!.compact!
