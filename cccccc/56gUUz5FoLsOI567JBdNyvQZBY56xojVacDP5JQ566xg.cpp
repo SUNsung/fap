@@ -1,107 +1,432 @@
 
         
-          // content::QuotaPermissionContext:
-  void RequestQuotaPermission(const content::StorageQuotaParams& params,
-                              int render_process_id,
-                              const PermissionCallback& callback) override;
+        // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    #if defined(OS_LINUX)
-typedef PowerObserverLinux PowerObserver;
+    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
+                           int /* object id */,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+}
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+      GdkRectangle screen_rect;
+  gdk_screen_get_monitor_geometry(screen, monitor, &screen_rect);
+    
+      if (menu_item->submenu_)
+    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
+                                 menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
+    
+    
+    {
+} // namespace extensions
+
+    
+    class NwObjCallObjectMethodAsyncFunction : public UIThreadExtensionFunction {
+ public:
+  NwObjCallObjectMethodAsyncFunction();
+    }
+    
+    void bitwiseAnd(const Size2D &size,
+                const u8 *src0Base, ptrdiff_t src0Stride,
+                const u8 *src1Base, ptrdiff_t src1Stride,
+                u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseAnd());
 #else
-typedef base::PowerObserver PowerObserver;
-#endif  // defined(OS_LINUX)
-    
-    bool URLRequestAboutJob::GetMimeType(std::string* mime_type) const {
-  *mime_type = 'text/html';
-  return true;
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-    
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-        Round(a, b, c, d, e, f, g, h, 0x27b70a85, w0 += sigma1(w14) + w9 + sigma0(w1));
-    Round(h, a, b, c, d, e, f, g, 0x2e1b2138, w1 += sigma1(w15) + w10 + sigma0(w2));
-    Round(g, h, a, b, c, d, e, f, 0x4d2c6dfc, w2 += sigma1(w0) + w11 + sigma0(w3));
-    Round(f, g, h, a, b, c, d, e, 0x53380d13, w3 += sigma1(w1) + w12 + sigma0(w4));
-    Round(e, f, g, h, a, b, c, d, 0x650a7354, w4 += sigma1(w2) + w13 + sigma0(w5));
-    Round(d, e, f, g, h, a, b, c, 0x766a0abb, w5 += sigma1(w3) + w14 + sigma0(w6));
-    Round(c, d, e, f, g, h, a, b, 0x81c2c92e, w6 += sigma1(w4) + w15 + sigma0(w7));
-    Round(b, c, d, e, f, g, h, a, 0x92722c85, w7 += sigma1(w5) + w0 + sigma0(w8));
-    Round(a, b, c, d, e, f, g, h, 0xa2bfe8a1, w8 += sigma1(w6) + w1 + sigma0(w9));
-    Round(h, a, b, c, d, e, f, g, 0xa81a664b, w9 += sigma1(w7) + w2 + sigma0(w10));
-    Round(g, h, a, b, c, d, e, f, 0xc24b8b70, w10 += sigma1(w8) + w3 + sigma0(w11));
-    Round(f, g, h, a, b, c, d, e, 0xc76c51a3, w11 += sigma1(w9) + w4 + sigma0(w12));
-    Round(e, f, g, h, a, b, c, d, 0xd192e819, w12 += sigma1(w10) + w5 + sigma0(w13));
-    Round(d, e, f, g, h, a, b, c, 0xd6990624, w13 += sigma1(w11) + w6 + sigma0(w14));
-    Round(c, d, e, f, g, h, a, b, 0xf40e3585, w14 += sigma1(w12) + w7 + sigma0(w15));
-    Round(b, c, d, e, f, g, h, a, 0x106aa070, w15 += sigma1(w13) + w8 + sigma0(w0));
-    
-    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
-    (void)ctx;
-    if (sizeof(secp256k1_scalar) == 32) {
-        /* When the secp256k1_scalar type is exactly 32 byte, use its
-         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
-         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
-        memcpy(r, &sig->data[0], 32);
-        memcpy(s, &sig->data[32], 32);
-    } else {
-        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
-        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
-    }
-    *recid = sig->data[64];
-}
-    
-    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
+    void Canny3x3L2(const Size2D &size,
+                const u8 * srcBase, ptrdiff_t srcStride,
+                u8 * dstBase, ptrdiff_t dstStride,
+                f64 low_thresh, f64 high_thresh,
+                Margin borderMargin)
 {
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
-    auto ret = ParseTorReplyMapping(input);
-    BOOST_CHECK_EQUAL(ret.size(), expected.size());
-    auto r_it = ret.begin();
-    auto e_it = expected.begin();
-    while (r_it != ret.end() && e_it != expected.end()) {
-        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
-        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
-        r_it++;
-        e_it++;
-    }
+    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
+#ifdef CAROTENE_NEON
+    Canny3x3<true, false>(size, 1,
+                          srcBase, srcStride,
+                          dstBase, dstStride,
+                          NULL, 0,
+                          NULL, 0,
+                          low_thresh, high_thresh,
+                          borderMargin);
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)low_thresh;
+    (void)high_thresh;
+    (void)borderMargin;
+#endif
 }
     
-    int UniValue::get_int() const
+    u8 cornerScore(const u8* ptr, const ptrdiff_t pixel[])
 {
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int32_t retval;
-    if (!ParseInt32(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
+    const s32 K = 8, N = 16 + K + 1;
+    s32 k, v = ptr[0];
+    s16 d[(N + 7) & ~7];
+    for( k = 0; k < N; k++ )
+        d[k] = (s16)(v - ptr[pixel[k]]);
+    }
+    
+    void fillMinMaxLocs(const Size2D & size,
+                    const u8 * srcBase, ptrdiff_t srcStride,
+                    u8 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
+                    u8 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+    namespace testing {
+    }
+    
+    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ALL_THREADS, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_)};
+    return ValuesIn(array);
+  }
+    
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
+    
+    
+    {}  // namespace
+    
+    // Tests the default c'tor.
+TEST(MyString, DefaultConstructor) {
+  const MyString s;
+    }
+    
+      void PopulateCache() {
+    Random rnd(1);
+    for (int64_t i = 0; i < FLAGS_cache_size; i++) {
+      uint64_t rand_key = rnd.Next() % FLAGS_max_key;
+      // Cast uint64* to be char*, data would be copied to cache
+      Slice key(reinterpret_cast<char*>(&rand_key), 8);
+      // do insert
+      cache_->Insert(key, new char[10], 1, &deleter);
+    }
+  }
+    
+    bool WriteController::IsStopped() const {
+  return total_stopped_.load(std::memory_order_relaxed) > 0;
+}
+// This is inside DB mutex, so we can't sleep and need to minimize
+// frequency to get time.
+// If it turns out to be a performance issue, we can redesign the thread
+// synchronization model here.
+// The function trust caller will sleep micros returned.
+uint64_t WriteController::GetDelay(Env* env, uint64_t num_bytes) {
+  if (total_stopped_.load(std::memory_order_relaxed) > 0) {
+    return 0;
+  }
+  if (total_delayed_.load(std::memory_order_relaxed) == 0) {
+    return 0;
+  }
+    }
+    
+    #include 'rocksdb/env.h'
+    
+      // Always pick a compaction which includes all files whenever possible.
+  CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) override {
+    ColumnFamilyMetaData cf_meta;
+    db->GetColumnFamilyMetaData(&cf_meta);
+    }
+    
+      {
+    PinnableSlice pinnable_val;
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+  }
+    
+    class DB;
+    
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+    void ObjectExtendedInfo60D::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  int obj_id = object_id(bytes, length);
+  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_accel(longitude_accel(bytes, length));
+      obs->set_lateral_accel(lateral_accel(bytes, length));
+      obs->set_oritation_angle(oritation_angle(bytes, length));
+      obs->set_length(object_length(bytes, length));
+      obs->set_width(object_width(bytes, length));
+      obs->set_obstacle_class(obstacle_class(bytes, length));
+      break;
+    }
+  }
+  // auto conti_obs = conti_radar->mutable_contiobs(object_id(bytes, length));
 }
     
-        // output element at index 2 (third element)
-    std::cout << array.at(2) << '\n';
+    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
     
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+      x <<= 0;
+  x >>= 0;
+    
+    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
+// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
+// 'physical_unit': 'deg C'}
+int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
+                                        int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
+    
+    {  double ret = x * 0.001000;
+  return ret;
+}
+    
+    // config detail: {'name': 'pacmod_status', 'enum': {0:
+// 'PACMOD_STATUS_CONTROL_DISABLED', 1: 'PACMOD_STATUS_CONTROL_ENABLED'},
+// 'precision': 1.0, 'len': 1, 'is_signed_var': False, 'offset': 0.0,
+// 'physical_range': '[0|1]', 'bit': 0, 'type': 'enum', 'order': 'motorola',
+// 'physical_unit': ''}
+Global_rpt_6a::Pacmod_statusType Globalrpt6a::pacmod_status(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 1);
+    }
+    
+    StoreBuffer::StoreBuffer(Heap* heap)
+    : heap_(heap), top_(nullptr), current_(0), mode_(NOT_IN_GC) {
+  for (int i = 0; i < kStoreBuffers; i++) {
+    start_[i] = nullptr;
+    limit_[i] = nullptr;
+    lazy_top_[i] = nullptr;
+  }
+  task_running_ = false;
+  insertion_callback = &InsertDuringRuntime;
+  deletion_callback = &DeleteDuringRuntime;
+}
+    
+    void StressScavengeObserver::Step(int bytes_allocated, Address soon_object,
+                                  size_t size) {
+  if (has_requested_gc_ || heap_.new_space()->Capacity() == 0) {
+    return;
+  }
+    }
+    
+      // Get the address of the location in the code object
+  // and compute the fp-to-sp delta in register edx.
+  __ mov(ecx, Operand(esp, kSavedRegistersAreaSize));
+  __ lea(edx, Operand(esp, kSavedRegistersAreaSize + 1 * kSystemPointerSize));
+    
+    
+// The IA32 disassembler implementation.
+class DisassemblerIA32 {
+ public:
+  DisassemblerIA32(
+      const NameConverter& converter,
+      Disassembler::UnimplementedOpcodeAction unimplemented_opcode_action)
+      : converter_(converter),
+        vex_byte0_(0),
+        vex_byte1_(0),
+        vex_byte2_(0),
+        instruction_table_(InstructionTable::get_instance()),
+        tmp_buffer_pos_(0),
+        unimplemented_opcode_action_(unimplemented_opcode_action) {
+    tmp_buffer_[0] = '\0';
+  }
+    }
+    
+    
+    {  // Clobber clobbered registers when running with the debug-code flag
+  // turned on to provoke errors.
+  if (emit_debug_code()) {
+    mov(address, Immediate(bit_cast<int32_t>(kZapValue)));
+    mov(value, Immediate(bit_cast<int32_t>(kZapValue)));
+  }
+}
+    
+      // Convenience function: Same as above, but takes the fid instead.
+  void CallRuntime(Runtime::FunctionId fid, int num_arguments,
+                   SaveFPRegsMode save_doubles = kDontSaveFPRegs) {
+    CallRuntime(Runtime::FunctionForId(fid), num_arguments, save_doubles);
+  }
+    
+    #define SSE4_RM_INSTRUCTION_LIST(V) \
+  V(pmovsxbw, 66, 0F, 38, 20)       \
+  V(pmovsxwd, 66, 0F, 38, 23)       \
+  V(pmovzxbw, 66, 0F, 38, 30)       \
+  V(pmovzxwd, 66, 0F, 38, 33)       \
+  V(ptest, 66, 0F, 38, 17)
+    
+    
+    {
+    {
+    {      Label uint8_elements(this), int8_elements(this), uint16_elements(this),
+          int16_elements(this), uint32_elements(this), int32_elements(this),
+          float32_elements(this), float64_elements(this),
+          bigint64_elements(this), biguint64_elements(this);
+      Label* elements_kind_labels[] = {
+          &uint8_elements,    &uint8_elements,    &int8_elements,
+          &uint16_elements,   &int16_elements,    &uint32_elements,
+          &int32_elements,    &float32_elements,  &float64_elements,
+          &bigint64_elements, &biguint64_elements};
+      int32_t elements_kinds[] = {
+          UINT8_ELEMENTS,    UINT8_CLAMPED_ELEMENTS, INT8_ELEMENTS,
+          UINT16_ELEMENTS,   INT16_ELEMENTS,         UINT32_ELEMENTS,
+          INT32_ELEMENTS,    FLOAT32_ELEMENTS,       FLOAT64_ELEMENTS,
+          BIGINT64_ELEMENTS, BIGUINT64_ELEMENTS};
+      const size_t kTypedElementsKindCount =
+          LAST_FIXED_TYPED_ARRAY_ELEMENTS_KIND -
+          FIRST_FIXED_TYPED_ARRAY_ELEMENTS_KIND + 1;
+      DCHECK_EQ(kTypedElementsKindCount, arraysize(elements_kinds));
+      DCHECK_EQ(kTypedElementsKindCount, arraysize(elements_kind_labels));
+      Switch(elements_kind, miss, elements_kinds, elements_kind_labels,
+             kTypedElementsKindCount);
+      BIND(&uint8_elements);
+      {
+        Comment('UINT8_ELEMENTS');  // Handles UINT8_CLAMPED_ELEMENTS too.
+        Node* element = Load(MachineType::Uint8(), backing_store, intptr_index);
+        exit_point->Return(SmiFromInt32(element));
+      }
+      BIND(&int8_elements);
+      {
+        Comment('INT8_ELEMENTS');
+        Node* element = Load(MachineType::Int8(), backing_store, intptr_index);
+        exit_point->Return(SmiFromInt32(element));
+      }
+      BIND(&uint16_elements);
+      {
+        Comment('UINT16_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(1));
+        Node* element = Load(MachineType::Uint16(), backing_store, index);
+        exit_point->Return(SmiFromInt32(element));
+      }
+      BIND(&int16_elements);
+      {
+        Comment('INT16_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(1));
+        Node* element = Load(MachineType::Int16(), backing_store, index);
+        exit_point->Return(SmiFromInt32(element));
+      }
+      BIND(&uint32_elements);
+      {
+        Comment('UINT32_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(2));
+        Node* element = Load(MachineType::Uint32(), backing_store, index);
+        exit_point->Return(ChangeUint32ToTagged(element));
+      }
+      BIND(&int32_elements);
+      {
+        Comment('INT32_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(2));
+        Node* element = Load(MachineType::Int32(), backing_store, index);
+        exit_point->Return(ChangeInt32ToTagged(element));
+      }
+      BIND(&float32_elements);
+      {
+        Comment('FLOAT32_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(2));
+        Node* element = Load(MachineType::Float32(), backing_store, index);
+        var_double_value->Bind(ChangeFloat32ToFloat64(element));
+        Goto(rebox_double);
+      }
+      BIND(&float64_elements);
+      {
+        Comment('FLOAT64_ELEMENTS');
+        Node* index = WordShl(intptr_index, IntPtrConstant(3));
+        Node* element = Load(MachineType::Float64(), backing_store, index);
+        var_double_value->Bind(element);
+        Goto(rebox_double);
+      }
+      BIND(&bigint64_elements);
+      {
+        Comment('BIGINT64_ELEMENTS');
+        exit_point->Return(LoadFixedTypedArrayElementAsTagged(
+            backing_store, intptr_index, BIGINT64_ELEMENTS, INTPTR_PARAMETERS));
+      }
+      BIND(&biguint64_elements);
+      {
+        Comment('BIGUINT64_ELEMENTS');
+        exit_point->Return(LoadFixedTypedArrayElementAsTagged(
+            backing_store, intptr_index, BIGUINT64_ELEMENTS,
+            INTPTR_PARAMETERS));
+      }
+    }
+  }
+}
