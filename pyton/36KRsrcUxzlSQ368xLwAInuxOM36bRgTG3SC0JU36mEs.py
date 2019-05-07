@@ -1,210 +1,127 @@
 
         
-            def park_vehicle(self, vehicle):
-        pass
+        from os import makedirs
+from os.path import exists, join
     
-        def override_category_budget(self, category, amount):
-        self.categories_to_budget_map[category] = amount
-
+        ```python
+         ..
+         # Not needed to change the device scope for model definition:
+         model = Xception(weights=None, ..)
     
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
+        # Note on specifying the initial state of RNNs
+        You can specify the initial state of RNN layers symbolically by
+        calling them with the keyword argument `initial_state`. The value of
+        `initial_state` should be a tensor or list of tensors representing
+        the initial state of the RNN layer.
     
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+    # Build the Autoencoder Model
+# First build the Encoder Model
+inputs = Input(shape=input_shape, name='encoder_input')
+x = inputs
+# Stack of Conv2D blocks
+# Notes:
+# 1) Use Batch Normalization before ReLU on deep networks
+# 2) Use MaxPooling2D as alternative to strides>1
+# - faster but not as good as strides>1
+for filters in layer_filters:
+    x = Conv2D(filters=filters,
+               kernel_size=kernel_size,
+               strides=2,
+               activation='relu',
+               padding='same')(x)
     
-        def process_query(self, query):
-        query = self.parse_query(query)
-        results = self.memory_cache.get(query)
-        if results is None:
-            results = self.reverse_index_cluster.process_search(query)
-            self.memory_cache.set(query, results)
-        return results
+    max_words = 1000
+batch_size = 32
+epochs = 5
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-            # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
-    
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-    
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-        class Plugin(AuthPlugin):
-        auth_type = 'test-require-false'
-        auth_require = False
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-    
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
-    
-    
-class BaseConfigDict(dict):
-    
-    from .compat import is_py2, builtin_str, str
-    
-    
-class SSLError(ConnectionError):
-    '''An SSL error occurred.'''
-    
-    
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
-    
-            # XXX should the partial digests be encoded too?
-        base = 'username='%s', realm='%s', nonce='%s', uri='%s', ' \
-               'response='%s'' % (self.username, realm, nonce, path, respdig)
-        if opaque:
-            base += ', opaque='%s'' % opaque
-        if algorithm:
-            base += ', algorithm='%s'' % algorithm
-        if entdig:
-            base += ', digest='%s'' % entdig
-        if qop:
-            base += ', qop='auth', nc=%s, cnonce='%s'' % (ncvalue, cnonce)
-    
-    import sys
-    
-    from .utils import override_environ
-    
-            with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(b'hehehe, not received')
-            sock.close()
-    
-    
-# From mitsuhiko/werkzeug (used with permission).
-def unquote_header_value(value, is_filename=False):
-    r'''Unquotes a header value.  (Reversal of :func:`quote_header_value`).
-    This does not use the real unquoting but what browsers are actually
-    using for quoting.
-    
-            # Broken links can't be fixed and
-        # I am not sure what do with the local ones.
-        if errortype.lower() in ['broken', 'local']:
-            print('Not Fixed: ' + line)
-        else:
-            # If this is a new file
-            if newfilename != _filename:
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.linkextractors import LinkExtractor
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
-    
-    
-class ScrapesContract(Contract):
-    ''' Contract to check presence of fields in scraped items
-        @scrapes page_name page_body
+        # Returns
+        Tensor with one scalar loss entry per sample.
     '''
+    def _logcosh(x):
+        return x + K.softplus(-2. * x) - K.log(2.)
+    return K.mean(_logcosh(y_pred - y_true), axis=-1)
     
-        def test_encode(self):
-        self.assertEqual('x', self.field.encode('x'))
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
+        )
     
-        def test_jwk_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url)
-        self.assertEqual(jws.signature.combined.kid, None)
-        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
-    
-    
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'josepy': ('https://josepy.readthedocs.io/en/latest/', None),
-}
+        assert 'Expected exception' in str(exception.value)
 
     
+    r'''
+The ``codes`` object defines a mapping from common names for HTTP statuses
+to their numerical codes, accessible either as attributes or as dictionary
+items.
     
-def display_temp(hass: HomeAssistant, temperature: float, unit: str,
-                 precision: float) -> float:
-    '''Convert temperature into preferred units/precision for display.'''
-    temperature_unit = unit
-    ha_unit = hass.config.units.temperature_unit
+        if hasattr(o, 'tell'):
+        try:
+            current_position = o.tell()
+        except (OSError, IOError):
+            # This can happen in some weird situations, such as when the file
+            # is actually a special file descriptor like stdin. In this
+            # instance, we don't know what the length is, so set it to zero and
+            # let requests chunk it instead.
+            if total_length is not None:
+                current_position = total_length
+        else:
+            if hasattr(o, 'seek') and total_length is None:
+                # StringIO and BytesIO have seek but no useable fileno
+                try:
+                    # seek to end of file
+                    o.seek(0, 2)
+                    total_length = o.tell()
     
-    import homeassistant.config as config_util
     
-    VALID_UNITS = [
-    LENGTH_KILOMETERS,
-    LENGTH_MILES,
-    LENGTH_FEET,
-    LENGTH_METERS,
-]
+def get_devkit_dir(name):
+    '''Retrieve the devkit dir for the dataset.'''
+    return _DATASETS[name][_DEVKIT_DIR]
     
-        res = yield from async_setup_component(hass, automation.DOMAIN, {
-        automation.DOMAIN: {
-            'alias': 'hello',
-            'trigger': {
-                'platform': 'homeassistant',
-                'event': 'shutdown',
-            },
-            'action': {
-                'service': 'test.automation',
-            }
-        }
-    })
-    assert res
-    assert not automation.is_on(hass, 'automation.hello')
-    assert len(calls) == 0
+    logger = logging.getLogger(__name__)
+    
+    import logging
+import numpy as np
+import os
+import shutil
+import uuid
+    
+        current = roi_feat
+    for i in range(cfg.FAST_RCNN.NUM_STACKED_CONVS):
+        current = model.Conv(
+            current, 'head_conv' + str(i + 1), dim_in, hidden_dim, 3,
+            stride=1, pad=1,
+            weight_init=('MSRAFill', {}),
+            bias_init=('ConstantFill', {'value': 0.}),
+            no_bias=0)
+        current = model.Relu(current, current)
+        dim_in = hidden_dim
+    
+    
+def compute_targets(ex_rois, gt_rois, weights=(1.0, 1.0, 1.0, 1.0)):
+    '''Compute bounding-box regression targets for an image.'''
+    return box_utils.bbox_transform_inv(ex_rois, gt_rois, weights).astype(
+        np.float32, copy=False
+    )
+
+    
+        sampled_fg_rois = roidb['boxes'][kp_fg_inds]
+    box_to_gt_ind_map = roidb['box_to_gt_ind_map'][kp_fg_inds]
+    
+        def _run_speed_test(self, iters=5, N=1024):
+        '''This function provides an example of how to benchmark custom
+        operators using the Caffe2 'prof_dag' network execution type. Please
+        note that for 'prof_dag' to work, Caffe2 must be compiled with profiling
+        support using the `-DUSE_PROF=ON` option passed to `cmake` when building
+        Caffe2.
+        '''
+        net = core.Net('test')
+        net.Proto().type = 'prof_dag'
+        net.Proto().num_workers = 2
+        Y = net.BatchPermutation(['X', 'I'], 'Y')
+        Y_flat = net.FlattenToVec([Y], 'Y_flat')
+        loss = net.AveragedLoss([Y_flat], 'loss')
+        net.AddGradientOperators([loss])
+        workspace.CreateNet(net)
