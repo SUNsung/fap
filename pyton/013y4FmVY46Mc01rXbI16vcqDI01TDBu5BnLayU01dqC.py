@@ -1,123 +1,158 @@
 
         
-            HEART = 0
-    DIAMOND = 1
-    CLUBS = 2
-    SPADE = 3
+        
+if __name__ == '__main__':
+    main()
+
     
     
-class Bus(Vehicle):
+class RemoveDuplicateUrls(MRJob):
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
+        def _hash_function(self, key):
+        return key % self.size
     
-    from mrjob.job import MRJob
-    
-    
-if len(sys.argv) <= 1:
-    print('Specify the version number as parameter')
-    sys.exit()
-version = sys.argv[1]
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-        def test_decrypt_text(self):
-        password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 16))
-        self.assertEqual(decrypted, self.secret_msg)
-    
-        def error(self, msg):
+        def __init__(self, db):
+        self.db = db
         pass
     
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+        objects = BaseSessionManager()
     
-    from flaskr.auth import login_required
-from flaskr.db import get_db
+        @cached_property
+    def initial(self):
+        data = self.form.get_initial_for_field(self.field, self.name)
+        # If this is an auto-generated default date, nix the microseconds for
+        # standardized handling. See #22502.
+        if (isinstance(data, (datetime.datetime, datetime.time)) and
+                not self.field.widget.supports_microseconds):
+            data = data.replace(microsecond=0)
+        return data
     
-        with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
-        assert post is None
-
+    alpha = 0.1
+# alpha = 0.01
     
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
+                gc.collect()
+            print('- benchmarking Lasso')
+            clf = Lasso(alpha=alpha, fit_intercept=False,
+                        precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lasso_results.append(time() - tstart)
+    
+        X = X.astype(float)
+    
+    
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    
+def generate_data(case, sparse=False):
+    '''Generate regression/classification data.'''
+    bunch = None
+    if case == 'regression':
+        bunch = datasets.load_boston()
+    elif case == 'classification':
+        bunch = datasets.fetch_20newsgroups_vectorized(subset='all')
+    X, y = shuffle(bunch.data, bunch.target)
+    offset = int(X.shape[0] * 0.8)
+    X_train, y_train = X[:offset], y[:offset]
+    X_test, y_test = X[offset:], y[offset:]
+    if sparse:
+        X_train = csr_matrix(X_train)
+        X_test = csr_matrix(X_test)
+    else:
+        X_train = np.array(X_train)
+        X_test = np.array(X_test)
+    y_test = np.array(y_test)
+    y_train = np.array(y_train)
+    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
+            'y_test': y_test}
+    return data
+    
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
+    
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
+    
+    #----------------------------------------------------------------------
+# 2D embedding of the digits dataset
+print('Computing embedding')
+X_red = manifold.SpectralEmbedding(n_components=2).fit_transform(X)
+print('Done.')
+    
+    This example is meant to illustrate situations where k-means will produce
+unintuitive and possibly unexpected clusters. In the first three plots, the
+input data does not conform to some implicit assumption that k-means makes and
+undesirable clusters are produced as a result. In the last plot, k-means
+returns intuitive clusters despite unevenly sized blobs.
 '''
-_app_ctx_err_msg = '''\
-Working outside of application context.
-    
-        def to_python(self, value):
-        return b64decode(value)
-    
-            if subdomain:
-            http_host = '{0}.{1}'.format(subdomain, http_host)
-    
-        def format_body(self, content, mime):
-        if is_valid_mime(mime):
-            for p in self.enabled_plugins:
-                content = p.format_body(content, mime)
-        return content
-
-    
-        def __init__(self, conversion, formatting, **kwargs):
-        super(PrettyStream, self).__init__(**kwargs)
-        self.formatting = formatting
-        self.conversion = conversion
-        self.mime = self.msg.content_type.split(';')[0]
-    
-            :param headers: The headers as text.
-    
-        # Output processing
-    def get_formatters(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, FormatterPlugin)]
+print(__doc__)
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        plugin_manager.register(Plugin)
-    
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-        def test_request_body_from_file_by_path_with_explicit_content_type(
-            self, httpbin):
-        r = http('--verbose',
-                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG,
-                 'Content-Type:text/plain; charset=utf8')
-        assert HTTP_OK in r
-        assert FILE_CONTENT in r
-        assert 'Content-Type: text/plain; charset=utf8' in r
-    
-    
-class ProgressReporterThread(threading.Thread):
-    '''
-    Reports download progress based on its status.
+    def predict(self, input):
+        '''
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
