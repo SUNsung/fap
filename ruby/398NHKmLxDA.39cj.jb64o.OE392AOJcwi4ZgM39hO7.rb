@@ -1,165 +1,115 @@
 
         
-                if value.present?
-          # We refresh the expiration time so frequently used keys stick
-          # around, removing the need for querying the database as much as
-          # possible.
-          #
-          # A key may be empty when we looked up a GitHub user (for example) but
-          # did not find a matching GitLab user. In that case we _don't_ want to
-          # refresh the TTL so we automatically pick up the right data when said
-          # user were to register themselves on the GitLab instance.
-          Redis::Cache.with { |redis| redis.expire(key, timeout) }
-        end
-    
-            # Initializes the system. Any subclasses MUST make sure this
-        # method is called on the parent. Therefore, if a subclass overrides
-        # `initialize`, then you must call `super`.
-        def initialize(vm)
-          @vm = vm
-        end
-    
-              hosts
-        end
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                # Don't set the value if it is the unset value, either.
-                value = obj.instance_variable_get(key)
-                result.instance_variable_set(key, value) if value != UNSET_VALUE
-              end
-            end
-          end
-    
-              nil
-        end
-    
-            # This method is called if the underlying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
-        end
-    
-    class FormulaPin
-  def initialize(f)
-    @f = f
-  end
-    
-        it { is_expected.to have_valid_bash_syntax }
-  end
-    
-          def link_to_clone(resource, options = {})
-        options[:data] = { action: 'clone', 'original-title': Spree.t(:clone) }
-        options[:class] = 'btn btn-primary btn-sm with-tip'
-        options[:method] = :post
-        options[:icon] = :clone
-        button_link_to '', clone_object_url(resource), options
+              it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
       end
     
-        it 'is able to search orders using only completed at input' do
-      fill_in 'q_created_at_gt', with: Date.current
-      click_on 'Filter Results'
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
     
-              def ensure_order
-            raise ActiveRecord::RecordNotFound if spree_current_order.nil?
-          end
+            subject.file = StringIO.new(invalid_data)
+        expect(subject).not_to be_valid
+        expect(subject.errors[:base]).to include('The provided data does not appear to be a valid Scenario.')
+      end
     
-            def index
-          @products = if params[:ids]
-                        product_scope.where(id: params[:ids].split(',').flatten)
-                      else
-                        product_scope.ransack(params[:q]).result
-                      end
+          it 'loads all workers' do
+        workers = @agent_runner.send(:load_workers)
+        expect(workers).to be_a(Hash)
+        expect(workers.keys).to eq(['HuginnScheduler', 'DelayedJobWorker'])
+      end
     
-        def cache(gist, file, data)
-      cache_file = get_cache_file_for gist, file
-      File.open(cache_file, 'w') do |io|
-        io.write data
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
+    end
+  end
+    
+        private
+    
+        <div id='cookies'>
+      <h3 id='cookie-info'>COOKIES</h3>
+      <% unless req.cookies.empty? %>
+        <table class='req'>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+          </tr>
+          <% req.cookies.each { |key, val| %>
+            <tr>
+              <td><%=h key %></td>
+              <td class='code'><div><%=h val.inspect %></div></td>
+            </tr>
+          <% } %>
+        </table>
+      <% else %>
+        <p class='no-data'>No cookie data.</p>
+      <% end %>
+      <div class='clear'></div>
+    </div> <!-- /COOKIES -->
+    
+              react_and_close(env, body) or [status, headers, body]
+        else
+          [status, headers, body]
+        end
+      end
+    
+        def validate_plugins!
+      @plugins_to_package.each do |plugin_name|
+        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
+          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
+        end
       end
     end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
-    end
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
     
-        # This allows packages to define flags for the fpm command line
-    def option(flag, param, help, options={}, &block)
-      @options ||= []
-      if !flag.is_a?(Array)
-        flag = [flag]
-      end
-    
-        open(temporary_target_path, 'wb') do |target_file|
-    
-        pkg_origin = attributes[:freebsd_origin]
-    if pkg_origin == 'fpm/<name>'  # fill in default
-      pkg_origin = 'fpm/#{name}'
-    end
-    
-      option '--data-dir', 'DATA_DIR',
-    'Specify php dir relative to prefix if differs from pear default (pear/data)'
-    
-    class FPM::Package::Puppet < FPM::Package
-  def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -m}.chomp
-    end
-    return @architecture
-  end # def architecture
-    
-        if !attributes[:no_auto_depends?] and attributes[:python_dependencies?]
-      metadata['dependencies'].each do |dep|
-        dep_re = /^([^<>!= ]+)\s*(?:([~<>!=]{1,2})\s*(.*))?$/
-        match = dep_re.match(dep)
-        if match.nil?
-          logger.error('Unable to parse dependency', :dependency => dep)
-          raise FPM::InvalidPackageConfiguration, 'Invalid dependency '#{dep}''
+          def has_sidebar
+        if @sidebar
+          @sidebar.formatted_data.strip.empty? ? false : true
+        else
+          @sidebar = (@page.sidebar || false)
+          !!@sidebar
         end
-        name, cmp, version = match.captures
+      end
     
-        unless safesystem(*args)
-      raise 'Command failed while creating payload tar: #{args}'
-    end
-    payload_tar
-  end
+        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
     
-        desc 'Package #{@name}' unless ::Rake.application.last_description
     
-      extend ActiveSupport::Concern
     
-      def destroy
-    @ip_address.destroy
-    redirect_to_with_json [:edit, @ip_pool]
-  end
+    desc 'Build and install'
+task :install => :build do
+  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
+end
     
-      private
-    
-      def index
-    @track_domains = @server.track_domains.order(:name).to_a
-  end
+      if base_path.nil?
+    Precious::App.run!(options)
+  else
+    require 'rack'
