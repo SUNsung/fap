@@ -1,40 +1,62 @@
 
         
-            for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
+        
+def replace_settingslist_nodes(app, doctree, fromdocname):
+    env = app.builder.env
     
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
+        else:
+            # If this is a new file
+            if newfilename != _filename:
     
-    import rsa
-import json
-from binascii import hexlify
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+                if depth < opts.depth:
+                for req in requests:
+                    req.meta['_depth'] = depth + 1
+                    req.meta['_callback'] = req.callback
+                    req.callback = callback
+                return requests
+    
+        def syntax(self):
+        return '[options]'
+    
+    from scrapy import twisted_version
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def _parsed_url_args(parsed):
+    # Assume parsed is urlparse-d from Request.url,
+    # which was passed via safe_url_string and is ascii-only.
+    b = lambda s: to_bytes(s, encoding='ascii')
+    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))
+    path = b(path)
+    host = b(parsed.hostname)
+    port = parsed.port
+    scheme = b(parsed.scheme)
+    netloc = b(parsed.netloc)
+    if port is None:
+        port = 443 if scheme == b'https' else 80
+    return scheme, netloc, host, port, path
     
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
-    
-    from __future__ import unicode_literals
-    
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['en']))
-        self.assertEqual(md5(subtitles['en']), '53cb083a5914b2d84ef1ab67b880d18a')
+        def _maybe_fire_closing(self):
+        if self.closing and not self.inprogress:
+            if self.nextcall:
+                self.nextcall.cancel()
+                if self.heartbeat.running:
+                    self.heartbeat.stop()
+            self.closing.callback(None)
