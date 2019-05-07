@@ -1,57 +1,73 @@
 
         
-        When /^I (?:like|unlike) the post '([^']*)' in the stream$/ do |post_text|
-  like_stream_post(post_text)
-end
-    
-          it 'should not be catched when it is unexpected' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        allow(alice).to receive(:like!).and_raise('something')
-        allow(@controller).to receive(:current_user).and_return(alice)
-        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
+                  def render_component(builder)
+            builder.radio_button + builder.label
+          end
       end
     end
   end
+end
+
     
-        it 'should redirect back in the mobile version if it has > 0 notifications' do
-      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
-      get :read_all, params: {type: 'liked'}, format: :mobile
-      expect(response).to redirect_to(notifications_path)
+            private
+    
+          test 'when layout is specified as nil, do not use a layout' do
+        controller = WithNilLayout.new
+        controller.process(:index)
+        assert_equal 'Hello nil!', controller.response_body
+      end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+          default_failure_app(options)
+      default_controllers(options)
+      default_path_names(options)
+      default_used_route(options)
+      default_used_helpers(options)
     end
     
-        def pattern_path(path)
-      return ::File.join(LOGSTASH_HOME, 'patterns', path)
-    end
+        # Creates configuration values for Devise and for the given module.
+    #
+    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
+    #
+    # The line above creates:
+    #
+    #   1) An accessor called Devise.stretches, which value is used by default;
+    #
+    #   2) Some class methods for your model Model.stretches and Model.stretches=
+    #      which have higher priority than Devise.stretches;
+    #
+    #   3) And an instance method stretches.
+    #
+    # To add the class methods you need to have a module ClassMethods defined
+    # inside the given class.
+    #
+    def self.config(mod, *accessors) #:nodoc:
+      class << mod; attr_accessor :available_configs; end
+      mod.available_configs = accessors
     
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
     end
   end
 end
     
-          prepare_package(explicit_plugins_specs, temp_path)
-      LogStash::Util::Zip.compress(temp_path, @target)
-    ensure
-      FileUtils.rm_rf(temp_path)
-    end
-    
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
-    
-          post_install_messages.compact.each do |message|
-        PluginManager.ui.info(message)
+        # Returns an extension based on the content type. e.g. 'jpeg' for
+    # 'image/jpeg'. If the style has a specified format, it will override the
+    # content-type detection.
+    #
+    # Each mime type generally has multiple extensions associated with it, so
+    # if the extension from the original filename is one of these extensions,
+    # that extension is used, otherwise, the first in the list is used.
+    def content_type_extension attachment, style_name
+      mime_type = MIME::Types[attachment.content_type]
+      extensions_for_mime_type = unless mime_type.empty?
+        mime_type.first.extensions
+      else
+        []
       end
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
-    end
