@@ -1,234 +1,82 @@
 
         
-        # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
-    
-                  Jekyll.logger.info 'LiveReload address:',
-                                 'http://#{opts['host']}:#{opts['livereload_port']}'
-            end
-          end
-          @thread.abort_on_exception = true
+                def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
         end
     
-          attr_accessor :page, :layout, :content, :paginator
-      attr_accessor :highlighter_prefix, :highlighter_suffix
-    
-        it 'creates an agent with a controller' do
-      visit '/'
-      page.find('a', text: 'Agents').trigger(:mouseover)
-      click_on('New Agent')
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+      context 'successful dry runs' do
+    before do
+      stub_request(:get, 'http://xkcd.com/').
+        with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
+        to_return(:status => 200, :body => File.read(Rails.root.join('spec/data_fixtures/xkcd.html')), :headers => {})
     end
     
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
-    end
-    
-      describe '#receive' do
-    it 'sends a message' do
-      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
-      @checker.receive([@event])
-    end
-    
-        private
-    
-            css('.example-title + pre').each do |node|
-          node['name'] = node.previous_element.content.strip
-          node.previous_element.remove
-        end
-    
-      protected
-    
-      config.middleware.use Warden::Manager do |config|
-    Devise.warden_config = config
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
+        it 'returns a FontAwesome icon element' do
+      icon = icon_tag('fa-copy', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('i.fa.fa-copy.text-info')).to be_a Nokogiri::XML::Element
+    end
+  end
     
-          # Sign in a user that already was authenticated. This helper is useful for logging
-      # users in after sign up. All options given to sign_in is passed forward
-      # to the set_user method in warden.
-      # If you are using a custom warden strategy and the timeoutable module, you have to
-      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
-      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
-      #
-      # Examples:
-      #
-      #   sign_in :user, @user                      # sign_in(scope, resource)
-      #   sign_in @user                             # sign_in(resource)
-      #   sign_in @user, event: :authentication     # sign_in(resource, options)
-      #   sign_in @user, store: false               # sign_in(resource, options)
-      #
-      def sign_in(resource_or_scope, *args)
-        options  = args.extract_options!
-        scope    = Devise::Mapping.find_scope!(resource_or_scope)
-        resource = args.last || resource_or_scope
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
     
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
     
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+    end
     
-              if recoverable.persisted?
-            if recoverable.reset_password_period_valid?
-              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
+          @log.level = -1
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:level)
+    
+    describe Agents::BoxcarAgent do
+  before(:each) do
+  @valid_params = {
+                    'user_credentials' => 'access_token',
+                    'title' => 'Sample Title',
+                    'body' => 'Sample Body'
+                  }
+  @checker = Agents::BoxcarAgent.new(:name => 'boxcartest', :options => @valid_params)
+  @checker.user = users(:bob)
+  @checker.save!
+    
+    answer_ary = answer.to_a
+# puts answer_ary
+
+    
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
             else
-              recoverable.errors.add(:reset_password_token, :expired)
+              render_error_payload(result.error)
             end
           end
-    
-          private
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
-end
-
-    
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-          prepare_package(explicit_plugins_specs, temp_path)
-      LogStash::Util::Zip.compress(temp_path, @target)
-    ensure
-      FileUtils.rm_rf(temp_path)
-    end
-    
-      private
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
-        end
-    
-          attr_reader :page, :diff, :versions, :message, :allow_editing
-    
-          attr_reader :page, :name
-    
-      end
-end
-
-    
-    desc 'Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom'
-task :update_style, :theme do |t, args|
-  theme = args.theme || 'classic'
-  if File.directory?('sass.old')
-    puts 'removed existing sass.old directory'
-    rm_r 'sass.old', :secure=>true
-  end
-  mv 'sass', 'sass.old'
-  puts '## Moved styles into sass.old/'
-  cp_r '#{themes_dir}/'+theme+'/sass/', 'sass', :remove_destination=>true
-  cp_r 'sass.old/custom/.', 'sass/custom/', :remove_destination=>true
-  puts '## Updated Sass ##'
-end
-    
-    end
-
-    
-      def new
-    @credential = @server.credentials.build
-  end
-    
-    end
-
-    
-      def new
-    @ip_address = @ip_pool.ip_addresses.build
-  end
-    
-      def create
-    @server = organization.servers.build(safe_params(:permalink))
-    if @server.save
-      redirect_to_with_json organization_server_path(organization, @server)
-    else
-      render_form_errors 'new', @server
-    end
-  end
-    
-      def new
-    @user_invite = UserInvite.active.find_by!(:uuid => params[:invite_token])
-    @user = User.new
-    @user.email_address = @user_invite.email_address
-    render :layout => 'sub'
-  end
