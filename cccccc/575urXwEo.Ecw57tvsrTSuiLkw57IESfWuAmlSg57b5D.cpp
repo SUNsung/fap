@@ -1,109 +1,193 @@
 
         
-        	const float32 inv3 = 1.0f / 3.0f;
-	b2Vec2 pRef(0.0f, 0.0f);
-	for (int32 i = 0; i < count; ++i)
-	{
-		// Triangle vertices.
-		b2Vec2 p1 = pRef;
-		b2Vec2 p2 = vs[i];
-		b2Vec2 p3 = i + 1 < count ? vs[i+1] : vs[0];
+        RequirementEnvironment::RequirementEnvironment(
+                                           DeclContext *conformanceDC,
+                                           GenericSignature *reqSig,
+                                           ProtocolDecl *proto,
+                                           ClassDecl *covariantSelf,
+                                           ProtocolConformance *conformance)
+    : reqSig(reqSig) {
+  ASTContext &ctx = conformanceDC->getASTContext();
     }
     
-    			return fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue + fDAlpha*fDAlpha;
-		}
-		else if (m_errormetric == ErrorMetric::RGBX)
-		{
-			assert(a_fDecodedAlpha >= 0.0f);
+    #endif // SWIFT_AST_SUBSTITUTION_MAP_STORAGE_H
+
     
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b),'r'(a<<16)
-  );
-  return rd_hi;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
+    }
     
-    #undef USUB32
-#define USUB32(a, b) USUB32_(a, b, __FILE__, __LINE__)
-static OPUS_INLINE unsigned int USUB32_(opus_uint64 a, opus_uint64 b, char *file, int line)
-{
-   opus_uint64 res;
-   if (!VERIFY_UINT(a) || !VERIFY_UINT(b))
-   {
-      fprintf (stderr, 'USUB32: inputs are not uint32: %llu %llu in %s: line %d\n', a, b, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   if (a<b)
-   {
-      fprintf (stderr, 'USUB32: inputs underflow: %llu < %llu in %s: line %d\n', a, b, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a-b;
-   if (!VERIFY_UINT(res))
-   {
-      fprintf (stderr, 'USUB32: output is not uint32: %llu - %llu = %llu in %s: line %d\n', a, b, res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips+=2;
-   return res;
-}
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
     
-    opus_int32 silk_inner_prod_aligned(
-    const opus_int16 *const     inVec1,             /*    I input vector 1                                              */
-    const opus_int16 *const     inVec2,             /*    I input vector 2                                              */
-    const opus_int              len,                /*    I vector lengths                                              */
-    int                         arch                /*    I Run-time architecture                                       */
-);
+    void GenerateDSYMJobAction::anchor() {}
     
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
+    Optional<FrontendInputsAndOutputs> ArgsToFrontendInputsConverter::convert(
+    SmallVectorImpl<std::unique_ptr<llvm::MemoryBuffer>> *buffers) {
+  SWIFT_DEFER {
+    if (buffers) {
+      std::move(ConfigurationFileBuffers.begin(),
+                ConfigurationFileBuffers.end(),
+                std::back_inserter(*buffers));
+      // Clearing the original list of buffers isn't strictly necessary, but
+      // makes the behavior more sensible if we were to call convert() again.
+      ConfigurationFileBuffers.clear();
+    }
+  };
+    }
     
-      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
+      /// Produces a FrontendInputsAndOutputs object with the inputs populated from
+  /// the arguments the converter was initialized with.
+  ///
+  /// \param buffers If present, buffers read in the processing of the frontend
+  /// inputs will be saved here. These should only be used for debugging
+  /// purposes.
+  Optional<FrontendInputsAndOutputs> convert(
+      SmallVectorImpl<std::unique_ptr<llvm::MemoryBuffer>> *buffers);
     
-      protobuf::FileDescriptorProto file_desc_proto;
-  grpc::string data;
-  file_desc->CopyTo(&file_desc_proto);
-  file_desc_proto.SerializeToString(&data);
-  response->mutable_file_descriptor_response()->add_file_descriptor_proto(data);
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    #include <mach/mach.h>
-    
-    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
-                          gpr_timespec* to) {
-  high_resolution_clock::duration deadline = from.time_since_epoch();
-  seconds secs = duration_cast<seconds>(deadline);
-  if (from == high_resolution_clock::time_point::max() ||
-      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
-      secs.count() < 0) {
-    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
-    return;
+    // Solve the dynamic programming problem for the given array of points, with
+// the given size and cost function.
+// Steps backwards are limited to being between min_step and max_step
+// inclusive.
+// The return value is the tail of the best path.
+DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points) {
+  if (size <= 0 || max_step < min_step || min_step >= size)
+    return nullptr;  // Degenerate, but not necessarily an error.
+  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
+  if (debug)
+    tprintf('min = %d, max=%d\n',
+            min_step, max_step);
+  // Evaluate the total cost at each point.
+  for (int i = 0; i < size; ++i) {
+    for (int offset = min_step; offset <= max_step; ++offset) {
+      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
+      int64_t new_cost = (points[i].*cost_func)(prev);
+      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
+          new_cost > points[i].total_cost_)
+        break;  // Find only the first minimum if going over twice the min.
+    }
+    points[i].total_cost_ += points[i].local_cost_;
+    if (debug) {
+      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
+              i, points[i].local_cost_, points[i].total_cost_,
+              points[i].total_steps_);
+    }
   }
-  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
-  to->tv_sec = static_cast<int64_t>(secs.count());
-  to->tv_nsec = static_cast<int32_t>(nsecs.count());
-  to->clock_type = GPR_CLOCK_REALTIME;
+  // Now find the end of the best path and return it.
+  int best_cost = points[size - 1].total_cost_;
+  int best_end = size - 1;
+  for (int end = best_end - 1; end >= size - min_step; --end) {
+    int cost = points[end].total_cost_;
+    if (cost < best_cost) {
+      best_cost = cost;
+      best_end = end;
+    }
+  }
+  return points + best_end;
 }
+    
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
+    }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
+    
+    
+    {  // WARNING! Keep data as the first element! KDPairInc and KDPairDec depend
+  // on the order of these elements so they can downcast pointers appropriately
+  // for use by GenericHeap::Reshuffle.
+  Data data;
+  Key key;
+};
+// Specialization of KDPair to provide operator< for sorting in increasing order
+// and recasting of data pointers for use with DoublePtr.
+template <typename Key, typename Data>
+struct KDPairInc : public KDPair<Key, Data> {
+  KDPairInc() = default;
+  KDPairInc(Key k, Data d) : KDPair<Key, Data>(k, d) {}
+  // Operator< facilitates sorting in increasing order.
+  int operator<(const KDPairInc<Key, Data>& other) const {
+    return this->key < other.key;
+  }
+  // Returns the input Data pointer recast to a KDPairInc pointer.
+  // Just casts a pointer to the first element to a pointer to the whole struct.
+  static KDPairInc* RecastDataPointer(Data* data_ptr) {
+    return reinterpret_cast<KDPairInc*>(data_ptr);
+  }
+};
+// Specialization of KDPair to provide operator< for sorting in decreasing order
+// and recasting of data pointers for use with DoublePtr.
+template <typename Key, typename Data>
+struct KDPairDec : public KDPair<Key, Data> {
+  KDPairDec() = default;
+  KDPairDec(Key k, Data d) : KDPair<Key, Data>(k, d) {}
+  // Operator< facilitates sorting in decreasing order by using operator> on
+  // the key values.
+  int operator<(const KDPairDec<Key, Data>& other) const {
+    return this->key > other.key;
+  }
+  // Returns the input Data pointer recast to a KDPairDec pointer.
+  // Just casts a pointer to the first element to a pointer to the whole struct.
+  static KDPairDec* RecastDataPointer(Data* data_ptr) {
+    return reinterpret_cast<KDPairDec*>(data_ptr);
+  }
+};
+    
+        Rational Exp(Rational const& rat);
+    Rational Log(Rational const& rat);
+    Rational Log10(Rational const& rat);
+    
+    void COpndCommand::ToggleSign()
+{
+    unsigned int commandCount;
+    m_commands->GetSize(&commandCount);
+    }
+    
+        Application a(argc, argv);
+    a.initModels();
+    a.initQml();
+    
+    void SortFilterProxyModel::setFilterString(const QString &filter)
+{
+    setFilterRegExp(QRegExp(filter, filterCaseSensitivity(), static_cast<QRegExp::PatternSyntax>(filterSyntax())));
+    emit filterStringChanged();
+}
+    
+    void TabViewModel::openTab(QSharedPointer<RedisClient::Connection> connection,
+                           int dbIndex) {
+  beginInsertRows(QModelIndex(), m_models.count(), m_models.count());
+  m_models.append(m_modelFactory(connection, dbIndex));
+  setCurrentTab(m_models.size() - 1);
+  emit changeCurrentTab(m_models.size() - 1);
+  endInsertRows();
+}
+    
+     public:
+  enum Roles {
+    tabName = Qt::UserRole + 1,
+    tabIndex,
+  };
