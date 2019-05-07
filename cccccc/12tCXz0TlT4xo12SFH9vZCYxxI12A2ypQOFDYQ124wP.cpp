@@ -1,148 +1,133 @@
 
         
-          TemporaryFile() {
-    path = tmppath();
-  }
+          v8::Local<v8::Value> URLRequest(v8::Isolate* isolate);
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7, typename T8, typename T9>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    #ifndef ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
+#define ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
+    
+    
+    {}  // namespace atom
+    
+    #include <map>
+#include <string>
+    
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
 }
     
-    # define TYPED_TEST_P(CaseName, TestName) \
-  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
-  template <typename gtest_TypeParam_> \
-  class TestName : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  static bool gtest_##TestName##_defined_ GTEST_ATTRIBUTE_UNUSED_ = \
-      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).AddTestName(\
-          __FILE__, __LINE__, #CaseName, #TestName); \
-  } \
-  template <typename gtest_TypeParam_> \
-  void GTEST_CASE_NAMESPACE_(CaseName)::TestName<gtest_TypeParam_>::TestBody()
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-    // This header implements a family of generic predicate assertion
-// macros:
-//
-//   ASSERT_PRED_FORMAT1(pred_format, v1)
-//   ASSERT_PRED_FORMAT2(pred_format, v1, v2)
-//   ...
-//
-// where pred_format is a function or functor that takes n (in the
-// case of ASSERT_PRED_FORMATn) values and their source expression
-// text, and returns a testing::AssertionResult.  See the definition
-// of ASSERT_EQ in gtest.h for an example.
-//
-// If you don't care about formatting, you can use the more
-// restrictive version:
-//
-//   ASSERT_PRED1(pred, v1)
-//   ASSERT_PRED2(pred, v1, v2)
-//   ...
-//
-// where pred is an n-ary function or functor that returns bool,
-// and the values v1, v2, ..., must support the << operator for
-// streaming to std::ostream.
-//
-// We also define the EXPECT_* variations.
-//
-// For now we only support predicates whose arity is at most 5.
-// Please email googletestframework@googlegroups.com if you need
-// support for higher arities.
+    #include 'base/files/file_util.h'
+#include 'base/logging.h'
+#include 'base/mac/mac_logging.h'
+#include 'base/posix/eintr_wrapper.h'
+#include 'base/process/launch.h'
+#include 'base/strings/sys_string_conversions.h'
     
-    // This exception is thrown by (and only by) a failed Google Test
-// assertion when GTEST_FLAG(throw_on_failure) is true (if exceptions
-// are enabled).  We derive it from std::runtime_error, which is for
-// errors presumably detectable only at run time.  Since
-// std::runtime_error inherits from std::exception, many testing
-// frameworks know how to extract and print the message inside it.
-class GTEST_API_ GoogleTestFailureException : public ::std::runtime_error {
- public:
-  explicit GoogleTestFailureException(const TestPartResult& failure);
-};
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_)};
-    return ValuesIn(array);
-  }
-    
-    // A handy wrapper for AddRef.
-#define GTEST_ADD_REF_(T) typename ::std::tr1::gtest_internal::AddRef<T>::type
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+    #endif  // ATOM_BROWSER_UI_COCOA_ROOT_VIEW_MAC_H_
 
     
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
+    }
     
     #include <dmlc/registry.h>
     
-      virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    param_.InitAllowUnknown(kwargs);
-    base_->Init(kwargs);
-    rnd_.seed(kRandMagic + param_.seed);
-    outimg_.set_pad(false);
-    meanimg_.set_pad(false);
-    if (param_.mean_img.length() != 0) {
-      std::unique_ptr<dmlc::Stream> fi(
-          dmlc::Stream::Create(param_.mean_img.c_str(), 'r', true));
-      if (fi.get() == nullptr) {
-        this->CreateMeanImg();
-      } else {
-        fi.reset(nullptr);
-        if (param_.verbose) {
-          LOG(INFO) << 'Load mean image from ' << param_.mean_img;
-        }
-        // use python compatible ndarray store format
-        std::vector<NDArray> data;
-        std::vector<std::string> keys;
-        {
-          std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(param_.mean_img.c_str(), 'r'));
-          NDArray::Load(fi.get(), &data, &keys);
-        }
-        CHECK_EQ(data.size(), 1U)
-            << 'Invalid mean image file format';
-        data[0].WaitToRead();
-        mshadow::Tensor<cpu, 3> src = data[0].data().get<cpu, 3, real_t>();
-        meanimg_.Resize(src.shape_);
-        mshadow::Copy(meanimg_, src);
-        meanfile_ready_ = true;
+    struct quantize_2bit {
+  MSHADOW_XINLINE static void Map(int out_block_id,
+                                  int original_size,
+                                  float *out,
+                                  float *grad,
+                                  float *residual,
+                                  const float neg_threshold,
+                                  const float pos_threshold) {
+    // this block contains the compressed representation of
+    // upto 16 values starting from out_block_id*16
+    float *compr_block = out + out_block_id;
+    // init to 0
+    *compr_block = 0;
+    // start and end are indices in original grad array
+    const int start = out_block_id << 4;
+    const int end = (start + 16 <= original_size) ? start + 16 : original_size;
+    // cast as char* to manipulate bits of float addresses
+    char *block_ptr = reinterpret_cast < char * > (compr_block);
+    // masks to set bits when value meets pos_threshold
+    // 0xc0 is mask when value is to be represented by the first two bits in a char*
+    // 0xc0 means first two bits are set to 11
+    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
+    // masks to set bits when value meets neg_threshold
+    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
+    for (int i = start; i < end; i++) {
+      // adds offset to reach appropriate byte
+      char *curr_byte = block_ptr + ((i - start) >> 2);
+      // adds gradient to existing residual to get updated grad
+      residual[i] += grad[i];
+      if (residual[i] >= pos_threshold) {
+        // set data to 11
+        *curr_byte |= posbits[(i & 3)];
+        // reduce residual by pos_threshold
+        residual[i] -= pos_threshold;
+      } else if (residual[i] <= neg_threshold) {
+        // set data to 10
+        *curr_byte |= negbits[(i & 3)];
+        residual[i] -= neg_threshold;
       }
     }
   }
+};
     
-    #if MXNET_USE_DIST_KVSTORE
-#include './kvstore_dist.h'
-std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
-#endif  // MXNET_USE_DIST_KVSTORE
-#if MXNET_USE_NCCL
-#include './kvstore_nccl.h'
-#endif  // MXNET_USE_NCCL
+    template<>
+void EvalClip<DEVICE>(const TBlob &src, const real_t &a_min, const real_t &a_max,
+                             TBlob *ret, RunContext ctx) {
+  typedef DEVICE xpu;
+  using namespace mshadow::expr;
+  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
+  CHECK_EQ(ret->type_flag_, src.type_flag_)
+    << 'Only support input/output with the same data type';
+  MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
+    ret->FlatTo2D<xpu, DType>(s)
+      = F<ClipMax::mshadow_op>(
+          F<ClipMin::mshadow_op>(src.FlatTo2D<xpu, DType>(s), scalar(DType(a_min))),
+          scalar(DType(a_max)));
+  });
+}
+    
+       out = data / sqrt(data.shape[-1])
     
       virtual void Forward(const OpContext &ctx,
                        const std::vector<TBlob> &in_data,
@@ -150,156 +135,215 @@ std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
                        const std::vector<TBlob> &out_data,
                        const std::vector<TBlob> &aux_args) {
     using namespace mshadow;
-    CHECK_EQ(req[bs::kOut], kWriteTo);
-    CHECK_EQ(in_data.size(), 2U);
+    using namespace mshadow::expr;
+    CHECK_EQ(in_data.size(), 1U);
     CHECK_EQ(out_data.size(), 2U);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
     Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+    if (!init_cudnn_) {
+      this->Init(s, in_data, out_data);
     }
-    
-      void EmitXX1Form(const uint8_t op,
-                   const RegNumber s,
-                   const RegNumber ra,
-                   const RegNumber rb,
-                   const uint16_t xo,
-                   const bool tx) {
-    }
-    
-    
-    {  if (base64) {
-    decoded = string_base64_decode(data, data_len, true);
-    if (decoded.isNull()) {
-      raise_warning('unable to decode base64 data');
-      return nullptr;
-    }
-  } else {
-    decoded = url_decode(data, data_len);
+    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
+    CUDNN_CALL(cudnnLRNCrossChannelForward(s->dnn_handle_,
+                                           lrn_desc_,
+                                           CUDNN_LRN_CROSS_CHANNEL_DIM1,
+                                           &alpha,
+                                           shape_desc_,
+                                           data.dptr_,
+                                           &beta,
+                                           shape_desc_,
+                                           out.dptr_));
   }
-  return req::make<MemFile>(decoded.data(), decoded.size());
-}
     
+    #endif  // MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    /*
- * Attempt to log an entry to the perf warning service.
- *
- * If StructuredLog::enabled() returns false or this event is discarded by the
- * effective sample rate, nothing will be logged. If both of those checks pass,
- * fillCols will be passed a StructuredLogEntry& to populate, which will then
- * be logged. The column names 'event_name' and 'priority' are reserved and
- * will be overwritten is fillCols() sets them.
- *
- * The effective sample rate is determined by Eval.PerfWarningSampleRate * rate
- * (or kDefaultPerfWarningRate for the overloads that don't take a rate). If
- * the effective sample rate is 0, all events will be discarded.
- */
-template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols);
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols);
-    
-            friend bool operator==(Rational const& lhs, Rational const& rhs);
-        friend bool operator!=(Rational const& lhs, Rational const& rhs);
-        friend bool operator<(Rational const& lhs, Rational const& rhs);
-        friend bool operator>(Rational const& lhs, Rational const& rhs);
-        friend bool operator<=(Rational const& lhs, Rational const& rhs);
-        friend bool operator>=(Rational const& lhs, Rational const& rhs);
-    
-            static property Windows::UI::Xaml::DependencyProperty^ AnnouncementProperty
-        {
-            Windows::UI::Xaml::DependencyProperty^ get()
-            {
-                return s_announcementProperty;
-            }
-        }
-    
-            if (id.compare(L'sDecimal') == 0)
-        {
-            return localizationSettings.GetDecimalSeparatorStr();
-        }
-    
-    void NetworkManager::OnNetworkStatusChange(_In_ Object^ /*sender*/)
-{
-    NetworkBehaviorChanged(GetNetworkAccessBehavior());
-}
-    
-            TraceActivity(
-            winrt::Windows::Foundation::Diagnostics::LoggingChannel channel,
-            std::wstring_view activityName,
-            winrt::Windows::Foundation::Diagnostics::LoggingFields fields) :
-            m_channel(channel),
-            m_activityName(activityName),
-            m_fields(fields),
-            m_activity(nullptr)
-        {
-            // Write the activity's START event. Note that you must not specify keyword
-            // or level for START and STOP events because they always use the activity's
-            // keyword and level.
-            m_activity = m_channel.StartActivity(
-                m_activityName,
-                m_fields,
-                winrt::Windows::Foundation::Diagnostics::LoggingLevel::Verbose,
-                winrt::Windows::Foundation::Diagnostics::LoggingOptions(WINEVENT_KEYWORD_RESPONSE_TIME)
-                );
-        }
-    
-    void CurrencyHttpClient::SetResponseLanguage(String^ responseLanguage)
-{
-    m_responseLanguage = responseLanguage;
-}
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
-}
-}  // namespace data
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    // This is a helpful data structure to define parameters
-// You do not have to use it.
-// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
-// for introduction of this module.
-struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
-  float scale_neg_weight;
-  // declare parameters
-  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
-    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
-        .describe('Scale the weight of negative examples by this factor');
+      for (auto& blob : in_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(0);
   }
-};
+  for (auto& blob : out_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(1);
+  }
+  for (auto& blob : in_grad) {
+    NDArray* nd = new NDArray(blob, ndctx.dev_id);
+    ptrs.push_back(reinterpret_cast<void*>(nd));
+    ndvar.push_back(nd->var());
+    tags.push_back(2);
+  }
+  std::sort(ndvar.begin(), ndvar.end());
+  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
+  for (auto& blob : out_grad) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(3);
+  }
     
-        const auto ngroup = static_cast<bst_omp_uint>(gptr.size() - 1);
-    #pragma omp parallel
+        switch (opCode)
     {
-      // parall construct, declare random number generator here, so that each
-      // thread use its own random number generator, seed by thread id and current iteration
-      common::RandomEngine rnd(iter * 1111 + omp_get_thread_num());
+    case IDC_INV:
+    case IDC_FE:
+    case IDC_MCLEAR:
+    case IDC_BACK:
+    case IDC_EXP:
+    case IDC_STORE:
+    case IDC_MPLUS:
+    case IDC_MMINUS:
+        return true;
     }
+    
+    class IOpndCommand : public IExpressionCommand
+{
+public:
+    virtual const std::shared_ptr<CalculatorVector<int>>& GetCommands() const = 0;
+    virtual void AppendCommand(int command) = 0;
+    virtual void ToggleSign() = 0;
+    virtual void RemoveFromEnd() = 0;
+    virtual bool IsNegative() const = 0;
+    virtual bool IsSciFmt() const = 0;
+    virtual bool IsDecimalPresent() const = 0;
+    virtual const std::wstring& GetToken(wchar_t decimalSymbol) = 0;
+    virtual void SetCommands(std::shared_ptr<CalculatorVector<int>> const& commands) = 0;
+};
+    
+        // sub one from x
+    (*px)->pq->sign *= -1;
+    addnum(&((*px)->pp), (*px)->pq, BASEX);
+    (*px)->pq->sign *= -1;
+    
+    CatmullRomTo* CatmullRomTo::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) CatmullRomTo();
+    a->initWithDuration(this->_duration, this->_points->clone());
+    a->autorelease();
+    return a;
+}
+    
+    EaseBezierAction* EaseBezierAction::reverse() const
+{
+    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
+    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
+    return reverseAction;
+}
+    
+    // DeccelAmplitude
+    
+        /**
+    @brief Get the amplitude of the effect.
+    @return Return the amplitude of the effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude to the effect.
+    @param amplitude The value of amplitude will be set.
+    */
+    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    
+    /** @class Repeat
+ * @brief Repeats an action a number of times.
+ * To repeat an action forever use the RepeatForever action.
+ */
+class CC_DLL Repeat : public ActionInterval
+{
+public:
+    /** Creates a Repeat action. Times is an unsigned integer between 1 and pow(2,30).
+     *
+     * @param action The action needs to repeat.
+     * @param times The repeat times.
+     * @return An autoreleased Repeat object.
+     */
+    static Repeat* create(FiniteTimeAction *action, unsigned int times);
+    }
+    
+    void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
+{
+    if (flags == 0)
+    {
+        return;
+    }
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if (target == nullptr)
+    {
+        return;
+    }
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        // Override
+    virtual ShatteredTiles3D* clone() const override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ShatteredTiles3D() {}
+    virtual ~ShatteredTiles3D() {}
+    
+    
+    {    frame->autorelease();
+    return frame;
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+            /**
+         * Move assignment.
+         * Similar to Rectangle<T>(Rectangle<T>&& rectangle).
+         * @param rectangle Rectangle to be moved.
+         * @return The resulting Rectangle.
+         */
+        Rectangle<T>& operator=(Rectangle<T>&& rectangle);
+    
+    #include <openpose/pose/poseParameters.hpp>
+#include <openpose/pose/poseParametersRender.hpp>
+    
+    
+    {
+    {        DELETE_COPY(PersonIdExtractor);
+    };
+}
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child1));
+    
+    namespace facebook {
+    }
+    
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
+    
+    // JNI's NIO support has some awkward preconditions and error reporting. This
+// class provides much more user-friendly access.
+class FBEXPORT JByteBuffer : public JavaClass<JByteBuffer> {
+ public:
+  static constexpr const char* kJavaDescriptor = 'Ljava/nio/ByteBuffer;';
+    }
+    
+    inline jobject JObject::self() const noexcept {
+  return this_;
+}
