@@ -1,349 +1,291 @@
 
         
-          v8::Local<v8::Value> URLRequest(v8::Isolate* isolate);
-    
-    #ifndef ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
-#define ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
-    
-    
-    {}  // namespace atom
-    
-    #include <map>
-#include <string>
-    
-    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
-  return false;
-}
-    
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
-    
-    #include 'base/files/file_util.h'
-#include 'base/logging.h'
-#include 'base/mac/mac_logging.h'
-#include 'base/posix/eintr_wrapper.h'
-#include 'base/process/launch.h'
-#include 'base/strings/sys_string_conversions.h'
-    
-    #endif  // ATOM_BROWSER_UI_COCOA_ROOT_VIEW_MAC_H_
+        #endif // BITCOIN_QT_NETWORKSTYLE_H
 
     
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
-    }
     
-    #include <dmlc/registry.h>
-    
-    struct quantize_2bit {
-  MSHADOW_XINLINE static void Map(int out_block_id,
-                                  int original_size,
-                                  float *out,
-                                  float *grad,
-                                  float *residual,
-                                  const float neg_threshold,
-                                  const float pos_threshold) {
-    // this block contains the compressed representation of
-    // upto 16 values starting from out_block_id*16
-    float *compr_block = out + out_block_id;
-    // init to 0
-    *compr_block = 0;
-    // start and end are indices in original grad array
-    const int start = out_block_id << 4;
-    const int end = (start + 16 <= original_size) ? start + 16 : original_size;
-    // cast as char* to manipulate bits of float addresses
-    char *block_ptr = reinterpret_cast < char * > (compr_block);
-    // masks to set bits when value meets pos_threshold
-    // 0xc0 is mask when value is to be represented by the first two bits in a char*
-    // 0xc0 means first two bits are set to 11
-    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
-    // masks to set bits when value meets neg_threshold
-    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
-    for (int i = start; i < end; i++) {
-      // adds offset to reach appropriate byte
-      char *curr_byte = block_ptr + ((i - start) >> 2);
-      // adds gradient to existing residual to get updated grad
-      residual[i] += grad[i];
-      if (residual[i] >= pos_threshold) {
-        // set data to 11
-        *curr_byte |= posbits[(i & 3)];
-        // reduce residual by pos_threshold
-        residual[i] -= pos_threshold;
-      } else if (residual[i] <= neg_threshold) {
-        // set data to 10
-        *curr_byte |= negbits[(i & 3)];
-        residual[i] -= neg_threshold;
-      }
-    }
-  }
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
 };
     
-    template<>
-void EvalClip<DEVICE>(const TBlob &src, const real_t &a_min, const real_t &a_max,
-                             TBlob *ret, RunContext ctx) {
-  typedef DEVICE xpu;
-  using namespace mshadow::expr;
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  CHECK_EQ(ret->type_flag_, src.type_flag_)
-    << 'Only support input/output with the same data type';
-  MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
-    ret->FlatTo2D<xpu, DType>(s)
-      = F<ClipMax::mshadow_op>(
-          F<ClipMin::mshadow_op>(src.FlatTo2D<xpu, DType>(s), scalar(DType(a_min))),
-          scalar(DType(a_max)));
-  });
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
+    }
+    
+    static void secp256k1_ecdsa_recoverable_signature_save(secp256k1_ecdsa_recoverable_signature* sig, const secp256k1_scalar* r, const secp256k1_scalar* s, int recid) {
+    if (sizeof(secp256k1_scalar) == 32) {
+        memcpy(&sig->data[0], r, 32);
+        memcpy(&sig->data[32], s, 32);
+    } else {
+        secp256k1_scalar_get_b32(&sig->data[0], r);
+        secp256k1_scalar_get_b32(&sig->data[32], s);
+    }
+    sig->data[64] = recid;
 }
     
-       out = data / sqrt(data.shape[-1])
     
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    CHECK_EQ(in_data.size(), 1U);
-    CHECK_EQ(out_data.size(), 2U);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
-    if (!init_cudnn_) {
-      this->Init(s, in_data, out_data);
+//------------------------------------------------------------------------------
+// Primary API functions
+    
+    
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
+}
+}
+    
+    // Bech32 is a string encoding format used in newer address types.
+// The output consists of a human-readable part (alphanumeric), a
+// separator character (1), and a base32 data section, the last
+// 6 characters of which are a checksum.
+//
+// For more information, see BIP 173.
+    
+    
+    {
+    {        if (bytes <= 64) {
+            if (bytes < 64) {
+                for (i = 0;i < bytes;++i) ctarget[i] = c[i];
+            }
+            input[12] = j12;
+            input[13] = j13;
+            return;
+        }
+        bytes -= 64;
+        c += 64;
     }
-    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
-    CUDNN_CALL(cudnnLRNCrossChannelForward(s->dnn_handle_,
-                                           lrn_desc_,
-                                           CUDNN_LRN_CROSS_CHANNEL_DIM1,
-                                           &alpha,
-                                           shape_desc_,
-                                           data.dptr_,
-                                           &beta,
-                                           shape_desc_,
-                                           out.dptr_));
-  }
-    
-    #endif  // MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+}
 
     
-      for (auto& blob : in_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(0);
-  }
-  for (auto& blob : out_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(1);
-  }
-  for (auto& blob : in_grad) {
-    NDArray* nd = new NDArray(blob, ndctx.dev_id);
-    ptrs.push_back(reinterpret_cast<void*>(nd));
-    ndvar.push_back(nd->var());
-    tags.push_back(2);
-  }
-  std::sort(ndvar.begin(), ndvar.end());
-  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
-  for (auto& blob : out_grad) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(3);
-  }
+    ; shuffle xDxC -> DC00
+_SHUF_DC00:              ddq 0x0b0a090803020100FFFFFFFFFFFFFFFF
+*/
     
-        switch (opCode)
-    {
-    case IDC_INV:
-    case IDC_FE:
-    case IDC_MCLEAR:
-    case IDC_BACK:
-    case IDC_EXP:
-    case IDC_STORE:
-    case IDC_MPLUS:
-    case IDC_MMINUS:
-        return true;
+    #include <stdio.h>
+#include 'db/dbformat.h'
+#include 'port/port.h'
+#include 'util/coding.h'
+    
+    struct leveldb_filterpolicy_t : public FilterPolicy {
+  virtual ~leveldb_filterpolicy_t() { (*destructor_)(state_); }
     }
     
-    class IOpndCommand : public IExpressionCommand
-{
-public:
-    virtual const std::shared_ptr<CalculatorVector<int>>& GetCommands() const = 0;
-    virtual void AppendCommand(int command) = 0;
-    virtual void ToggleSign() = 0;
-    virtual void RemoveFromEnd() = 0;
-    virtual bool IsNegative() const = 0;
-    virtual bool IsSciFmt() const = 0;
-    virtual bool IsDecimalPresent() const = 0;
-    virtual const std::wstring& GetToken(wchar_t decimalSymbol) = 0;
-    virtual void SetCommands(std::shared_ptr<CalculatorVector<int>> const& commands) = 0;
+      // Make multiple inputs so we need to compact.
+  for (int i = 0; i < 2; i++) {
+    Build(10);
+    dbi->TEST_CompactMemTable();
+    Corrupt(kTableFile, 100, 1);
+    env_.SleepForMicroseconds(100000);
+  }
+  dbi->CompactRange(nullptr, nullptr);
+    
+    
+    {}  // namespace leveldb
+    
+      // Position at the first key in the source.  The iterator is Valid()
+  // after this call iff the source is not empty.
+  virtual void SeekToFirst() = 0;
+    
+      // Leveldb will write up to this amount of bytes to a file before
+  // switching to a new one.
+  // Most clients should leave this parameter alone.  However if your
+  // filesystem is more efficient with larger files, you could
+  // consider increasing the value.  The downside will be longer
+  // compactions and hence longer latency/performance hiccups.
+  // Another reason to increase this parameter might be when you are
+  // initially populating a large database.
+  size_t max_file_size = 2 * 1024 * 1024;
+    
+      // Add key,value to the table being constructed.
+  // REQUIRES: key is after any previously added key according to comparator.
+  // REQUIRES: Finish(), Abandon() have not been called
+  void Add(const Slice& key, const Slice& value);
+    
+    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+
+    
+    
+    {  const FilterPolicy* policy_;
+  std::string keys_;             // Flattened key contents
+  std::vector<size_t> start_;    // Starting index in keys_ of each key
+  std::string result_;           // Filter data computed so far
+  std::vector<Slice> tmp_keys_;  // policy_->CreateFilter() argument
+  std::vector<uint32_t> filter_offsets_;
 };
     
-        // sub one from x
-    (*px)->pq->sign *= -1;
-    addnum(&((*px)->pp), (*px)->pq, BASEX);
-    (*px)->pq->sign *= -1;
+            NDShape m_shape;
+        VariableKind m_varKind;
+        ::CNTK::DataType m_dataType;
+        std::weak_ptr<Function> m_ownerFunction;
+        std::unique_ptr<std::once_flag> m_initValueFlag;
+        NDArrayViewPtr m_value;
+        std::unique_ptr<ParameterInitializer> m_valueInitializer;
+        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
+        bool m_needsGradient;
+        std::wstring m_name;
+        std::vector<Axis> m_dynamicAxes;
+        bool m_isSparse;
+        std::wstring m_uid;
+        std::atomic<size_t> m_valueTimeStamp;
+        Variable m_blockFunctionVariableMapping;
     
-    CatmullRomTo* CatmullRomTo::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) CatmullRomTo();
-    a->initWithDuration(this->_duration, this->_points->clone());
-    a->autorelease();
-    return a;
-}
-    
-    EaseBezierAction* EaseBezierAction::reverse() const
-{
-    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
-    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
-    return reverseAction;
-}
-    
-    // DeccelAmplitude
-    
-        /**
-    @brief Get the amplitude of the effect.
-    @return Return the amplitude of the effect.
-    */
-    float getAmplitude() const { return _amplitude; }
-    /**
-    @brief Set the amplitude to the effect.
-    @param amplitude The value of amplitude will be set.
-    */
-    void setAmplitude(float amplitude) { _amplitude = amplitude; }
-    
-    /** @class Repeat
- * @brief Repeats an action a number of times.
- * To repeat an action forever use the RepeatForever action.
- */
-class CC_DLL Repeat : public ActionInterval
-{
-public:
-    /** Creates a Repeat action. Times is an unsigned integer between 1 and pow(2,30).
-     *
-     * @param action The action needs to repeat.
-     * @param times The repeat times.
-     * @return An autoreleased Repeat object.
-     */
-    static Repeat* create(FiniteTimeAction *action, unsigned int times);
-    }
-    
-    void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
-{
-    if (flags == 0)
+        // this returns the map directly (read-only) and will lazily initialize it for a given seed
+    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
     {
-        return;
+        // if wrong seed then lazily recache the sequence
+        if (seed != currentseed && randomizationrange != randomizeDisable)
+        {
+            // test for numeric overflow
+            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
+                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
+            // 0, 1, 2...
+            foreach_index (t, map)
+                map[t] = (INDEXTYPE) t;
     }
-    CCASSERT(target != nullptr, 'target can't be nullptr!');
-    if (target == nullptr)
+    }
+    
+    public:
+    // constructor
+    // This constructs a new model from an existing one by:
+    //  - iterating over all nodes
+    //  - trying a sequence of edit functions until one made an edit
+    //    This is like pattern matching: The first edit function that matches will return an updated node.
+    //  - assemble a new network that consists of the old network with edits applied
+    // Note that the old model is not edited in-place; instead a new copy is made that shares
+    // unchanged nodes with the original one.
+    ComputationNetworkWithEdits(const IConfigRecordPtr configp) :
+        ComputationNetwork()
     {
-        return;
+        // get config parameters
+        let& config = *configp;
+        SetTraceLevel(config[L'traceLevel']);
+        let& net = config[L'inputModel'].AsRef<ComputationNetwork>();
+        let editFunctions = ScriptableObjects::ConfigArray::FlattenedVectorFrom<ConfigLambda>(config[L'editFunctions']);
+        let additionalRoots = ScriptableObjects::ConfigArray::FlattenedVectorFrom<ComputationNodeBasePtr>(config[L'additionalRoots']);
     }
+    
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
+  }
+    
+      // Put key-value
+  s = db->Put(WriteOptions(), 'key1', 'value');
+  assert(s.ok());
+  std::string value;
+  // get value
+  s = db->Get(ReadOptions(), 'key1', &value);
+  assert(s.ok());
+  assert(value == 'value');
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+    namespace rocksdb {
     }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+      OptimisticTransactionDB(const OptimisticTransactionDB&) = delete;
+  void operator=(const OptimisticTransactionDB&) = delete;
     
-        // Override
-    virtual ShatteredTiles3D* clone() const override;
-    virtual void update(float time) override;
+            int setContext(redisAsyncContext * ac) {
+            if (ac->ev.data != NULL) {
+                return REDIS_ERR;
+            }
+            m_ctx = ac;
+            m_ctx->ev.data = this;
+            m_ctx->ev.addRead = RedisQtAddRead;
+            m_ctx->ev.delRead = RedisQtDelRead;
+            m_ctx->ev.addWrite = RedisQtAddWrite;
+            m_ctx->ev.delWrite = RedisQtDelWrite;
+            m_ctx->ev.cleanup = RedisQtCleanup;
+            return REDIS_OK;
+        }
     
-CC_CONSTRUCTOR_ACCESS:
-    ShatteredTiles3D() {}
-    virtual ~ShatteredTiles3D() {}
+        signals:
+        void finished();
     
+    #include 'swoole.h'
+#include 'coroutine.h'
     
-    {    frame->autorelease();
-    return frame;
+            size_t size = cache_list.size();
+        if (size == cache_capacity && size > 0)
+        {
+            auto del = cache_list.back();
+            cache_map.erase(del.first);
+            cache_list.pop_back();
+        }
+    
+    static pid_t create_server()
+{
+    pid_t pid;
+    swoole_shell_exec('php server/tcp.php', &pid, 1);
+    sleep(1); // wait 1s
+    return pid;
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-            /**
-         * Move assignment.
-         * Similar to Rectangle<T>(Rectangle<T>&& rectangle).
-         * @param rectangle Rectangle to be moved.
-         * @return The resulting Rectangle.
-         */
-        Rectangle<T>& operator=(Rectangle<T>&& rectangle);
-    
-    #include <openpose/pose/poseParameters.hpp>
-#include <openpose/pose/poseParametersRender.hpp>
-    
-    
+    TEST(coroutine_base, yield_resume)
+{
+    long _cid;
+    long cid = Coroutine::create([](void *arg)
     {
-    {        DELETE_COPY(PersonIdExtractor);
-    };
+        long cid = Coroutine::get_current_cid();
+        Coroutine *co = Coroutine::get_by_cid(cid);
+        co->yield();
+        *(long *) arg = Coroutine::get_current_cid();
+    }, &_cid);
+    }
+    
+    static int thread_onTask(swThreadPool *pool, void *task, int task_len)
+{
+    sw_atomic_long_t *n = (sw_atomic_long_t *) task;
+    sw_atomic_fetch_add(n, 1);
+    if (*n == N - 1)
+    {
+        write(_pipe, (void*) n, sizeof(long));
+    }
+    return SW_OK;
 }
     
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child1));
-    
-    namespace facebook {
     }
+TEST(os_signal, swSignalfd_set)
+{
+    int ret;
+    sigset_t curset;
     
-      const char* functionName() const { return m_functionName; }
-  const char* fileName() const { return m_fileName; }
-  int lineNumber() const { return m_lineNumber; }
     
-    // JNI's NIO support has some awkward preconditions and error reporting. This
-// class provides much more user-friendly access.
-class FBEXPORT JByteBuffer : public JavaClass<JByteBuffer> {
- public:
-  static constexpr const char* kJavaDescriptor = 'Ljava/nio/ByteBuffer;';
-    }
-    
-    inline jobject JObject::self() const noexcept {
-  return this_;
+    {    return 0;
 }
