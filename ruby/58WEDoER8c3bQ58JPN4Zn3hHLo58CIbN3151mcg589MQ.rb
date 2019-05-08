@@ -1,111 +1,29 @@
 
         
-                    [:checked, :selected, :disabled, :readonly].each do |option|
-              current_value = @options[option]
-              next if current_value.nil?
-    
-                case options[:default]
-            when nil
-              Time.current
-            when Date, Time
-              options[:default]
-            else
-              default = options[:default].dup
-    
-    require 'action_view/helpers/tags/placeholderable'
-    
-          def test_helpers_with_module_through_block
-        @controller = AbstractHelpersBlock.new
-        @controller.process(:with_module)
-        assert_equal 'Module Included', @controller.response_body
-      end
+            # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
     end
     
-          # Sets multiple keys to a given value.
-      #
-      # mapping - A Hash mapping the cache keys to their values.
-      # timeout - The time after which the cache key should expire.
-      def self.write_multiple(mapping, timeout: TIMEOUT)
-        Redis::Cache.with do |redis|
-          redis.multi do |multi|
-            mapping.each do |raw_key, value|
-              multi.set(cache_key_for(raw_key), value, ex: timeout)
-            end
-          end
-        end
-      end
+            # The VM which this system is tied to.
+        attr_reader :vm
     
-            def importer_class
-          IssueAndLabelLinksImporter
+              # Return the registry
+          data[:provisioners]
         end
     
-                # We mark the object as imported immediately so we don't end up
-            # scheduling it multiple times.
-            mark_as_imported(object)
-          end
-        end
-      end
-    
-        def absolute_url_string?(str)
-      str =~ SCHEME_RGX
-    end
-    
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
-    
-            # This is called to upgrade this V1 config to V2. The parameter given
-        # is the full V2 configuration object, so you can do anything to it
-        # that you want.
-        #
-        # No return value is expected, modifications should be made directly
-        # to the new V2 object.
-        #
-        # @param [V2::Root] new
-        def upgrade(new)
-        end
-    
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
-    
-            # This returns all registered host classes.
-        #
-        # @return [Hash]
-        def hosts
-          hosts = {}
-    
-            # Sets a human-friendly description of the plugin.
-        #
-        # @param [String] value Description of the plugin.
-        # @return [String] Description of the plugin.
-        def self.description(value=UNSET_VALUE)
-          get_or_set(:description, value)
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
         end
     
             # This contains all the registered guest capabilities.
@@ -113,75 +31,165 @@
         # @return [Hash<Symbol, Registry>]
         attr_reader :guest_capabilities
     
-            # This returns all registered providers.
+            # This returns all the registered commands.
         #
-        # @return [Hash]
-        def providers
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        def commands
           Registry.new.tap do |result|
             @registered.each do |plugin|
-              result.merge!(plugin.components.providers)
+              result.merge!(plugin.components.commands)
             end
           end
         end
     
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
-    
-      def process_salmon
-    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
-  end
-end
-
-    
-        # Mobile devices do not support regular notifications, so we enable push notifications by default
-    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
-    
-    class Api::Web::SettingsController < Api::Web::BaseController
-  respond_to :json
-    
-      def after_sign_in_path_for(resource)
-    if resource.email_verified?
-      root_path
-    else
-      finish_signup_path
-    end
-  end
-end
-
-    
-    module ExportControllerConcern
-  extend ActiveSupport::Concern
-    
-      included do
-    before_action :set_session_activity
-  end
-    
-      attr_reader :center, :radius
-    
-    def mkboard
-  (0...ROW*COL).each{|i|
-    if i % ROW >= ROW-NP
-      $b[i] = -2
-    else
-      $b[i] = -1
-    end
-    $b[3*ROW+3]=$b[3*ROW+4]=$b[4*ROW+3]=$b[4*ROW+4]=-2
-  }
-end
-    
-    # This is the version that ships with OS X 10.10, so be sure we test against it.
-# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
-# so we use a fork that makes a trivial change to a macro invocation.
-gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @short_output = argv.flag?('short')
-          super
+            # Defines additional configuration keys to be available in the
+        # Vagrantfile. The configuration class should be returned by a
+        # block passed to this method. This is done to ensure that the class
+        # is lazy loaded, so if your class inherits from any classes that
+        # are specific to Vagrant 1.0, then the plugin can still be defined
+        # without breaking anything in future versions of Vagrant.
+        #
+        # @param [String] name Configuration key.
+        def self.config(name, scope=nil, &block)
+          scope ||= :top
+          components.configs[scope].register(name.to_sym, &block)
+          nil
         end
+    
+      before_action :set_account
+  respond_to :txt
+    
+        render_empty
+  end
+    
+        define_method provider do
+      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
+    
+      private
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
+        end
+      end
+    end
+  end
+    
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
+    end
+  end
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+        require 'capistrano/scm/git'
+    install_plugin Capistrano::SCM::Git
+    
+          ServerKey = Struct.new(:hostname, :port)
+    
+          # Given a callable that provides a value, wrap the callable with another
+      # object that responds to `call`. This new object will perform validation
+      # and then return the original callable's value.
+      #
+      # If the callable is a `Question`, the object returned by this method will
+      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
+      # ensures that `is_a?(Question)` remains true even after the validation
+      # wrapper is applied. This is needed so that `Configuration#is_question?`
+      # works as expected.
+      #
+      def assert_valid_later(key, callable)
+        validation_callback = lambda do
+          value = callable.call
+          assert_valid_now(key, value)
+          value
+        end
+    
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
+      end
+    
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
+    
+          DOUBLE_SPLAT = '**'.freeze
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
+    end
+  end
+end
+
+    
+          CopAnalysis.new(analysis.line_ranges, nil)
+    end
+    
+          attr_reader :department, :cop_name
+    
+        def URIEncodeOctets(octets, result, index)
+      if (@@hexCharCodeArray == 0)
+        @@hexCharCodeArray = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                              65, 66, 67, 68, 69, 70];
+      end
+      index = URIAddEncodedOctetToBuffer(octets[0], result, index);
+      if (octets[1]);
+        index = URIAddEncodedOctetToBuffer(octets[1], result, index)
+      end
+      if (octets[2]);
+        index = URIAddEncodedOctetToBuffer(octets[2], result, index)
+      end
+      if (octets[3]);
+        index = URIAddEncodedOctetToBuffer(octets[3], result, index)
+      end
+      return index;
+    end
+    
+          def escaped_name
+        CGI.escape(@name)
+      end
+    
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
