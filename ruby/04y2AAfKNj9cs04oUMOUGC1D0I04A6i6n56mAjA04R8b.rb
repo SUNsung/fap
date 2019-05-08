@@ -1,85 +1,113 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
+        describe 'Creating a new agent', js: true do
+  before(:each) do
+    login_as(users(:bob))
+  end
     
-    require 'benchmark/ips'
-require 'jekyll'
-require 'json'
-    
-    Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
-    
-            # Setup and normalize the configuration:
-        #   * Create Kramdown if it doesn't exist.
-        #   * Set syntax_highlighter, detecting enable_coderay and merging
-        #       highlighter if none.
-        #   * Merge kramdown[coderay] into syntax_highlighter_opts stripping coderay_.
-        #   * Make sure `syntax_highlighter_opts` exists.
-    
-      EmailToken.where(user_id: smoke_user.id).update_all(confirmed: true)
-end
-
-    
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
-    
-          it 'allows you to force the tag creation' do
-        tag = '2.0.0'
-        message = 'message'
-    
-        def relative_url_string?(str)
-      str !~ SCHEME_RGX && !fragment_url_string?(str) && !data_url_string?(str)
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
     end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
+      before(:each) do
+    stub_request(:get, /events.json$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /projects.json$/).to_return(
+      :body => JSON.dump([{name: 'test', id: 1234},{name: 'test1', id: 1235}]),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /02:00$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    @valid_params = { :project_id => 6789 }
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+      before_action :set_account
+  respond_to :txt
+    
+    
+end
+end
+end
+
+    
+        head + [data.length].pack('v') + data
+  end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+              # Decodes the crealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_crealm(input)
+            input.value[0].value
+          end
+    
+              # Decodes the cusec field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_cusec(input)
+            input.value[0].value
+          end
+    
+      until to_boolean(IS_EMPTY[proc])
+    array.push(FIRST[proc])
+    proc = REST[proc]
+  end
+    
+    $pnum=[]
+def setpiece(a,pos)
+  if a.length == $p.length then
+    $no += 1
+    pboard
+    return
+  end
+  while $b[pos] != -1
+    pos += 1
+  end
+  ($pnum - a).each do |i|
+    $p[i].each do |x|
+      f = 0
+      x.each{|s|
+        if $b[pos+s] != -1
+          f=1
+          break
+        end
+      }
+      if f == 0 then
+        x.each{|s|
+          $b[pos+s] = i
+        }
+        a << i
+        setpiece(a.dup, pos)
+        a.pop
+        x.each{|s|
+          $b[pos+s] = -1
+        }
       end
     end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-            location_badge = at_css('.location-badge')
-        if location_badge && doc.last_element_child != location_badge
-          doc.last_element_child.after(location_badge)
-        end
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { sleep('2')   }.should raise_error(TypeError)
-  end
-    
-      platform_is_not :windows do
-    it 'does not expand shell variables when given multiples arguments' do
-      lambda { @object.system('echo', @shell_var) }.should output_to_fd('#{@shell_var}\n')
-    end
-  end
-    
-      it 'returns true when passed ?R if the argument is readable by the real uid' do
-    Kernel.test(?R, @file).should be_true
-  end
-    
-      it 'raises ArgumentError if no block or proc is provided' do
-    lambda do
-      trace_var :$Kernel_trace_var_global
-    end.should raise_error(ArgumentError)
   end
 end
+    
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
