@@ -1,72 +1,97 @@
 
         
-          # Concatenate the edge components to create a path tensor:
-  # [max_paths_per_ins, max_path_length, 4]
-  lemmas = _word_dropout(
-      tf.reshape(features['lemmas'], [-1, max_path_len]), input_keep_prob)
+            def __iter__(self):
+        return iter(self._plugins)
     
-          if not samples:
-        samples = [sample]
-        char_ids_samples = [sample_char_ids]
-      sent += vocab.id_to_word(samples[0]) + ' '
-      sys.stderr.write('%s\n' % sent)
     
-      def _score(self, word_patch):
-    '''Score a matrix of shape (batch_size, num_timesteps+1) str tokens.'''
-    word_ids = np.array(
-        [[self.vocab.word_to_id(word) for word in row]
-         for row in word_patch])
-    char_ids = np.array(
-        [[self.vocab.word_to_char_ids(word) for word in row]
-         for row in word_patch])
-    print('Probs for \n{}\n='.format(np.array(word_patch)[:, 1:]))
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
     
-      train_data = _read_words(train_path)
-  valid_data = _read_words(valid_path)
-  return train_data, valid_data
     
-      if epoch_size == 0:
-    raise ValueError('epoch_size == 0, decrease batch_size or num_steps')
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
     
-      Returns:
-    loss:  Scalar tf.float32 loss.
+        def test_upload_multiple_fields_with_the_same_name(self, httpbin):
+        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
+                 'test-file@%s' % FILE_PATH_ARG,
+                 'test-file@%s' % FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert r.count('Content-Disposition: form-data; name='test-file';'
+                       ' filename='%s'' % os.path.basename(FILE_PATH)) == 2
+        # Should be 4, but is 3 because httpbin
+        # doesn't seem to support filed field lists
+        assert r.count(FILE_CONTENT) in [3, 4]
+        assert r.count('Content-Type: text/plain') == 2
     
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
-          'Need a reversed directory to fill in the backward components.')
-      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      load_bwd_ckpt = tf.train.latest_checkpoint(
-          FLAGS.language_model_ckpt_dir_reversed)
-      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
-                                                         load_bwd_ckpt))
-      tf.logging.info('Restoring Discriminator from %s and %s.' %
-                      (load_fwd_ckpt, load_bwd_ckpt))
-      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
-      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
-      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
-      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
+        else:
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
+
     
-        The main difference between this decoder function and the `decoder_fn` in
-    `attention_decoder_fn_train` is how `next_cell_input` is calculated. In
-    decoder function we calculate the next input by applying an argmax across
-    the feature dimension of the output from the decoder. This is a
-    greedy-search approach. (Bahdanau et al., 2014) & (Sutskever et al., 2014)
-    use beam-search instead.
     
-    # ZoneoutWrapper.
-from regularization import zoneout
+def make_setting_element(setting_data, app, fromdocname):
+    refnode = make_refnode(app.builder, fromdocname,
+                           todocname=setting_data['docname'],
+                           targetid=setting_data['refid'],
+                           child=nodes.Text(setting_data['setting_name']))
+    p = nodes.paragraph()
+    p += refnode
     
-    import rsa
-import json
-from binascii import hexlify
+            if self.spider_is_idle(spider) and slot.close_if_idle:
+            self._spider_idle(spider)
     
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
     
-    PREFIX = r'''%YOUTUBE-DL(1)
+logger = logging.getLogger(__name__)
     
-        def setUp(self):
-        if self._SKIP_SOCKS_TEST:
-            return
+        def set_appid_not_exist(self, appid):
+        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
+        with self.lock:
+            if appid not in self.not_exist_appids:
+                self.not_exist_appids.append(appid)
+            try:
+                self.config.GAE_APPIDS.remove(appid)
+            except:
+                pass
+    
+            content = response.read()
+        if self.config.check_ip_content not in content:
+            self.logger.warn('app check content:%s', content)
+            return False
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
+    
+    
+    
+                    if self.accept[s] >= 1:
+                    #print 'accept state for alt %d' % self.accept[s]
+                    return self.accept[s]
+    
+    
+    def seek(self, index):
+        self.p = index
+    
+            txt = self.text
+        if txt is not None:
+            txt = txt.replace('\n','\\\\n')
+            txt = txt.replace('\r','\\\\r')
+            txt = txt.replace('\t','\\\\t')
+        else:
+            txt = '<no text>'
