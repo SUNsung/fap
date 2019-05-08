@@ -1,179 +1,114 @@
 
         
-          url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
-end
+            def class_ref_for_action(named: nil)
+      class_ref = Actions.action_class_ref(named)
+      unless class_ref
+        if Fastlane::Actions.formerly_bundled_actions.include?(action)
+          # This was a formerly bundled action which is now a plugin.
+          UI.verbose(caller.join('\n'))
+          UI.user_error!('The action '#{action}' is no longer bundled with fastlane. You can install it using `fastlane add_plugin #{action}`')
+        else
+          Fastlane::ActionsList.print_suggestions(action)
+          UI.user_error!('Action '#{action}' not available, run `fastlane actions` to get a full list')
+        end
+      end
     
-    STDOUT.sync = true
+        def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+        it 'raises when no argument passed' do
+      expect do
+        command_from_args
+      end.to raise_error(ArgumentError)
+    end
     
-            def initialize(_opts)
-          # If EventMachine SSL support on Windows ever gets better, the code below will
-          # set up the reactor to handle SSL
-          #
-          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
-          # if @ssl_enabled
-          #   em_opts[:tls_options] = {
-          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
-          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
-          #   }
-          #   em_opts[:secure] = true
-          # end
+    # Here be monkey patches
     
-      describe 'DotHelper::DotDrawer' do
-    describe '#id' do
-      it 'properly escapes double quotaion and backslash' do
-        expect(DotHelper::DotDrawer.draw(foo: '') {
-          id('hello\\'')
-        }).to eq(''hello\\\\\\''')
+              value_detector.find_folders(options)
+        end
+    
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
+        end
+    
+          def parallel?
+        @parallel
+      end
+    
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+            def collection_method
+          :issues_comments
+        end
+    
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
       end
     end
   end
 end
 
     
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
     
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
-    
-      describe 'cleanup_failed_jobs!' do
-    before do
-      3.times do |i|
-        Delayed::Job.create(failed_at: Time.now - i.minutes)
-      end
-      @keep = Delayed::Job.order(:failed_at)[1]
-    end
-    
-        it 'returns nil when passed nil' do
-      expect(Utils.parse_duration(nil)).to be_nil
-    end
-    
-        it 'should require credentials' do
-      @checker.options['api_key'] = nil
-      expect(@checker).not_to be_valid
-    end
-  end
-    
-      describe '#receive' do
-    it 'sends a message' do
-      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
-      @checker.receive([@event])
-    end
-    
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
-    else
-      head 400
-    end
-  end
-    
-      def encoded_challenge
-    HTMLEntities.new.encode(params['hub.challenge'])
-  end
-    
-      included do
-    before_action :set_locale
-  end
-    
-      def set_rate_limit_headers
-    apply_header_limit
-    apply_header_remaining
-    apply_header_reset
-  end
-    
-    def to_boolean(proc)
-  IF[proc][true][false]
+      at_exit { Application.run! if $!.nil? && Application.run? }
 end
     
-        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
-                   args: [
-                           '--mode=silent',
-                         ],
-                   sudo: true
-  end
+    desc 'generate gemspec'
+task 'rack-protection.gemspec' do
+  require 'rack/protection/version'
+  content = File.binread 'rack-protection.gemspec'
     
-            if state_index < current_index
-          css_classes << 'completed'
-          text = link_to text, checkout_state_path(state), class: 'nav-link'
-        end
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
     
-              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-            if current_api_user.has_spree_role?('admin') && user_id.present?
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-    
-            private
-    
-            def approve
-          authorize! :approve, @order, params[:token]
-          @order.approved_by(current_api_user)
-          respond_with(@order, default_template: :show)
-        end
-    
-          @@property_attributes = [:id, :name, :presentation]
-    
-    # This example uses the API to create a package from local files
-# it also creates necessary init-scripts and systemd files so our executable can be used as a service
-    
-        return str
-  end
-    
-        # Build the packaging metadata files.
-    checksums = {}
-    self.files.each do |f|
-      path = staging_path(f)
-      if File.symlink?(path)
-        checksums[f] = '-'
-      elsif File.file?(path)
-        checksums[f] = Digest::SHA256.file(path).hexdigest
-      end
+        it 'sets a session authenticity token if one does not exist' do
+      session = {}
+      allow(Rack::Protection::AuthenticityToken).to receive(:random_token).and_return(token)
+      allow_any_instance_of(Rack::Protection::AuthenticityToken).to receive(:mask_token).and_return(masked_token)
+      Rack::Protection::AuthenticityToken.token(session)
+      expect(session[:csrf]).to eq(token)
     end
-    
-    class FPM::Package::NPM < FPM::Package
-  class << self
-    include FPM::Util
   end
-  # Flags '--foo' will be accessable  as attributes[:npm_foo]
-  option '--bin', 'NPM_EXECUTABLE',
-    'The path to the npm executable you wish to run.', :default => 'npm'
     
-      option '--user', 'USER',
-    'Set the user to USER in the prototype files.',
-    :default => 'root'
-    
-        stdout_w.close; stderr_w.close
-    logger.debug('Process is running', :pid => process.pid)
-    if block_given?
-      args3 = []
-      args3.push(process)           if opts[:process]
-      args3.push(process.io.stdin)  if opts[:stdin]
-      args3.push(stdout_r)          if opts[:stdout]
-      args3.push(stderr_r)          if opts[:stderr]
-    
-    # Like the ::Gem::Package::TarWriter but contains some backports and bug fixes
-class FPM::Util::TarWriter < ::Gem::Package::TarWriter
-  if FPM::Issues::TarWriter.has_issues_with_split_name?
-    def split_name(name)
-      if name.bytesize > 256 then
-        raise ::Gem::Package::TooLongFileName.new('File \'#{name}\' has a too long path (should be 256 or less)')
-      end
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
+    end
+  end
+end
