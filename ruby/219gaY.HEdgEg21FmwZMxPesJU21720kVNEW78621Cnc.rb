@@ -1,48 +1,18 @@
 
         
-        @@ chat
-<pre id='chat'></pre>
-<form>
-  <input id='msg' placeholder='type message here...' />
-</form>
+                  def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
     
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
+          @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
     
-    desc 'generate documentation'
-task :doc => 'doc:all'
-    
-          attr_reader :app, :options
-    
-      it 'should not set the Content Security Policy for other content types' do
-    headers = get('/', {}, 'wants' => 'text/foo').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
-  end
-    
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-    module Grape
-  module DSL
-    module Helpers
-      extend ActiveSupport::Concern
-      include Grape::DSL::Configuration
-    
-        def initialize_cancan_ability
-      klass = resource.namespace.cancan_ability_class
-      klass = klass.constantize if klass.is_a? String
-      klass.new user
-    end
-    
-        def self.config
-      {
-        path: ActiveAdmin.application.default_namespace || '/',
-        controllers: ActiveAdmin::Devise.controllers,
-        path_names: { sign_in: 'login', sign_out: 'logout' },
-        sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
-      }
-    end
+        # An empty argument will be skipped, so return empty quotes.
+    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
+    return ''''.dup if str.empty?
