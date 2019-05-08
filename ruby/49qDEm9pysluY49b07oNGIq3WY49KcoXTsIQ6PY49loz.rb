@@ -1,160 +1,200 @@
 
         
-                  def checked?(value)
-            case value
-            when TrueClass, FalseClass
-              value == !!@checked_value
-            when NilClass
-              false
-            when String
-              value == @checked_value
-            else
-              if value.respond_to?(:include?)
-                value.include?(@checked_value)
-              else
-                value.to_i == @checked_value.to_i
-              end
-            end
-          end
-    
-              def initialize(template_object, object_name, method_name, object,
-                         sanitized_attribute_name, text, value, input_html_options)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @sanitized_attribute_name = sanitized_attribute_name
-            @text = text
-            @value = value
-            @input_html_options = input_html_options
-          end
-    
-          def self.delegate_to(klass)
-        self.type_klass = klass
-      end
-    
-          def objekt
-        Object.new
-      end
-    end
-    
-              issue.label_names.each do |label_name|
-            # Although unlikely it's technically possible for an issue to be
-            # given a label that was created and assigned after we imported all
-            # the project's labels.
-            next unless (label_id = label_finder.id_for(label_name))
-    
-            # Builds a new note using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-              new(hash)
-        end
-    
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-    end
+        # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
 
     
-            it 'should add an error when no service is selected' do
-          expect(services_scenario_import.import).to eq(false)
-          expect(services_scenario_import.errors[:base].length).to eq(1)
+            @hide_this_step = false
+        if exception
+          if @exceptions.include?(exception)
+            @hide_this_step = true
+            return
+          end
+    
+            def log_error(error)
+          Jekyll.logger.error 'LiveReload experienced an error. ' \
+            'Run with --trace for more information.'
+          raise error
+        end
+      end
+    end
+  end
+end
+
+    
+          attr_accessor :page, :layout, :content, :paginator
+      attr_accessor :highlighter_prefix, :highlighter_suffix
+    
+            parsed_expr = parse_expression(expression)
+        @context.stack do
+          groups = input.group_by do |item|
+            @context[variable] = item
+            parsed_expr.render(@context)
+          end
+          grouped_array(groups)
         end
       end
     
-      let :reverted_template do
-    old_template.merge('url' => '{{ url }}')
+          it 'activates an existing user' do
+        users(:bob).deactivate!
+        visit admin_users_path
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
+        expect(page).to have_no_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).to be_active
+      end
+    end
   end
+end
+
     
-      describe 'path request must exist' do
-    it 'should check that validation added if path does not exist' do
-      opts = @opts.tap { |o| o.delete('path') }
-      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
-      @checker.user = users(:bob)
-      expect(@checker.save).to eq false
-      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
+        it 'does not send previously configured sources when the current agent does not support them' do
+      select_agent_type('Website Agent scrapes')
+      select2('SF Weather', from: 'Sources')
+      select_agent_type('Webhook Agent')
+      fill_in(:agent_name, with: 'No sources')
+      click_on 'Save'
+      expect(page).to have_content('No sources')
+      agent = Agent.find_by(name: 'No sources')
+      expect(agent.sources).to eq([])
+    end
+    
+        it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+    end
+    
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
     end
   end
     
-        it 'should raise error when invalid response arrives' do
-      stub(HTTParty).post { {'blah' => 'blah'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Invalid response from Boxcar:/)
+          it 'should be valid with a valid uploaded scenario' do
+        subject.file = StringIO.new(valid_data)
+        expect(subject).to be_valid
+      end
     end
+  end
     
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+          it 'loads only the workers specified in the :only option' do
+        agent_runner = AgentRunner.new(only: HuginnScheduler)
+        workers = agent_runner.send(:load_workers)
+        expect(workers.keys).to eq(['HuginnScheduler'])
+        agent_runner.stop
+      end
+    
+        it 'outputs control links to agents within the incoming set, but not outside it' do
+      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
+      agents(:jane_rain_notifier_agent).save!
+    
+      describe '#recursively_interpolate_jsonpaths' do
+    it 'interpolates all string values in a structure' do
+      struct = {
+        :int => 5,
+        :string => 'this <escape $.works>',
+        :array => ['<works>', 'now', '<$.there.world>'],
+        :deep => {
+          :string => 'hello <there.world>',
+          :hello => :world
+        }
+      }
+      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
+      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
+        :int => 5,
+        :string => 'this should+work',
+        :array => ['should work', 'now', 'WORLD'],
+        :deep => {
+          :string => 'hello WORLD',
+          :hello => :world
+        }
+      })
+    end
+  end
+    
+    describe Agents::BoxcarAgent do
+  before(:each) do
+  @valid_params = {
+                    'user_credentials' => 'access_token',
+                    'title' => 'Sample Title',
+                    'body' => 'Sample Body'
+                  }
+  @checker = Agents::BoxcarAgent.new(:name => 'boxcartest', :options => @valid_params)
+  @checker.user = users(:bob)
+  @checker.save!
+    
+      add_filter %r{^/build.rb$}
+  add_filter %r{^/config.rb$}
+  add_filter %r{^/constants.rb$}
+  add_filter %r{^/postinstall.rb$}
+  add_filter %r{^/test.rb$}
+  add_filter %r{^/compat/}
+  add_filter %r{^/dev-cmd/tests.rb$}
+  add_filter %r{^/test/}
+  add_filter %r{^/vendor/}
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+      config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = 'test'
+    puppet.manifest_file = 'vagrant.pp'
+  end
+end
+
+    
+          logger.fatal('Fix the above problems, and you'll be rolling packages in no time!')
+      return 1
+    end
+    input_class = FPM::Package.types[input_type]
+    output_class = FPM::Package.types[output_type]
+    
+      # Does this package have the given script?
+  def script?(name)
+    return scripts.include?(name)
+  end # def script?
+    
+        if self.attributes[:osxpkg_payload_free?]
+      args << '--nopayload'
     else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      args += ['--root', staging_path]
     end
-  end
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          def extend_remember_period
-        self.class.extend_remember_period
-      end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
-  end
-end
+      end # def input
+end # class FPM::Package::PEAR
 
     
-          def order_time(time)
-        [I18n.l(time.to_date), time.strftime('%l:%M %p').strip].join(' ')
+        # Copy 'files' from builddir to :output/files
+    Find.find('files', 'manifests') do |path|
+      logger.info('Copying path: #{path}')
+      if File.directory?(path)
+        ::Dir.mkdir(File.join(params[:output], path))
+      else
+        FileUtils.cp(path, File.join(params[:output], path))
       end
     end
-  end
-end
-
+  end # def build!
     
-            select_tag(:per_page,
-                   options_for_select(per_page_options, selected_option),
-                   class: 'form-control pull-right js-per-page-select per-page-selected-#{selected_option}')
-      end
+      # Output a tarball.
+  #
+  # If the output path ends predictably (like in .tar.gz) it will try to obey
+  # the compression type.
+  def output(output_path)
+    output_check(output_path)
     
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
-  end
-end
-    
-            def load_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
-          @order.state = params[:state] if params[:state]
-          state_callback(:before)
-        end
+    # Use a zip as a package.
+#
+# This provides no metadata. Both input and output are supported.
+class FPM::Package::Zip < FPM::Package
