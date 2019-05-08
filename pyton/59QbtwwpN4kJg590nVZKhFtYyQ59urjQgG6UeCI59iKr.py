@@ -1,74 +1,44 @@
 
         
-        # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
+        no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
-            # this line for build stable iteration
-        sorted_keys = sorted(self.graph.keys())
-        for x in xrange(10):  # 10 iters
-            for n in sorted_keys:
-                s = 0
-                for e in self.graph[n]:
-                    s += e[2] / outSum[e[1]] * ws[e[1]]
-                ws[n] = (1 - self.d) + self.d * s
+            def reset(path):
+            os.mkdir('d')
+            with tarfile.TarFile(path, 'w') as archive:
+                for file in ('a', 'b', 'c', 'd/e'):
+                    with open(file, 'w') as f:
+                        f.write('*')
     
+        def __init__(self):
+        super(BaseAdapter, self).__init__()
     
-def viterbi(obs, states, start_p, trans_p, emit_p):
-    V = [{}]  # tabular
-    path = {}
-    for y in states:  # init
-        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
-        path[y] = [y]
-    for t in xrange(1, len(obs)):
-        V.append({})
-        newpath = {}
-        for y in states:
-            em_p = emit_p[y].get(obs[t], MIN_FLOAT)
-            (prob, state) = max(
-                [(V[t - 1][y0] + trans_p[y0].get(y, MIN_FLOAT) + em_p, y0) for y0 in PrevStatus[y]])
-            V[t][y] = prob
-            newpath[y] = path[state] + [y]
-        path = newpath
-    
-            x = 0
-        buf = ''
-        N = len(sentence)
-        while x < N:
-            y = route[x][1] + 1
-            l_word = sentence[x:y]
-            if y - x == 1:
-                buf += l_word
-            else:
-                if buf:
-                    if len(buf) == 1:
-                        yield pair(buf, self.word_tag_tab.get(buf, 'x'))
-                    elif not self.tokenizer.FREQ.get(buf):
-                        recognized = self.__cut_detail(buf)
-                        for t in recognized:
-                            yield t
-                    else:
-                        for elem in buf:
-                            yield pair(elem, self.word_tag_tab.get(elem, 'x'))
-                    buf = ''
-                yield pair(l_word, self.word_tag_tab.get(l_word, 'x'))
-            x = y
-    
-        route = [None] * len(obs)
-    i = len(obs) - 1
-    while i >= 0:
-        route[i] = state
-        state = mem_path[i][state]
-        i -= 1
-    return (prob, route)
-
-    
-    if opt.topK is None:
-    topK = 10
-else:
-    topK = int(opt.topK)
-    
-    jieba.analyse.set_idf_path('../extra_dict/idf.txt.big');
-    
-    nmf = decomposition.NMF(n_components=n_topic).fit(tfidf)
-print('done in %0.3fs.' % (time.time() - t0))
+            # Deleting model 'ProcessingIssue'
+        db.delete_table('sentry_processingissue')
