@@ -1,103 +1,105 @@
 
         
-            it 'allows to delete a user' do
-      visit admin_users_path
-      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
-      expect(page).to have_text('User 'bob' was deleted.')
-      expect(page).to have_no_text('bob@example.com')
+        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+    
+    Jekyll::PluginManager.require_from_bundler
+    
+            def handle_websockets_event(websocket)
+          websocket.onopen { |handshake| connect(websocket, handshake) }
+          websocket.onclose { disconnect(websocket) }
+          websocket.onmessage { |msg| print_message(msg) }
+          websocket.onerror { |error| log_error(error) }
+        end
+    
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
     end
     
-        it 'returns a label 'Disabled' if a given agent is disabled' do
-      stub(@agent).disabled? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Disabled'
+          def fallback_data
+        @fallback_data ||= {}
+      end
     end
-    
-          @agent1.update!(disabled: true)
-    
-      def update
-    response, status = process_push_request
-    render plain: response, status: status
-  end
-    
-        12.times do |i|
-      day     = i.weeks.ago.to_date
-      week_id = day.cweek
-      week    = Date.commercial(day.cwyear, week_id)
-    
-      def request_locale
-    preferred_locale || compatible_locale
-  end
-    
-      def reset_period_offset
-    api_throttle_data[:period] - request_time.to_i % api_throttle_data[:period]
   end
 end
 
     
-      included do
-    before_action :set_session_activity
-  end
+    (allow file-read-metadata)
+(allow file-read*
+  ; This is currenly only added because using `xcodebuild` to build a resource
+  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
+  ; needed, but for now it doesn’t seem like a real problem.
+  (literal '/')
+  (regex
+    ; TODO see if we can restrict this more, but it's going to be hard
+    #'^/Users/[^.]+/*'
+    ;#'^/Users/[^.]+/.netrc'
+    ;#'^/Users/[^.]+/.gemrc'
+    ;#'^/Users/[^.]+/.gem/*'
+    ;#'^/Users/[^.]+/Library/.*'
+    #'^/Library/*'
+    #'^/System/Library/*'
+    #'^/usr/lib/*'
+    #'^/usr/share/*'
+    #'^/private/*'
+    #'^/dev/*'
+    #'^<%= ruby_prefix %>'
+    #'^<%= pod_prefix %>'
+    #'^<%= xcode_app_path %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
     
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
-    
-          expect(page).to have_content('R200')
-      expect(page).to have_content('incomplete@example.com')
-    end
-    
-          # Order Form
-      expect(page).not_to have_css('.edit-item')
-      # Order Tabs
-      expect(page).not_to have_link('Details')
-      expect(page).not_to have_link('Customer')
-      expect(page).not_to have_link('Adjustments')
-      expect(page).not_to have_link('Payments')
-      expect(page).not_to have_link('Returns')
-    end
-    
-          within_row(1) { click_icon :split }
-      wait_for_ajax
-      targetted_select2 'LA', from: '#s2id_item_stock_location'
-      click_icon :'save-split'
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.shipments.first.id}')).to be_present
-    
-            def order
-          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
-          authorize! :update, @order, order_token
+          def main_sidebar_classes
+        if cookies['sidebar-minimized'] == 'true'
+          'col-3 col-md-2 sidebar'
+        else
+          'p-0 col-3 col-md-2 sidebar'
         end
+      end
+    
+        it 'does not display forbidden links' do
+      visit spree.edit_admin_order_path(order)
+    
+          within_row(2) { click_icon :split }
+      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
+      click_icon :save
+      wait_for_ajax
+      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
+    end
+  end
+end
+
+    
+              if Spree::Dependencies.cart_update_service.constantize.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+            def option_types_params
+          params[:product].fetch(:option_types, [])
+        end
+    
+                render_order(result)
+          end
