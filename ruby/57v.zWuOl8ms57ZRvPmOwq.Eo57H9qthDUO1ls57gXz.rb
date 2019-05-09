@@ -1,67 +1,78 @@
-          # Setup the options hash
-          options ||= {}
+
+        
+        module UnpackStrategy
+  class Air
+    include UnpackStrategy
     
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
-        end
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
     
-              hosts
-        end
-    
-              # Return the registry
-          data[:communicator]
-        end
-    
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
-        end
-    
-              return [main_args, sub_command, sub_args]
-        end
+          it 'should remove participation' do
+        delete :destroy, params: {post_id: post.id}
+        expect(alice.participations.where(:target_id => post.id)).not_to exist
+        expect(response.code).to eq('200')
       end
     end
-  end
-end
-
     
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
+          it 'it calls toggle_hidden_shareable' do
+        expect(@controller.current_user).to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
+        put :update, params: {id: 42, post_id: @status.id}, format: :js
+      end
     end
+    
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
+      end
+    end
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
-end
-
     
-    describe NotificationsController, :type => :controller do
-  before do
-    sign_in alice, scope: :user
-  end
+          def masked_token?(token)
+        token.length == TOKEN_LENGTH * 2
+      end
     
-    require_relative '../lib/bootstrap/environment'
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
     
-      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
+      it 'should ignore CSP3 no arg directives unless they are set to true' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :block_all_mixed_content => false, :disown_opener => 'false', :upgrade_insecure_requests => 'foo'
     
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
+      end
     
-              it 'fails when installing a non logstash plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
-            expect(command).not_to install_successfully
-          end
+      # puts '\n== Copying sample files =='
+  # unless File.exist?('config/database.yml')
+  #   cp 'config/database.yml.sample', 'config/database.yml'
+  # end
+    
+      # Store uploaded files on the local file system in a temporary directory
+  config.active_storage.service = :test
