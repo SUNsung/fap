@@ -1,70 +1,74 @@
 
         
-            context '(de)activating users' do
-      it 'does not show deactivation buttons for the current user' do
-        visit admin_users_path
-        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+        module Docs
+  class Filter < ::HTML::Pipeline::Filter
+    def css(*args)
+      doc.css(*args)
+    end
+    
+            true
       end
     
-      it 'renders the import form' do
-    visit new_scenario_imports_path
-    expect(page).to have_text('Import a Public Scenario')
-  end
+          INDEX = Set.new
     
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-            it 'kills no long active workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
-          mock.instance_of(HuginnScheduler).stop!
-          @agent_runner.send(:run_workers)
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
         end
-      end
     
-        it 'unregisters disabled SchedulerAgents' do
-      @scheduler.schedule_scheduler_agents
+            # Defines additional configuration keys to be available in the
+        # Vagrantfile. The configuration class should be returned by a
+        # block passed to this method. This is done to ensure that the class
+        # is lazy loaded, so if your class inherits from any classes that
+        # are specific to Vagrant 1.0, then the plugin can still be defined
+        # without breaking anything in future versions of Vagrant.
+        #
+        # @param [String] name Configuration key.
+        # @param [Boolean] upgrade_safe If this is true, then this configuration
+        #   key is safe to load during an upgrade, meaning that it depends
+        #   on NO Vagrant internal classes. Do _not_ set this to true unless
+        #   you really know what you're doing, since you can cause Vagrant
+        #   to crash (although Vagrant will output a user-friendly error
+        #   message if this were to happen).
+        def self.config(name=UNSET_VALUE, upgrade_safe=false, &block)
+          data[:config] ||= Registry.new
     
-        it 'should convert the 'escape' method correctly' do
-      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
-                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
-      )
-    end
+                    if provider_to_use && provider_to_use != active_provider
+                  # We found an active machine with a provider that doesn't
+                  # match the requested provider. Show an error.
+                  raise Errors::ActiveMachineWithDifferentProvider,
+                    name: active_name.to_s,
+                    active_provider: active_provider.to_s,
+                    requested_provider: provider_to_use.to_s
+                else
+                  # Use this provider and exit out of the loop. One of the
+                  # invariants [for now] is that there shouldn't be machines
+                  # with multiple providers.
+                  @logger.info('Active machine found with name #{active_name}. ' +
+                               'Using provider: #{active_provider}')
+                  provider_to_use = active_provider
+                  break
+                end
+              end
+            end
     
-      let :new_template do
-    {
-      'description' => '{{ hovertext }}',
-      'comment' => '{{ comment }}'
-    }
-  end
-    
-        it 'updates Agents' last_error_log_at when an error is logged' do
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 3, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at).to be_nil
-    
-        stub_request(:get, /trackings/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    
-        def fragment_url_string?(str)
-      str[0] == '#'
-    end
-    
-        def ==(other)
-      other.is_a?(self.class) && filters == other.filters
-    end
-    
-            css('h1:not(:first-child)').each do |node|
-          node.name = 'h2'
-        end unless at_css('h2')
+            # This returns all the registered host capabilities.
+        #
+        # @return [Hash]
+        def host_capabilities
+          results = Hash.new { |h, k| h[k] = Registry.new }
     
       #
   # Payload types were identified from xCAT-server source code (IPMI.pm)
@@ -78,42 +82,74 @@ end
   PAYLOAD_RAKP3 = 0x14
   PAYLOAD_RAKP4 = 0x15
     
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
+        data =
+      [0x00, 0x00, 0x00, 0x00].pack('C*') +
+      bmc_session_id +
+      console_random_id +
+      [
+        0x14, 0x00, 0x00,
+        username.length
+      ].pack('C*') +
+      username
+    
+            # Creates a TCP connection using Rex::Socket::Tcp
+        #
+        # @return [Rex::Socket::Tcp]
+        def create_tcp_connection
+          self.connection = Rex::Socket::Tcp.create(
+            'PeerHost'   => host,
+            'PeerPort'   => port.to_i,
+            'Context'    => context,
+            'Timeout'    => timeout
+          )
+        end
+    
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=end
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
           end
+        end
+        @sidebar
+      end
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
-            elems << etype_asn1
+        follow_redirect!
+    assert_equal '/I/C', last_request.fullpath
+    assert last_response.ok?
     
-          def button_link_to(text, url, html_options = {})
-        if html_options[:method] &&
-            !html_options[:method].to_s.casecmp('get').zero? &&
-            !html_options[:remote]
-          form_tag(url, method: html_options.delete(:method), class: 'd-inline') do
-            button(text, html_options.delete(:icon), nil, html_options)
-          end
-        else
-          if html_options['data-update'].nil? && html_options[:remote]
-            object_name, action = url.split('/')[-2..-1]
-            html_options['data-update'] = [action, object_name.singularize].join('_')
-          end
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
     
-    describe 'Orders Listing', type: :feature do
-  stub_authorization!
+    exec         = {}
+options      = {
+  :port => 4567,
+  :bind => '0.0.0.0',
+}
+wiki_options = {
+  :live_preview  => false,
+  :allow_uploads => false,
+  :allow_editing => true,
+}
     
-    namespace :gem do
-  def version
-    require 'spree/core/version'
-    Spree.version
-  end
-    
-                render_order(result)
-          end
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
