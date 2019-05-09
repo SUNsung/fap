@@ -1,65 +1,83 @@
 
         
-            def __call__(self, r):
-        # Initialize per-thread state, if needed
-        self.init_per_thread_state()
-        # If we have a saved nonce, skip the 401
-        if self._thread_local.last_nonce:
-            r.headers['Authorization'] = self.build_digest_header(r.method, r.url)
-        try:
-            self._thread_local.pos = r.body.tell()
-        except AttributeError:
-            # In the case of HTTPDigestAuth being reused and the body of
-            # the previous request was a file-like object, pos has the
-            # file position of the previous body. Ensure it's set to
-            # None.
-            self._thread_local.pos = None
-        r.register_hook('response', self.handle_401)
-        r.register_hook('response', self.handle_redirect)
-        self._thread_local.num_401_calls = 1
+        
+class ProxyError(ConnectionError):
+    '''A proxy error occurred.'''
     
-        def list_domains(self):
-        '''Utility method to list all the domains in the jar.'''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain not in domains:
-                domains.append(cookie.domain)
-        return domains
-    
-    import idna
-import urllib3
-import chardet
+        def __delitem__(self, key):
+        del self._store[key.lower()]
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-            try:
-            length = super_len(data)
-        except (TypeError, AttributeError, UnsupportedOperation):
-            length = None
-    
-        if 'charset' in params:
-        return params['charset'].strip(''\'')
-    
-            self.assertEqual(jws, JWS.from_json(jws.to_json()))
-    
-            :raises .errors.PluginError: If there has been an error in parsing with
-            the specified lens.
+def prepare_url(value):
+    # Issue #1483: Make sure the URL always has a trailing slash
+    httpbin_url = value.url.rstrip('/') + '/'
     
     
-UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
-'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
+    builtin_str = str
+    bytes = str
+    str = unicode
+    basestring = basestring
+    numeric_types = (int, long, float)
+    integer_types = (int, long)
     
-    ========================================  =====================================
-``--dns-cloudflare-credentials``          Cloudflare credentials_ INI file.
-                                          (Required)
-``--dns-cloudflare-propagation-seconds``  The number of seconds to wait for DNS
-                                          to propagate before asking the ACME
-                                          server to verify the DNS record.
-                                          (Default: 10)
-========================================  =====================================
+        def test_server_finishes_when_no_connections(self):
+        '''the server thread exits even if there are no connections'''
+        server = Server.basic_response_server()
+        with server:
+            pass
+    
+        def test_invalid(self):
+        with pytest.raises(ValueError):
+            to_key_val_list('string')
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      with CurrentWorkingDirectory( unicode_dir ):
+    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
+      with MockCompletionRequest( ServerResponse ):
+        ycm.SendCompletionRequest()
+        ok_( ycm.CompletionRequestReady() )
+        assert_that(
+          ycm.GetCompletionResponse(),
+          has_entries( {
+            'completions': empty(),
+            'completion_start_column': 1
+          } )
+        )
+    
+    def _worker(executor_reference, work_queue):
+    try:
+        while True:
+            work_item = work_queue.get(block=True)
+            if work_item is not None:
+                work_item.run()
+                continue
+            executor = executor_reference()
+            # Exit if:
+            #   - The interpreter is shutting down OR
+            #   - The executor that owns the worker has been collected OR
+            #   - The executor that owns the worker has been shutdown.
+            if _shutdown or executor is None or executor._shutdown:
+                # Notice other workers
+                work_queue.put(None)
+                return
+            del executor
+    except BaseException:
+        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    
+        def remove(self, val):
+        if val in self.idxs:
+            idx, last = self.idxs[val], self.nums[-1]
+            self.nums[idx], self.idxs[last] = last, idx
+            self.nums.pop()
+            self.idxs.pop(val, 0)
+            return True
+        return False
+    
+    
+def is_prime(n, k):
