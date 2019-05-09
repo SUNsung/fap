@@ -1,270 +1,243 @@
 
         
-        IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
-                           int /* object id */,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
+          desired_output_for_decode = 'abcdefghIJ';
+  expected = string('\x0A\x0', 2);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
     
-    void GetRenderProcessHosts(std::set<RenderProcessHost*>& rphs) {
-  RenderProcessHost* render_process_host = NULL;
-  std::vector<Shell*> windows = Shell::windows();
-  for (size_t i = 0; i < windows.size(); ++i) {
-    if (!windows[i]->is_devtools()) {
-      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
-      rphs.insert(render_process_host);
+    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
+    const unittest::TestArenaMapLite& message) {
+  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_BAZ_LITE>(
+      message);
+}
+    
+    TEST(StatusOr, TestPointerStatus) {
+  const int kI = 0;
+  StatusOr<const int*> good(&kI);
+  EXPECT_TRUE(good.ok());
+  StatusOr<const int*> bad(Status::CANCELLED);
+  EXPECT_EQ(Status::CANCELLED, bad.status());
+}
+    
+    
+    {  typedef integral_constant<int, 1> one_type;
+  EXPECT_EQ(1, one_type::value);
+}
+    
+    int main(int argc, const char** argv) {
+  FileInputStream fin(STDIN_FILENO);
+  GzipInputStream in(&fin);
     }
+    
+    using google::protobuf::util::TimeUtil;
+    
+      virtual void PrintDefaultValueString(std::ostream &os) const {  // NOLINT(*)
+    std::string s;
+    caffe::NetParameter np;
+    // Avoid wasting time making a copy -- just push in out default object's pointer
+    np.mutable_layer()->AddAllocated(const_cast<::caffe::LayerParameter *>(&default_value_));
+    google::protobuf::TextFormat::PrintToString(np, &s);
+    np.mutable_layer()->ReleaseLast();
+    os << '\'' << s << '\'';
   }
-}
     
-      // Quit the whole app.
-  static void Quit(content::RenderProcessHost* rph = NULL);
+    #if MXNET_USE_OPENCV
+#include <opencv2/opencv.hpp>
+#include <vector>  // NOLINT(*)
+#include <utility> // NOLINT(*)
+#include <string> // NOLINT(*)
     
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
-    }
-    
-    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    if (enable_shortcut_){
-      focus_manager->RegisterAccelerator(
-        accelerator_,
-        ui::AcceleratorManager::kHighPriority,
-        this);
-    }
-    if (submenu_ != NULL){
-      submenu_->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    class NwAppCloseAllWindowsFunction : public UIThreadExtensionFunction {
- public:
-  NwAppCloseAllWindowsFunction() {}
-    }
-    
-          // strip off data uri header if raw is set
-      if (!(data.raw.get() && *(data.raw))) {
-        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kPNGDataUriPrefix));
-        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kJPEGDataUriPrefix));
-        } else {
-          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
-          return false;
-        }
-      }
-    
-    
-    {    *context = (cvhalFilter2D*)(ctx);
-    return CV_HAL_ERROR_OK;
-}
-inline int TEGRA_MORPHFREE(cvhalFilter2D *context)
-{
-    if(context)
-    {
-        delete (MorphCtx*)context;
-        return CV_HAL_ERROR_OK;
-    }
-    else
-    {
-        return CV_HAL_ERROR_UNKNOWN;
-    }
-}
-#define TEGRA_MORPHIMPL(context, src_data, src_step, dst_data, dst_step, width, height, src_full_width, src_full_height, src_roi_x, src_roi_y, dst_full_width, dst_full_height, dst_roi_x, dst_roi_y) \
-( \
-    (void)dst_full_width, (void)dst_full_height, (void)dst_roi_x, (void)dst_roi_y, \
-    context && CAROTENE_NS::isSupportedConfiguration() ? \
-        ((MorphCtx*)context)->operation == CV_HAL_MORPH_ERODE ? \
-        CAROTENE_NS::erode(CAROTENE_NS::Size2D(width, height), ((MorphCtx*)context)->channels, \
-                           src_data, src_step, dst_data, dst_step, \
-                           ((MorphCtx*)context)->ksize, ((MorphCtx*)context)->anchor_x, ((MorphCtx*)context)->anchor_y, \
-                           ((MorphCtx*)context)->border, ((MorphCtx*)context)->border, ((MorphCtx*)context)->borderValues, \
-                           CAROTENE_NS::Margin(src_roi_x, src_full_width - width - src_roi_x, src_roi_y, src_full_height - height - src_roi_y)), \
-        CV_HAL_ERROR_OK : \
-        ((MorphCtx*)context)->operation == CV_HAL_MORPH_DILATE ? \
-        CAROTENE_NS::dilate(CAROTENE_NS::Size2D(width, height), ((MorphCtx*)context)->channels, \
-                            src_data, src_step, dst_data, dst_step, \
-                            ((MorphCtx*)context)->ksize, ((MorphCtx*)context)->anchor_x, ((MorphCtx*)context)->anchor_y, \
-                            ((MorphCtx*)context)->border, ((MorphCtx*)context)->border, ((MorphCtx*)context)->borderValues, \
-                            CAROTENE_NS::Margin(src_roi_x, src_full_width - width - src_roi_x, src_roi_y, src_full_height - height - src_roi_y)), \
-        CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-        void thresholdBinary(const Size2D &size,
-                         const s16 *srcBase, ptrdiff_t srcStride,
-                         s16 *dstBase, ptrdiff_t dstStride,
-                         s16 threshold, s16 value);
-    
-            if(cn > 1)
-        {
-            for(size_t j = 0, jn = 0; j < size.width; ++j, jn += cn)
-            {
-                size_t maxIdx = jn;
-                for(s32 k = 1; k < cn; ++k)
-                    if(_norm[jn + k] > _norm[maxIdx]) maxIdx = jn + k;
-                _norm[j] = _norm[maxIdx];
-                _dx[j] = _dx[maxIdx];
-                _dy[j] = _dy[maxIdx];
-            }
-        }
-    
-            vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        float32x4_t vline1Shifted_f32 = vaddq_f32(vline1_f32, vshift);
-        float32x4_t vline2Shifted_f32 = vaddq_f32(vline2_f32, vshift);
-        uint32x4_t vline1_u32 = vcvtq_u32_f32(vline1Shifted_f32);
-        uint32x4_t vline2_u32 = vcvtq_u32_f32(vline2Shifted_f32);
-        uint32x4_t vline1Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline2_f32));
-        uint32x4_t vline2Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline1Shifted_f32));
-        vline1Mask = vshrq_n_u32(vline1Mask, 16);
-        vline2Mask = vshrq_n_u32(vline2Mask, 16);
-        vline1_u32 = vqsubq_u32(vline1_u32, vline1Mask);
-        vline2_u32 = vqsubq_u32(vline2_u32, vline2Mask);
-        uint16x4_t vRes1 = vqrshrn_n_u32(vline1_u32, 16);
-        uint16x4_t vRes2 = vqrshrn_n_u32(vline2_u32, 16);
-        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
-    
-    inline float32x2_t vrsqrt_f32(float32x2_t val)
-{
-    float32x2_t e = vrsqrte_f32(val);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    return e;
-}
-    
-    #ifdef USE_OPENCV
-  /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Mat.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+      /*!
+   * \brief sets two bit gradient compression
+   * \param threshold float value used for thresholding gradients
    */
-  void Transform(const vector<cv::Mat> & mat_vector,
-                Blob<Dtype>* transformed_blob);
+  void SetTwoBitCompression(const float threshold);
     
-    #include <vector>
+    template<typename xpu>
+void NDArrayOp<xpu>::Backward(const OpContext &ctx,
+                    const std::vector<TBlob> &out_grad,
+                    const std::vector<TBlob> &in_data,
+                    const std::vector<TBlob> &out_data,
+                    const std::vector<OpReqType> &req,
+                    const std::vector<TBlob> &in_grad,
+                    const std::vector<TBlob> &aux_args) {
+  using namespace mshadow;
+  Context ndctx = get_ctx();
+  std::vector<void*> ptrs;
+  std::vector<Engine::VarHandle> ndvar;
+  std::vector<int> tags;
+  for (auto& i : req) CHECK_NE(i, kAddTo);
+    }
     
+    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
+.describe('Apply a sparse regularization to the output a sigmoid activation function.')
+.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
+.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
     
-    {}  // namespace caffe
+            friend bool operator==(Rational const& lhs, Rational const& rhs);
+        friend bool operator!=(Rational const& lhs, Rational const& rhs);
+        friend bool operator<(Rational const& lhs, Rational const& rhs);
+        friend bool operator>(Rational const& lhs, Rational const& rhs);
+        friend bool operator<=(Rational const& lhs, Rational const& rhs);
+        friend bool operator>=(Rational const& lhs, Rational const& rhs);
+    
+    Rational RationalMath::Frac(Rational const& rat)
+{
+    PRAT prat = rat.ToPRAT();
+    try
+    {
+        fracrat(&prat, RATIONAL_BASE, RATIONAL_PRECISION);
+    }
+    catch (uint32_t error)
+    {
+        destroyrat(prat);
+        throw(error);
+    }
+    }
+    
+        Rational Exp(Rational const& rat);
+    Rational Log(Rational const& rat);
+    Rational Log10(Rational const& rat);
+    
+        Rational operator<<(Rational lhs, Rational const& rhs)
+    {
+        lhs <<= rhs;
+        return lhs;
+    }
+    
+        case IDC_MPLUS:
+    {
+        /* MPLUS adds m_currentVal to immediate memory and kills the 'mem'   */
+        /* indicator if the result is zero.                           */
+        Rational result = *m_memoryValue + m_currentVal;
+        m_memoryValue = make_unique<Rational>(TruncateNumForIntMath(result)); // Memory should follow the current int mode
+    }
+    
+    #define SMALL_ENOUGH_RAT(a, precision) (zernum((a)->pp) || ((((a)->pq->cdigit + (a)->pq->exp) - ((a)->pp->cdigit + (a)->pp->exp) - 1) * g_ratio > precision))
+    
+    /**
+ * Factory method
+ */
+static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
+                                                   Transliterator::Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
+    return new RemoveTransliterator();
+}
+    
+    UBool
+FixedSortKeyByteSink::Resize(int32_t /*appendCapacity*/, int32_t /*length*/) {
+    return FALSE;
+}
+    
+    UnicodeString &ScientificNumberFormatter::format(
+        const Formattable &number,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    UnicodeString original;
+    FieldPositionIterator fpi;
+    fDecimalFormat->format(number, original, &fpi, status);
+    return fStyle->format(
+            original,
+            fpi,
+            fPreExponent,
+            *fStaticSets,
+            appendTo,
+            status);
+}
+    
+    #ifndef __SCRIPTSET_H__
+#define __SCRIPTSET_H__
+    
+    // public get and set methods ----------------------------------------
+    
+      void BeforeFirst() override {
+    parser_->BeforeFirst();
+  }
     
     
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
-};
-}  // namespace caffe
-    
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
-    
-    namespace mxnet {
-namespace exec {
-    }
-    }
-    
-        if (param_.mean_r > 0.0f || param_.mean_g > 0.0f ||
-        param_.mean_b > 0.0f || param_.mean_a > 0.0f) {
-      // subtract mean per channel
-      data[0] -= param_.mean_r;
-      if (data.shape_[0] >= 3) {
-        data[1] -= param_.mean_g;
-        data[2] -= param_.mean_b;
+    {
+    {      // Test write Symbol
+      std::vector<unsigned char> buffer2(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+      for (int i = 0; i < input.size(); i++) {
+        cbw.WriteSymbol(buffer2.data(), input[i], i);
       }
-      if (data.shape_[0] == 4) {
-        data[3] -= param_.mean_a;
+      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
+      std::vector<int> output2(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output2[i] = ci2[i];
       }
-    } else if (!meanfile_ready_ || param_.mean_img.length() == 0) {
-      // do not subtract anything
-    } else {
-      CHECK(meanfile_ready_);
-      data -= meanimg_;
+      ASSERT_TRUE(input == output2);
     }
-    
-    
-    {  // sorted position of constant arguments
-  std::vector<int> const_loc;
-  for (int i = 0; i < num_const; ++i) {
-    const_loc.push_back(wrap_args[i + 3].operator int());
   }
-  std::sort(const_loc.begin(), const_loc.end());
-  // wrapped function
-  // This is the function that called by the user.
-  auto wrapped = [f, fset_stream, const_loc](TVMArgs args, TVMRetValue* rv) {
-    std::shared_ptr<TVMFunctor> func =
-      std::make_shared<TVMFunctor>(f, fset_stream);
-    std::vector<Engine::VarHandle> const_vars, mutate_vars;
-    func->Init(args, const_loc, &const_vars, &mutate_vars);
-    Engine *engine = Engine::Get();
-    engine->DeduplicateVarHandle(&const_vars, &mutate_vars);
-    engine->PushSync([func](RunContext ctx) {
-        func->Run(ctx);
-      }, func->ctx(), const_vars, mutate_vars);
-  };
-  *wrap_rv = PackedFunc(wrapped);
 }
     
-    Operator* NativeOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
-}
+    namespace xgboost {
+/*!
+ * \brief interface of gradient boosting model.
+ */
+class GradientBooster {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~GradientBooster() = default;
+  /*!
+   * \brief set configuration from pair iterators.
+   * \param begin The beginning iterator.
+   * \param end The end iterator.
+   * \tparam PairIter iterator<std::pair<std::string, std::string> >
+   */
+  template<typename PairIter>
+  inline void Configure(PairIter begin, PairIter end);
+  /*!
+   * \brief Set the configuration of gradient boosting.
+   *  User must call configure once before InitModel and Training.
+   *
+   * \param cfg configurations on both training and model parameters.
+   */
+  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
+  /*!
+   * \brief load model from stream
+   * \param fi input stream.
+   */
+  virtual void Load(dmlc::Stream* fi) = 0;
+  /*!
+   * \brief save model to stream.
+   * \param fo output stream
+   */
+  virtual void Save(dmlc::Stream* fo) const = 0;
+  /*!
+   * \brief whether the model allow lazy checkpoint
+   * return true if model is only updated in DoBoost
+   * after all Allreduce calls
+   */
+  virtual bool AllowLazyCheckPoint() const {
+    return false;
+  }
+  /*!
+   * \brief perform update to the model(boosting)
+   * \param p_fmat feature matrix that provide access to features
+   * \param in_gpair address of the gradient pair statistics of the data
+   * \param obj The objective function, optional, can be nullptr when use customized version
+   * the booster may change content of gpair
+   */
+  virtual void DoBoost(DMatrix* p_fmat,
+                       HostDeviceVector<GradientPair>* in_gpair,
+                       ObjFunction* obj = nullptr) = 0;
+    }
+    }
     
-    
-    {  CHECK(param_.pinfo->backward(ptrs.size(), ptrs.data(), tags.data(), param_.pinfo->p_backward));
-  Engine::Get()->PushAsync(
-      [ndcpy, ctx](RunContext rctx, Engine::CallbackOnComplete on_complete){
-        ctx.async_on_complete();
-        on_complete();
-      }, ndctx, ndvar, {}, FnProperty::kNormal, 0, 'NDArrayOpBackward');
+    void SimpleCSRSource::CopyFrom(DMatrix* src) {
+  this->Clear();
+  this->info = src->Info();
+  for (const auto &batch : src->GetRowBatches()) {
+    page_.Push(batch);
+  }
 }
