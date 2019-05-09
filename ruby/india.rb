@@ -1,62 +1,65 @@
 
         
-        Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-        def print_config_variables
-      ['--print-config-variables', '-p',
-       'Display the defined config variables before starting the deployment tasks.',
-       lambda do |_value|
-         Configuration.env.set(:print_config_variables, true)
-       end]
+            it 'shell-escapes environment variable values' do
+      message = 'A message'
+      path = '/usr/my local/bin'
+      command = command_from_args({ 'PATH' => path }, 'git', 'commit', '-m', message)
+      expect(command).to eq('PATH=#{path.shellescape} git commit -m #{message.shellescape}')
     end
-  end
+    
+    describe 'monkey patch of Array.shelljoin (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+    end
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
 end
-
     
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
+      def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
   end
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
+  end
     
-        # Same as to_s
-    def inspect
-      to_s
-    end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+        # Finds a machine where the UUID is prefixed by the given string.
+    #
+    # @return [Hash]
+    def find_by_prefix(prefix)
+      @machines.each do |uuid, data|
+        return data.merge('id' => uuid) if uuid.start_with?(prefix)
       end
-    end
     
-        # Returns the Rails.env constant.
-    def rails_env attachment, style_name
-      Rails.env
-    end
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
+          end
+        end
+    
+    module Vagrant
+  module Plugin
+    module V1
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
