@@ -1,33 +1,21 @@
 
         
-                When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+            def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
     
+            Emit key value pairs of the form:
     
-class User(object):
-    
-        def __init__(self, template_categories_to_budget_map):
-        self.categories_to_budget_map = template_categories_to_budget_map
+            (foo, 2), p1
+        (bar, 3), p1
+        (foo, 3), p2
+        (bar, 10), p3
+        (foo, 1), p4
     
         def get(self, key):
         hash_index = self._hash_function(key)
@@ -36,114 +24,108 @@ class User(object):
                 return item.value
         raise KeyError('Key not found')
     
-            is_not_importable = False
-        is_namespace = False
-        tests = []
-        if os.path.isdir(os.path.abspath(start_dir)):
-            start_dir = os.path.abspath(start_dir)
-            if start_dir != top_level_dir:
-                is_not_importable = not os.path.isfile(os.path.join(start_dir, '__init__.py'))
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = os.path.join('datasets', 'fashion-mnist')
+    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
+    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
+             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+    
+    
+def test_reuters():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = reuters.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        assert len(x_train) + len(x_test) == 11228
+        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = reuters.get_word_index()
+        assert isinstance(word_index, dict)
+    
+    
+def get_data():
+    (x_train, y_train), _ = test_utils.get_test_data(
+        num_train=batch_size,
+        num_test=batch_size,
+        input_shape=(data_dim,),
+        classification=True,
+        num_classes=num_classes)
+    y_train = np_utils.to_categorical(y_train, num_classes)
+    
+    import numpy as np
+import warnings
+from ..engine.base_layer import InputSpec, Layer
+from ..utils import conv_utils
+from ..legacy import interfaces
+from ..legacy.layers import Recurrent, ConvRecurrent2D
+from .recurrent import RNN
+from ..utils.generic_utils import has_arg
+from ..utils.generic_utils import to_list
+from ..utils.generic_utils import transpose_shape
+    
+    train_model.fit(epochs=epochs,
+                steps_per_epoch=steps_per_epoch)
+    
+    __all__ = ['__version__', 'version_info', 'twisted_version',
+           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
+    
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.linkextractors import LinkExtractor
+    
+            self.crawler_process.crawl(spidercls, **opts.spargs)
+        self.crawler_process.start()
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
         else:
-            # support for discovery from dotted module names
-            try:
-                __import__(start_dir)
-            except ImportError:
-                is_not_importable = True
-            else:
-                the_module = sys.modules[start_dir]
-                top_part = start_dir.split('.')[0]
-                try:
-                    start_dir = os.path.abspath(
-                       os.path.dirname((the_module.__file__)))
-                except AttributeError:
-                    # look for namespace packages
-                    try:
-                        spec = the_module.__spec__
-                    except AttributeError:
-                        spec = None
+            print('Scrapy %s' % scrapy.__version__)
     
-            class Foo(unittest.TestCase):
-            def test_1(self): pass
-            def test_2(self): pass
-    
-        def testPickle(self):
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
-            with self.assertRaises(TypeError):
-                pickle.dumps(BZ2Compressor(), proto)
-    
-    # Add the html version.  This converts the message into a multipart/alternative
-# container, with the original text message as the first part and the new html
-# message as the second part.
-asparagus_cid = make_msgid()
-msg.add_alternative('''\
-<html>
-  <head></head>
-  <body>
-    <p>Salut!</p>
-    <p>Cela ressemble à un excellent
-        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
-            recipie
-        </a> déjeuner.
-    </p>
-    <img src='cid:{asparagus_cid}' />
-  </body>
-</html>
-'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
-# note that we needed to peel the <> off the msgid for use in the html.
-    
-        print('-' * 20)
-    
-        # Create queues
-    task_queue = Queue()
-    done_queue = Queue()
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+            def __init__(self, method=SSL.SSLv23_METHOD):
+            self.method = method
     
     
-def MockAsyncServerResponseException( exception ):
-  '''Return a fake future object that is complete, but raises an exception.
-  Suitable for mocking a response future within a client request. For example:
+class PackException(Exception):
+    pass
     
-    d = {'name': None, 'description': None, 'short_description': None}
+    import numpy as np
+import pytest
     
-        filepath = os.path.join(_dir, f)
-    with open(filepath) as file:
-        try:
-            _ = json.loads(file.read())
-            return True
-        except:
-            sys.stderr.write(traceback.format_exc())            
-            assert False, u'校验(%s)失败' % f
-    
-    ICONS_PACKAGE = 'A File Icon'
-PKGCTRL_SETTINGS = 'Package Control.sublime-settings'
+        def __init__(self, context=None):
+        self.context = context or decimal.getcontext()
     
     
-def get_ui_theme():
-  return sublime.load_settings(PREFERENCES).get('theme', '')
+class NullableForeignKeySourceSerializer(serializers.ModelSerializer):
+    target = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=ForeignKeyTarget.objects.all(),
+        allow_null=True
+    )
     
-    .mt-config-changes ul li, .mt-config-changes p {
-  {{'.foreground'|css}}
-}
+        def test_nested_serialize_empty(self):
+        expected_data = {
+            'nested': {
+                'one': None,
+                'two': None
+            }
+        }
+        serializer = self.Serializer()
+        assert serializer.data == expected_data
     
-        def display_list(self, themes):
-        self.themes = themes
-        self.initial_theme = get_theme(PLAIN_NOTES)
+            request = factory.get('/', content_type='application/json')
+        response = view(request)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == self.expected_response_data
     
-            try:
-            import pygments
-            info['pygments_version'] = format_version(pygments, '__version__')
-        except Exception:
-            info['pygments_version'] = 'Version could not be acquired!'
+        value = repr(value)
