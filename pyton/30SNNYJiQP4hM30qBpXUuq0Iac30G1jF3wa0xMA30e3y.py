@@ -1,134 +1,78 @@
 
         
-        
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
+            def handle_budget_notifications(self, key, total):
+        '''Call notification API if nearing or exceeded budget.'''
+        ...
     
-            :param req: The :class:`PreparedRequest <PreparedRequest>` used to generate the response.
-        :param resp: The urllib3 response object.
-        :rtype: requests.Response
-        '''
-        response = Response()
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-            #: A list of :class:`Response <Response>` objects from
-        #: the history of the Request. Any redirect responses will end
-        #: up here. The list is sorted from the oldest to the most recent request.
-        self.history = []
+        def __init__(self, url, contents, child_urls):
+        self.url = url
+        self.contents = contents
+        self.child_urls = child_urls
+        self.signature = self.create_signature()
     
-        def appid_exist(self, appids):
-        for appid in appids.split('|'):
-            if appid == '':
-                continue
-            if appid in self.config.GAE_APPIDS:
-                return True
-        return False
+    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
     
-                    try:
-                    ip = line.split()[0]
-                    return ip
-                except:
-                    continue
+        # TASK: Predict the outcome on the testing set and store it in a variable
+    # named y_predicted
     
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
+    # Anisotropicly distributed data
+transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+X_aniso = np.dot(X, transformation)
+y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
+    
+    from sklearn.cluster import MiniBatchKMeans, KMeans
+from sklearn.metrics.pairwise import pairwise_distances_argmin
+from sklearn.datasets.samples_generator import make_blobs
     
     
-def gae_application(environ, start_response):
-    cookie = environ.get('HTTP_COOKIE', '')
-    options = environ.get('HTTP_X_GOA_OPTIONS', '')
-    if environ['REQUEST_METHOD'] == 'GET' and not cookie:
-        if '204' in environ['QUERY_STRING']:
-            start_response('204 No Content', [])
-            yield ''
-        else:
-            timestamp = long(os.environ['CURRENT_VERSION_ID'].split('.')[1])/2**28
-            ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(timestamp+8*3600))
-            html = u'GoAgent Python Server %s \u5df2\u7ecf\u5728\u5de5\u4f5c\u4e86\uff0c\u90e8\u7f72\u65f6\u95f4 %s\n' % (__version__, ctime)
-            start_response('200 OK', [('Content-Type', 'text/plain; charset=utf-8')])
-            yield html.encode('utf8')
-        raise StopIteration
+class Resource(jose.Field):
+    '''Resource MITM field.'''
     
-    import mock
-    
-            '''
-        super(AugeasConfigurator, self).rollback_checkpoints(rollback)
-        self.aug.load()
-
+    # -- Options for LaTeX output ---------------------------------------------
     
     latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    #
+    # 'papersize': 'letterpaper',
     }
     
-    
-# -- General configuration ------------------------------------------------
-    
-    default_role = 'py:obj'
-    
-        platforms = 'any',
-    zip_safe = True,
-    include_package_data = True,
-    
-    site_info = 'baomihua.com'
-download = baomihua_download
-download_playlist = playlist_not_supported('baomihua')
+    '''
 
     
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
     
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
+            if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return detect_faces_in_image(file)
     
-        if 'viewVCourse' in url:
-        playlist = public_course_playlist(url)
-        for video in playlist:
-            icourses_download(video[0], output_dir=output_dir, **kwargs)
-        return
-    elif 'coursestatic' in url:
-        course_page = get_content(url)
-        page_navi_vars = re.search(page_type_patt, course_page)
     
-    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-# old pattern /uuid.shtml
-# now it could be #uuid
-    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
-    if id:
-        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
     
-        def encode(self, arg):
-        return self.__unicode__().encode(arg)
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
     
-            for y in obs_states:
-            prob, state = max((V[t - 1][y0] + trans_p[y0].get(y, MIN_INF) +
-                               emit_p[y].get(obs[t], MIN_FLOAT), y0) for y0 in prev_states)
-            V[t][y] = prob
-            mem_path[t][y] = state
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-        def testDefaultCut_NOHMM(self):
-        for content in test_contents:
-            result = jieba.cut(content,HMM=False)
-            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testDefaultCut_NOHMM', file=sys.stderr)
-    
-    jieba.enable_parallel()
+    # Find all the faces and face encodings in the unknown image
+face_locations = face_recognition.face_locations(unknown_image)
+face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
