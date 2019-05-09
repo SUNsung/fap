@@ -1,106 +1,107 @@
 
         
-                static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
+        namespace caffe {
+    }
     
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {}  // namespace caffe
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/sigmoid_layer.hpp'
+    
+    AuthPropertyIterator::~AuthPropertyIterator() {}
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
+ public:
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
+    }
+    
+    // These helper functions return the SpanContext and Span, respectively
+// associated with the census_context* stored by grpc. The user will need to
+// call this for manual propagation of tracing data.
+::opencensus::trace::SpanContext SpanContextFromCensusContext(
+    const census_context* ctxt);
+::opencensus::trace::Span SpanFromCensusContext(const census_context* ctxt);
+    
+    
+    {}  // namespace grpc
+    
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+    #endif  // GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
 
     
-    int main(int argc, char** argv)
-{
-    if (argc < 3)
-    {
-        printf('Syntax: %s [-base85] [-nocompress] <inputfile> <symbolname>\n', argv[0]);
-        return 0;
-    }
-    }
-    
-    namespace ImGuiFreeType
-{
-    // Hinting greatly impacts visuals (and glyph sizes).
-    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
-    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
-    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
-    }
-    
-    	VkSemaphore& image_acquired_semaphore  = wd->Frames[wd->FrameIndex].ImageAcquiredSemaphore;
-	err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
-	check_vk_result(err);
-    
-        // First check if only one format, VK_FORMAT_UNDEFINED, is available, which would imply that any format is available
-    if (avail_count == 1)
-    {
-        if (avail_format[0].format == VK_FORMAT_UNDEFINED)
-        {
-            VkSurfaceFormatKHR ret;
-            ret.format = request_formats[0];
-            ret.colorSpace = request_color_space;
-            return ret;
-        }
-        else
-        {
-            // No point in searching another format
-            return avail_format[0];
-        }
-    }
-    else
-    {
-        // Request several formats, the first found will be used
-        for (int request_i = 0; request_i < request_formats_count; request_i++)
-            for (uint32_t avail_i = 0; avail_i < avail_count; avail_i++)
-                if (avail_format[avail_i].format == request_formats[request_i] && avail_format[avail_i].colorSpace == request_color_space)
-                    return avail_format[avail_i];
-    }
-    
-    // Allegro
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#ifdef _WIN32
-#include <allegro5/allegro_windows.h>
-#endif
-#define ALLEGRO_HAS_CLIPBOARD   (ALLEGRO_VERSION_INT >= ((5 << 24) | (1 << 16) | (12 << 8)))    // Clipboard only supported from Allegro 5.1.12
-    
-    
-    {} // namespace aria2
-
-    
-    void DHTRoutingTable::getBuckets(
-    std::vector<std::shared_ptr<DHTBucket>>& buckets) const
-{
-  dht::enumerateBucket(buckets, root_.get());
+    void Timepoint2Timespec(const system_clock::time_point& from,
+                        gpr_timespec* to) {
+  system_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == system_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
+    return;
+  }
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
 }
     
+    #ifndef GUETZLI_ENTROPY_ENCODE_H_
+#define GUETZLI_ENTROPY_ENCODE_H_
     
-    {  void deserialize(const std::string& filename);
-};
+    ///////////////////////////////////////////////////////////////////////////////
+// Constants for DCT horizontal pass
     
-      ~DHTRoutingTableSerializer();
-    
-    class DHTSetup {
-public:
-  DHTSetup();
+    namespace guetzli {
     }
     
-      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
-    
-    public:
-  DHTTaskQueueImpl();
-    
-    
-    {} // namespace aria2
-
-    
-      unsigned char secret_[2][SECRET_SIZE];
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
 }
