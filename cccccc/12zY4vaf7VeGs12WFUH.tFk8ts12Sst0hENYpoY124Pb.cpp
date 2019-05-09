@@ -1,216 +1,135 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
+        namespace atom {
     }
     
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-    
-    {}  // namespace
-    
-      remover->AddObserver(this);
-  remover->RemoveAndReply(base::Time(), base::Time::Max(),
-                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
-                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
-                          this);
-  // BrowsingDataRemover deletes itself.
-  base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
-};
-    
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-        UText inputText = UTEXT_INITIALIZER;
-    utext_openConstUnicodeString(&inputText, &input, &status);
-    init2(&inputText, status);
-    utext_close(&inputText);
-    
-        /**
-     * Constructs a transliterator.
-     */
-    RemoveTransliterator();
-    
-    void SearchIterator::setMatchNotFound() 
-{
-    setMatchStart(USEARCH_DONE);
-    setMatchLength(0);
-    UErrorCode status = U_ZERO_ERROR;
-    // by default no errors should be returned here since offsets are within 
-    // range.
-    if (m_search_->isForwardSearching) {
-        setOffset(m_search_->textLength, status);
-    }
-    else {
-        setOffset(0, status);
-    }
+    namespace base {
+class SupportsUserData;
 }
     
-    U_NAMESPACE_END
+    AboutProtocolHandler::~AboutProtocolHandler() {}
     
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
-public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
-};
-    
-    #ifndef __SHARED_NUMBERFORMAT_H__
-#define __SHARED_NUMBERFORMAT_H__
-    
-        /**
-     * The text to be matched.
-     */
-    UnicodeString pattern;
-    
-      virtual const std::string& getType() const CXX11_OVERRIDE;
-    
-      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
-                        const unsigned char* key) const;
-    
-    class DHTTask {
-public:
-  virtual ~DHTTask() = default;
-    }
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-      Type type_;
-    
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
-}
-    
-    bool Executor::keepAliveAcquire() {
-  return false;
-}
-    
-    
-    {} // namespace folly
+    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
 
     
-    namespace folly {
-    }
+    #include 'atom/browser/osr/osr_view_proxy.h'
     
     
-    { private:
-  const KeepAlive<> executor_;
-};
-    
-      unsigned int get_local_count(const PackedPtr& p) const {
-    return p.extra() & ~ALIASED_PTR;
-  }
-    
-    void AtFork::unregisterHandler(void* object) {
-  auto& list = AtForkList::instance();
-  std::lock_guard<std::mutex> lg(list.tasksLock);
-  for (auto it = list.tasks.begin(); it != list.tasks.end(); ++it) {
-    if (it->object == object) {
-      list.tasks.erase(it);
-      return;
-    }
-  }
-}
-    
-    
-    {
-    {template <typename IPAddrType>
-inline bool
-getNthMSBitImpl(const IPAddrType& ip, size_t bitIndex, sa_family_t family) {
-  if (bitIndex >= ip.bitCount()) {
-    getNthMSBitImplThrow(ip.bitCount(), family);
-  }
-  // Underlying bytes are in n/w byte order
-  return (ip.getNthMSByte(bitIndex / 8) & (0x80 >> (bitIndex % 8))) != 0;
-}
-} // namespace detail
-} // namespace folly
+    {}  // namespace relauncher
 
     
-    size_t qfind_first_byte_of_bitset(
-    const StringPieceLite haystack,
-    const StringPieceLite needles) {
-  std::bitset<256> s;
-  for (auto needle : needles) {
-    s[(uint8_t)needle] = true;
-  }
-  for (size_t index = 0; index < haystack.size(); ++index) {
-    if (s[(uint8_t)haystack[index]]) {
-      return index;
-    }
-  }
-  return std::string::npos;
-}
+        Rational Exp(Rational const& rat);
+    Rational Log(Rational const& rat);
+    Rational Log10(Rational const& rat);
     
-    public:
-    JStringCache(int capacity) : capacity(capacity) {}
+    inline constexpr auto IDS_DIVBYZERO = IDS_ERRORS_FIRST;
+inline constexpr auto IDS_DOMAIN = IDS_ERRORS_FIRST + 1;
+inline constexpr auto IDS_UNDEFINED = IDS_ERRORS_FIRST + 2;
+inline constexpr auto IDS_POS_INFINITY = IDS_ERRORS_FIRST + 3;
+inline constexpr auto IDS_NEG_INFINITY = IDS_ERRORS_FIRST + 4;
+inline constexpr auto IDS_NOMEM = IDS_ERRORS_FIRST + 6;
+inline constexpr auto IDS_TOOMANY = IDS_ERRORS_FIRST + 7;
+inline constexpr auto IDS_OVERFLOW = IDS_ERRORS_FIRST + 8;
+inline constexpr auto IDS_NORESULT = IDS_ERRORS_FIRST + 9;
+inline constexpr auto IDS_INSUFFICIENT_DATA = IDS_ERRORS_FIRST + 10;
     
-    namespace WeexCore {
-    }
+    private:
+    std::shared_ptr<IHistoryDisplay> m_pHistoryDisplay;
+    ICalcDisplay* m_pCalcDisplay;
     
-    #include <map>
-#include <set>
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
 #include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
     
-    namespace WeexCore {
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
     }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
     
     
     {
-    { public:
-  std::string page_id_;
-  std::string ref_;
-  std::vector<std::pair<std::string, std::string>> *style_;
-  std::vector<std::pair<std::string, std::string>> *margin_;
-  std::vector<std::pair<std::string, std::string>> *padding_;
-  std::vector<std::pair<std::string, std::string>> *border_;
-};
-}  // namespace WeexCore
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
     
-    #endif  // CORE_RENDER_NODE_RENDER_APPBAR_H_
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
+    
+    /*! \brief interface of objective function */
+class ObjFunction {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~ObjFunction() = default;
+  /*!
+   * \brief set configuration from pair iterators.
+   * \param begin The beginning iterator.
+   * \param end The end iterator.
+   * \tparam PairIter iterator<std::pair<std::string, std::string> >
+   */
+  template<typename PairIter>
+  inline void Configure(PairIter begin, PairIter end);
+  /*!
+   * \brief Configure the objective with the specified parameters.
+   * \param args arguments to the objective function.
+   */
+  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& args) = 0;
+  /*!
+   * \brief Get gradient over each of predictions, given existing information.
+   * \param preds prediction of current round
+   * \param info information about labels, weights, groups in rank
+   * \param iteration current iteration number.
+   * \param out_gpair output of get gradient, saves gradient and second order gradient in
+   */
+  virtual void GetGradient(const HostDeviceVector<bst_float>& preds,
+                           const MetaInfo& info,
+                           int iteration,
+                           HostDeviceVector<GradientPair>* out_gpair) = 0;
+    }
+    
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    const auto& offset_vec = page.offset.HostVector();
+    const auto& data_vec = page.data.HostVector();
+    CHECK(page.offset.Size() != 0 && offset_vec[0] == 0);
+    CHECK_EQ(offset_vec.back(), page.data.Size());
+    fo->Write(offset_vec);
+    if (page.data.Size() != 0) {
+      fo->Write(dmlc::BeginPtr(data_vec), page.data.Size() * sizeof(Entry));
+    }
+  }
