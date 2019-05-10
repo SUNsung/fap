@@ -1,131 +1,113 @@
 
         
-            def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
+                    if isinstance(value, str):
+                # See: https://github.com/jakubroztocil/httpie/issues/212
+                value = value.encode('utf8')
     
-            Emit key value pairs of the form:
+            request_line = '{method} {path}{query} HTTP/1.1'.format(
+            method=self._orig.method,
+            path=url.path or '/',
+            query='?' + url.query if url.query else ''
+        )
     
-            (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
+            See https://github.com/jakubroztocil/httpie/issues/212
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
+    
+    
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', httpbin.url + '/get', env=env)
+        assert 'HTTP/' not in r
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
+    
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+    
+SESSIONS_DIR_NAME = 'sessions'
+DEFAULT_SESSIONS_DIR = os.path.join(DEFAULT_CONFIG_DIR, SESSIONS_DIR_NAME)
+VALID_SESSION_NAME_PATTERN = re.compile('^[a-zA-Z0-9_.-]+$')
+# Request headers starting with these prefixes won't be stored in sessions.
+# They are specific to each request.
+# http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Requests
+SESSION_IGNORED_HEADER_PREFIXES = ['Content-', 'If-']
+    
+    References:
+    tensorlayer.layers.Conv2dLayer
+'''
+import tensorflow as tf
+    
+            return self._call(x)
+
+    
+        return g
+    
+    
+def permute(x, perm):
     '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+    Examples:
+        x.shape == [128, 32, 1]
+        x = permute(x, [0, 2, 1])
+        x.shape == [128, 1, 32]
+    
+    sum_ngrams = 0
+for s in sentences:
+    for w in s:
+        w = w.lower()
+        # from gensim.models._utils_any2vec import compute_ngrams
+        ret = compute_ngrams(w, min_ngrams, max_ngrams)
+        print(ret)
+        sum_ngrams += len(ret)
+'''
+['<h', 'he', 'el', 'll', 'lo', 'o>', '<he', 'hel', 'ell', 'llo', 'lo>', '<hel', 'hell', 'ello', 'llo>']
+['<w', 'wo', 'or', 'rl', 'ld', 'd>', '<wo', 'wor', 'orl', 'rld', 'ld>', '<wor', 'worl', 'orld', 'rld>']
+['<!', '!>', '<!>']
+['<i', 'i>', '<i>']
+['<a', 'am', 'm>', '<am', 'am>', '<am>']
+['<h', 'hu', 'ua', 'ay', 'y>', '<hu', 'hua', 'uay', 'ay>', '<hua', 'huay', 'uay>']
+['<.', '.>', '<.>']
+'''
+assert sum_ngrams == len(model.wv.vectors_ngrams)
+print(sum_ngrams)  # 57
+print()
     
     
-def test_reuters():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = reuters.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        assert len(x_train) + len(x_test) == 11228
-        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = reuters.get_word_index()
-        assert isinstance(word_index, dict)
+def main():
+    test = TestQueueFromStacks()
+    test.test_queue_from_stacks()
     
-    
-def get_data():
-    (x_train, y_train), _ = test_utils.get_test_data(
-        num_train=batch_size,
-        num_test=batch_size,
-        input_shape=(data_dim,),
-        classification=True,
-        num_classes=num_classes)
-    y_train = np_utils.to_categorical(y_train, num_classes)
-    
-    import numpy as np
-import warnings
-from ..engine.base_layer import InputSpec, Layer
-from ..utils import conv_utils
-from ..legacy import interfaces
-from ..legacy.layers import Recurrent, ConvRecurrent2D
-from .recurrent import RNN
-from ..utils.generic_utils import has_arg
-from ..utils.generic_utils import to_list
-from ..utils.generic_utils import transpose_shape
-    
-    train_model.fit(epochs=epochs,
-                steps_per_epoch=steps_per_epoch)
-    
-    __all__ = ['__version__', 'version_info', 'twisted_version',
-           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
-    
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.linkextractors import LinkExtractor
-    
-            self.crawler_process.crawl(spidercls, **opts.spargs)
-        self.crawler_process.start()
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
-        else:
-            print('Scrapy %s' % scrapy.__version__)
-    
-            def __init__(self, method=SSL.SSLv23_METHOD):
-            self.method = method
-    
-    
-class PackException(Exception):
-    pass
-    
-    import numpy as np
-import pytest
-    
-        def __init__(self, context=None):
-        self.context = context or decimal.getcontext()
-    
-    
-class NullableForeignKeySourceSerializer(serializers.ModelSerializer):
-    target = serializers.SlugRelatedField(
-        slug_field='name',
-        queryset=ForeignKeyTarget.objects.all(),
-        allow_null=True
-    )
-    
-        def test_nested_serialize_empty(self):
-        expected_data = {
-            'nested': {
-                'one': None,
-                'two': None
-            }
-        }
-        serializer = self.Serializer()
-        assert serializer.data == expected_data
-    
-            request = factory.get('/', content_type='application/json')
-        response = view(request)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.data == self.expected_response_data
-    
-        value = repr(value)
+        def test_sort_stack(self, stack):
+        print('Test: Empty stack')
+        sorted_stack = self.get_sorted_stack(stack, [])
+        assert_equal(sorted_stack.pop(), None)
