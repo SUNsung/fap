@@ -1,237 +1,224 @@
 
         
-          image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-      inline int offset(const vector<int>& indices) const {
-    CHECK_LE(indices.size(), num_axes());
-    int offset = 0;
-    for (int i = 0; i < num_axes(); ++i) {
-      offset *= shape(i);
-      if (indices.size() > i) {
-        CHECK_GE(indices[i], 0);
-        CHECK_LT(indices[i], shape(i));
-        offset += indices[i];
-      }
+        /* Coin network-specific GUI style information */
+class PlatformStyle
+{
+public:
+    /** Get style associated with provided platform name, or 0 if not known */
+    static const PlatformStyle *instantiate(const QString &platformId);
     }
-    return offset;
+    
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    }
+    
+        /* Check NULLs for conversion */
+    CHECK(secp256k1_ecdsa_sign(both, &normal_sig, message, privkey, NULL, NULL) == 1);
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, NULL, &recsig) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, NULL) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, &recsig) == 1);
+    
+        UniValue v4;
+    BOOST_CHECK(v4.setNumStr('2147483648'));
+    BOOST_CHECK_EQUAL(v4.get_int64(), 2147483648);
+    BOOST_CHECK_THROW(v4.get_int(), std::runtime_error);
+    BOOST_CHECK(v4.setNumStr('1000'));
+    BOOST_CHECK_EQUAL(v4.get_int(), 1000);
+    BOOST_CHECK_THROW(v4.get_str(), std::runtime_error);
+    BOOST_CHECK_EQUAL(v4.get_real(), 1000);
+    BOOST_CHECK_THROW(v4.get_array(), std::runtime_error);
+    BOOST_CHECK_THROW(v4.getKeys(), std::runtime_error);
+    BOOST_CHECK_THROW(v4.getValues(), std::runtime_error);
+    BOOST_CHECK_THROW(v4.get_obj(), std::runtime_error);
+    
+    /** A hasher class for RIPEMD-160. */
+class CRIPEMD160
+{
+private:
+    uint32_t s[5];
+    unsigned char buf[64];
+    uint64_t bytes;
+    }
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
   }
-  /**
-   * @brief Copy from a source Blob.
-   *
-   * @param source the Blob to copy from
-   * @param copy_diff if false, copy the data; if true, copy the diff
-   * @param reshape if false, require this Blob to be pre-shaped to the shape
-   *        of other (and die otherwise); if true, Reshape this Blob to other's
-   *        shape if necessary
-   */
-  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
-      bool reshape = false);
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
     
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
+    #endif
+
     
+    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
+#define TESSERACT_CCMAIN_OSDETECT_H_
     
-    {}  // namespace caffe
+    #include <cstdint>      // for int32_t
+#include 'points.h'     // for FCOORD
     
+    #ifndef NORMALIS_H
+#define NORMALIS_H
     
-    { protected:
-  TransformationParameter transform_param_;
-  shared_ptr<DataTransformer<Dtype> > data_transformer_;
-  bool output_labels_;
-};
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-#include 'caffe/layers/power_layer.hpp'
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
+    // GenericHeap requires 1 template argument:
+// Pair will normally be either KDPairInc<Key, Data> or KDPairDec<Key, Data>
+// for some arbitrary Key and scalar, smart pointer, or non-ownership pointer
+// Data type, according to whether a MIN heap or a MAX heap is desired,
+// respectively. Using KDPtrPairInc<Key, Data> or KDPtrPairDec<Key, Data>,
+// GenericHeap can also handle simple Data pointers and own them.
+// If no additional data is required, Pair can also be a scalar, since
+// GenericHeap doesn't look inside it except for operator<.
+//
+// The heap is stored as a packed binary tree in an array hosted by a
+// GenericVector<Pair>, with the invariant that the children of each node are
+// both NOT Pair::operator< the parent node. KDPairInc defines Pair::operator<
+// to use Key::operator< to generate a MIN heap and KDPairDec defines
+// Pair::operator< to use Key::operator> to generate a MAX heap by reversing
+// all the comparisons.
+// See http://en.wikipedia.org/wiki/Heap_(data_structure) for more detail on
+// the basic heap implementation.
+//
+// Insertion and removal are both O(log n) and, unlike the STL heap, an
+// explicit Reshuffle function allows a node to be repositioned in time O(log n)
+// after changing its value.
+//
+// Accessing the element for revaluation is a more complex matter, since the
+// index and pointer can be changed arbitrarily by heap operations.
+// Revaluation can be done by making the Data type in the Pair derived from or
+// contain a DoublePtr as its first data element, making it possible to convert
+// the pointer to a Pair using KDPairInc::RecastDataPointer.
+template <typename Pair>
+class GenericHeap {
  public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
+  GenericHeap() = default;
+  // The initial size is only a GenericVector::reserve. It is not enforced as
+  // the size limit of the heap. Caller must implement their own enforcement.
+  explicit GenericHeap(int initial_size) {
+    heap_.reserve(initial_size);
+  }
     }
     
-    #include 'caffe/layers/pooling_layer.hpp'
     
-              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
-          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
-          CAFFE_ENFORCE(H >= dkernel_h);
-          CAFFE_ENFORCE(W >= dkernel_w);
-          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
-          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
+    { private:
+  // Data members are private to keep deletion of data_ encapsulated.
+  Data* data_;
+  Key key_;
+};
+// Specialization of KDPtrPair to provide operator< for sorting in increasing
+// order.
+template <typename Key, typename Data>
+struct KDPtrPairInc : public KDPtrPair<Key, Data> {
+  // Since we are doing non-standard stuff we have to duplicate *all* the
+  // constructors and operator=.
+  KDPtrPairInc() : KDPtrPair<Key, Data>() {}
+  KDPtrPairInc(Key k, Data* d) : KDPtrPair<Key, Data>(k, d) {}
+  KDPtrPairInc(KDPtrPairInc& src) : KDPtrPair<Key, Data>(src) {}
+  void operator=(KDPtrPairInc& src) {
+    KDPtrPair<Key, Data>::operator=(src);
+  }
+  // Operator< facilitates sorting in increasing order.
+  int operator<(const KDPtrPairInc<Key, Data>& other) const {
+    return this->key() < other.key();
+  }
+};
+// Specialization of KDPtrPair to provide operator< for sorting in decreasing
+// order.
+template <typename Key, typename Data>
+struct KDPtrPairDec : public KDPtrPair<Key, Data> {
+  // Since we are doing non-standard stuff we have to duplicate *all* the
+  // constructors and operator=.
+  KDPtrPairDec() : KDPtrPair<Key, Data>() {}
+  KDPtrPairDec(Key k, Data* d) : KDPtrPair<Key, Data>(k, d) {}
+  KDPtrPairDec(KDPtrPairDec& src) : KDPtrPair<Key, Data>(src) {}
+  void operator=(KDPtrPairDec& src) {
+    KDPtrPair<Key, Data>::operator=(src);
+  }
+  // Operator< facilitates sorting in decreasing order by using operator> on
+  // the key values.
+  int operator<(const KDPtrPairDec<Key, Data>& other) const {
+    return this->key() > other.key();
+  }
+};
     
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+LEVELDB_EXPORT Env* NewMemEnv(Env* base_env);
+    
+    class MemTableIterator : public Iterator {
  public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
-    
-    
-    {  if (op->send_message() != nullptr) {
-    ++sent_message_count_;
-  }
-  if (op->recv_message() != nullptr) {
-    recv_message_ = op->op()->payload->recv_message.recv_message;
-    initial_on_done_recv_message_ =
-        op->op()->payload->recv_message.recv_message_ready;
-    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
-  }
-  if (op->recv_trailing_metadata() != nullptr) {
-    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
-    initial_on_done_recv_trailing_metadata_ =
-        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
-    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
-        &on_done_recv_trailing_metadata_;
-  }
-  // Call next op.
-  grpc_call_next_op(elem, op->op());
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    
-    {  RpcServerStatsEncoding() = delete;
-  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
-  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
-};
-    
-      CensusServerCallData()
-      : gc_(nullptr),
-        auth_context_(nullptr),
-        recv_initial_metadata_(nullptr),
-        initial_on_done_recv_initial_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
-  }
-    
-    #include <grpc/support/port_platform.h>
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  FILETIME idle, kernel, user;
-  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
-    total = FiletimeToInt(kernel) + FiletimeToInt(user);
-    busy = total - FiletimeToInt(idle);
-  }
-  return std::make_pair(busy, total);
-}
-    
-    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
-  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
-    return system_clock::time_point::max();
-  }
-  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
-  system_clock::time_point tp;
-  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
-  tp +=
-      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
-  return tp;
-}
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    
-    {  double ret = x * OBJECT_AREL_RES + OBJECT_AREL_LAT_MIN;
-  return ret;
-}
-    
-    #include 'modules/drivers/radar/conti_radar/protocol/object_general_info_60b.h'
-    
-    const PolynomialXd& Spline1dSeg::ThirdOrderDerivative() const {
-  return third_order_derivative_;
-}
-    
-    
-    {  bool ret = x;
-  return ret;
-}
-    
-    // config detail: {'name': 'output_value', 'enum': {0:
-// 'OUTPUT_VALUE_HEADLIGHTS_OFF', 1: 'OUTPUT_VALUE_LOW_BEAMS', 2:
-// 'OUTPUT_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
-// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 23, 'type': 'enum',
-// 'order': 'motorola', 'physical_unit': ''}
-Headlight_rpt_77::Output_valueType Headlightrpt77::output_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+  explicit MemTableIterator(MemTable::Table* table) : iter_(table) {}
     }
+    
+      ASSERT_TRUE(!Overlaps('a', 'b'));
+  ASSERT_TRUE(!Overlaps('z1', 'z2'));
+  ASSERT_TRUE(Overlaps('a', 'p'));
+  ASSERT_TRUE(Overlaps('a', 'q'));
+  ASSERT_TRUE(Overlaps('a', 'z'));
+  ASSERT_TRUE(Overlaps('p', 'p1'));
+  ASSERT_TRUE(Overlaps('p', 'q'));
+  ASSERT_TRUE(Overlaps('p', 'z'));
+  ASSERT_TRUE(Overlaps('p1', 'p2'));
+  ASSERT_TRUE(Overlaps('p1', 'z'));
+  ASSERT_TRUE(Overlaps('q', 'q'));
+  ASSERT_TRUE(Overlaps('q', 'q1'));
+    
+    
+    { private:
+  BlockHandle metaindex_handle_;
+  BlockHandle index_handle_;
+};
+    
+    #include 'db/log_format.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+    
+    
+    {  Env* const env_;
+  const std::string dbname_;
+  const Options& options_;
+  Cache* cache_;
+};
+    
+      // Return the last sequence number.
+  uint64_t LastSequence() const { return last_sequence_; }
+    
+      ASSERT_OK(WriteStringToFile(env_, kWrite1Data, kTestFileName));
+    
+      Status(const Status& rhs);
+  Status& operator=(const Status& rhs);
