@@ -1,83 +1,49 @@
 
         
-        
-class ProxyError(ConnectionError):
-    '''A proxy error occurred.'''
+            def __init__(self):
+        self.name = 'pg_trgm'
     
-        def __delitem__(self, key):
-        del self._store[key.lower()]
+        def __init__(self, keys, strict=False, messages=None):
+        self.keys = set(keys)
+        self.strict = strict
+        if messages is not None:
+            self.messages = {**self.messages, **messages}
     
+        def create(self):
+        # Because a cache can fail silently (e.g. memcache), we don't know if
+        # we are failing to create a new session because of a key collision or
+        # because the cache is missing. So we try for a (large) number of times
+        # and then raise an exception. That's the risk you shoulder if using
+        # cache backing.
+        for i in range(10000):
+            self._session_key = self._get_new_session_key()
+            try:
+                self.save(must_create=True)
+            except CreateError:
+                continue
+            self.modified = True
+            return
+        raise RuntimeError(
+            'Unable to create a new session key. '
+            'It is likely that the cache is unavailable.')
     
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+        def save(self, must_create=False):
+        super().save(must_create)
+        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
     
-    
-    builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
-    
-        def test_server_finishes_when_no_connections(self):
-        '''the server thread exits even if there are no connections'''
-        server = Server.basic_response_server()
-        with server:
-            pass
-    
-        def test_invalid(self):
-        with pytest.raises(ValueError):
-            to_key_val_list('string')
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-      with CurrentWorkingDirectory( unicode_dir ):
-    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-      with MockCompletionRequest( ServerResponse ):
-        ycm.SendCompletionRequest()
-        ok_( ycm.CompletionRequestReady() )
-        assert_that(
-          ycm.GetCompletionResponse(),
-          has_entries( {
-            'completions': empty(),
-            'completion_start_column': 1
-          } )
+        def create_model_instance(self, data):
+        '''
+        Return a new instance of the session model object, which represents the
+        current session state. Intended to be used for saving the session data
+        to the database.
+        '''
+        return self.model(
+            session_key=self._get_or_create_session_key(),
+            session_data=self.encode(data),
+            expire_date=self.get_expiry_date(),
         )
     
-    def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The interpreter is shutting down OR
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if _shutdown or executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
-    
-        def remove(self, val):
-        if val in self.idxs:
-            idx, last = self.idxs[val], self.nums[-1]
-            self.nums[idx], self.idxs[last] = last, idx
-            self.nums.pop()
-            self.idxs.pop(val, 0)
-            return True
-        return False
-    
-    
-def is_prime(n, k):
+        @classmethod
+    def get_session_store_class(cls):
+        from django.contrib.sessions.backends.db import SessionStore
+        return SessionStore
