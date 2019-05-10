@@ -1,175 +1,103 @@
 
         
-            if text.endswith('>'):
-        words, text = text[:-1].rsplit('<', 1)
-        words = words.strip()
-    else:
-        words = None
-    
-        return app
-
-    
-        if db is not None:
-        db.close()
-    
-    
-@pytest.fixture
-def runner(app):
-    '''A test runner for the app's Click commands.'''
-    return app.test_cli_runner()
+            lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
     
     
-def test_delete(client, auth, app):
-    auth.login()
-    response = client.post('/1/delete')
-    assert response.headers['Location'] == 'http://localhost/'
-    
-            if add_version_option:
-            params.append(version_option)
-    
-        Defines all the global objects that are proxies to the current
-    active context.
-    
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    # I don't know how to call the player directly so I just put it here
-# just in case anyone touchs it -- Beining@Aug.24.2016
-#download = site.download_by_url
-#download_playlist = site.download_by_url
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
+class HashTable:
+    '''
+        Basic Hash Table example with open addressing and linear probing
     '''
     
-    import json
+            while self.values[new_key] is not None \
+                and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
     
-            for p in js_path:
-            if 'mtool' in p or 'mcore' in p:
-                js_text = get_content(p)
-                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+        for i in range(1, n+1):
+        for j in range(1, s+1):
+            dp[i][j]= dp[i][j-1]
     
-        title = r1(r'<meta property='og:title' content='(.*?)'>', html)
-    
-        html = get_content(url)
-    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
-    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
-    if id is None:
-        video_pattern = r''vid'\s*:\s*' + uuid_pattern
-        id = match1(html, video_pattern)
-    assert id, 'can't find video info'
-    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
-    
-        def prepare(self, **kwargs):
-        if re.search(r'imgur\.com/a/', self.url):
-            # album
-            content = get_content(self.url)
-            album = match1(content, r'album\s*:\s*({.*}),') or \
-                    match1(content, r'image\s*:\s*({.*}),')
-            album = json.loads(album)
-            count = album['album_images']['count']
-            images = album['album_images']['images']
-            ext = images[0]['ext']
-            self.streams = {
-                'original': {
-                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
-                            for i in images],
-                    'size': sum([i['size'] for i in images]),
-                    'container': ext[1:]
-                },
-                'thumbnail': {
-                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
-                            for i in images],
-                    'container': 'jpg'
-                }
-            }
-            self.title = album['title']
-    
-    
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
-    
-            # Adding model 'ApiAuthorization'
-        db.create_table(
-            'sentry_apiauthorization', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ApiApplication'], null=True
-                    )
-                ), (
-                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
+    Usage:
+  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
+  
+  2. create initial_centroids,
+        initial_centroids = get_initial_centroids(
+            X, 
+            k, 
+            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
             )
-        )
-        db.send_create_signal('sentry', ['ApiAuthorization'])
+    
+        difference = log_predict - log_actual
+    square_diff = np.square(difference)
+    mean_square_diff = square_diff.mean()
     
     
-def make_handler(value):
-    return BitHandler(
-        keys=(
-            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
-            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
-            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
-        ),
-        value=value,
-    )
+def b_expo_mod(a, b, c):
+    res = 1
+    while b > 0:
+        if b&1:
+            res = ((res%c) * (a%c)) % c
     
-            print('Success: test_insertion_sort')
+        return res
     
-            print('Success: test_selection_sort\n')
+        def test_func_as_dict_key(self):
+        value = 'Some string'
+        d = {}
+        d[self.b] = value
+        self.assertEqual(d[self.b], value)
     
-            print('Success: test_queue_from_stacks')
+        def test_html_escape_filename(self):
+        filename = '<test&>.txt'
+        fullpath = os.path.join(self.tempdir, filename)
     
-            print('Test: Pop general case')
-        assert_equal(stacks.pop(), 5)
-        assert_equal(stacks.pop(), 3)
+            test_names = ['test_2', 'test_1']
+        self.assertEqual(loader.getTestCaseNames(Foo), test_names)
     
-    		print('Test: delete')
-		myTree.delete(5)
-		assert_equal(myTree.treeIsEmpty(), True)
-		
-		print('Test: more complex deletions')
-		[myTree.insert(x) for x in range(1, 5)]
-		myTree.delete(2)
-		assert_equal(myTree.root.rightChild.data, 3)
-		print('Test: delete invalid value')
-		assert_equal(myTree.delete(100), False)
+        def test_printer_buttons(self):
+        '''Test buttons whose commands use printer function.'''
+        dialog = self.dialog
+        button_sources = [(dialog.py_license, license, 'license'),
+                          (dialog.py_copyright, copyright, 'copyright'),
+                          (dialog.py_credits, credits, 'credits')]
     
-        def extract_min(self):
-        if not self.array:
-            return None
-        minimum = sys.maxsize
-        for index, node in enumerate(self.array):
-            if node.key < minimum:
-                minimum = node.key
-                minimum_index = index
-        return self.array.pop(minimum_index)
+    
+# Is a path a directory?
+# This follows symbolic links, so both islink() and isdir()
+# can be true for the same path on systems that support symlinks
+def isdir(s):
+    '''Return true if the pathname refers to an existing directory.'''
+    try:
+        st = os.stat(s)
+    except (OSError, ValueError):
+        return False
+    return stat.S_ISDIR(st.st_mode)
+    
+    # In a real program you'd get the filename from the arguments.
+with open('outgoing.msg', 'rb') as fp:
+    msg = BytesParser(policy=policy.default).parse(fp)
+    
+    def getText(nodelist):
+    rc = []
+    for node in nodelist:
+        if node.nodeType == node.TEXT_NODE:
+            rc.append(node.data)
+    return ''.join(rc)
+    
+    
+if __name__ == '__main__':
+    freeze_support()
+    test()
