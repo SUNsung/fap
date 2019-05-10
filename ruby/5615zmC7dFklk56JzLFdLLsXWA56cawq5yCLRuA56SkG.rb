@@ -1,83 +1,86 @@
 
         
-              dt = Date.today
-      freeze_time dt
-    
-        false
+          def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
     
-    class FormulaPin
-  def initialize(f)
-    @f = f
+      def subscription_params
+    params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
   end
     
-          # Returns the operator for the `kwsplat` as a string.
-      #
-      # @return [String] the double splat operator
-      def operator
-        DOUBLE_SPLAT
+        data.deep_merge!(data_params) if params[:data]
+    
+      before_action :require_user!
+    
+          def markdown_podfile
+        UI::ErrorReport.markdown_podfile
       end
     
-          # A shorthand for getting the last argument of the node.
-      # Equivalent to `arguments.last`.
-      #
-      # @return [Node, nil] the last argument of the node,
-      #                     or `nil` if there are no arguments
-      def last_argument
-        arguments[-1]
-      end
+    When(/^an error is raised$/) do
+  error = TestApp.shared_path.join('fail')
+  run_vagrant_command(test_file_exists(error))
+end
     
-          def self.for(class_name)
-        new(*class_name.split('::').last(2))
-      end
+    Given(/^file '(.*?)' exists in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
+  run_vagrant_command('touch #{file_shared_path}')
+end
     
-          def header
-        if @header.nil?
-          if page = @page.header
-            @header = page.text_data
-          else
-            @header = false
-          end
-        end
-        @header
-      end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def editable
-        @editable
-      end
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      s.add_development_dependency 'rack-test', '~> 0.6.2'
-  s.add_development_dependency 'shoulda', '~> 3.5.0'
-  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
-  s.add_development_dependency 'mocha', '~> 1.1.0'
-  s.add_development_dependency 'test-unit', '~> 3.1.0'
-  s.add_development_dependency 'webrick', '~> 1.3.1'
-    
-          within_row(2) { click_icon :split }
-      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
-      click_icon :save
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
-    end
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
   end
 end
-
     
-            def create
-          authorize! :create, Product
-          params[:product][:available_on] ||= Time.current
-          set_up_shipping_category
+    module Capistrano
+  class Configuration
+    # Decorates a Variables object to additionally perform an optional set of
+    # user-supplied validation rules. Each rule for a given key is invoked
+    # immediately whenever `set` is called with a value for that key.
+    #
+    # If `set` is called with a callable value or a block, validation is not
+    # performed immediately. Instead, the validation rules are invoked the first
+    # time `fetch` is used to access the value.
+    #
+    # A rule is simply a block that accepts two arguments: key and value. It is
+    # up to the rule to raise an exception when it deems the value is invalid
+    # (or just print a warning).
+    #
+    # Rules can be registered using the DSL like this:
+    #
+    #   validate(:my_key) do |key, value|
+    #     # rule goes here
+    #   end
+    #
+    class ValidatedVariables < SimpleDelegator
+      include Capistrano::ProcHelpers
+    
+          # Returns an array of source file location(s) where the given key was
+      # assigned (i.e. where `set` was called). If the key was never assigned,
+      # returns `nil`.
+      def source_locations(key)
+        locations[key]
+      end
+    
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
