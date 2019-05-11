@@ -1,85 +1,92 @@
 
         
-                  def render_collection_for(builder_class, &block)
-            options = @options.stringify_keys
-            rendered_collection = render_collection do |item, value, text, default_html_options|
-              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
-    
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class TextField < Base # :nodoc:
-        include Placeholderable
-    
-        DATA_URL = 'data:'.freeze
-    
-          request_all initial_urls do |response|
-        next unless data = handle_response(response)
-        yield data
-        next unless data[:internal_urls].present?
-        next_urls = data[:internal_urls].select { |url| history.add?(url.downcase) }
-        instrument 'queued.scraper', urls: next_urls
-        next_urls
-      end
-    end
-    
-            self.base_url.scheme = effective_base_url.scheme
-        self.base_url.host = effective_base_url.host
-        self.base_url.path = effective_base_url.path
-        super
-      ensure
-        self.base_url.scheme = original_scheme
-        self.base_url.host = original_host
-        self.base_url.path = original_path
-      end
-    end
-    
-            css('pre[language]').each do |node|
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip
-          node['data-language'] = 'html' if node.content.start_with?('<')
-          node.remove_attribute('language')
-          node.remove_attribute('format')
-        end
-    
-          def mod
-        return @mod if defined?(@mod)
-        @mod = slug[/api\/([\w\-\.]+)\//, 1]
-        @mod.remove! 'angular2.' if @mod
-        @mod
-      end
-    end
-  end
+          gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
 end
 
     
-            css('.toplang', '#quickview', '.top').remove
+        stdout.strip
+  end
+end
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+      def test_file_exists(path)
+    exists?('f', path)
+  end
     
-        def analyze_rest(analysis, line)
-      if (start_line = analysis.start_line_number)
-        return CopAnalysis.new(analysis.line_ranges + [start_line..line], nil)
+        def run
+      Rake.application = self
+      super
+    end
+    
+          private
+    
+          private
+    
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
+        end
       end
     
-            def advance
-          authorize! :update, @order, order_token
-          while @order.next; end
-          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
-        end
+    set_if_empty :format, :airbrussh
+set_if_empty :log_level, :debug
     
-              if Cart::Update.call(order: @order, params: order_params).success?
-            user_id = params[:order][:user_id]
-            if current_api_user.has_spree_role?('admin') && user_id
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-            respond_with(@order, default_template: :show)
-          else
-            invalid_resource!(@order)
-          end
+    module URI
+  ;
+  class << self
+# Does the char code correspond to an alpha-numeric char.
+# isAlphaNumeric('a'.ord) => true
+# isAlphaNumeric(''.ord) => false
+    def isAlphaNumeric(cc)
+      # a - z
+      if (97 <= cc && cc <= 122);
+        return true
+      end
+      # A - Z
+      if (65 <= cc && cc <= 90);
+        return true
+      end
+      # 0 - 9
+      if (48 <= cc && cc <= 57);
+        return true
+      end
+    
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
         end
+        ret
+      end
+    
+          def js # custom js
+        @js
+      end
+    
+          private
+    
+    ENV['RACK_ENV'] = 'test'
+require 'gollum'
+require 'gollum/app'
+    
+      test 'previews content' do
+    post '/preview', :content => 'abc', :format => 'markdown'
+    assert last_response.ok?
+  end
