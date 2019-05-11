@@ -1,192 +1,89 @@
 
         
-              it 'works with select regex when regex is string' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: \'\/AppDelegate\'
-            )
-          end').runner.execute(:test)
-    
-          description = '**DEPRECATED!**'
-    
-    shelljoin_testcases = [
-  {
-    'it' => '(#1) on array with entry with space',
-    'it_result' => {
-      'windows' => 'wraps this entry in double quotes',
-      'other'   => 'escapes the space in this entry'
-    },
-    'input' => ['a', 'b c', 'd'],
-    'expect' => {
-      'windows' => 'a 'b c' d',
-      'other'   => 'a b\ c d'
-    }
-  },
-  {
-    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
-    'it_result' => {
-      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
-      'other'   => 'escapes the double quotes and escapes the space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a '''b'' c' d',
-      'other'   => 'a \'b\'\ c d'
-    }
-  },
-  {
-    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
-    'it_result' => {
-      'windows' => 'no changes',
-      'other'   => 'escapes the single quotes and space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a \''b' c\' d',
-      'other'   => 'a \\'b\\'\\ c d'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
-  {
-    'it' => '(#4) on array with entry that is `$$`',
-    'it_result' => {
-      'windows' => 'the result includes the process id',
-      'other'   => 'the result includes the process id'
-    },
-    'input' => ['ps', '-p', $$],
-    'expect' => {
-      'windows' => 'ps -p #{$$}',
-      'other'   => 'ps -p #{$$}'
-    }
-  }
-]
-    
-    module Cert
-  class CommandsGenerator
-    include Commander::Methods
-    
-        # The path used after sending unlock password instructions
-    def after_sending_unlock_instructions_path_for(resource)
-      new_session_path(resource) if is_navigational_format?
+            def base_url
+      context[:base_url]
     end
     
-      # Attempt to find the mapped route for devise based on request path
-  def devise_mapping
-    @devise_mapping ||= request.env['devise.mapping']
-  end
+        def path
+      @path ||= url.path
+    end
     
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
+          str.truncate(max_length).ljust(max_length) << tag.to_s
+    end
+    
+            css('img[style]').each do |node|
+          node['align'] ||= node['style'][/float:\s*(left|right)/, 1]
+          node['style'] = node['style'].split(';').map(&:strip).select { |s| s =~ /\Awidth|height/ }.join(';')
+        end
+    
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
         else
-          warden.set_user(resource, options.merge!(scope: scope))
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
         end
       end
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          # Checks whether the user session has expired based on configured time.
-      def timedout?(last_access)
-        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
-      end
-    
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
         #
-        # No return value is expected.
-        def prepare
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
         end
     
-              return [main_args, sub_command, sub_args]
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
         end
-      end
-    end
-  end
-end
-
     
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
+            # Yields a VM for each target VM for the command.
         #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
         #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Hash] options Additional tweakable settings.
+        # @option options [Symbol] :provider The provider to back the
+        #   machines with. All machines will be backed with this
+        #   provider. If none is given, a sensible default is chosen.
+        # @option options [Boolean] :reverse If true, the resulting order
+        #   of machines is reversed.
+        # @option options [Boolean] :single_target If true, then an
+        #   exception will be raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          @logger.debug('Getting target VMs for command. Arguments:')
+          @logger.debug(' -- names: #{names.inspect}')
+          @logger.debug(' -- options: #{options.inspect}')
     
-    When /^I (?:log|sign) out manually$/ do
-  manual_logout
-end
+            # This contains all the guests and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :guests
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          it 'supports filtering by read/unread' do
-        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
-        get :read_all
-        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
-        get :index, params: {show: 'unread'}
-        expect(assigns[:notifications].count).to eq(1)
-      end
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
     end
     
-          it 'returns an empty array for a post visible to the user' do
-        sign_in(bob, scope: :user)
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body)).to eq([])
-      end
-    end
-    
-    desc 'Default: run unit tests.'
-task :default => [:clean, :all]
-    
-    Given /^I add this snippet to config\/application.rb:$/ do |snippet|
-  file_name = 'config/application.rb'
-  cd('.') do
-    content = File.read(file_name)
-    File.open(file_name, 'w') {|f| f << content.sub(/class Application < Rails::Application.*$/, 'class Application < Rails::Application\n#{snippet}\n')}
+        # Test page_header_from_content(@content)
+    actual = @view.title
+    assert_equal '1 & 2', actual
   end
-end
-    
-    After do
-  ORIGINAL_BUNDLE_VARS.each_pair do |key, value|
-    ENV[key] = value
-  end
-end
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-    require 'mimemagic'
-require 'mimemagic/overlay'
-require 'logger'
-require 'terrapin'
-    
-        def possible_types
-      MIME::Types.type_for(@filepath).collect(&:content_type)
-    end
-    
-        def scaling dst, ratio
-      if ratio.horizontal? || ratio.square?
-        [ '%dx' % dst.width, ratio.width ]
-      else
-        [ 'x%d' % dst.height, ratio.height ]
-      end
-    end
