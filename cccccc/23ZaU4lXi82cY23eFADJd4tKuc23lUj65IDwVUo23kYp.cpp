@@ -1,251 +1,280 @@
 
         
-        REGISTER_OP('ShapelessOp');
+        
+    {    void operator() (const T * src0, const T * src1, T * dst) const
+    {
+        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
+    }
+};
     
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
+    template <>
+void accumulateSquareConst<0>(const Size2D &size,
+                              const u8 *srcBase, ptrdiff_t srcStride,
+                              s16 *dstBase, ptrdiff_t dstStride)
+{
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
+        for (size_t i = 0u; i < size.height; ++i)
+    {
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t sj = 0u, dj = 0u;
+    }
     
-    Base::~Base() {
+    
+    {
+    {
+    {            for (; j < size.width; j++)
+            {
+                dst[j] = (u8)src[j];
+            }
+        }
+    }
 }
     
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
+                uint32x4_t v_mask0 = vorrq_u32(vceqq_u32(v_src0, v_maxval4), vceqq_u32(v_src0, v_minval4));
+            uint32x4_t v_mask1 = vorrq_u32(vceqq_u32(v_src1, v_maxval4), vceqq_u32(v_src1, v_minval4));
     
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
+        u32 step_base = 16 / sizeof(T), step_tail = 8 / sizeof(T);
+    size_t roiw_base = size.width >= (step_base - 1) ? size.width - step_base + 1 : 0;
+    size_t roiw_tail = size.width >= (step_tail - 1) ? size.width - step_tail + 1 : 0;
     
-    
-    {}
-    
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    template <typename T, int elsize> struct vtail
+{
+    static inline void inRange(const T *, const T *, const T *,
+                               u8 *, size_t &, size_t)
+    {
+        //do nothing since there couldn't be enough data
     }
+};
+template <typename T> struct vtail<T, 2>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
+        if( x + 8 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1(dst + x, internal::vmovn(vd));
+            x+=8;
+        }
     }
-    
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+};
+template <typename T> struct vtail<T, 1>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        typedef typename internal::VecTraits<T>::vec64 vec64;
+        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
+        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
+        if( x + 16 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1q(dst + x, vd);
+            x+=16;
+        }
+        if( x + 8 < width)
+        {
+             vec64  vs = internal::vld1( src + x);
+             vec64 vr1 = internal::vld1(rng1 + x);
+             vec64 vr2 = internal::vld1(rng2 + x);
+            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
+            internal::vst1(dst + x, vd);
+            x+=8;
+        }
     }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
 };
     
-      // implement nw.Screen.initEventListeners()
-  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenInitEventListenersFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+    // Returns a Boolean value indicating whether the caller is currently
+// executing in the context of the death test child process.  Tools such as
+// Valgrind heap checkers may need this to modify their behavior in death
+// tests.  IMPORTANT: This is an internal utility.  Using it may break the
+// implementation of death tests.  User code MUST NOT use it.
+GTEST_API_ bool InDeathTestChild();
     
+    #include <iosfwd>
+#include <vector>
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-string.h'
     
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
-  }
+      // Returns the TestInfo object for the test that's currently running,
+  // or NULL if no test is running.
+  const TestInfo* current_test_info() const
+      GTEST_LOCK_EXCLUDED_(mutex_);
+    
+      // Returns true if the death test passed; that is, the test process
+  // exited during the test, its exit status matches a user-supplied
+  // predicate, and its stderr output matches a user-supplied regular
+  // expression.
+  // The user-supplied predicate may be a macro expression rather
+  // than a function pointer or functor, or else Wait and Passed could
+  // be combined.
+  virtual bool Passed(bool exit_status_ok) = 0;
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+      tuple(const tuple& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_), f3_(t.f3_),
+      f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_) {}
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45>
+struct Types45 {
+  typedef T1 Head;
+  typedef Types44<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+      T44, T45> Tail;
 };
     
-    Variant ArrayDirectory::read() {
-  if (!m_it) {
-    return false;
-  }
+    int Water::allocated_ = 0;
+    
+      // Clears the queue.
+  void Clear() {
+    if (size_ > 0) {
+      // 1. Deletes every node.
+      QueueNode<E>* node = head_;
+      QueueNode<E>* next = node->next();
+      for (; ;) {
+        delete node;
+        node = next;
+        if (node == NULL) break;
+        next = node->next();
+      }
+    }
     }
     
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
+    
+    {		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
+		{
+			m_fError += CalcPixelError(m_afrgbaDecodedColors[uiPixel], m_afDecodedAlphas[uiPixel],
+										m_pafrgbaSource[uiPixel]);
+		}
+		
+	}
     
     
-    {protected:
-  bool closeImpl();
-};
+    {	};
     
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
+      If the input is not compressible, the return value might be larger than
+  length (input buffer size).
+    
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.*/
+    
+    /*
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+    
+    /* (a32 * b32) >> 16 */
+#undef silk_SMULWW
+static OPUS_INLINE opus_int32 silk_SMULWW_armv4(opus_int32 a, opus_int32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+    '#silk_SMULWW\n\t'
+    'smull %0, %1, %2, %3\n\t'
+    : '=&r'(rd_lo), '=&r'(rd_hi)
+    : '%r'(a), 'r'(b)
   );
+  return (rd_hi<<16)+(rd_lo>>16);
+}
+#define silk_SMULWW(a, b) (silk_SMULWW_armv4(a, b))
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    namespace php {
+struct Program;
+}
+struct Index;
+    
+      bool canEmit(size_t nBytes) const {
+    assert(capacity() >= used());
+    return nBytes < (capacity() - used());
+  }
+    
+      static const APCCollection* fromHandle(const APCHandle* handle) {
+    assertx(handle->checkInvariants());
+    assertx(handle->kind() == APCKind::SharedCollection);
+    static_assert(offsetof(APCCollection, m_handle) == 0, '');
+    return reinterpret_cast<const APCCollection*>(handle);
+  }
+    
+    static HackStrictOption GetHackStrictOption(const IniSettingMap& ini,
+                                            const Hdf& config,
+                                            const std::string& name /* = '' */,
+                                            HackStrictOption def
+                                           ) {
+  auto val = Config::GetString(ini, config, name);
+  if (val.empty()) {
+    return def;
+  }
+  if (val == 'warn') {
+    return HackStrictOption::WARN;
+  }
+  bool ret;
+  ini_on_update(val, ret);
+  return ret ? HackStrictOption::ON : HackStrictOption::OFF;
 }
     
-    //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices. Render function needs to support it.
-//#define ImDrawIdx unsigned int
+    void clearThreadLocalIO();
+void setThreadLocalIO(FILE* in, FILE* out, FILE* err);
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
-
+        // change element with key 'the bad'
+    object.at('the bad') = 'il cattivo';
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    int main(int argc, char** argv)
-{
-    if (argc < 3)
+        // out_of_range.401
+    try
     {
-        printf('Syntax: %s [-base85] [-nocompress] <inputfile> <symbolname>\n', argv[0]);
-        return 0;
+        // try to use a an invalid array index
+        json::const_reference ref = j.at('/array/4'_json_pointer);
     }
-    }
-    
-    // Set default OpenGL3 loader to be gl3w
-#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
-#endif
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
-}
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Main loop
-    bool done = false;
-    while (!done)
+    catch (json::out_of_range& e)
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
+        std::cout << e.what() << '\n';
     }
     
-    
-    {  // Single-Delete diagnostics for exceptional situations
-  uint64_t num_single_del_fallthru = 0;
-  uint64_t num_single_del_mismatch = 0;
-};
-
-    
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    #pragma once
-    
-    #pragma once
-// lua headers
-extern 'C' {
-#include <lauxlib.h>
-#include <lua.h>
-#include <lualib.h>
-}
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
