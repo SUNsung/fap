@@ -1,84 +1,41 @@
 
         
-                  data = connection.get_once(length, timeout)
-          unless data && data.length == length
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
+              spec['version'] = Bootstrap::VERSION
     
-              # Retrieves the element instance fields
-          #
-          # @return [Array]
-          def attributes
-            self.class.attributes
-          end
+      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found).
+  config.i18n.fallbacks = true
     
-              # Decodes the end_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_end_time(input)
-            input.value[0].value
-          end
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+  end
     
-                decode_asn1(asn1)
-          end
+          def order_time(time)
+        [I18n.l(time.to_date), time.strftime('%l:%M %p').strip].join(' ')
+      end
+    end
+  end
+end
+
     
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
+          # Order Form
+      expect(page).not_to have_css('.edit-item')
+      # Order Tabs
+      expect(page).not_to have_link('Details')
+      expect(page).not_to have_link('Customer')
+      expect(page).not_to have_link('Adjustments')
+      expect(page).not_to have_link('Payments')
+      expect(page).not_to have_link('Returns')
+    end
     
-              # Decodes a Rex::Proto::Kerberos::Model::KrbError
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 0
-                self.pvno = decode_pvno(val)
-              when 1
-                self.msg_type = decode_msg_type(val)
-              when 2
-                self.ctime = decode_ctime(val)
-              when 3
-                self.cusec = decode_cusec(val)
-              when 4
-                self.stime = decode_stime(val)
-              when 5
-                self.susec = decode_susec(val)
-              when 6
-                self.error_code = decode_error_code(val)
-              when 7
-                self.crealm = decode_crealm(val)
-              when 8
-                self.cname = decode_cname(val)
-              when 9
-                self.realm = decode_realm(val)
-              when 10
-                self.sname = decode_sname(val)
-              when 12
-                self.e_data = decode_e_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
-              end
-            end
-          end
+            def product_params
+          params.require(:product).permit(permitted_product_attributes)
+        end
     
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
+          @@user_attributes = [:id, :email, :created_at, :updated_at]
+    
+        it 'accepts jsfiddle link with a custom-tab parameter' do
+      expect do
+        generate_new_liquid(jsfiddle_link_with_custom_tabs)
+      end.not_to raise_error
+    end
