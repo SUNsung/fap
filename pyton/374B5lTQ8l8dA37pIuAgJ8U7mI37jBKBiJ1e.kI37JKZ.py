@@ -1,70 +1,100 @@
 
         
-            # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
+                print('None input')
+        assert_raises(TypeError, insertion_sort.sort, None)
     
-            if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
-            error = 'User {0} is already registered.'.format(username)
+        def __len__(self):
+        return len(self.array)
     
-            :param name: the optional name of the global, otherwise the
-                     function name will be used.
-        '''
-        def register_template(state):
-            state.app.jinja_env.globals[name or f.__name__] = f
-        self.record_once(register_template)
+    # Sampling from about 20M text materials include literature and computer technology
+#
+# Japanese frequency table, applied to both S-JIS and EUC-JP
+# They are sorted in order.
     
-        if blueprint is not None and seems_fishy:
-        info.append('  The template was looked up from an endpoint that '
-                    'belongs to the blueprint '%s'.' % blueprint)
-        info.append('  Maybe you did not place a template in the right folder?')
-        info.append('  See http://flask.pocoo.org/docs/blueprints/#templates')
+    Win1250HungarianModel = {
+  'char_to_order_map': win1250HungarianCharToOrderMap,
+  'precedence_matrix': HungarianLangModel,
+  'typical_positive_ratio': 0.947368,
+  'keep_english_letter': True,
+  'charset_name': 'windows-1250',
+  'language': 'Hungarian',
+}
+
     
+        def get_confidence(self):
+        if self.state == ProbingState.NOT_ME:
+            return 0.01
     
-class TagMarkup(JSONTag):
-    '''Serialize anything matching the :class:`~flask.Markup` API by
-    having a ``__html__`` method to the result of that method. Always
-    deserializes to an instance of :class:`~flask.Markup`.'''
+    UCS2LE_ST = (
+          6,     6,     7,     6,     4,     3,MachineState.ERROR,MachineState.ERROR,#00-07
+     MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#08-0f
+     MachineState.ITS_ME,MachineState.ITS_ME,     5,     5,     5,MachineState.ERROR,MachineState.ITS_ME,MachineState.ERROR,#10-17
+          5,     5,     5,MachineState.ERROR,     5,MachineState.ERROR,     6,     6,#18-1f
+          7,     6,     8,     8,     5,     5,     5,MachineState.ERROR,#20-27
+          5,     5,     5,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     5,     5,#28-2f
+          5,     5,     5,MachineState.ERROR,     5,MachineState.ERROR,MachineState.START,MachineState.START #30-37
+)
     
-            The arguments passed to :meth:`as_view` are forwarded to the
-        constructor of the class.
-        '''
-        def view(*args, **kwargs):
-            self = view.view_class(*class_args, **class_kwargs)
-            return self.dispatch_request(*args, **kwargs)
+        def feed(self, byte_str):
+        for i in range(len(byte_str)):
+            coding_state = self.coding_sm.next_state(byte_str[i])
+            if coding_state == MachineState.ERROR:
+                self.logger.debug('%s %s prober hit error at byte %s',
+                                  self.charset_name, self.language, i)
+                self._state = ProbingState.NOT_ME
+                break
+            elif coding_state == MachineState.ITS_ME:
+                self._state = ProbingState.FOUND_IT
+                break
+            elif coding_state == MachineState.START:
+                char_len = self.coding_sm.get_current_charlen()
+                if i == 0:
+                    self._last_char[1] = byte_str[0]
+                    self.context_analyzer.feed(self._last_char[2 - char_len:],
+                                               char_len)
+                    self.distribution_analyzer.feed(self._last_char, char_len)
+                else:
+                    self.context_analyzer.feed(byte_str[i + 1 - char_len:i + 3
+                                                        - char_len], char_len)
+                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
+                                                    char_len)
     
+    def get_parallel_rotations():
+    mult90 = [0, np.pi/2, -np.pi/2, np.pi]
+    parallel_rotations = []
+    for euler in itertools.product(mult90, repeat=3):
+        canonical = mat2euler(euler2mat(euler))
+        canonical = np.round(canonical / (np.pi / 2))
+        if canonical[0] == -2:
+            canonical[0] = 2
+        if canonical[2] == -2:
+            canonical[2] = 2
+        canonical *= np.pi / 2
+        if all([(canonical != rot).any() for rot in parallel_rotations]):
+            parallel_rotations += [canonical]
+    assert len(parallel_rotations) == 24
+    return parallel_rotations
+
     
-def make_git_commit(message, *args):
-    message = message % args
-    Popen(['git', 'commit', '-am', message]).wait()
-    
-    
-def test_url_generation_requires_server_name(app):
-    with app.app_context():
-        with pytest.raises(RuntimeError):
-            flask.url_for('index')
-    
-    
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    
-    
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
+        def test_duplicatedinput_inputs(self):
+        '''The duplicated_input env needs to generate strings with the appropriate
+        amount of repetiion.'''
+        env = alg.duplicated_input.DuplicatedInputEnv(duplication=2)
+        input_tape = env.generate_input_data(4)
+        self.assertEqual(len(input_tape), 4)
+        self.assertEqual(input_tape[0], input_tape[1])
+        self.assertEqual(input_tape[2], input_tape[3])
+        # If requested input size isn't a multiple of duplication, go lower
+        input_tape = env.generate_input_data(3)
+        self.assertEqual(len(input_tape), 2)
+        self.assertEqual(input_tape[0], input_tape[1])
+        # If requested input size is *less than* duplication, go up
+        input_tape = env.generate_input_data(1)
+        self.assertEqual(len(input_tape), 2)
+        self.assertEqual(input_tape[0], input_tape[1])
+        
+        env = alg.duplicated_input.DuplicatedInputEnv(duplication=3)
+        input_tape = env.generate_input_data(6)
+        self.assertEqual(len(input_tape), 6)
+        self.assertEqual(input_tape[0], input_tape[1])
+        self.assertEqual(input_tape[1], input_tape[2])
