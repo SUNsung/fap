@@ -1,104 +1,140 @@
 
         
-                if self.with_body:
-            try:
-                for chunk in self.iter_body():
-                    yield chunk
-                    if self.on_body_chunk_downloaded:
-                        self.on_body_chunk_downloaded(chunk)
-            except BinarySuppressedError as e:
-                if self.with_headers:
-                    yield b'\n'
-                yield e.message
+            def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
+        )
     
-        # The URL prefix the adapter should be mount to.
-    prefix = None
+        system_ssl = ssl.OPENSSL_VERSION_NUMBER
+    system_ssl_info = {
+        'version': '%x' % system_ssl if system_ssl is not None else ''
+    }
     
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
+            # Verify we receive an Authorization header in response, then redirect.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_302)
     
     
-@mock.patch('httpie.core.get_response')
-def test_error(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+@pytest.mark.parametrize(
+    'value, expected', (
+        (
+            'application/xml',
+            ('application/xml', {})
+        ),
+        (
+            'application/json ; charset=utf-8',
+            ('application/json', {'charset': 'utf-8'})
+        ),
+        (
+            'application/json ; Charset=utf-8',
+            ('application/json', {'charset': 'utf-8'})
+        ),
+        (
+            'text/plain',
+            ('text/plain', {})
+        ),
+        (
+            'multipart/form-data; boundary = something ; boundary2=\'something_else\' ; no_equals ',
+            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
+        ),
+        (
+                'multipart/form-data; boundary = something ; boundary2='something_else' ; no_equals ',
+                ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
+        ),
+        (
+            'multipart/form-data; boundary = something ; \'boundary2=something_else\' ; no_equals ',
+            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
+        ),
+        (
+            'multipart/form-data; boundary = something ; 'boundary2=something_else' ; no_equals ',
+            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
+        ),
+        (
+            'application/json ; ; ',
+            ('application/json', {})
+        )
+    ))
+def test__parse_content_type_header(value, expected):
+    assert _parse_content_type_header(value) == expected
     
-        def test_request_body_from_file_by_path_with_explicit_content_type(
-            self, httpbin):
-        r = http('--verbose',
-                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG,
-                 'Content-Type:text/plain; charset=utf8')
-        assert HTTP_OK in r
-        assert FILE_CONTENT in r
-        assert 'Content-Type: text/plain; charset=utf8' in r
+        def prepare_method(self, method):
+        '''Prepares the given HTTP method.'''
+        self.method = method
+        if self.method is not None:
+            self.method = to_native_string(self.method.upper())
     
-        description = proj_info['description'],
-    keywords = proj_info['keywords'],
+        def prepare_request(self, request):
+        '''Constructs a :class:`PreparedRequest <PreparedRequest>` for
+        transmission and returns it. The :class:`PreparedRequest` has settings
+        merged from the :class:`Request <Request>` instance and those of the
+        :class:`Session`.
     
-    class BokeCC(VideoExtractor):
-    name = 'BokeCC'
+            dupe_releases = orm.Release.objects.values_list('version', 'organization_id')\
+                                           .annotate(vcount=models.Count('id'))\
+                                           .filter(vcount__gt=1)
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+        def backwards(self, orm):
+        'Write your backwards methods here.'
     
-    site_info = 'Giphy.com'
-download = giphy_download
-download_playlist = playlist_not_supported('giphy')
-
-    
-        def api_req(self, url):
-        xml_str = get_content(url)
-        dom = parseString(xml_str)
-        status = dom.getElementsByTagName('result')[0].getAttribute('status')
-        if status != 'success':
-            raise Exception('API returned fail')
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-    
-        for filename in filenames:
-        fd = codecs.open(filename, mode='r', encoding='utf-8')
-        for line in fd.readlines():
-            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
-            for ref in refs:
-                if ref not in urls:
-                    urls.append(ref)
-    
-        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
+            # Adding model 'RawEvent'
+        db.create_table(
+            'sentry_rawevent', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'event_id',
+                    self.gf('django.db.models.fields.CharField')(max_length=32, null=True)
+                ), (
+                    'datetime',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+                ('data', self.gf('sentry.db.models.fields.node.NodeField')(null=True, blank=True)),
+            )
+        )
+        db.send_create_signal('sentry', ['RawEvent'])
     
     
-class CurlAsyncHTTPClient(AsyncHTTPClient):
-    def initialize(  # type: ignore
-        self, max_clients: int = 10, defaults: Dict[str, Any] = None
-    ) -> None:
-        super(CurlAsyncHTTPClient, self).initialize(defaults=defaults)
-        self._multi = pycurl.CurlMulti()
-        self._multi.setopt(pycurl.M_TIMERFUNCTION, self._set_timeout)
-        self._multi.setopt(pycurl.M_SOCKETFUNCTION, self._handle_socket)
-        self._curls = [self._curl_create() for i in range(max_clients)]
-        self._free_list = self._curls[:]
-        self._requests = (
-            collections.deque()
-        )  # type: Deque[Tuple[HTTPRequest, Callable[[HTTPResponse], None], float]]
-        self._fds = {}  # type: Dict[int, int]
-        self._timeout = None  # type: Optional[object]
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
     
-                from tornado.options import define, parse_command_line, options
+            # Deleting model 'ApiGrant'
+        db.delete_table('sentry_apigrant')
     
-    For each function or class described in `tornado.platform.interface`,
-the appropriate platform-specific implementation exists in this module.
-Most code that needs access to this functionality should do e.g.::
+            # Deleting field 'CommitAuthor.external_id'
+        db.delete_column('sentry_commitauthor', 'external_id')
     
-        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
-    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
-    the default for ``tornado.simple_httpclient``, but other libraries
-    may default to ``AF_UNSPEC``.
+      def testDefaultParseValueDict(self):
+    self.assertEqual(
+        parser.DefaultParseValue('{'abc': 5, '123': 1}'), {'abc': 5, '123': 1})
+    
+    import six
+    
+    import mock
+import six
+    
+    
+def Decode(data, encoding=None):
+  '''Returns string with non-ascii characters decoded to UNICODE.
