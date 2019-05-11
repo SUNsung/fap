@@ -1,76 +1,57 @@
 
         
-        
-class Suit(Enum):
+            publicKey, privateKey = generateKey(keySize)
+    print('\nWriting public key to file %s_pubkey.txt...' % name)
+    with open('%s_pubkey.txt' % name, 'w') as fo:
+        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
     
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
-        '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
+        def __init__(self, size_table, charge_factor=None, lim_charge=None):
+        self.size_table = size_table
+        self.values = [None] * self.size_table
+        self.lim_charge = 0.75 if lim_charge is None else lim_charge
+        self.charge_factor = 1 if charge_factor is None else charge_factor
+        self.__aux_list = []
+        self._keys = {}
     
-        def __init__(self, query, results):
-        self.query = query
-        self.results = results
+        for i in range(1, n+1):
+        dp[i][0] = True
     
-        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
-        self.pages = pages
-        self.data_store = data_store
-        self.reverse_index_queue = reverse_index_queue
-        self.doc_index_queue = doc_index_queue
+        This game presents moves along a linear chain of states, with two actions:
+     0) forward, which moves along the chain but returns no reward
+     1) backward, which returns to the beginning and has a small reward
+    
+    def test_text_envs():
+    env = gym.make('FrozenLake-v0')
+    video = VideoRecorder(env)
+    try:
+        env.reset()
+        video.capture_frame()
+        video.close()
+    finally:
+        os.remove(video.path)
+
+    
+        env = gym.make(args.env_id)
+    
+    # Top-down car dynamics simulation.
+#
+# Some ideas are taken from this great tutorial http://www.iforce2d.net/b2dtut/top-down-car by Chris Campbell.
+# This simulation is a bit more detailed, with wheels rotation.
+#
+# Created by Oleg Klimov. Licensed on the same terms as the rest of OpenAI Gym.
     
     
-def main():
-    if len(sys.argv) < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    check_format(sys.argv[1])
-    if len(errors) > 0:
-        for err in errors:
-            print(err)
-        sys.exit(1)
-    
-        for app in module.params['apps']:
-        if app not in client.apps():
-            module.fail_json(msg='App {0} does not exist'.format(app))
-    
-        # get the attributes
-    model_handle = model.get('mh')
+class VerboseProxy(object):
+    '''Proxy all function calls to another class and log method name, arguments
+    and return values for each call.
+    '''
     
     
-def do_send_request(module, url, params, key):
-    data = json.dumps(params)
-    headers = {
-        'Content-Type': 'application/json',
-        'x-stackdriver-apikey': key
-    }
-    response, info = fetch_url(module, url, headers=headers, data=data, method='POST')
-    if info['status'] != 200:
-        module.fail_json(msg='Unable to send msg: %s' % info['msg'])
+def main(args):
+    logging.basicConfig(format='\033[33m%(levelname)s:\033[37m %(message)s\033[0m\n')
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        for parent_name in parent_names:
-      try:
-        parent_group = group_name_to_group[ parent_name ]
-      except KeyError:
-        continue
-      parent_group.children.append( group )
-    
-        Returns:
-        An iterator that yields the given Futures as they complete (finished or
-        cancelled).
-    
-            Args:
-            max_workers: The maximum number of processes that can be used to
-                execute the given calls. If None or not given then as many
-                worker processes will be created as the machine has processors.
-        '''
-        _check_system_limits()
+        def test_path_from_options(self):
+        paths = ['one.yml', 'two.yml']
+        opts = {'--file': paths}
+        environment = Environment.from_env_file('.')
+        assert get_config_path_from_options('.', opts, environment) == paths
