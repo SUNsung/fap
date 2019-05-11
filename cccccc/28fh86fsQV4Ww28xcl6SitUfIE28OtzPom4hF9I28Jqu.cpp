@@ -1,311 +1,179 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+          char *oldBegin = Begin;
+  char *oldEnd = End;
+  std::size_t oldSize = (std::size_t) (oldEnd - oldBegin);
     
-    REGISTER_OP('Ackermann')
-    .Output('ackermann: string')
-    .Doc(R'doc(
-Output a fact about the ackermann function.
-)doc');
+    char Mangle::getStandardTypeSubst(StringRef TypeName) {
+#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
+  if (TypeName == #TYPENAME) {                       \
+    return #MANGLING[0];                             \
+  }
+    }
     
-    
-    {}  // namespace tensorflow
+    #endif
 
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // Computes complex-to-complex FFT in the transform direction as specified
-  // by direction parameter.
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<std::complex<float>> &input,
-                     DeviceMemory<std::complex<float>> *output) = 0;
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<std::complex<double>> &input,
-                     DeviceMemory<std::complex<double>> *output) = 0;
-    
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_PLATFORM_ID_H_
-#define TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_PLATFORM_ID_H_
-    
-      reqToSyntheticEnvMap = SubstitutionMap::get(reqSig,
-    [selfType, substConcreteType, depth, covariantSelf, &ctx]
-    (SubstitutableType *type) -> Type {
-      // If the conforming type is a class, the protocol 'Self' maps to
-      // the class-constrained 'Self'. Otherwise, it maps to the concrete
-      // type.
-      if (type->isEqual(selfType)) {
-        if (covariantSelf)
-          return GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
-        return substConcreteType;
-      }
-      // Other requirement generic parameters map 1:1 with their depth
-      // increased appropriately.
-      auto *genericParam = cast<GenericTypeParamType>(type);
-      // In a protocol requirement, the only generic parameter at depth 0
-      // should be 'Self', and all others at depth 1. Anything else is
-      // invalid code.
-      if (genericParam->getDepth() != 1)
-        return Type();
-      auto substGenericParam =
-        GenericTypeParamType::get(depth, genericParam->getIndex(), ctx);
-      return substGenericParam;
-    },
-    [selfType, substConcreteType, conformance, conformanceDC, &ctx](
-        CanType type, Type replacement, ProtocolDecl *proto)
-          -> Optional<ProtocolConformanceRef> {
-      // The protocol 'Self' conforms concretely to the conforming type.
-      if (type->isEqual(selfType)) {
-        ProtocolConformance *specialized = conformance;
-        if (conformance && conformance->getGenericSignature()) {
-          auto concreteSubs =
-            substConcreteType->getContextSubstitutionMap(
-              conformanceDC->getParentModule(), conformanceDC);
-          specialized =
-            ctx.getSpecializedConformance(substConcreteType, conformance,
-                                          concreteSubs);
-        }
-    }
-    }
-    
-    using namespace swift;
-    
-      DefaultCacheKey CKey(Key, &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    if (Entry->second == Value)
-      return;
-    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
-    DCache.Entries.erase(Entry);
-  }
-    
-    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
-                                               ArrayRef<unsigned char> key) {
-  out << '\'';
-  for (auto byte : key) {
-    if (byte < 16) out << '0';
-    out.write_hex(byte);
-  }
-  out << '\'';
+    {  int result = 0;
+  RenderThread::Get()->Send(new ShellViewHostMsg_AllocateId(
+      routing_id,
+      &result));
+  return scope.Escape(v8::Integer::New(isolate, result));
 }
+    
+    
+    {}  // namespace nwapi
 
     
-    
-    {  OutLines.append(Lines.begin(), Lines.end());
-}
-
-    
-      bool isImportAsMember() const { return bool(effectiveDC); }
-    
-    std::string Mangle::translateOperator(StringRef Op) {
-  std::string Encoded;
-  for (char ch : Op) {
-    Encoded.push_back(translateOperatorChar(ch));
-  }
-  return Encoded;
-}
-    
-    static bool encodeToUTF8(const std::vector<uint32_t> &Scalars,
-                         std::string &OutUTF8) {
-  for (auto S : Scalars) {
-    if (!isValidUnicodeScalar(S)) {
-      OutUTF8.clear();
-      return false;
-    }
-    if (S >= 0xD800 && S < 0xD880)
-      S -= 0xD800;
-    }
-    }
-    
-    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
-                                       const grpc_call_element_args* args) {
-  path_ = grpc_slice_ref_internal(args->path);
-  start_time_ = absl::Now();
-  method_ = GetMethod(&path_);
-  qualified_method_ = absl::StrCat('Sent.', method_);
-  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
-                    OnDoneRecvTrailingMetadataCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  return GRPC_ERROR_NONE;
+    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
 }
     
     
-    {  RpcServerStatsEncoding() = delete;
-  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
-  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
 };
     
-    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
+      std::shared_ptr<DHTNode> localNode_;
     
-    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-    
-    #ifdef GPR_APPLE
+    #include 'common.h'
     
     
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
+    {  virtual bool finished() = 0;
+};
     
-    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
-  memset(core, 0, sizeof(*core));
-  for (const auto& m : proto.metrics()) {
-    switch (m.value_case()) {
-      case Metric::VALUE_NOT_SET:
-        break;
-      case Metric::kCount:
-        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
-          if (m.name() == grpc_stats_counter_name[i]) {
-            core->counters[i] = m.count();
-            break;
-          }
-        }
-        break;
-      case Metric::kHistogram:
-        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
-          if (m.name() == grpc_stats_histogram_name[i]) {
-            const auto& h = m.histogram();
-            bool valid = true;
-            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              if (grpc_stats_histo_bucket_boundaries[i][j] !=
-                  h.buckets(j).start()) {
-                valid = false;
-              }
-            }
-            if (!valid) {
-              gpr_log(GPR_ERROR,
-                      'Found histogram %s but shape is different from proto',
-                      m.name().c_str());
-            }
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              core->histograms[grpc_stats_histo_start[i] + j] =
-                  h.buckets(j).count();
-            }
-          }
-        }
-        break;
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+    StopWriteToken::~StopWriteToken() {
+  assert(controller_->total_stopped_ >= 1);
+  --controller_->total_stopped_;
+}
+    
+      // these three metods are querying the state of the WriteController
+  bool IsStopped() const;
+  bool NeedsDelay() const { return total_delayed_.load() > 0; }
+  bool NeedSpeedupCompaction() const {
+    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
+  }
+  // return how many microseconds the caller needs to sleep after the call
+  // num_bytes: how many number of bytes to put into the DB.
+  // Prerequisite: DB mutex held.
+  uint64_t GetDelay(Env* env, uint64_t num_bytes);
+  void set_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    } else if (write_rate > max_delayed_write_rate()) {
+      write_rate = max_delayed_write_rate();
     }
+    delayed_write_rate_ = write_rate;
+  }
+    
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
+    
+      Status s = OptimisticTransactionDB::Open(options, kDBPath, &txn_db);
+  assert(s.ok());
+  db = txn_db->GetBaseDB();
+    
+      txn->Rollback();
+    
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
+    }
+    
+    class Checkpoint {
+ public:
+  // Creates a Checkpoint object to be used for creating openable snapshots
+  static Status Create(DB* db, Checkpoint** checkpoint_ptr);
+    }
+    
+      static int GetSweepSpaceIndex(AllocationSpace space) {
+    DCHECK(IsValidSweepingSpace(space));
+    return space - FIRST_GROWABLE_PAGED_SPACE;
+  }
+    
+    
+void Assembler::rcl(Register dst, uint8_t imm8) {
+  EnsureSpace ensure_space(this);
+  DCHECK(is_uint5(imm8));  // illegal shift count
+  if (imm8 == 1) {
+    EMIT(0xD1);
+    EMIT(0xD0 | dst.code());
+  } else {
+    EMIT(0xC1);
+    EMIT(0xD0 | dst.code());
+    EMIT(imm8);
   }
 }
     
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
+      void minps(XMMRegister dst, Operand src);
+  void minps(XMMRegister dst, XMMRegister src) { minps(dst, Operand(src)); }
+  void maxps(XMMRegister dst, Operand src);
+  void maxps(XMMRegister dst, XMMRegister src) { maxps(dst, Operand(src)); }
+    
+      int double_regs_offset = FrameDescription::double_registers_offset();
+  // Fill in the double input registers.
+  for (int i = 0; i < config->num_allocatable_double_registers(); ++i) {
+    int code = config->GetAllocatableDoubleCode(i);
+    int dst_offset = code * kDoubleSize + double_regs_offset;
+    int src_offset = code * kDoubleSize;
+    __ movsd(xmm0, Operand(esp, src_offset));
+    __ movsd(Operand(esi, dst_offset), xmm0);
   }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
+    
+    Register JavaScriptFrame::fp_register() { return ebp; }
+Register JavaScriptFrame::context_register() { return esi; }
+Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
     
     
-    {    // Some corruption was detected.  'size' is the approximate number
-    // of bytes dropped due to the corruption.
-    virtual void Corruption(size_t bytes, const Status& status) = 0;
-  };
+    {  // Rest of parameters passed to JSRunMicrotasksEntry.
+  static constexpr int kMicrotaskQueueArgOffset = +3 * kSystemPointerSize;
+};
     
-      // crc32c values for all supported record types.  These are
-  // pre-computed to reduce the overhead of computing the crc of the
-  // record type stored in the header.
-  uint32_t type_crc_[kMaxRecordType + 1];
+    const Register StoreTransitionDescriptor::SlotRegister() { return no_reg; }
+const Register StoreTransitionDescriptor::VectorRegister() { return no_reg; }
+const Register StoreTransitionDescriptor::MapRegister() { return edi; }
     
-    namespace leveldb {
+      BIND(&if_lhsisnotnumber);
+  {
+    // No checks on rhs are done yet. We just know lhs is not a number or Smi.
+    Label if_lhsisoddball(this), if_lhsisnotoddball(this);
+    Node* lhs_instance_type = LoadInstanceType(lhs);
+    Node* lhs_is_oddball = InstanceTypeEqual(lhs_instance_type, ODDBALL_TYPE);
+    Branch(lhs_is_oddball, &if_lhsisoddball, &if_lhsisnotoddball);
     }
-    
-    class Repairer {
- public:
-  Repairer(const std::string& dbname, const Options& options)
-      : dbname_(dbname),
-        env_(options.env),
-        icmp_(options.comparator),
-        ipolicy_(options.filter_policy),
-        options_(SanitizeOptions(dbname, &icmp_, &ipolicy_, options)),
-        owns_info_log_(options_.info_log != options.info_log),
-        owns_cache_(options_.block_cache != options.block_cache),
-        next_file_number_(1) {
-    // TableCache can be small since we expect each table to be opened once.
-    table_cache_ = new TableCache(dbname_, options_, 10);
-  }
-    }
-    
-    namespace leveldb {
-    }
-    
-    class TableCache {
- public:
-  TableCache(const std::string& dbname, const Options& options, int entries);
-  ~TableCache();
-    }
-    
-    //-----------------------------------------------------------------------------
-// [SECTION] ImFontConfig
-//-----------------------------------------------------------------------------
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2019-02-11: OpenGL: Projecting clipping rectangles correctly using draw_data->FramebufferScale to allow multi-viewports for retina display.
-//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
-//  2018-08-03: OpenGL: Disabling/restoring GL_LIGHTING and GL_COLOR_MATERIAL to increase compatibility with legacy OpenGL applications.
-//  2018-06-08: Misc: Extracted imgui_impl_opengl2.cpp/.h away from the old combined GLFW/SDL+OpenGL2 examples.
-//  2018-06-08: OpenGL: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL2_RenderDrawData() in the .h file so you can call it yourself.
-//  2017-09-01: OpenGL: Save and restore current polygon mode.
-//  2016-09-10: OpenGL: Uploading font texture as RGBA32 to increase compatibility with users shaders (not ideal).
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-    
-    //---- Define assertion handler. Defaults to calling assert().
-//#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)
-//#define IM_ASSERT(_EXPR)  ((void)(_EXPR))     // Disable asserts
-    
-        // Cleanup
-    ImGui_ImplAllegro5_Shutdown();
-    ImGui::DestroyContext();
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
-    
-        // Main loop
-    while (true)
-    {
-        if (s3eDeviceCheckQuitRequest())
-            break;
-    }
-    
-        outliterals(input+length - literals, literals);
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
