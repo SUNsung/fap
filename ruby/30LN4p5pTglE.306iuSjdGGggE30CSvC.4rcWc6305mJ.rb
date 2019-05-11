@@ -1,72 +1,79 @@
 
         
-        WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
-mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
+          gem.licenses      = ['MIT']
     
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
+    Given(/^an invalid release named '(.+)'$/) do |filename|
+  run_vagrant_command('mkdir -p #{TestApp.release_path(filename)}')
 end
 
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
+        def any?(key)
+      value = fetch(key)
+      if value && value.respond_to?(:any?)
+        begin
+          return value.any?
+        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
+          # Gracefully ignore values whose `any?` method doesn't accept 0 args
+        end
       end
-    end
     
-        def entries_as_json
-      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
+          def response
+        return @response if defined? @response
     
-        attr_reader :filters
+          ServerKey = Struct.new(:hostname, :port)
     
-        def mime_type
-      headers['Content-Type'] || 'text/plain'
-    end
+          private
     
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
+            def current
+          @order = find_current_order
+          if @order
+            respond_with(@order, default_template: :show, locals: { root_object: @order })
+          else
+            head :no_content
+          end
+        end
+    
+      # Used on the blog index to split posts on the <!--more--> marker
+  def excerpt(input)
+    if input.index(/<!--\s*more\s*-->/i)
+      input.split(/<!--\s*more\s*-->/i)[0]
+    else
+      input
     end
   end
-end
+    
+    # enable logging
+FPM::Util.send :module_function, :logger
+FPM::Util.logger.level = :info
+FPM::Util.logger.subscribe STDERR
+    
+      def to_s(format=nil)
+    return super('NAME_FULLVERSION_ARCH.TYPE') if format.nil?
+    return super(format)
+  end
+    
+      end # def output
+end # class FPM::Package::IPS
 
     
-      def set_account
-    @account = Account.find(params[:id])
-  end
-    
-      def future_expires
-    Time.now.utc + lease_seconds_or_default
-  end
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
+        if script?(:before_install) or script?(:after_install) or \
+        script?(:before_upgrade) or script?(:after_upgrade) or \
+        script?(:before_remove) or script?(:after_remove)
+      install_script = template('pacman/INSTALL.erb').result(binding)
+      install_script_file = build_path('.INSTALL')
+      File.write(install_script_file, install_script)
     end
-  end
     
-    module Jekyll
+        # Generate the package 'Prototype' file
+    File.open('#{build_path}/Prototype', 'w') do |prototype|
+      prototype.puts('i pkginfo')
+      prototype.puts('i preinstall') if self.scripts['pre-install']
+      prototype.puts('i postinstall') if self.scripts['post-install']
     
-    
-  # Adds some extra filters used during the category creation process.
-  module Filters
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
+        cleanup_staging
+    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
+    # rest.
+    dir.input('.')
+    @staging_path = dir.staging_path
+    dir.cleanup_build
+  end # def input
