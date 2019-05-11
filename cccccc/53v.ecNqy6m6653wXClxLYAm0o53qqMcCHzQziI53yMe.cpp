@@ -1,344 +1,338 @@
 
         
-        base::StringPiece GetStringResource(int resource_id) {
-  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
+        static void secp256k1_ge_to_storage(secp256k1_ge_storage *r, const secp256k1_ge *a) {
+    secp256k1_fe x, y;
+    VERIFY_CHECK(!a->infinity);
+    x = a->x;
+    secp256k1_fe_normalize(&x);
+    y = a->y;
+    secp256k1_fe_normalize(&y);
+    secp256k1_fe_to_storage(&r->x, &x);
+    secp256k1_fe_to_storage(&r->y, &y);
 }
     
-    class ObjectManager;
+        memset(rng->v, 0x01, 32); /* RFC6979 3.2.b. */
+    memset(rng->k, 0x00, 32); /* RFC6979 3.2.c. */
     
+    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
+#define SECP256K1_MODULE_ECDH_MAIN_H
     
-    {} // namespace extensions
-#endif
-
-    
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
-  } else {
-    return index_ == rhs.index_;
-  }
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
-  if (b->idx.named.grpc_server_stats_bin != nullptr) {
-    ServerStatsDeserialize(
-        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
-            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
-        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
-        elapsed_time);
-    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
-  }
-}
-    
-    #include 'absl/strings/string_view.h'
-#include 'absl/time/time.h'
-#include 'src/cpp/ext/filters/census/channel_filter.h'
-#include 'src/cpp/ext/filters/census/context.h'
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
+    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
+    secp256k1_scalar r, s;
+    secp256k1_scalar sec, non, msg;
+    int recid;
+    int ret = 0;
+    int overflow = 0;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(seckey != NULL);
+    if (noncefp == NULL) {
+        noncefp = secp256k1_nonce_function_default;
     }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
-    
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
-    
-    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
-    
-    namespace grpc {
     }
     
     
-    {}  // namespace grpc
-    
-    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
-  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
-    return system_clock::time_point::max();
-  }
-  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
-  system_clock::time_point tp;
-  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
-  tp +=
-      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
-  return tp;
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
 }
-    
-      std::string Key(int i) {
-    char buf[100];
-    snprintf(buf, sizeof(buf), 'key%06d', i);
-    return std::string(buf);
-  }
-    
-    #include 'db/builder.h'
+}
     
     #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
+#include <string>
+#include <vector>
     
-    typedef uint64_t SequenceNumber;
+    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
+#define BITCOIN_CRYPTO_RIPEMD160_H
     
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
+    loop0:
+    lea	TBL,[K256 wrt rip]
     
-    #ifndef STORAGE_LEVELDB_DB_LOG_READER_H_
-#define STORAGE_LEVELDB_DB_LOG_READER_H_
+      desired_output_for_decode = 'zbcdefghIJ';
+  expected = string('\0zbcdefghIJ\0', 12);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
     
-    #endif  // STORAGE_LEVELDB_DB_MEMTABLE_H_
-
-    
-    
-    {
-    {  void ArchiveFile(const std::string& fname) {
-    // Move into another directory.  E.g., for
-    //    dir/foo
-    // rename to
-    //    dir/lost/foo
-    const char* slash = strrchr(fname.c_str(), '/');
-    std::string new_dir;
-    if (slash != nullptr) {
-      new_dir.assign(fname.data(), slash - fname.data());
+    string Status::ToString() const {
+  if (error_code_ == error::OK) {
+    return 'OK';
+  } else {
+    if (error_message_.empty()) {
+      return error::CodeEnumToString(error_code_);
+    } else {
+      return error::CodeEnumToString(error_code_) + ':' +
+          error_message_;
     }
-    new_dir.append('/lost');
-    env_->CreateDir(new_dir);  // Ignore error
-    std::string new_file = new_dir;
-    new_file.append('/');
-    new_file.append((slash == nullptr) ? fname.c_str() : slash + 1);
-    Status s = env_->RenameFile(fname, new_file);
-    Log(options_.info_log, 'Archiving %s: %s\n',
-        fname.c_str(), s.ToString().c_str());
   }
-};
-}  // namespace
-    
-    TableCache::TableCache(const std::string& dbname,
-                       const Options& options,
-                       int entries)
-    : env_(options.env),
-      dbname_(dbname),
-      options_(options),
-      cache_(NewLRUCache(entries)) {
 }
     
-    #ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
-#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+    #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
     
-    // WriteBatchInternal provides static methods for manipulating a
-// WriteBatch that we don't want in the public WriteBatch interface.
-class WriteBatchInternal {
- public:
-  // Return the number of entries in the batch.
-  static int Count(const WriteBatch* batch);
+    using google::protobuf::FileDescriptorProto;
+using google::protobuf::FileDescriptor;
+using google::protobuf::DescriptorPool;
+using google::protobuf::io::Printer;
+using google::protobuf::util::SchemaGroupStripper;
+using google::protobuf::util::EnumScrubber;
+using google::protobuf::util::ExtensionStripper;
+using google::protobuf::util::FieldScrubber;
+    
+    #include 'addressbook.pb.h'
+    
+      /// @brief Deprecated; use <code>Reshape(const vector<int>& shape)</code>.
+  void Reshape(const int num, const int channels, const int height,
+      const int width);
+  /**
+   * @brief Change the dimensions of the blob, allocating new memory if
+   *        necessary.
+   *
+   * This function can be called both to create an initial allocation
+   * of memory, and to adjust the dimensions of a top blob during Layer::Reshape
+   * or Layer::Forward. When changing the size of blob, memory will only be
+   * reallocated if sufficient memory does not already exist, and excess memory
+   * will never be freed.
+   *
+   * Note that reshaping an input blob and immediately calling Net::Backward is
+   * an error; either Net::Forward or Net::Reshape need to be called to
+   * propagate the new input shape to higher layers.
+   */
+  void Reshape(const vector<int>& shape);
+  void Reshape(const BlobShape& shape);
+  void ReshapeLike(const Blob& other);
+  inline string shape_string() const {
+    ostringstream stream;
+    for (int i = 0; i < shape_.size(); ++i) {
+      stream << shape_[i] << ' ';
     }
-    
-     public:
-  enum Order {
-    SEQUENTIAL,
-    RANDOM
-  };
-  enum DBState {
-    FRESH,
-    EXISTING
-  };
-    
-    
-  bool ReadProtoFromTextContent(const std::string& text,
-                                ::google::protobuf::Message* proto) const {
-    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
-    return success;
+    stream << '(' << count_ << ')';
+    return stream.str();
   }
+  inline const vector<int>& shape() const { return shape_; }
+  /**
+   * @brief Returns the dimension of the index-th axis (or the negative index-th
+   *        axis from the end, if index is negative).
+   *
+   * @param index the axis index, which may be negative as it will be
+   *        'canonicalized' using CanonicalAxisIndex.
+   *        Dies on out of range index.
+   */
+  inline int shape(int index) const {
+    return shape_[CanonicalAxisIndex(index)];
+  }
+  inline int num_axes() const { return shape_.size(); }
+  inline int count() const { return count_; }
+    
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+#endif
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual inline const char* type() const { return 'BNLL'; }
     
     
-    {
-    {
-    {  /*!
-   * \brief Worker threads.
-   */
-  std::vector<std::thread> worker_threads_;
-  /*!
-   * \brief Startup synchronization objects
-   */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
-  /*!
-   * \brief Disallow default construction.
-   */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
 };
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
-
     
-      // Note that out is of the same shape as the transpose of
-  // the Khatri-Rao product
-  //
-  // When input is transposed, we could first put the transpose of
-  // the Khatri-Rao product in out, then call the linear solver, which
-  // will update the out's content to the final result;
-  //
-  // If the input is not transposed, we need to create an intermediate
-  // tensor to store the Khatri-Rao product, call the linear solver with
-  // MXNET_LAPACK_COL_MAJOR as the matrix layout, and transpose
-  // the final result into out
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-       out = data / sqrt(data.shape[-1])
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    #include './crop-inl.h'
     
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 3U);
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
-    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
-    Shape<4> grid_shape = Shape4(out.size(0), out.size(2), out.size(3), 2);
-    Tensor<gpu, 3, DType> loc = in_data[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
-    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
-                                .get_with_shape<gpu, 4, DType>(grid_shape, s);
-    if (!init_cudnn_) {
-     Init(s, in_data, out_data);
+    {}  // namespace caffe
+    
+    #include 'unicode/translit.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    
+int32_t SelectFormat::findSubMessage(const MessagePattern& pattern, int32_t partIndex,
+                                     const UnicodeString& keyword, UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
+        return 0;
     }
-    CHECK_EQ(data.CheckContiguous(), true);
-    CHECK_EQ(out.CheckContiguous(), true);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    if (param_.transform_type == st::kAffine) {
-      CUDNN_CALL(cudnnSpatialTfGridGeneratorForward(s->dnn_handle_,
-                                                    st_desc_,
-                                                    loc.dptr_,
-                                                    grid.dptr_));
-    }
-    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
-                                            st_desc_,
-                                            &alpha,
-                                            in_desc_,
-                                            data.dptr_,
-                                            grid.dptr_,
-                                            &beta,
-                                            out_desc_,
-                                            out.dptr_));
-  }
-    
-    DMLC_REGISTER_PARAMETER(NDArrayOpParam);
-    
-    
-    {
-    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
-      if (index == 1) {
-        var->attrs.dict['__init__'] = '[\'zero\', {}]';
-      }
-    });
-}  // namespace op
-}  // namespace mxnet
-    
-    
-    {
-    {    private:
-        std::wstring m_activityName;
-        winrt::Windows::Foundation::Diagnostics::LoggingChannel m_channel;
-        winrt::Windows::Foundation::Diagnostics::LoggingFields m_fields;
-        winrt::Windows::Foundation::Diagnostics::LoggingActivity m_activity;
-    };
+    UnicodeString other(FALSE, SELECT_KEYWORD_OTHER, 5);
+    int32_t count = pattern.countParts();
+    int32_t msgStart=0;
+    // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
+    do {
+        const MessagePattern::Part& part=pattern.getPart(partIndex++);
+        const UMessagePatternPartType type=part.getType();
+        if(type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
+            break;
+        }
+        // part is an ARG_SELECTOR followed by a message
+        if(pattern.partSubstringMatches(part, keyword)) {
+            // keyword matches
+            return partIndex;
+        } else if(msgStart==0 && pattern.partSubstringMatches(part, other)) {
+            msgStart=partIndex;
+        }
+        partIndex=pattern.getLimitPartIndex(partIndex);
+    } while(++partIndex<count);
+    return msgStart;
 }
-
     
     
-    {}
-    
-    
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
-  }
-};
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
-    
-    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
-  const char* prefix = 'glob://';
-  const char* path_str = path.data();
-  int path_len = path.length();
-    }
-    
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
-    
-    /*
- * If the given AtomicHashMap has more than one submap allocated, log a perf
- * warning with its name.
- *
- * A single unique done flag should exist for each map being checked, to avoid
- * logging more than once (process, map) pair.
- */
-template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done);
-    
-    bool Waves3D::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude)
-{
-    if (Grid3DAction::initWithDuration(duration, gridSize))
-    {
-        _waves = waves;
-        _amplitude = amplitude;
-        _amplitudeRate = 1.0f;
-    }
-    }
-    
-    // main loop
-void ActionManager::update(float dt)
-{
-    for (tHashElement *elt = _targets; elt != nullptr; )
-    {
-        _currentTarget = elt;
-        _currentTargetSalvaged = false;
-    }
-    }
-    
-    http://www.cocos2d-x.org
-    
-    @since v0.99.5
-@js cc.animationCache
-*/
-class CC_DLL AnimationCache : public Ref
-{
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
 public:
-    /**
-     * @js ctor
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
+    
+    class NumberFormat;
+    
+        /**
+     * Returns TRUE if this object is equal to rhs.
      */
-    AnimationCache();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    ~AnimationCache();
-    /** Returns the shared instance of the Animation cache 
-	 @js NA
-	*/
-    static AnimationCache* getInstance();
+    UBool equals(const SignificantDigitInterval &rhs) const {
+        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
     }
+    
+    
+    
+        case UDAT_QUARTER_FIELD:
+        if (gotNumber) // i.e., Q or QQ.
+        {
+            // Don't want to parse the month if it is a string
+            // while pattern uses numeric style: Q or QQ.
+            // [We computed 'value' above.]
+            cal.set(UCAL_MONTH, (value - 1) * 3);
+            return pos.getIndex();
+        } else {
+            // count >= 3 // i.e., QQQ or QQQQ
+            // Want to be able to parse both short and long forms.
+            // Try count == 4 first:
+            int32_t newStart = 0;
+    }
+    
+        /**
+     * Implement UnicodeMatcher
+     * Returns TRUE if this matcher will match a character c, where c
+     * & 0xFF == v, at offset, in the forward direction (with limit >
+     * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     * @param v    the given value
+     * @return     TRUE if this matcher will match a character c, 
+     *             where c & 0xFF == v
+     */
+    virtual UBool matchesIndexValue(uint8_t v) const;
+    
+    class ExtensionHandler : virtual public ExtensionIf {
+ public:
+  ExtensionHandler() {
+    // Your initialization goes here
+  }
+    }
+    
+    namespace osquery { namespace extensions {
+    }
+    }
+    
+      for (const auto& iter : line) {
+    options_index++;
+    if (iter[0] == '/') {
+      line_exports.push_back(iter);
+    } else {
+      break;
+    }
+  }
+    
+      // Join results..
+  for (auto& entry : hw_info) {
+    bool matched = false;
+    for (auto& row : results) {
+      auto serial = row.find('serial_number');
+      if (serial == row.end()) {
+        continue;
+      }
+    }
+    }
+    
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
+    
+    
+    {  auto dst = std::vector<TestMessage>{};
+  auto status =
+      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
+          &buf[0], tail, head, buf.size(), dst);
+  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
+  ASSERT_EQ(dst.size(), test_size);
+  for (std::size_t i = 0; i < test_size; ++i) {
+    EXPECT_EQ(dst[i].c_, 't');
+    EXPECT_EQ(dst[i].d_, 'i');
+  }
+  EXPECT_EQ(dst[0].a_, 1);
+  EXPECT_EQ(dst[0].b_, 2);
+  EXPECT_EQ(dst[1].a_, 3);
+  EXPECT_EQ(dst[1].b_, 4);
+  EXPECT_EQ(dst[2].a_, 5);
+  EXPECT_EQ(dst[2].b_, 6);
+}
+    
+    namespace osquery {
+namespace table_tests {
+    }
+    }
+    
+    // Sanity check integration test for kernel_integrity
+// Spec file: specs/linux/kernel_integrity.table
+    
+    // Sanity check integration test for kernel_modules
+// Spec file: specs/linux/kernel_modules.table
