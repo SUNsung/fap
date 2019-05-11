@@ -1,121 +1,116 @@
 
         
-        require 'rack/test'
-require 'action_controller/railtie'
-require 'active_record'
-require 'devise/rails/routes'
-require 'devise/rails/warden_compat'
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+              if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
       end
-    
-          def mailer_reply_to(mapping)
-        mailer_sender(mapping, :reply_to)
-      end
-    
-        def default_constraints(options)
-      @constraints = Hash.new
-      @constraints.merge!(options[:constraints]) if options[:constraints]
     end
     
-        # Creates configuration values for Devise and for the given module.
-    #
-    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
-    #
-    # The line above creates:
-    #
-    #   1) An accessor called Devise.stretches, which value is used by default;
-    #
-    #   2) Some class methods for your model Model.stretches and Model.stretches=
-    #      which have higher priority than Devise.stretches;
-    #
-    #   3) And an instance method stretches.
-    #
-    # To add the class methods you need to have a module ClassMethods defined
-    # inside the given class.
-    #
-    def self.config(mod, *accessors) #:nodoc:
-      class << mod; attr_accessor :available_configs; end
-      mod.available_configs = accessors
+      private
     
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
+      end
+    end
+  end
     
-                seq = OpenSSL::ASN1::Sequence.new(seqs)
+      included do
+    before_action :set_user_activity
+  end
     
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+          def cookie_paths(path)
+        path = '/' if path.to_s.empty?
+        paths = []
+        Pathname.new(path).descend { |p| paths << p.to_s }
+        paths
+      end
+    
+      describe '.token' do
+    it 'returns a unique masked version of the authenticity token' do
+      expect(Rack::Protection::AuthenticityToken.token(session)).not_to eq(masked_token)
+    end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
 end
     
-                int
-          end
+        def render(context)
+      includes_dir = File.join(context.registers[:site].source, '_includes')
     
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequestBody into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
     
-              # Decodes the crealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-      # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+      # Replaces relative urls with full urls
+  def expand_urls(input, url='')
+    url ||= '/'
+    input.gsub /(\s+(href|src|poster)\s*=\s*['|']{1})(\/[^\/>]{1}[^\''>]*)/ do
+      $1+url+$3
+    end
+  end
