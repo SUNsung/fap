@@ -1,304 +1,139 @@
 
         
-        struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
-    }
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
-    
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return nullptr;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
-      int64_t new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
-  }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
+        void MapLiteTestUtil::ExpectMapFieldsModified(
+    const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_FOO_LITE>(
+      message);
 }
     
-    
-    {  // Best available image.
-  Pix* pix_;
-  // True if the source image is white-on-black.
-  bool inverse_;
-  // Block the word came from. If not null, block->re_rotation() takes the
-  // 'untransformed' coordinates even further back to the original image.
-  // Used only on the first DENORM in a chain.
-  const BLOCK* block_;
-  // Rotation to apply between translation to the origin and scaling.
-  const FCOORD* rotation_;
-  // Previous transformation in a chain.
-  const DENORM* predecessor_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding x-coord. Owned by the DENORM.
-  GenericVector<float>* x_map_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding y-coord. Owned by the DENORM.
-  GenericVector<float>* y_map_;
-  // x-coordinate to be mapped to final_xshift_ in the result.
-  float x_origin_;
-  // y-coordinate to be mapped to final_yshift_ in the result.
-  float y_origin_;
-  // Scale factors for x and y coords. Applied to pre-rotation system.
-  float x_scale_;
-  float y_scale_;
-  // Destination coords of the x_origin_ and y_origin_.
-  float final_xshift_;
-  float final_yshift_;
+    class Proto3DataStripper : public DataStripper {
+ private:
+  virtual bool ShouldBeClear(const FieldDescriptor *field) {
+    return field->type() == FieldDescriptor::TYPE_GROUP ||
+           field->is_extension();
+  }
 };
     
-    #include 'publictypes.h'
-#include 'elst.h'
-#include 'strngs.h'
+      for (int i = argc / 2; i > 0; i--) {
+    const std::string &input_file = argv[i];
+    const std::string &output_file = argv[i + argc / 2];
+    }
     
-    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    int main(int argc, char *argv[]) {
+  if (argc % 2 == 0 || argc == 1) {
+    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
+        'input_files are one to one mapping to output_file_names.' <<
+        std::endl;
+    return 1;
+  }
+    }
     
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
+      // Returns true iff the test part failed.
+  bool failed() const { return type_ != kSuccess; }
+    
+    // A class representing the parsed contents of the
+// --gtest_internal_run_death_test flag, as it existed when
+// RUN_ALL_TESTS was called.
+class InternalRunDeathTestFlag {
  public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
+  InternalRunDeathTestFlag(const std::string& a_file,
+                           int a_line,
+                           int an_index,
+                           int a_write_fd)
+      : file_(a_file), line_(a_line), index_(an_index),
+        write_fd_(a_write_fd) {}
     }
     
-    		typedef struct
-		{
-			//Red portion
-			unsigned baseR : 8;
-			unsigned tableIndexR : 4;
-			unsigned multiplierR : 4;
-			unsigned selectorsR0 : 8;
-			unsigned selectorsR1 : 8;
-			unsigned selectorsR2 : 8;
-			unsigned selectorsR3 : 8;
-			unsigned selectorsR4 : 8;
-			unsigned selectorsR5 : 8;
-			//Green portion
-			unsigned baseG : 8;
-			unsigned tableIndexG : 4;
-			unsigned multiplierG : 4;
-			unsigned selectorsG0 : 8;
-			unsigned selectorsG1 : 8;
-			unsigned selectorsG2 : 8;
-			unsigned selectorsG3 : 8;
-			unsigned selectorsG4 : 8;
-			unsigned selectorsG5 : 8;
-		} Data;
+        for (int i = 2; i <= max; i++) {
+      if (!is_prime_[i]) continue;
+    }
     
-    enum InitOptions {ioReverseSolution = 1, ioStrictlySimple = 2, ioPreserveCollinear = 4};
-enum JoinType {jtSquare, jtRound, jtMiter};
-enum EndType {etClosedPolygon, etClosedLine, etOpenButt, etOpenSquare, etOpenRound};
+    #include 'EtcBlock4x4EncodingBits.h'
+#include 'EtcColor.h'
+#include 'EtcImage.h'
+#include 'EtcColorFloatRGBA.h'
+#include 'EtcBlock4x4Encoding_RGB8.h'
+#include 'EtcBlock4x4Encoding_RGBA8.h'
+#include 'EtcBlock4x4Encoding_RGB8A1.h'
+#include 'EtcBlock4x4Encoding_R11.h'
+#include 'EtcBlock4x4Encoding_RG11.h'
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    			float fSourceX = 2.0f * a_frgbaSourcePixel.fR - 1.0f;
+			float fSourceY = 2.0f * a_frgbaSourcePixel.fG - 1.0f;
+			float fSourceZ = 2.0f * a_frgbaSourcePixel.fB - 1.0f;
     
-    #undef silk_SMLAWW
-static OPUS_INLINE opus_int32 silk_SMLAWW_armv4(opus_int32 a, opus_int32 b,
- opus_int32 c)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    '#silk_SMLAWW\n\t'
-    'smull %0, %1, %2, %3\n\t'
-    : '=&r'(rd_lo), '=&r'(rd_hi)
-    : '%r'(b), 'r'(c)
-  );
-  return a+(rd_hi<<16)+(rd_lo>>16);
-}
-#define silk_SMLAWW(a, b, c) (silk_SMLAWW_armv4(a, b, c))
+    		ColorFloatRGBA	m_afrgbaDecodedColors[PIXELS];	// decoded RGB components, ignore Alpha
+		float			m_afDecodedAlphas[PIXELS];		// decoded alpha component
+		float			m_fError;						// error for RGBA relative to m_pafrgbaSource
     
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
+    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
+static const tran_high_t sinpi_1_9 = 5283;
+static const tran_high_t sinpi_2_9 = 9929;
+static const tran_high_t sinpi_3_9 = 13377;
+static const tran_high_t sinpi_4_9 = 15212;
     
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
+    #define NORM_SCALING 1.f
     
-    Writer::~Writer() {
-}
     
-          case kNewFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &f.number) &&
-            GetVarint64(&input, &f.file_size) &&
-            GetInternalKey(&input, &f.smallest) &&
-            GetInternalKey(&input, &f.largest)) {
-          new_files_.push_back(std::make_pair(level, f));
-        } else {
-          msg = 'new-file entry';
+    {            // TODO: this copying here is redundant, value should be moved from the dictionary to the variable.
+            // Also, the correct device should be used upfront when deserializing NDArrayView.
+            Variable var(shape, kind, dataType, value.DeepClone(device, value.IsReadOnly()), needsGradient, dynamicAxis, isSparse, name, uid);
+            if (var.IsParameter())
+                return Parameter(var);
+            else
+                return Constant(var);
         }
-        break;
     
-    #include <set>
-#include <utility>
-#include <vector>
-#include 'db/dbformat.h'
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
+                {
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
     
-      void Write(bool write_sync, Order order, DBState state,
-             int num_entries, int value_size, int entries_per_batch) {
-    // Create new database if state == FRESH
-    if (state == FRESH) {
-      if (FLAGS_use_existing_db) {
-        message_ = 'skipping (--use_existing_db is true)';
-        return;
-      }
-      sqlite3_close(db_);
-      db_ = nullptr;
-      Open();
-      Start();
+            yield_count = 0;
+        do
+        {
+            ptr = pool->alloc(pool, size);
+            if (ptr)
+            {
+                break;
+            }
+            else
+            {
+                yield_count++;
+                yield_total_count++;
+                usleep(10);
+            }
+        } while (yield_count < 100);
+    
+    TEST(coroutine_base, yield_resume)
+{
+    long _cid;
+    long cid = Coroutine::create([](void *arg)
+    {
+        long cid = Coroutine::get_current_cid();
+        Coroutine *co = Coroutine::get_by_cid(cid);
+        co->yield();
+        *(long *) arg = Coroutine::get_current_cid();
+    }, &_cid);
     }
-    }
     
-    namespace HPHP { namespace HHBBC {
-    }
-    }
     
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    void Label::addJump(Assembler* a) {
-  if (m_address) return;
-  JumpInfo info;
-  info.a = a;
-  info.addr = a->codeBlock.frontier();
-  m_toPatch.push_back(info);
+    {
+    {        ret = chan.pop(0.001);
+        ASSERT_EQ(ret, nullptr);
+    });
 }
+
     
-      // Total amount of bytes that a li64 function emits as fixed size
-  static const uint8_t kLi64Len = instr_size_in_bytes * 5;
-  // TOC emit length: (ld/lwz + nop) or (addis + ld/lwz)
-  static const uint8_t kTocLen = instr_size_in_bytes * 2;
+        un1.sun_family = AF_UNIX;
+    un2.sun_family = AF_UNIX;
     
-    
-    {}
-    
-    #include 'hphp/runtime/base/perf-warning-inl.h'
-    
-    #ifndef incl_HPHP_PIPE_H_
-#define incl_HPHP_PIPE_H_
-    
-        // output changed array
-    std::cout << array << '\n';
-    
-      // drop column family
-  s = db->DropColumnFamily(handles[1]);
-  assert(s.ok());
-    
-    int main() {
-  rocksdb::DB* raw_db;
-  rocksdb::Status status;
-    }
-    
-    class DbDumpTool {
- public:
-  bool Run(const DumpOptions& dump_options,
-           rocksdb::Options options = rocksdb::Options());
-};
-    
-    namespace rocksdb {
-    }
-    
-    // Database with Transaction support.
-//
-// See optimistic_transaction.h and examples/transaction_example.cc
+    static unordered_map<int, wait_task *> waitpid_map;
+static unordered_map<int, int> child_processes;
+static queue<wait_task *> wait_list;
