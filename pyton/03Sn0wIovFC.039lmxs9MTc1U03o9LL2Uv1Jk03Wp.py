@@ -1,135 +1,238 @@
 
         
-            def __init__(self, operators, supervisors, directors):
-        self.operators = operators
-        self.supervisors = supervisors
-        self.directors = directors
-        self.queued_calls = deque()
+        
+def _get_most_recent_snapshot(snapshots, max_snapshot_age_secs=None, now=None):
+    '''
+    Gets the most recently created snapshot and optionally filters the result
+    if the snapshot is too old
+    :param snapshots: list of snapshots to search
+    :param max_snapshot_age_secs: filter the result if its older than this
+    :param now: simulate time -- used for unit testing
+    :return:
+    '''
+    if len(snapshots) == 0:
+        return None
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        if state == 'present':
+        if not all((replication_id, cluster_id)):
+            module.fail_json(msg='The state 'present' requires options: 'replication_id' and 'cluster_id'')
+        response, changed = create(module, connection, replication_id, cluster_id, name)
+    elif state == 'absent':
+        response, changed = delete(module, connection, name)
+    elif state == 'copy':
+        if not all((target, bucket)):
+            module.fail_json(msg='The state 'copy' requires options: 'target' and 'bucket'.')
+        response, changed = copy(module, connection, name, target, bucket)
     
+    RETURN = '''
+server_certificate_id:
+    description: The 21 character certificate id
+    returned: success
+    type: str
+    sample: 'ADWAJXWTZAXIPIMQHMJPO'
+certificate_body:
+    description: The asn1der encoded PEM string
+    returned: success
+    type: str
+    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
+server_certificate_name:
+    description: The name of the server certificate
+    returned: success
+    type: str
+    sample: 'server-cert-name'
+arn:
+    description: The Amazon resource name of the server certificate
+    returned: success
+    type: str
+    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
+path:
+    description: The path of the server certificate
+    returned: success
+    type: str
+    sample: '/'
+expiration:
+    description: The date and time this server certificate will expire, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2017-06-15T12:00:00+00:00'
+upload_date:
+    description: The date and time this server certificate was uploaded, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2015-04-25T00:36:40+00:00'
+'''
     
-if __name__ == '__main__':
-    HitCounts.run()
-
-    
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
-    
-    
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
+        if purge_rules is True and len(rules) > 0:
+        result['rules_purged'] = len(rules)
+        deletions = result['rules_purged']
+        rules = list()
+        if not module.check_mode:
+            gateway.del_all_nat_rules()
+            task = gateway.save_services_configuration()
+            vca.block_until_completed(task)
+            rules = gateway.get_nat_rules()
+        result['changed'] = True
     
     
 def main():
-    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
-        template = tmplf.read()
-    
-        out = issue_template_tmpl % {'version': locals()['__version__']}
-    
-        return ret
-    
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
-    
-    # General information about the project.
-project = u'youtube-dl'
-copyright = u'2014, Ricardo Garcia Gonzalez'
-    
-        def test_encrypt(self):
-        msg = b'message'
-        key = list(range(16))
-        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
-        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
-        self.assertEqual(decrypted, msg)
-    
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
+    argument_spec = ipa_argument_spec()
+    argument_spec.update(zone_name=dict(type='str', required=True),
+                         state=dict(type='str', default='present', choices=['present', 'absent']),
+                         )
     
     
-class TestExecution(unittest.TestCase):
-    def test_import(self):
-        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
+DOCUMENTATION = '''
+---
+module: airbrake_deployment
+version_added: '1.2'
+author: 'Bruce Pennypacker (@bpennypacker)'
+short_description: Notify airbrake about app deployments
+description:
+   - Notify airbrake about app deployments (see http://help.airbrake.io/kb/api-2/deploy-tracking)
+options:
+  token:
+    description:
+      - API token.
+    required: true
+  environment:
+    description:
+      - The airbrake environment name, typically 'production', 'staging', etc.
+    required: true
+  user:
+    description:
+      - The username of the person doing the deployment
+    required: false
+  repo:
+    description:
+      - URL of the project repository
+    required: false
+  revision:
+    description:
+      - A hash, number, tag, or other identifier showing what revision was deployed
+    required: false
+  url:
+    description:
+      - Optional URL to submit the notification to. Use to send notifications to Airbrake-compliant tools like Errbit.
+    required: false
+    default: 'https://airbrake.io/deploys.txt'
+    version_added: '1.5'
+  validate_certs:
+    description:
+      - If C(no), SSL certificates for the target url will not be validated. This should only be used
+        on personally controlled sites using self-signed certificates.
+    required: false
+    default: 'yes'
+    type: bool
+    
+    
+DOCUMENTATION = '''
+---
+module: bigpanda
+author: 'Hagai Kariti (@hkariti)'
+short_description: Notify BigPanda about deployments
+version_added: '1.8'
+description:
+   - Notify BigPanda when deployments start and end (successfully or not). Returns a deployment object containing all the parameters for future module calls.
+options:
+  component:
+    description:
+      - 'The name of the component being deployed. Ex: billing'
+    required: true
+    aliases: ['name']
+  version:
+    description:
+      - The deployment version.
+    required: true
+  token:
+    description:
+      - API token.
+    required: true
+  state:
+    description:
+      - State of the deployment.
+    required: true
+    choices: ['started', 'finished', 'failed']
+  hosts:
+    description:
+      - Name of affected host name. Can be a list.
+    required: false
+    default: machine's hostname
+    aliases: ['host']
+  env:
+    description:
+      - The environment name, typically 'production', 'staging', etc.
+    required: false
+  owner:
+    description:
+      - The person responsible for the deployment.
+    required: false
+  description:
+    description:
+      - Free text description of the deployment.
+    required: false
+  url:
+    description:
+      - Base URL of the API server.
+    required: False
+    default: https://api.bigpanda.io
+  validate_certs:
+    description:
+      - If C(no), SSL certificates for the target url will not be validated. This should only be used
+        on personally controlled sites using self-signed certificates.
+    required: false
+    default: 'yes'
+    type: bool
+    
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
+    
+            This function first checks for save errors, if none are found,
+        all configuration changes made will be saved. According to the
+        function parameters. If an exception is raised, a new checkpoint
+        was not created.
+    
+    REWRITE_HTTPS_ARGS = [
+    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,NE,R=permanent]']
+'''Apache version<2.3.9 rewrite rule arguments used for redirections to
+https vhost'''
+    
+        def test_ne(self):
+        self.assertTrue(self.vhost1 != self.vhost2)
+        self.assertFalse(self.vhost1 != self.vhost1b)
+    
+    # Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = ['sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode']
+    
+    .. code-block:: bash
+   :caption: To acquire a certificate for ``example.com``, waiting 60 seconds
+             for DNS propagation
     
     
 if __name__ == '__main__':
-    from sklearn.linear_model import Lasso, LassoLars
-    import matplotlib.pyplot as plt
+    main()
     
-    import six
+    		else:
+			successor = current.rightChild
+			successorParent = current
     
-        op.add_option('--transformers',
-                  dest='selected_transformers',
-                  default='GaussianRandomProjection,SparseRandomProjection',
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. Available: '
-                       'GaussianRandomProjection,SparseRandomProjection')
+            print('Test: remove on a key that already exists')
+        hash_table.remove(10)
+        assert_equal(hash_table.get(0), 'foo')
+        assert_raises(KeyError, hash_table.get, 10)
     
-            # split the paragraph into fake smaller paragraphs to make the
-        # problem harder e.g. more similar to tweets
-        if lang in ('zh', 'ja'):
-        # FIXME: whitespace tokenizing does not work on chinese and japanese
-            continue
-        words = content.split()
-        n_groups = len(words) / n_words_per_short_text
-        if n_groups < 1:
-            continue
-        groups = np.array_split(words, n_groups)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-    
-    def getRuleInvocationStack(self):
-        '''
-        Return List<String> of the rules in your parser instance
-        leading up to a call to this method.  You could override if
-        you want more details such as the file/line info of where
-        in the parser java code a rule is invoked.
+        def extract_min(self):
+        if not self.array:
+            return None
+        minimum = sys.maxsize
+        for index, node in enumerate(self.array):
+            if node.key < minimum:
+                minimum = node.key
+                minimum_index = index
+        return self.array.pop(minimum_index)
