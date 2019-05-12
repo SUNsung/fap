@@ -1,101 +1,57 @@
 
         
-            def __init__(self):
-        self.name = 'pg_trgm'
+        import OpenSSL
+from utils import check_ip_valid
     
+        def test_del_msg_failure_with_null_msg(self):
+        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
+        message = MagicMock(spec=Message)
+        message.name = 'msg_3'
+        message.to_id = self.id
+        message.del_on_recipient = False
     
-class SessionStore(SessionBase):
-    '''
-    A cache-based session store.
-    '''
-    cache_key_prefix = KEY_PREFIX
+            cfg = {'url': 'test_state'}
+        self.world.url_features = mock.Mock(return_value={'test_state'})
+        feature_state = self.world._make_state(cfg)
+        self.assertTrue(feature_state.is_enabled())
+        self.assertTrue(feature_state.is_enabled(user=gary))
     
+        # Multi-browser url() escape via spaces inside quotes
+    def test_escape_url(self):
+        testcase = u'*{background-image: url('foo bar');}'
+        self.assertInvalid(testcase)
     
-class Session(AbstractBaseSession):
-    '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+    import unittest
     
-        lastmod = None
-    all_sites_lastmod = True
-    urls = []
-    for site in maps:
-        try:
-            if callable(site):
-                site = site()
-            urls.extend(site.get_urls(page=page, site=req_site,
-                                      protocol=req_protocol))
-            if all_sites_lastmod:
-                site_lastmod = getattr(site, 'latest_lastmod', None)
-                if site_lastmod is not None:
-                    site_lastmod = (
-                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
-                        else site_lastmod.timetuple()
-                    )
-                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
-                else:
-                    all_sites_lastmod = False
-        except EmptyPage:
-            raise Http404('Page %s empty' % page)
-        except PageNotAnInteger:
-            raise Http404('No page '%s'' % page)
-    response = TemplateResponse(request, template_name, {'urlset': urls},
-                                content_type=content_type)
-    if all_sites_lastmod and lastmod is not None:
-        # if lastmod is defined for all sites, set header so as
-        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
-        response['Last-Modified'] = http_date(timegm(lastmod))
-    return response
-
+        def test_simple_self_post(self):
+        post = Link(is_self=True, selftext='''
+Some text here.
+https://example.com
+https://reddit.com''')
+        url = _get_scrape_url(post)
+        self.assertEqual(url, 'https://example.com')
     
-    The test data is embedded using the weights of the final dense layer, just
-before the classification head. This embedding can then be visualized using
-TensorBoard's Embedding Projector.
-'''
+        def test_get_refund_amount_when_zero(self):
+        '''
+        Assert that correct value is returned when existing refund_amount is
+        zero.
+        '''
+        campaign = MagicMock(spec=('total_budget_dollars',))
+        campaign.total_budget_dollars = 200.
+        refund_amount = get_refund_amount(campaign, self.billable_amount)
+        self.assertEquals(refund_amount,
+            campaign.total_budget_dollars - self.billable_amount)
     
-    
-def test_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-    # Save the model weights.
-weight_path = os.path.join(tempfile.gettempdir(), 'saved_wt.h5')
-train_model.save_weights(weight_path)
-    
-    
-def sparse_categorical_crossentropy(y_true, y_pred):
-    return K.sparse_categorical_crossentropy(y_true, y_pred)
-    
-    
-def test_conv_output_length():
-    assert conv_utils.conv_output_length(None, 7, 'same', 1) is None
-    assert conv_utils.conv_output_length(224, 7, 'same', 1) == 224
-    assert conv_utils.conv_output_length(224, 7, 'same', 2) == 112
-    assert conv_utils.conv_output_length(32, 5, 'valid', 1) == 28
-    assert conv_utils.conv_output_length(32, 5, 'valid', 2) == 14
-    assert conv_utils.conv_output_length(32, 5, 'causal', 1) == 32
-    assert conv_utils.conv_output_length(32, 5, 'causal', 2) == 16
-    assert conv_utils.conv_output_length(32, 5, 'full', 1) == 36
-    assert conv_utils.conv_output_length(32, 5, 'full', 2) == 18
-    
-            for project in RangeQuerySetWrapperWithProgressBar(orm.Project.objects.all()):
-            orm.Environment.objects.filter(
-                project_id=project.id, organization_id__isnull=True
-            ).update(organization_id=project.organization_id)
-    
-            # Deleting model 'VersionDSymFile'
-        db.delete_table('sentry_versiondsymfile')
-    
-        complete_apps = ['sentry']
-
-    
-            # Adding unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.create_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
+            # verify compression
+        data = [('a.b.c.w', 1), ('a.b.c.x', 2), ('a.b.c.y', 3), ('a.b.z', 4),
+                ('bbb', 5), ('bbc', 6)]
+        conn = self.connect(compress=True)
+        conn.send(reversed(data))
+        self.assertEquals(
+            ['a.b.c.w:1\n^06x:2\n^06y:3\n^04z:4\nbbb:5\nbbc:6'],
+            conn.sock.datagrams)
+        conn = self.connect(compress=False)
+        conn.send(reversed(data))
+        self.assertEquals(
+            ['bbc:6\nbbb:5\na.b.z:4\na.b.c.y:3\na.b.c.x:2\na.b.c.w:1'],
+            conn.sock.datagrams)
