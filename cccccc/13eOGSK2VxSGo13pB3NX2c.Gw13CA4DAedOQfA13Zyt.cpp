@@ -1,107 +1,149 @@
 
         
-        namespace caffe {
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+    
+    
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
+        }
+      }
     }
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {}  // namespace caffe
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-    AuthPropertyIterator::~AuthPropertyIterator() {}
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusClientCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusClientCallData : public CallData {
- public:
-  // Maximum size of trace context is sent on the wire.
-  static constexpr uint32_t kMaxTraceContextLen = 64;
-  // Maximum size of tags that are sent on the wire.
-  static constexpr uint32_t kMaxTagsLen = 2048;
-    }
-    
-    // These helper functions return the SpanContext and Span, respectively
-// associated with the census_context* stored by grpc. The user will need to
-// call this for manual propagation of tracing data.
-::opencensus::trace::SpanContext SpanContextFromCensusContext(
-    const census_context* ctxt);
-::opencensus::trace::Span SpanFromCensusContext(const census_context* ctxt);
-    
-    
-    {}  // namespace grpc
-    
-    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
-    
-    #endif  // GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
-
-    
-    void Timepoint2Timespec(const system_clock::time_point& from,
-                        gpr_timespec* to) {
-  system_clock::duration deadline = from.time_since_epoch();
-  seconds secs = duration_cast<seconds>(deadline);
-  if (from == system_clock::time_point::max() ||
-      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
-      secs.count() < 0) {
-    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
-    return;
   }
-  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
-  to->tv_sec = static_cast<int64_t>(secs.count());
-  to->tv_nsec = static_cast<int32_t>(nsecs.count());
-  to->clock_type = GPR_CLOCK_REALTIME;
 }
     
-    #ifndef GUETZLI_ENTROPY_ENCODE_H_
-#define GUETZLI_ENTROPY_ENCODE_H_
+    struct Bfloat16EqFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a == b; }
+};
+struct Bfloat16NeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a != b; }
+};
+struct Bfloat16LtFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a < b; }
+};
+struct Bfloat16GtFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a > b; }
+};
+struct Bfloat16LeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a <= b; }
+};
+struct Bfloat16GeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a >= b; }
+};
     
-    ///////////////////////////////////////////////////////////////////////////////
-// Constants for DCT horizontal pass
     
-    namespace guetzli {
+    {}  // namespace tensorflow
+    
+    namespace tensorflow {
     }
     
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
+    #include 'tensorflow/stream_executor/platform/port.h'
+#include 'tensorflow/stream_executor/platform/logging.h'
+    
+    namespace stream_executor {
+namespace host {
+    }
+    }
+    
+    void HostTimer::StopNow() { duration_ = clock::now() - start_time_; }
+    
+    #ifndef TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
+#define TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
   }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
   }
-  return table;
 }
+    
+      void sendMessage();
+    
+    namespace aria2 {
+    }
+    
+    
+    {  void deserialize(const std::string& filename);
+};
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+    
+    {} // namespace aria2
+    
+    void DHTTaskQueueImpl::addPeriodicTask1(const std::shared_ptr<DHTTask>& task)
+{
+  periodicTaskQueue1_.addTask(task);
+}
+    
+    public:
+  DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                        std::chrono::seconds interval);
+    
+      virtual ~DHTUnknownMessage();
+    
+    TEST(heap, random)
+{
+    swHeap *pq;
+    node_t *ns;
+    node_t *n;
+    }
+    
+        coro_test({
+        make_pair([](void *arg)
+        {
+            auto chan = (Channel *) arg;
+    }
+    }
+    
+        /**
+     * 协程2
+     */
+    Coroutine::create([](void *arg)
+    {
+        G_a.x = 100;
+        G_a.y = nullptr;
+    });
