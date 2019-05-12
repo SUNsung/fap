@@ -1,186 +1,175 @@
 
         
-          plt.plot(vals_txn[:,0:n_to_plot] + scale*np.array(range(n_to_plot)),
-           color=color, lw=1.0)
-  plt.axis('tight')
-  if title:
-    plt.title(title)
+        
+def read_data(data_fname):
+  ''' Read saved data in HDF5 format.
     
-      softmax_weights = sess.run(t['softmax_weights'])
-  fname = FLAGS.save_dir + '/embeddings_softmax.npy'
-  with tf.gfile.Open(fname, mode='w') as f:
-    np.save(f, softmax_weights)
-  sys.stderr.write('Finished softmax weights\n')
+      all_embs = np.zeros([vocab.size, 1024])
+  for i in xrange(vocab.size):
+    input_dict = {t['inputs_in']: inputs,
+                  t['targets_in']: targets,
+                  t['target_weights_in']: weights}
+    if 'char_inputs_in' in t:
+      input_dict[t['char_inputs_in']] = (
+          vocab.word_char_ids[i].reshape([-1, 1, MAX_WORD_LEN]))
+    embs = sess.run(t['all_embs'], input_dict)
+    all_embs[i, :] = embs
+    sys.stderr.write('Finished word embedding %d/%d\n' % (i, vocab.size))
     
-      def word_to_id(self, word):
-    if word in self._word_to_id:
-      return self._word_to_id[word]
+    
+def generate_logs(sess, model, log, id_to_word, feed):
+  '''Impute Sequences using the model for a particular feed and send it to
+  logs.
+  '''
+  # Impute Sequences.
+  [p, inputs_eval, sequence_eval] = sess.run(
+      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
+    
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
+    
+      Returns:
+    gen_train_op: Generator training op.
+  '''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
     else:
-      if word.lower() in self._word_to_id:
-        return self._word_to_id[word.lower()]
-    return self.unk
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('\nOptimizing Generator vars:')
+    for v in gen_vars:
+      print(v)
     
-      train_path = os.path.join(data_path, 'train_lm.tfrecords')
-  valid_path = os.path.join(data_path, 'test_lm.tfrecords')
+      Args:
+    init_savers:  Dictionary of init_savers.  'init_saver_name': init_saver.
+    sess:  tf.Session.
+  '''
+  ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    print('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
+    tf.logging.info('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
+    print('Asserting Generator is a seq2seq-variant.')
+    tf.logging.info('Asserting Generator is a seq2seq-variant.')
+    assert FLAGS.generator_model.startswith('seq2seq')
+    init_saver = init_savers['init_saver']
+    init_saver.restore(sess, FLAGS.maskgan_ckpt)
     
-    
-def ptb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
-  '''Iterate on the raw PTB data.
-    
-      with tf.Graph().as_default():
-    # Construct the model.
-    model = train_mask_gan.create_MaskGAN(hparams, is_training)
-    
-        ## Load the Discriminator weights from the MaskGAN checkpoint if
-    # the weights are compatible.
-    if FLAGS.discriminator_model == 'seq2seq_vd':
-      print('Restoring Discriminator from %s.' % FLAGS.maskgan_ckpt)
-      tf.logging.info('Restoring Discriminator from %s.' % FLAGS.maskgan_ckpt)
-      dis_init_saver = init_savers['dis_init_saver']
-      dis_init_saver.restore(sess, FLAGS.maskgan_ckpt)
-    
-    
-def discriminator(hparams, sequence, is_training, reuse=None):
-  '''Define the bidirectional Discriminator graph.'''
-  sequence = tf.cast(sequence, tf.int32)
-    
-                        resp = HTTPResponse.from_httplib(
-                        r,
-                        pool=conn,
-                        connection=low_conn,
-                        preload_content=False,
-                        decode_content=False
-                    )
-                except:
-                    # If we hit any problems here, clean up the connection.
-                    # Then, reraise so that we can handle the actual exception.
-                    low_conn.close()
-                    raise
-    
-        def __call__(self, r):
-        r.headers['Proxy-Authorization'] = _basic_auth_str(self.username, self.password)
-        return r
+        def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
+        )
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-            body, content_type = encode_multipart_formdata(new_fields)
-    
-    >>> requests.codes['temporary_redirect']
-307
->>> requests.codes.teapot
-418
->>> requests.codes['\o/']
-200
-    
-            if state == 'absent' and user in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.remove_collaborator(user)
-            affected_apps += [app]
-            result_state = True
-        elif state == 'present' and user not in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.add_collaborator(user_id_or_email=user, silent=module.params['suppress_invitation'])
-            affected_apps += [app]
-            result_state = True
-    
-    
-class QPSSpider(Spider):
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
-        else:
-            request.meta['handle_httpstatus_all'] = True
-    
-        requires_project = False
-    default_settings = {'LOG_ENABLED': False}
-    
-        def short_desc(self):
-        return 'Get settings values'
-    
-        def __init__(self, request, timeout=180):
-        self._url = urldefrag(request.url)[0]
-        # converting to bytes to comply to Twisted interface
-        self.url = to_bytes(self._url, encoding='ascii')
-        self.method = to_bytes(request.method, encoding='ascii')
-        self.body = request.body or None
-        self.headers = Headers(request.headers)
-        self.response_headers = None
-        self.timeout = request.meta.get('download_timeout') or timeout
-        self.start_time = time()
-        self.deferred = defer.Deferred().addCallback(self._build_response, request)
-    
-            cookiejarkey = request.meta.get('cookiejar')
-        jar = self.jars[cookiejarkey]
-        cookies = self._get_request_cookies(jar, request)
-        for cookie in cookies:
-            jar.set_cookie_if_ok(cookie, request)
-    
-        config_path = config_util.ensure_config_exists(config_dir)
-    print('Configuration file:', config_path)
-    return 0
+def _scale_enum(anchor, scales):
+    '''Enumerate a set of anchors for each scale wrt an anchor.'''
+    w, h, x_ctr, y_ctr = _whctrs(anchor)
+    ws = w * scales
+    hs = h * scales
+    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
+    return anchors
 
     
-        if unit_2 == LENGTH_MILES:
-        result = __meters_to_miles(meters)
-    elif unit_2 == LENGTH_FEET:
-        result = __meters_to_feet(meters)
-    elif unit_2 == LENGTH_KILOMETERS:
-        result = __meters_to_kilometers(meters)
     
-        def extract_tags(self, sentence, topK=20, withWeight=False, allowPOS=(), withFlag=False):
+_RENAME = {
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
+    # Removed head_builder module in favor of the more specific fast_rcnn name
+    'head_builder.add_roi_2mlp_head':
+        'fast_rcnn_heads.add_roi_2mlp_head',
+}
+    
+    
+def add_fpn_retinanet_outputs(model, blobs_in, dim_in, spatial_scales):
+    '''RetinaNet head. For classification and box regression, we can chose to
+    have the same conv tower or a separate tower. 'bl_feat_list' stores the list
+    of feature blobs for bbox prediction. These blobs can be shared cls feature
+    blobs if we share the tower or else are independent blobs.
+    '''
+    dim_out = dim_in
+    k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    A = len(cfg.RETINANET.ASPECT_RATIOS) * cfg.RETINANET.SCALES_PER_OCTAVE
+    
+    
+def _expand_bbox_targets(bbox_target_data):
+    '''Bounding-box regression targets are stored in a compact form in the
+    roidb.
+    
+    # Example usage:
+# data_loader_benchmark.par \
+#   NUM_GPUS 2 \
+#   TRAIN.DATASETS '('voc_2007_trainval',)' \
+#   TRAIN.PROPOSAL_FILES /path/to/voc_2007_trainval/proposals.pkl \
+#   DATA_LOADER.NUM_THREADS 4 \
+#   DATA_LOADER.MINIBATCH_QUEUE_SIZE 64 \
+#   DATA_LOADER.BLOBS_QUEUE_CAPACITY 8
+    
+    
+def load_script(path: str) -> types.ModuleType:
+    fullname = '__mitmproxy_script__.{}'.format(
+        os.path.splitext(os.path.basename(path))[0]
+    )
+    # the fullname is not unique among scripts, so if there already is an existing script with said
+    # fullname, remove it.
+    sys.modules.pop(fullname, None)
+    oldpath = sys.path
+    sys.path.insert(0, os.path.dirname(path))
+    m = None
+    try:
+        loader = importlib.machinery.SourceFileLoader(fullname, path)
+        spec = importlib.util.spec_from_loader(fullname, loader=loader)
+        m = importlib.util.module_from_spec(spec)
+        loader.exec_module(m)
+        if not getattr(m, 'name', None):
+            m.name = path  # type: ignore
+    except Exception as e:
+        script_error_handler(path, e, msg=str(e))
+    finally:
+        sys.path[:] = oldpath
+        return m
+    
+    
+def domain_match(a: str, b: str) -> bool:
+    if cookiejar.domain_match(a, b):  # type: ignore
+        return True
+    elif cookiejar.domain_match(a, b.strip('.')):  # type: ignore
+        return True
+    return False
+    
+        def call_strings(self, path: str, args: typing.Sequence[str]) -> typing.Any:
         '''
-        Extract keywords from sentence using TF-IDF algorithm.
-        Parameter:
-            - topK: return how many top keywords. `None` for all possible words.
-            - withWeight: if True, return a list of (word, weight);
-                          if False, return a list of words.
-            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v','nr'].
-                        if the POS of w is not in this list,it will be filtered.
-            - withFlag: only work with allowPOS is not empty.
-                        if True, return a list of pair(word, weight) like posseg.cut
-                        if False, return a list of words
+            Call a command using a list of string arguments. May raise CommandError.
         '''
-        if allowPOS:
-            allowPOS = frozenset(allowPOS)
-            words = self.postokenizer.cut(sentence)
-        else:
-            words = self.tokenizer.cut(sentence)
-        freq = {}
-        for w in words:
-            if allowPOS:
-                if w.flag not in allowPOS:
-                    continue
-                elif not withFlag:
-                    w = w.word
-            wc = w.word if allowPOS and withFlag else w
-            if len(wc.strip()) < 2 or wc.lower() in self.stop_words:
-                continue
-            freq[w] = freq.get(w, 0.0) + 1.0
-        total = sum(freq.values())
-        for k in freq:
-            kw = k.word if allowPOS and withFlag else k
-            freq[k] *= self.idf_freq.get(kw, self.median_idf) / total
+        if path not in self.commands:
+            raise exceptions.CommandError('Unknown command: %s' % path)
+        return self.commands[path].call(args)
     
-            if not obs_states:
-            obs_states = prev_states_expect_next if prev_states_expect_next else all_states
-    
-    while True:
-    line = sys.stdin.readline()
-    if line=='':
-        break
-    line = line.strip()
-    for word in jieba.cut(line):
-        print(word)
+        def __getattr__(self, k):
+        if k in self.names:
+            return self.names[k]
+        raise AttributeError('No such attribute: %s', k)
