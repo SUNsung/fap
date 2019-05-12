@@ -1,89 +1,108 @@
 
         
-            def base_url
-      context[:base_url]
-    end
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        def path
-      @path ||= url.path
-    end
-    
-          str.truncate(max_length).ljust(max_length) << tag.to_s
-    end
-    
-            css('img[style]').each do |node|
-          node['align'] ||= node['style'][/float:\s*(left|right)/, 1]
-          node['style'] = node['style'].split(';').map(&:strip).select { |s| s =~ /\Awidth|height/ }.join(';')
-        end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+            def log_error(error)
+          Jekyll.logger.error 'LiveReload experienced an error. ' \
+            'Run with --trace for more information.'
+          raise error
         end
       end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Hash] options Additional tweakable settings.
-        # @option options [Symbol] :provider The provider to back the
-        #   machines with. All machines will be backed with this
-        #   provider. If none is given, a sensible default is chosen.
-        # @option options [Boolean] :reverse If true, the resulting order
-        #   of machines is reversed.
-        # @option options [Boolean] :single_target If true, then an
-        #   exception will be raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          @logger.debug('Getting target VMs for command. Arguments:')
-          @logger.debug(' -- names: #{names.inspect}')
-          @logger.debug(' -- options: #{options.inspect}')
-    
-            # This contains all the guests and their parents.
-        #
-        # @return [Registry<Symbol, Array<Class, Symbol>>]
-        attr_reader :guests
-    
-    # test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
-def context(*args, &block)
-  return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
-    def self.test(name, &block)
-      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
     end
-    
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
   end
+end
+
+    
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
+        end
+      end
+    end
+  end
+end
+
+    
+      private
+    
+      included do
+    before_action :set_locale
+  end
+    
+      gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
+end
+
+    
+    module Capistrano
+  class Configuration
+    # Decorates a Variables object to additionally perform an optional set of
+    # user-supplied validation rules. Each rule for a given key is invoked
+    # immediately whenever `set` is called with a value for that key.
+    #
+    # If `set` is called with a callable value or a block, validation is not
+    # performed immediately. Instead, the validation rules are invoked the first
+    # time `fetch` is used to access the value.
+    #
+    # A rule is simply a block that accepts two arguments: key and value. It is
+    # up to the rule to raise an exception when it deems the value is invalid
+    # (or just print a warning).
+    #
+    # Rules can be registered using the DSL like this:
+    #
+    #   validate(:my_key) do |key, value|
+    #     # rule goes here
+    #   end
+    #
+    class ValidatedVariables < SimpleDelegator
+      include Capistrano::ProcHelpers
+    
+          def trusted?
+        @trusted
+      end
+    
+            def update
+          authorize! :update, @product
+    
+          @@inventory_unit_attributes = [
+        :id, :lock_version, :state, :variant_id, :shipment_id,
+        :return_authorization_id
+      ]
+    
+      # Array of configuration files
+  attr_accessor :config_files
+    
+        # Execute the transmogrification on the manifest
+    pkg_mogrify = safesystemout('pkgmogrify', manifest_fn)
+    File.write(build_path('#{name}.p5m.2'), pkg_mogrify)
+    safesystem('cp', build_path('#{name}.p5m.2'), manifest_fn)
+    
+        File.write(build_path('packlist'), files.sort.join('\n'))
+    
+      def default_output
+    v = version
+    v = '#{epoch}:#{v}' if epoch
+    if iteration
+      '#{name}_#{v}-#{iteration}_#{architecture}.#{type}'
+    else
+      '#{name}_#{v}_#{architecture}.#{type}'
+    end
+  end # def default_output
+end # class FPM::Deb
