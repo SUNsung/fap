@@ -1,124 +1,104 @@
 
         
-                  def render_collection
-            @collection.map do |item|
-              value = value_for_collection(item, @value_method)
-              text  = value_for_collection(item, @text_method)
-              default_html_options = default_html_options_for_collection(item, value)
-              additional_html_options = option_html_attributes(item)
+            def translation_scope
+      'devise.unlocks'
+    end
+end
+
     
-                  Time.utc(
-                default[:year], default[:month], default[:day],
-                default[:hour], default[:min], default[:sec]
-              )
+      # Returns a signed in resource from session (if one exists)
+  def signed_in_resource
+    warden.authenticate(scope: resource_name)
+  end
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+          # If the record is persisted, remove the remember token (but only if
+      # it exists), and save the record without validations.
+      def forget_me!
+        return unless persisted?
+        self.remember_token = nil if respond_to?(:remember_token)
+        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
+        save(validate: false)
+      end
+    
+              # Make sure we're only working with one VM if single target
+          if options[:single_target] && vms.length != 1
+            vm = @env.primary_vm
+            raise Errors::MultiVMTargetRequired if !vm
+            vms = [vm]
+          end
+    
+            # This contains all the registered host capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :host_capabilities
+    
+            # This returns all the config classes for the various pushes.
+        #
+        # @return [Registry]
+        def push_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:push])
             end
           end
-      end
+        end
+    
+    Rake::TestTask.new(:'test:core') do |t|
+  core_tests = %w[base delegator encoding extensions filter
+     helpers mapped_error middleware radius rdoc
+     readme request response result route_added_hook
+     routing server settings sinatra static templates]
+  t.test_files = core_tests.map {|n| 'test/#{n}_test.rb'}
+  t.ruby_opts = ['-r rubygems'] if defined? Gem
+  t.ruby_opts << '-I.'
+  t.warning = true
+end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+      describe '.random_token' do
+    it 'generates a base64 encoded 32 character string' do
+      expect(Base64.strict_decode64(token).length).to eq(32)
     end
   end
 end
 
     
-        module HelperyTest
-      def included_method
-        'Included'
-      end
-    end
-    
-          GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(1)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    
-              # Register a new communicator class only if a name was given.
-          data[:communicator].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-            # This contains all the push implementations by name.
-        #
-        # @return [Registry<Symbol, Array<Class, Hash>>]
-        attr_reader :pushes
-    
-        # Checks if the given key is registered with the registry.
-    #
-    # @return [Boolean]
-    def key?(key)
-      @items.key?(key)
-    end
-    alias_method :has_key?, :key?
-    
-            expect(path).to have_valid_bash_syntax
-      end
-    end
-  end
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-    Then(/^the invalid (.+) release is ignored$/) do |filename|
-  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
-    
-            true
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
       end
     
-    # This file provides the following methods:
-#   encodeURIComponent(componentString)
-#   string.charCodeAt(k)
-    
-          def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
-      end
-    
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
-  end
-    
-    desc 'Build and install'
-task :install => :build do
-  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
-end
-    
-        # Remove all slashes from the start of string.
-    # Remove all double slashes
-    def clean_url url
-      return url if url.nil?
-      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
-    end
-    
-        # True if the dimensions represent a horizontal rectangle
-    def horizontal?
-      height < width
-    end
-    
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
-      end
-    end
-    
-        # Returns the Rails.root constant.
-    def rails_root attachment, style_name
-      Rails.root
-    end
+            MESSAGES = [
+          'Passing safe_level with the 2nd argument of `ERB.new` is ' \
+          'deprecated. Do not use it, and specify other arguments as ' \
+          'keyword arguments.',
+          'Passing trim_mode with the 3rd argument of `ERB.new` is ' \
+          'deprecated. Use keyword argument like ' \
+          '`ERB.new(str, trim_mode: %<arg_value>s)` instead.',
+          'Passing eoutvar with the 4th argument of `ERB.new` is ' \
+          'deprecated. Use keyword argument like ' \
+          '`ERB.new(str, eoutvar: %<arg_value>s)` instead.'
+        ].freeze
