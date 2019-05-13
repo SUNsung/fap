@@ -1,405 +1,465 @@
 
         
-          // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
+        /**
+ * @brief A wrapper around SyncedMemory holders serving as the basic
+ *        computational unit through which Layer%s, Net%s, and Solver%s
+ *        interact.
+ *
+ * TODO(dox): more thorough description.
+ */
+template <typename Dtype>
+class Blob {
+ public:
+  Blob()
+       : data_(), diff_(), count_(0), capacity_(0) {}
     }
     
-    
-    {  cache_t *cache_out = nullptr;
-  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
-  assert(cache_out);
-  return cache_out;
-}
-    
-    
-    {    // Must be 'const' or nothing.
-    clang::Qualifiers quals = pointee.getQualifiers();
-    bool isConst = quals.hasConst();
-    quals.removeConst();
-    if (quals.empty()) {
-      if (auto record = pointee->getAs<clang::RecordType>()) {
-        auto recordDecl = record->getDecl();
-        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return forRecord(isConst, record->getDecl());
-        }
-      } else if (pointee->isVoidType()) {
-        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return isConst ? forConstVoid() : forVoid();
-        }
-      }
-    }
+      /**
+   * @brief Return whether to allow force_backward for a given bottom blob
+   *        index.
+   *
+   * If AllowForceBackward(i) == false, we will ignore the force_backward
+   * setting and backpropagate to blob i only if it needs gradient information
+   * (as is done when force_backward == false).
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return true;
   }
     
-    
-    {
-    {  } else {
-    assert(clangDiag.hasSourceManager());
-    auto clangCI = ImporterImpl.getClangInstance();
-    ClangDiagRenderer renderer(clangCI->getLangOpts(),
-                               &clangCI->getDiagnosticOpts(), emitDiag);
-    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
-                                      clangDiag.getSourceManager());
-    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
-                            clangDiag.getRanges(), clangDiag.getFixItHints(),
-                            &clangDiag);
-  }
-}
-
-    
-    // Import As Member -- attempt to import C global functions and variables as
-// members on types or instances.
-    
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
-}
-    
-     private:
-  // We construct a char array of the form:
-  //    klength  varint32               <-- start_
-  //    userkey  char[klength]          <-- kstart_
-  //    tag      uint64
-  //                                    <-- end_
-  // The array is a suitable MemTable key.
-  // The suffix starting with 'userkey' can be used as an InternalKey.
-  const char* start_;
-  const char* kstart_;
-  const char* end_;
-  char space_[200];      // Avoid allocation for short keys
-    
-    
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
-    return;
-  }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
-  }
-}
-    
-    #include <stdint.h>
-#include <string>
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-#include 'port/port.h'
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-    namespace leveldb {
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      Status WriteDescriptor() {
-    std::string tmp = TempFileName(dbname_, 1);
-    WritableFile* file;
-    Status status = env_->NewWritableFile(tmp, &file);
-    if (!status.ok()) {
-      return status;
-    }
-    }
     
-    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
-                             Cache::Handle** handle) {
-  Status s;
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  Slice key(buf, sizeof(buf));
-  *handle = cache_->Lookup(key);
-  if (*handle == nullptr) {
-    std::string fname = TableFileName(dbname_, file_number);
-    RandomAccessFile* file = nullptr;
-    Table* table = nullptr;
-    s = env_->NewRandomAccessFile(fname, &file);
-    if (!s.ok()) {
-      std::string old_fname = SSTTableFileName(dbname_, file_number);
-      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-        s = Status::OK();
-      }
-    }
-    if (s.ok()) {
-      s = Table::Open(options_, file, file_size, &table);
-    }
-    }
-    }
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-                    // Loop through input, until either the input is exhausted or
-                //   we reach a character that is not a member of the set.
-                int64_t ix = fp->fInputIdx;
-                UTEXT_SETNATIVEINDEX(fInputText, ix);
-                for (;;) {
-                    if (ix >= fActiveLimit) {
-                        fHitEnd = TRUE;
-                        break;
-                    }
-                    UChar32 c = UTEXT_NEXT32(fInputText);
-                    if (c<256) {
-                        if (s8->contains(c) == FALSE) {
-                            break;
-                        }
-                    } else {
-                        if (s->contains(c) == FALSE) {
-                            break;
-                        }
-                    }
-                    ix = UTEXT_GETNATIVEINDEX(fInputText);
-                }
-    
-        case URX_STRING:
-    case URX_STRING_I:
-        {
-            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
-            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
-            int32_t length = URX_VAL(lengthOp);
-            UnicodeString str(fLiteralText, val, length);
-            printf('%s', CStr(str)());
-        }
-        break;
-    
-    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            appendTo.append(fBeginMarkup);
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getEndIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(fEndMarkup);
-            break;
-        default:
-            break;
-        }
-    }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
-}
-    
-        ScriptSet &setAll();
-    ScriptSet &resetAll();
-    int32_t countMembers() const;
-    int32_t hashCode() const;
-    int32_t nextSetBit(int32_t script) const;
-    
-    UnicodeString&
-SelectFormat::format(const UnicodeString& keyword,
-                     UnicodeString& appendTo,
-                     FieldPosition& /*pos */,
-                     UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    // Check for the validity of the keyword
-    if (!PatternProps::isIdentifier(keyword.getBuffer(), keyword.length())) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;  // Invalid formatting argument.
-    }
-    if (msgPattern.countParts() == 0) {
-        status = U_INVALID_STATE_ERROR;
-        return appendTo;
-    }
-    int32_t msgStart = findSubMessage(msgPattern, 0, keyword, status);
-    if (!MessageImpl::jdkAposMode(msgPattern)) {
-        int32_t patternStart = msgPattern.getPart(msgStart).getLimit();
-        int32_t msgLimit = msgPattern.getLimitPartIndex(msgStart);
-        appendTo.append(msgPattern.getPatternString(),
-                        patternStart,
-                        msgPattern.getPatternIndex(msgLimit) - patternStart);
-        return appendTo;
-    }
-    // JDK compatibility mode: Remove SKIP_SYNTAX.
-    return MessageImpl::appendSubMessageWithoutSkipSyntax(msgPattern, msgStart, appendTo);
-}
-    
-    #endif
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-    // Bitwise comparison for the collation keys.
-Collator::EComparisonResult
-CollationKey::compareTo(const CollationKey& target) const
-{
-    UErrorCode errorCode = U_ZERO_ERROR;
-    return static_cast<Collator::EComparisonResult>(compareTo(target, errorCode));
-}
-    
-    int32_t StandardPlural::indexOrNegativeFromString(const char *keyword) {
-    switch (*keyword++) {
-    case 'f':
-        if (uprv_strcmp(keyword, 'ew') == 0) {
-            return FEW;
-        }
-        break;
-    case 'm':
-        if (uprv_strcmp(keyword, 'any') == 0) {
-            return MANY;
-        }
-        break;
-    case 'o':
-        if (uprv_strcmp(keyword, 'ther') == 0) {
-            return OTHER;
-        } else if (uprv_strcmp(keyword, 'ne') == 0) {
-            return ONE;
-        }
-        break;
-    case 't':
-        if (uprv_strcmp(keyword, 'wo') == 0) {
-            return TWO;
-        }
-        break;
-    case 'z':
-        if (uprv_strcmp(keyword, 'ero') == 0) {
-            return ZERO;
-        }
-        break;
-    default:
-        break;
+    namespace caffe {
     }
-    return -1;
+    
+    namespace caffe {
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    bool b2Polygon::IsCCW() {
+	return (GetArea() > 0.0f);
+}
+	
+void b2Polygon::MergeParallelEdges(float32 tolerance) {
+	if (nVertices <= 3) return; //Can't do anything useful here to a triangle
+	bool* mergeMe = new bool[nVertices];
+	int32 newNVertices = nVertices;
+	for (int32 i = 0; i < nVertices; ++i) {
+		int32 lower = (i == 0) ? (nVertices - 1) : (i - 1);
+		int32 middle = i;
+		int32 upper = (i == nVertices - 1) ? (0) : (i + 1);
+		float32 dx0 = x[middle] - x[lower];
+		float32 dy0 = y[middle] - y[lower];
+		float32 dx1 = x[upper] - x[middle];
+		float32 dy1 = y[upper] - y[middle];
+		float32 norm0 = sqrtf(dx0*dx0+dy0*dy0);
+		float32 norm1 = sqrtf(dx1*dx1+dy1*dy1);
+		if ( !(norm0 > 0.0f && norm1 > 0.0f) && newNVertices > 3 ) {
+			//Merge identical points
+			mergeMe[i] = true;
+			--newNVertices;
+		}
+		dx0 /= norm0; dy0 /= norm0;
+		dx1 /= norm1; dy1 /= norm1;
+		float32 cross = dx0 * dy1 - dx1 * dy0;
+		float32 dot = dx0 * dx1 + dy0 * dy1;
+		if (fabs(cross) < tolerance && dot > 0 && newNVertices > 3) {
+			mergeMe[i] = true;
+			--newNVertices;
+		} else {
+			mergeMe[i] = false;
+		}
+	}
+	if(newNVertices == nVertices || newNVertices == 0) {
+		delete[] mergeMe;
+		return;
+	}
+	float32* newx = new float32[newNVertices];
+	float32* newy = new float32[newNVertices];
+	int32 currIndex = 0;
+	for (int32 i=0; i < nVertices; ++i) {
+		if (mergeMe[i] || newNVertices == 0 || currIndex == newNVertices) continue;
+		b2Assert(currIndex < newNVertices);
+		newx[currIndex] = x[i];
+		newy[currIndex] = y[i];
+		++currIndex;
+	}
+	delete[] x;
+	delete[] y;
+	delete[] mergeMe;
+	x = newx;
+	y = newy;
+	nVertices = newNVertices;
+	//printf('%d \n', newNVertices);
+}
+	
+    /* 
+	 *	Allocates and returns pointer to vector vertex array.
+     *  Length of array is nVertices.
+	 */
+b2Vec2* b2Polygon::GetVertexVecs() {
+        b2Vec2* out = new b2Vec2[nVertices];
+        for (int32 i = 0; i < nVertices; ++i) {
+            out[i].Set(x[i], y[i]);
+        }
+        return out;
+}
+	
+b2Polygon::b2Polygon(b2Triangle& t) {
+	nVertices = 3;
+	x = new float[nVertices];
+	y = new float[nVertices];
+	for (int32 i = 0; i < nVertices; ++i) {
+		x[i] = t.x[i];
+		y[i] = t.y[i];
+	}
+}
+	
+void b2Polygon::Set(const b2Polygon& p) {
+        if (nVertices != p.nVertices){
+			nVertices = p.nVertices;
+			delete[] x;
+			delete[] y;
+			x = new float32[nVertices];
+			y = new float32[nVertices];
+        }
+		
+        for (int32 i = 0; i < nVertices; ++i) {
+            x[i] = p.x[i];
+            y[i] = p.y[i];
+        }
+	areaIsSet = false;
+}
+	
+    /*
+     * Assuming the polygon is simple, checks if it is convex.
+     */
+bool b2Polygon::IsConvex() {
+        bool isPositive = false;
+        for (int32 i = 0; i < nVertices; ++i) {
+            int32 lower = (i == 0) ? (nVertices - 1) : (i - 1);
+            int32 middle = i;
+            int32 upper = (i == nVertices - 1) ? (0) : (i + 1);
+            float32 dx0 = x[middle] - x[lower];
+            float32 dy0 = y[middle] - y[lower];
+            float32 dx1 = x[upper] - x[middle];
+            float32 dy1 = y[upper] - y[middle];
+            float32 cross = dx0 * dy1 - dx1 * dy0;
+            // Cross product should have same sign
+            // for each vertex if poly is convex.
+            bool newIsP = (cross >= 0) ? true : false;
+            if (i == 0) {
+                isPositive = newIsP;
+            }
+            else if (isPositive != newIsP) {
+                return false;
+            }
+        }
+        return true;
 }
     
     
-    {        // Delete the old text (the key)
-        text.handleReplaceBetween(start + outLen, limit + outLen, UnicodeString());
-    }        
+	// ----------------------------------------------------------------------------------------------------
+	//
     
-    namespace CalculatorApp::Common::Automation
+    class PolyNode 
+{ 
+public:
+    PolyNode();
+    virtual ~PolyNode(){};
+    Path Contour;
+    PolyNodes Childs;
+    PolyNode* Parent;
+    PolyNode* GetNext() const;
+    bool IsHole() const;
+    bool IsOpen() const;
+    int ChildCount() const;
+private:
+    //PolyNode& operator =(PolyNode& other); 
+    unsigned Index; //node index in Parent.Childs
+    bool m_IsOpen;
+    JoinType m_jointype;
+    EndType m_endtype;
+    PolyNode* GetNextSiblingUp() const;
+    void AddChild(PolyNode& child);
+    friend class Clipper; //to access Index
+    friend class ClipperOffset; 
+};
+    
+    #endif /* OPUS_HAVE_RTCD */
+    
+    /** 16x16 multiply-add where the result fits in 32 bits */
+#undef MAC16_16
+static OPUS_INLINE opus_val32 MAC16_16_armv5e(opus_val32 c, opus_val16 a,
+ opus_val16 b)
 {
-    class NarratorAnnouncementHostFactory
+  int res;
+  __asm__(
+      '#MAC16_16\n\t'
+      'smlabb %0, %1, %2, %3;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b), 'r'(c)
+  );
+  return res;
+}
+#define MAC16_16(c, a, b) (MAC16_16_armv5e(c, a, b))
+    
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+    
     {
-    public:
-        static INarratorAnnouncementHost^ MakeHost();
+    {/*!
+ * \brief Quantile sketch use WXQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WXQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
+};
+/*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class GKQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_QUANTILE_H_
+
+    
+    
+    {  /*!
+   * \brief dump the model in the requested format
+   * \param fmap feature map that may help give interpretations of feature
+   * \param with_stats extra statistics while dumping model
+   * \param format the format to dump the model in
+   * \return a vector of dump for boosters.
+   */
+  virtual std::vector<std::string> DumpModel(const FeatureMap& fmap,
+                                             bool with_stats,
+                                             std::string format) const = 0;
+  /*!
+   * \brief create a gradient booster from given name
+   * \param name name of gradient booster
+   * \param cache_mats The cache data matrix of the Booster.
+   * \param base_margin The base margin of prediction.
+   * \return The created booster.
+   */
+  static GradientBooster* Create(
+      const std::string& name,
+      const std::vector<std::shared_ptr<DMatrix> >& cache_mats,
+      bst_float base_margin);
+};
+    
+      XGBOOST_DEVICE void operator()() {
+    this->operator()(0);
+  }
+  XGBOOST_DEVICE void operator()(int _idx) {
+    float arr[16];
+    InitializeRange(arr, arr + 16);
+    Span<float> s (arr);
+    Span<float>::iterator left { s.begin() };
+    Span<float>::iterator right { s.end() };
     }
-    }
     
-        public enum class LanguageFontType
-    {
-        UIText,
-        UICaption,
-    };
+      bool addNode(const std::shared_ptr<DHTNode>& node, bool good);
     
-      virtual std::string toString() const CXX11_OVERRIDE;
+    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
     
-      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
+      DHTTaskExecutor periodicTaskQueue2_;
     
-    void DHTTaskExecutor::update()
+    void DHTTokenUpdateCommand::process()
 {
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
+  try {
+    tokenTracker_->updateTokenSecret();
   }
-  else {
-    r = 0;
+  catch (RecoverableException& e) {
+    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
   }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
-    }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
 }
     
-    namespace aria2 {
+    
+    {  void setTokenTracker(DHTTokenTracker* tokenTracker);
+};
+    
+    #include <fstream>
+    
+    namespace osquery {
+namespace table_tests {
+    }
     }
     
-    #include <cstring>
-#include <cstdlib>
+    
+    {  sender.Update();
+  sender.Stop();
+  EXPECT_FALSE(sender.IsRunning());
+}
+    
+    int ClusterQualityInfo702::invalid_state(const std::uint8_t* bytes,
+                                         int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(3, 5);
+    }
+    
+    class SpeedLimitTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    speed_limit_.Clear();
+    for (int i = 0; i < 100; ++i) {
+      std::pair<double, double> sp;
+      sp.first = i * 1.0;
+      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
+      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
+    }
+  }
+    }
+    
+      const double init_derivative = 0.1;
+  constraint.AddSecondDerivativeBoundary(init_derivative, index_list,
+                                         lower_bound, upper_bound);
+  const auto mat = constraint.inequality_constraint_matrix();
+  const auto bd = constraint.inequality_constraint_boundary();
+    
+    void SplineSegKernel::CalculateSecondOrderDerivative(
+    const uint32_t num_params) {
+  kernel_second_order_derivative_ =
+      Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 2; r < kernel_second_order_derivative_.rows(); ++r) {
+    for (int c = 2; c < kernel_second_order_derivative_.cols(); ++c) {
+      kernel_second_order_derivative_(r, c) =
+          (r * r - r) * (c * c - c) / (r + c - 3.0);
+    }
+  }
+}
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    Brakerpt6c::Brakerpt6c() {}
+const int32_t Brakerpt6c::ID = 0x6C;
+    
+    // config detail: {'name': 'usr_can_timeout', 'offset': 0.0, 'precision': 1.0,
+// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 5,
+// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
+bool Globalrpt6a::usr_can_timeout(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(5, 1);
+    }
+    
+    // config detail: {'name': 'manual_input', 'enum': {0:
+// 'MANUAL_INPUT_HEADLIGHTS_OFF', 1: 'MANUAL_INPUT_LOW_BEAMS', 2:
+// 'MANUAL_INPUT_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
+// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 7, 'type': 'enum',
+// 'order': 'motorola', 'physical_unit': ''}
+Headlight_rpt_77::Manual_inputType Headlightrpt77::manual_input(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+        while ((n = (node_t*) swHeap_pop(pq)))
+    {
+        ASSERT_EQ(_map[n->val], n->pri);
+        free(n);
+    }
+    
+        ExampleQt example(argv[argc-1]);
+    
+    
+    {    friend
+    void getCallback(redisAsyncContext *, void *, void *);
+};
+    
+    
+    {    ASSERT_GT(cid, 0);
+    Coroutine::get_by_cid(cid)->resume();
+    ASSERT_EQ(cid, _cid);
+}
