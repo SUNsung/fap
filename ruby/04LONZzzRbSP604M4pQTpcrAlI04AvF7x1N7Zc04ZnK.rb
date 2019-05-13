@@ -1,117 +1,64 @@
-    # put the non-standard line terminations back to normal
-    # gah.  not having look behinds suck,
-    header.gsub!(/([^\r])\n/n,'\1' + '\r\n')
-    
-        # inject some junk params at the end of the param list, just to be sure :P
-    if self.junk_params
-      rand(10)+5.times {
-        params.push(Rex::Text.rand_text_alpha(rand(32) + 5) + '=' + Rex::Text.rand_text_alpha(rand(64) + 5))
-      }
-    end
-    params.join('&')
-  end
-    
-      #
-  # Updates the various parts of the HTTP response command string.
-  #
-  def update_cmd_parts(str)
-    if (md = str.match(/HTTP\/(.+?)\s+(\d+)\s?(.+?)\r?\n?$/))
-      self.message = md[3].gsub(/\r/, '')
-      self.code    = md[2].to_i
-      self.proto   = md[1]
-    else
-      raise RuntimeError, 'Invalid response command string', caller
+
+        
+              it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
     end
     
-    require 'rex/proto/ipmi/utils'
+          expect(agent.control_targets).to eq([bob_weather_agent])
+    end
     
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
+        it 'shows the dry run pop up with previous events and allows use previously received event' do
+      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
+      agent.sources << emitter
+      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
+      agent.save!
     
-              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Authorization Data decoding not supported'
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
-            end
-    
-              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
-    
-            def run
-          print_version
-          signal_end_of_output
-          listen
-        end
-    
-          def link_to_edit(resource, options = {})
-        url = options[:url] || edit_object_url(resource)
-        options[:data] = { action: 'edit' }
-        options[:class] = 'btn btn-primary btn-sm'
-        link_to_with_icon('edit', Spree.t(:edit), url, options)
+          it 'runs until stop is called' do
+        mock.instance_of(Rufus::Scheduler).join
+        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
+        @agent_runner.run
       end
     
-            context 'there is not enough stock at the other location' do
-          context 'and it cannot backorder' do
-            it 'does not allow me to split stock' do
-              product.master.stock_items.last.update_column(:backorderable, false)
-              product.master.stock_items.last.update_column(:count_on_hand, 0)
+      describe '#check' do
+    it 'should not emit events on its first run' do
+      expect { @checker.check }.to change { Event.count }.by(0)
+      expect(@checker.memory[:last_event]).to eq '2014-04-17T10:25:31.000+02:00'
+    end
+    it 'should check that initial run creates an event' do
+      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
+      expect { @checker.check }.to change { Event.count }.by(1)
+    end
+  end
     
-              def find_spree_current_order
-            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
-              store: spree_current_store,
-              user: spree_current_user,
-              token: order_token,
-              currency: current_currency
-            )
-          end
+        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
     
-              if Cart::Update.call(order: @order, params: order_params).success?
-            user_id = params[:order][:user_id]
-            if current_api_user.has_spree_role?('admin') && user_id
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-            respond_with(@order, default_template: :show)
-          else
-            invalid_resource!(@order)
-          end
-        end
+          def encode_token(token)
+        Base64.strict_encode64(token)
+      end
     
-              options = { variants_attrs: variants_params, options_attrs: option_types_params }
-          @product = Core::Importer::Product.new(@product, product_params, options).update
+          def origin(env)
+        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
+      end
+    
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
+      end
+    end
+  end
+end
+
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
