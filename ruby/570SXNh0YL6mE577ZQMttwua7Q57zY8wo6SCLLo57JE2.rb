@@ -1,37 +1,76 @@
 
         
-        require 'vagrant/util/safe_puts'
+          def has_setting?(name)
+    has_key?(name.to_sym) || has_key?('#{name.to_s}?'.to_sym) || name.to_sym == :default_locale
+  end
     
-            # Initializes the system. Any subclasses MUST make sure this
-        # method is called on the parent. Therefore, if a subclass overrides
-        # `initialize`, then you must call `super`.
-        def initialize(vm)
-          @vm = vm
-        end
-    
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-              # Make sure we're only working with one VM if single target
-          if options[:single_target] && machines.length != 1
-            @logger.debug('Using primary machine since single target')
-            primary_name = @env.primary_machine_name
-            raise Errors::MultiVMTargetRequired if !primary_name
-            machines = [get_machine.call(primary_name)]
-          end
-    
-            # This contains all the hosts and their parents.
-        #
-        # @return [Registry<Symbol, Array<Class, Symbol>>]
-        attr_reader :hosts
-    
-            # The logger for this class.
-        LOGGER = Log4r::Logger.new('vagrant::plugin::v2::plugin')
-    
-          its(:env) { is_expected.to use_userpaths }
+        def length
+      @queue.length
     end
+    
+      describe '#<<' do
+    it 'normalizes directive name' do
+      builder << {
+        script_src: ['symbol_underscore'],
+        'script-src': ['symbol_dash'],
+        'script_src' => ['string_underscore'],
+        'script-src' => ['string_dash'],
+      }
+    
+      def self.bundle(langs)
+    result = File.read(HIGHLIGHTJS_DIR + 'highlight.min.js')
+    langs.each do |lang|
+      begin
+        result << '\n' << File.read(HIGHLIGHTJS_DIR + 'languages/#{lang}.min.js')
+      rescue Errno::ENOENT
+        # no file, don't care
+      end
+    end
+    
+          return response unless html_response?(headers)
+      ContentSecurityPolicy.base_url = request.host_with_port if Rails.env.development?
+    
+        # this is only required for NGINX X-SendFile it seems
+    response.headers['Content-Length'] = File.size(cache_file).to_s
+    set_cache_control_headers
+    send_file(cache_file, disposition: :inline)
+  end
+    
+          render plain: svg_sprite, disposition: nil, content_type: 'application/javascript'
+    end
+  end
+    
+        before_action :ensure_logged_in, except: [:voters]
+    
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+    end
+    
+    
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+    desc 'Publish to rubygems. Same as release'
+task :publish => :release
+    
+        def tmux_window_and_pane_target
+      '#{project.name}:#{window_index}.#{pane_index}'
+    end
+    
+      chain :with_commands do |*expected|
+    @commands = expected
+  end
+  alias_method :and_commands, :with_commands
