@@ -1,29 +1,32 @@
 
         
-          if FLAGS.noise_type == 'poisson':
-    noisy_data = spikify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  elif FLAGS.noise_type == 'gaussian':
-    noisy_data = gaussify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  else:
-    raise ValueError('Only noise types supported are poisson or gaussian')
-    
-    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
-            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
+        # Pull out some commonly used parameters.
+# These are user parameters (configuration)
+rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
 T = FLAGS.T
 C = FLAGS.C
 N = FLAGS.N
+S = FLAGS.S
+input_magnitude = FLAGS.input_magnitude
 nreplications = FLAGS.nreplications
-E = nreplications * C
+E = nreplications * C         # total number of trials
+# S is the number of measurements in each datasets, w/ each
+# dataset having a different set of observations.
+ndatasets = N/S                 # ok if rounded down
 train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
+ntime_steps = int(T / FLAGS.dt)
+# End of user parameters
     
-      Returns:
-    loss_matrix:  Loss matrix of shape [batch_size, sequence_length].
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  return cross_entropy_loss
+    
+def write_data(data_fname, data_dict, use_json=False, compression=None):
+  '''Write data in HD5F format.
+    
+    
+def _SampleModel(prefix_words, vocab):
+  '''Predict next words using the given prefix words.
+    
+        self.bos_chars = self._convert_word_to_char_ids(self.bos_char)
+    self.eos_chars = self._convert_word_to_char_ids(self.eos_char)
     
       Args:
     hparams:  Hyperparameters for the MaskGAN.
@@ -31,158 +34,87 @@ ntimesteps = int(T / FLAGS.dt)
     is_training:  Whether the model is training.
     reuse (Optional):  Whether to reuse the model.
     
-      The `attention_decoder_fn_inference` is called with user arguments
-  and returns the `decoder_fn`, which can be passed to the
-  `dynamic_rnn_decoder`, such that
+    from __future__ import print_function
     
-        state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
+        fpath = os.path.join(path, 'train')
+    x_train, y_train = load_batch(fpath, label_key=label_mode + '_labels')
     
-        module = AnsibleModule(argument_spec=argument_spec,)
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape[1:])(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x)
+    x2 = np.transpose(x, (0, 3, 1, 2))
+    inputs2 = Input(shape=x2.shape[1:])
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape[1:])(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2)
+    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
     
-        if module.params.get('max_items'):
-        params['MaxItems'] = module.params.get('max_items')
+    import datetime
+import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
     
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
     
-DOCUMENTATION = '''
----
-module: gcpubsub_facts
-version_added: '2.3'
-short_description: List Topics/Subscriptions and Messages from Google PubSub.
-description:
-    - List Topics/Subscriptions from Google PubSub.  Use the gcpubsub module for
-      topic/subscription management.
-      See U(https://cloud.google.com/pubsub/docs) for an overview.
-requirements:
-  - 'python >= 2.6'
-  - 'google-auth >= 0.5.0'
-  - 'google-cloud-pubsub >= 0.22.0'
-notes:
-  - list state enables user to list topics or subscriptions in the project.  See examples for details.
-author:
-  - 'Tom Melendez (@supertom) <tom@supertom.com>'
-options:
-  topic:
-    description:
-       - GCP pubsub topic name.  Only the name, not the full path, is required.
-    required: False
-  view:
-    description:
-       - Choices are 'topics' or 'subscriptions'
-    required: True
-  state:
-    description:
-       - list is the only valid option.
-    required: False
-'''
+    FREQ_CAT_NUM = 4
     
-            if add_rules:
-            firewall_policy = _add_firewall_rules(module,
-                                                  oneandone_conn,
-                                                  firewall_policy['id'],
-                                                  add_rules)
-            _check_mode(module, firewall_policy)
-            changed = True
+        def feed(self, byte_str):
+        for i in range(len(byte_str)):
+            coding_state = self.coding_sm.next_state(byte_str[i])
+            if coding_state == MachineState.ERROR:
+                self.logger.debug('%s %s prober hit error at byte %s',
+                                  self.charset_name, self.language, i)
+                self._state = ProbingState.NOT_ME
+                break
+            elif coding_state == MachineState.ITS_ME:
+                self._state = ProbingState.FOUND_IT
+                break
+            elif coding_state == MachineState.START:
+                char_len = self.coding_sm.get_current_charlen()
+                if i == 0:
+                    self._last_char[1] = byte_str[0]
+                    self.distribution_analyzer.feed(self._last_char, char_len)
+                else:
+                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
+                                                    char_len)
     
-    # Copyright: (c) 2015, VMware, Inc. All Rights Reserved.
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    # EUC-JP
     
-        for rule in desired_rules:
-        if rule not in current_rules:
-            additions += 1
-            if not module.check_mode:
-                gateway.add_nat_rule(**rule)
-            result['changed'] = True
-    result['rules_added'] = additions
+            # Log all prober confidences if none met MINIMUM_THRESHOLD
+        if self.logger.getEffectiveLevel() == logging.DEBUG:
+            if self.result['encoding'] is None:
+                self.logger.debug('no probers hit minimum threshold')
+                for group_prober in self._charset_probers:
+                    if not group_prober:
+                        continue
+                    if isinstance(group_prober, CharSetGroupProber):
+                        for prober in group_prober.probers:
+                            self.logger.debug('%s %s confidence = %s',
+                                              prober.charset_name,
+                                              prober.language,
+                                              prober.get_confidence())
+                    else:
+                        self.logger.debug('%s %s confidence = %s',
+                                          prober.charset_name,
+                                          prober.language,
+                                          prober.get_confidence())
+        return self.result
+
     
-        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
-                                        hostcategory=hostcategory,
-                                        ipaenabledflag=ipaenabledflag,
-                                        servicecategory=servicecategory,
-                                        sourcehostcategory=sourcehostcategory,
-                                        usercategory=usercategory)
-    ipa_hbacrule = client.hbacrule_find(name=name)
-    
-    
-DOCUMENTATION = '''
----
-module: spectrum_device
-short_description: Creates/deletes devices in CA Spectrum.
-description:
-   - This module allows you to create and delete devices in CA Spectrum U(https://www.ca.com/us/products/ca-spectrum.html).
-   - Tested on CA Spectrum 9.4.2, 10.1.1 and 10.2.1
-version_added: '2.6'
-author: 'Renato Orgito (@orgito)'
-options:
-    device:
-        aliases: [ host, name ]
-        required: true
-        description:
-            - IP address of the device.
-            - If a hostname is given, it will be resolved to the IP address.
-    community:
-        description:
-            - SNMP community used for device discovery.
-            - Required when C(state=present).
-    landscape:
-        required: true
-        description:
-            - Landscape handle of the SpectroServer to which add or remove the device.
-    state:
-        required: false
-        description:
-            - On C(present) creates the device when it does not exist.
-            - On C(absent) removes the device when it exists.
-        choices: ['present', 'absent']
-        default: 'present'
-    url:
-        aliases: [ oneclick_url ]
-        required: true
-        description:
-            - HTTP, HTTPS URL of the Oneclick server in the form (http|https)://host.domain[:port]
-    url_username:
-        aliases: [ oneclick_user ]
-        required: true
-        description:
-            - Oneclick user name.
-    url_password:
-        aliases: [ oneclick_password ]
-        required: true
-        description:
-            - Oneclick user password.
-    use_proxy:
-        required: false
-        description:
-            - if C(no), it will not use a proxy, even if one is defined in an environment
-                variable on the target hosts.
-        default: 'yes'
-        type: bool
-    validate_certs:
-        required: false
-        description:
-            - If C(no), SSL certificates will not be validated. This should only be used
-                on personally controlled sites using self-signed certificates.
-        default: 'yes'
-        type: bool
-    agentport:
-        required: false
-        description:
-            - UDP port used for SNMP discovery.
-        default: 161
-notes:
-   -  The devices will be created inside the I(Universe) container of the specified landscape.
-   -  All the operations will be performed only on the specified landscape.
-'''
-    
-        from sklearn.tree import DecisionTreeClassifier
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    plt.legend(loc='best')
-    
-    # Part 1: Quantitative evaluation of various init methods
+        def get_confidence(self):
+        unlike = 0.99
+        if self._num_mb_chars < 6:
+            unlike *= self.ONE_CHAR_PROB ** self._num_mb_chars
+            return 1.0 - unlike
+        else:
+            return unlike
