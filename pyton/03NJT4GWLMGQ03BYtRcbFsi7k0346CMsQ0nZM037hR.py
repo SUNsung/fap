@@ -1,135 +1,142 @@
 
         
-            plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
+        from os import makedirs
+from os.path import exists, join
     
-    # Import datasets, classifiers and performance metrics
-from sklearn import datasets, svm, metrics
+        # Test that writing over the input data works predictably
+    for mode in ['torch', 'tf']:
+        x = np.random.uniform(0, 255, (2, 10, 10, 3))
+        xint = x.astype('int')
+        x2 = utils.preprocess_input(x, mode=mode)
+        xint2 = utils.preprocess_input(xint)
+        assert_allclose(x, x2)
+        assert xint.astype('float').max() != xint2.max()
+    # Caffe mode works differently from the others
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    xint = x.astype('int')
+    x2 = utils.preprocess_input(x, data_format='channels_last', mode='caffe')
+    xint2 = utils.preprocess_input(xint)
+    assert_allclose(x, x2[..., ::-1])
+    assert xint.astype('float').max() != xint2.max()
     
-    plt.subplot(3, 4, 10)
-plt.imshow(np.reshape(agglo.labels_, images[0].shape),
-           interpolation='nearest', cmap=plt.cm.nipy_spectral)
-plt.xticks(())
-plt.yticks(())
-plt.title('Labels')
-plt.show()
+    
+def test_regularization_shared_layer_in_different_models():
+    shared_dense = Dense(num_classes,
+                         kernel_regularizer=regularizers.l1(),
+                         activity_regularizer=regularizers.l1())
+    models = []
+    for _ in range(2):
+        input_tensor = Input(shape=(data_dim,))
+        unshared_dense = Dense(num_classes, kernel_regularizer=regularizers.l1())
+        out = unshared_dense(shared_dense(input_tensor))
+        models.append(Model(input_tensor, out))
+    
+    from ..layers.merge import concatenate
+from .. import backend as K
+from ..layers.core import Lambda
+from ..engine.training import Model
+from ..models import clone_model
+from ..utils.generic_utils import to_list
+    
+    outputs = Activation('sigmoid', name='decoder_output')(x)
+    
+    scores = model.evaluate(x_test, y_test, verbose=0)
+print('IRNN test score:', scores[0])
+print('IRNN test accuracy:', scores[1])
 
     
+    # the data, split between train and test sets
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
     
-#----------------------------------------------------------------------
-# Visualize the clustering
-def plot_clustering(X_red, labels, title=None):
-    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
-    X_red = (X_red - x_min) / (x_max - x_min)
+        t = now()
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=1,
+              validation_data=(x_test, y_test))
+    print('Training time: %s' % (now() - t))
+    score = model.evaluate(x_test, y_test, verbose=0)
+    print('Test score:', score[0])
+    print('Test accuracy:', score[1])
     
-    import numpy as np
-import scipy as sp
-import matplotlib.pyplot as plt
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        for release in RangeQuerySetWrapperWithProgressBar(
+            orm.Release.objects.exclude(new_groups=0)
+        ):
+            projects = list(release.projects.values_list('id', flat=True))
+            if len(projects) > 1:
+                # do something fancy where we look at Group.first_release
+                # to calculate ReleaseProject.new_group
+                for p_id in projects:
+                    new_groups = orm.Group.objects.filter(
+                        first_release=release, project_id=p_id
+                    ).count()
+                    if not new_groups:
+                        continue
+                    orm.ReleaseProject.objects.filter(
+                        release_id=release.id, project_id=p_id
+                    ).update(new_groups=new_groups)
+            elif len(projects) == 1:
+                # copy Release.new_groups to ReleaseProject.new_group
+                orm.ReleaseProject.objects.filter(
+                    release_id=release.id, project_id=projects[0]
+                ).update(new_groups=release.new_groups)
     
-    This example is meant to illustrate situations where k-means will produce
-unintuitive and possibly unexpected clusters. In the first three plots, the
-input data does not conform to some implicit assumption that k-means makes and
-undesirable clusters are produced as a result. In the last plot, k-means
-returns intuitive clusters despite unevenly sized blobs.
-'''
-print(__doc__)
-    
-    from sklearn import cluster, datasets
-from sklearn.preprocessing import StandardScaler
-from itertools import cycle, islice
-    
-    from sklearn.cluster import MiniBatchKMeans, KMeans
-from sklearn.metrics.pairwise import pairwise_distances_argmin
-from sklearn.datasets.samples_generator import make_blobs
-    
-    
-def is_setting_index(node):
-    if node.tagname == 'index':
-        # index entries for setting directives look like:
-        # [(u'pair', u'SETTING_NAME; setting', u'std:setting-SETTING_NAME', '')]
-        entry_type, info, refid = node['entries'][0][:3]
-        return entry_type == 'pair' and info.endswith('; setting')
-    return False
-    
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
+            # Adding unique constraint on 'EnvironmentProject', fields ['project', 'environment']
+        db.create_unique('sentry_environmentproject', ['project_id', 'environment_id'])
     
     
-class _BenchServer(object):
-    
-            for spidername in args or spider_loader.list():
-            spidercls = spider_loader.load(spidername)
-            spidercls.start_requests = lambda s: conman.from_spider(s, result)
-    
-        requires_project = True
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
+class Migration(DataMigration):
+    def forwards(self, orm):
+        'Write your forwards methods here.'
+        db.commit_transaction()
     
     
-# contracts
-class UrlContract(Contract):
-    ''' Contract to set the url of the request (mandatory)
-        @url http://scrapy.org
-    '''
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'ProcessingIssue'
+        db.create_table(
+            'sentry_processingissue', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'checksum',
+                    self.gf('django.db.models.fields.CharField')(max_length=40, db_index=True)
+                ), ('type', self.gf('django.db.models.fields.CharField')(max_length=30)),
+                ('data', self.gf('sentry.db.models.fields.gzippeddict.GzippedDictField')()), (
+                    'datetime',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ProcessingIssue'])
     
-            if not aws_access_key_id:
-            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
-        if not aws_secret_access_key:
-            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
-    
-    openssl_methods = {
-    METHOD_TLS:    SSL.SSLv23_METHOD,                   # protocol negotiation (recommended)
-    METHOD_SSLv3:  SSL.SSLv3_METHOD,                    # SSL 3 (NOT recommended)
-    METHOD_TLSv10: SSL.TLSv1_METHOD,                    # TLS 1.0 only
-    METHOD_TLSv11: getattr(SSL, 'TLSv1_1_METHOD', 5),   # TLS 1.1 only
-    METHOD_TLSv12: getattr(SSL, 'TLSv1_2_METHOD', 6),   # TLS 1.2 only
-}
-    
-    # The name of a javascript file (relative to the configuration directory) that
-# implements a search results scorer. If empty, the default will be used.
-#html_search_scorer = 'scorer.js'
-    
-    AUTOHSTS_STEPS = [60, 300, 900, 3600, 21600, 43200, 86400]
-'''AutoHSTS increase steps: 1min, 5min, 15min, 1h, 6h, 12h, 24h'''
-    
-        @certbot_util.patch_get_utility()
-    def test_more_info_cancel(self, mock_util):
-        mock_util().menu.side_effect = [
-            (display_util.CANCEL, -1),
-        ]
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+            # Adding model 'ApiAuthorization'
+        db.create_table(
+            'sentry_apiauthorization', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ApiApplication'], null=True
+                    )
+                ), (
+                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.User']
+                    )
+                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ApiAuthorization'])
