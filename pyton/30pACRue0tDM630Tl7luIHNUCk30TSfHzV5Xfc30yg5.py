@@ -1,116 +1,172 @@
 
         
         
-class CallState(Enum):
+class Resource(jose.Field):
+    '''Resource MITM field.'''
+    
+        def test_kid_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url, kid=self.kid)
+        self.assertEqual(jws.signature.combined.nonce, self.nonce)
+        self.assertEqual(jws.signature.combined.url, self.url)
+        self.assertEqual(jws.signature.combined.kid, self.kid)
+        self.assertEqual(jws.signature.combined.jwk, None)
+        # TODO: check that nonce is in protected header
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-dns-cloudxns.tex', u'certbot-dns-cloudxns Documentation',
+     u'Certbot Project', 'manual'),
+]
+    
+    .. code-block:: bash
+   :caption: To acquire a single certificate for both ``example.com`` and
+             ``www.example.com``
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.delete_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
+    
+            # User chose to not deal with backwards NULL issues for 'Environment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'Environment.project_id' and its values cannot be restored.'
+        )
     
     
-class RequestStatus(Enum):
+def make_handler(value):
+    return BitHandler(
+        keys=(
+            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
+            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
+            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
+        ),
+        value=value,
+    )
     
-        def _hash_function(self, key):
-        return key % self.size
+        dest = pathlib.Path('dist')
+    dest.mkdir(exist_ok=True)
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
+        result = s[lambda x: [True, False, True, True]]
+    tm.assert_series_equal(result, s.iloc[[0, 2, 3]])
+    
+        def __init__(self, values, dtype=None, copy=False, context=None):
+        for val in values:
+            if not isinstance(val, decimal.Decimal):
+                raise TypeError('All values must be of type ' +
+                                str(decimal.Decimal))
+        values = np.asarray(values, dtype=object)
+    
+        ('smaller', None, '10pt'),
+    ('smaller', '18pt', '15pt'),
+    ('larger', None, '{pt:f}pt'.format(pt=14.4)),
+    ('larger', '15pt', '18pt'),
+])
+def test_css_relative_font_size(size, relative_to, resolved):
+    if relative_to is None:
+        inherited = None
+    else:
+        inherited = {'font-size': relative_to}
+    assert_resolves('font-size: {size}'.format(size=size),
+                    {'font-size': resolved}, inherited=inherited)
 
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
-    
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+        def to_int(self, byte):
+        '''
+        将unsigned byte字符转换为整数
+        '''
+        return struct.unpack('B', byte)[0]
     
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+class RecurrentLayer(object):
+    '''
+    Desc:
+        用 RecurrentLayer 类来实现一个循环层。下面的代码是初始化一个循环层，可以在构造函数中设置卷积层的超参数。我们注意到，循环层有两个权重数组，U和W
+    '''
+    def __init__(self, input_width, state_width,
+                 activator, learning_rate):
+        self.input_width = input_width
+        self.state_width = state_width
+        self.activator = activator
+        self.learning_rate = learning_rate
+        self.times = 0       # 当前时刻初始化为t0
+        self.state_list = [] # 保存各个时刻的state
+        self.state_list.append(np.zeros(
+            (state_width, 1)))           # 初始化s0
+        self.U = np.random.uniform(-1e-4, 1e-4,
+            (state_width, input_width))  # 初始化U
+        self.W = np.random.uniform(-1e-4, 1e-4,
+            (state_width, state_width))  # 初始化W
     
     
-@pytest.fixture
-def brew_install_no_argument():
-    return '''This command requires a formula argument'''
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-            if opts.logfile:
-            self.settings.set('LOG_ENABLED', True, priority='cmdline')
-            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
-    
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
-    
-        def long_desc(self):
-        return ('Edit a spider using the editor defined in the EDITOR environment'
-                ' variable or else the EDITOR setting')
+# 从文本中构建矩阵，加载文本文件，然后处理
+def loadDataSet(fileName):  # 通用函数，用来解析以 tab 键分隔的 floats（浮点数）
+    dataSet = []
+    fr = open(fileName)
+    for line in fr.readlines():
+        curLine = line.strip().split('\t')
+        fltLine = map(float, curLine)  # 映射所有的元素为 float（浮点数）类型
+        dataSet.append(fltLine)
+    return dataSet
     
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
+if __name__ == '__main__':
     
-    if twisted_version >= (14, 0, 0):
-    # ClientTLSOptions requires a recent-enough version of Twisted.
-    # Not having ScrapyClientTLSOptions should not matter for older
-    # Twisted versions because it is not used in the fallback
-    # ScrapyClientContextFactory.
+        Args:
+        dataMat    特征集合
+        labels     分类结果集合
+        lam        固定值
+        T          迭代次数
+        k          待处理列表大小
+    Returns:
+        w          回归系数
+    '''
+    m, n = shape(dataSet)
+    w = zeros(n)  # 回归系数
+    dataIndex = range(m)
+    for t in range(1, T+1):
+        wDelta = mat(zeros(n))  # 重置 wDelta
     
-        group.append(HTML('title.html').render())
+    
+    y_pred = np.argmax(clf.predict(X_test), axis=1)
+    X_test = X_test.reshape(-1, 8*8)
+    # Reduce dimension to 2D using PCA and plot the results
+    Plot().plot_in_2d(X_test, y_pred, title='Convolutional Neural Network', accuracy=accuracy, legend_labels=range(10))
+    
+        print ('-- Classification Tree --')
+    
+    
+# ...........
+#  LOAD DATA
+# ...........
+data = datasets.load_digits()
+digit1 = 1
+digit2 = 8
+idx = np.append(np.where(data.target == digit1)[0], np.where(data.target == digit2)[0])
+y = data.target[idx]
+# Change labels to {0, 1}
+y[y == digit1] = 0
+y[y == digit2] = 1
+X = data.data[idx]
+X = normalize(X)
+    
+        accuracy = accuracy_score(y_test, y_pred)
+    
+        # Color map
+    cmap = plt.get_cmap('viridis')
+    
+    # Import helper functions
+from mlfromscratch.utils import make_diagonal, normalize, train_test_split, accuracy_score
+from mlfromscratch.deep_learning.activation_functions import Sigmoid
+from mlfromscratch.utils import Plot
+from mlfromscratch.supervised_learning import LogisticRegression
+    
+        #-----
+    # MLP
+    #-----
+    
+        y_pred = np.argmax(clf.predict(X_test), axis=1)
+    y_test = np.argmax(y_test, axis=1)
