@@ -1,318 +1,310 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15>
-internal::ValueArray15<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8,
-    T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15) {
-  return internal::ValueArray15<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12,
-      v13, v14, v15);
+        void Menu::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    for(auto* item : menu_items_) {
+      item->UpdateKeys(focus_manager);
+    }
+  }
 }
     
-    // The tests from the instantiation above will have these names:
-//
-//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
-//
-// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
-// in the given test case, whether their definitions come before or
-// AFTER the INSTANTIATE_TEST_CASE_P statement.
-//
-// Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after main() has started.
-// This allows the user on one hand, to adjust generator parameters in order
-// to dynamically determine a set of tests to run and on the other hand,
-// give the user a chance to inspect the generated tests with Google Test
-// reflection API before RUN_ALL_TESTS() is executed.
-//
-// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
-// for more examples.
-//
-// In the future, we plan to publish the API for defining new parameter
-// generators. But for now this interface remains part of the internal
-// implementation and is subject to change.
-//
-//
-// A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
-// values. Inheriting from TestWithParam<T> satisfies that requirement because
-// TestWithParam<T> inherits from both Test and WithParamInterface. In more
-// complicated hierarchies, however, it is occasionally useful to inherit
-// separately from Test and WithParamInterface. For example:
-    
-    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5>
-AssertionResult AssertPred5Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  const char* e5,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4,
-                                  const T5& v5) {
-  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  net::ProxyConfigWithAnnotation config;
+  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
+      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
     }
     
-    // DeathTest is a class that hides much of the complexity of the
-// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
-// returns a concrete class that depends on the prevailing death test
-// style, as defined by the --gtest_death_test_style and/or
-// --gtest_internal_run_death_test flags.
-    
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
-    
-    template <typename T1, typename T2>
-struct AssertTypeEq;
-    
-    $for i [[
-$range j 1..i
-$range k 2..i
-template <$for j, [[typename T$j]]>
-struct Types$i {
-  typedef T1 Head;
-  typedef Types$(i-1)<$for k, [[T$k]]> Tail;
-};
-    
-    #include 'sample1.h'
-    
-      // Adds an element to the end of the queue.  A copy of the element is
-  // created using the copy constructor, and then stored in the queue.
-  // Changes made to the element in the queue doesn't affect the source
-  // object, and vice versa.
-  void Enqueue(const E& element) {
-    QueueNode<E>* new_node = new QueueNode<E>(element);
-    }
-    
-        void NDMask::CopyFrom(const NDMask& source)
-    {
-        if (source.Shape() != Shape())
-            InvalidArgument('NDMask::CopyFrom: The source mask's shape '%S' must be same as this NDMask's shape '%S'.', source.Shape().AsString().c_str(), Shape().AsString().c_str());
-    }
-    
-    namespace CNTK
-{
-    const std::wstring versionKey = L'version';
-    const std::wstring typeKey = L'type';
-    const std::wstring uidKey = L'uid';
-    const std::wstring kindKey = L'kind';
-    const std::wstring dataTypeKey = L'data_type';
-    const std::wstring dynamicAxisKey = L'dynamic_axis';
-    const std::wstring isSparseKey = L'is_sparse';
-    const std::wstring nameKey = L'name';
-    const std::wstring needsGradientKey = L'needs_gradient';
-    const std::wstring shapeKey = L'shape';
-    const std::wstring valueKey = L'value';
-    const std::wstring opKey = L'op';
-    const std::wstring attributesKey = L'attributes';
-    const std::wstring inputsKey = L'inputs';
-    const std::wstring rootKey = L'root';
-    const std::wstring functionsKey = L'primitive_functions';
-    const std::wstring sampleCountKey = L'sample_count';
-    const std::wstring minibatchCountKey = L'minibatchCount'; // TODO: Python-style spelling
-    const std::wstring sweepCountKey = L'sweepCount';
-    const std::wstring unitKey = L'unit';
-    const std::wstring refMBSizeKey = L'ref_mb_size';
-    const std::wstring epochSizeKey = L'epoch_size';
-    const std::wstring scheduleKey = L'schedule';
-    const std::wstring learningRateScheduleKey = L'learnig_rate_schedule';
-    const std::wstring smoothedGradientsKey = L'smoothed_gradients';
-    const std::wstring noiseInjectionSeedKey = L'noise_injection_seed';
-    const std::wstring masterParameterUpdatedKey = L'master_parameter_updated';
-    const std::wstring smoothedCountKey = L'smoothed_count';
-    const std::wstring stateKey = L'state';
-    const std::wstring rngSeedKey = L'rng_seed';
-    const std::wstring rngOffsetKey = L'rng_offset';
-    const std::wstring blockFunctionCompositeKey = L'block_function_composite';
-    const std::wstring blockFunctionOpNameKey = L'block_function_op_name';
-    const std::wstring blockFunctionCompositeArgumentsMapKeysKey = L'block_function_composite_arguments_map_keys';
-    const std::wstring blockFunctionCompositeArgumentsMapValuesKey = L'block_function_composite_arguments_map_values';
-    const std::wstring internalWorkerStateKey = L'internal_worker_state';
-    const std::wstring externalWorkerStateKey = L'external_worker_state';
-    const std::wstring userDefinedStateKey = L'user_defined_state';
-    const std::wstring udfModuleNameKey = L'module';
-    const std::wstring udfFactoryMethodNameKey = L'deserialize_method';
-    const std::wstring nativeUDFKey = L'native';
-    }
-    
-            static bool IsUDF(const Dictionary& dict);
-    
-                auto sequenceValueVarSubshape = currentSequenceDataShape.SubShape(0, fullyDefinedSampleShape.Rank());
-            if (sequenceValueVarSubshape != fullyDefinedSampleShape)
-            {
-                for (size_t k = 0; k < fullyDefinedSampleShape.Rank(); ++k)
-                {
-                    if (fullyDefinedSampleShape[k] == NDShape::FreeDimension)
-                        fullyDefinedSampleShape[k] = sequenceValueVarSubshape[k];
-                    else if (fullyDefinedSampleShape[k] != sequenceValueVarSubshape[k])
-                        InvalidArgument('Value::Create: The shape '%S' of sequence #%zu is not compatible with the sample shape '%S'.', currentSequenceData->Shape().AsString().c_str(), i, sampleShape.AsString().c_str());
-                }
-            }
-    
-    
-    {            return { m_packedData->GetMatrix<ElementType>(), m_packedDataLayout };
+          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
+      if (data.type == TYPE_PNG &&
+        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
+        error_ = 'Failed to decode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG) {
+        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
+        if (tmp_bitmap == NULL) {
+          error_ = 'Failed to decode as JPEG';
+          return false;
         }
+        bitmap = std::move(tmp_bitmap);
+      }
     
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-    
-    {    bool IsRandomizationDisabled() const
-    {
-        return randomizationrange == randomizeDisable;
-    }
-};
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-        // ComputationNode derived classes are guaranteed to have a MBLayout
-    if (isFinalValidationPass && !HasMBLayout())
-        InvalidArgument('%ls: Input [%s] must operate on minibatches.', NodeDescription().c_str(), string(shapeB).c_str());
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
+    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
  public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
+  NwClipboardClearSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {
+    {    return SingleGradientDef(
+        'MergeSingleListFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
   }
 };
     
+    op = core.CreateOperator(
+    'FindDuplicateElements',
+    ['data'],
+    ['indices'],
+)
     
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+    #include 'genericvector.h'  // for GenericVector
+#include 'rect.h'           // for TBOX
     
-    double ObjectGeneralInfo60B::lateral_dist(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    int ObjectQualityInfo60C::meas_state(const std::uint8_t* bytes,
-                                     int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(2, 3);
-    }
-    
-    #include 'modules/planning/common/speed_limit.h'
-    
-    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
-#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
-#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
-#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
-#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
-#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
-#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
-    
-      Byte t2(bytes + 2);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    using ::apollo::drivers::canbus::Byte;
-    
-    // config detail: {'name': 'manual_input', 'enum': {0:
-// 'MANUAL_INPUT_HEADLIGHTS_OFF', 1: 'MANUAL_INPUT_LOW_BEAMS', 2:
-// 'MANUAL_INPUT_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
-// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 7, 'type': 'enum',
-// 'order': 'motorola', 'physical_unit': ''}
-Headlight_rpt_77::Manual_inputType Headlightrpt77::manual_input(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-        /** 
-     * Called once per frame. time a value between 0 and 1.
-    
-    NS_CC_BEGIN;
-    
-    
-    {    return false;
+    bool ParagraphModel::ValidFirstLine(int lmargin, int lindent,
+                                    int rindent, int rmargin) const {
+  switch (justification_) {
+    case JUSTIFICATION_LEFT:
+      return NearlyEqual(lmargin + lindent, margin_ + first_indent_,
+                         tolerance_);
+    case JUSTIFICATION_RIGHT:
+      return NearlyEqual(rmargin + rindent, margin_ + first_indent_,
+                         tolerance_);
+    case JUSTIFICATION_CENTER:
+      return NearlyEqual(lindent, rindent, tolerance_ * 2);
+    default:
+      // shouldn't happen
+      return false;
+  }
 }
     
-        //
-    // Overrides
-    //
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    virtual FlipX* reverse() const override;
-    virtual FlipX* clone() const override;
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
     
-CC_CONSTRUCTOR_ACCESS:
-    FlipX() :_flipX(false) {}
-    virtual ~FlipX() {}
+      // Similar to the above, but return the vector of unichar ids for which
+  // the given unichar_id is an ambiguity (appears in the 'wrong' part of
+  // some ambiguity pair).
+  inline const UnicharIdVector *ReverseAmbigsForAdaption(
+      UNICHAR_ID unichar_id) const {
+    if (reverse_ambigs_for_adaption_.empty()) return nullptr;
+    return reverse_ambigs_for_adaption_[unichar_id];
+  }
     
-        /** 
-     * initializes the action
-     * @param duration in seconds
-     * @param dstAngleX in degreesCW
-     * @param dstAngleY in degreesCW
-     */
-    bool initWithDuration(float duration, float dstAngleX, float dstAngleY);
-    /**
-     * initializes the action
-     * @param duration in seconds
-     */
-    bool initWithDuration(float duration, const Vec3& dstAngle3D);
+    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
+
+    
+    // GenericHeap requires 1 template argument:
+// Pair will normally be either KDPairInc<Key, Data> or KDPairDec<Key, Data>
+// for some arbitrary Key and scalar, smart pointer, or non-ownership pointer
+// Data type, according to whether a MIN heap or a MAX heap is desired,
+// respectively. Using KDPtrPairInc<Key, Data> or KDPtrPairDec<Key, Data>,
+// GenericHeap can also handle simple Data pointers and own them.
+// If no additional data is required, Pair can also be a scalar, since
+// GenericHeap doesn't look inside it except for operator<.
+//
+// The heap is stored as a packed binary tree in an array hosted by a
+// GenericVector<Pair>, with the invariant that the children of each node are
+// both NOT Pair::operator< the parent node. KDPairInc defines Pair::operator<
+// to use Key::operator< to generate a MIN heap and KDPairDec defines
+// Pair::operator< to use Key::operator> to generate a MAX heap by reversing
+// all the comparisons.
+// See http://en.wikipedia.org/wiki/Heap_(data_structure) for more detail on
+// the basic heap implementation.
+//
+// Insertion and removal are both O(log n) and, unlike the STL heap, an
+// explicit Reshuffle function allows a node to be repositioned in time O(log n)
+// after changing its value.
+//
+// Accessing the element for revaluation is a more complex matter, since the
+// index and pointer can be changed arbitrarily by heap operations.
+// Revaluation can be done by making the Data type in the Pair derived from or
+// contain a DoublePtr as its first data element, making it possible to convert
+// the pointer to a Pair using KDPairInc::RecastDataPointer.
+template <typename Pair>
+class GenericHeap {
+ public:
+  GenericHeap() = default;
+  // The initial size is only a GenericVector::reserve. It is not enforced as
+  // the size limit of the heap. Caller must implement their own enforcement.
+  explicit GenericHeap(int initial_size) {
+    heap_.reserve(initial_size);
+  }
+    }
+    
+    
+    {        return m_prevMinibatchAggregateTrainingLossValue->AsScalar<double>() / m_prevMinibatchNumSamples;
+    }
+    
+        Value::Value(const NDArrayViewPtr& data, const NDMaskPtr& mask)
+        : m_data(data), m_mask(mask)
+    {
+        if (mask != nullptr)
+        {
+            auto dataShape = data->Shape();
+            auto maskShape = mask->Shape();
+    }
+    }
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
+    }
+    
+    static inline size_t rand(const size_t begin, const size_t end)
+{
+    const size_t randno = ::rand() * RAND_MAX + ::rand(); // BUGBUG: still only covers 32-bit range
+    return begin + randno % (end - begin);
+}
+    
+    
+    {private:
+    long long m_start;
+    long long m_end;
+};
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
+    }
+    
+    
+    {template<typename IndexType, typename DType = real_t>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
+    
+    
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
+    
+    // Finally register the objective function.
+// After it succeeds you can try use xgboost with objective=mylogistic
+XGBOOST_REGISTER_OBJECTIVE(MyLogistic, 'mylogistic')
+.describe('User defined logistic regression plugin')
+.set_body([]() { return new MyLogistic(); });
+    
+        // Remove the assertion on batch.index, which can be null in the case that the data in this
+    // batch is entirely sparse. Although it's true that this indicates a likely issue with the
+    // user's data workflows, passing XGBoost entirely sparse data should not cause it to fail.
+    // See https://github.com/dmlc/xgboost/issues/1827 for complete detail.
+    // CHECK(batch.index != nullptr);
+    
+      xfer += iprot->readStructBegin(fname);
+    
+      void ping(ExtensionStatus& _return) {
+    // Your implementation goes here
+    printf('ping\n');
+  }
+    
+    void genNFSShare(const std::string& share_line, QueryData& results) {
+  auto line = osquery::split(share_line);
+  if (line.size() == 0 || boost::starts_with(line[0], '#')) {
+    return;
+  }
+    }
+    
+    QueryData genKernelIntegrity(QueryContext &context) {
+  QueryData results;
+  Row r;
+  std::string content;
+  std::string text_segment_hash;
+  std::string syscall_addr_modified;
+    }
+    
+    void querySmartDevices(
+    libsmartctl::ClientInterface& smartctl,
+    std::function<void(
+        std::function<void(const std::string&, hardwareDriver*)>)> walk_func,
+    QueryData& results) {
+  // hw_info is for tracking info retrieve with an explicit HW controller.  It
+  // is indexed by serial_number, since that's how you correlate the data with
+  // auto-detect retrieved SMART info.
+  std::map<std::string, Row> hw_info;
+    }
+    
+    #include <linux/perf_event.h>
+    
+      enum class IsEnabledError {
+    CallFailed = 1,
+    IncorrectResponseFormat = 2,
+    IncorrectValue = 3
+  };
+  Expected<bool, Killswitch::IsEnabledError> isEnabled(const std::string& key);
+    
+      wrapped.msg.a_ = 3;
+  wrapped.msg.b_ = 4;
+  std::copy(wrapped_ptr,
+            wrapped_ptr + first_part_size,
+            &buf[0] + tail + sizeof(WrappedMessage));
+  std::copy(wrapped_ptr + first_part_size,
+            wrapped_ptr + sizeof(WrappedMessage),
+            &buf[0]);
