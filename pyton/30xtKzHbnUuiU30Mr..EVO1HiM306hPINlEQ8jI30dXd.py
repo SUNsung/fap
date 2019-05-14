@@ -1,234 +1,148 @@
 
         
-            if index % 10000 == 0:
-      print('Classified %d/%d (%3.2f%%) of the paths' % (
-          index, len(path_index), 100 * index / len(path_index)))
-    
-    # generate trials for both RNNs
-rates_a, x0s_a, _ = generate_data(rnn_a, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
-                                  input_magnitude=0.0, input_times=None)
-spikes_a = spikify_data(rates_a, rng, rnn_a['dt'], rnn_a['max_firing_rate'])
+        
+python_3 = (u'thefuck/python3-bash',
+            u'FROM python:3',
+            u'sh')
     
     
-def generate_data(rnn, T, E, x0s=None, P_sxn=None, input_magnitude=0.0,
-                  input_times=None):
-  ''' Generates data from an randomly initialized RNN.
-  Args:
-    rnn: the rnn
-    T: Time in seconds to run (divided by rnn['dt'] to get steps, rounded down.
-    E: total number of examples
-    S: number of samples (subsampling N)
-  Returns:
-    A list of length E of NxT tensors of the network being run.
-  '''
-  N = rnn['N']
-  def run_rnn(rnn, x0, ntime_steps, input_time=None):
-    rs = np.zeros([N,ntime_steps])
-    x_tm1 = x0
-    r_tm1 = np.tanh(x0)
-    tau = rnn['tau']
-    dt = rnn['dt']
-    alpha = (1.0-dt/tau)
-    W = dt/tau*rnn['W']*rnn['g']
-    Bin = dt/tau*rnn['Bin']
-    Bin2 = dt/tau*rnn['Bin2']
-    b = dt/tau*rnn['b']
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-      if not FLAGS.seq2seq_share_embedding:
-    variable_mapping = {
-        str(model_str) + '/embedding':
-            encoder_embedding,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  else:
-    variable_mapping = {
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  return variable_mapping
-    
-    A second approach implemented relies on a list of porn domains, to activate it
-pass the list filename as the only argument
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
 '''
     
-        infile, outfile = args
+    You can download from:
+  https://osxfuse.github.io/
+Error: An unsatisfied requirement failed this build.'''
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
+        def read(self, n=None):
+        return ''
+    
+    def findTestCases(module, prefix='test', sortUsing=util.three_way_cmp,
+                  suiteClass=suite.TestSuite):
+    return _makeLoader(prefix, sortUsing, suiteClass).loadTestsFromModule(\
+        module)
 
     
-        def test_socks4(self):
-        self.assertTrue(isinstance(self._get_ip('socks4'), compat_str))
+            If maxBytes is zero, rollover never occurs.
+        '''
+        # If rotation/rollover is wanted, it doesn't make sense to use another
+        # mode. If for example 'w' were specified, then if there were multiple
+        # runs of the calling application, the logs from previous runs would be
+        # lost if the 'w' is respected, because the log file would be truncated
+        # on each run.
+        if maxBytes > 0:
+            mode = 'a'
+        BaseRotatingHandler.__init__(self, filename, mode, encoding, delay)
+        self.maxBytes = maxBytes
+        self.backupCount = backupCount
     
-        return app
-
+    # Function to return the operator module
+def get_operator_module():
+    return operator
     
-        # test that the user was inserted into the database
-    with app.app_context():
-        assert get_db().execute(
-            'select * from user where username = 'a'',
-        ).fetchone() is not None
+    def mul(a, b):
+    time.sleep(0.5 * random.random())
+    return a * b
     
-        with pytest.raises(sqlite3.ProgrammingError) as e:
-        db.execute('SELECT 1')
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
+def hang_up(signal, frame):
+    raise HangUpException()
+    
+    It has been modified to mimic the behaviour of
+https://golang.org/pkg/time/#ParseDuration
 '''
+# MIT LICENSE
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation files
+# (the 'Software'), to deal in the Software without restriction,
+# including without limitation the rights to use, copy, modify, merge,
+# publish, distribute, sublicense, and/or sell copies of the Software,
+# and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+from __future__ import absolute_import
+from __future__ import unicode_literals
     
-        :param source: the source code of the template to be
-                   rendered
-    :param context: the variables that should be available in the
-                    context of the template.
-    '''
-    ctx = _app_ctx_stack.top
-    ctx.app.update_template_context(context)
-    return _render(ctx.app.jinja_env.from_string(source),
-                   context, ctx.app)
-
+        def test_multiple_path_from_env_custom_separator(self):
+        with mock.patch.dict(os.environ):
+            os.environ['COMPOSE_PATH_SEPARATOR'] = '^'
+            os.environ['COMPOSE_FILE'] = 'c:\\one.yml^.\\semi;colon.yml'
+            environment = Environment.from_env_file('.')
+            assert get_config_path_from_options(
+                '.', {}, environment
+            ) == ['c:\\one.yml', '.\\semi;colon.yml']
     
+        def test_tls_ca_cert_explicit(self):
+        options = {
+            '--tlscacert': self.ca_cert, '--tls': True,
+            '--tlsverify': True
+        }
+        result = tls_config_from_options(options)
+        assert isinstance(result, docker.tls.TLSConfig)
+        assert result.ca_cert == options['--tlscacert']
+        assert result.verify is True
     
-def parse_date(string):
-    string = _date_strip_re.sub('', string)
-    return datetime.strptime(string, '%B %d %Y')
-    
-    
-def test_clean_pop(app):
-    app.testing = False
-    called = []
-    
-    
-class InvalidProxyURL(InvalidURL):
-    '''The proxy URL provided is invalid.'''
-    
-    
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
-    
-    
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
-    
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
+        @pytest.mark.skipif(not IS_WINDOWS_PLATFORM, reason='Needs pywin32')
+    def test_windows_pipe_error_no_data(self, mock_logging):
+        import pywintypes
+        with pytest.raises(errors.ConnectionError):
+            with handle_connection_errors(mock.Mock(api_version='1.22')):
+                raise pywintypes.error(232, 'WriteFile', 'The pipe is being closed.')
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+class ConsoleWarningFormatterTestCase(unittest.TestCase):
     
-        def rebuild_proxies(self, prepared_request, proxies):
-        '''This method re-evaluates the proxy configuration by considering the
-        environment variables. If we are redirected to a URL covered by
-        NO_PROXY, we strip the proxy configuration. Otherwise, we set missing
-        proxy keys for this URL (in case they were stripped by a previous
-        redirect).
+            assert expected == actual
     
-        if not region:
-        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
-    
-    
-DOCUMENTATION = '''
----
-module: iam_server_certificate_facts
-short_description: Retrieve the facts of a server certificate
-description:
-  - Retrieve the attributes of a server certificate
-version_added: '2.2'
-author: 'Allen Sanabria (@linuxdynasty)'
-requirements: [boto3, botocore]
-options:
-  name:
-    description:
-      - The name of the server certificate you are retrieving attributes for.
-    required: true
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
-    
-        :param client: AWS API client reference (boto3)
-    :param module: Ansible module reference
-    :return dict:
-    '''
-    
-        state = module.params.get('state')
-    
-        return nat_rules
-    
-        if followed_count > 0:
-        module.exit_json(changed=True, msg='followed %d log(s)' % (followed_count,))
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.utils.versions import scrapy_components_versions
-    
-                # trustRoot set to platformTrust() will use the platform's root CAs.
-            #
-            # This means that a website like https://www.cacert.org will be rejected
-            # by default, since CAcert.org CA certificate is seldom shipped.
-            return optionsForClientTLS(hostname.decode('ascii'),
-                                       trustRoot=platformTrust(),
-                                       extraCertificateOptions={
-                                            'method': self._ssl_method,
-                                       })
-    
-    
-def _get_boto_connection():
-    from boto.s3.connection import S3Connection
-    
-    
-logger = logging.getLogger(__name__)
-    
-        @classmethod
-    def from_crawler(cls, crawler):
-        if not crawler.settings.getbool('COOKIES_ENABLED'):
-            raise NotConfigured
-        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
+        def test_sort_service_dicts_3(self):
+        services = [
+            {
+                'name': 'child'
+            },
+            {
+                'name': 'parent',
+                'links': ['child']
+            },
+            {
+                'links': ['parent'],
+                'name': 'grandparent'
+            },
+        ]
