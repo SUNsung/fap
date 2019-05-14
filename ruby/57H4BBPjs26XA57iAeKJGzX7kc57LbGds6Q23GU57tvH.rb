@@ -1,73 +1,100 @@
 
         
-                  if options['multiple']
-            add_default_name_and_id_for_value(@checked_value, options)
-            options.delete('multiple')
-          else
-            add_default_name_and_id(options)
-          end
-    
-                options = options.dup
-            options[:field_name]           = @method_name
-            options[:include_position]     = true
-            options[:prefix]             ||= @object_name
-            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
-    
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
-    
-            private
-    
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
-    
-              context 'A shipment has shipped' do
-            it 'does not show or let me back to the cart page, nor show the shipment edit buttons', js: false do
-              order = create(:order, state: 'payment')
-              order.shipments.create!(stock_location_id: stock_location.id, state: 'shipped')
-    
-      context 'moving variants between shipments', js: true do
-    before do
-      create(:stock_location, name: 'LA')
-      visit spree.admin_orders_path
-      within_row(1) do
-        click_link 'R100'
+                # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
       end
     end
+  end
+end
+
     
-            def find_product
-          super(params[:id])
+            # This contains all the push implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Hash>>]
+        attr_reader :pushes
+    
+            # This returns all registered providers.
+        #
+        # @return [Hash]
+        def providers
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.providers)
+            end
+          end
         end
     
-          @@property_attributes = [:id, :name, :presentation]
+              hook_name ||= ALL_ACTIONS
+          components.action_hooks[hook_name.to_sym] << block
+        end
+    
+        # Returns an array populated with the keys of this object.
+    #
+    # @return [Array]
+    def keys
+      @items.keys
+    end
+    
+        context 'on a post from a contact' do
+      before do
+        aspect_to_post = bob.aspects.where(:name => 'generic').first
+        @post = bob.post :status_message, :text => 'something', :to => aspect_to_post
+      end
+    
+      describe '#destroy' do
+    before do
+      sign_in @user, scope: :user
+    end
+    it 'redirects to / for a non-mobile user' do
+      delete :destroy
+      expect(response).to redirect_to new_user_session_path
+    end
+    
+          it 'it doesn't call toggle_hidden_shareable' do
+        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
+        begin
+          put :update, params: {id: 42, post_id: @status.id}, format: :js
+        rescue ActiveRecord::RecordNotFound
+        end
+      end
+    end
+  end
+end
+
+    
+                within_row(1) { click_icon 'split' }
+            targetted_select2 @shipment2.number, from: '#s2id_item_stock_location'
+            fill_in 'item_quantity', with: 1
+            click_icon :save
+    
+              def find_spree_current_order
+            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: spree_current_store,
+              user: spree_current_user,
+              token: order_token,
+              currency: current_currency
+            )
+          end
+    
+              if Spree::Dependencies.cart_update_service.constantize.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+          if data.code.to_i != 200
+        raise RuntimeError, 'Gist replied with #{data.code} for #{gist_url}'
+      end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
