@@ -1,110 +1,10 @@
 
         
-              it 'Does not use pattern matching for tag name if so requested' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits()
-        end').runner.execute(:test)
-    
-          default_command(:create)
-    
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
-    
-      # Sets the resource creating an instance variable
-  def resource=(new_resource)
-    instance_variable_set(:'@#{resource_name}', new_resource)
-  end
-    
-        def default_controllers(options)
-      mod = options[:module] || 'devise'
-      @controllers = Hash.new { |h,k| h[k] = '#{mod}/#{k}' }
-      @controllers.merge!(options[:controllers]) if options[:controllers]
-      @controllers.each { |k,v| @controllers[k] = v.to_s }
-    end
-    
-          # A callback initiated after successfully being remembered. This can be
-      # used to insert your own logic that is only run after the user is
-      # remembered.
-      #
-      # Example:
-      #
-      #   def after_remembered
-      #     self.update_attribute(:invite_code, nil)
-      #   end
-      #
-      def after_remembered
-      end
-    
-          def timeout_in
-        self.class.timeout_in
-      end
-    
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
-    
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        context 'on my own post' do
-      it 'succeeds' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        post :create, params: like_hash, format: :json
-        expect(response.code).to eq('201')
-      end
-    end
-    
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-    
-          code = InvitationCode.create(user: bob)
-      code.update_attributes(count: 0)
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
+                def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
         end
       end
     end
@@ -112,84 +12,164 @@ end
 end
 
     
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
-      end
-    end
-  end
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
-      else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
+            def id_for_already_imported_cache(note)
+          note.id
+        end
       end
     end
   end
 end
 
     
-        desc 'Run one single machine acceptance test'
-    task :single, :machine do |t, args|
-      ENV['LS_VAGRANT_HOST']  = args[:machine]
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
+              sidekiq_worker_class
+            .perform_async(project.id, repr.to_hash, waiter.key)
+    
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
+    
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
+  end
+end
+    
+        extend Forwardable
+    attr_reader :variables
+    def_delegators :variables,
+                   :set, :fetch, :fetch_for, :delete, :keys, :validate
+    
+          sh <<-SH
+        git commit --allow-empty -a -m '#{source_version} release'  &&
+        git tag -s v#{source_version} -m '#{source_version} release'  &&
+        git push && (git push origin || true) &&
+        git push --tags && (git push origin --tags || true)
+      SH
     end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+                <li class='frame-info <%= frame_class(frame) %>'>
+              <code><%=h frame.filename %></code> in
+                <code><strong><%=h frame.function %></strong></code>
+            </li>
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+      end
+    
+      # Print deprecation notices to the Rails logger.
+  config.active_support.deprecation = :log
+    
+            # If the instance variable @{attr} is defined, then
+        # it means the flag was given on the command line.
+        flag_given = instance_variable_defined?('@#{attr}')
+        input.attributes['#{attr}_given?'.to_sym] = flag_given
+        attr = '#{attr}?' if !respond_to?(attr) # handle boolean :flag cases
+        input.attributes[attr.to_sym] = send(attr) if respond_to?(attr)
+        logger.debug('Setting attribute', attr.to_sym => send(attr))
+      end
+    end
+    
+        wordsize = case @architecture
+    when nil, 'native'
+      %x{getconf LONG_BIT}.chomp # 'native' is current arch
+    when 'amd64'
+      '64'
+    when 'i386'
+      '32'
+    else
+      %x{getconf LONG_BIT}.chomp # default to native, the current arch
+    end
+    
+      option '--data-dir', 'DATA_DIR',
+    'Specify php dir relative to prefix if differs from pear default (pear/data)'
+    
+        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
+    libs.each do |file|
+      base = staging_path(File.join(attributes[:prefix]))
+      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
+      File.chmod(0755, File.join(base, file))
+    end
+    
+        if File.exists?(params[:output])
+      # TODO(sissel): Allow folks to choose output?
+      logger.error('Puppet module directory '#{params[:output]}' already ' \
+                    'exists. Delete it or choose another output (-p flag)')
+    end
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
   end
 end
 
     
-    shared_examples 'logstash list' do |logstash|
-  describe 'logstash-plugin list on #{logstash.hostname}' do
-    before(:all) do
-      logstash.install({:version => LOGSTASH_VERSION})
+    
+    # Convert the 'package directory' built above to a real solaris package.
+    safesystem('pkgtrans', '-s', build_path, output_path, name)
+    safesystem('cp', '#{build_path}/#{output_path}', output_path)
+  end # def output
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for tar.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
     end
     
-    shared_context 'creates guest order with guest token' do
-  let(:guest_token) { 'guest_token' }
-  let!(:order)      { create(:order, token: guest_token, store: store, currency: currency) }
-  let!(:line_item)  { create(:line_item, order: order, currency: currency) }
-  let!(:headers)    { headers_order_token }
+      # Get an array containing the recommended 'ar' command for this platform
+  # and the recommended options to quickly create/append to an archive
+  # without timestamps or uids (if possible).
+  def ar_cmd
+    return @@ar_cmd if defined? @@ar_cmd
     
-              it_behaves_like 'nested requested resources'
-        end
-      end
+        attr_reader :commands, :index, :name, :project
+    
+    FactoryBot.define do
+  factory :project, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load('spec/fixtures/sample.yml') }
     end
+    
+    describe Tmuxinator::Pane do
+  let(:klass) { described_class }
+  let(:instance) { klass.new(index, project, window, *commands) }
+  # let(:index) { 'vim' }
+  # let(:project) { 0 }
+  # let(:tab) { nil }
+  # let(:commands) { nil }
+  let(:index) { 0 }
+  let(:project) { double }
+  let(:window) { double }
+  let(:commands) { ['vim', 'bash'] }
+    
+        result
   end
     
-        context 'with specified pagination params' do
-      let!(:order) { create(:order, state: 'complete', user: user, completed_at: Time.current) }
-      let!(:order_1) { create(:order, state: 'complete', user: user, completed_at: Time.current + 1.day) }
-      let!(:order_2) { create(:order, state: 'complete', user: user, completed_at: Time.current + 2.days) }
-      let!(:order_3) { create(:order, state: 'complete', user: user, completed_at: Time.current + 3.days) }
-    
-            it 'returns specified amount products' do
-          expect(json_response['data'].count).to eq 2
-        end
-    
-        context 'by roots' do
-      before { get '/api/v2/storefront/taxons?roots=true' }
-    
-        add_filter '/bin/'
-    add_filter '/db/'
-    add_filter '/script/'
-    add_filter '/spec/'
-    add_filter '/lib/spree/api/testing_support/'
-    
-          private
-    
-            def show
-          authorize! :read, @order, order_token
-          @address = find_address
-          respond_with(@address)
-        end
-    
-    ENV['RAILS_ENV'] = 'test'
+      describe '#tmux' do
+    it { expect(instance.tmux).to eq 'wemux' }
+  end
+end
