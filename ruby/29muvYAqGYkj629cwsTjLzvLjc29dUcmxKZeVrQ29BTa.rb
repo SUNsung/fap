@@ -1,90 +1,112 @@
 
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
-    
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
-          end
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-        end
-      end
+        
+            # If you've clearned the pin, use bumped_at, otherwise put it at the top
+    def order_nocategory_with_pinned_sql
+      -'CASE
+        WHEN topics.pinned_globally
+         AND (COALESCE(topics.pinned_at, '#{lowest_date}') > COALESCE(tu.cleared_pinned_at, '#{lowest_date}'))
+          THEN topics.pinned_at + interval '9999 years'
+          ELSE topics.bumped_at
+       END DESC'
     end
-  end
-end
     
-          it 'detects closing brace on same line as last element' do
-        src = construct(false, false)
-        inspect_source(src)
+      def self.write_cache!(date = nil)
+    if date.nil?
+      write_cache!(Time.now.utc)
+      write_cache!(Time.now.utc.yesterday)
+      return
+    end
     
-            self
-      end
+      def load_setting(name_arg, value, locale_defaults)
+    name = name_arg.to_sym
+    @defaults[DEFAULT_LOCALE.to_sym][name] = value
     
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
+      module Deferrable
+    
+      def self.apply_headers(cors_origins, env, headers)
+    origin = nil
+    
+      def set_cache_control_headers
+    if Rails.env.development?
+      response.headers['Last-Modified'] = Time.zone.now.httpdate
+      immutable_for(1.second)
+    else
+      response.headers['Last-Modified'] = last_modified.httpdate if last_modified
+      immutable_for(1.year)
     end
   end
 end
 
     
-          # Checks whether this `hash` element is on the same line as `other`.
-      #
-      # @note A multiline element is considered to be on the same line if it
-      #       shares any of its lines with `other`
-      #
-      # @return [Boolean] whether this element is on the same line as `other`
-      def same_line?(other)
-        loc.last_line == other.loc.line || loc.line == other.loc.last_line
-      end
-    
-          # Returns the index of the `when` branch within the `case` statement.
-      #
-      # @return [Integer] the index of the `when` branch
-      def branch_index
-        parent.when_branches.index(self)
-      end
-    
-          def self.parse(identifier)
-        parts = identifier.split('/', 2)
-    
-      def framework_version
-    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
+      def log_later(data, host)
+    Scheduler::Defer.later('Track view', _db = nil) do
+      self.class.log_request_on_site(data, host)
+    end
   end
     
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
+              # topic must not be archived
+          if post.topic&.archived
+            raise StandardError.new I18n.t('poll.topic_must_be_open_to_toggle_status') if raise_errors
+            return
+          end
+    
+          def rate_limit_resets_in
+        # We add a few seconds to the rate limit so we don't _immediately_
+        # resume when the rate limit resets as this may result in us performing
+        # a request before GitHub has a chance to reset the limit.
+        octokit.rate_limit.resets_in + 5
       end
+    
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
+        end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
+      end
+    
+    class User < ActiveRecord::Base
+  devise :database_authenticatable
+end
+    
+              if mod.const_defined?('ClassMethods')
+            class_mod = mod.const_get('ClassMethods')
+            extend class_mod
+    
+          # Checks whether the user session has expired based on configured time.
+      def timedout?(last_access)
+        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
+      end
+    
+            @user.send_confirmation_instructions
+      end
+    
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    else
+      ['Unknown mode: #{hub_mode}', 422]
+    end
+  end
+    
+      included do
+    before_action :set_locale
+  end
+    
+        it 'rejects invalid jsfiddle link' do
+      expect do
+        generate_new_liquid('invalid_jsfiddle_link')
+      end.to raise_error(StandardError)
     end
