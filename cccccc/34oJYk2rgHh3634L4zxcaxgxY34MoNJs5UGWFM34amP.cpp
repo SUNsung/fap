@@ -1,127 +1,172 @@
 
         
-        // Generate param traits log methods.
-#include 'ipc/param_traits_log_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+        void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
+  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
+                                unittest::MAP_ENUM_BAR_LITE,
+                                unittest::MAP_ENUM_BAZ_LITE>(message);
 }
     
-    v8::Handle<v8::Value> AllocateId(int routing_id);
+    #include <fstream>
     
-    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
+    
+    {}  // namespace
+    
+    class EnumGenerator {
  public:
-  NwAppGetDataPathFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  explicit EnumGenerator(const EnumDescriptor* descriptor);
+  ~EnumGenerator();
+    }
     
- protected:
-  ~NwAppGetDataPathFunction() override {}
+    // Convert macro to string
+#define STRINGIFY(m) #m
+#define AS_STRING(m) STRINGIFY(m)
     
-  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
+      /**
+   * @brief Return whether to allow force_backward for a given bottom blob
+   *        index.
+   *
+   * If AllowForceBackward(i) == false, we will ignore the force_backward
+   * setting and backpropagate to blob i only if it needs gradient information
+   * (as is done when force_backward == false).
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return true;
+  }
+    
+    
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
+    }
+    return layer_types_str;
+  }
 };
     
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
+      int num_spatial_axes_;
+  int bottom_dim_;
+  int top_dim_;
     
-        if (screens) {
-      std::unique_ptr<DesktopMediaList> screen_media_list =
-        std::make_unique<NativeDesktopMediaList>(
-          content::DesktopMediaID::TYPE_SCREEN,
-          webrtc::DesktopCapturer::CreateScreenCapturer(options));
-      media_list_.push_back(std::move(screen_media_list));
-    }
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
     
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    std::string tmppath() {
-  // TMPFILE is for manual test execution during which the user will specify
-  // the full temp file path using the environmental variable TMPFILE
-  const char* tmpfile = getenv('TMPFILE');
-  if (tmpfile) {
-    return std::string(tmpfile);
-  }
+    namespace caffe {
     }
     
     
-    {} // namespace caffe2
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
+    
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
+    
+    namespace caffe {
+    }
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+    AuthPropertyIterator::~AuthPropertyIterator() {}
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+    
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    
+    
+    {  RpcServerStatsEncoding() = delete;
+  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
+  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
+};
+    
+      Status GetFileByName(ServerContext* context, const grpc::string& file_name,
+                       reflection::v1alpha::ServerReflectionResponse* response);
+    
+    
+    {}  // namespace grpc
 
     
-    ```
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
+    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
+  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
+    return system_clock::time_point::max();
   }
+  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
+  system_clock::time_point tp;
+  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
+  tp +=
+      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
+  return tp;
 }
     
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+    {class DbUndumpTool {
+ public:
+  bool Run(const UndumpOptions& undump_options,
+           rocksdb::Options options = rocksdb::Options());
+};
+}  // namespace rocksdb
+#endif  // ROCKSDB_LITE
+
     
-        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
-    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
-    enum RasterizerFlags
-    {
-        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
-        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
-        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
-        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
-        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
-        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
-        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
-        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
-    };
+    namespace rocksdb {
+    }
     
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    maxBackgroundOperations
+ * Signature: (J)I
+ */
+jint Java_org_rocksdb_BackupableDBOptions_maxBackgroundOperations(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return static_cast<jint>(bopt->max_background_operations);
+}
+    
+        ExampleQt example(argv[argc-1]);
+    
+        ::testing::InitGoogleTest(&argc, argv);
+    int retval = RUN_ALL_TESTS();
+    kill(server_pid, SIGTERM);
+    int status = 0;
+    wait(&status);
