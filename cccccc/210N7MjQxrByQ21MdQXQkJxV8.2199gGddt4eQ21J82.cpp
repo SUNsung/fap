@@ -1,275 +1,331 @@
 
         
-          char *oldAllocation = Allocated;
-  char *oldBegin = Begin;
-  std::size_t oldSize = (std::size_t) (End - oldBegin);
+        #include <QIcon>
+#include <QPixmap>
+#include <QString>
+    
+    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+    
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
+    
+    #undef BE32
+#undef Round
+#undef sigma1
+#undef sigma0
+#undef Sigma1
+#undef Sigma0
+#undef Maj
+#undef Ch
+    
+    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
+    secp256k1_scalar r, s;
+    secp256k1_scalar sec, non, msg;
+    int recid;
+    int ret = 0;
+    int overflow = 0;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(seckey != NULL);
+    if (noncefp == NULL) {
+        noncefp = secp256k1_nonce_function_default;
+    }
+    }
+    
+    namespace detail {
+    }
+    
+    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
+std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
     
     
-    {  return 0;
-}
-    
-    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
-    
-      scoped_ptr<base::Value> value_args(
-      converter->FromV8Value(args, isolate->GetCurrentContext()));
-  if (!value_args.get() ||
-      !value_args->IsType(base::Value::TYPE_LIST))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'args' passed to CallObjectMethodSync')));
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-          if (data.type == TYPE_PNG &&
-         !gfx::PNGCodec::EncodeBGRASkBitmap(bitmap, false, &encoded_image)) {
-        LOG(INFO) << 'NwClipboardGetSyncFunction::RunSync(' << nwapi::nw__clipboard::ToString(data.type) << ') failed when converting to PNG';
-        error_ = 'Failed to encode as PNG';
-        return false;
-      } else if (data.type == TYPE_JPEG &&
-                 !gfx::JPEGCodec::Encode(bitmap, kQuality, &encoded_image)) {
-        LOG(INFO) << 'NwClipboardGetSyncFunction::RunSync(' << nwapi::nw__clipboard::ToString(data.type) << ') failed when converting to JPEG';
-        error_ = 'Failed to encode as JPEG';
-        return false;
-      }
-    
-    #include <vector>
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
-}
-    
-    #include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
+    {}  // namespace leveldb
     
       Slice in(encoded);
   ParsedInternalKey decoded('', 0, kTypeValue);
     
-      Cache::Handle* handle = nullptr;
-  Status s = FindTable(file_number, file_size, &handle);
-  if (!s.ok()) {
-    return NewErrorIterator(s);
-  }
-    
-      std::string comparator_;
-  uint64_t log_number_;
-  uint64_t prev_log_number_;
-  uint64_t next_file_number_;
-  SequenceNumber last_sequence_;
-  bool has_comparator_;
-  bool has_log_number_;
-  bool has_prev_log_number_;
-  bool has_next_file_number_;
-  bool has_last_sequence_;
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-        size_t Trainer::TotalNumberOfUnitsSeen(DataUnit unit) const
-    {
-        switch (unit)
-        {
-        case DataUnit::Minibatch:
-            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfMinibatchesSeen();
-            break;
-        case DataUnit::Sweep:
-            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfSweepsSeen();
-            break;
-        case DataUnit::Sample:
-            return m_parameterLearners->GetMetricAggregatingLearner()->TotalNumberOfSamplesSeen();
-        default:
-            //should not be here; whenever a new data unit is defined, there should be a new case in this function.
-            LogicError('Unsupported data unit: %d', (int)unit);
-        }
-    }
-    
-            NDArrayViewPtr valueData;
-        NDShape valueDataShape = fullyDefinedSampleShape.AppendShape({ maxSequenceLength, numSequences });
-        if (numSequences == 1)
-        {
-            if (createNewCopy)
-                valueData = sequences[0]->DeepClone();
-            else
-                valueData = sequences[0];
-    }
-    
-        private:
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const NDArrayViewPtr& packedData, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(packedData), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            // Determine unpacked shape
-            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
-        }
-    
-        // Releases the mutex
-    void Release()
-    {
-        assert(m_fd != -1);
-        // removing file
-        unlink(m_fileName.c_str());
-        // Note: file is intentionally removed *before* releasing the lock
-        // to ensure that locked file isn't deleted by the non-owner of the lock
-        m_lock.l_type = F_UNLCK;
-        // Now removing the lock and closing the file descriptor
-        // waiting processes will be notified
-        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
-        if (rc == FCNTL_ERROR)
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
-        }
-        close(m_fd);
-        m_fd = -1;
-    }
-    
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-        virtual void Save(File& fstream) const override
-    {
-        Base::Save(fstream);
-        fstream << m_subPen;
-        fstream << m_delPen;
-        fstream << m_insPen;
-        fstream << m_squashInputs;
-        fstream << m_tokensToIgnore;
-    }
-    
-    template<class ElemType>
-void OptimizedRNNStackNode<ElemType>::Validate(bool isFinalValidationPass)
-{
-    // support an internal legacy version
-    if (m_legacySwapInputsPending)
-    {
-        ::swap(m_inputs[0], m_inputs[1]);
-        m_legacySwapInputsPending = false;
-    }
-    // N.B.: I need both of these lines.
-    Base::Validate(isFinalValidationPass);
-    InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
-    }
-    
-      static Data& getMutableData() { return data_; }
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
-
-    
-      virtual void executeTask() = 0;
-    
-    public:
-  DHTTaskQueueImpl();
-    
-      std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port,
-                            const unsigned char* secret) const;
-    
-    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
-                   uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.lower_bound(target);
-  if (i != entries_.end() && *(*i) == *target) {
-    (*i)->add(ipaddr);
-  }
-  else {
-    target->add(ipaddr);
-    entries_.insert(i, target);
-  }
+    namespace base {
+class DictionaryValue;
+class ListValue;
 }
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-        auto it_lower = std::lower_bound(
-        speed_limit_.speed_limit_points().begin(),
-        speed_limit_.speed_limit_points().end(), s,
-        [](const std::pair<double, double>& point, const double curr_s) {
-          return point.first < curr_s;
-        });
-    
-      const auto mat = kernel.kernel_matrix() / (2.0 * 1.0 / std::pow(0.1, 6));
-  const auto offset = kernel.offset_matrix();
-    
-    void Accelrpt68::Parse(const std::uint8_t* bytes, int32_t length,
-                       ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_manual_input(
-      manual_input(bytes, length));
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_commanded_value(
-      commanded_value(bytes, length));
-  chassis->mutable_gem()->mutable_accel_rpt_68()->set_output_value(
-      output_value(bytes, length));
+    RenderView* GetCurrentRenderView() {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::Local<v8::Context> ctx = isolate->GetCurrentContext();
+  return GetRenderView(ctx);
 }
     
-    class Accelrpt68Test : public ::testing::Test {
- public:
-  virtual void SetUp() {}
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return !item->icon_.IsEmpty();
+}
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
 };
     
-    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+      std::string type;
+    
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
+      }
+    }
+    }
     }
     
-    // config detail: {'name': 'commanded_value', 'enum': {0:
-// 'COMMANDED_VALUE_HEADLIGHTS_OFF', 1: 'COMMANDED_VALUE_LOW_BEAMS', 2:
-// 'COMMANDED_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
-// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 15, 'type': 'enum',
-// 'order': 'motorola', 'physical_unit': ''}
-Headlight_rpt_77::Commanded_valueType Headlightrpt77::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
+        ~ClipboardWriter() {
+      scw_.reset();
     }
     
-    using ::apollo::drivers::canbus::Byte;
+    #include <vector>
+    
+    
+    {} // namespace extensions
+#endif
+
+    
+        if (screens) {
+      std::unique_ptr<DesktopMediaList> screen_media_list =
+        std::make_unique<NativeDesktopMediaList>(
+          content::DesktopMediaID::TYPE_SCREEN,
+          webrtc::DesktopCapturer::CreateScreenCapturer(options));
+      media_list_.push_back(std::move(screen_media_list));
+    }
+    
+    uint32_t Hash(const char* data, size_t n, uint32_t seed);
+    
+    
+    {}  // namespace leveldb
+
+    
+    #ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+    
+    // A DB is a persistent ordered map from keys to values.
+// A DB is safe for concurrent access from multiple threads without
+// any external synchronization.
+class LEVELDB_EXPORT DB {
+ public:
+  // Open the database with the specified 'name'.
+  // Stores a pointer to a heap-allocated database in *dbptr and returns
+  // OK on success.
+  // Stores nullptr in *dbptr and returns a non-OK status on error.
+  // Caller should delete *dbptr when it is no longer needed.
+  static Status Open(const Options& options, const std::string& name,
+                     DB** dbptr);
+    }
+    
+      const char* Name() const override { return 'leveldb.BytewiseComparator'; }
+    
+    static const int kValueSize = 200 * 1024;
+static const int kTotalSize = 100 * 1024 * 1024;
+static const int kCount = kTotalSize / kValueSize;
+    
+    
+    {    // Do it
+    std::string contents;
+    Status s = ReadFileToString(env_.target(), fname, &contents);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+    for (int i = 0; i < bytes_to_corrupt; i++) {
+      contents[i + offset] ^= 0x80;
+    }
+    s = WriteStringToFile(env_.target(), contents, fname);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+  }
+    
+      // Return an iterator that yields the contents of the memtable.
+  //
+  // The caller must ensure that the underlying MemTable remains live
+  // while the returned iterator is live.  The keys returned by this
+  // iterator are internal keys encoded by AppendInternalKey in the
+  // db/format.{h,cc} module.
+  Iterator* NewIterator();
+    
+      // Apply *edit to the current version to form a new descriptor that
+  // is both saved to persistent state and installed as the new
+  // current version.  Will release *mu while actually writing to the file.
+  // REQUIRES: *mu is held on entry.
+  // REQUIRES: no other thread concurrently calls LogAndApply()
+  Status LogAndApply(VersionEdit* edit, port::Mutex* mu)
+      EXCLUSIVE_LOCKS_REQUIRED(mu);
+    
+    #include <string>
+#include <vector>
+    
+      // Intentionally copyable.
+  WriteBatch(const WriteBatch&) = default;
+  WriteBatch& operator=(const WriteBatch&) = default;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    #include 'hphp/runtime/base/apc-handle.h'
+    
+    #define CONTAINER_CONFIG_BODY(T, METHOD) \
+T Config::Get##METHOD(const IniSetting::Map& ini, const Hdf& config, \
+                      const std::string& name /* = '' */, \
+                      const T& defValue /* = T() */, \
+                      const bool prepend_hhvm /* = true */) { \
+  auto ini_name = IniName(name, prepend_hhvm); \
+  Hdf hdf = name != '' ? config[name] : config; \
+  T ini_ret, hdf_ret; \
+  auto value = ini_iterate(ini, ini_name); \
+  if (value.isArray() || value.isObject()) { \
+    ini_on_update(value.toVariant(), ini_ret); \
+    /** Make sure that even if we have an ini value, that if we also **/ \
+    /** have an hdf value, that it maintains its edge as beating out **/ \
+    /** ini                                                          **/ \
+    if (hdf.exists() && !hdf.isEmpty()) { \
+      hdf.configGet(hdf_ret); \
+      if (hdf_ret != ini_ret) { \
+        ini_ret = hdf_ret; \
+        IniSetting::SetSystem(ini_name, ini_get(ini_ret)); \
+      } \
+    } \
+    return ini_ret; \
+  } \
+  if (hdf.exists() && !hdf.isEmpty()) { \
+    hdf.configGet(hdf_ret); \
+    return hdf_ret; \
+  } \
+  return defValue; \
+} \
+void Config::Bind(T& loc, const IniSetting::Map& ini, const Hdf& config, \
+                  const std::string& name /* = '' */, \
+                  const T& defValue /* = T() */, \
+                  const bool prepend_hhvm /* = true */) { \
+  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
+  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
+                   IniName(name, prepend_hhvm), &loc); \
+}
+    
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+
+    
+    #endif
+
+    
+      Pipe();
+  virtual ~Pipe();
+    
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
+}
+    
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
+    
+    
+SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+}
+    
+    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
+    
+            // Copy new text to start, and delete it
+        text.copy(destStart, destLimit, start);
+        text.handleReplaceBetween(tempStart + outLen, destLimit + outLen, UnicodeString());
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2019-04-23: Inputs: Added support for SDL_GameController (if ImGuiConfigFlags_NavEnableGamepad is set by user application).
+//  2019-03-12: Misc: Preserve DisplayFramebufferScale when main window is minimized.
+//  2018-12-21: Inputs: Workaround for Android/iOS which don't seem to handle focus related calls.
+//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
+//  2018-11-14: Changed the signature of ImGui_ImplSDL2_ProcessEvent() to take a 'const SDL_Event*'.
+//  2018-08-01: Inputs: Workaround for Emscripten which doesn't seem to handle focus related calls.
+//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
+//  2018-06-08: Misc: Extracted imgui_impl_sdl.cpp/.h away from the old combined SDL2+OpenGL/Vulkan examples.
+//  2018-06-08: Misc: ImGui_ImplSDL2_InitForOpenGL() now takes a SDL_GLContext parameter.
+//  2018-05-09: Misc: Fixed clipboard paste memory leak (we didn't call SDL_FreeMemory on the data returned by SDL_GetClipboardText).
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+//  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
+//  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes.
+//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
+//  2018-01-19: Inputs: When available (SDL 2.0.4+) using SDL_CaptureMouse() to retrieve coordinates outside of client area when dragging. Otherwise (SDL 2.0.3 and before) testing for SDL_WINDOW_INPUT_FOCUS instead of SDL_WINDOW_MOUSE_FOCUS.
+//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
+//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
+//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
+    
+            D3D12_RESOURCE_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        desc.Alignment = 0;
+        desc.Width = width;
+        desc.Height = height;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.SampleDesc.Count = 1;
+        desc.SampleDesc.Quality = 0;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
