@@ -1,27 +1,20 @@
 
         
-              module ClassMethods
-        def redirections
-          @redirections
-        end
-    
-            css('.multi-line-signature').each do |node|
-          node.name = 'pre'
-          node.content = node.content.strip
-        end
-    
-            css('h2:not([id]) a[id]:not([href])').each do |node|
-          node.parent['id'] = node['id']
-          node.before(node.children).remove
-        end
-    
-      array
+            def extract_to_dir(unpack_dir, basename:, verbose:)
+      system_command! AIR_APPLICATION_INSTALLER,
+                      args:    ['-silent', '-location', unpack_dir, path],
+                      verbose: verbose
+    end
+  end
 end
+
     
-        def_delegators :@s, :scan_until, :skip_until, :string
+        def pos
+      byte_to_str_pos @s.pos
+    end
     
-            reaction
-      end
+        def for(file_or_dir)
+      return @options_config if @options_config
     
-    describe 'Product Variants', type: :feature, js: true do
-  stub_authorization!
+                1.upto(3) do |i|
+              next if !arguments[i] || arguments[i].hash_type?
