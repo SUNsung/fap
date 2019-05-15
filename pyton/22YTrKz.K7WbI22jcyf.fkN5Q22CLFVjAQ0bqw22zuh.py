@@ -1,167 +1,168 @@
 
         
-        In the second benchmark, we increase the number of dimensions of the
-training set. Then we plot the computation time as function of
-the number of dimensions.
+                    with tf.Session() as sess:
+                tf.global_variables_initializer().run()
+                o_val = o.eval()
+            ```
     
-        for n_samples in sample_sizes:
-        X = random_state.rand(n_samples, 300)
+        def _call(self, x):
+        ''''''
+        o = self.act_fn(tf.matmul(x, self.W) + self.b)
+        return o
     
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
+        name = name or 'highway_conv2d'
+    for i, kz in enumerate(kernel_size):
+        x = highway_conv2d(x, kz, act_fn, strides, padding, carry_bias, name='{}-{}'.format(name, i))
     
-    import numpy as np
-from sklearn.covariance import EllipticEnvelope
-from sklearn.svm import OneClassSVM
-import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from sklearn.datasets import load_boston
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    We generate data from three groups of waveforms. Two of the waveforms
-(waveform 1 and waveform 2) are proportional one to the other. The cosine
-distance is invariant to a scaling of the data, as a result, it cannot
-distinguish these two waveforms. Thus even with no noise, clustering
-using this distance will not separate out waveform 1 and 2.
-    
-        clustering_algorithms = (
-        ('Single Linkage', single),
-        ('Average Linkage', average),
-        ('Complete Linkage', complete),
-        ('Ward Linkage', ward),
-    )
-    
-        return strings
-
-    
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
-    
-    def _print_header(settings, inproject):
-    if inproject:
-        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
-            settings['BOT_NAME']))
-    else:
-        print('Scrapy %s - no active project\n' % scrapy.__version__)
-    
-            # start checks
-        if opts.list:
-            for spider, methods in sorted(contract_reqs.items()):
-                if not methods and not opts.verbose:
-                    continue
-                print(spider)
-                for method in sorted(methods):
-                    print('  * %s' % method)
-        else:
-            start = time.time()
-            self.crawler_process.start()
-            stop = time.time()
-    
-                if not callable(cb):
-                cb_method = getattr(spider, cb, None)
-                if callable(cb_method):
-                    cb = cb_method
-                else:
-                    logger.error('Cannot find callback %(callback)r in spider: %(spider)s',
-                                 {'callback': cb, 'spider': spider.name})
-                    return
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.settings import BaseSettings
-    
-        # taken from twisted/twisted/internet/_sslverify.py
-    
-        delimiter = b'\n'
+        def __call__(self, x):
+        '''
+        Args:
+            x: 注意 x.dtype == float32
+        '''
+        # x = tf.cast(x, dtype=tf.float32)  # 交给外部处理
+        loss_regularization = 0.
+        if self.l1:
+            loss_regularization += tf.reduce_sum(self.l1 * tf.abs(x))
+        if self.l2:
+            loss_regularization += tf.reduce_sum(self.l2 * tf.square(x))
+        return loss_regularization
     
     
-def record(api, method, path, data, headers):
-    ''' Record a given API call to a persistent file on disk '''
-    file_path = get_file_path(api, create=True)
-    if CURRENTLY_REPLAYING or not file_path or not should_record(api, method, path, data, headers):
-        return
-    entry = None
-    try:
-        if isinstance(data, dict):
-            data = json.dumps(data)
-        if data or data in [u'', b'']:
-            try:
-                data = to_bytes(data)
-            except Exception as e:
-                LOGGER.warning('Unable to call to_bytes: %s' % e)
-            data = to_str(base64.b64encode(data))
-        entry = {
-            'a': api,
-            'm': method,
-            'p': path,
-            'd': data,
-            'h': dict(headers)
-        }
-        with open(file_path, 'a') as dumpfile:
-            dumpfile.write('%s\n' % json.dumps(entry))
-    except Exception as e:
-        print('Error recording API call to persistent file: %s %s' % (e, traceback.format_exc()))
-    
-            assert 'Parameters' in response
-        assert len(response['Parameters']) > 0
-        assert response['Parameters'][0]['Name'] == 'test_put'
-        assert response['Parameters'][0]['Value'] == '1'
-
-    
-        def _create_function(self, function_name):
-        arn = lambda_api.func_arn(function_name)
-        lambda_api.arn_to_lambda[arn] = LambdaFunction(arn)
-        lambda_api.arn_to_lambda[arn].versions = {'$LATEST': {'CodeSize': self.CODE_SIZE}}
-        lambda_api.arn_to_lambda[arn].handler = self.HANDLER
-        lambda_api.arn_to_lambda[arn].runtime = self.RUNTIME
-        lambda_api.arn_to_lambda[arn].timeout = self.TIMEOUT
-        lambda_api.arn_to_lambda[arn].envvars = {}
-
-    
-    
-def validate_template(req_data):
-    LOGGER.debug(req_data)
-    response_content = '''
-        <Capabilities></Capabilities>
-        <CapabilitiesReason></CapabilitiesReason>
-        <DeclaredTransforms></DeclaredTransforms>
-        <Description></Description>
-        <Parameters>
-        </Parameters>
+def permute(x, perm):
     '''
+    Examples:
+        x.shape == [128, 32, 1]
+        x = permute(x, [0, 2, 1])
+        x.shape == [128, 1, 32]
     
-                    obj_name = str(uuid.uuid4())
-                obj_path = '%s%s%s' % (prefix, '' if prefix.endswith('/') else '/', obj_name)
-                try:
-                    s3.Object(bucket, obj_path).put(Body=data)
-                except Exception as e:
-                    LOG.error('Unable to put record to stream: %s %s' % (e, traceback.format_exc()))
-                    raise e
+    # 如果一个 ngram 都没找到，gensim 会报错
+#   其实可以返回一个 0 向量的，它内部实际上是从一个 0 向量开始累加的；
+#   但返回时做了一个判断——如果依然是 0 向量，则报错
+# print(model.wv['z'])
+r'''
+Traceback (most recent call last):
+  File 'D:/OneDrive/workspace/github/DL-Notes-for-Interview/code/工具库/gensim/FastText.py', line 53, in <module>
+    print(model.wv['z'])
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 336, in __getitem__
+    return self.get_vector(entities)
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 454, in get_vector
+    return self.word_vec(word)
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 1989, in word_vec
+    raise KeyError('all ngrams for word %s absent from model' % word)
+KeyError: 'all ngrams for word z absent from model'
+'''
     
-    import sys
-import os
-import re
+            logit_masks = [logit(y) for y in masks_ts]
+        logit_masks = np.mean(logit_masks, axis=0)
+        masks_c = 1.0 / (1.0 + np.exp(-logit_masks))
+    else:
+        raise NotImplementedError(
+            'Heuristic {} not supported'.format(cfg.TEST.MASK_AUG.HEUR)
+        )
     
-    # pylint: disable=wrong-import-position,wrong-import-order
-from globals import PATH_CHEAT_SHEETS, ROSETTA_PATH
-from adapter import Adapter             # pylint: disable=relative-import
-# pylint: enable=wrong-import-position,wrong-import-order
+    from detectron.core.config import cfg
+from detectron.datasets.dataset_catalog import get_raw_dir
     
-    from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
-from adapter import Adapter
+        current = roi_feat
+    for i in range(cfg.FAST_RCNN.NUM_STACKED_CONVS):
+        current = model.Conv(
+            current, 'head_conv' + str(i + 1), dim_in, hidden_dim, 3,
+            stride=1, pad=1,
+            weight_init=('MSRAFill', {}),
+            bias_init=('ConstantFill', {'value': 0.}),
+            no_bias=0)
+        current = model.Relu(current, current)
+        dim_in = hidden_dim
     
-    Exports:
+    
+class GenerateProposalLabelsOp(object):
+    
+    ax = fig.add_axes((0.45, 0.1, 0.16, 0.8))
+bar_data = [2.1, -00.8, 1.1, 2.5, -2.1, -0.5, -2.0, 1.5]
+ax.set_ylim(-3, 3)
+ax.set_xticks([])
+ax.set_yticks([])
+ax.bar(np.arange(len(bar_data)), bar_data)
+    
+    
+def test_setitem_callable():
+    # GH 12533
+    s = pd.Series([1, 2, 3, 4], index=list('ABCD'))
+    s[lambda x: 'A'] = -1
+    tm.assert_series_equal(s, pd.Series([-1, 2, 3, 4], index=list('ABCD')))
+    
+    
+@pytest.mark.parametrize('size,relative_to,resolved', [
+    ('1em', None, '12pt'),
+    ('1.0em', None, '12pt'),
+    ('1.25em', None, '15pt'),
+    ('1em', '16pt', '16pt'),
+    ('1.0em', '16pt', '16pt'),
+    ('1.25em', '16pt', '20pt'),
+    ('1rem', '16pt', '12pt'),
+    ('1.0rem', '16pt', '12pt'),
+    ('1.25rem', '16pt', '15pt'),
+    ('100%', None, '12pt'),
+    ('125%', None, '15pt'),
+    ('100%', '16pt', '16pt'),
+    ('125%', '16pt', '20pt'),
+    ('2ex', None, '12pt'),
+    ('2.0ex', None, '12pt'),
+    ('2.50ex', None, '15pt'),
+    ('inherit', '16pt', '16pt'),
+    
+    
+@pytest.mark.parametrize('input_color', [None, 'not-a-color'])
+def test_css_to_excel_bad_colors(input_color):
+    # see gh-18392
+    css = ('border-top-color: {color}; '
+           'border-right-color: {color}; '
+           'border-bottom-color: {color}; '
+           'border-left-color: {color}; '
+           'background-color: {color}; '
+           'color: {color}').format(color=input_color)
+    
+        with tm.ensure_clean() as path:
+        df = pd.read_json('{'a': ['foo', 'bar', 'baz'], 'b': [4, 5, 6]}')
+        df.to_json(path, orient='records', lines=True,
+                   compression=compression)
+    
+    url = sys.argv[1]
+content = open(url,'rb').read()
+t1 = time.time()
+words = '/ '.join(jieba.cut(content))
+    
+    from ..const import IS_WINDOWS_PLATFORM
+    
+            if docstring is None:
+            raise NoSuchCommand(command, self)
+    
+    
+class NetworkTest(DockerClientTestCase):
+    def test_network_default_labels(self):
+        net = Network(self.client, 'composetest', 'foonet')
+        net.ensure()
+        net_data = net.inspect()
+        labels = net_data['Labels']
+        assert labels[LABEL_NETWORK] == net.name
+        assert labels[LABEL_PROJECT] == net.project
+    
+        def test_path_from_options(self):
+        paths = ['one.yml', 'two.yml']
+        opts = {'--file': paths}
+        environment = Environment.from_env_file('.')
+        assert get_config_path_from_options('.', opts, environment) == paths
+    
+        def test_tls_client_and_ca(self):
+        options = {
+            '--tlscert': self.client_cert, '--tlskey': self.key,
+            '--tlsverify': True, '--tlscacert': self.ca_cert
+        }
+        result = tls_config_from_options(options)
+        assert isinstance(result, docker.tls.TLSConfig)
+        assert result.cert == (options['--tlscert'], options['--tlskey'])
+        assert result.ca_cert == options['--tlscacert']
+        assert result.verify is True
+    
+    
+class TestHandleConnectionErrors(object):
