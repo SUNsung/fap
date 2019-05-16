@@ -1,197 +1,111 @@
 
         
-        #include <cstdint>  // for int16_t
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
     
-    namespace tesseract {
-    }
-    
-    class BLOCK;
-class FCOORD;
-class TBOX;
-class UNICHARSET;
-    
-    static STRING ParagraphJustificationToString(
-    tesseract::ParagraphJustification justification) {
-  switch (justification) {
-    case JUSTIFICATION_LEFT:
-      return 'LEFT';
-    case JUSTIFICATION_RIGHT:
-      return 'RIGHT';
-    case JUSTIFICATION_CENTER:
-      return 'CENTER';
-    default:
-      return 'UNKNOWN';
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
   }
 }
     
-    #include 'errcode.h'
     
-      // Functions to navigate the tree. Unlike the original implementation, we
-  // store the root at index 0.
-  int ParentNode(int index) const {
-    return (index + 1) / 2 - 1;
-  }
-  int LeftChild(int index) const {
-    return index * 2 + 1;
-  }
+    {}  // namespace tensorflow
     
     
-    { protected:
-  // Outputs the integer formed by reversing the bits of the input integer. Only
-  // the lowest num_bits_ bits of the input integer are reversed.
-  int GetBinaryReversedInteger(int in_val) const {
-    int bit_pos = num_bits_;
-    int out_val = 0;
-    while(bit_pos--) {
-      // Set the value of the last bit.
-      out_val |= (in_val & 0x1);
-      if (bit_pos > 0) {
-        // Left-shift output value to prepare for storing the next bit.
-        out_val <<= 1;
-      }
-      // Right-shift input value to prepare for retrieving the next bit.
-      in_val >>= 1;
-    }
-    return out_val;
-  }
-  int N_;
-  // Next number to be considered for reversal and output.
-  int next_num_;
-  // number of bits required to represent the numbers of the sequence
-  int num_bits_;
-};
-    
-    void CensusClientCallData::StartTransportStreamOpBatch(
-    grpc_call_element* elem, TransportStreamOpBatch* op) {
-  if (op->send_initial_metadata() != nullptr) {
-    census_context* ctxt = op->get_census_context();
-    GenerateClientContext(
-        qualified_method_, &context_,
-        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
-    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
-                                               kMaxTraceContextLen);
-    if (tracing_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &tracing_bin_,
-              grpc_mdelem_from_slices(
-                  GRPC_MDSTR_GRPC_TRACE_BIN,
-                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
-    }
-    grpc_slice tags = grpc_empty_slice();
-    // TODO: Add in tagging serialization.
-    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
-    if (encoded_tags_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &stats_bin_,
-              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
-    }
-  }
-    }
-    
-    // TraceContextEncoding encapsulates the logic for encoding and decoding of
-// trace contexts.
-class TraceContextEncoding {
- public:
-  // Size of encoded GrpcTraceContext. (16 + 8 + 1 + 4)
-  static constexpr size_t kGrpcTraceContextSize = 29;
-  // Error value.
-  static constexpr size_t kEncodeDecodeFailure = 0;
-    }
-    
-    // Allows different codebases to use their own thread pool impls
-typedef ThreadPoolInterface* (*CreateThreadPoolFunc)(void);
-void SetCreateThreadPool(CreateThreadPoolFunc func);
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+    {}  // namespace tensorflow
 
     
-      void InitParams(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    std::vector<std::pair<std::string, std::string> > kwargs_left;
-    // init image rec param
-    kwargs_left = param_.InitAllowUnknown(kwargs);
-    // maximum prefetch threaded iter internal size
-    const int kMaxPrefetchBuffer = 16;
-    // init thread iter
-    iter.set_max_capacity(kMaxPrefetchBuffer);
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
   }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
     
-    struct GradientCompressionParam : public dmlc::Parameter<GradientCompressionParam> {
-  std::string type;
-  float threshold;
-  DMLC_DECLARE_PARAMETER(GradientCompressionParam) {
-    DMLC_DECLARE_FIELD(type)
-      .describe('Type of gradient compression to use, like `2bit` for example');
-    DMLC_DECLARE_FIELD(threshold).set_default(0.5)
-      .describe('Threshold to use for 2bit gradient compression');
-  }
-};
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
+    
+    #include 'tensorflow/stream_executor/device_memory.h'
+#include 'tensorflow/stream_executor/platform/logging.h'
+    
+      // Indicates a preference for more shared memory than L1 cache.
+  kPreferShared,
+    
+        if (!found) {
+      KeyMap::iterator it = keymap.find(upperText);
+      if (it != keymap.end()) {
+        keyName = it->second;
+        found = true;
+      }
+    }
+    
+    
+    {} // namespace extensions
+#endif
+
+    
+          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
+      if (data.type == TYPE_PNG &&
+        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
+        error_ = 'Failed to decode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG) {
+        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
+        if (tmp_bitmap == NULL) {
+          error_ = 'Failed to decode as JPEG';
+          return false;
+        }
+        bitmap = std::move(tmp_bitmap);
+      }
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT2.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT2_(pred_format, v1, v2, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, v1, v2), \
+                on_failure)
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_DEATH_TEST_INTERNAL_H_
+
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+    
+    {  // Can we set the MyString to NULL?
+  s.Set(NULL);
+  EXPECT_STREQ(NULL, s.c_string());
+}
+
+    
+    DMLC_REGISTER_PARAMETER(CaffeDataParam);
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file iter_prefetcher.h
+ * \brief define a prefetcher using threaditer to keep k batch fetched
+ */
+#ifndef MXNET_IO_ITER_PREFETCHER_H_
+#define MXNET_IO_ITER_PREFETCHER_H_
     
     /*!
  * Copyright (c) 2015 by Contributors
@@ -203,229 +117,150 @@ std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
 #include <dmlc/logging.h>
 #include './kvstore_local.h'
     
-      for (auto& blob : in_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(0);
+    template<typename xpu, typename OP, bool reverse>
+void EvalScalar_(const TBlob &lhs, const real_t &rhs,
+                 TBlob *ret, RunContext ctx) {
+  using namespace mshadow::expr;
+  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
+  CHECK_EQ(ret->type_flag_, lhs.type_flag_)
+    << 'Only support input/output with the same data type';
+  if (reverse) {
+    MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
+      ret->FlatTo2D<xpu, DType>(s)
+        = F<typename OP::mshadow_op>(scalar(DType(rhs)), lhs.FlatTo2D<xpu, DType>(s));
+    });
+  } else {
+    MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
+      ret->FlatTo2D<xpu, DType>(s)
+        = F<typename OP::mshadow_op>(lhs.FlatTo2D<xpu, DType>(s), scalar(DType(rhs)));
+    });
   }
-  for (auto& blob : out_data) {
-    NDArray* nd = new NDArray(blob, ndctx.dev_id);
-    ptrs.push_back(reinterpret_cast<void*>(nd));
-    ndvar.push_back(nd->var());
-    tags.push_back(1);
-  }
-  std::sort(ndvar.begin(), ndvar.end());
-  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
-    
-          CompressedIterator<int> ci(buffer.data(), alphabet_size);
-      std::vector<int> output(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output[i] = ci[i];
-      }
-    
-      /*!
-   * \brief add an element to a sketch
-   * \param x The element added to the sketch
-   * \param w The weight of the element.
-   */
-  inline void Push(DType x, RType w = 1) {
-    if (w == static_cast<RType>(0)) return;
-    if (inqueue.qtail == inqueue.queue.size()) {
-      // jump from lazy one value to limit_size * 2
-      if (inqueue.queue.size() == 1) {
-        inqueue.queue.resize(limit_size * 2);
-      } else {
-        temp.Reserve(limit_size * 2);
-        inqueue.MakeSummary(&temp);
-        // cleanup queue
-        inqueue.qtail = 0;
-        this->PushTemp();
-      }
-    }
-    inqueue.Push(x, w);
-  }
-    
-    
-    {  /*!
-   * \brief transform prediction values, this is only called when Eval is called,
-   *  usually it redirect to PredTransform
-   * \param io_preds prediction values, saves to this vector as well
-   */
-  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
-    this->PredTransform(io_preds);
-  }
-  /*!
-   * \brief transform probability value back to margin
-   * this is used to transform user-set base_score back to margin
-   * used by gradient boosting
-   * \return transformed value
-   */
-  virtual bst_float ProbToMargin(bst_float base_score) const {
-    return base_score;
-  }
-  /*!
-   * \brief Create an objective function according to name.
-   * \param name Name of the objective.
-   */
-  static ObjFunction* Create(const std::string& name);
-};
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
-.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(true);
-  });
-    
-    BatchSet SimpleDMatrix::GetSortedColumnBatches() {
-  // Sorted column page doesn't exist, generate it
-  if (!sorted_column_page_) {
-    auto page = dynamic_cast<SimpleCSRSource*>(source_.get())->page_;
-    sorted_column_page_.reset(
-        new SparsePage(page.GetTranspose(source_->info.num_col_)));
-    sorted_column_page_->SortRows();
-  }
-  auto begin_iter =
-      BatchIterator(new SimpleBatchIteratorImpl(sorted_column_page_.get()));
-  return BatchSet(begin_iter);
 }
     
-      // init thread buffers
-  inline void InitThreadTemp(int nthread, int num_feature) {
-    int prev_thread_temp_size = thread_temp.size();
-    if (prev_thread_temp_size < nthread) {
-      thread_temp.resize(nthread, RegTree::FVec());
-      for (int i = prev_thread_temp_size; i < nthread; ++i) {
-        thread_temp[i].Init(num_feature);
-      }
+    /*!
+ *  Copyright (c) 2018 by Contributors
+ * \file transformer.cc
+ * \brief CPU implementation of the operators used in Transformer
+ */
+#include <mxnet/base.h>
+#include './transformer-inl.h'
+#include '../tensor/elemwise_unary_op.h'
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator* CreateOp<cpu>(CropParam param) {
+  return new CropOp<cpu>(param);
+}
+    }
+    }
+    
+    
+    {
+    {
+    { private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 1U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+      unsigned lrn_n = param_.nsize;
+      double alpha = param_.alpha;
+      double beta = param_.beta;
+      double lrn_k = param_.knorm;
+      CHECK_EQ(data.shape_, out.shape_);
+      CUDNN_CALL(cudnnCreateLRNDescriptor(&lrn_desc_));
+      CUDNN_CALL(cudnnSetLRNDescriptor(lrn_desc_,
+                                       lrn_n,
+                                       alpha,
+                                       beta,
+                                       lrn_k));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&shape_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(shape_desc_,
+                                            CUDNN_TENSOR_NCHW,
+                                            dtype_,
+                                            data.shape_[0],
+                                            data.shape_[1],
+                                            data.shape_[2],
+                                            data.shape_[3]));
     }
   }
-  inline void PredLoopSpecalize(DMatrix* p_fmat,
-                                std::vector<bst_float>* out_preds,
-                                const gbm::GBTreeModel& model, int num_group,
-                                unsigned tree_begin, unsigned tree_end) {
-    const MetaInfo& info = p_fmat->Info();
-    const int nthread = omp_get_max_threads();
-    InitThreadTemp(nthread, model.param.num_feature);
-    std::vector<bst_float>& preds = *out_preds;
-    CHECK_EQ(model.param.size_leaf_vector, 0)
-        << 'size_leaf_vector is enforced to 0 so far';
-    CHECK_EQ(preds.size(), p_fmat->Info().num_row_ * num_group);
-    // start collecting the prediction
-    for (const auto &batch : p_fmat->GetRowBatches()) {
-      // parallel over local batch
-      constexpr int kUnroll = 8;
-      const auto nsize = static_cast<bst_omp_uint>(batch.Size());
-      const bst_omp_uint rest = nsize % kUnroll;
-#pragma omp parallel for schedule(static)
-      for (bst_omp_uint i = 0; i < nsize - rest; i += kUnroll) {
-        const int tid = omp_get_thread_num();
-        RegTree::FVec& feats = thread_temp[tid];
-        int64_t ridx[kUnroll];
-        SparsePage::Inst inst[kUnroll];
-        for (int k = 0; k < kUnroll; ++k) {
-          ridx[k] = static_cast<int64_t>(batch.base_rowid + i + k);
-        }
-        for (int k = 0; k < kUnroll; ++k) {
-          inst[k] = batch[i + k];
-        }
-        for (int k = 0; k < kUnroll; ++k) {
-          for (int gid = 0; gid < num_group; ++gid) {
-            const size_t offset = ridx[k] * num_group + gid;
-            preds[offset] += this->PredValue(
-                inst[k], model.trees, model.tree_info, gid,
-                info.GetRoot(ridx[k]), &feats, tree_begin, tree_end);
-          }
-        }
-      }
-      for (bst_omp_uint i = nsize - rest; i < nsize; ++i) {
-        RegTree::FVec& feats = thread_temp[0];
-        const auto ridx = static_cast<int64_t>(batch.base_rowid + i);
-         auto inst = batch[i];
-        for (int gid = 0; gid < num_group; ++gid) {
-          const size_t offset = ridx * num_group + gid;
-          preds[offset] +=
-              this->PredValue(inst, model.trees, model.tree_info, gid,
-                              info.GetRoot(ridx), &feats, tree_begin, tree_end);
-        }
-      }
-    }
-  }
-    
-        std::shared_ptr<xgboost::DMatrix> *dmat =
-        static_cast<std::shared_ptr<xgboost::DMatrix> *>(handle);
-    xgboost::MetaInfo &info = (*dmat)->Info();
-    ASSERT_EQ(info.num_col_, num_cols);
-    ASSERT_EQ(info.num_row_, row);
-    ASSERT_EQ(info.num_nonzero_, num_cols * row - num_missing);
-    
-      void IncDone() {
-    num_done_++;
-  }
-    
-    
-    {}  //  namespace rocksdb
+  bool init_cudnn_;
+  LRNParam param_;
+  cudnnDataType_t dtype_;
+  cudnnLRNDescriptor_t lrn_desc_;
+  cudnnTensorDescriptor_t shape_desc_;
+};  // class CuDNNLocalResponseNormOp
+}  // namespace op
+}  // namespace mxnet
+#endif  // MXNET_OPERATOR_CUDNN_LRN_INL_H_
 
     
-      uint64_t sleep_debt = 0;
-  uint64_t time_since_last_refill = 0;
-  if (last_refill_time_ != 0) {
-    if (last_refill_time_ > time_now) {
-      sleep_debt = last_refill_time_ - time_now;
-    } else {
-      time_since_last_refill = time_now - last_refill_time_;
-      bytes_left_ +=
-          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
-                                kMicrosPerSecond * delayed_write_rate_);
-      if (time_since_last_refill >= kRefillInterval &&
-          bytes_left_ > num_bytes) {
-        // If refill interval already passed and we have enough bytes
-        // return without extra sleeping.
-        last_refill_time_ = time_now;
-        bytes_left_ -= num_bytes;
-        return 0;
+    
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
       }
+    });
+}  // namespace op
+}  // namespace mxnet
+    
+    namespace CalcEngine
+{
+    class Number
+    {
+    public:
+        Number() noexcept;
+        Number(int32_t sign, int32_t exp, std::vector<uint32_t> const& mantissa) noexcept;
     }
-  }
-    
-      std::atomic<int> total_stopped_;
-  std::atomic<int> total_delayed_;
-  std::atomic<int> total_compaction_pressure_;
-  uint64_t bytes_left_;
-  uint64_t last_refill_time_;
-  // write rate set when initialization or by `DBImpl::SetDBOptions`
-  uint64_t max_delayed_write_rate_;
-  // current write rate
-  uint64_t delayed_write_rate_;
-    
-    using namespace rocksdb;
-    
-      // Always pick a compaction which includes all files whenever possible.
-  CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) override {
-    ColumnFamilyMetaData cf_meta;
-    db->GetColumnFamilyMetaData(&cf_meta);
     }
     
-    #include 'rocksdb/cache.h'
-#include 'rocksdb/compaction_filter.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/table.h'
-#include 'rocksdb/utilities/options_util.h'
+        Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-      ~ManagedSnapshot();
-    
-    namespace rocksdb {
+        class CalculatorHistory : public IHistoryDisplay
+    {
+    public:
+        CalculatorHistory(const size_t maxSize);
+        unsigned int AddToHistory(
+            _In_ std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> const& spTokens,
+            _In_ std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> const& spCommands,
+            std::wstring_view result);
+        std::vector<std::shared_ptr<HISTORYITEM>> const& GetHistory();
+        std::shared_ptr<HISTORYITEM> const& GetHistoryItem(unsigned int uIdx);
+        void ClearHistory();
+        unsigned int AddItem(_In_ std::shared_ptr<HISTORYITEM> const& spHistoryItem);
+        bool RemoveItem(unsigned int uIdx);
+        size_t MaxHistorySize() const
+        {
+            return m_maxHistorySize;
+        }
+        ~CalculatorHistory(void);
     }
     
-      // Block current thread until condition variable is notified by a call to
-  // Notify() or NotifyAll().  Wait() will be called with mutex locked.
-  // Returns OK if notified.
-  // Returns non-OK if TransactionDB should stop waiting and fail the operation.
-  // May return OK spuriously even if not notified.
-  virtual Status Wait(std::shared_ptr<TransactionDBMutex> mutex) = 0;
+    void COpndCommand::ClearAllAndAppendCommand(CalculationManager::Command command)
+{
+    m_commands->Clear();
+    m_commands->Append(static_cast<int>(command));
+    m_fSciFmt = false;
+    m_fNegative = false;
+    m_fDecimal = false;
+}
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
