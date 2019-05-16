@@ -1,137 +1,8 @@
 
         
-        def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
-    
-          #
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
-    else
-      head 400
-    end
+          def package(gem, ext='')
+    'pkg/#{gem}-#{source_version}' + ext
   end
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-      UPDATE_SIGN_IN_HOURS = 24
-    
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
-end
-    
-      end
-    
-      describe '#read_all' do
-    let(:post) { FactoryGirl.create(:status_message) }
-    
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
-      end
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-    <style type='text/css' media='screen'>
-  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
-  div.clear           {clear: both;}
-  body                {background: #EEEEEE; margin: 0; padding: 0;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
-                       'Garuda';}
-  code                {font-family: 'Lucida Console', monospace;
-                       font-size: 12px;}
-  li                  {height: 18px;}
-  ul                  {list-style: none; margin: 0; padding: 0;}
-  ol:hover            {cursor: pointer;}
-  ol li               {white-space: pre;}
-  #explanation        {font-size: 12px; color: #666666;
-                       margin: 20px 0 0 100px;}
-/* WRAP */
-  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
-                       padding: 30px 50px 20px 50px;
-                       border-left: 1px solid #DDDDDD;
-                       border-right: 1px solid #DDDDDD;}
-/* HEADER */
-  #header             {margin: 0 auto 25px auto;}
-  #header img         {float: left;}
-  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
-  h1                  {margin: 0; font-size: 36px; color: #981919;}
-  h2                  {margin: 0; font-size: 22px; color: #333333;}
-  #header ul          {margin: 0; font-size: 12px; color: #666666;}
-  #header ul li strong{color: #444444;}
-  #header ul li       {display: inline; padding: 0 10px;}
-  #header ul li.first {padding-left: 0;}
-  #header ul li.last  {border: 0; padding-right: 0;}
-/* BODY */
-  #backtrace,
-  #get,
-  #post,
-  #cookies,
-  #rack               {width: 980px; margin: 0 auto 10px auto;}
-  p#nav               {float: right; font-size: 14px;}
-/* BACKTRACE */
-  a#expando           {float: left; padding-left: 5px; color: #666666;
-                      font-size: 14px; text-decoration: none; cursor: pointer;}
-  a#expando:hover     {text-decoration: underline;}
-  h3                  {float: left; width: 100px; margin-bottom: 10px;
-                       color: #981919; font-size: 14px; font-weight: bold;}
-  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
-  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
-                           font-size: 12px; color: #333333;}
-  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
-                       border-bottom: 0;}
-  #backtrace ol       {width: 920px; margin-left: 50px;
-                       font: 10px 'Lucida Console', monospace; color: #666666;}
-  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
-                       padding: 2px 0;}
-  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
-  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
-                       padding: 3px 0;}
-  #backtrace-ul .code {padding: 6px 0 4px 0;}
-  #backtrace.condensed .system,
-  #backtrace.condensed .framework {display:none;}
-/* REQUEST DATA */
-  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
-  table.req           {width: 980px; text-align: left; font-size: 12px;
-                       color: #666666; padding: 0; border-spacing: 0;
-                       border: 1px solid #EEEEEE; border-bottom: 0;
-                       border-left: 0;
-                       clear:both}
-  table.req tr th     {padding: 2px 10px; font-weight: bold;
-                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-  table.req tr td     {padding: 2px 20px 2px 10px;
-                       border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-/* HIDE PRE/POST CODE AT START */
-  .pre-context,
-  .post-context       {display: none;}
-    
-            if unmasked_token?(token)
-          compare_with_real_token token, session
     
     module Rack
   module Protection
@@ -149,47 +20,82 @@ end
     class CookieTossing < Base
       default_reaction :deny
     
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
-    
-    get '/' do
-  stats = Sidekiq::Stats.new
-  @failed = stats.failed
-  @processed = stats.processed
-  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
-  erb :index
-end
-    
-    module Sidekiq
-  module Generators # :nodoc:
-    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
-      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
-    
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
         end
       end
+    
+      it 'should not set the Content Security Policy for other content types' do
+    headers = get('/', {}, 'wants' => 'text/foo').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
+    
+          def right_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, ri                   = *line.match(/\+(\d+)/)
+          @right_diff_line_number = ri.to_i
+          @current_line_number    = @right_diff_line_number
+          ret                     = '...'
+        elsif line[0] == ?-
+          ret = ' '
+        elsif line[0] == ?+
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        else
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        end
+        ret
+      end
+    end
+  end
+end
+
+    
+          def partial(name)
+        if name == :author_template
+          self.class.partial('history_authors/#{@page.wiki.user_icons}')
+        else
+          super
+        end
+      end
+    
+        assert body.include?('Bilbo Baggins'), '/pages should include the page 'Bilbo Baggins''
+    assert body.include?('Gondor'), '/pages should include the folder 'Gondor''
+    assert !body.include?('Boromir'), '/pages should NOT include the page 'Boromir''
+    assert body.include?('Mordor'), '/pages should include the folder 'Mordor''
+    assert !body.include?('Eye Of Sauron'), '/pages should NOT include the page 'Eye Of Sauron''
+    assert !body.match(/(Zamin).+(roast\-mutton)/m), '/pages should be sorted alphabetically'
+  end
+    
+        @wiki = Gollum::Wiki.new(@path)
+    page  = @wiki.page('PG')
+    assert_equal '바뀐 text', utf8(page.raw_data)
+    assert_equal 'ghi', page.version.message
+  end
+    
+        it 'rejects invalid jsfiddle link' do
+      expect do
+        generate_new_liquid('invalid_jsfiddle_link')
+      end.to raise_error(StandardError)
     end
     
-          indifferent_hash.merge! request.params
-      route_params.each {|k,v| indifferent_hash[k.to_s] = v }
+      def permitted_attributes_for_update
+    %i[body_markdown receive_notifications]
+  end
     
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
-    end
-    
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
+          it 'unmutes the parent comment if already muted' do
+        sign_in original_commenter
+        parent_comment_by_og.update(receive_notifications: false)
+        patch '/comment_mutes/#{parent_comment_by_og.id}', params: { comment: { receive_notifications: 'true' } }
+        expect(parent_comment_by_og.reload.receive_notifications).to eq true
+      end
     end
