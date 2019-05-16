@@ -1,119 +1,112 @@
 
         
-          plt.subplot(nrows,2,5+subplot_cidx)
-  plot_time_series(means, bidx,
-                   n_to_plot=n_to_plot, scale=1.0,
-                   title=col_title + ' Spikes (LFADS - red, Spikes - black)')
-  plot_time_series(data_bxtxn, bidx, n_to_plot=n_to_plot, color='k', scale=1.0)
+            def test_no_upgrade_http(self):
+        c.secure = False
+        self._setSessionCookie(days_old=60)
+        upgrade_cookie_security()
+        self.assertFalse(c.cookies[g.login_cookie].dirty)
     
-    # Pull out some commonly used parameters.
-# These are user parameters (configuration)
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-S = FLAGS.S
-input_magnitude = FLAGS.input_magnitude
-nreplications = FLAGS.nreplications
-E = nreplications * C         # total number of trials
-# S is the number of measurements in each datasets, w/ each
-# dataset having a different set of observations.
-ndatasets = N/S                 # ok if rounded down
-train_percentage = FLAGS.train_percentage
-ntime_steps = int(T / FLAGS.dt)
-# End of user parameters
+        def test_ftue_autocreate(self):
+        request = MagicMock()
+        context = MagicMock()
+        request.cookies = {}
+        loid = LoId.load(request, context, create=True)
+        self.assertIsNotNone(loid.loid)
+        self.assertIsNotNone(loid.created)
+        self.assertTrue(loid.new)
     
-      # A bit of filtering. We don't care about spectral properties, or
-  # filtering artifacts, simply correlate time steps a bit.
-  filt_len = 6
-  bc_filt = np.ones([filt_len])/float(filt_len)
-  for c in range(nchannels_all):
-    all_data_nxtc[c,:] = scipy.signal.filtfilt(bc_filt, [1.0], all_data_nxtc[c,:])
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
     
-      for t in ngrams_list:
-    key = hash_function(t)
-    if key in counts:
-      counts[key] += 1
-    else:
-      counts[key] = 1
-  return counts
-    
-        def state_forwards(self, app_label, state):
-        pass
-    
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
-        else:
-            s.delete()  # Clear sessions with no data.
-        return s
-    
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-    
-def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % name) or os.path.exists('%s_privkey.txt' % name):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \n'
-              'Use a different name or delete these files and re-run this program.' %
-              (name, name))
-        sys.exit()
-    
-    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
-	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
-	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-		return TEMPORARY_ARRAY
-	else:
-		return LONGEST_SUB
-    
-        def __init__(self, arr):
-        # we need a list not a string, so do something to change the type
-        self.array = arr.split(',')
-        print(('the input array is:', self.array))
-    
-    def getLetterCount(message):
-    letterCount = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0,
-                   'I': 0, 'J': 0, 'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0,
-                   'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 'W': 0, 'X': 0,
-                   'Y': 0, 'Z': 0}
-    for letter in message.upper():
-        if letter in LETTERS:
-            letterCount[letter] += 1
-    
-        #Writing the PDF to disk, preserving metadata of first tldr page
-    group[2].copy(ap).write_pdf('tldr.pdf')
-    
-    *TL;DR80
-Enables selecting an algorithm at runtime.
-'''
-    
-    
-# In some very complex cases, it might be desirable to pull out the building
-# logic into another function (or a method on another class), rather than being
-# in the base class '__init__'. (This leaves you in the strange situation where
-# a concrete class does not have a useful constructor)
-    
-        def __del__(self):
-        if self.item is not None:
-            self._queue.put(self.item)
-            self.item = None
-    
-    
-if __name__ == '__main__':
-    simple_hello = TextTag('hello, world!')
-    special_hello = ItalicWrapper(BoldWrapper(simple_hello))
-    print('before:', simple_hello.render())
-    print('after:', special_hello.render())
-    
-        def test_extended_properties(self):
-        print(u'John's relatives: {0}'.format(self.John.relatives))
-        self.assertDictEqual(
-            {'name': 'John', 'occupation': 'Coder', 'relatives': 'Many relatives.', 'call_count2': 0},
-            self.John.__dict__,
+        def test_future_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        self.assert_invalid(
+            body,
+            header='2:awesomefuturespec',
+            error=signing.ERRORS.UNKOWN_GLOBAL_VERSION,
+            global_version=2,
         )
+    
+        def test_attr_whitelist(self):
+        testcase = '<div><a><a><em onclick='alert(1)'>FOO!</em></a></a></div>'
+        self.assertFragmentRaises(testcase, SoupUnsupportedAttrError)
+    
+    '''
+如果上面的代码运行没有问题，说明numpy安装没有问题
+'''
+
+    
+        # 测试 randCent() 函数是否正常运行。
+    # 首先，先看一下矩阵中的最大值与最小值
+    print('min(dataMat[:, 0])=', min(dataMat[:, 0]))
+    print('min(dataMat[:, 1])=', min(dataMat[:, 1]))
+    print('max(dataMat[:, 1])=', max(dataMat[:, 1]))
+    print('max(dataMat[:, 0])=', max(dataMat[:, 0]))
+    
+        Args:
+        dataMat         训练数据集
+        user            用户编号
+        simMeas         相似度计算方法
+        item            未评分的物品编号
+    Returns:
+        ratSimTotal/simTotal     评分（0～5之间的值）
+    '''
+    # 得到数据集中的物品数目
+    n = shape(dataMat)[1]
+    # 初始化两个评分值
+    simTotal = 0.0
+    ratSimTotal = 0.0
+    # 遍历行中的每个物品（对用户评过分的物品进行遍历，并将它与其他物品进行比较）
+    for j in range(n):
+        userRating = dataMat[user, j]
+        # 如果某个物品的评分值为0，则跳过这个物品
+        if userRating == 0:
+            continue
+        # 寻找两个用户都评级的物品
+        # 变量 overLap 给出的是两个物品当中已经被评分的那个元素的索引ID
+        # logical_and 计算x1和x2元素的真值。
+        overLap = nonzero(logical_and(dataMat[:, item].A > 0, dataMat[:, j].A > 0))[0]
+        # 如果相似度为0，则两着没有任何重合元素，终止本次循环
+        if len(overLap) == 0:
+            similarity = 0
+        # 如果存在重合的物品，则基于这些重合物重新计算相似度。
+        else:
+            similarity = simMeas(dataMat[overLap, item], dataMat[overLap, j])
+        # print 'the %d and %d similarity is : %f'(iten,j,similarity)
+        # 相似度会不断累加，每次计算时还考虑相似度和当前用户评分的乘积
+        # similarity  用户相似度，   userRating 用户评分
+        simTotal += similarity
+        ratSimTotal += similarity * userRating
+    if simTotal == 0:
+        return 0
+    # 通过除以所有的评分总和，对上述相似度评分的乘积进行归一化，使得最后评分在0~5之间，这些评分用来对预测值进行排序
+    else:
+        return ratSimTotal/simTotal
+    
+        def map(self, mapperId, inVals):  # 需要 2 个参数
+        # input: nodeId, ('w', w-vector) OR nodeId, ('x', int)
+        if False:
+            yield
+        if inVals[0] == 'w':                  # 积累 w向量
+            self.w = inVals[1]
+        elif inVals[0] == 'x':
+            self.dataList.append(inVals[1])   # 累积数据点计算
+        elif inVals[0] == 't':                # 迭代次数
+            self.t = inVals[1]
+        else:
+            self.eta = inVals                 # 这用于 debug， eta未在map中使用
+    
+    
+def loadDataSet(fileName):
+    dataMat = []
+    labelMat = []
+    fr = open(fileName)
+    for line in fr.readlines():
+        lineArr = line.strip().split('\t')
+        # dataMat.append([float(lineArr[0]), float(lineArr[1]), float(lineArr[2])])
+        dataMat.append([float(lineArr[0]), float(lineArr[1])])
+        labelMat.append(float(lineArr[2]))
+    return dataMat, labelMat
