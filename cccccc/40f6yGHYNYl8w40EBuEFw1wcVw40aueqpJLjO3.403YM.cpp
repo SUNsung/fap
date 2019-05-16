@@ -1,640 +1,421 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
+        
+    {}%
     
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
+  }
     
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    static void secp256k1_gej_rescale(secp256k1_gej *r, const secp256k1_fe *s) {
-    /* Operations: 4 mul, 1 sqr */
-    secp256k1_fe zz;
-    VERIFY_CHECK(!secp256k1_fe_is_zero(s));
-    secp256k1_fe_sqr(&zz, s);
-    secp256k1_fe_mul(&r->x, &r->x, &zz);                /* r->x *= s^2 */
-    secp256k1_fe_mul(&r->y, &r->y, &zz);
-    secp256k1_fe_mul(&r->y, &r->y, s);                  /* r->y *= s^3 */
-    secp256k1_fe_mul(&r->z, &r->z, s);                  /* r->z *= s   */
-}
-    
-    
-    {    /* Serialize/parse compact and verify/recover. */
-    extra[0] = 0;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
-    extra[31] = 1;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
-    extra[31] = 0;
-    extra[0] = 1;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
-    memset(&rsignature[4], 0, sizeof(rsignature[4]));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
-    /* Parse compact (with recovery id) and recover. */
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
-    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
-    /* Serialize/destroy/parse signature and verify again. */
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
-    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
-    /* Recover again */
-    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
-          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
-}
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
-}
-    
-        BOOST_CHECK(v.setArray());
-    BOOST_CHECK(v.isArray());
-    BOOST_CHECK_EQUAL(v.size(), 0);
-    
-    CallCredentials::~CallCredentials() {}
-    
-    const AuthProperty AuthPropertyIterator::operator*() {
-  return std::pair<grpc::string_ref, grpc::string_ref>(
-      property_->name,
-      grpc::string_ref(property_->value, property_->value_length));
-}
-    
-    MeasureDouble RpcServerReceivedBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerReceivedBytesPerRpcMeasureName,
-      'Total bytes received across all messages per RPC', kUnitBytes);
-  return measure;
-}
-    
-    void ProtoServerReflectionPlugin::InitServer(grpc::ServerInitializer* si) {
-  si->RegisterService(reflection_service_);
-}
-    
-    void DynamicThreadPool::DynamicThread::ThreadFunc() {
-  pool_->ThreadFunc();
-  // Now that we have killed ourselves, we should reduce the thread count
-  std::unique_lock<std::mutex> lock(pool_->mu_);
-  pool_->nthreads_--;
-  // Move ourselves to dead list
-  pool_->dead_threads_.push_back(this);
+        void emitDiagnosticMessage(clang::FullSourceLoc Loc,
+                               clang::PresumedLoc PLoc,
+                               clang::DiagnosticsEngine::Level Level,
+                               StringRef Message,
+                               ArrayRef<clang::CharSourceRange> Ranges,
+                               clang::DiagOrStoredDiag Info) override {
+      if (isInSwiftBuffers(Loc)) {
+        // FIXME: Ideally, we'd report non-suppressed diagnostics on synthetic
+        // buffers, printing their names (eg. <swift-imported-modules>:...) but
+        // this risks printing _excerpts_ of those buffers to stderr too; at
+        // present the synthetic buffers are 'large blocks of null bytes' which
+        // we definitely don't want to print out. So until we have some clever
+        // way to print the name but suppress printing excerpts, we just replace
+        // the Loc with an invalid one here, which suppresses both.
+        Loc = clang::FullSourceLoc();
+        if (shouldSuppressDiagInSwiftBuffers(Info))
+          return;
+      }
+      callback(Loc, Level, Message);
     }
     
-            std::unordered_map<Parameter, NDArrayViewPtr> m_smoothedGradientValues;
+    using namespace swift;
+using namespace Demangle;
     
-        template CNTK_API const float* NDArrayView::DataBuffer<float>() const;
-    template CNTK_API const double* NDArrayView::DataBuffer<double>() const;
-    template CNTK_API const float16* NDArrayView::DataBuffer<float16>() const;
-    template CNTK_API const int8_t* NDArrayView::DataBuffer<int8_t>() const;
-    template CNTK_API const int16_t* NDArrayView::DataBuffer<int16_t>() const;
-    
-        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
-    {
-        m_test->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
-            {
-                OnWriteTestUpdate(samples, updates, aggregateMetric);
-            });
-    }
-    
-        // Make sure that the dictionary contains all required keys, and if it does, return version value
-    // from the dictionary.
-    template <typename T>
-    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
-    { 
-        const auto& version = GetVersion(dict);
-    }
-    
-    
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
+    #endif
+    /**
+	 * Find the convex hull of a point cloud using 'Gift-wrap' algorithm - start
+     * with an extremal point, and walk around the outside edge by testing
+     * angles.
+     * 
+     * Runs in O(N*S) time where S is number of sides of resulting polygon.
+     * Worst case: point cloud is all vertices of convex polygon -> O(N^2).
+     * 
+     * There may be faster algorithms to do this, should you need one -
+     * this is just the simplest. You can get O(N log N) expected time if you
+     * try, I think, and O(N) if you restrict inputs to simple polygons.
+     * 
+     * Returns null if number of vertices passed is less than 3.
+     * 
+	 * Results should be passed through convex decomposition afterwards
+	 * to ensure that each shape has few enough points to be used in Box2d.
+	 *
+     * FIXME?: May be buggy with colinear points on hull. Couldn't find a test
+     * case that resulted in wrong behavior. If one turns up, the solution is to
+     * supplement angle check with an equality resolver that always picks the
+     * longer edge. I think the current solution is working, though it sometimes
+     * creates an extra edge along a line.
+     */
+	
+b2Polygon ConvexHull(b2Vec2* v, int nVert) {
+        float32* cloudX = new float32[nVert];
+        float32* cloudY = new float32[nVert];
+        for (int32 i = 0; i < nVert; ++i) {
+            cloudX[i] = v[i].x;
+            cloudY[i] = v[i].y;
+        }
+        b2Polygon result = ConvexHull(cloudX, cloudY, nVert);
+		delete[] cloudX;
+		delete[] cloudY;
+		return result;
+}
+	
+b2Polygon ConvexHull(float32* cloudX, float32* cloudY, int32 nVert) {
+		b2Assert(nVert > 2);
+        int32* edgeList = new int32[nVert];
+        int32 numEdges = 0;
+		
+	float32 minY = 1e10;
+        int32 minYIndex = nVert;
+        for (int32 i = 0; i < nVert; ++i) {
+            if (cloudY[i] < minY) {
+                minY = cloudY[i];
+                minYIndex = i;
             }
         }
-    
-        // this returns the map directly (read-only) and will lazily initialize it for a given seed
-    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
-    {
-        // if wrong seed then lazily recache the sequence
-        if (seed != currentseed && randomizationrange != randomizeDisable)
-        {
-            // test for numeric overflow
-            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
-                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
-            // 0, 1, 2...
-            foreach_index (t, map)
-                map[t] = (INDEXTYPE) t;
-    }
-    }
-    
-    class Timer
-{
-public:
-    Timer()
-        : m_start(0), m_end(0)
-    {
-    }
-    }
-    
-    
-    {
-    {        // Remaining elements
-        if (squashInputs)
-        {
-            //squash sequences of identical samples
-            for (size_t i = 1; i < columnIndices.size(); i++)
-            {
-                size_t refId = (int)firstSeq(0, columnIndices[i]);
-                if (lastId != refId)
-                {
-                    lastId = refId;
-                    if (std::find(tokensToIgnore.begin(), tokensToIgnore.end(), refId) == tokensToIgnore.end())
-                        out_SampleSeqVec.push_back(refId);
+		
+        int32 startIndex = minYIndex;
+        int32 winIndex = -1;
+        float32 dx = -1.0f;
+        float32 dy = 0.0f;
+        while (winIndex != minYIndex) {
+            float32 newdx = 0.0f;
+            float32 newdy = 0.0f;
+            float32 maxDot = -2.0f;
+            for (int32 i = 0; i < nVert; ++i) {
+                if (i == startIndex)
+                    continue;
+                newdx = cloudX[i] - cloudX[startIndex];
+                newdy = cloudY[i] - cloudY[startIndex];
+                float32 nrm = sqrtf(newdx * newdx + newdy * newdy);
+                nrm = (nrm == 0.0f) ? 1.0f : nrm;
+                newdx /= nrm;
+                newdy /= nrm;
+                
+                //Cross and dot products act as proxy for angle
+                //without requiring inverse trig.
+                //FIXED: don't need cross test
+                //float32 newCross = newdx * dy - newdy * dx;
+                float32 newDot = newdx * dx + newdy * dy;
+                if (newDot > maxDot) {//newCross >= 0.0f && newDot > maxDot) {
+                    maxDot = newDot;
+                    winIndex = i;
                 }
             }
+            edgeList[numEdges++] = winIndex;
+            dx = cloudX[winIndex] - cloudX[startIndex];
+            dy = cloudY[winIndex] - cloudY[startIndex];
+            float32 nrm = sqrtf(dx * dx + dy * dy);
+            nrm = (nrm == 0.0f) ? 1.0f : nrm;
+            dx /= nrm;
+            dy /= nrm;
+            startIndex = winIndex;
         }
-        else
-        {
-            for (size_t i = 1; i < columnIndices.size(); i++)
-            {
-                auto refId = (int)firstSeq(0, columnIndices[i]);
-                if (std::find(tokensToIgnore.begin(), tokensToIgnore.end(), refId) == tokensToIgnore.end())
-                    out_SampleSeqVec.push_back(refId);
-            }
+		
+        float32* xres = new float32[numEdges];
+        float32* yres = new float32[numEdges];
+        for (int32 i = 0; i < numEdges; i++) {
+            xres[i] = cloudX[edgeList[i]];
+            yres[i] = cloudY[edgeList[i]];
+			//('%f, %f\n',xres[i],yres[i]);
         }
+		
+        b2Polygon returnVal(xres, yres, numEdges);
     }
+    }
+    
+    
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
 };
     
-            for(int i = 0 ; i < nums.size() ; i ++)
-            for(int j = i + 1 ; j < nums.size() ; j ++)
-                if(nums[i] + nums[j] == target){
-                    int res[] = {i, j};
-                    return vector<int>(res, res + 2);
-                }
     
+    {		*a_piEncodingTime_ms = totalEncodingTime;
+	}
     
-    {    return head;
-}
+    		m_pencoding->InitFromEncodingBits(this, a_paucEncodingBits, m_afrgbaSource,
+										m_pimageSource->GetErrorMetric());
     
-    // Counting
-// Time Complexity: O(n)
-// Space Complexity: O(3)
-class Solution {
-public:
-    void sortColors(vector<int> &nums) {
-    }
+    namespace Etc
+{
+	class Block4x4EncodingBits;
     }
     
-    int main() {
-    }
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
     
-            vector<int> res;
-        if( root == NULL )
-            return res;
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
     
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    }
-    
-            TreeNode* cur = root;
-        while(cur != NULL){
-            if(cur->left == NULL){
-                res.push_back(cur->val);
-                cur = cur->right;
-            }
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right != NULL && prev->right != cur)
-                    prev = prev->right;
-    }
-    }
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> postorderTraversal(TreeNode* root) {
-    }
-    }
-    
-    #endif  // GFLAGS
+    #endif /* SILK_MACROS_ARMv4_H */
 
     
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
     
-      // these three metods are querying the state of the WriteController
-  bool IsStopped() const;
-  bool NeedsDelay() const { return total_delayed_.load() > 0; }
-  bool NeedSpeedupCompaction() const {
-    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
-  }
-  // return how many microseconds the caller needs to sleep after the call
-  // num_bytes: how many number of bytes to put into the DB.
-  // Prerequisite: DB mutex held.
-  uint64_t GetDelay(Env* env, uint64_t num_bytes);
-  void set_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
-    } else if (write_rate > max_delayed_write_rate()) {
-      write_rate = max_delayed_write_rate();
-    }
-    delayed_write_rate_ = write_rate;
-  }
-    
-    namespace rocksdb {
+    {        if(equalPrefixLength > 0) {
+            if((leftUnit >= 0 && data->isUnsafeBackward(leftUnit, numeric)) ||
+                    (rightUnit >= 0 && data->isUnsafeBackward(rightUnit, numeric))) {
+                // Identical prefix: Back up to the start of a contraction or reordering sequence.
+                do {
+                    --equalPrefixLength;
+                    leftUnit = left.previous(&left);
+                    right.previous(&right);
+                } while(equalPrefixLength > 0 && data->isUnsafeBackward(leftUnit, numeric));
+            }
+            // See the notes in the UTF-16 version.
+        }
     }
     
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
+    //eof
+
     
-    // This is an example interface of external-compaction algorithm.
-// Compaction algorithm can be implemented outside the core-RocksDB
-// code by using the pluggable compaction APIs that RocksDb provides.
-class Compactor : public EventListener {
- public:
-  // Picks and returns a compaction task given the specified DB
-  // and column family.  It is the caller's responsibility to
-  // destroy the returned CompactionTask.  Returns 'nullptr'
-  // if it cannot find a proper compaction task.
-  virtual CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) = 0;
-    }
-    
-      // Commit transaction
-  s = txn->Commit();
-  assert(s.ok());
-  delete txn;
-    
-    #include 'rocksdb/db.h'
-    
-    /*
- * ThreadPool is a component that will spawn N background threads that will
- * be used to execute scheduled work, The number of background threads could
- * be modified by calling SetBackgroundThreads().
- * */
-class ThreadPool {
- public:
-  virtual ~ThreadPool() {}
-    }
-    
-    #pragma once
-#ifndef ROCKSDB_LITE
-    
-      // Number of open files that can be used by the DB.  You may need to
-  // increase this if your database has a large working set (budget
-  // one open file per 2MB of working set).
-  //
-  // Default: 1000
-  int max_open_files;
-    
-        std::map<int, int> _map;
-    
-    
-    {    ex->finish();
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
 }
     
-        signals:
-        void finished();
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
+};
     
-    static int ares_event_read(swReactor *reactor, swEvent *event)
+    U_NAMESPACE_END
+    
+    SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
+: fDateIgnorables(NULL),
+  fTimeIgnorables(NULL),
+  fOtherIgnorables(NULL)
 {
-    auto task = (ares_dns_task *) event->socket->object;
-    auto co = task->co;
+    fDateIgnorables  = new UnicodeSet(UNICODE_STRING('[-,./[:whitespace:]]', 20), status);
+    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING('[-.:[:whitespace:]]', 19),  status);
+    fOtherIgnorables = new UnicodeSet(UNICODE_STRING('[:whitespace:]', 14),       status);
     }
     
-        ~http2_session()
-    {
-        if (inflater)
-        {
-            nghttp2_hd_inflate_del(inflater);
-        }
-        if (deflater)
-        {
-            nghttp2_hd_deflate_del(deflater);
-        }
-    }
     
-    TEST(cares, resolve_timeout)
+class SimpleDateFormatStaticSets : public UMemory
 {
-    coro_test([](void *arg)
-    {
-        auto result = CAres::resolve('www.swoole.com', AF_INET, 0.001);
-        ASSERT_EQ(result, '');
-    });
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    CollationKey::CollationKey()
+    : UObject(), fFlagAndLength(0),
+      fHashCode(kEmptyHashCode)
+{
 }
     
-        time_t start = time(nullptr);
-    while (i != 1000)
-    {
-        usleep(100);
-        
-        if ((time(nullptr) - start) > 3)
-        {
-            ASSERT_TRUE(false);
-        }
-    }
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or a negative value
+     */
+    static int32_t indexOrNegativeFromString(const UnicodeString &keyword);
     
-    static swThreadPool pool;
-static int _pipe;
-const static int N = 10000;
-    
-    TEST(coroutine_base, get_current)
+    StringMatcher::StringMatcher(const StringMatcher& o) :
+    UnicodeFunctor(o),
+    UnicodeMatcher(o),
+    UnicodeReplacer(o),
+    pattern(o.pattern),
+    data(o.data),
+    segmentNumber(o.segmentNumber),
+    matchStart(o.matchStart),
+    matchLimit(o.matchLimit)
 {
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        auto co = Coroutine::get_current();
-        *(long *) arg = co->get_cid();
-    }, &_cid);
+}
+    
+            // The temporary buffer starts at tempStart, and extends
+        // to destLimit.  The start of the buffer has a single
+        // character from before the key.  This provides style
+        // data when addition characters are filled into the
+        // temporary buffer.  If there is nothing to the left, use
+        // the non-character U+FFFF, which Replaceable subclasses
+        // should treat specially as a 'no-style character.'
+        // destStart points to the point after the style context
+        // character, so it is tempStart+1 or tempStart+2.
+        int32_t tempStart = text.length(); // start of temp buffer
+        int32_t destStart = tempStart; // copy new text to here
+        if (start > 0) {
+            int32_t len = U16_LENGTH(text.char32At(start-1));
+            text.copy(start-len, start, tempStart);
+            destStart += len;
+        } else {
+            UnicodeString str((UChar) 0xFFFF);
+            text.handleReplaceBetween(tempStart, tempStart, str);
+            destStart++;
+        }
+        int32_t destLimit = destStart;
+    
+      virtual ~Extension_call_result() throw();
+  ExtensionResponse success;
+    
+    /**
+ * @brief Represents a hardware driver type that SMART api can you use to query
+ * device information.
+ *
+ * @param driver name of SMART controller driver
+ * @param maxID max ID number of which disks on the controller is monitored
+ */
+struct hardwareDriver {
+  std::string driver;
+  size_t maxID;
+};
+    
+      // Author: @guliashvili
+  // Creation Time: 3/09/2018
+  bool isWindowsProfilingEnabled();
+    
+    struct mei_response {
+  uint32_t maxlen;
+  uint8_t version;
+};
+    
+    
+    {  auto dst = std::vector<TestMessage>{};
+  auto status =
+      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
+          &buf[0], tail, head, buf.size(), dst);
+  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
+  ASSERT_EQ(dst.size(), test_size);
+  for (std::size_t i = 0; i < test_size; ++i) {
+    EXPECT_EQ(dst[i].c_, 't');
+    EXPECT_EQ(dst[i].d_, 'i');
+  }
+  EXPECT_EQ(dst[0].a_, 1);
+  EXPECT_EQ(dst[0].b_, 2);
+  EXPECT_EQ(dst[1].a_, 3);
+  EXPECT_EQ(dst[1].b_, 4);
+  EXPECT_EQ(dst[2].a_, 5);
+  EXPECT_EQ(dst[2].b_, 6);
+}
+    
+    namespace osquery {
+namespace table_tests {
     }
+    }
+    
+    TEST_F(KernelModules, test_sanity) {
+  QueryData data = execute_query('select * from kernel_modules');
+  ASSERT_GT(data.size(), 0ul);
+  ValidatatioMap row_map = {
+      {'name', NonEmptyString},
+      {'size', NonNegativeInt},
+      {'used_by', NonEmptyString},
+      {'status', NonEmptyString},
+      {'address', NonNegativeInt},
+  };
+  validate_rows(data, row_map);
+}
+    
+    TEST_F(keychainItems, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from keychain_items');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'label', NormalType}
+  //      {'description', NormalType}
+  //      {'comment', NormalType}
+  //      {'created', NormalType}
+  //      {'modified', NormalType}
+  //      {'type', NormalType}
+  //      {'path', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+            memcpy(&tmp, recv_pkg.ptr, sizeof(tmp));
+        ASSERT_EQ(tmp, recv_pkg.size);
+    
+    #include <atomic>
+    
+    using namespace swoole;
+    
+        coro_test({
+        make_pair([](void *arg)
+        {
+            auto chan = (Channel *) arg;
+    }
+    }
+    
+            if (pid == 0)
+        {
+            exit(0);
+        }
+    
+    public:
+    static int _onReceive(swServer *serv, swEventData *req);
+    static void _onConnect(swServer *serv, swDataHead *info);
+    static void _onClose(swServer *serv, swDataHead *info);
+    static int _onPacket(swServer *serv, swEventData *req);
+    static void _onPipeMessage(swServer *serv, swEventData *req);
+    static void _onStart(swServer *serv);
+    static void _onShutdown(swServer *serv);
+    static void _onWorkerStart(swServer *serv, int worker_id);
+    static void _onWorkerStop(swServer *serv, int worker_id);
+    static int _onTask(swServer *serv, swEventData *task);
+    static int _onFinish(swServer *serv, swEventData *task);
+    
+    #include 'swoole.h'
+    
+        virtual void onStart();
+    virtual void onShutdown() {};
+    virtual void onWorkerStart(int worker_id);
+    virtual void onWorkerStop(int worker_id) {}
+    virtual void onPipeMessage(int src_worker_id, const DataBuffer &) {}
+    virtual void onReceive(int fd, const DataBuffer &data);
+    virtual void onConnect(int fd);
+    virtual void onClose(int fd);
+    virtual void onPacket(const DataBuffer &data, ClientInfo &clientInfo);
