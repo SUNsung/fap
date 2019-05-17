@@ -1,112 +1,76 @@
 
         
-                  def initialize(template_object, object_name, method_name, object, tag_value)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @tag_value = tag_value
+        describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+            context 'when the schema_version is less than 1' do
+          it 'translates keep_events_for from days to seconds' do
+            valid_parsed_data.delete(:schema_version)
+            valid_parsed_data[:agents] = [valid_parsed_weather_agent_data.merge(keep_events_for: 5)]
+    
+          expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
+    end
+  end
+    
+    
+  #
+  # Waits for the HTTP service to terminate
+  #
+  def wait
+    self.listener.wait if self.listener
+  end
+    
+        if res[1] == IAX_SUBTYPE_REGREJ
+      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
+      dprint('REGREJ: #{reason}')
+      return
+    end
+    
+                encoded
           end
     
-        def at_css(*args)
-      doc.at_css(*args)
-    end
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
     
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
     
-        def to_json
-      JSON.generate(as_json)
+              include Rex::Proto::Kerberos::Crypto
+          include Rex::Proto::Kerberos::Model
+    
+              # Decodes the sname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+        end
+      end
     end
   end
 end
-
     
-        def effective_url
-      @effective_url ||= URL.parse super
-    end
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-      end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
-    end
-    
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
-    
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
-  end
-    
-    Then(/^the tasks folder is created$/) do
-  path = TestApp.test_app_path.join('lib/capistrano/tasks')
-  expect(Dir.exist?(path)).to be true
-end
-    
-    World(VagrantHelpers)
-
-    
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
-    
-          def roles_for(names)
-        options = extract_options(names)
-        s = Filter.new(:role, names).filter(servers_by_key.values)
-        s.select { |server| server.select?(options) }
-      end
-    
-          class ValidatedQuestion < Question
-        def initialize(validator)
-          @validator = validator
-        end
-    
-    set_if_empty :default_env, {}
-set_if_empty :keep_releases, 5
-    
-          def title
-        'Create a new page'
-      end
-    
-          def remove_page_extentions(page_path)
-        Gollum::Markup.formats.values.each do |format|
-          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
-        end
-        return page_path
-      end
-    
-          attr_reader :name, :path
-    
-    # Commit file to wiki, overwriting previous versions of that file
-def commit_test_file(wiki, dir, filename, ext, content)
-  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
-  committer.add_to_index(dir, filename, ext, content, true)
-    committer.after_commit do |committer, sha|
-      wiki.clear_cache
-      committer.update_working_dir(dir, filename, ext)
-    end
-  committer.commit
-end
-
-    
-    #############################################################################
-#
-# Custom tasks (add your own tasks here)
-#
-#############################################################################
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
