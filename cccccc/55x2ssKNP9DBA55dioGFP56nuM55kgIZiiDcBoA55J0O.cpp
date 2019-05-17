@@ -1,180 +1,103 @@
 
         
-        void App::ClearCache(content::RenderProcessHost* render_process_host) {
-  render_process_host->Send(new ShellViewMsg_ClearCache());
-  nw::RemoveHttpDiskCache(render_process_host->GetBrowserContext(),
-                          render_process_host->GetID());
-}
-    
-    #endif  // CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
-
-    
-    
-namespace nwapi {
-    }
-    
-    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
- public:
-  NwAppSetProxyConfigFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    class NwObjCallObjectMethodAsyncFunction : public UIThreadExtensionFunction {
- public:
-  NwObjCallObjectMethodAsyncFunction();
-    }
-    
-    void NwDesktopCaptureMonitor::OnSourceNameChanged(DesktopMediaList* list, int index) {
-    DesktopMediaList::Source src = list->GetSource(index);
-    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceNameChanged::Create(
-      src.id.ToString(),
-      base::UTF16ToUTF8(src.name));
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceNameChanged::kEventName,
-      std::move(args));    
+        void PrintHeaderServerMethodSync(grpc_generator::Printer *printer,
+                                 const grpc_generator::Method *method,
+                                 std::map<grpc::string, grpc::string> *vars) {
+  (*vars)['Method'] = method->name();
+  (*vars)['Request'] = method->input_type_name();
+  (*vars)['Response'] = method->output_type_name();
+  printer->Print(method->GetLeadingComments('//').c_str());
+  if (method->NoStreaming()) {
+    printer->Print(*vars,
+                   'virtual ::grpc::Status $Method$('
+                   '::grpc::ServerContext* context, const $Request$* request, '
+                   '$Response$* response);\n');
+  } else if (ClientOnlyStreaming(method)) {
+    printer->Print(*vars,
+                   'virtual ::grpc::Status $Method$('
+                   '::grpc::ServerContext* context, '
+                   '::grpc::ServerReader< $Request$>* reader, '
+                   '$Response$* response);\n');
+  } else if (ServerOnlyStreaming(method)) {
+    printer->Print(*vars,
+                   'virtual ::grpc::Status $Method$('
+                   '::grpc::ServerContext* context, const $Request$* request, '
+                   '::grpc::ServerWriter< $Response$>* writer);\n');
+  } else if (method->BidiStreaming()) {
+    printer->Print(
+        *vars,
+        'virtual ::grpc::Status $Method$('
+        '::grpc::ServerContext* context, '
+        '::grpc::ServerReaderWriter< $Response$, $Request$>* stream);'
+        '\n');
   }
-    
-        /*
-        Extract a single plane from 3 channel image
-    */
-    void extract3(const Size2D &size,
-                  const u8 * srcBase, ptrdiff_t srcStride,
-                  u8 * dstBase, ptrdiff_t dstStride,
-                  u32 coi);
-    
-    #define IMPL_ADDWEIGHTED(type)                                \
-void addWeighted(const Size2D &,                              \
-                 const type *, ptrdiff_t,                     \
-                 const type *, ptrdiff_t,                     \
-                 type *, ptrdiff_t,                           \
-                 f32, f32, f32)                               \
-{                                                             \
-    internal::assertSupportedConfiguration();                 \
+  printer->Print(method->GetTrailingComments('//').c_str());
 }
     
-    
-    {
-    {
-    {            x -= 8;
-            if(x == colsn){
-                x -= cn;
-            }
-            s16 prevx[4], rowx[4], nextx[4];
-            for( s32 k = 0; k < cn; k++ )
-            {
-                prevx[(k + x%cn)%cn] = srow2[x+k-cn] + srow1[x+k-cn] + srow0[x+k-cn];
-                rowx[(k + x%cn)%cn] = srow2[x+k] + srow1[x+k] + srow0[x+k];
-            }
-            for( ; x < colsn; x++ )
-            {
-                size_t xx = x%cn;
-                if(x+cn >= colsn) {
-                    // make border
-                    if (borderType == BORDER_MODE_CONSTANT)
-                    {
-                        nextx[xx] = borderValue;
-                    } else if (borderType == BORDER_MODE_REFLECT101)
-                    {
-                        nextx[xx] = srow2[x-cn] + srow1[x-cn] + srow0[x-cn];
-                    } else {
-                        nextx[xx] = srow2[x] + srow1[x] + srow0[x];
-                    }
-                } else {
-                    nextx[xx] = srow2[x+cn] + srow1[x+cn] + srow0[x+cn];
-                }
-                *(drow+x) = internal::saturate_cast<u8>((prevx[xx] + rowx[xx] + nextx[xx])*(1/9.));
-                prevx[xx] = rowx[xx];
-                rowx[xx] = nextx[xx];
-            }
+      // Generate table constructors, conditioned on its members' types.
+  void GenTableBuilders(const StructDef &struct_def,
+                        std::string *code_ptr) {
+    std::string &code = *code_ptr;
+    code += 'def ' + NormalizedName(struct_def) +
+            'Start(b_:flatbuffers_builder):\n    b_.StartObject(' +
+            NumToString(struct_def.fields.vec.size()) + ')\n';
+    for (auto it = struct_def.fields.vec.begin();
+        it != struct_def.fields.vec.end(); ++it) {
+      auto &field = **it;
+      if (field.deprecated) continue;
+      auto offset = it - struct_def.fields.vec.begin();
+      code += 'def ' + NormalizedName(struct_def) + 'Add' +
+              MakeCamel(NormalizedName(field)) + '(b_:flatbuffers_builder, ' +
+              NormalizedName(field) + ':' + LobsterType(field.value.type) +
+              '):\n    b_.Prepend' + GenMethod(field.value.type) + 'Slot(' +
+              NumToString(offset) + ', ' + NormalizedName(field) + ', ' +
+              field.value.constant + ')\n';
+      if (field.value.type.base_type == BASE_TYPE_VECTOR) {
+        code += 'def ' + NormalizedName(struct_def) + 'Start' +
+                MakeCamel(NormalizedName(field)) +
+                'Vector(b_:flatbuffers_builder, n_:int):\n    b_.StartVector(';
+        auto vector_type = field.value.type.VectorType();
+        auto alignment = InlineAlignment(vector_type);
+        auto elem_size = InlineSize(vector_type);
+        code += NumToString(elem_size) + ', n_, ' + NumToString(alignment) +
+                ')\n';
+        if (vector_type.base_type != BASE_TYPE_STRUCT ||
+            !vector_type.struct_def->fixed) {
+          code += 'def ' + NormalizedName(struct_def) + 'Create' +
+                  MakeCamel(NormalizedName(field)) +
+                  'Vector(b_:flatbuffers_builder, v_:[' +
+                  LobsterType(vector_type) + ']):\n    b_.StartVector(' +
+                  NumToString(elem_size) + ', v_.length, ' +
+                  NumToString(alignment) +
+                  ')\n    reverse(v_) e_: b_.Prepend' +
+                  GenMethod(vector_type) +
+                  '(e_)\n    b_.EndVector(v_.length)\n';
         }
+      }
     }
-#else
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)borderValue;
-#endif
-}
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-            //left&right borders
-        if (borderType != BORDER_MODE_CONSTANT)
-            for (s32 k = 0; k < cn; ++k)
-            {
-                lane[-cn+k] = lane[idx_l1 + k];
-                lane[-cn-cn+k] = lane[idx_l2 + k];
-    }
-    
-    bool IsUserOnly(std::wstring opt)
-{
-	bool userOnly;
-    }
-    
-    namespace aria2 {
-    }
-    
-    namespace aria2 {
-    }
-    
-      char zero[18];
-  memset(zero, 0, sizeof(zero));
-    
-    
-    {} // namespace aria2
-    
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    public:
-  DHTTaskExecutor(int numConcurrent);
-    
-      virtual void executeTask() = 0;
-    
-    
-    {  virtual void
-  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-};
-    
-    namespace aria2 {
-    }
-    
-    bool DNSCache::CacheEntry::add(const std::string& addr)
-{
-  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
-                                              eoi = addrEntries_.end();
-       i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return false;
-    }
+    code += 'def ' + NormalizedName(struct_def) +
+            'End(b_:flatbuffers_builder):\n    b_.EndObject()\n\n';
   }
-  addrEntries_.push_back(AddrEntry(addr));
-  return true;
-}
     
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    template <class Builder>
+void RetrieveRPC(MonsterStorage::Stub *stub) {
+  Builder fbb;
+  grpc::ClientContext context;
+  fbb.Clear();
+  auto stat_offset = CreateStat(fbb, fbb.CreateString('Fred'));
+  fbb.Finish(stat_offset);
+  auto request = MessageBuilder(std::move(fbb)).ReleaseMessage<Stat>();
     }
     
-        // print values
-    std::cout << object << '\n';
-    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+      // clang-format off
+  #if !defined(FLATBUFFERS_CPP98_STL)
+  // clang-format on
+  GrpcLikeMessageBuilder &operator=(GrpcLikeMessageBuilder &&other) {
+    // Construct temporary and swap idiom
+    GrpcLikeMessageBuilder temp(std::move(other));
+    Swap(temp);
+    return *this;
+  }
+  // clang-format off
+  #endif  // !defined(FLATBUFFERS_CPP98_STL)
+  // clang-format on
