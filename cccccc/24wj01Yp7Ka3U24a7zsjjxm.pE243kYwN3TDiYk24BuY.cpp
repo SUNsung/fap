@@ -1,70 +1,225 @@
 
         
-        
-    {  // Assuming T is defined in namespace foo, in the next statement,
-  // the compiler will consider all of:
-  //
-  //   1. foo::operator<< (thanks to Koenig look-up),
-  //   2. ::operator<< (as the current namespace is enclosed in ::),
-  //   3. testing::internal2::operator<< (thanks to the using statement above).
-  //
-  // The operator<< whose type matches T best will be picked.
-  //
-  // We deliberately allow #2 to be a candidate, as sometimes it's
-  // impossible to define #1 (e.g. when foo is ::std, defining
-  // anything in it is undefined behavior unless you are a compiler
-  // vendor.).
-  *os << value;
+        #endif
+
+    
+    namespace tesseract {
+    }
+    
+      // Returns the covariance.
+  double covariance() const {
+    if (total_weight > 0.0)
+      return (sigxy - sigx * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double x_variance() const {
+    if (total_weight > 0.0)
+      return (sigxx - sigx * sigx / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double y_variance() const {
+    if (total_weight > 0.0)
+      return (sigyy - sigy * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+    
+    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
+  if (justification_ != other.justification_)
+    return false;
+  if (justification_ == JUSTIFICATION_CENTER ||
+      justification_ == JUSTIFICATION_UNKNOWN)
+    return true;
+  int tolerance = (tolerance_ + other.tolerance_) / 4;
+  return NearlyEqual(margin_ + first_indent_,
+                     other.margin_ + other.first_indent_, tolerance) &&
+         NearlyEqual(margin_ + body_indent_,
+                     other.margin_ + other.body_indent_, tolerance);
 }
     
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
+      // Similar to the above, but return the vector of unichar ids for which
+  // the given unichar_id is an ambiguity (appears in the 'wrong' part of
+  // some ambiguity pair).
+  inline const UnicharIdVector *ReverseAmbigsForAdaption(
+      UNICHAR_ID unichar_id) const {
+    if (reverse_ambigs_for_adaption_.empty()) return nullptr;
+    return reverse_ambigs_for_adaption_[unichar_id];
+  }
     
-    // The default case.
-template <typename ToPrint, typename OtherOperand>
-class FormatForComparison {
- public:
-  static ::std::string Format(const ToPrint& value) {
-    return ::testing::PrintToString(value);
+    
+    { private:
+  // Data members are private to keep deletion of data_ encapsulated.
+  Data* data_;
+  Key key_;
+};
+// Specialization of KDPtrPair to provide operator< for sorting in increasing
+// order.
+template <typename Key, typename Data>
+struct KDPtrPairInc : public KDPtrPair<Key, Data> {
+  // Since we are doing non-standard stuff we have to duplicate *all* the
+  // constructors and operator=.
+  KDPtrPairInc() : KDPtrPair<Key, Data>() {}
+  KDPtrPairInc(Key k, Data* d) : KDPtrPair<Key, Data>(k, d) {}
+  KDPtrPairInc(KDPtrPairInc& src) : KDPtrPair<Key, Data>(src) {}
+  void operator=(KDPtrPairInc& src) {
+    KDPtrPair<Key, Data>::operator=(src);
+  }
+  // Operator< facilitates sorting in increasing order.
+  int operator<(const KDPtrPairInc<Key, Data>& other) const {
+    return this->key() < other.key();
+  }
+};
+// Specialization of KDPtrPair to provide operator< for sorting in decreasing
+// order.
+template <typename Key, typename Data>
+struct KDPtrPairDec : public KDPtrPair<Key, Data> {
+  // Since we are doing non-standard stuff we have to duplicate *all* the
+  // constructors and operator=.
+  KDPtrPairDec() : KDPtrPair<Key, Data>() {}
+  KDPtrPairDec(Key k, Data* d) : KDPtrPair<Key, Data>(k, d) {}
+  KDPtrPairDec(KDPtrPairDec& src) : KDPtrPair<Key, Data>(src) {}
+  void operator=(KDPtrPairDec& src) {
+    KDPtrPair<Key, Data>::operator=(src);
+  }
+  // Operator< facilitates sorting in decreasing order by using operator> on
+  // the key values.
+  int operator<(const KDPtrPairDec<Key, Data>& other) const {
+    return this->key() > other.key();
   }
 };
     
-      // Formats an int value as '%02d'.
-  static std::string FormatIntWidth2(int value);  // '%02d' for width == 2
+      // Return a pointer to the object identified by id.
+  // If we haven't yet loaded the object, use loader to load it.
+  // If loader fails to load it, record a nullptr entry in the cache
+  // and return nullptr -- further attempts to load will fail (even
+  // with a different loader) until DeleteUnusedObjects() is called.
+  // We delete the given loader.
+  T *Get(STRING id,
+         TessResultCallback<T *> *loader) {
+    T *retval = nullptr;
+    mu_.Lock();
+    for (int i = 0; i < cache_.size(); i++) {
+      if (id == cache_[i].id) {
+        retval = cache_[i].object;
+        if (cache_[i].object != nullptr) {
+          cache_[i].count++;
+        }
+        mu_.Unlock();
+        delete loader;
+        return retval;
+      }
+    }
+    cache_.push_back(ReferenceCount());
+    ReferenceCount &rc = cache_.back();
+    rc.id = id;
+    retval = rc.object = loader->Run();
+    rc.count = (retval != nullptr) ? 1 : 0;
+    mu_.Unlock();
+    return retval;
+  }
     
-    template <GTEST_3_TYPENAMES_(T)>
-class GTEST_3_TUPLE_(T) {
- public:
-  template <int k> friend class gtest_internal::Get;
+            std::shared_ptr<const Matrix<V1ElemType>> matrix = GetMatrix<V1ElemType>();
+        auto matrixDims = GetMatrixDimensions(Shape());
+        if (matrix->GetNumRows() != matrixDims.first)
+            LogicError('The number of rows of the underlying matrix does not match the shape.');
+        if (matrix->GetNumCols() != matrixDims.second)
+            LogicError('The number of columns of the underlying matrix does not match the shape.');
+    
+            // (start, end) values in the current window to be reported.
+        std::pair<double, double> m_loss;
+        std::pair<double, double> m_metric;
+        std::pair<size_t, size_t> m_samples;
+        std::pair<size_t, size_t> m_updates;
+    
+    
+    {        // resize the temporaries to their proper size
+        size_t cols = Input(0)->Value().GetNumCols();
+        m_maxIndexes0->Resize(1, cols);
+        m_maxIndexes1->Resize(1, cols);
+        m_maxValues->Resize(1, cols);
     }
     
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
+    // -----------------------------------------------------------------------
+// SparseInputValue (/*no input*/)
+// a sparse input value (typically fed by a DataReader)
+// this covers two types: (regular vs. image)
+// -----------------------------------------------------------------------
     
-      // Adds an element to the end of the queue.  A copy of the element is
-  // created using the copy constructor, and then stored in the queue.
-  // Changes made to the element in the queue doesn't affect the source
-  // object, and vice versa.
-  void Enqueue(const E& element) {
-    QueueNode<E>* new_node = new QueueNode<E>(element);
+    template <class ElemType>
+void EpochAccumulatorNode<ElemType>::Validate(bool isFinalValidationPass)
+{
+    Base::Validate(isFinalValidationPass);
+    SetDims(Input(0)->GetSampleLayout(), HasMBLayout());
+}
+    
+        if(result == CollationFastLatin::BAIL_OUT_RESULT) {
+        if(settings->dontCheckFCD()) {
+            UTF16CollationIterator leftIter(data, numeric,
+                                            left, left + equalPrefixLength, leftLimit);
+            UTF16CollationIterator rightIter(data, numeric,
+                                            right, right + equalPrefixLength, rightLimit);
+            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+        } else {
+            FCDUTF16CollationIterator leftIter(data, numeric,
+                                              left, left + equalPrefixLength, leftLimit);
+            FCDUTF16CollationIterator rightIter(data, numeric,
+                                                right, right + equalPrefixLength, rightLimit);
+            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+        }
     }
+    if(result != UCOL_EQUAL || settings->getStrength() < UCOL_IDENTICAL || U_FAILURE(errorCode)) {
+        return (UCollationResult)result;
+    }
+    
+    void ScientificNumberFormatter::getPreExponent(
+        const DecimalFormatSymbols &dfs, UnicodeString &preExponent) {
+    preExponent.append(dfs.getConstSymbol(
+            DecimalFormatSymbols::kExponentMultiplicationSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kOneDigitSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol));
+}
+    
+    int32_t SearchIterator::previous(UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        int32_t offset;
+        if (m_search_->reset) {
+            offset                       = m_search_->textLength;
+            m_search_->isForwardSearching = FALSE;
+            m_search_->reset              = FALSE;
+            setOffset(offset, status);
+        }
+        else {
+            offset = getOffset();
+        }
+        
+        int32_t matchindex = m_search_->matchedIndex;
+        if (m_search_->isForwardSearching == TRUE) {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setOffset has been called or that next ran off the text
+            // string. the iterator would have been set to offset textLength if 
+            // a match is not found.
+            m_search_->isForwardSearching = FALSE;
+            if (matchindex != USEARCH_DONE) {
+                return matchindex;
+            }
+        }
+        else {
+            if (offset == 0 || matchindex == 0) {
+                // not enough characters to match
+                setMatchNotFound();
+                return USEARCH_DONE; 
+            }
+        }
+    }
+    }
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    U_NAMESPACE_BEGIN
     
         /**
      * Sets minimum significant digits. 0 or negative means no minimum.
@@ -73,106 +228,4 @@ class GTEST_3_TUPLE_(T) {
         fMin = count <= 0 ? 0 : count;
     }
     
-    #include 'unicode/unistr.h'
-    
-    
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
-    
-};
-    
-    int32_t
-CollationKey::hashCode() const
-{
-    // (Cribbed from UnicodeString)
-    // We cache the hashCode; when it becomes invalid, due to any change to the
-    // string, we note this by setting it to kInvalidHashCode. [LIU]
-    }
-    
-            VkSubmitInfo end_info = {};
-        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        end_info.commandBufferCount = 1;
-        end_info.pCommandBuffers = &command_buffer;
-        err = vkEndCommandBuffer(command_buffer);
-        check_vk_result(err);
-        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
-        check_vk_result(err);
-    
-        // 7. Allocate texture
-    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
-    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
-    atlas->TexPixelsAlpha8 = (unsigned char*)IM_ALLOC(atlas->TexWidth * atlas->TexHeight);
-    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
-    
-    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
-// By default the embedded implementations are declared static and not available outside of imgui cpp files.
-//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
-//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
-//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
-//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-        // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-    
-    {     // Show/hide OSD keyboard
-    if (io.WantTextInput)
-    {
-        // Some text input widget is active?
-        if (!g_osdKeyboardEnabled)
-        {
-            g_osdKeyboardEnabled = true;
-            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 1);    // show OSD keyboard
-        }
-    }
-    else
-    {
-        // No text input widget is active
-        if (g_osdKeyboardEnabled)
-        {
-            g_osdKeyboardEnabled = false;
-            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 0);    // hide OSD keyboard
-        }
-    }
-}
-
-    
-    #ifdef _MSC_VER
-#pragma warning (disable: 4505) // unreferenced local function has been removed (stb stuff)
-#endif
+    U_NAMESPACE_BEGIN
