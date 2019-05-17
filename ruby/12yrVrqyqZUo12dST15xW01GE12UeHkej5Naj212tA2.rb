@@ -1,34 +1,80 @@
 
         
-            it 'shows the dry run pop up with previous events and allows use previously received event' do
-      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
-      agent.sources << emitter
-      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
-      agent.save!
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-          describe '#import' do
-        it 'makes a new scenario for Bob' do
-          expect {
-            scenario_import.import(:skip_agents => true)
-          }.to change { users(:bob).scenarios.count }.by(1)
+    module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
     
-        it 'optionally supports treating values that start with '$' as raw JSONPath' do
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload)).to eq('$.there.world')
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload, :leading_dollarsign_is_jsonpath => true)).to eq('WORLD')
+            def find_target_id
+          GithubImport::IssuableFinder.new(project, issue).database_id
+        end
+      end
+    end
+  end
+end
+
+    
+          # Returns the ID to use for the cache used for checking if an object has
+      # already been imported or not.
+      #
+      # object - The object we may want to import.
+      def id_for_already_imported_cache(object)
+        raise NotImplementedError
+      end
+    
+        it 'does not show the target select2 field when the agent can not create events' do
+      select_agent_type('Email Agent')
+      expect(page).to have_content('This type of Agent cannot create events.')
     end
   end
     
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+      describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
+    
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
+    end
+  end
+    
+        @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
+    }
+    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
     }
   end
+    
+        it 'should convert the 'escape' method correctly' do
+      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
+                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
+      )
+    end
     
       describe '#log_for_agent' do
     it 'creates AgentLogs' do
@@ -40,65 +86,72 @@
       expect(log.level).to eq(4)
     end
     
-      describe 'helpers' do
-    it 'should generate a correct request options hash' do
-      expect(@checker.send(:request_options)).to eq({headers: {'User-Agent' => 'Huginn - https://github.com/huginn/huginn', 'Authorization' => 'Bearer '1234token''}})
+        it 'should not provide the since attribute on first run' do
+      expect(@checker.send(:query_parameters)).to eq({})
     end
     
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+        if authenticated && resource = warden.user(resource_name)
+      flash[:alert] = I18n.t('devise.failure.already_authenticated')
+      redirect_to after_sign_in_path_for(resource)
+    end
   end
     
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
-        end
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
     
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
       end
     
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-      it 'sets a new csrf token for the session in env, even after a 'safe' request' do
-    get('/', {}, {})
-    expect(env['rack.session'][:csrf]).not_to be_nil
+          def timeout_in
+        self.class.timeout_in
+      end
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
     
-        class << self
-      def elastic_pack_base_uri
-        env_url = ENV['LOGSTASH_PACK_URL']
-        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
-      end
-    
-          PluginManager.ui.info('Install successful')
-    rescue ::Bundler::BundlerError => e
-      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
-    ensure
-      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
     end
+  end
     
-      namespace :vm do
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
     end
+  end
+    
+      def compatible_locale
+    http_accept_language.compatible_language_from(available_locales)
+  end
+    
+      included do
+    before_action :set_session_activity
+  end
+    
+            def print_version
+          output_pipe.puts 'version: '#{Pod::VERSION}''
+        end
+    
+    Then(/^the current symlink points to that specific release$/) do
+  specific_release_path = TestApp.releases_path.join(@rollback_release)
