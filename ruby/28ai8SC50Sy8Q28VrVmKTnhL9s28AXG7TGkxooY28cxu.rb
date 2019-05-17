@@ -1,147 +1,123 @@
 
         
-            str << '\r\n'
-    
-    ###
-#
-# HTTP request class.
-#
-###
-class Request < Packet
-    
-    require 'rex/proto/ipmi/utils'
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-                decrypted
-          end
-    
-                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-    
-              # Encodes the nonce
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_nonce
-            bn = OpenSSL::BN.new(nonce.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Rex::Proto::Kerberos::Model::KrbError encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'KrbError encoding not supported'
-          end
-    
-              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'LastRequest encoding not supported'
-          end
-    
-    get '/' do
-  halt erb(:login) unless params[:user]
-  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
+        def converted_history(markdown)
+  remove_head_from_history(
+    custom_release_header_anchors(
+      liquid_escape(
+        linkify(
+          normalize_bullets(markdown)
+        )
+      )
+    )
+  )
 end
     
-          def unmasked_token?(token)
-        token.length == TOKEN_LENGTH
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
+    
+            parsed_expr = parse_expression(expression)
+        @context.stack do
+          groups = input.group_by do |item|
+            @context[variable] = item
+            parsed_expr.render(@context)
+          end
+          grouped_array(groups)
+        end
       end
     
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
+            def sidekiq_worker_class
+          ImportLfsObjectWorker
+        end
     
-        def validate_plugins!
-      @plugins_to_package.each do |plugin_name|
-        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
-          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
+            def representation_class
+          Representation::Note
+        end
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
+      end
+    
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
         end
       end
     end
+  end
+end
+
     
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+    end
+  end
+end
+
+    
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
+    
+      describe '#pretty_jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('<\\/script>')
+    end
   end
     
-        # remove 'system' local gems used by LS
-    local_gems = gemfile.locally_installed_gems.map(&:name) - NON_PLUGIN_LOCAL_GEMS
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
     
-        not_matching_pipeline = described_class.new(source, pipeline_id, [], settings)
-    expect(subject).not_to eq(not_matching_pipeline)
+        def log_status(status)
+      puts bold status
+    end
     
-    platforms = PlatformConfig.new
+        pod 'Alamofire', path: '../Alamofire Example/Alamofire'
     
-              it 'allow to install a specific version' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
           end
         end
-      end
     
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+    ```
+#{plugins_string}
+```
+#{markdown_podfile}
+EOS
       end
