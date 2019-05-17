@@ -1,122 +1,84 @@
 
         
-          print(header)
-    
-      Args:
-    in_size: The integer size of the non-batc input dimension. [(x),y]
-    out_size: The integer size of non-batch output dimension. [x,(y)]
-    do_bias (optional): Add a (learnable) bias vector to the operation,
-      if false, b will be None
-    mat_init_value (optional): numpy constant for matrix initialization, if None
-      , do random, with additional parameters.
-    alpha (optional): A multiplicative scaling for the weight initialization
-      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
-    identity_if_possible (optional): just return identity,
-      if x.shape[1] == out_size.
-    normalized (optional): Option to divide out by the norms of the rows of W.
-    name (optional): The name prefix to add to variables.
-    collections (optional): List of additional collections. (Placed in
-      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
-    
-      elif FLAGS.baseline_method is None:
-    num_missing = tf.reduce_sum(missing)
-    final_gen_objective += tf.reduce_sum(rewards) / (num_missing + eps)
-    baselines = tf.zeros_like(rewards)
-    critic_loss = None
-    maintain_averages_op = None
-    advantages = cumulative_rewards
-    
-      Returns:
-    variable_mapping:  Dictionary with Key: ckpt_name, Value: model_varself.
-  '''
-  assert (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd')
-  assert hparams.dis_num_layers == 2
-    
-    '''Simple bidirectional model definitions.'''
-    
-    for test in gettestcases():
-    if METHOD == 'EURISTIC':
-        try:
-            webpage = compat_urllib_request.urlopen(test['url'], timeout=10).read()
-        except Exception:
-            print('\nFail: {0}'.format(test['name']))
+        
+def check_alphabetical(lines):
+    '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
             continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
+        title_re_match = link_re.match(raw_title)
+        if title_re_match:
+            sections[category].append(title_re_match.group(1).upper())
+    
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
+    
+            This should not be called from user code, and is only exposed for use
+        when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+    
+        def is_unverifiable(self):
+        return True
+    
+    import json
+import platform
+import sys
+import ssl
+    
+    ``response``:
+    The response generated from a Request.
+'''
+HOOKS = ['response']
+    
+            with server as (host, port):
+            r = requests.get('http://{}:{}'.format(host, port))
+    
+            r = requests.Request('GET', url, auth=auth)
+        p = r.prepare()
+    
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
+    
+        def test_command_line_interface_show_distance(self):
+        target_string = 'obama.jpg,obama,0.0'
+        runner = CliRunner()
+        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
     
     
-if __name__ == '__main__':
-    unittest.main()
-
-    
-        def _get_ip(self, protocol):
-        if self._SKIP_SOCKS_TEST:
-            return '127.0.0.1'
-    
-        :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
+def face_encodings(face_image, known_face_locations=None, num_jitters=1):
     '''
-    post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
-    
-    
-def get_db():
-    '''Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
-    '''
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-    
-            #: as blueprints can be registered multiple times with the
-        #: application and not everything wants to be registered
-        #: multiple times on it, this attribute can be used to figure
-        #: out if the blueprint was registered in the past already.
-        self.first_registration = first_registration
-    
-        Implements signals based on blinker if available, otherwise
-    falls silently back to a noop.
-    
-        :param source: the source code of the template to be
-                   rendered
-    :param context: the variables that should be available in the
-                    context of the template.
-    '''
-    ctx = _app_ctx_stack.top
-    ctx.app.update_template_context(context)
-    return _render(ctx.app.jinja_env.from_string(source),
-                   context, ctx.app)
-
-    
-            assert meth is not None, 'Unimplemented method %r' % request.method
-        return meth(*args, **kwargs)
-
-    
-    # Optional dataset entry keys
-_IM_PREFIX = 'image_prefix'
-_DEVKIT_DIR = 'devkit_directory'
-_RAW_DIR = 'raw_dir'
-    
-    
-# ---------------------------------------------------------------------------- #
-# RPN and Faster R-CNN outputs and losses
-# ---------------------------------------------------------------------------- #
-    
-    import numpy as np
-    
-    
-def _get_retinanet_blobs(
-        foas, all_anchors, gt_boxes, gt_classes, im_width, im_height):
-    total_anchors = all_anchors.shape[0]
-    logger.debug('Getting mad blobs: im_height {} im_width: {}'.format(
-        im_height, im_width))
+    Given an image, return the 128-dimension face encoding for each face in the image.
