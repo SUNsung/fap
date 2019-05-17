@@ -1,230 +1,504 @@
 
         
-        #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
+        #undef VERB
+#undef DIRECTIONAL_PREPOSITION
+#undef PREPOSITION
+
     
-    REGISTER_GRADIENT(Sub, GetSubGradient);
+    using namespace swift;
     
-    OPERATOR_SCHEMA(GivenTensorIntFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
+      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
+    if (classifyTypedef(subTypedef->getDecl()))
+      return forTypedef(subTypedef->getDecl());
+    return forInvalid();
+  }
     
-    
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
-    .Output(
-        0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
-    
-    // Converts a streamable value to an std::string.  A NULL pointer is
-// converted to '(null)'.  When the input value is a ::string,
-// ::std::string, ::wstring, or ::std::wstring object, each NUL
-// character in it is replaced with '\\0'.
-template <typename T>
-std::string StreamableToString(const T& streamable) {
-  return (Message() << streamable).GetString();
+    static bool isValidUnicodeScalar(uint32_t S) {
+  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
+  // ASCII characters.
+  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
 }
     
-    // GetTypeId<T>() returns the ID of type T.  Different values will be
-// returned for different types.  Calling the function twice with the
-// same type argument is guaranteed to return the same ID.
-template <typename T>
-TypeId GetTypeId() {
-  // The compiler is required to allocate a different
-  // TypeIdHelper<T>::dummy_ variable for each T used to instantiate
-  // the template.  Therefore, the address of dummy_ is guaranteed to
-  // be unique.
-  return &(TypeIdHelper<T>::dummy_);
+    void LinkJobAction::anchor() {}
+    
+      /**
+   * Caffe's thread local state will be initialized using the current
+   * thread values, e.g. device id, solver index etc. The random seed
+   * is initialized using caffe_rng_rand.
+   */
+  void StartInternalThread();
+    
+      /**
+   * @brief Given the bottom blobs, compute the top blobs and the loss.
+   *
+   * @param bottom
+   *     the input blobs, whose data fields store the input data for this layer
+   * @param top
+   *     the preshaped output blobs, whose data fields will store this layers'
+   *     outputs
+   * \return The total loss from the layer.
+   *
+   * The Forward wrapper calls the relevant device wrapper function
+   * (Forward_cpu or Forward_gpu) to compute the top blob values given the
+   * bottom blobs.  If the layer has any non-zero loss_weights, the wrapper
+   * then computes and returns the loss.
+   *
+   * Your layer should implement Forward_cpu and (optionally) Forward_gpu.
+   */
+  inline Dtype Forward(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+#define REGISTER_LAYER_CREATOR(type, creator)                                  \
+  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
+  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      int num_kernels_im2col_;
+  int num_kernels_col2im_;
+  int conv_out_channels_;
+  int conv_in_channels_;
+  int conv_out_spatial_dim_;
+  int kernel_dim_;
+  int col_offset_;
+  int output_offset_;
+    
+    
+    {  Blob<Dtype> transformed_data_;
+};
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
+    
+    #include <vector>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    // Range() returns generators providing sequences of values in a range.
+//
+// Synopsis:
+// Range(start, end)
+//   - returns a generator producing a sequence of values {start, start+1,
+//     start+2, ..., }.
+// Range(start, end, step)
+//   - returns a generator producing a sequence of values {start, start+step,
+//     start+step+step, ..., }.
+// Notes:
+//   * The generated sequences never include end. For example, Range(1, 5)
+//     returns a generator producing a sequence {1, 2, 3, 4}. Range(1, 9, 2)
+//     returns a generator producing {1, 3, 5, 7}.
+//   * start and end must have the same type. That type may be any integral or
+//     floating-point type or a user defined type satisfying these conditions:
+//     * It must be assignable (have operator=() defined).
+//     * It must have operator+() (operator+(int-compatible type) for
+//       two-operand version).
+//     * It must have operator<() defined.
+//     Elements in the resulting sequences will also have that type.
+//   * Condition start < end must be satisfied in order for resulting sequences
+//     to contain any elements.
+//
+template <typename T, typename IncrementT>
+internal::ParamGenerator<T> Range(T start, T end, IncrementT step) {
+  return internal::ParamGenerator<T>(
+      new internal::RangeGenerator<T, IncrementT>(start, end, step));
 }
     
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
+    // The tests from the instantiation above will have these names:
+//
+//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
+//
+// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
+// in the given test case, whether their definitions come before or
+// AFTER the INSTANTIATE_TEST_CASE_P statement.
+//
+// Please also note that generator expressions (including parameters to the
+// generators) are evaluated in InitGoogleTest(), after main() has started.
+// This allows the user on one hand, to adjust generator parameters in order
+// to dynamically determine a set of tests to run and on the other hand,
+// give the user a chance to inspect the generated tests with Google Test
+// reflection API before RUN_ALL_TESTS() is executed.
+//
+// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
+// for more examples.
+//
+// In the future, we plan to publish the API for defining new parameter
+// generators. But for now this interface remains part of the internal
+// implementation and is subject to change.
+//
+//
+// A parameterized test fixture must be derived from testing::Test and from
+// testing::WithParamInterface<T>, where T is the type of the parameter
+// values. Inheriting from TestWithParam<T> satisfies that requirement because
+// TestWithParam<T> inherits from both Test and WithParamInterface. In more
+// complicated hierarchies, however, it is occasionally useful to inherit
+// separately from Test and WithParamInterface. For example:
     
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
+    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ALL_THREADS, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    #include <limits.h>
-#include 'sample1.h'
-#include 'gtest/gtest.h'
+    // Depending on the platform, different string classes are available.
+// On Linux, in addition to ::std::string, Google also makes use of
+// class ::string, which has the same interface as ::std::string, but
+// has a different implementation.
+//
+// The user can define GTEST_HAS_GLOBAL_STRING to 1 to indicate that
+// ::string is available AND is a distinct type to ::std::string, or
+// define it to 0 to indicate otherwise.
+//
+// If the user's ::std::string and ::string are the same class due to
+// aliasing, he should define GTEST_HAS_GLOBAL_STRING to 0.
+//
+// If the user doesn't define GTEST_HAS_GLOBAL_STRING, it is defined
+// heuristically.
+    
+    namespace testing {
+namespace internal {
+    }
+    }
     
     
     {  return clone;
 }
     
     
-    {  // Can we set the MyString to NULL?
-  s.Set(NULL);
-  EXPECT_STREQ(NULL, s.c_string());
+// A simple string class.
+class MyString {
+ private:
+  const char* c_string_;
+  const MyString& operator=(const MyString& rhs);
+    }
+    
+        int32_t     op;                    // Operation from the compiled pattern, split into
+    int32_t     opType;                //    the opcode
+    int32_t     opValue;               //    and the operand value.
+    
+        Transliterator::_registerFactory(UnicodeString(TRUE, ::CURR_ID, -1),
+                                     RemoveTransliterator_create, integerToken(0));
+    
+    const char *
+RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        return NULL;
+    }
+    const Locale *result;
+    switch(type) {
+    case ULOC_ACTUAL_LOCALE:
+        result = actualLocaleIsSameAsValid ? &validLocale : &tailoring->actualLocale;
+        break;
+    case ULOC_VALID_LOCALE:
+        result = &validLocale;
+        break;
+    case ULOC_REQUESTED_LOCALE:
+    default:
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    if(result->isBogus()) { return NULL; }
+    const char *id = result->getName();
+    return id[0] == 0 ? 'root' : id;
 }
+    
+    ScriptSet &ScriptSet::reset(UScriptCode script, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return *this;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    bits[index] &= ~bit;
+    return *this;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    
+    {    }
+    else if (U_SUCCESS(status))
+    {
+        status = U_MISSING_RESOURCE_ERROR;
+    }
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or a negative value
+     */
+    static int32_t indexOrNegativeFromString(const char *keyword);
+    
+    /**
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
+ * and return the pointer.
+ */
+UnicodeMatcher* StringMatcher::toMatcher() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeMatcher *nonconst_base = static_cast<UnicodeMatcher *>(nonconst_this);
+  
+  return nonconst_base;
+}
+    
+    void Assembler::srad(const Reg64& ra, const Reg64& rs, const Reg64& rb,
+                     bool rc) {
+  EmitXForm(31, rn(rs), rn(ra), rn(rb), 794, rc);
+}
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
+    
+    void Config::ReplaceIncludesWithIni(const std::string& original_ini_filename,
+                                    const std::string& iniStr,
+                                    std::string& with_includes) {
+  std::istringstream iss(iniStr);
+  std::string line;
+  while (std::getline(iss, line)) {
+    // Handle cases like
+    //   #include           ''
+    //   ##includefoo barbaz'myconfig.ini' how weird is that
+    // Anything that is not a syntactically correct #include 'file' after
+    // this pre-processing, will be treated as an ini comment and processed
+    // as such in the ini parser
+    auto pos = line.find_first_not_of(' ');
+    if (pos == std::string::npos ||
+        line.compare(pos, strlen('#include'), '#include') != 0) {
+      // treat as normal ini line, including comment that doesn't start with
+      // #include
+      with_includes += line + '\n';
+      continue;
+    }
+    pos += strlen('#include');
+    auto start = line.find_first_not_of(' ', pos);
+    auto end = line.find_last_not_of(' ');
+    if ((start == std::string::npos || line[start] != ''') ||
+        (end == start || line[end] != ''')) {
+      with_includes += line + '\n'; // treat as normal comment
+      continue;
+    }
+    std::string file = line.substr(start + 1, end - start - 1);
+    const std::string logger_file = file;
+    boost::filesystem::path p(file);
+    if (!p.is_absolute()) {
+      boost::filesystem::path opath(original_ini_filename);
+      p = opath.parent_path()/p;
+    }
+    if (boost::filesystem::exists(p)) {
+      std::ifstream ifs(p.string());
+      const std::string contents((std::istreambuf_iterator<char>(ifs)),
+                                 std::istreambuf_iterator<char>());
+      Config::ReplaceIncludesWithIni(p.string(), contents, with_includes);
+    } else {
+      Logger::Warning('ini include file %s not found', logger_file.c_str());
+    }
+  }
+}
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
+    }
+  }
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+    #endif
 
     
-    
-    {}  // namespace grpc
-
-    
-    AuthPropertyIterator::AuthPropertyIterator(
-    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
-    : property_(property),
-      ctx_(iter->ctx),
-      index_(iter->index),
-      name_(iter->name) {}
-    
-    #include <grpcpp/impl/channel_argument_option.h>
-    
-    struct DataStreamWrapper final : Stream::Wrapper {
-  DataStreamWrapper() {
-    m_isLocal = true;
+    template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done) {
+  if (LIKELY(map.numSubMaps() == 1) ||
+      done.load(std::memory_order_relaxed) ||
+      done.exchange(true, std::memory_order_relaxed)) {
+    return;
   }
     }
     
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+    #include 'hphp/util/struct-log.h'
+    
+    /**
+ * A request-local wrapper for the three standard files:
+ * STDIN, STDOUT, and STDERR.
+ */
+struct BuiltinFiles final : RequestEventHandler {
+  static const Variant& GetSTDIN();
+  static const Variant& GetSTDOUT();
+  static const Variant& GetSTDERR();
+    }
+    
+        int i;
+    for (i = 0; i < SIZE - 1; i++)
+    {
+        int pri = swoole_system_random(10000, 99999);
+        ns = (node_t*) malloc(sizeof(node_t));
+        ns->val = i;
+        ns->pri = pri;
+        swHeap_push(pq, pri, ns);
+        _map[i] = pri;
+    }
+    
+    #endif /* !__HIREDIS_QT_H__ */
 
     
-    constexpr int64_t kDefaultPerfWarningRate = 100;
+        public slots:
+        void run();
     
-        Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
-    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
-    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
-    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
-    
-            static NarratorAnnouncement^ GetAnnouncement(Windows::UI::Xaml::DependencyObject^ element)
+        inline void del(const std::string &key)
+    {
+        auto iter = cache_map.find(key);
+        if (iter == cache_map.end())
         {
-            return safe_cast<NarratorAnnouncement^>(element->GetValue(s_announcementProperty));
+            return;
         }
-    
-    using namespace  ::osquery::extensions;
-    
-    namespace osquery {
-namespace ebpf {
     }
-    }
-    
-    // NOTE: the original code used the same class for the `reverse()` method
-EASERATE_TEMPLATE_IMPL(EaseIn, tweenfunc::easeIn);
-EASERATE_TEMPLATE_IMPL(EaseOut, tweenfunc::easeOut);
-EASERATE_TEMPLATE_IMPL(EaseInOut, tweenfunc::easeInOut);
-    
-    AccelDeccelAmplitude* AccelDeccelAmplitude::clone() const
-{
-    // no copy constructor
-    if (_other)
-        return AccelDeccelAmplitude::create(_other->clone(), _rate);
-    
-    return nullptr;
-}
-    
-    // implementation of Shaky3D
-    
-    ActionInstant* Show::reverse() const
-{
-    return Hide::create();
-}
-    
-        //
-    // Overrides
-    //
-    virtual RepeatForever* clone() const override;
-    virtual RepeatForever* reverse(void) const override;
-    virtual void startWithTarget(Node* target) override;
-    /**
-     * @param dt In seconds.
-     */
-    virtual void step(float dt) override;
-    virtual bool isDone(void) const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RepeatForever()
-    : _innerAction(nullptr)
-    {}
-    virtual ~RepeatForever();
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-        // Overrides
-    virtual SplitRows* clone() const override;
-    virtual void update(float time) override;
-    virtual void startWithTarget(Node *target) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    SplitRows() {}
-    virtual ~SplitRows() {}
-    
-        /* Creates an animation with an array of SpriteFrame and a delay between frames in seconds.
-     * The frames will be added with one 'delay unit'.
-     * @since v0.99.5
-     * @param arrayOfSpriteFrameNames An array of SpriteFrame.
-     * @param delay A delay between frames in seconds.
-     * @param loops The times the animation is going to loop.
-     */
-    static Animation* createWithSpriteFrames(const Vector<SpriteFrame*>& arrayOfSpriteFrameNames, float delay = 0.0f, unsigned int loops = 1);
-    
-        /** Deletes a Animation from the cache.
-     *
-     * @param name The name of animation.
-     */
-    void removeAnimation(const std::string& name);
-    /** @deprecated. Use removeAnimation() instead
-     * @js NA
-     * @lua NA
-     */
-    CC_DEPRECATED_ATTRIBUTE void removeAnimationByName(const std::string& name){ removeAnimation(name);}
-    
-        /**
-     * get vertex count
-     * @return number of vertices
-     */
-    unsigned int getVertCount() const;
-    
-    /**
-     * get triangles count
-     * @return number of triangles
-     */
-    unsigned int getTrianglesCount() const;
