@@ -1,118 +1,108 @@
 
         
-        
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_bashrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'bash')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+                    # >leading or trailing LWS MAY be removed without
+            # >changing the semantics of the field value'
+            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
+            # Also, requests raises `InvalidHeader` for leading spaces.
+            value = value.strip()
     
-     edit-sources - edit the source information file
-'''
-apt_operations = ['list', 'search', 'show', 'update', 'install', 'remove',
-                  'upgrade', 'full-upgrade', 'edit-sources']
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+        @property
+    def config(self):
+        if not hasattr(self, '_config'):
+            self._config = Config(directory=self.config_dir)
+            if self._config.is_new():
+                self._config.save()
+            else:
+                self._config.load()
+        return self._config
     
     
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert match(Command(script.format(filename.format(ext)), ''))
+# noinspection PyAbstractClass
+class BuiltinAuthPlugin(AuthPlugin):
     
-        try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
+        def get_auth_plugin(self, auth_type):
+        return self.get_auth_plugin_mapping()[auth_type]
     
-        def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
-    
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
-        else:
-            s.delete()  # Clear sessions with no data.
-        return s
-    
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-        num_keypoints = gt_keypoints.shape[2]
-    sampled_keypoints = -np.ones(
-        (len(sampled_fg_rois), gt_keypoints.shape[1], num_keypoints),
-        dtype=gt_keypoints.dtype
-    )
-    for ii in range(len(sampled_fg_rois)):
-        ind = box_to_gt_ind_map[ii]
-        if ind >= 0:
-            sampled_keypoints[ii, :, :] = gt_keypoints[gt_inds[ind], :, :]
-            assert np.sum(sampled_keypoints[ii, 2, :]) > 0
-    
-        IOLoop.instance().add_callback(run_tests)
+        '''
+    return path.replace('\\', '\\\\\\')
     
     
-class Error(Exception):
-    '''Exception raised by errors in the options module.'''
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    '''Implementation of platform-specific functionality.
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
     
-    from concurrent.futures import ThreadPoolExecutor
-from tornado import gen
-from tornado.ioloop import IOLoop
-from tornado.platform.asyncio import (
-    AsyncIOLoop,
-    to_asyncio_future,
-    AnyThreadEventLoopPolicy,
-)
-from tornado.testing import AsyncTestCase, gen_test
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    
+def test_unicode_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': UNICODE}
+    
+        name = None
+    helpurl = None
+    about = None
+    
+        def test_default_encoder_naive_fails(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            ValueError, RFC3339Field.default_encoder, datetime.datetime.now())
+    
+        good_nonce = jose.encode_b64jose(b'foo')
+    wrong_nonce = u'F'
+    # Following just makes sure wrong_nonce is wrong
+    try:
+        jose.b64decode(wrong_nonce)
+    except (ValueError, TypeError):
+        assert True
+    else:
+        assert False  # pragma: no cover
+    
+    The path to this file can be provided interactively or using the
+``--dns-cloudflare-credentials`` command-line argument. Certbot records the path
+to this file for use during renewal, but does not store the file's contents.
+    
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+    
+            link_list = []
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
+    
+        if not info_only:
+        download_url_ffmpeg(m3u8_url, title, 'm3u8', None, output_dir=output_dir, merge=merge)
+    
+    import ssl
