@@ -1,331 +1,429 @@
 
         
-        #include <QIcon>
-#include <QPixmap>
-#include <QString>
-    
-    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-    
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
-    
-    #undef BE32
-#undef Round
-#undef sigma1
-#undef sigma0
-#undef Sigma1
-#undef Sigma0
-#undef Maj
-#undef Ch
-    
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
-    }
-    
-    namespace detail {
-    }
-    
-    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
-std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
-    
-    
-    {}  // namespace leveldb
-    
-      Slice in(encoded);
-  ParsedInternalKey decoded('', 0, kTypeValue);
-    
-    namespace base {
-class DictionaryValue;
-class ListValue;
-}
-    
-    RenderView* GetCurrentRenderView() {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::Local<v8::Context> ctx = isolate->GetCurrentContext();
-  return GetRenderView(ctx);
-}
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return !item->icon_.IsEmpty();
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
-    
-      std::string type;
-    
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
+        template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
       }
     }
+  }
+}
+    
+    template<typename xpu>
+void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                                const float threshold) {
+  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
+  ::Launch(s,
+          inputs[1].Size(),         // original size
+          inputs[1].dptr<float>(),  // out array
+          inputs[0].dptr<float>(),  // compressed array
+          -1 *threshold,            // negative threshold
+          threshold);               // positive threshold
+}
+    
+      /*!
+  * \brief Issues dequantize operation to be scheduled by the engine
+  * Decompresses `from` into `to` using current parameters of `type` and `threshold`
+  * \param from the ndarray containing quantized data
+  * \param to the target ndarray which contains final dequantized data
+  * \param priority Priority of the action.
+  */
+  void Dequantize(const mxnet::NDArray &from, mxnet::NDArray *to, const int priority);
+    
+      void Run(const RunContext& rctx) {
+    // setup DLTensor
+    for (size_t i = 0; i < array_loc_.size(); ++i) {
+      values_[array_loc_[i]].v_handle =
+          const_cast<DLTensor*>(&(array_data_[i].data().dltensor()));
     }
-    }
-    
-        ~ClipboardWriter() {
-      scw_.reset();
-    }
-    
-    #include <vector>
-    
-    
-    {} // namespace extensions
+    // run the packed function
+    TVMRetValue rv;
+    TVMArgs args(&values_[0], &type_codes_[0], values_.size());
+    if (ctx().dev_type == Context::kGPU) {
+#if MXNET_USE_CUDA
+      // pass stream via last argument.
+      void* strm = static_cast<void*>(rctx.get_stream<gpu>()->stream_);
+      int dev_type = kDLGPU;
+      fset_stream_(dev_type, rctx.ctx.dev_id, strm);
+      func_.CallPacked(args, &rv);
+      fset_stream_(dev_type, rctx.ctx.dev_id, nullptr);
+#else
+      LOG(FATAL) << 'Please compile with CUDA enabled for cuda features';
 #endif
-
-    
-        if (screens) {
-      std::unique_ptr<DesktopMediaList> screen_media_list =
-        std::make_unique<NativeDesktopMediaList>(
-          content::DesktopMediaID::TYPE_SCREEN,
-          webrtc::DesktopCapturer::CreateScreenCapturer(options));
-      media_list_.push_back(std::move(screen_media_list));
+    } else {
+      func_.CallPacked(args, &rv);
     }
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed);
-    
-    
-    {}  // namespace leveldb
-
-    
-    #ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
-#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
-    
-    // A DB is a persistent ordered map from keys to values.
-// A DB is safe for concurrent access from multiple threads without
-// any external synchronization.
-class LEVELDB_EXPORT DB {
- public:
-  // Open the database with the specified 'name'.
-  // Stores a pointer to a heap-allocated database in *dbptr and returns
-  // OK on success.
-  // Stores nullptr in *dbptr and returns a non-OK status on error.
-  // Caller should delete *dbptr when it is no longer needed.
-  static Status Open(const Options& options, const std::string& name,
-                     DB** dbptr);
-    }
-    
-      const char* Name() const override { return 'leveldb.BytewiseComparator'; }
-    
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
-    
-    
-    {    // Do it
-    std::string contents;
-    Status s = ReadFileToString(env_.target(), fname, &contents);
-    ASSERT_TRUE(s.ok()) << s.ToString();
-    for (int i = 0; i < bytes_to_corrupt; i++) {
-      contents[i + offset] ^= 0x80;
-    }
-    s = WriteStringToFile(env_.target(), contents, fname);
-    ASSERT_TRUE(s.ok()) << s.ToString();
   }
     
-      // Return an iterator that yields the contents of the memtable.
-  //
-  // The caller must ensure that the underlying MemTable remains live
-  // while the returned iterator is live.  The keys returned by this
-  // iterator are internal keys encoded by AppendInternalKey in the
-  // db/format.{h,cc} module.
-  Iterator* NewIterator();
+    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
+with width and height of the second input symbol, i.e., with one input, we need h_w to
+specify the crop height and width, otherwise the second input symbol's size will be used
+)code' ADD_FILELINE)
     
-      // Apply *edit to the current version to form a new descriptor that
-  // is both saved to persistent state and installed as the new
-  // current version.  Will release *mu while actually writing to the file.
-  // REQUIRES: *mu is held on entry.
-  // REQUIRES: no other thread concurrently calls LogAndApply()
-  Status LogAndApply(VersionEdit* edit, port::Mutex* mu)
-      EXCLUSIVE_LOCKS_REQUIRED(mu);
     
-    #include <string>
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
+      }
+    });
+}  // namespace op
+}  // namespace mxnet
+    
+            int32_t const& Sign() const;
+        int32_t const& Exp() const;
+        std::vector<uint32_t> const& Mantissa() const;
+    
+    void CBinaryCommand::Accept(_In_ ISerializeCommandVisitor& commandVisitor)
+{
+    commandVisitor.Visit(*this);
+}
+    
+        static std::vector<uint32_t> DigitGroupingStringToGroupingVector(std::wstring_view groupingString);
+    std::wstring GroupDigits(std::wstring_view delimiter, std::vector<uint32_t> const& grouping, std::wstring_view displayString, bool isNumNegative = false);
+    
+    #include <algorithm>
+#include <string>
+#include 'CalcErr.h'
+#include <cstring> // for memmove
+#include <sal.h>   // for SAL
+    
+    void LiveRegionHost::Announce(NarratorAnnouncement ^ announcement)
+{
+    if (m_host == nullptr)
+    {
+        m_host = ref new TextBlock();
+        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
+    }
+    }
+    
+    #include <dmlc/registry.h>
+#include <functional>
 #include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
     
-      // Intentionally copyable.
-  WriteBatch(const WriteBatch&) = default;
-  WriteBatch& operator=(const WriteBatch&) = default;
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
+    }
     
-    //////////////////////////////////////////////////////////////////////
+    namespace xgboost {
+namespace obj {
+    }
+    }
     
-    #include 'hphp/runtime/base/apc-handle.h'
+      inline static void LimitSizeLevel
+    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
+    size_t& nlevel = *out_nlevel;
+    size_t& limit_size = *out_limit_size;
+    nlevel = 1;
+    while (true) {
+      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
+      size_t n = (1ULL << nlevel);
+      if (n * limit_size >= maxn) break;
+      ++nlevel;
+    }
+    // check invariant
+    size_t n = (1ULL << nlevel);
+    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
+    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
+  }
     
-    #define CONTAINER_CONFIG_BODY(T, METHOD) \
-T Config::Get##METHOD(const IniSetting::Map& ini, const Hdf& config, \
-                      const std::string& name /* = '' */, \
-                      const T& defValue /* = T() */, \
-                      const bool prepend_hhvm /* = true */) { \
-  auto ini_name = IniName(name, prepend_hhvm); \
-  Hdf hdf = name != '' ? config[name] : config; \
-  T ini_ret, hdf_ret; \
-  auto value = ini_iterate(ini, ini_name); \
-  if (value.isArray() || value.isObject()) { \
-    ini_on_update(value.toVariant(), ini_ret); \
-    /** Make sure that even if we have an ini value, that if we also **/ \
-    /** have an hdf value, that it maintains its edge as beating out **/ \
-    /** ini                                                          **/ \
-    if (hdf.exists() && !hdf.isEmpty()) { \
-      hdf.configGet(hdf_ret); \
-      if (hdf_ret != ini_ret) { \
-        ini_ret = hdf_ret; \
-        IniSetting::SetSystem(ini_name, ini_get(ini_ret)); \
-      } \
-    } \
-    return ini_ret; \
-  } \
-  if (hdf.exists() && !hdf.isEmpty()) { \
-    hdf.configGet(hdf_ret); \
-    return hdf_ret; \
-  } \
-  return defValue; \
-} \
-void Config::Bind(T& loc, const IniSetting::Map& ini, const Hdf& config, \
-                  const std::string& name /* = '' */, \
-                  const T& defValue /* = T() */, \
-                  const bool prepend_hhvm /* = true */) { \
-  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
-  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
-                   IniName(name, prepend_hhvm), &loc); \
-}
-    
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
-
-    
-    #endif
-
-    
-      Pipe();
-  virtual ~Pipe();
-    
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct GradientBoosterReg
+    : public dmlc::FunctionRegEntryBase<
+  GradientBoosterReg,
+  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
+                                  bst_float base_margin)> > {
 };
     
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
-public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+    /*!
+ * \brief Registry entry for objective factory functions.
+ */
+struct ObjFunctionReg
+    : public dmlc::FunctionRegEntryBase<ObjFunctionReg,
+                                        std::function<ObjFunction* ()> > {
 };
     
+      void PredictInstance(const SparsePage::Inst& inst,
+                       std::vector<bst_float>* out_preds,
+                       const gbm::GBTreeModel& model, unsigned ntree_limit,
+                       unsigned root_index) override {
+    if (thread_temp.size() == 0) {
+      thread_temp.resize(1, RegTree::FVec());
+      thread_temp[0].Init(model.param.num_feature);
+    }
+    ntree_limit *= model.param.num_output_group;
+    if (ntree_limit == 0 || ntree_limit > model.trees.size()) {
+      ntree_limit = static_cast<unsigned>(model.trees.size());
+    }
+    out_preds->resize(model.param.num_output_group *
+                      (model.param.size_leaf_vector + 1));
+    // loop over output groups
+    for (int gid = 0; gid < model.param.num_output_group; ++gid) {
+      (*out_preds)[gid] =
+          PredValue(inst, model.trees, model.tree_info, gid, root_index,
+                    &thread_temp[0], 0, ntree_limit) +
+          model.base_margin;
+    }
+  }
+  void PredictLeaf(DMatrix* p_fmat, std::vector<bst_float>* out_preds,
+                   const gbm::GBTreeModel& model, unsigned ntree_limit) override {
+    const int nthread = omp_get_max_threads();
+    InitThreadTemp(nthread, model.param.num_feature);
+    const MetaInfo& info = p_fmat->Info();
+    // number of valid trees
+    ntree_limit *= model.param.num_output_group;
+    if (ntree_limit == 0 || ntree_limit > model.trees.size()) {
+      ntree_limit = static_cast<unsigned>(model.trees.size());
+    }
+    std::vector<bst_float>& preds = *out_preds;
+    preds.resize(info.num_row_ * ntree_limit);
+    // start collecting the prediction
+    for (const auto &batch : p_fmat->GetRowBatches()) {
+      // parallel over local batch
+      const auto nsize = static_cast<bst_omp_uint>(batch.Size());
+#pragma omp parallel for schedule(static)
+      for (bst_omp_uint i = 0; i < nsize; ++i) {
+        const int tid = omp_get_thread_num();
+        auto ridx = static_cast<size_t>(batch.base_rowid + i);
+        RegTree::FVec& feats = thread_temp[tid];
+        feats.Fill(batch[i]);
+        for (unsigned j = 0; j < ntree_limit; ++j) {
+          int tid = model.trees[j]->GetLeafIndex(feats, info.GetRoot(ridx));
+          preds[ridx * ntree_limit + j] = static_cast<bst_float>(tid);
+        }
+        feats.Drop(batch[i]);
+      }
+    }
+  }
     
-SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
-}
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
     
-    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
+      // Transaction could not commit since the write outside of the txn conflicted
+  // with the read!
+  assert(s.IsBusy());
     
-            // Copy new text to start, and delete it
-        text.copy(destStart, destLimit, start);
-        text.handleReplaceBetween(tempStart + outLen, destLimit + outLen, UnicodeString());
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
+    }
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+      // Do a write outside of the transaction to key 'y'
+  s = txn_db->Put(write_options, 'y', 'y');
+    
+    namespace rocksdb {
+namespace experimental {
+    }
+    }
+    
+      // If non-NULL, use the specified cache for blocks.
+  // If NULL, leveldb will automatically create and use an 8MB internal cache.
+  // Default: NULL
+  Cache* block_cache;
+    
+    namespace rocksdb {
+    }
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
 
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2019-04-23: Inputs: Added support for SDL_GameController (if ImGuiConfigFlags_NavEnableGamepad is set by user application).
-//  2019-03-12: Misc: Preserve DisplayFramebufferScale when main window is minimized.
-//  2018-12-21: Inputs: Workaround for Android/iOS which don't seem to handle focus related calls.
-//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
-//  2018-11-14: Changed the signature of ImGui_ImplSDL2_ProcessEvent() to take a 'const SDL_Event*'.
-//  2018-08-01: Inputs: Workaround for Emscripten which doesn't seem to handle focus related calls.
-//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
-//  2018-06-08: Misc: Extracted imgui_impl_sdl.cpp/.h away from the old combined SDL2+OpenGL/Vulkan examples.
-//  2018-06-08: Misc: ImGui_ImplSDL2_InitForOpenGL() now takes a SDL_GLContext parameter.
-//  2018-05-09: Misc: Fixed clipboard paste memory leak (we didn't call SDL_FreeMemory on the data returned by SDL_GetClipboardText).
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
-//  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes.
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-19: Inputs: When available (SDL 2.0.4+) using SDL_CaptureMouse() to retrieve coordinates outside of client area when dragging. Otherwise (SDL 2.0.3 and before) testing for SDL_WINDOW_INPUT_FOCUS instead of SDL_WINDOW_MOUSE_FOCUS.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
     
-            D3D12_RESOURCE_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-        desc.Alignment = 0;
-        desc.Width = width;
-        desc.Height = height;
-        desc.DepthOrArraySize = 1;
-        desc.MipLevels = 1;
-        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        desc.SampleDesc.Count = 1;
-        desc.SampleDesc.Quality = 0;
-        desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+    {  kernel.AddRegularization(0.3);
+  mat_golden = MatrixXd::Identity(10, 10) * 0.5;
+  EXPECT_EQ(kernel.kernel_matrix(), mat_golden);
+}
+    
+    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
+  SetSplineFunc(PolynomialXd(params));
+}
+    
+    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::manual_input(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+      Byte t3(bytes + 7);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Brakerpt6c brake;
+  brake.Parse(bytes, length, &chassis_detail);
+    
+    
+    {  bool ret = x;
+  return ret;
+}
