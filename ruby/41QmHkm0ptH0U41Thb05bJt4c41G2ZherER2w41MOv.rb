@@ -1,110 +1,127 @@
 
         
-                  if !matches || !matches[:type]
-            raise(
-              ArgumentError,
-              'The note URL #{note.html_url.inspect} is not supported'
-            )
-          end
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-        def add_entry(entry)
-      if @index.add?(entry.as_json.to_s)
-        @entries << entry.dup
-        @types[entry.type].count += 1 if entry.type
+              it 'creates a new user' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: '12345678'
+        click_on 'Create User'
+        expect(page).to have_text('User 'usertest' was successfully created.')
+        expect(page).to have_text('test@test.com')
       end
+    
+      it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+        it 'returns a label 'No' if any falsy value is given' do
+      [false, nil].each { |value|
+        label = yes_no(value)
+        expect(label).to be_html_safe
+        expect(Nokogiri(label).text).to eq 'No'
+      }
+    end
+  end
+    
+        describe '#agents_dot' do
+      before do
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
+    
+        it 'for the afternoon' do
+      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
+    end
+  end
+    
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
     end
     
-        def format_url(url)
-      url.to_s.remove %r{\Ahttps?://}
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+        def links
+      context[:links]
     end
     
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
+        private
+    
+    # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
+# is to ensure that people can’t use malicious code from pod specifications.
+#
+# It does this by creating a ‘seatbelt’ profile on the fly and executing the
+# given command through `/usr/bin/sandbox-exec`. This profile format is an
+# undocumented format, which uses TinyScheme to implement its DSL.
+#
+# Even though it uses a undocumented format, it’s actually very self-explanatory.
+# Because we use a whitelist approach, `(deny default)`, any action that is
+# denied is logged to `/var/log/system.log`. So tailing that should provide
+# enough information on steps that need to be take to get something to work.
+#
+# For more information see:
+#
+# * https://github.com/CocoaPods/CocoaPods/issues/939
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
+# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
+# * `$ man sandbox-exec`
+# * `$ ls /usr/share/sandbox`
+    
+            def run
+          print_version
+          signal_end_of_output
+          listen
+        end
+    
+            # Should be overriden if you have areas of your checkout that don't match
+        # up to a step within checkout_steps, such as a registration step
+        def skip_state_validation?
+          false
+        end
+    
+              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
+                                                                                  variant: variant,
+                                                                                  quantity: params[:line_item][:quantity],
+                                                                                  options: line_item_params[:options]).value
+          if @line_item.errors.empty?
+            respond_with(@line_item, status: 201, default_template: :show)
+          else
+            invalid_resource!(@line_item)
           end
         end
     
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
-  end
-end
-
+            def index
+          @products = if params[:ids]
+                        product_scope.where(id: params[:ids].split(',').flatten)
+                      else
+                        product_scope.ransack(params[:q]).result
+                      end
     
-      def process_salmon
-    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
-  end
-end
-
+      puts '\n== Preparing database =='
+  system! 'bin/rails db:setup'
     
-        render_empty
-  end
-    
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
-    
-      included do
-    before_action :set_rate_limit_headers, if: :rate_limited_request?
-  end
-    
-          def left_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, li                  = *line.match(/\-(\d+)/)
-          @left_diff_line_number = li.to_i
-          @current_line_number   = @left_diff_line_number
-          ret                    = '...'
-        elsif line[0] == ?-
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        elsif line[0] == ?+
-          ret = ' '
-        else
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        end
-        ret
-      end
-    
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
-        end
-      end
-    
-          def toc_content
-        @toc_content
-      end
-    
-      s.name              = 'gollum'
-  s.version           = '4.1.4'
-  s.date              = '2018-10-01'
-  s.rubyforge_project = 'gollum'
-  s.license           = 'MIT'
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
