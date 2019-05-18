@@ -1,148 +1,142 @@
 
         
-            def did_show_message?
-      file_name = '.did_show_opt_info'
+            File.readlines(Rails.root + 'spec/fixtures/md/spec.txt').each do |line|
+      if line == '```````````````````````````````` example\n'
+        state = :example
+        next
+      end
     
-            # From https://stackoverflow.com/a/4789702/445598
-        # We do this to make the actual error message red and therefore more visible
-        reraise_formatted!(e, e.message)
+      def current_db
+    RailsMultisite::ConnectionManagement.current_db
+  end
+    
+      def report
+    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
+      'blocked-uri',
+      'disposition',
+      'document-uri',
+      'effective-directive',
+      'original-policy',
+      'referrer',
+      'script-sample',
+      'status-code',
+      'violated-directive',
+      'line-number',
+      'source-file'
+    )
+  end
+    
+        # if you need to test this and are having ssl issues see:
+    #  http://stackoverflow.com/questions/6756460/openssl-error-using-omniauth-specified-ssl-path-but-didnt-work
+    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development?
+    @omniauth = OmniAuth::Builder.new(app) do
+      Discourse.authenticators.each do |authenticator|
+        authenticator.register_middleware(self)
       end
     end
     
-          it 'allows you to specify a prefix' do
-        prefix = '16309-'
+        # JOIN of topics table based on manipulating draft_key seems imperfect
+    builder = DB.build <<~SQL
+      SELECT
+        d.*, t.title, t.id topic_id, t.archetype,
+        t.category_id, t.closed topic_closed, t.archived topic_archived,
+        pu.username, pu.name, pu.id user_id, pu.uploaded_avatar_id, pu.username_lower,
+        du.username draft_username, NULL as raw, NULL as cooked, NULL as post_number
+      FROM drafts d
+      LEFT JOIN LATERAL json_extract_path_text (d.data::json, 'postId') postId ON TRUE
+      LEFT JOIN posts p ON postId :: BIGINT = p.id
+      LEFT JOIN topics t ON
+        CASE
+            WHEN d.draft_key LIKE '%' || '#{EXISTING_TOPIC}' || '%'
+              THEN CAST(replace(d.draft_key, '#{EXISTING_TOPIC}', '') AS INT)
+            ELSE 0
+        END = t.id
+      JOIN users pu on pu.id = COALESCE(p.user_id, t.user_id, d.user_id)
+      JOIN users du on du.id = #{user_id}
+      /*where*/
+      /*order_by*/
+      /*offset*/
+      /*limit*/
+    SQL
     
-          it 'adds use-ssh flag to command if use_ssh is set to true' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              use_ssh: true
-            )
-          end').runner.execute(:test)
+      def build(theme_ids)
+    builder = Builder.new
     
-          it 'cannot have both path and pathspec parameters' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: 'myfile.txt', pathspec: '*.txt')
-          end').runner.execute(:test)
-        end.to raise_error(FastlaneCore::Interface::FastlaneError)
-      end
+          script_srcs = parse(policy)['script-src']
+      expect(script_srcs).to include('https://www.google-analytics.com/analytics.js')
+      expect(script_srcs).to include('https://www.googletagmanager.com/gtm.js')
+    end
+    
+        it 'does not send previously configured receivers when the current agent does not support them' do
+      select_agent_type('Website Agent scrapes')
+      sleep 0.5
+      select2('ZKCD', from: 'Receivers')
+      select_agent_type('Email Agent')
+      fill_in(:agent_name, with: 'No receivers')
+      click_on 'Save'
+      expect(page).to have_content('No receivers')
+      agent = Agent.find_by(name: 'No receivers')
+      expect(agent.receivers).to eq([])
     end
   end
 end
 
     
-        context 'passing command arguments to the system' do
-      it 'passes a string as a string' do
-        expect_command('git commit')
-        Fastlane::Actions.sh('git commit')
-      end
-    
-    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
-# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
-containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
-file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
-    
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
-    
-          attr_reader :scope_name, :resource
-    
-    module Devise
-  module Models
-    # Rememberable manages generating and clearing token for remembering the user
-    # from a saved cookie. Rememberable also has utility methods for dealing
-    # with serializing the user into the cookie and back from the cookie, trying
-    # to lookup the record based on the saved information.
-    # You probably wouldn't use rememberable methods directly, they are used
-    # mostly internally for handling the remember token.
-    #
-    # == Options
-    #
-    # Rememberable adds the following options in devise_for:
-    #
-    #   * +remember_for+: the time you want the user will be remembered without
-    #     asking for credentials. After this time the user will be blocked and
-    #     will have to enter their credentials again. This configuration is also
-    #     used to calculate the expires time for the cookie created to remember
-    #     the user. By default remember_for is 2.weeks.
-    #
-    #   * +extend_remember_period+: if true, extends the user's remember period
-    #     when remembered via cookie. False by default.
-    #
-    #   * +rememberable_options+: configuration options passed to the created cookie.
-    #
-    # == Examples
-    #
-    #   User.find(1).remember_me!  # regenerating the token
-    #   User.find(1).forget_me!    # clearing the token
-    #
-    #   # generating info to put into cookies
-    #   User.serialize_into_cookie(user)
-    #
-    #   # lookup the user based on the incoming cookie information
-    #   User.serialize_from_cookie(cookie_string)
-    module Rememberable
-      extend ActiveSupport::Concern
-    
-        return qstring
-  end
-    
-            private
-    
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.encrypt
-            cipher.key = k3
-            encrypted = cipher.update(data_encrypt) + cipher.final
-    
-              def self.decode(input)
-            elem = self.new
-            elem.decode(input)
-          end
-    
-              # Encodes the pa_data field
-          #
-          # @return [String]
-          def encode_pa_data
-            elems = []
-            pa_data.each do |data|
-              elems << data.encode
-            end
-    
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_value(input)
-            input.value[0].value
-          end
-        end
-      end
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
     end
   end
 end
+
     
-    FIRST     = -> l { LEFT[RIGHT[l]] }
-IF        = -> b { b }
-LEFT      = -> p { p[-> x { -> y { x } } ] }
-RIGHT     = -> p { p[-> x { -> y { y } } ] }
-IS_EMPTY  = LEFT
-REST      = -> l { RIGHT[RIGHT[l]] }
+      describe '#filename' do
+    it 'strips special characters' do
+      expect(AgentsExporter.new(:name => 'ƏfooƐƕƺbar').filename).to eq('foo-bar.json')
+    end
     
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
-        end
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+    RSpec::Matchers.define :have_value do |expected|
+  match do |actual|
+    await_condition { actual.value && actual.value.include?(expected) }
+  end
+    
+    module Workers
+  class PublishToHub < Base
+    def perform(*_args)
+      # don't publish to pubsubhubbub in cucumber
+    end
+  end
+    
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
+    
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
+    end
+    
+          it 'federates' do
+        allow_any_instance_of(Participation::Generator).to receive(:create!)
+        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
+        post_request!
+      end
+    
+      if ENV['RAILS_LOG_TO_STDOUT'].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
+    
+      # Tell Action Mailer not to deliver emails to the real world.
+  # The :test delivery method accumulates sent emails in the
+  # ActionMailer::Base.deliveries array.
+  config.action_mailer.delivery_method = :test
