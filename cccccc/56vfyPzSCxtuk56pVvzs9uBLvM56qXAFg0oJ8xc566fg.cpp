@@ -1,171 +1,176 @@
 
         
-        namespace nw {
+        SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    namespace content {
-class RenderFrameHost;
+        /* Check bad contexts and NULLs for signing */
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(none, &recsig, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(sign, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(vrfy, &recsig, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, NULL, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, NULL, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 4);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, NULL, NULL, NULL) == 0);
+    CHECK(ecount == 5);
+    /* This will fail or succeed randomly, and in either case will not ARG_CHECK failure */
+    secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, recovery_test_nonce_function, NULL);
+    CHECK(ecount == 5);
+    /* These will all fail, but not in ARG_CHECK way */
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, zero_privkey, NULL, NULL) == 0);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, over_privkey, NULL, NULL) == 0);
+    /* This one will succeed. */
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 5);
+    
+    
+    {  return leveldb::test::RunAllTests();
 }
+
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+      // When an actor (column family) requests a stop token, all writes will be
+  // stopped until the stop token is released (deleted)
+  std::unique_ptr<WriteControllerToken> GetStopToken();
+  // When an actor (column family) requests a delay token, total delay for all
+  // writes to the DB will be controlled under the delayed write rate. Every
+  // write needs to call GetDelay() with number of bytes writing to the DB,
+  // which returns number of microseconds to sleep.
+  std::unique_ptr<WriteControllerToken> GetDelayToken(
+      uint64_t delayed_write_rate);
+  // When an actor (column family) requests a moderate token, compaction
+  // threads will be increased
+  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
+    
+      delete db;
+    
+    #endif  // ROCKSDB_LITE
+
+    
+    // ============================================================================
+// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
+// ============================================================================
+// skip_overhead                                               36.37ns   27.49M
+// dev_null_log_overhead                                        2.61us  382.57K
+// ============================================================================
     
     
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
-      routing_id,
-      object_id,
-      type,
-      *static_cast<base::DictionaryValue*>(value_option.get())));
-  return v8::Undefined(isolate);
+    {void Executor::keepAliveRelease() {
+  LOG(FATAL) << __func__ << '() should not be called for folly::Executor types '
+             << 'which do not override keepAliveAcquire()';
 }
+} // namespace folly
+
     
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
     
-      static int getUID() {
-    static int id = 0;
-    return ++id;
+    {    auto res = CountedDetail::template get_shared_ptr_from_counted_base<T>(
+        p.get(), inc);
+    if (aliased) {
+      auto aliasedp =
+          CountedDetail::template get_shared_ptr_from_counted_base<SharedPtr>(
+              p.get());
+      res = *aliasedp;
+    }
+    return res;
   }
     
-    
-    {  gtk_widget_show(menu_);
-  g_object_ref_sink(G_OBJECT(menu_));
-}
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
-    
-    // Prints the given value using the << operator if it has one;
-// otherwise prints the bytes in it.  This is what
-// UniversalPrinter<T>::Print() does when PrintTo() is not specialized
-// or overloaded for type T.
+    // Each level of cache has sharing sets, which are the set of cpus
+// that share a common cache at that level.  These are available in a
+// hex bitset form (/sys/devices/system/cpu/cpu0/index0/shared_cpu_map,
+// for example).  They are also available in a human-readable list form,
+// as in /sys/devices/system/cpu/cpu0/index0/shared_cpu_list.  The list
+// is a comma-separated list of numbers and ranges, where the ranges are
+// a pair of decimal numbers separated by a '-'.
 //
-// A user can override this behavior for a class type Foo by defining
-// an overload of PrintTo() in the namespace where Foo is defined.  We
-// give the user this option as sometimes defining a << operator for
-// Foo is not desirable (e.g. the coding style may prevent doing it,
-// or there is already a << operator but it doesn't do what the user
-// wants).
-template <typename T>
-void PrintTo(const T& value, ::std::ostream* os) {
-  // DefaultPrintTo() is overloaded.  The type of its first two
-  // arguments determine which version will be picked.  If T is an
-  // STL-style container, the version for container will be called; if
-  // T is a pointer, the pointer version will be called; otherwise the
-  // generic version will be called.
-  //
-  // Note that we check for container types here, prior to we check
-  // for protocol message types in our operator<<.  The rationale is:
-  //
-  // For protocol messages, we want to give people a chance to
-  // override Google Mock's format by defining a PrintTo() or
-  // operator<<.  For STL containers, other formats can be
-  // incompatible with Google Mock's format for the container
-  // elements; therefore we check for container types here to ensure
-  // that our format is used.
-  //
-  // The second argument of DefaultPrintTo() is needed to bypass a bug
-  // in Symbian's C++ compiler that prevents it from picking the right
-  // overload between:
-  //
-  //   PrintTo(const T& x, ...);
-  //   PrintTo(T* x, ...);
-  DefaultPrintTo(IsContainerTest<T>(0), is_pointer<T>(), value, os);
-}
+// To sort the cpus for optimum locality we don't really need to parse
+// the sharing sets, we just need a unique representative from the
+// equivalence class.  The smallest value works fine, and happens to be
+// the first decimal number in the file.  We load all of the equivalence
+// class information from all of the cpu*/index* directories, order the
+// cpus first by increasing last-level cache equivalence class, then by
+// the smaller caches.  Finally, we break ties with the cpu number itself.
     
-      // Gets the outcome of the test part.
-  Type type() const { return type_; }
-    
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
- public:
-  ...
-  typedef std::list<T> List;
-  static T shared_;
-  T value_;
-};
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_)};
-    return ValuesIn(array);
+      // create an in6_addr from an uint8_t*
+  static inline in6_addr mkAddress6(const uint8_t* src) {
+    in6_addr addr;
+    std::memset(&addr, 0, 16);
+    std::memcpy(addr.s6_addr, src, 16);
+    return addr;
   }
     
-      // Gets the 0-terminated C string this MyString object represents.
-  const char* c_string() const { return c_string_; }
-    
-      static bool isInitialized6() { return data6_.initialized; }
-    
-    #include <string>
-#include <vector>
-#include <memory>
-    
+    namespace op
+{
+    /**
+     * Add your class description here.
+     */
+    class UserPostProcessing
+    {
     public:
-  DHTRoutingTableDeserializer(int family);
-    
-    #include 'LogFactory.h'
-#include 'Logger.h'
-#include 'util.h'
-#include 'DHTNode.h'
-#include 'DHTConnectionImpl.h'
-#include 'DHTRoutingTable.h'
-#include 'DHTMessageFactoryImpl.h'
-#include 'DHTMessageTracker.h'
-#include 'DHTMessageDispatcherImpl.h'
-#include 'DHTMessageReceiver.h'
-#include 'DHTTaskQueueImpl.h'
-#include 'DHTTaskFactoryImpl.h'
-#include 'DHTPeerAnnounceStorage.h'
-#include 'DHTTokenTracker.h'
-#include 'DHTInteractionCommand.h'
-#include 'DHTTokenUpdateCommand.h'
-#include 'DHTBucketRefreshCommand.h'
-#include 'DHTPeerAnnounceCommand.h'
-#include 'DHTEntryPointNameResolveCommand.h'
-#include 'DHTAutoSaveCommand.h'
-#include 'DHTTask.h'
-#include 'DHTRoutingTableDeserializer.h'
-#include 'DHTRegistry.h'
-#include 'DHTBucketRefreshTask.h'
-#include 'DHTMessageCallback.h'
-#include 'DHTMessageTrackerEntry.h'
-#include 'DHTMessageEntry.h'
-#include 'UDPTrackerClient.h'
-#include 'BtRegistry.h'
-#include 'prefs.h'
-#include 'Option.h'
-#include 'SocketCore.h'
-#include 'DlAbortEx.h'
-#include 'RecoverableException.h'
-#include 'a2functional.h'
-#include 'DownloadEngine.h'
-#include 'fmt.h'
-    
-    namespace aria2 {
+        /**
+         * Add your constructor description here.
+         */
+        UserPostProcessing();
+    }
     }
     
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
+        const auto FACE_NUMBER_PARTS = 70u;
+    #define FACE_PAIRS_RENDER_GPU \
+        0,1,  1,2,  2,3,  3,4,  4,5,  5,6,  6,7,  7,8,  8,9,  9,10,  10,11,  11,12,  12,13,  13,14,  14,15,  15,16,  17,18,  18,19,  19,20, \
+        20,21,  22,23,  23,24,  24,25,  25,26,  27,28,  28,29,  29,30,  31,32,  32,33,  33,34,  34,35,  36,37,  37,38,  38,39,  39,40,  40,41, \
+        41,36,  42,43,  43,44,  44,45,  45,46,  46,47,  47,42,  48,49,  49,50,  50,51,  51,52,  52,53,  53,54,  54,55,  55,56,  56,57,  57,58, \
+        58,59,  59,48,  60,61,  61,62,  62,63,  63,64,  64,65,  65,66,  66,67,  67,60
+    #define FACE_SCALES_RENDER_GPU 1
+    const std::vector<unsigned int> FACE_PAIRS_RENDER {FACE_PAIRS_RENDER_GPU};
+    #define FACE_COLORS_RENDER_GPU 255.f,    255.f,    255.f
+    const std::vector<float> FACE_COLORS_RENDER{FACE_COLORS_RENDER_GPU};
+    const std::vector<float> FACE_SCALES_RENDER{FACE_SCALES_RENDER_GPU};
+    
+        public:
+        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
+                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+    
+        template<typename T>
+    Point<T>& Point<T>::operator*=(const T value)
+    {
+        try
+        {
+            x *= value;
+            y *= value;
+            // Return
+            return *this;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return *this;
+        }
+    }
