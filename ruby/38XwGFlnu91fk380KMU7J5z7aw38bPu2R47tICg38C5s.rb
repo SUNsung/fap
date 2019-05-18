@@ -1,139 +1,50 @@
 
         
-          it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+        def to_array(proc)
+  array = []
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
   end
-    
-        it 'returns a label 'No' if any falsy value is given' do
-      [false, nil].each { |value|
-        label = yes_no(value)
-        expect(label).to be_html_safe
-        expect(Nokogiri(label).text).to eq 'No'
-      }
-    end
-  end
-    
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
-    end
-  end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
-    end
-  end
-    
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
-      end
-    end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
-
     
-          # Checks whether this node body is a void context.
-      #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
-      end
-    
-          def format
-        @format = (@page.format || false) if @format.nil?
-        @format.to_s.downcase
+          it 'supports filtering by read/unread' do
+        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
+        get :read_all
+        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
+        get :index, params: {show: 'unread'}
+        expect(assigns[:notifications].count).to eq(1)
       end
     end
+    
+              method == :define_method
+        end
+    
+      config.vm.define :smartos do |smartos|
+    smartos.vm.box = 'smartos-base1310-64-virtualbox-20130806.box'
+    smartos.vm.box_url = 'http://dlc-int.openindiana.org/aszeszo/vagrant/smartos-base1310-64-virtualbox-20130806.box'
   end
-end
-
     
-        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
-    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
-    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
-    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
-    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
+        File.write(build_path('packlist'), files.sort.join('\n'))
     
-      s.summary     = 'A simple, Git-powered wiki.'
-  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
-    
-    def ask(message, valid_options)
-  if valid_options
-    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
-  else
-    answer = get_stdin(message)
+      def unpack_data_to
+    'files'
   end
-  answer
-end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
+          # TODO(sissel): preinstall/postinstall
+      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
+      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
+        type, klass, path, mode, user, group = line.split
+    
+        # Add the tar compression flag if necessary
+    tar_compression_flag(input_path).tap do |flag|
+      args << flag unless flag.nil?
     end
     
-    require 'stringex'
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-      # Checks for excerpts (helpful for template conditionals)
-  def has_excerpt(input)
-    input =~ /<!--\s*more\s*-->/i ? true : false
-  end
+    # Use a zip as a package.
+#
+# This provides no metadata. Both input and output are supported.
+class FPM::Package::Zip < FPM::Package
