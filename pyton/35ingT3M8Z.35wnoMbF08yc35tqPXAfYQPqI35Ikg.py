@@ -1,65 +1,99 @@
 
         
-        def generateLargePrime(keysize = 1024):
-    while True:
-        num = random.randrange(2 ** (keysize - 1), 2 ** (keysize))
-        if isPrime(num):
-            return num
-    
-            while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
-    
-    def kmeans(data, k, initial_centroids, maxiter=500, record_heterogeneity=None, verbose=False):
-    '''This function runs k-means on given data and initial set of centroids.
-       maxiter: maximum number of iterations to run.(default=500)
-       record_heterogeneity: (optional) a list, to store the history of heterogeneity as function of iterations
-                             if None, do not store the history.
-       verbose: if True, print how many data points changed their cluster labels in each iteration'''
-    centroids = initial_centroids[:]
-    prev_cluster_assignment = None
-    
-    for itr in range(maxiter):        
-        if verbose:
-            print(itr, end='')
-        
-        # 1. Make cluster assignments using nearest centroids
-        cluster_assignment = assign_clusters(data,centroids)
-            
-        # 2. Compute a new centroid for each of the k clusters, averaging all data points assigned to that cluster.
-        centroids = revise_centroids(data,k, cluster_assignment)
-            
-        # Check for convergence: if none of the assignments changed, stop
-        if prev_cluster_assignment is not None and \
-          (prev_cluster_assignment==cluster_assignment).all():
-            break
-        
-        # Print number of new assignments 
-        if prev_cluster_assignment is not None:
-            num_changed = np.sum(prev_cluster_assignment!=cluster_assignment)
-            if verbose:
-                print('    {0:5d} elements changed their cluster assignment.'.format(num_changed))   
-        
-        # Record heterogeneity convergence metric
-        if record_heterogeneity is not None:
-            # YOUR CODE HERE
-            score = compute_heterogeneity(data,k,centroids,cluster_assignment)
-            record_heterogeneity.append(score)
-        
-        prev_cluster_assignment = cluster_assignment[:]
-        
-    return centroids, cluster_assignment
+            def save(self, must_create=False):
+        super().save(must_create)
+        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
     
     
-def b_expo_mod(a, b, c):
-    res = 0
-    while b > 0:
-        if b&1:
-            res = ((res%c) + (a%c)) % c
+class SessionStore(SessionBase):
+    '''
+    Implement database session store.
+    '''
+    def __init__(self, session_key=None):
+        super().__init__(session_key)
     
-        with tf.variable_scope(name, reuse=reuse):
-        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
-        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
-        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
+    
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
+    
+    # The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
+    
+        @certbot_util.patch_get_utility()
+    def test_select_correct(self, mock_util):
+        mock_util().checklist.return_value = (
+            display_util.OK, [self.vhosts[3].display_repr(),
+                              self.vhosts[2].display_repr()])
+        vhs = select_vhost_multiple([self.vhosts[3],
+                                     self.vhosts[2],
+                                     self.vhosts[1]])
+        self.assertTrue(self.vhosts[2] in vhs)
+        self.assertTrue(self.vhosts[3] in vhs)
+        self.assertFalse(self.vhosts[1] in vhs)
+    
+       # Cloudflare API credentials used by Certbot
+   dns_cloudflare_email = cloudflare@example.com
+   dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
+    
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
+    
+    The path to this file can be provided interactively or using the
+``--dns-digitalocean-credentials`` command-line argument. Certbot records the
+path to this file for use during renewal, but does not store the file's contents.
+    
+    
+def elu(x):
+    '''指数线性单元'''
+    return tf.nn.elu(x)
+    
+        Args:
+        x(tf.Tensor):
+        kernel_size(int or list of int):
+        out_channels(int):
+        act_fn(function):
+        strides(int or list of int):
+        padding(str):
+        name(str):
+        reuse(bool):
+    
+    from ..utils import get_wb
+from ..activations import relu
+from ..activations import linear
+    
+        Args:
+        h: context encoding     shape: [N, T, d]
+        u: question encoding    shape: [N, J, d]
+        T(int): context length
+        J(int): question length
+        d(int): features size
+        name(str):
+        reuse(bool):
+    '''
+    T = T or int(h.get_shape()[-2])
+    
+    
+def get_params_dict():
+    '''以字典形式获取所有 trainable 参数'''
+    param_dict = dict()
+    for var in tf.trainable_variables():
+        param_dict[var.name] = {'shape': list(map(int, var.shape)),
+                                'number': int(reduce(mul, var.shape, 1))}
+    return param_dict
+    
+        References:
+        K.repeat()
+        tf.tile()
+    '''
+    assert x.get_shape().ndims == 2
+    x = tf.expand_dims(x, axis=1)  # -> [batch_size, 1, n_input]
+    return tf.tile(x, [1, n, 1])  # -> [batch_size, n, n_input]
