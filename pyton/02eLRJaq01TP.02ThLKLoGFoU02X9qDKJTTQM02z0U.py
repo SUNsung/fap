@@ -1,177 +1,132 @@
 
         
-            if len(clean) & 1:
-        clean += 'X'
+        
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
     
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
+    password = key + 16 * [0]
+new_key = aes_encrypt(password, key_expansion(password)) * (32 // 16)
+r = openssl_encode('aes-256-ctr', new_key, iv)
+print('aes_decrypt_text 32')
+print(repr(r))
+
     
-    This is a pure Python implementation of Dynamic Programming solution to the longest increasing subsequence of a given sequence.
+    # We must be able to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     
-        def solve_sub_array(self):
-        rear = [int(self.array[0])]*len(self.array)
-        sum_value = [int(self.array[0])]*len(self.array)
-        for i in range(1, len(self.array)):
-            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
-            rear[i] = max(sum_value[i], rear[i-1])
-        return rear[len(self.array)-1]
+    import io
+import sys
+import re
     
-        difference = predict - actual
-    numerator = np.sum(difference) / len(predict) 
-    denumerator =  np.sum(actual) / len(predict)
-    print(numerator)
-    print(denumerator)
+    import sys
+import os
+# Allows to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-            a += a
-        b >>= 1
     
-    '''
+from youtube_dl import YoutubeDL
     
-        def add_options(self, parser):
+                if 'playlist_mincount' in test_case:
+                assertGreaterEqual(
+                    self,
+                    len(res_dict['entries']),
+                    test_case['playlist_mincount'],
+                    'Expected at least %d in playlist %s, but got only %d' % (
+                        test_case['playlist_mincount'], test_case['url'],
+                        len(res_dict['entries'])))
+            if 'playlist_count' in test_case:
+                self.assertEqual(
+                    len(res_dict['entries']),
+                    test_case['playlist_count'],
+                    'Expected %d entries in playlist %s, but got %d.' % (
+                        test_case['playlist_count'],
+                        test_case['url'],
+                        len(res_dict['entries']),
+                    ))
+            if 'playlist_duration_sum' in test_case:
+                got_duration = sum(e['duration'] for e in res_dict['entries'])
+                self.assertEqual(
+                    test_case['playlist_duration_sum'], got_duration)
+    
+        def test_youtube_nosubtitles(self):
+        self.DL.expect_warning('video doesn\'t have subtitles')
+        self.url = 'n5BB19UTcdA'
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertFalse(subtitles)
+    
+            print('One element')
+        assert_equal(merge_sort.sort([5]), [5])
+    
+            print('Test: Two or more element stack (general case)')
+        num_items = 10
+        numbers = [randint(0, 10) for x in range(num_items)]
+        sorted_stack = self.get_sorted_stack(stack, numbers)
+        sorted_numbers = []
+        for _ in range(num_items):
+            sorted_numbers.append(sorted_stack.pop())
+        assert_equal(sorted_numbers, sorted(numbers, reverse=True))
+    
+    		if current is None:
+			return False
+    
+    from mitmproxy import addonmanager
+from mitmproxy import exceptions
+from mitmproxy import flow
+from mitmproxy import command
+from mitmproxy import eventsequence
+from mitmproxy import ctx
+import mitmproxy.types as mtypes
+    
+            if not ctx.options.server_replay_ignore_host:
+            key.append(r.host)
+    
+                    flt = flowfilter.parse(fpatt)
+                if not flt:
+                    raise exceptions.OptionsError(
+                        'Invalid setheader filter pattern %s' % fpatt
+                    )
+                self.lst.append((fpatt, header, value, flt))
+    
+    
+def domain_match(a: str, b: str) -> bool:
+    if cookiejar.domain_match(a, b):  # type: ignore
+        return True
+    elif cookiejar.domain_match(a, b.strip('.')):  # type: ignore
+        return True
+    return False
+    
+        def parse_partial(
+        self,
+        cmdstr: str
+    ) -> typing.Tuple[typing.Sequence[ParseResult], typing.Sequence[str]]:
         '''
-        Populate option parse with options available for this command
+            Parse a possibly partial command. Return a sequence of ParseResults and a sequence of remainder type help items.
         '''
-        group = OptionGroup(parser, 'Global Options')
-        group.add_option('--logfile', metavar='FILE',
-            help='log file. if omitted stderr will be used')
-        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
-            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
-        group.add_option('--nolog', action='store_true',
-            help='disable logging completely')
-        group.add_option('--profile', metavar='FILE', default=None,
-            help='write python cProfile stats to FILE')
-        group.add_option('--pidfile', metavar='FILE',
-            help='write process ID to FILE')
-        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
-            help='set/override setting (may be repeated)')
-        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
-    
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
-    
-    logger = logging.getLogger(__name__)
-    
-    class Command(ScrapyCommand):
-    
-            self._signer = None
-        if is_botocore():
-            import botocore.auth
-            import botocore.credentials
-            kw.pop('anon', None)
-            if kw:
-                raise TypeError('Unexpected keyword arguments: %s' % kw)
-            if not self.anon:
-                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
-                self._signer = SignerCls(botocore.credentials.Credentials(
-                    aws_access_key_id, aws_secret_access_key))
-        else:
-            _S3Connection = _get_boto_connection()
+        buf = io.StringIO(cmdstr)
+        parts: typing.List[str] = []
+        lex = lexer(buf)
+        while 1:
+            remainder = cmdstr[buf.tell():]
             try:
-                self.conn = _S3Connection(
-                    aws_access_key_id, aws_secret_access_key, **kw)
-            except Exception as ex:
-                raise NotConfigured(str(ex))
+                t = lex.get_token()
+            except ValueError:
+                parts.append(remainder)
+                break
+            if not t:
+                break
+            parts.append(t)
+        if not parts:
+            parts = ['']
+        elif cmdstr.endswith(' '):
+            parts.append('')
     
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
-    
-            # Fixes Twisted 11.1.0+ support as HTTPClientFactory is expected
-        # to have _disconnectedDeferred. See Twisted r32329.
-        # As Scrapy implements it's own logic to handle redirects is not
-        # needed to add the callback _waitForDisconnect.
-        # Specifically this avoids the AttributeError exception when
-        # clientConnectionFailed method is called.
-        self._disconnectedDeferred = defer.Deferred()
-    
-            If it has already been started, stop it. In all cases, close all spiders
-        and the downloader.
-        '''
-        if self.running:
-            # Will also close spiders and downloader
-            return self.stop()
-        elif self.open_spiders:
-            # Will also close downloader
-            return self._close_all_spiders()
-        else:
-            return defer.succeed(self.downloader.close())
-    
-        def _has_ajax_crawlable_variant(self, response):
-        '''
-        Return True if a page without hash fragment could be 'AJAX crawlable'
-        according to https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
-        '''
-        body = response.text[:self.lookup_bytes]
-        return _has_ajaxcrawlable_meta(body)
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
-    
-        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
-    # JSONObjectWithFields is tricky...
-    header_cls = Header
-    header = jose.Field(
-        'header', omitempty=True, default=header_cls(),
-        decoder=header_cls.from_json)
-    
-        def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
-    
-        def test_subscriber_shall_be_detachable_from_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
-        sub.unsubscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 0)
-    
-        def test_initial_state(self):
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
-    
-        def test_relatives_after_access(self):
-        print(u'John's relatives: {0}'.format(self.John.relatives))
-        self.assertIn('relatives', self.John.__dict__)
-    
-        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'Yes'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time * 10), expected_execution_time)
-
-    
-        REGISTRY = {}
+            @property
+        def has_color_table(self):
+            if hasattr(self, '_m_has_color_table'):
+                return self._m_has_color_table if hasattr(self, '_m_has_color_table') else None
