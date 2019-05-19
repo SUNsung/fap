@@ -1,132 +1,115 @@
 
         
-            def order_top_with_notification_levels(score)
-      -'COALESCE(topic_users.notification_level, 1) DESC, COALESCE(category_users.notification_level, 1) DESC, COALESCE(top_topics.#{score}, 0) DESC, topics.bumped_at DESC'
-    end
+        module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
     
-        @omniauth.before_request_phase do |env|
-      # If the user is trying to reconnect to an existing account, store in session
-      request = ActionDispatch::Request.new(env)
-      request.session[:auth_reconnect] = !!request.params['reconnect']
-    end
+            # attributes - A hash containing the raw issue details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+            # Builds a user using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          new(Representation.symbolize_hash(raw_hash))
+        end
+    
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
+    
+      # Gets the actual resource stored in the instance variable
+  def resource
+    instance_variable_get(:'@#{resource_name}')
   end
     
-          @directives.each do |directive, sources|
-        if sources.is_a?(Array)
-          policy.public_send(directive, *sources)
-        else
-          policy.public_send(directive, sources)
+    class TestApp < Rails::Application
+  config.root = File.dirname(__FILE__)
+  config.session_store :cookie_store, key: 'cookie_store_key'
+  secrets.secret_token    = 'secret_token'
+  secrets.secret_key_base = 'secret_key_base'
+  config.eager_load = false
+    
+            constant.required_fields(klass).each do |field|
+          failed_attributes << field unless instance.respond_to?(field)
         end
       end
     
-        def clear_theme_extensions_cache!
-      cache.clear
-    end
-    
-          FileUtils.mkdir_p(DISK_CACHE_PATH)
-      File.write(cache_file, content)
-    end
-    
-      @@detailed_request_loggers = nil
-  @@ip_skipper = nil
-    
-            # Yields a VM for each target VM for the command.
+            # Registers additional providers to be available.
         #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
+        # @param [Symbol] name Name of the provider.
+        def self.provider(name=UNSET_VALUE, &block)
+          data[:providers] ||= Registry.new
+    
+            # The configuration for this provisioner. This will be an instance of
+        # the `Config` class which is part of the provisioner.
+        attr_reader :config
+    
+                    @env.machine_names.each do |machine_name|
+                  if machine_name =~ regex
+                    machines << get_machine.call(machine_name)
+                  end
+                end
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a configuration key defined for
+      # V2. Any configuration key plugins for V2 should inherit from this
+      # class.
+      class Config
+        # This constant represents an unset value. This is useful so it is
+        # possible to know the difference between a configuration value that
+        # was never set, and a value that is nil (explicitly). Best practice
+        # is to initialize all variables to this value, then the {#merge}
+        # method below will 'just work' in many cases.
+        UNSET_VALUE = Object.new
+    
+            # This returns all registered provisioners.
         #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Hash] options Additional tweakable settings.
-        # @option options [Symbol] :provider The provider to back the
-        #   machines with. All machines will be backed with this
-        #   provider. If none is given, a sensible default is chosen.
-        # @option options [Boolean] :reverse If true, the resulting order
-        #   of machines is reversed.
-        # @option options [Boolean] :single_target If true, then an
-        #   exception will be raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          @logger.debug('Getting target VMs for command. Arguments:')
-          @logger.debug(' -- names: #{names.inspect}')
-          @logger.debug(' -- options: #{options.inspect}')
+        # @return [Hash]
+        def provisioners
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.provisioner)
+            end
+          end
+        end
     
-      #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
+        # /RAND/../RAND../
+    if self.junk_directories
+      str.gsub!(/\//) {
+        dirs = ''
+        (rand(5)+5).times {
+          dirs << '/' + Rex::Text.rand_text_alpha(rand(5) + 1) + '/..'
+        }
+        dirs + '/'
+      }
     end
     
-      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
-    head = [
-      0x06, 0x00, 0xff, 0x07,  # RMCP Header
-      0x06,                    # RMCP+ Authentication Type
-      PAYLOAD_RAKP1,           # Payload Type
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00,
-    ].pack('C*')
+        # Linear little-endian signed PCM is our native format
+    when IAX_CODEC_LINEAR_PCM
+      buff
     
     module Rex
   module Proto
     module Kerberos
       module Model
-        class EncKdcResponse < Element
-          # @!attribute key
-          #   @return [Rex::Proto::Kerberos::Model::EncryptionKey] The session key
-          attr_accessor :key
-          # @!attribute last_req
-          #   @return [Array<Rex::Proto::Kerberos::Model::LastRequest>] This field is returned by the KDC and specifies the time(s)
-          #   of the last request by a principal
-          attr_accessor :last_req
-          # @!attribute nonce
-          #   @return [Integer] random number
-          attr_accessor :nonce
-          # @!attribute key_expiration
-          #   @return [Time] The key-expiration field is part of the response from the
-          #   KDC and specifies the time that the client's secret key is due to expire
-          attr_accessor :key_expiration
-          # @!attribute flags
-          #   @return [Integer] This field indicates which of various options were used or
-          #   requested when the ticket was issued
-          attr_accessor :flags
-          # @!attribute auth_time
-          #   @return [Time] the time of initial authentication for the named principal
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Time] Specifies the time after which the ticket is valid
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Time] This field contains the time after which the ticket will
-          #   not be honored (its expiration time)
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Time] This field is only present in tickets that have the
-          #   RENEWABLE flag set in the flags field.  It indicates the maximum
-          #   endtime that may be included in a renewal
-          attr_accessor :renew_till
-          # @!attribute srealm
-          #   @return [String] The realm part of the server's principal identifier
-          attr_accessor :srealm
-          # @!attribute sname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
-          attr_accessor :sname
-    
-              # Encodes the nonce
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_nonce
-            bn = OpenSSL::BN.new(nonce.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
     
               # Decodes a Rex::Proto::Kerberos::Model::KrbError from an String
           #
@@ -134,44 +117,64 @@
           def decode_string(input)
             asn1 = OpenSSL::ASN1.decode(input)
     
-      preflight do
-    processes = system_command '/bin/launchctl', args: ['list']
+      uninstall_preflight do
+    system_command '#{HOMEBREW_PREFIX}/bin/brew', args: ['cask', 'uninstall', 'adobe-photoshop-lightroom600']
+  end
     
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
+        if input_type == 'pleaserun'
+      # Special case for pleaserun that all parameters are considered the 'command'
+      # to run through pleaserun.
+      input.input(args)
+    else
+      # Each remaining command line parameter is used as an 'input' argument.
+      # For directories, this means paths. For things like gem and python, this
+      # means package name or paths to the packages (rails, foo-1.0.gem, django,
+      # bar/setup.py, etc)
+      args.each do |arg|
+        input.input(arg)
+      end
+    end
+    
+        # Parse 'epoch:version-iteration' in the version string
+    version_re = /^(?:([0-9]+):)?(.+?)(?:-(.*))?$/
+    m = version_re.match(control['pkgver'][0])
+    if !m
+      raise 'Unsupported version string '#{control['pkgver'][0]}''
+    end
+    self.epoch, self.version, self.iteration = m.captures
+    
+          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
+      target = File.join(base, 'files')
+      actions_script = File.join(base, 'install_actions.sh')
+      ::PleaseRun::Installer.install_files(platform, target, false)
+      ::PleaseRun::Installer.write_actions(platform, actions_script)
+    end
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
+  end
+end
+
+    
+        it 'splits commands into an array' do
+      commands = [
+        'tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m',
+        'tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m'
+      ]
+      expect(window.commands).to eq(commands)
     end
   end
     
-          updated_note = Notification.find(note.id)
-      expect(updated_note.unread).to eq(true)
-      expect(updated_note.updated_at.iso8601).to eq(note.updated_at.iso8601)
-    end
+      orig_stdout = $stdout
+  orig_stderr = $stderr
     
-      describe '#update' do
-    context 'on a post you can see' do
+      describe '.editor?' do
+    context '$EDITOR is set' do
       before do
-        sign_in(bob, scope: :user)
+        allow(ENV).to receive(:[]).with('EDITOR') { 'vim' }
       end
-    
-    get '/' do
-  halt erb(:login) unless params[:user]
-  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
-end
-    
-      File.open('rack-protection.gemspec', 'w') { |f| f << content }
-end
-    
-      def self.io_adapters=(new_registry)
-    @io_adapters = new_registry
-  end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
-  end
-end
