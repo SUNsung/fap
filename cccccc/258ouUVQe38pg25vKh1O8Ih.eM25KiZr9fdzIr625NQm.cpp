@@ -1,376 +1,351 @@
 
         
-        #endif // BITCOIN_QT_NETWORKSTYLE_H
-
+        #define TEGRA_RECIP(src2, sz2, dst, sz, w, h, scale) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::reciprocal(CAROTENE_NS::Size2D(w, h), \
+                            src2, sz2, \
+                            dst, sz, \
+                            scale, \
+                            CAROTENE_NS::CONVERT_POLICY_SATURATE), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    public:
-    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
-    ~SignVerifyMessageDialog();
+        enum COLOR_SPACE
+    {
+        COLOR_SPACE_BT601,
+        COLOR_SPACE_BT709
+    };
     
-    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
-    int n;
-    unsigned char rkey[64];
-    if (keylen <= 64) {
-        memcpy(rkey, key, keylen);
-        memset(rkey + keylen, 0, 64 - keylen);
-    } else {
-        secp256k1_sha256_t sha256;
-        secp256k1_sha256_initialize(&sha256);
-        secp256k1_sha256_write(&sha256, key, keylen);
-        secp256k1_sha256_finalize(&sha256, rkey);
-        memset(rkey + 32, 0, 32);
-    }
-    }
-    
-    void test_ecdh_api(void) {
-    /* Setup context that just counts errors */
-    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
-    secp256k1_pubkey point;
-    unsigned char res[32];
-    unsigned char s_one[32] = { 0 };
-    int32_t ecount = 0;
-    s_one[31] = 1;
+    namespace {
     }
     
-        UniValue obj2(UniValue::VOBJ);
-    BOOST_CHECK(obj2.pushKV('cat1', 9000));
-    BOOST_CHECK(obj2.pushKV('cat2', 12345));
-    
-    // To Update the operands in the Expression according to the current Radix
-void CHistoryCollector::UpdateHistoryExpression(uint32_t radix, int32_t precision)
+    void bitwiseAnd(const Size2D &size,
+                const u8 *src0Base, ptrdiff_t src0Stride,
+                const u8 *src1Base, ptrdiff_t src1Stride,
+                u8 *dstBase, ptrdiff_t dstStride)
 {
-    if (m_spTokens == nullptr)
-    {
-        return;
-    }
-    }
-    
-        Rational& Rational::operator>>=(Rational const& rhs)
-    {
-        PRAT lhsRat = this->ToPRAT();
-        PRAT rhsRat = rhs.ToPRAT();
-    }
-    
-    
-    {    m_historyItems.erase(m_historyItems.begin() + uIdx);
-    return true;
-}
-    
-        // Releases the mutex
-    void Release()
-    {
-        assert(m_fd != -1);
-        // removing file
-        unlink(m_fileName.c_str());
-        // Note: file is intentionally removed *before* releasing the lock
-        // to ensure that locked file isn't deleted by the non-owner of the lock
-        m_lock.l_type = F_UNLCK;
-        // Now removing the lock and closing the file descriptor
-        // waiting processes will be notified
-        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
-        if (rc == FCNTL_ERROR)
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
-        }
-        close(m_fd);
-        m_fd = -1;
-    }
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
-{
-public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
-    }
-    
-    
-    {
-    {                // New query
-                numberOfUrls = 0;
-                previousQueryId = queryId;
-            }
-            
-            numberOfUrls++;
-        }
-    
-    
-    {                    if (!memAllocInfoVec.empty())
-                    {
-                        // the memory allocation vector is sorted by size. We find the largest available buffer that doesn't have time overlap
-                        auto workingAlloc = memAllocInfoVec.end();
-                        for (auto iter = memAllocInfoVec.begin(); iter != memAllocInfoVec.end(); iter++)
-                        {
-                            if (!CheckOverlap(make_pair(memInfo.allocStep, memInfo.releaseStep), iter->occupancy))
-                                workingAlloc = iter;
-                        }
-                        if (workingAlloc == memAllocInfoVec.end())  // nothing works 
-                        {
-                            vector<pair<int, int>> occ;
-                            occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                            memAllocInfoVec.push_back(ma);  // add as the last one 
-                            memInfo.SetMemoryId(memoryCounter);
-                            memoryCounter++;
-                        }
-                        else
-                        {
-                            workingAlloc->occupancy.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                            memInfo.SetMemoryId(workingAlloc->memoryId);
-                        }
-                    }
-                    else
-                    {
-                        vector<pair<int, int>> occ;
-                        occ.push_back(make_pair(memInfo.allocStep, memInfo.releaseStep));
-                        MemAllocInfo ma(memoryCounter, memInfo.matrixSize, occ);
-                        memAllocInfoVec.push_back(ma);
-                        memInfo.SetMemoryId(memoryCounter);
-                        memoryCounter++;
-                    }
-                }
-    
-    
-    {
-    {        // N.B. - this is the magical call, the reason for the function
-        // dimensions would be outputRank * numSamples * minibatch * time.
-        // This call establishes outputRank * numSamples, the rest will be filled in
-        // dynamically though the MBLayout.
-        SetDims(TensorShape(dimsC), HasMBLayout());
-    }
-};
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
-    
-    SEXP XGDMatrixCreateFromMat_R(SEXP mat,
-                              SEXP missing) {
-  SEXP ret;
-  R_API_BEGIN();
-  SEXP dim = getAttrib(mat, R_DimSymbol);
-  size_t nrow = static_cast<size_t>(INTEGER(dim)[0]);
-  size_t ncol = static_cast<size_t>(INTEGER(dim)[1]);
-  const bool is_int = TYPEOF(mat) == INTSXP;
-  double *din;
-  int *iin;
-  if (is_int) {
-    iin = INTEGER(mat);
-  } else {
-    din = REAL(mat);
-  }
-  std::vector<float> data(nrow * ncol);
-  #pragma omp parallel for schedule(static)
-  for (omp_ulong i = 0; i < nrow; ++i) {
-    for (size_t j = 0; j < ncol; ++j) {
-      data[i * ncol +j] = is_int ? static_cast<float>(iin[i + nrow * j]) : din[i + nrow * j];
-    }
-  }
-  DMatrixHandle handle;
-  CHECK_CALL(XGDMatrixCreateFromMat(BeginPtr(data), nrow, ncol, asReal(missing), &handle));
-  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
-    
-    /*!
- * \brief template for all quantile sketch algorithm
- *        that uses merge/prune scheme
- * \tparam DType type of data content
- * \tparam RType type of rank
- * \tparam TSummary actual summary data structure it uses
- */
-template<typename DType, typename RType, class TSummary>
-class QuantileSketchTemplate {
- public:
-  /*! \brief type of summary type */
-  using Summary = TSummary;
-  /*! \brief the entry type */
-  using Entry = typename Summary::Entry;
-  /*! \brief same as summary, but use STL to backup the space */
-  struct SummaryContainer : public Summary {
-    std::vector<Entry> space;
-    SummaryContainer(const SummaryContainer &src) : Summary(nullptr, src.size) {
-      this->space = src.space;
-      this->data = dmlc::BeginPtr(this->space);
-    }
-    SummaryContainer() : Summary(nullptr, 0) {
-    }
-    /*! \brief reserve space for summary */
-    inline void Reserve(size_t size) {
-      if (size > space.size()) {
-        space.resize(size);
-        this->data = dmlc::BeginPtr(space);
-      }
-    }
-    /*!
-     * \brief set the space to be merge of all Summary arrays
-     * \param begin beginning position in the summary array
-     * \param end ending position in the Summary array
-     */
-    inline void SetMerge(const Summary *begin,
-                         const Summary *end) {
-      CHECK(begin < end) << 'can not set combine to empty instance';
-      size_t len = end - begin;
-      if (len == 1) {
-        this->Reserve(begin[0].size);
-        this->CopyFrom(begin[0]);
-      } else if (len == 2) {
-        this->Reserve(begin[0].size + begin[1].size);
-        this->SetMerge(begin[0], begin[1]);
-      } else {
-        // recursive merge
-        SummaryContainer lhs, rhs;
-        lhs.SetCombine(begin, begin + len / 2);
-        rhs.SetCombine(begin + len / 2, end);
-        this->Reserve(lhs.size + rhs.size);
-        this->SetCombine(lhs, rhs);
-      }
-    }
-    /*!
-     * \brief do elementwise combination of summary array
-     *        this[i] = combine(this[i], src[i]) for each i
-     * \param src the source summary
-     * \param max_nbyte maximum number of byte allowed in here
-     */
-    inline void Reduce(const Summary &src, size_t max_nbyte) {
-      this->Reserve((max_nbyte - sizeof(this->size)) / sizeof(Entry));
-      SummaryContainer temp;
-      temp.Reserve(this->size + src.size);
-      temp.SetCombine(*this, src);
-      this->SetPrune(temp, space.size());
-    }
-    /*! \brief return the number of bytes this data structure cost in serialization */
-    inline static size_t CalcMemCost(size_t nentry) {
-      return sizeof(size_t) + sizeof(Entry) * nentry;
-    }
-    /*! \brief save the data structure into stream */
-    template<typename TStream>
-    inline void Save(TStream &fo) const {  // NOLINT(*)
-      fo.Write(&(this->size), sizeof(this->size));
-      if (this->size != 0) {
-        fo.Write(this->data, this->size * sizeof(Entry));
-      }
-    }
-    /*! \brief load data structure from input stream */
-    template<typename TStream>
-    inline void Load(TStream &fi) {  // NOLINT(*)
-      CHECK_EQ(fi.Read(&this->size, sizeof(this->size)), sizeof(this->size));
-      this->Reserve(this->size);
-      if (this->size != 0) {
-        CHECK_EQ(fi.Read(this->data, this->size * sizeof(Entry)),
-                 this->size * sizeof(Entry));
-      }
-    }
-  };
-  /*!
-   * \brief initialize the quantile sketch, given the performance specification
-   * \param maxn maximum number of data points can be feed into sketch
-   * \param eps accuracy level of summary
-   */
-  inline void Init(size_t maxn, double eps) {
-    LimitSizeLevel(maxn, eps, &nlevel, &limit_size);
-    // lazy reserve the space, if there is only one value, no need to allocate space
-    inqueue.queue.resize(1);
-    inqueue.qtail = 0;
-    data.clear();
-    level.clear();
-  }
-    }
-    
-    TEST(c_api, XGDMatrixCreateFromMat_omp) {
-  std::vector<int> num_rows = {100, 11374, 15000};
-  for (auto row : num_rows) {
-    int num_cols = 50;
-    int num_missing = 5;
-    DMatrixHandle handle;
-    std::vector<float> data(num_cols * row, 1.5);
-    for (int i = 0; i < num_missing; i++) {
-      data[i] = std::numeric_limits<float>::quiet_NaN();
-    }
-    }
-    }
-    
-    
-    {    for (auto i = lists.begin(); i != lists.end(); i++)
-    {
-        int ret = (int) (long) swRbtree_find(tree, *i);
-        ASSERT_EQ(ret, 0);
-    }
-}
-
-    
-        QObject::connect(&example, SIGNAL(finished()), &app, SLOT(quit()));
-    QTimer::singleShot(0, &example, SLOT(run()));
-    
-        int ret3 = (int) (long) swHashMap_find(hm, (char *) SW_STRL('notfound'));
-    ASSERT_EQ(ret3, 0);
-    
-    int main(int argc, char **argv)
-{
-    swoole_init();
-    }
-    
-    TEST(coroutine_channel, push_timeout)
-{
-    coro_test([](void *arg)
-    {
-        Channel chan(1);
-        bool ret;
-    }
-    }
-    
-        un1.sun_family = AF_UNIX;
-    un2.sun_family = AF_UNIX;
-    
-        _pipe = eventfd(0, 0);
-    
-    void MyServer::onPacket(const DataBuffer &data, ClientInfo &clientInfo)
-{
-    printf('recv, length=%ld, str=%s, client=%s:%d\n', data.length,  (char *) data.buffer, clientInfo.address, clientInfo.port);
-    char resp_data[SW_BUFFER_SIZE_STD];
-    int n = snprintf(resp_data, SW_BUFFER_SIZE_STD, (char *) 'Server: %.*s\n', (int) data.length, (char *) data.buffer);
-    auto sent_data =  DataBuffer(resp_data, n);
-    auto ip = string(clientInfo.address);
-    auto ret = this->sendto(ip, clientInfo.port, sent_data);
-    if (!ret)
-    {
-        printf('send to client failed. errno=%d\n', errno);
-    }
-    else
-    {
-        printf('send %d bytes to client success. data=%s\n', n, resp_data);
-    }
-}
-    
-        /**
-     * 协程2
-     */
-    Coroutine::create([](void *arg)
-    {
-        G_a.x = 100;
-        G_a.y = nullptr;
-    });
-    
-    void swoole_coroutine_signal_init()
-{
-    if (!signal_init)
-    {
-        signal_init = true;
-        swSignal_add(SIGCHLD, signal_handler);
-#ifdef HAVE_SIGNALFD
-        if (SwooleG.use_signalfd && !swReactor_handle_isset(SwooleG.main_reactor, SW_FD_SIGNAL))
-        {
-            swSignalfd_setup(SwooleG.main_reactor);
-        }
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseAnd());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
 #endif
+}
+    
+                // do vertical convolution
+            size_t x = 0;
+            const size_t bcols = y + 2 < size.height ? colsn : (colsn - 8);
+            for( ; x <= bcols; x += 8 )
+            {
+                internal::prefetch(srow0 + x);
+                internal::prefetch(srow1 + x);
+                internal::prefetch(srow2 + x);
+    }
+    
+    #define MERGE_QUAD(sgn, bits, n) { \
+                                     vec128 v_dst; \
+                                     /*FILL_LINES##n(PREF, sgn##bits) \
+                                     FILL_LINES##n(VLD1Q, sgn##bits)*/ \
+                                     FILL_LINES##n(PRLD, sgn##bits) \
+                                     vst##n##q_##sgn##bits(dst + dj, v_dst); \
+                                 }
+    
+    void convolution(const Size2D &size,
+                 const u8 * srcBase, ptrdiff_t srcStride,
+                 u8 * dstBase, ptrdiff_t dstStride,
+                 BORDER_MODE border, u8 borderValue,
+                 const Size2D & ksize, s16 * kernelBase, u32 scale)
+{
+    internal::assertSupportedConfiguration(isConvolutionSupported(size, ksize, border));
+#ifdef CAROTENE_NEON
+    const uint8x8_t v_zero_u8 = vdup_n_u8(0);
+    const uint8x8_t v_border = vdup_n_u8(borderValue);
+    const int32x4_t v_zero_s32 = vdupq_n_s32(0);
+    }
+    
+    
+    {
+    {
+    {             vec128  vs = internal::vld1q( src + i);
+             vec128 vr1 = internal::vld1q(rng1 + i);
+             vec128 vr2 = internal::vld1q(rng2 + i);
+            uvec128 vd1 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+                     vs = internal::vld1q( src + i + 16/sizeof(T));
+                    vr1 = internal::vld1q(rng1 + i + 16/sizeof(T));
+                    vr2 = internal::vld1q(rng2 + i + 16/sizeof(T));
+            uvec128 vd2 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            vnst(dst + i, vd1, vd2);
+        }
+        vtail<T, sizeof(T)>::inRange(src, rng1, rng2, dst, i, size.width);
+        for( ; i < size.width; i++ )
+            dst[i] = (u8)(-(rng1[i] <= src[i] && src[i] <= rng2[i]));
     }
 }
+    
+                vsuml = vaddw_u16(vsuml, vget_low_u16(el8));
+            vsumh = vaddw_u16(vsumh, el4h);
+    
+    <summary> <b>Example</b> </summary>
+    
+    #endif // CAFFE2_OPERATORS_JSD_OP_H_
+
+    
+    REGISTER_CUDA_OPERATOR(LC1D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC1DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
+    
+    // The variables defined in the type-parameterized test macros are
+// static as typically these macros are used in a .h file that can be
+// #included in multiple translation units linked together.
+# define TYPED_TEST_CASE_P(CaseName) \
+  static ::testing::internal::TypedTestCasePState \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName)
+    
+    // In describing the results of death tests, these terms are used with
+// the corresponding definitions:
+//
+// exit status:  The integer exit information in the format specified
+//               by wait(2)
+// exit code:    The integer code passed to exit(3), _exit(2), or
+//               returned from main()
+class GTEST_API_ DeathTest {
+ public:
+  // Create returns false if there was an error determining the
+  // appropriate action to take for the current death test; for example,
+  // if the gtest_death_test_style flag is set to an invalid value.
+  // The LastMessage method will return a more detailed message in that
+  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
+  // argument is set.  If the death test should be skipped, the pointer
+  // is set to NULL; otherwise, it is set to the address of a new concrete
+  // DeathTest object that controls the execution of the current test.
+  static bool Create(const char* statement, const RE* regex,
+                     const char* file, int line, DeathTest** test);
+  DeathTest();
+  virtual ~DeathTest() { }
+    }
+    
+    #include 'gtest/internal/gtest-string.h'
+    
+    // MSVC 8.0, Sun C++, and IBM XL C++ have a bug which causes the above
+// definition to fail to remove the const in 'const int[3]' and 'const
+// char[3][4]'.  The following specialization works around the bug.
+template <typename T, size_t N>
+struct RemoveConst<const T[N]> {
+  typedef typename RemoveConst<T>::type type[N];
+};
+    
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+    ]]
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+      static int allocated() { return allocated_; }
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+     private:
+  // Creates a node with a given element value.  The next pointer is
+  // set to NULL.
+  explicit QueueNode(const E& an_element) : element_(an_element), next_(NULL) {}
+    
+        NDArrayView::NDArrayView(CNTK::DataType dataType, const NDShape& viewShape, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const void* nonZeroValues, size_t numNonZeroValues, const DeviceDescriptor& device, bool readOnly/* = false*/)
+        : NDArrayView(dataType, device, StorageFormat::SparseCSC, viewShape, false, AllocateTensorView(dataType, StorageFormat::SparseCSC, viewShape, device, numNonZeroValues * DataTypeSize(dataType)))
+    {
+        if ((colStarts == nullptr) || (rowIndices == nullptr) || (nonZeroValues == nullptr) || (numNonZeroValues == 0) || (numNonZeroValues > viewShape.TotalSize()))
+            InvalidArgument('Invalid sparse CSC format data specified for construction of NDArrayView with shape '%S'; '
+                            'either one of the specified buffers is null or the count (%d) of non-zero values is invalid.',
+                            viewShape.AsString().c_str(), (int)numNonZeroValues);
+        switch (dataType)
+        {
+            case DataType::Float:
+            {
+                auto sparseMatrix = GetWritableMatrix<float>(1);
+                sparseMatrix->SetMatrixFromCSCFormat(colStarts, rowIndices, (const float*)nonZeroValues, numNonZeroValues, sparseMatrix->GetNumRows(), sparseMatrix->GetNumCols());
+                break;
+            }
+            case DataType::Double:
+            {
+                auto sparseMatrix = GetWritableMatrix<double>(1);
+                sparseMatrix->SetMatrixFromCSCFormat(colStarts, rowIndices, (const double*)nonZeroValues, numNonZeroValues, sparseMatrix->GetNumRows(), sparseMatrix->GetNumCols());
+                break;
+            }
+            case DataType::Float16:
+            {
+                auto sparseMatrix = GetWritableMatrix<half>(1);
+                sparseMatrix->SetMatrixFromCSCFormat(colStarts, rowIndices, (const half*)nonZeroValues, numNonZeroValues, sparseMatrix->GetNumRows(), sparseMatrix->GetNumCols());
+                break;
+            }
+            case DataType::Int8:
+            {
+                auto sparseMatrix = GetWritableMatrix<char>(1);
+                sparseMatrix->SetMatrixFromCSCFormat(colStarts, rowIndices, (const char*)nonZeroValues, numNonZeroValues,
+                    sparseMatrix->GetNumRows(), sparseMatrix->GetNumCols());
+                break;
+            }
+            case DataType::Int16:
+            {
+                auto sparseMatrix = GetWritableMatrix<short>(1);
+                sparseMatrix->SetMatrixFromCSCFormat(colStarts, rowIndices, (const short*)nonZeroValues, numNonZeroValues,
+                    sparseMatrix->GetNumRows(), sparseMatrix->GetNumCols());
+                break;
+            }
+            default:
+                LogicError('Unsupported DataType %s', DataTypeName(dataType));
+                break;
+        }
+        m_isReadOnly = readOnly;
+    }
+    
+        /*static*/ Variable Variable::Deserialize(const Dictionary& dict, const CNTK::DeviceDescriptor& device)
+    {
+        static const vector<std::wstring> s_requiredDictionaryKeys = { typeKey, uidKey, kindKey, dataTypeKey, dynamicAxisKey, isSparseKey, needsGradientKey, shapeKey };
+    }
+    
+        // firstSeq - first sequence of samples
+    // secondSeq - second sequence of samples
+    // numParallelSequences - number of parallel sequences in the minibatch
+    // subPen - substitution penalty
+    // delPen - deletion penalty
+    // insPen - insertion penalty
+    // squashInputs - whether to merge sequences of identical samples.
+    // tokensToIgnore - list of samples to ignore during edit distance evaluation
+    ElemType ComputeEditDistanceError(Matrix<ElemType>& firstSeq, const Matrix<ElemType> & secondSeq, MBLayoutPtr pMBLayout, 
+        float subPen, float delPen, float insPen, bool squashInputs, const vector<size_t>& tokensToIgnore)
+    {
+        std::vector<int> firstSeqVec, secondSeqVec;
+    }
+    
+    // Default limit for the size of the back track stack, to avoid system
+//    failures causedby heap exhaustion.  Units are in 32 bit words, not bytes.
+// This value puts ICU's limits higher than most other regexp implementations,
+//    which use recursion rather than the heap, and take more storage per
+//    backtrack point.
+//
+static const int32_t DEFAULT_BACKTRACK_STACK_CAPACITY = 8000000;
+    
+        char resultLocale[ULOC_FULLNAME_CAPACITY + 1];
+    int32_t length = ucol_getFunctionalEquivalent(resultLocale, ULOC_FULLNAME_CAPACITY,
+                                                  'collation', locale,
+                                                  NULL, &errorCode);
+    if(U_FAILURE(errorCode)) { return 0; }
+    if(length == 0) {
+        uprv_strcpy(resultLocale, 'root');
+    } else {
+        resultLocale[length] = 0;
+    }
+    
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+    
+    {        // Create a TimeZoneRule for initial time
+        if (firstStdStart < firstDstStart) {
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(DST_STR), getRawOffset(), dstRule->getDSTSavings());
+            firstTransition = new TimeZoneTransition(firstStdStart, *initialRule, *stdRule);
+        } else {
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(STD_STR), getRawOffset(), 0);
+            firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
+        }
+        // Check for null pointers.
+        if (initialRule == NULL || firstTransition == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteTransitionRules();
+            return;
+        }
+        
+    } else {
+        // Create a TimeZoneRule for initial time
+        initialRule = new InitialTimeZoneRule(tzid, getRawOffset(), 0);
+        // Check for null pointer.
+        if (initialRule == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteTransitionRules();
+            return;
+        }
+    }
+    
+    class UnicodeString;
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+        if (hasCursor) {
+        // Adjust the cursor for positions outside the key.  These
+        // refer to code points rather than code units.  If cursorPos
+        // is within the output string, then use newStart, which has
+        // already been set above.
+        if (cursorPos < 0) {
+            newStart = start;
+            int32_t n = cursorPos;
+            // Outside the output string, cursorPos counts code points
+            while (n < 0 && newStart > 0) {
+                newStart -= U16_LENGTH(text.char32At(newStart-1));
+                ++n;
+            }
+            newStart += n;
+        } else if (cursorPos > output.length()) {
+            newStart = start + outLen;
+            int32_t n = cursorPos - output.length();
+            // Outside the output string, cursorPos counts code points
+            while (n > 0 && newStart < text.length()) {
+                newStart += U16_LENGTH(text.char32At(newStart));
+                --n;
+            }
+            newStart += n;
+        } else {
+            // Cursor is within output string.  It has been set up above
+            // to be relative to start.
+            newStart += start;
+        }
+    }
