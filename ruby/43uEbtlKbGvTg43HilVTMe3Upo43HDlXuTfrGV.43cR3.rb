@@ -1,92 +1,136 @@
 
         
-              expect(builder.build).to eq(previous)
-    end
+        begin
+  require 'cucumber/rake/task'
+  Cucumber::Rake::Task.new(:features) do |t|
+    t.profile = 'travis'
   end
-    
-    class ContentSecurityPolicy
-  class Builder
-    EXTENDABLE_DIRECTIVES = %i[
-      base_uri
-      object_src
-      script_src
-      worker_src
-    ].freeze
-    
-          theme_ids = env[:resolved_theme_ids]
-      headers['Content-Security-Policy'] = policy(theme_ids) if SiteSetting.content_security_policy
-      headers['Content-Security-Policy-Report-Only'] = policy(theme_ids) if SiteSetting.content_security_policy_report_only
-    
-            if is_navigational_format?
-          session.delete(session_key)
-        else
-          session[session_key]
-        end
-      end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-            # The token is only valid if:
-        # 1. we have a date
-        # 2. the current time does not pass the expiry period
-        # 3. the record has a remember_created_at date
-        # 4. the token date is bigger than the remember_created_at
-        # 5. the token matches
-        generated_at.is_a?(Time) &&
-         (self.class.remember_for.ago < generated_at) &&
-         (generated_at > (remember_created_at || Time.now).utc) &&
-         Devise.secure_compare(rememberable_value, token)
-      end
-    
-      GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-    file package(gem, '.gem') => ['pkg/', '#{directory + '/' + gem}.gemspec'] do |f|
-      sh 'cd #{directory} && gem build #{gem}.gemspec'
-      mv directory + '/' + File.basename(f.name), f.name
-    end
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-          def masked_token?(token)
-        token.length == TOKEN_LENGTH * 2
-      end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to eq('block-all_mixed_content; connect-src 'self'; default-src none; disown-opener; img-src 'self'; script-src 'self'; style-src 'self'; upgrade-insecure_requests')
+  Cucumber::Rake::Task.new(:'features:html', 'Run Cucumber features and produce HTML output') do |t|
+    t.profile = 'html_report'
   end
-    
-    if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-  puts '## Set the codepage to 65001 for Windows machines'
-  `chcp 65001`
-end
-    
-      def render(context)
-    config_tag(context.registers[:site].config, @key, @tag, @classname)
+rescue LoadError
+  desc 'Cucumber rake task not available'
+  task :features do
+    abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
   end
 end
     
-        def get_gist_from_web(gist, file)
-      gist_url = get_gist_url_for(gist, file)
-      data     = get_web_content(gist_url)
+    require 'benchmark/ips'
+require 'jekyll'
+require 'json'
     
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
+    end
+    
+          it 'runs until stop is called' do
+        mock.instance_of(Rufus::Scheduler).join
+        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
+        @agent_runner.run
       end
+    
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+          @log.level = 5
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:level)
+    
+      def passthru
+    render status: 404, plain: 'Not found. Authentication passthru.'
+  end
+    
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
     end
   end
 end
+
+    
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
+    end
+    
+            warden.logout
+        expire_data_after_sign_out!
+        warden.clear_strategies_cache!
+        warden.lock! if lock
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
+    end
+    
+          included do
+        include Devise::Controllers::ScopedViews
+      end
+    
+        private
