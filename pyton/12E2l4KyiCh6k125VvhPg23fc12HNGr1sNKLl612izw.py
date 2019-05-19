@@ -1,77 +1,123 @@
 
         
-        
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+            @cached_property
+    def model(self):
+        return self.get_model_class()
     
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
     
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            instance_id=dict(type='str', required=True),
-            state=dict(type='str', default='present', choices=['absent', 'present']),
-            database_name=dict(type='str'),
-            configuration=dict(type='str', required=True),
-            node_count=dict(type='int', default=1),
-            instance_display_name=dict(type='str'),
-            force_instance_delete=dict(type='bool', default=False),
-            service_account_email=dict(type='str'),
-            credentials_file=dict(type='str'),
-            project_id=dict(type='str'),
-        ),
-    )
+    # The name of an image file (within the static path) to use as favicon
+# of the docs.  This file should be a Windows icon file (.ico) being
+# 16x16 or 32x32 pixels large.
+#html_favicon = None
     
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+        # Display the results
+    for top, right, bottom, left in face_locations:
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
     
-        if state in ['present', 'enabled']:
-        ipaenabledflag = 'TRUE'
-    else:
-        ipaenabledflag = 'FALSE'
+            img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama_partial_face2.jpg'))
+        detected_faces = api.face_locations(img)
     
-    # Copyright (c) 2016, Loic Blot <loic.blot@unix-experience.fr>
-# Copyright (c) 2018, Ansible Project
-# Sponsored by Infopro Digital. http://www.infopro-digital.com/
-# Sponsored by E.T.A.I. http://www.etai.fr/
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+        # Global variables
+    Global = Manager().Namespace()
+    Global.buff_num = 1
+    Global.read_num = 1
+    Global.write_num = 1
+    Global.frame_delay = 0
+    Global.is_exit = False
+    read_frame_list = Manager().dict()
+    write_frame_list = Manager().dict()
     
-        publicKey = (keySize, e_1, e_2, p)
-    privateKey = (keySize, d)
+        # Or instead, use the known face with the smallest distance to the new face
+    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+    best_match_index = np.argmin(face_distances)
+    if matches[best_match_index]:
+        name = known_face_names[best_match_index]
     
-            if self.values[key] is None:
-            self._set_value(key, data)
-    
-    
-class SubArray:
-    
-    def main():
+        :rtype: str
+    :return: A java class path that will allow your properties to be
+             found and the MultiLangDaemon and its deps and
+        any custom paths you provided.
     '''
-    In this demonstration we're generating a sample data set from the sin function in numpy.
-    We then train a decision tree on the data set and use the decision tree to predict the
-    label of 10 different test values. Then the mean squared error over this test is displayed.
-    '''
-    X = np.arange(-1., 1., 0.005)
-    y = np.sin(X)
+    # First make all the user provided paths absolute
+    paths = [os.path.abspath(p) for p in paths]
+    # We add our paths after the user provided paths because this permits users to
+    # potentially inject stuff before our paths (otherwise our stuff would always
+    # take precedence).
+    paths.append(get_kcl_jar_path())
+    if properties:
+        # Add the dir that the props file is in
+        dir_of_file = get_dir_of_file(properties)
+        paths.append(dir_of_file)
+    # add path of custom java code
+    dir_name = os.path.dirname(os.path.realpath(__file__))
+    paths.append(os.path.realpath(os.path.join(dir_name, 'java')))
+    paths.insert(0, os.path.realpath(os.path.join(dir_name, '..', '..',
+            'infra', 'amazon-kinesis-client', 'aws-java-sdk-sts.jar')))
+    return ':'.join([p for p in paths if p != ''])
     
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+    
+def receive_assert_delete(queue_url, assertions, sqs_client=None, required_subject=None):
+    if not sqs_client:
+        sqs_client = aws_stack.connect_to_service('sqs')
+    
+            expanded1 = multipart_content.expand_multipart_filename(data1, headers)
+        self.assertIsNot(expanded1, data1, 'Should have changed content of data with filename to interpolate')
+        self.assertIn(b'uploads/20170826T181315.679087009Z/upload/pixel.png', expanded1,
+            'Should see the interpolated filename')
+    
+        def reset(self):
+        self.state = 0
+        return self.state
 
     
-        return matchScore
+    class UnregisteredEnv(Unregistered):
+    '''Raised when the user requests an env from the registry that does
+    not actually exist.
+    '''
+    pass
+    
+        if modified:
+        logger.info('Writing new rollout file to {}'.format(ROLLOUT_FILE))
+        with open(ROLLOUT_FILE, 'w') as outfile:
+            json.dump(rollout_dict, outfile, indent=2, sort_keys=True)
+    else:
+        logger.info('No modifications needed.')
+    
+    if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=None)
+    parser.add_argument('env_id', nargs='?', default='CartPole-v0', help='Select the environment to run')
+    args = parser.parse_args()
+    
+        def paint(self, x1, y1, x2, y2, c1, c2=None, bg1=None, bg2=None, angle=None, angle_bg=None):
+        '''
+        Paint rectangle (x1,y1) (x2,y2) with foreground color c1 and background bg1 if specified.
+        If spefied colors c2/bg2, rectangle is painted with linear gradient (inclined under angle).
+        '''
+    
+        def _is_block_separator(self, before, now, after):
+        if (re.match(r'\s*$', before)
+                and re.match(r';\s*', now)
+                and re.match(r';;;;;;+', after)):
+            block_name = re.sub(r';\s*', '', now)
+            block_name = '_'.join([x.strip(',&:') for x in  block_name.strip(', ').split()])
+            return block_name
+        return None
+    
+        return answer
