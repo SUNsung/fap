@@ -1,164 +1,165 @@
 
         
-        
-@pytest.fixture(autouse=True)
-def shell(mocker):
-    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
-                         new_callable=MagicMock)
-    shell.get_history.return_value = []
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=True)
-    return shell
+            publicKey = (n, e)
+    privateKey = (n, d)
+    return (publicKey, privateKey)
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
     
     
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
+class QuadraticProbing(HashTable):
+    '''
+        Basic Hash Table example with open addressing using Quadratic Probing 
+    '''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+            if isinstance(B,bytes):
+            B = B.decode('ascii')
+    
+    try:
+	raw_input		#Python 2
+except NameError:
+	raw_input = input	#Python 3
+    
+    print(longestSub([4,8,7,5,1,12,2,3,9]))
+print(longestSub([9,8,7,6,5,7]))
+    
+    OLD_REWRITE_HTTPS_ARGS = [
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,QSA,R=permanent]'],
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,QSA,R=permanent]']]
+    
+    The path to this file can be provided interactively or using the
+``--dns-cloudflare-credentials`` command-line argument. Certbot records the path
+to this file for use during renewal, but does not store the file's contents.
+    
+    ========================================  =====================================
+``--dns-cloudxns-credentials``            CloudXNS credentials_ INI file.
+                                          (Required)
+``--dns-cloudxns-propagation-seconds``    The number of seconds to wait for DNS
+                                          to propagate before asking the ACME
+                                          server to verify the DNS record.
+                                          (Default: 30)
+========================================  =====================================
+    
+    def fetch_photo_url_list_impl(url, size, method, id_field, id_parse_func, collection_name):
+    page = get_html(url)
+    api_key = get_api_key(page)
+    ext_field = ''
+    if id_parse_func:
+        ext_field = '&%s=%s' % (id_field, id_parse_func(url, page))
+    page_number = 1
+    urls = []
+    while True:
+        call_url = tmpl_api_call % (api_key, method, ext_field, page_number)
+        photoset = json.loads(get_content_headered(call_url))[collection_name]
+        pagen = photoset['page']
+        pages = photoset['pages']
+        for info in photoset['photo']:
+            url = get_url_of_largest(info, api_key, size)
+            urls.append(url)
+        page_number = page_number + 1
+        # the typeof 'page' and 'pages' may change in different methods
+        if str(pagen) == str(pages):
+            break
+    return urls, match1(page, pattern_inline_title)
+    
+    from ..common import *
+    
+    class Imgur(VideoExtractor):
+    name = 'Imgur'
+    
+            pdf = match1(content, r'name='filename'\s*value='([^']+\.pdf)'')
+        if pdf: pdf = 'http://res.infoq.com/downloads/pdfdownloads/%s' % pdf
+    
+        content = re.sub('MAJOR_VERSION = .*\n',
+                     'MAJOR_VERSION = {}\n'.format(major),
+                     content)
+    content = re.sub('MINOR_VERSION = .*\n',
+                     'MINOR_VERSION = {}\n'.format(minor),
+                     content)
+    content = re.sub('PATCH_VERSION = .*\n',
+                     'PATCH_VERSION = '{}'\n'.format(patch),
+                     content)
+    
+        def __init__(self, unpacked, extra):
+        self.unpacked = unpacked
+        self.extra = extra
     
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+def testUnsignedInt():
+    check(b'\x99\xcc\x00\xcc\x80\xcc\xff\xcd\x00\x00\xcd\x80\x00'
+          b'\xcd\xff\xff\xce\x00\x00\x00\x00\xce\x80\x00\x00\x00'
+          b'\xce\xff\xff\xff\xff',
+          (0,
+           128,
+           255,
+           0,
+           32768,
+           65535,
+           0,
+           2147483648,
+           4294967295, ), )
     
-    def point_quat2quat(quat):
-    _quat = quat.copy()
-    if len(_quat.shape) < 2:
-        _quat = np.expand_dims(_quat, 0)
-    assert(_quat.shape[1] == 5)
-    angle = np.arctan(_quat[:,[0]] / _quat[:,[1]])
-    qw = np.cos(angle / 2)
-    
-    class DoubleWrapperError(Error):
-    pass
-    
-    class UnrecordableEnv(object):
-    metadata = {'render.modes': [None]}
-    
-            # Lastly, pull the app out of test mode so it'll load controllers on
-        # first use
-        RedditApp.test_mode = False
-    
-    class MockWorld(World):
-    def _make_state(self, config):
-        # Mock by hand because _parse_config is called in __init__, so we
-        # can't instantiate then update.
-        class MockState(FeatureState):
-            def _parse_config(*args, **kwargs):
-                return config
-        return MockState('test_state', self)
-    
-            # Scenario: call raises TransactionError
-        _request.make_request.return_value = (False, _response)
-        self.assertRaises(TransactionError, capture_authorization_hold,
-                          self.customer_id, self.payment_profile_id,
-                          self.amount, self.transaction_id)
-    
-            for width in (108, 216, 320, 640, 960, 1080):
-            url = self.provider.resize_image(image, width)
-            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
-                width*2))
-
+    ax = fig.add_axes((0.63, 0.1, 0.16, 0.8))
+for i in range(4):
+    ax.plot(np.random.rand(8))
+ax.set_xticks([])
+ax.set_yticks([])
     
     
-class SigningTests(RedditTestCase):
-    def setUp(self):
-        super(RedditTestCase, self).setUp()
-        g.secrets['request_signature_secret'] = 'super_secret_do_not_share'
+@pytest.mark.parametrize('grps', [
+    ['qux'], ['qux', 'quux']])
+@pytest.mark.parametrize('vals', [
+    [2, 2, 8, 2, 6],
+    [pd.Timestamp('2018-01-02'), pd.Timestamp('2018-01-02'),
+     pd.Timestamp('2018-01-08'), pd.Timestamp('2018-01-02'),
+     pd.Timestamp('2018-01-06')]])
+@pytest.mark.parametrize('ties_method,ascending,pct,exp', [
+    ('average', True, False, [2., 2., 5., 2., 4.]),
+    ('average', True, True, [0.4, 0.4, 1.0, 0.4, 0.8]),
+    ('average', False, False, [4., 4., 1., 4., 2.]),
+    ('average', False, True, [.8, .8, .2, .8, .4]),
+    ('min', True, False, [1., 1., 5., 1., 4.]),
+    ('min', True, True, [0.2, 0.2, 1.0, 0.2, 0.8]),
+    ('min', False, False, [3., 3., 1., 3., 2.]),
+    ('min', False, True, [.6, .6, .2, .6, .4]),
+    ('max', True, False, [3., 3., 5., 3., 4.]),
+    ('max', True, True, [0.6, 0.6, 1.0, 0.6, 0.8]),
+    ('max', False, False, [5., 5., 1., 5., 2.]),
+    ('max', False, True, [1., 1., .2, 1., .4]),
+    ('first', True, False, [1., 2., 5., 3., 4.]),
+    ('first', True, True, [0.2, 0.4, 1.0, 0.6, 0.8]),
+    ('first', False, False, [3., 4., 1., 5., 2.]),
+    ('first', False, True, [.6, .8, .2, 1., .4]),
+    ('dense', True, False, [1., 1., 3., 1., 2.]),
+    ('dense', True, True, [1. / 3., 1. / 3., 3. / 3., 1. / 3., 2. / 3.]),
+    ('dense', False, False, [3., 3., 1., 3., 2.]),
+    ('dense', False, True, [3. / 3., 3. / 3., 1. / 3., 3. / 3., 2. / 3.]),
+])
+def test_rank_args(grps, vals, ties_method, ascending, pct, exp):
+    key = np.repeat(grps, len(vals))
+    vals = vals * len(grps)
+    df = DataFrame({'key': key, 'val': vals})
+    result = df.groupby('key').rank(method=ties_method,
+                                    ascending=ascending, pct=pct)
     
-        def filter_with_english_letters(self, aBuf):
-        # TODO
-        return aBuf
-
     
-        def reset(self):
-        CharSetProber.reset(self)
-        for codingSM in self._mCodingSM:
-            if not codingSM:
-                continue
-            codingSM.active = True
-            codingSM.reset()
-        self._mActiveSM = len(self._mCodingSM)
-        self._mDetectedCharset = None
-    
-    GB2312_TYPICAL_DISTRIBUTION_RATIO = 0.9
-    
-            for cur in aBuf:
-            if cur == ' ':
-                # We stand on a space - a word just ended
-                if self._mBeforePrev != ' ':
-                    # next-to-last char was not a space so self._mPrev is not a
-                    # 1 letter word
-                    if self.is_final(self._mPrev):
-                        # case (1) [-2:not space][-1:final letter][cur:space]
-                        self._mFinalCharLogicalScore += 1
-                    elif self.is_non_final(self._mPrev):
-                        # case (2) [-2:not space][-1:Non-Final letter][
-                        #  cur:space]
-                        self._mFinalCharVisualScore += 1
-            else:
-                # Not standing on a space
-                if ((self._mBeforePrev == ' ') and
-                        (self.is_final(self._mPrev)) and (cur != ' ')):
-                    # case (3) [-2:space][-1:final letter][cur:not space]
-                    self._mFinalCharVisualScore += 1
-            self._mBeforePrev = self._mPrev
-            self._mPrev = cur
-    
-    Win1251BulgarianModel = {
-  'charToOrderMap': win1251BulgarianCharToOrderMap,
-  'precedenceMatrix': BulgarianLangModel,
-  'mTypicalPositiveRatio': 0.969392,
-  'keepEnglishLetter': False,
-  'charsetName': 'windows-1251'
-}
-    
-    # Character Mapping Table:
-Latin2_HungarianCharToOrderMap = (
-255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
-253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
-252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
-253, 28, 40, 54, 45, 32, 50, 49, 38, 39, 53, 36, 41, 34, 35, 47,
- 46, 71, 43, 33, 37, 57, 48, 64, 68, 55, 52,253,253,253,253,253,
-253,  2, 18, 26, 17,  1, 27, 12, 20,  9, 22,  7,  6, 13,  4,  8,
- 23, 67, 10,  5,  3, 21, 19, 65, 62, 16, 11,253,253,253,253,253,
-159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,
-175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,
-191,192,193,194,195,196,197, 75,198,199,200,201,202,203,204,205,
- 79,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,
-221, 51, 81,222, 78,223,224,225,226, 44,227,228,229, 61,230,231,
-232,233,234, 58,235, 66, 59,236,237,238, 60, 69, 63,239,240,241,
- 82, 14, 74,242, 70, 80,243, 72,244, 15, 83, 77, 84, 30, 76, 85,
-245,246,247, 25, 73, 42, 24,248,249,250, 31, 56, 29,251,252,253,
-)
+@pytest.mark.parametrize('css,inherited,expected', [
+    ('font-weight: bold', '',
+     {'font': {'bold': True}}),
+    ('', 'font-weight: bold',
+     {'font': {'bold': True}}),
+    ('font-weight: bold', 'font-style: italic',
+     {'font': {'bold': True, 'italic': True}}),
+    ('font-style: normal', 'font-style: italic',
+     {'font': {'italic': False}}),
+    ('font-style: inherit', '', {}),
+    ('font-style: normal; font-style: inherit', 'font-style: italic',
+     {'font': {'italic': True}}),
+])
+def test_css_to_excel_inherited(css, inherited, expected):
+    convert = CSSToExcelConverter(inherited)
+    assert expected == convert(css)
