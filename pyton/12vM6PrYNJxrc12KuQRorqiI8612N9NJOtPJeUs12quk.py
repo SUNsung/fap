@@ -1,125 +1,95 @@
 
         
-        __version__ = '1.1.dev'
+        
+def test_auth_plugin_require_auth_false_and_auth_provided(httpbin):
     
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
+        if (first_byte_pos != resumed_from
+            or (instance_length is not None
+                and last_byte_pos + 1 != instance_length)):
+        # Not what we asked for.
+        raise ContentRangeError(
+            'Unexpected Content-Range returned (%r)'
+            ' for the requested Range ('bytes=%d-')'
+            % (content_range, resumed_from)
+        )
     
-            def _fail(self, *args, **kwargs):
-            raise RuntimeError(
-                'signalling support is unavailable '
-                'because the blinker library is '
-                'not installed.'
-            )
+            X_test = X[-n_test_samples:]
+        Y_test = Y[-n_test_samples:]
+        X = X[:(i * step)]
+        Y = Y[:(i * step)]
     
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
     
-def _default_template_ctx_processor():
-    '''Default template context processor.  Injects `request`,
-    `session` and `g`.
-    '''
-    reqctx = _request_ctx_stack.top
-    appctx = _app_ctx_stack.top
-    rv = {}
-    if appctx is not None:
-        rv['g'] = appctx.g
-    if reqctx is not None:
-        rv['request'] = reqctx.request
-        rv['session'] = reqctx.session
-    return rv
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
     
+    input data sparsity: 0.050000
+true coef sparsity: 0.000100
+test data sparsity: 0.027400
+model sparsity: 0.000024
+r^2 on test data (dense model) : 0.233651
+r^2 on test data (sparse model) : 0.233651
+Wrote profile results to sparsity_benchmark.py.lprof
+Timer unit: 1e-06 s
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+    from sklearn.datasets import make_checkerboard
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralBiclustering
+from sklearn.metrics import consensus_score
     
+    # Anisotropicly distributed data
+transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+X_aniso = np.dot(X, transformation)
+y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
+    # #############################################################################
+# Compute clustering with Means
     
+        def __init__(self, unpacked, extra):
+        self.unpacked = unpacked
+        self.extra = extra
     
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline(u'unfunction fuck')
-    how_to_configure(proc, TIMEOUT)
-
-    
-    
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations)
-])
-def test_get_operations(set_help, app, help_text, operations):
-    set_help(help_text)
-    assert _get_operations(app) == operations
-    
-        new_command = get_new_command(Command('apt update', match_output))
-    assert new_command == 'apt list --upgradable'
-
-    
-    match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
-'''
+        result = s[lambda x: ['A', 'B']]
+    tm.assert_series_equal(result, s.loc[['A', 'B']])
     
     
-@pytest.fixture
-def brew_install_no_argument():
-    return '''This command requires a formula argument'''
-    
-    \tDid you mean `build`?
-'''
-    
-    
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert match(Command(script.format(filename.format(ext)), ''))
-    
-        def get_ip(self):
-        with self.lock:
-            while True:
-                line = self.in_fd.readline()
-                if not line:
-                    raise Exception()
-    
-    
-#try:
-#    from code.default.gae_proxy.local.config import config
-#except:
-#    from code.default.gae_proxy.local.config import config
-from config import config
-    
-    - ANTLRStringStream: Reads from a string objects. The input should be a unicode
-  object, or ANTLR3 will have trouble decoding non-ascii data.
-- ANTLRFileStream: Opens a file and read the contents, with optional character
-  decoding.
-- ANTLRInputStream: Reads the date from a file-like object, with optional
-  character decoding.
+ABCIndex = create_pandas_abc_type('ABCIndex', '_typ', ('index', ))
+ABCInt64Index = create_pandas_abc_type('ABCInt64Index', '_typ',
+                                       ('int64index', ))
+ABCUInt64Index = create_pandas_abc_type('ABCUInt64Index', '_typ',
+                                        ('uint64index', ))
+ABCRangeIndex = create_pandas_abc_type('ABCRangeIndex', '_typ',
+                                       ('rangeindex', ))
+ABCFloat64Index = create_pandas_abc_type('ABCFloat64Index', '_typ',
+                                         ('float64index', ))
+ABCMultiIndex = create_pandas_abc_type('ABCMultiIndex', '_typ',
+                                       ('multiindex', ))
+ABCDatetimeIndex = create_pandas_abc_type('ABCDatetimeIndex', '_typ',
+                                          ('datetimeindex', ))
+ABCTimedeltaIndex = create_pandas_abc_type('ABCTimedeltaIndex', '_typ',
+                                           ('timedeltaindex', ))
+ABCPeriodIndex = create_pandas_abc_type('ABCPeriodIndex', '_typ',
+                                        ('periodindex', ))
+ABCCategoricalIndex = create_pandas_abc_type('ABCCategoricalIndex', '_typ',
+                                             ('categoricalindex', ))
+ABCIntervalIndex = create_pandas_abc_type('ABCIntervalIndex', '_typ',
+                                          ('intervalindex', ))
+ABCIndexClass = create_pandas_abc_type('ABCIndexClass', '_typ',
+                                       ('index', 'int64index', 'rangeindex',
+                                        'float64index', 'uint64index',
+                                        'multiindex', 'datetimeindex',
+                                        'timedeltaindex', 'periodindex',
+                                        'categoricalindex', 'intervalindex'))
