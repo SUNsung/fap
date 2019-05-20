@@ -1,84 +1,114 @@
 
         
         
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
-        title_re_match = link_re.match(raw_title)
-        if title_re_match:
-            sections[category].append(title_re_match.group(1).upper())
+class RequestStatus(Enum):
     
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
-    }
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
     
-            This should not be called from user code, and is only exposed for use
-        when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+        def append_to_front(self, node):
+        ...
     
-        def is_unverifiable(self):
-        return True
+        # Test that writing over the input data works predictably
+    for mode in ['torch', 'tf']:
+        x = np.random.uniform(0, 255, (2, 10, 10, 3))
+        xint = x.astype('int')
+        x2 = utils.preprocess_input(x, mode=mode)
+        xint2 = utils.preprocess_input(xint)
+        assert_allclose(x, x2)
+        assert xint.astype('float').max() != xint2.max()
+    # Caffe mode works differently from the others
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    xint = x.astype('int')
+    x2 = utils.preprocess_input(x, data_format='channels_last', mode='caffe')
+    xint2 = utils.preprocess_input(xint)
+    assert_allclose(x, x2[..., ::-1])
+    assert xint.astype('float').max() != xint2.max()
     
-    import json
-import platform
-import sys
-import ssl
+    model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test))
     
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
-    
-            with server as (host, port):
-            r = requests.get('http://{}:{}'.format(host, port))
-    
-            r = requests.Request('GET', url, auth=auth)
-        p = r.prepare()
-    
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    # Load a sample picture and learn how to recognize it.
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-            # Now let's list all the faces we found in all 128 frames
-        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
-            number_of_faces_in_frame = len(face_locations)
-    
-        def test_command_line_interface_show_distance(self):
-        target_string = 'obama.jpg,obama,0.0'
-        runner = CliRunner()
-        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
-    
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    print('Vectorizing sequence data...')
+tokenizer = Tokenizer(num_words=max_words)
+x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
+x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
     
     
-def face_encodings(face_image, known_face_locations=None, num_jitters=1):
-    '''
-    Given an image, return the 128-dimension face encoding for each face in the image.
+def sparse_categorical_crossentropy(y_true, y_pred):
+    return K.sparse_categorical_crossentropy(y_true, y_pred)
+    
+    Originally created for this issue:
+https://github.com/scrapy/scrapy/issues/606
+    
+        def set_crawler(self, crawler):
+        assert not hasattr(self, '_crawler'), 'crawler already set'
+        self._crawler = crawler
+    
+    
+def _import_file(filepath):
+    abspath = os.path.abspath(filepath)
+    dirname, file = os.path.split(abspath)
+    fname, fext = os.path.splitext(file)
+    if fext != '.py':
+        raise ValueError('Not a Python source file: %s' % abspath)
+    if dirname:
+        sys.path = [dirname] + sys.path
+    try:
+        module = import_module(fname)
+    finally:
+        if dirname:
+            sys.path.pop(0)
+    return module
+    
+            def creatorForNetloc(self, hostname, port):
+            return ScrapyClientTLSOptions(hostname.decode('ascii'), self.getContext())
+    
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
+    
+            # XXX: Google parses at least first 100k bytes; scrapy's redirect
+        # middleware parses first 4k. 4k turns out to be insufficient
+        # for this middleware, and parsing 100k could be slow.
+        # We use something in between (32K) by default.
+        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
+    
+    import logging
+import numpy as np
+    
+        def blend(self, mask):
+        ''' Blur mask if requested '''
+        logger.trace('Blending mask')
+        mask = BlurMask(self.config['type'],
+                        mask,
+                        self.config['radius'],
+                        self.config['passes']).blurred
+        return mask
+
+    
+    logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
+    
+            # Check that ref_vid is a video when it needs to be
+        if self.args.action in self._actions_req_ref_video:
+            if self.ref_vid.is_type('none'):
+                raise ValueError('The file chosen as the reference video is '
+                                 'not a video, either leave the field blank '
+                                 'or type 'None': '
+                                 '{}'.format(self.ref_vid.path))
+        elif self.args.action in self._actions_can_use_ref_video:
+            if self.ref_vid.is_type('none'):
+                logger.warning('Warning: no reference video was supplied, even though '
+                               'one may be used with the chosen action. If this is '
+                               'intentional then ignore this warning.')
+    
+        def draw_black_image(self):
+        ''' Change image to black at correct dimensions '''
+        logger.trace('Drawing black image')
+        height, width = self.image.shape[:2]
+        self.image = np.zeros((height, width, 3), np.uint8)
