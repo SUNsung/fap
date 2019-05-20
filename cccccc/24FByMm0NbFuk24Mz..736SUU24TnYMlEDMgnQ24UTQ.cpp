@@ -1,258 +1,262 @@
 
         
-        // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+            void absDiff(const Size2D &size,
+                 const u16 *src0Base, ptrdiff_t src0Stride,
+                 const u16 *src1Base, ptrdiff_t src1Stride,
+                 u16 *dstBase, ptrdiff_t dstStride);
     
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
     
-    MenuDelegate::MenuDelegate(ObjectManager* object_manager)
-    : object_manager_(object_manager) {
-}
-    
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
-    
-    void Menu::Insert(MenuItem* menu_item, int pos) {
-  if (pos < 0 || pos > (int)menu_items_.size()) return;
+    {    void operator() (const T * src0, const T * src1, T * dst) const
+    {
+        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
     }
-    
-    #include 'base/files/file_path.h'
-#include 'base/strings/string_util.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/threading/thread_restrictions.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'content/nw/src/nw_base.h'
-#include 'content/nw/src/nw_content.h'
-#include 'content/nw/src/nw_package.h'
-#include 'ui/base/accelerators/accelerator.h'
-#include 'ui/gfx/image/image_skia_operations.h'
-#include 'ui/events/event_constants.h'//for modifier key code
-#include 'base/logging.h'
-    
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
-    
-    namespace extensions {
-    }
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    
-    {  shared_ptr<boost::thread> thread_;
 };
     
-    #include <vector>
-    
-      virtual inline const char* type() const { return 'Accuracy'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif
-
-    
-    #endif  // TESSERACT_CCMAIN_OSDETECT_H_
-
-    
-    // Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::StringParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_STRING;
-  sIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::IntParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_INTEGER;
-  iIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::BoolParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_BOOLEAN;
-  bIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::DoubleParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_DOUBLE;
-  dIt = it;
-  vcMap[my_id_] = this;
+    void add(const Size2D &size,
+         const s8 * src0Base, ptrdiff_t src0Stride,
+         const s8 * src1Base, ptrdiff_t src1Stride,
+         s8 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s8, s16>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s8, s16>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
     
-    // Deletes the box with the given index, and shuffles up the rest.
-// Recomputes the bounding box.
-void BoxWord::DeleteBox(int index) {
-  ASSERT_HOST(0 <= index && index < length_);
-  boxes_.remove(index);
-  --length_;
-  ComputeBoundingBox();
-}
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
     }
     
-    // Initialization funciton called by caffeOp & caffeLoss
-template<typename Dtype>
-void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
-  for (index_t i=0; i < n_num; ++i)
-    v->push_back(new ::caffe::Blob<Dtype>());
+                int32x4_t va = vaddq_s32(lane0a, lane2a);
+            int32x4_t vb = vaddq_s32(lane0b, lane2b);
+            int32x4_t wa = vaddq_s32(va, lane1a);
+            int32x4_t wb = vaddq_s32(vb, lane1b);
+    
+    bool isLaplacianOpenCVSupported(const Size2D &size, BORDER_MODE border)
+{
+    return isSupportedConfiguration() &&
+        size.width >= 8 && size.height >= 1 &&
+        (border == BORDER_MODE_CONSTANT   ||
+         border == BORDER_MODE_REFLECT    ||
+         border == BORDER_MODE_REFLECT101 ||
+         border == BORDER_MODE_REPLICATE);
 }
     
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file caffe_data_iter.cc
- * \brief register mnist iterator
+    
+    {	if (a0 == b0 || a0 == b1 || a1 == b0 || a1 == b1) return false;
+	float x1 = a0.x; float y1 = a0.y;
+	float x2 = a1.x; float y2 = a1.y;
+	float x3 = b0.x; float y3 = b0.y;
+	float x4 = b1.x; float y4 = b1.y;
+	
+	//AABB early exit
+	if (b2Max(x1,x2) < b2Min(x3,x4) || b2Max(x3,x4) < b2Min(x1,x2) ) return false;
+	if (b2Max(y1,y2) < b2Min(y3,y4) || b2Max(y3,y4) < b2Min(y1,y2) ) return false;
+	
+	float ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3));
+	float ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3));
+	float denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+	if (b2Abs(denom) < CMP_EPSILON) {
+		//Lines are too close to parallel to call
+		return false;
+	}
+	ua /= denom;
+	ub /= denom;
+	
+	if ((0 < ua) && (ua < 1) && (0 < ub) && (ub < 1)) {
+		//if (intersectionPoint){
+			intersectionPoint.x = (x1 + ua * (x2 - x1));
+			intersectionPoint.y = (y1 + ua * (y2 - y1));
+		//}
+		//printf('%f, %f -> %f, %f crosses %f, %f -> %f, %f\n',x1,y1,x2,y2,x3,y3,x4,y4);
+		return true;
+	}
+	
+	return false;
+}
+    
+    namespace Etc
+{
+	class Block4x4;
+    }
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include <sys/time.h>
-#include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <atomic>
     
-    
-    {        return dict[versionKey].Value<size_t>();
+        // Create Logical Device (with 1 queue)
+    {
+        int device_extension_count = 1;
+        const char* device_extensions[] = { 'VK_KHR_swapchain' };
+        const float queue_priority[] = { 1.0f };
+        VkDeviceQueueCreateInfo queue_info[1] = {};
+        queue_info[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queue_info[0].queueFamilyIndex = g_QueueFamily;
+        queue_info[0].queueCount = 1;
+        queue_info[0].pQueuePriorities = queue_priority;
+        VkDeviceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        create_info.queueCreateInfoCount = sizeof(queue_info) / sizeof(queue_info[0]);
+        create_info.pQueueCreateInfos = queue_info;
+        create_info.enabledExtensionCount = device_extension_count;
+        create_info.ppEnabledExtensionNames = device_extensions;
+        err = vkCreateDevice(g_PhysicalDevice, &create_info, g_Allocator, &g_Device);
+        check_vk_result(err);
+        vkGetDeviceQueue(g_Device, g_QueueFamily, 0, &g_Queue);
     }
     
-            for (size_t i = 0; i < numSequences; ++i)
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
         {
-            MaskKind firstMaskEntry = maskBuffer[i * maxNumTimeSteps];
-            if (firstMaskEntry == MaskKind::SequenceBegin)
-                sequenceBeginIndices[i] = 0;
-            else if (firstMaskEntry == MaskKind::Valid)
-                sequenceBeginIndices[i] = Microsoft::MSR::CNTK::SentinelValueIndicatingUnspecifedSequenceBeginIdx;
-            else
-                LogicError('The first entry of a Value mask must be Valid or SequenceBegin');
+            static float f = 0.0f;
+            static int counter = 0;
+    }
+    
+        if      (numlit ==     0)    ;
+    else if (numlit <=    32)    stb_out (0x000020 + numlit-1);
+    else if (numlit <=  2048)    stb_out2(0x000800 + numlit-1);
+    else /*  numlit <= 65536) */ stb_out3(0x070000 + numlit-1);
+    
+        // Show the window
+    ::ShowWindow(hwnd, SW_SHOWDEFAULT);
+    ::UpdateWindow(hwnd);
+    
+        {
+        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+        desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        desc.NumDescriptors = NUM_BACK_BUFFERS;
+        desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        desc.NodeMask = 1;
+        if (g_pd3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dRtvDescHeap)) != S_OK)
+            return false;
     }
     
     
-    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
-            }
-            else if (!sampleDynamicAxes.empty())
-                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
+
     
-            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
-            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
-            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
-                seed.Value<size_t>() = Internal::GenerateRandomSeed();
+            if (ImGui::Button('Button'))                                  // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+    //----------------------------------------
+// OpenGL    GLSL      GLSL
+// version   version   string
+//----------------------------------------
+//  2.0       110       '#version 110'
+//  2.1       120       '#version 120'
+//  3.0       130       '#version 130'
+//  3.1       140       '#version 140'
+//  3.2       150       '#version 150'
+//  3.3       330       '#version 330 core'
+//  4.0       400       '#version 400 core'
+//  4.1       410       '#version 410 core'
+//  4.2       420       '#version 410 core'
+//  4.3       430       '#version 430 core'
+//  ES 2.0    100       '#version 100'      = WebGL 1.0
+//  ES 3.0    300       '#version 300 es'   = WebGL 2.0
+//----------------------------------------
+    
+    #define SIZE    100
+    
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = (rand() % (20000 * 37));
+        if (key % 37 == 0)
+        {
+            continue;
+        }
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_EQ(ret, 0);
+    }
+    
+        public slots:
+        void run();
+    
+        cache.set('test2', val2);
+    ASSERT_EQ(cache.get('test2').get(), val2.get());
+    val2.reset();
+    ASSERT_EQ(dtor_num, 1);
+    ASSERT_EQ(cache.get('test'), nullptr);
+    
+            auto iter = cache_map.find(key);
+        if (iter != cache_map.end())
+        {
+            iter->second->second.first = expire_time;
+            iter->second->second.second = val;
+            cache_list.splice(cache_list.begin(), cache_list, iter->second);
+            return;
         }
     
-    
-    {        Matrix<ElemType>::VectorSum(sliceInputValue, sliceOutputValue, true);
-    }
-    
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        return false;
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    #endif //__CCINSTANT_ACTION_H__
-
-    
-    #include '2d/CCActionInterval.h'
-    
-    AnimationFrame* AnimationFrame::clone() const
+    TEST(coroutine_channel, push_timeout)
 {
-    // no copy constructor
-    auto frame = new (std::nothrow) AnimationFrame();
-    frame->initWithSpriteFrame(_spriteFrame->clone(),
-                               _delayUnits,
-                               _userInfo);
+    coro_test([](void *arg)
+    {
+        Channel chan(1);
+        bool ret;
+    }
     }
     
-            for (auto& obj : frameArray)
-        {
-            ValueMap& entry = obj.asValueMap();
-            std::string spriteFrameName = entry['spriteframe'].asString();
-            SpriteFrame *spriteFrame = frameCache->getSpriteFrameByName(spriteFrameName);
+        fd1 = socket(AF_UNIX,SOCK_DGRAM,0);
+    strncpy(un1.sun_path, sock1_path, sizeof(un1.sun_path) - 1); 
+    bind(fd1,(struct sockaddr *)&un1,sizeof(un1));
+    
+    
+    {    ret = swServer_start(&serv);
+    if (ret < 0)
+    {
+        swTrace('start server fail[error=%d].\n', ret);
+        exit(0);
     }
+    return 0;
+}
