@@ -1,92 +1,188 @@
 
         
-            def login(self, username='test', password='test'):
-        return self._client.post(
-            '/auth/login', data={'username': username, 'password': password}
-        )
+            proc.sendline(u'ehco test')
     
     
-@pytest.mark.parametrize(
-    ('username', 'password', 'message'),
-    (('a', 'test', b'Incorrect username.'), ('test', 'a', b'Incorrect password.')),
-)
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
-    
-        try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
-        pass
-    
-        Or alternatively you can define the configuration options in the
-    module that calls :meth:`from_object` or provide an import path to
-    a module that should be loaded.  It is also possible to tell it to
-    use the same module and with that provide the configuration values
-    just before the call::
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
     
     
-def _lookup_req_object(name):
-    top = _request_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_request_ctx_err_msg)
-    return getattr(top, name)
+@pytest.mark.parametrize('command', [
+    Command('apt-cache search foo', ''),
+    Command('aptitude search foo', ''),
+    Command('apt search foo', ''),
+    Command('apt-get install foo', ''),
+    Command('apt-get source foo', ''),
+    Command('apt-get clean', ''),
+    Command('apt-get remove', ''),
+    Command('apt-get update', ''),
+    Command('sudo apt update', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
     
-        Internally, the dict key is suffixed with `__`, and the suffix is removed
-    when deserializing.
-    '''
+    You can download from:
+  https://osxfuse.github.io/
+Error: An unsatisfied requirement failed this build.'''
     
-        def __init__(self):
-        self.name = 'unaccent'
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+    
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert match(Command(script.format(filename.format(ext)), ''))
+    
+            if opts.meta:
             try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
+                opts.meta = json.loads(opts.meta)
+            except ValueError:
+                raise UsageError('Invalid -m/--meta value, pass a valid json string to -m or --meta. ' \
+                                'Example: --meta='{\'foo\' : \'bar\'}'', print_help=False)
     
-        class Meta:
-        abstract = True
-        verbose_name = _('session')
-        verbose_name_plural = _('sessions')
-    
-    
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
+            else:
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
 
     
     
-def test_chunked_upload():
-    '''can safely send generators'''
-    close_server = threading.Event()
-    server = Server.basic_response_server(wait_to_close_event=close_server)
-    data = iter([b'a', b'b', b'c'])
+logger = logging.getLogger(__name__)
+    
+            # XXX: Google parses at least first 100k bytes; scrapy's redirect
+        # middleware parses first 4k. 4k turns out to be insufficient
+        # for this middleware, and parsing 100k could be slow.
+        # We use something in between (32K) by default.
+        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
+    
+    
+def fetch(version):
+    base = 'http://wheels.scipy.org'
+    tree = html.parse(base)
+    root = tree.getroot()
+    
+            df = seed_df(seed_nans, n, m)
+        bins = None, np.arange(0, max(5, df['3rd'].max()) + 1, 2)
+        keys = '1st', '2nd', ['1st', '2nd']
+        for k, b in product(keys, bins):
+            binned.append((df, k, b, n, m))
+            ids.append('{}-{}-{}'.format(k, n, m))
+    
+    '''
+from .casting import BaseCastingTests  # noqa
+from .constructors import BaseConstructorsTests  # noqa
+from .dtype import BaseDtypeTests  # noqa
+from .getitem import BaseGetitemTests  # noqa
+from .groupby import BaseGroupbyTests  # noqa
+from .interface import BaseInterfaceTests  # noqa
+from .methods import BaseMethodsTests  # noqa
+from .ops import BaseArithmeticOpsTests, BaseComparisonOpsTests, BaseOpsUtil  # noqa
+from .printing import BasePrintingTests  # noqa
+from .reduce import BaseNoReduceTests, BaseNumericReduceTests, BaseBooleanReduceTests  # noqa
+from .missing import BaseMissingTests  # noqa
+from .reshaping import BaseReshapingTests  # noqa
+from .setitem import BaseSetitemTests  # noqa
+from .io import BaseParsingTests  # noqa
+
+    
+    
+@pytest.mark.parametrize('style,equiv', [
+    ('margin: 1px; margin-top: inherit',
+     'margin-bottom: 1px; margin-right: 1px; margin-left: 1px'),
+    ('margin-top: inherit', ''),
+    ('margin-top: initial', ''),
+])
+def test_css_none_absent(style, equiv):
+    assert_same_resolution(style, equiv)
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      return group_name_to_group
+    
+    
+def RegexSingleList_test():
+  opts = _JavaFilter( { 'regex' : [ 'taco' ] } )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
+    
+    
+class FakeFuture( object ):
+  '''A fake version of a future response object, just about suitable for
+  mocking a server response as generated by PostDataToHandlerAsync.
+  Not usually used directly. See MockAsyncServerResponse* methods'''
+  def __init__( self, done, response = None, exception = None ):
+    self._done = done
+    
+    def _add_call_item_to_queue(pending_work_items,
+                            work_ids,
+                            call_queue):
+    '''Fills call_queue with _WorkItems from pending_work_items.
+    
+    # If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+#show_authors = False
+    
+        author='LittleCoder',
+    author_email='i7meavnktqegm1b@qq.com',
+    
+    def produce_group_chat(core, msg):
+    r = re.match('(@[0-9a-z]*?):<br/>(.*)$', msg['Content'])
+    if r:
+        actualUserName, content = r.groups()
+        chatroomUserName = msg['FromUserName']
+    elif msg['FromUserName'] == core.storageClass.userName:
+        actualUserName = core.storageClass.userName
+        content = msg['Content']
+        chatroomUserName = msg['ToUserName']
+    else:
+        msg['ActualUserName'] = core.storageClass.userName
+        msg['ActualNickName'] = core.storageClass.nickName
+        msg['IsAt'] = False
+        utils.msg_formatter(msg, 'Content')
+        return
+    chatroom = core.storageClass.search_chatrooms(userName=chatroomUserName)
+    member = utils.search_dict_list((chatroom or {}).get(
+        'MemberList') or [], 'UserName', actualUserName)
+    if member is None:
+        chatroom = core.update_chatroom(chatroomUserName)
+        member = utils.search_dict_list((chatroom or {}).get(
+            'MemberList') or [], 'UserName', actualUserName)
+    if member is None:
+        logger.debug('chatroom member fetch failed with %s' % actualUserName)
+        msg['ActualNickName'] = ''
+        msg['IsAt'] = False
+    else:
+        msg['ActualNickName'] = member.get('DisplayName', '') or member['NickName']
+        atFlag = '@' + (chatroom['Self'].get('DisplayName', '') or core.storageClass.nickName)
+        msg['IsAt'] = (
+            (atFlag + (u'\u2005' if u'\u2005' in msg['Content'] else ' '))
+            in msg['Content'] or msg['Content'].endswith(atFlag))
+    msg['ActualUserName'] = actualUserName
+    msg['Content']        = content
+    utils.msg_formatter(msg, 'Content')
