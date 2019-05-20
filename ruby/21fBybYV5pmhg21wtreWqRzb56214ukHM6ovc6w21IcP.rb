@@ -1,76 +1,90 @@
 
         
-        describe JobsHelper do
-  let(:job) { Delayed::Job.new }
+              it 'adds docset_bundle_filename param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_bundle_filename: 'DocSet bundle filename'
+          )
+        end').runner.execute(:test)
     
-            context 'when the schema_version is less than 1' do
-          it 'translates keep_events_for from days to seconds' do
-            valid_parsed_data.delete(:schema_version)
-            valid_parsed_data[:agents] = [valid_parsed_weather_agent_data.merge(keep_events_for: 5)]
+          it 'works given the path to compile_commands.json' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
+            )
+          end').runner.execute(:test)
     
-          expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
-    end
-  end
-    
-    
-  #
-  # Waits for the HTTP service to terminate
-  #
-  def wait
-    self.listener.wait if self.listener
-  end
-    
-        if res[1] == IAX_SUBTYPE_REGREJ
-      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
-      dprint('REGREJ: #{reason}')
-      return
-    end
-    
-                encoded
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
-    
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
-    
-              include Rex::Proto::Kerberos::Crypto
-          include Rex::Proto::Kerberos::Model
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
+          it 'yields command output' do
+        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
+        Fastlane::Actions.sh('ls', '-la') do |status, result|
+          expect(status.exitstatus).to eq(1)
+          expect(result).to eq('Heeeelp! Something went wrong.')
         end
+      end
+    
+              value_detector.find_folders(options)
+        end
+    
+          it 'splits correctly' do
+        expected = ['One', 'Two', 'Three', 'Four Token']
+        expect(generator.split_keywords(keywords)).to eq(expected)
+      end
+    end
+    
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+      describe 'DotHelper::DotDrawer' do
+    describe '#id' do
+      it 'properly escapes double quotaion and backslash' do
+        expect(DotHelper::DotDrawer.draw(foo: '') {
+          id('hello\\'')
+        }).to eq(''hello\\\\\\''')
       end
     end
   end
 end
+
     
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        it 'updates Agents' last_error_log_at when an error is logged' do
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 3, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at).to be_nil
     
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
+    
+        def ==(other)
+      other.name == name && other.path == path && other.type == type
+    end
+    
+        delegate :empty?, :blank?, to: :pages
+    
+            css('.content', 'article', '.api-header', 'section', '.instance-member').each do |node|
+          node.before(node.children).remove
+        end
+    
+      # GET /resource/unlock?unlock_token=abcdef
+  def show
+    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
+    yield resource if block_given?
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+        proxy = Devise::Hooks::Proxy.new(warden)
+    
+        # Gives the class the mapping points to.
+    def to
+      @klass.get
+    end
