@@ -1,75 +1,72 @@
 
         
-        
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_modified_;
-}
-    
-    namespace {
+            if (startIndex != -1) {
+      if (startIndex < fActiveStart || startIndex > fActiveLimit) {
+          status = U_INDEX_OUTOFBOUNDS_ERROR;
+      }
+      fMatchEnd = startIndex;
     }
     
-    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
-}
+    U_NAMESPACE_BEGIN
     
-    namespace parallel {
+    class FCDUTF16NFDIterator : public UTF16NFDIterator {
+public:
+    FCDUTF16NFDIterator(const Normalizer2Impl &nfcImpl, const UChar *text, const UChar *textLimit)
+            : UTF16NFDIterator(NULL, NULL) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        const UChar *spanLimit = nfcImpl.makeFCD(text, textLimit, NULL, errorCode);
+        if(U_FAILURE(errorCode)) { return; }
+        if(spanLimit == textLimit || (textLimit == NULL && *spanLimit == 0)) {
+            s = text;
+            limit = spanLimit;
+        } else {
+            str.setTo(text, (int32_t)(spanLimit - text));
+            {
+                ReorderingBuffer buffer(nfcImpl, str);
+                if(buffer.init(str.length(), errorCode)) {
+                    nfcImpl.makeFCD(spanLimit, textLimit, &buffer, errorCode);
+                }
+            }
+            if(U_SUCCESS(errorCode)) {
+                s = str.getBuffer();
+                limit = s + str.length();
+            }
+        }
     }
+private:
+    UnicodeString str;
+};
     
-    void Assembler::and(const Reg64& ra, const Reg64& rs, const Reg64& rb,
-                     bool rc) {
-  EmitXForm(31, rn(rs), rn(ra), rn(rb), 28, rc);
+    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+    
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
+    
+        /**
+     * Construct a matcher that matches the given pattern string.
+     * @param string the pattern to be matched, possibly containing
+     * stand-ins that represent nested UnicodeMatcher objects.
+     * @param start inclusive start index of text to be replaced
+     * @param limit exclusive end index of text to be replaced;
+     * must be greater than or equal to start
+     * @param segmentNum the segment number from 1..n, or 0 if this is
+     * not a segment.
+     * @param data context object mapping stand-ins to
+     * UnicodeMatcher objects.
+     */
+    StringMatcher(const UnicodeString& string,
+                  int32_t start,
+                  int32_t limit,
+                  int32_t segmentNum,
+                  const TransliterationRuleData& data);
+    
+    /**
+ * Destructor
+ */
+StringReplacer::~StringReplacer() {
 }
-    
-    // Deserializing an array could give back a different ArrayKind than we need,
-// so we have to go with the slow case of calling a collection constructor.
-NEVER_INLINE
-Object createFromSerialized(CollectionType colType, APCHandle* handle) {
-  auto const col = Object::attach(collections::alloc(colType));
-  auto const arr = handle->toLocal();
-  switch (colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    static_cast<BaseVector*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    static_cast<BaseSet*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    static_cast<BaseMap*>(col.get())->init(arr);
-    break;
-  case CollectionType::Pair:
-    not_reached();
-    break;
-  }
-  return col;
-}
-    
-        if (!slash && !semi) {
-      raise_warning('rfc2397: invalid meta data');
-      return nullptr;
-    }
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/stream-wrapper-registry.h'
-    
-    #include <sys/types.h>
-    
-    template<typename F>
-void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
-                        int64_t rate, F fillCols) {
-  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
-  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
-  if (!StructuredLog::coinflip(effectiveRate)) return;
-    }
