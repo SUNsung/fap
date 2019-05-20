@@ -1,48 +1,40 @@
 
         
-        module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-              # Register the command
-          components.commands.register(name.to_sym) do
-            [block, opts]
-          end
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
+            def fragment_url_string?(str)
+      str[0] == '#'
     end
     
-    RSpec.describe 'CommentMutes', type: :request do
-  let(:original_commenter)                      { create(:user) }
-  let(:other_commenter)                         { create(:user) }
-  let(:article)                                 { create(:article) }
-  let(:parent_comment_by_og)                    { create(:comment, commentable: article, user: original_commenter) }
-  let(:child_of_parent_by_other)              { create(:comment, commentable: article, user: other_commenter, ancestry: parent_comment_by_og.id.to_s) }
-  let(:child_of_child_by_og)                { create(:comment, commentable: article, user: original_commenter, ancestry: '#{parent_comment_by_og.id}/#{child_of_parent_by_other.id}') }
-  let(:child_of_child_of_child_by_other)  { create(:comment, commentable: article, user: other_commenter, ancestry: '#{parent_comment_by_og.id}/#{child_of_parent_by_other.id}/#{child_of_child_by_og.id}') }
-  let(:child_of_child_of_child_by_og)     { create(:comment, commentable: article, user: original_commenter, ancestry: '#{parent_comment_by_og.id}/#{child_of_parent_by_other.id}/#{child_of_child_by_og.id}/#{child_of_child_by_other.id}') }
-  let(:child_of_child_by_other)             { create(:comment, commentable: article, user: other_commenter, ancestry: '#{parent_comment_by_og.id}/#{child_of_parent_by_other.id}') }
-  let(:child2_of_child_of_child_by_og) { create(:comment, commentable: article, user: original_commenter, ancestry: '#{parent_comment_by_og.id}/#{child_of_parent_by_other.id}/#{child_of_child_by_other.id}') }
-  let(:parent_comment_by_other) { create(:comment, commentable: article, user: other_commenter) }
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
+    
+        def effective_url
+      @effective_url ||= URL.parse super
+    end
+    
+        def process_response?(response)
+      raise NotImplementedError
+    end
+    
+            css('a[id]:empty').each do |node|
+          node.next_element['id'] = node['id'] if node.next_element
+        end
+    
+      def warn_local_gems(plugins_with_path)
+    puts('Update is not supported for manually defined plugins or local .gem plugin installations, skipping: #{plugins_with_path.join(', ')}')
+  end
+    
+    task :spec    => 'spec:all'
+task :default => :spec
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
+    
+      def perform(msg='lulz you forgot a msg!')
+    $redis.lpush('sinkiq-example-messages', msg)
+  end
+end
