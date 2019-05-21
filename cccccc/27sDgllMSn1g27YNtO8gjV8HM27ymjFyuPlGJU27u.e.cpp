@@ -1,196 +1,286 @@
 
         
         
-    {  return Begin + oldSize;
-}  
-
-    
-    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
-                                               ArrayRef<unsigned char> key) {
-  out << '\'';
-  for (auto byte : key) {
-    if (byte < 16) out << '0';
-    out.write_hex(byte);
-  }
-  out << '\'';
-}
-
-    
-    % for start_code_point, end_code_point, value in break_table.property_value_ranges:
-%   if start_code_point == 0:
-  if (C <= ${end_code_point})
-%   else:
-  if (C >= ${start_code_point} && C <= ${end_code_point})
-%   end
-    return GraphemeClusterBreakProperty::${value};
-% end
-    
-    #include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/type_traits.h>
-#include <google/protobuf/message.h>
-#include <google/protobuf/text_format.h>
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-    
     {
-    {inline void Dequantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
-                               const std::vector<mxnet::TBlob> &inputs,
-                               const float threshold) {
-  Dequantize2BitKernelLaunch(s, inputs, threshold);
-}
-}  // namespace kvstore
-}  // namespace mxnet
-    
-      /*!
-   * \brief returns compression factor, which is the factor by which size of gradient
-   * reduces when using a particular type of compression
-   */
-  int GetCompressionFactor();
-    
-    template<typename xpu, typename OP>
-void EvalOneHot_(const TBlob &index, const TBlob &rhs,
-                 TBlob *ret, RunContext ctx) {
-  LOG(INFO) << 'The operator onehot_encode is deprecated; use one_hot instead.';
-  using namespace mshadow::expr;
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  // TODO(eric): support mixed type encoding, i.e. int index and float rhs.
-  CHECK_EQ(ret->type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  CHECK_EQ(rhs.type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  CHECK_EQ(index.type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  ret->get<xpu, 2, real_t>(s) =
-    one_hot_encode(index.get<xpu, 1, real_t>(s),
-                   rhs.shape_[1]);
-}
-    
-      // Pointers to the given variable and result variable
-  // We exchange what given and result point to at every step
-  Tensor<cpu, 2, DType> *given = &storage,
-    *result = &out, *tmp;
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file crop.cc
- * \brief
- * \author Wei Wu
-*/
-    
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 3U);
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
-    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
-    Shape<4> grid_shape = Shape4(out.size(0), out.size(2), out.size(3), 2);
-    Tensor<gpu, 3, DType> loc = in_data[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
-    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
-                                .get_with_shape<gpu, 4, DType>(grid_shape, s);
-    if (!init_cudnn_) {
-     Init(s, in_data, out_data);
+    {
+    {            for (; j < size.width; j++)
+                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
+        }
     }
-    CHECK_EQ(data.CheckContiguous(), true);
-    CHECK_EQ(out.CheckContiguous(), true);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    if (param_.transform_type == st::kAffine) {
-      CUDNN_CALL(cudnnSpatialTfGridGeneratorForward(s->dnn_handle_,
-                                                    st_desc_,
-                                                    loc.dptr_,
-                                                    grid.dptr_));
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    
+    {            vx = vxnext;
+            vy = vynext;
+        }
+        int32x4_t norml = vmull_s16(vget_low_s16(vx), vget_low_s16(vx));
+        int32x4_t normh = vmull_s16(vget_high_s16(vy), vget_high_s16(vy));
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
+CVTS_FUNC(s8, u16, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s8 q3, d4                                       \n\t'
+            'vmovl.s8 q4, d5                                       \n\t'
+            'vmovl.s16 q5, d6                                      \n\t'
+            'vmovl.s16 q6, d7                                      \n\t'
+            'vmovl.s16 q7, d8                                      \n\t'
+            'vmovl.s16 q8, d9                                      \n\t'
+            'vcvt.f32.s32 q9, q5                                   \n\t'
+            'vcvt.f32.s32 q10, q6                                  \n\t'
+            'vcvt.f32.s32 q11, q7                                  \n\t'
+            'vcvt.f32.s32 q12, q8                                  \n\t'
+            'vmul.f32 q13, q9, q0                                  \n\t'
+            'vmul.f32 q14, q10, q0                                 \n\t'
+            'vmul.f32 q15, q11, q0                                 \n\t'
+            'vmul.f32 q2, q12, q0                                  \n\t'
+            'vadd.f32 q3, q13, q1                                  \n\t'
+            'vadd.f32 q4, q14, q1                                  \n\t'
+            'vadd.f32 q5, q15, q1                                  \n\t'
+            'vadd.f32 q6, q2, q1                                   \n\t'
+            'vcvt.s32.f32 q7, q3                                   \n\t'
+            'vcvt.s32.f32 q8, q4                                   \n\t'
+            'vcvt.s32.f32 q9, q5                                   \n\t'
+            'vcvt.s32.f32 q10, q6                                  \n\t'
+            'vqmovun.s32 d22, q7                                   \n\t'
+            'vqmovun.s32 d23, q8                                   \n\t'
+            'vqmovun.s32 d24, q9                                   \n\t'
+            'vqmovun.s32 d25, q10                                  \n\t'
+            'vst1.16 {d22-d23}, [%[dst1]]                          \n\t'
+            'vst1.16 {d24-d25}, [%[dst2]]                          \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 8),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
+        );
     }
-    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
-                                            st_desc_,
-                                            &alpha,
-                                            in_desc_,
-                                            data.dptr_,
-                                            grid.dptr_,
-                                            &beta,
-                                            out_desc_,
-                                            out.dptr_));
-  }
+})
+#else
+CVTS_FUNC(s8, u16, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        int8x16_t vline = vld1q_s8(_src + i);
+        int16x8_t vline1_s16 = vmovl_s8(vget_low_s8 (vline));
+        int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline));
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline1_s16));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline1_s16));
+        int32x4_t vline3_s32 = vmovl_s16(vget_low_s16 (vline2_s16));
+        int32x4_t vline4_s32 = vmovl_s16(vget_high_s16(vline2_s16));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
+        float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline3_f32 = vmulq_f32(vline3_f32, vscale);
+        vline4_f32 = vmulq_f32(vline4_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline3_f32 = vaddq_f32(vline3_f32, vshift);
+        vline4_f32 = vaddq_f32(vline4_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        vline3_s32 = vcvtq_s32_f32(vline3_f32);
+        vline4_s32 = vcvtq_s32_f32(vline4_f32);
+        uint16x8_t vRes1_u16 = vcombine_u16(vqmovun_s32(vline1_s32), vqmovun_s32(vline2_s32));
+        uint16x8_t vRes2_u16 = vcombine_u16(vqmovun_s32(vline3_s32), vqmovun_s32(vline4_s32));
+        vst1q_u16(_dst + i + 0, vRes1_u16);
+        vst1q_u16(_dst + i + 8, vRes2_u16);
+    }
+})
+#endif
     
-    Operator* NativeOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
+        size_t j = 0;
+    }
+    
+    inline float32x4_t vrsqrtq_f32(float32x4_t val)
+{
+    float32x4_t e = vrsqrteq_f32(val);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    return e;
 }
     
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file identity_attach_KL_sparse_reg.cc
- * \brief\
-*/
-#include './identity_attach_KL_sparse_reg-inl.h'
-#include <nnvm/op_attr_types.h>
+                // combine 3 'shifted' vectors
+            t0 = vextq_u16(tprev, tcurr, 7);
+            t1 = tcurr;
+            t2 = vextq_u16(tcurr, tnext, 1);
     
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
+                                               UBool /*isIncremental*/) const {
+    // Our caller (filteredTransliterate) has already narrowed us
+    // to an unfiltered run.  Delete it.
+    UnicodeString empty;
+    text.handleReplaceBetween(index.start, index.limit, empty);
+    int32_t len = index.limit - index.start;
+    index.contextLimit -= len;
+    index.limit -= len;
+}
+U_NAMESPACE_END
+    
+    SelectFormat::~SelectFormat() {
 }
     
+    U_NAMESPACE_BEGIN
     
-    { protected:
-  SpeedLimit speed_limit_;
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
 };
     
-    
-    {
-    {
-    {
-    {  double ret = x * 0.001000;
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    #endif  // __SMALLINTFORMATTER_H__
 
+    
+        // We will need the calendar to know what type of symbols to load.
+    initializeCalendar(NULL, locale, status);
+    if (U_FAILURE(status)) return;
+    
+    
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+      /*
+   * Create an uncounted array if we can.
+   *
+   * If this collection is an OuterHandle, then we need to do a full check on
+   * this array for things like circularity.  If we're an InnerHandle, someone
+   * already checked that, but we want to check for whether it's uncounted to
+   * use a better representation.  For the OuterHandle case, we just delegate
+   * to APCArray below (which will do the full DataWalker pass).
+   */
+  if (level == APCHandleLevel::Inner && apcExtension::UseUncounted &&
+      !array->empty()) {
+    DataWalker walker(DataWalker::LookupFeature::HasObjectOrResource);
+    auto const features = walker.traverseData(const_cast<ArrayData*>(array));
+    assertx(!features.isCircular);
+    if (!features.hasObjectOrResource) {
+      auto const makeUncounted = [&] () {
+        if (isVectorCollection(obj->collectionType())) {
+          return APCArray::MakeUncountedVec(const_cast<ArrayData*>(array));
+        }
+        return APCArray::MakeUncountedDict(const_cast<ArrayData*>(array));
+      };
+      return WrapArray(
+        { makeUncounted(), getMemSize(array) + sizeof(APCTypedValue) },
+        obj->collectionType()
+      );
+    }
+  }
+    
+    CONTAINER_CONFIG_BODY(std::vector<uint32_t>, UInt32Vector)
+CONTAINER_CONFIG_BODY(std::vector<std::string>, StrVector)
+namespace { using simap = std::unordered_map<std::string, int>; }
+CONTAINER_CONFIG_BODY(simap, IntMap)
+CONTAINER_CONFIG_BODY(ConfigMap, Map)
+CONTAINER_CONFIG_BODY(ConfigMapC, MapC)
+CONTAINER_CONFIG_BODY(ConfigSet, Set)
+CONTAINER_CONFIG_BODY(ConfigSetC, SetC)
+CONTAINER_CONFIG_BODY(ConfigFlatSet, FlatSet)
+CONTAINER_CONFIG_BODY(ConfigIMap, IMap)
+    
+    #endif // HPHP_DATA_STREAM_WRAPPER_H
+
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    /**
+ * Wrapper around popen/pclose.
+ */
+struct Pipe : PlainFile {
+  DECLARE_RESOURCE_ALLOCATION(Pipe);
+    }
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/execution-context.h'
+#include 'hphp/runtime/base/request-event-handler.h'
+    
+    #include <string>
+    
+    ClusterGeneralInfo701::ClusterGeneralInfo701() {}
+const uint32_t ClusterGeneralInfo701::ID = 0x701;
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(4, 4);
+    
+    ObjectGeneralInfo60B::ObjectGeneralInfo60B() {}
+const uint32_t ObjectGeneralInfo60B::ID = 0x60B;
+    
+    bool RadarState201::send_quality(const std::uint8_t* bytes,
+                                 int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(4, 1);
+    }
+    
+    namespace apollo {
+namespace localization {
+namespace msf {
+    }
+    }
+    }
+    
+      x <<= 16;
+  x >>= 16;
     
     namespace apollo {
 namespace canbus {
@@ -199,85 +289,86 @@ namespace gem {
     }
     }
     
-    void Brakerpt6c::Parse(const std::uint8_t* bytes, int32_t length,
-                       ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_manual_input(
-      manual_input(bytes, length));
-  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_commanded_value(
-      commanded_value(bytes, length));
-  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_output_value(
-      output_value(bytes, length));
-  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_brake_on_off(
-      brake_on_off(bytes, length));
-}
+      // Picks a node of at least |minimum_size| from the category. Stores the
+  // actual size in |node_size|. Returns nullptr if no node is found.
+  FreeSpace SearchForNodeInList(size_t minimum_size, size_t* node_size);
     
-    // config detail: {'name': 'veh_can_timeout', 'offset': 0.0, 'precision': 1.0,
-// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 2,
-// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
-bool Globalrpt6a::veh_can_timeout(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(2, 1);
+    #include 'src/allocation.h'
+#include 'src/base/logging.h'
+#include 'src/base/platform/platform.h'
+#include 'src/cancelable-task.h'
+#include 'src/globals.h'
+#include 'src/heap/gc-tracer.h'
+#include 'src/heap/remembered-set.h'
+#include 'src/heap/slot-set.h'
+    
+    #include 'src/heap/stress-scavenge-observer.h'
+    
+    #include 'src/ia32/frame-constants-ia32.h'
+    
+    class ExitFrameConstants : public TypedFrameConstants {
+ public:
+  static constexpr int kSPOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kCodeOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  DEFINE_TYPED_FRAME_SIZES(2);
     }
     
-        for (i = 1; i < 20000; i++)
-    {
-        uint32_t key = i * 37;
-        swRbtree_insert(tree, key, (void *) (long) (i * 8));
+      flatbuffers::FlatBufferBuilder builder;
+  auto name = builder.CreateString('Dog');
+  auto sound = builder.CreateString('Bark');
+  auto animal_buffer = sample::CreateAnimal(builder, name, sound);
+  builder.Finish(animal_buffer);
+    
+    // Generate a flatbuffer schema from the Parser's internal representation.
+std::string GenerateFBS(const Parser &parser, const std::string &file_name) {
+  // Proto namespaces may clash with table names, escape the ones that were
+  // generated from a table:
+  for (auto it = parser.namespaces_.begin(); it != parser.namespaces_.end();
+       ++it) {
+    auto &ns = **it;
+    for (size_t i = 0; i < ns.from_table; i++) {
+      ns.components[ns.components.size() - 1 - i] += '_';
+    }
+  }
     }
     
-            int setContext(redisAsyncContext * ac) {
-            if (ac->ev.data != NULL) {
-                return REDIS_ERR;
-            }
-            m_ctx = ac;
-            m_ctx->ev.data = this;
-            m_ctx->ev.addRead = RedisQtAddRead;
-            m_ctx->ev.delRead = RedisQtDelRead;
-            m_ctx->ev.addWrite = RedisQtAddWrite;
-            m_ctx->ev.delWrite = RedisQtDelWrite;
-            m_ctx->ev.cleanup = RedisQtCleanup;
-            return REDIS_OK;
-        }
     
+    {    code += Indent + '/**\n';
+    code += Indent + ' * @param int $_i offset\n';
+    code += Indent + ' * @param ByteBuffer $_bb\n';
+    code += Indent + ' * @return ' + struct_def.name + '\n';
+    code += Indent + ' **/\n';
+    code += Indent + 'public function init($_i, ByteBuffer $_bb)\n';
+    code += Indent + '{\n';
+    code += Indent + Indent + '$this->bb_pos = $_i;\n';
+    code += Indent + Indent + '$this->bb = $_bb;\n';
+    code += Indent + Indent + 'return $this;\n';
+    code += Indent + '}\n\n';
+  }
     
-    {    friend
-    void getCallback(redisAsyncContext *, void *, void *);
-};
+    // Test to validate Conan package generated
     
-        cache.set('test2', val2);
-    ASSERT_EQ(cache.get('test2').get(), val2.get());
-    val2.reset();
-    ASSERT_EQ(dtor_num, 1);
-    ASSERT_EQ(cache.get('test'), nullptr);
-    
-        std::unordered_map<std::string, cache_list_t::iterator> cache_map;
-    cache_list_t cache_list;
-    size_t cache_capacity;
-    
-    TEST(coroutine_base, yield_resume)
-{
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        long cid = Coroutine::get_current_cid();
-        Coroutine *co = Coroutine::get_by_cid(cid);
-        co->yield();
-        *(long *) arg = Coroutine::get_current_cid();
-    }, &_cid);
-    }
-    
-    private:
-    int check_task_param(int dst_worker_id);
-    
-    void my_onClose(swServer *serv, swDataHead *info)
-{
-    printf('PID=%d\tClose fd=%d|from_id=%d\n', getpid(), info->fd, info->from_id);
-}
-    
-    
-    {    virtual void onTask(int task_id, int src_worker_id, const DataBuffer &data);
-    virtual void onFinish(int task_id, const DataBuffer &data);
-};
-    
-    #include <iostream>
+      // GetMessage extracts the subslice of the buffer corresponding to the
+  // flatbuffers-encoded region and wraps it in a `Message<T>` to handle buffer
+  // ownership.
+  template<class T> Message<T> GetMessage() {
+    auto buf_data = buf_.scratch_data();       // pointer to memory
+    auto buf_size = buf_.capacity();  // size of memory
+    auto msg_data = buf_.data();      // pointer to msg
+    auto msg_size = buf_.size();      // size of msg
+    // Do some sanity checks on data/size
+    FLATBUFFERS_ASSERT(msg_data);
+    FLATBUFFERS_ASSERT(msg_size);
+    FLATBUFFERS_ASSERT(msg_data >= buf_data);
+    FLATBUFFERS_ASSERT(msg_data + msg_size <= buf_data + buf_size);
+    // Calculate offsets from the buffer start
+    auto begin = msg_data - buf_data;
+    auto end = begin + msg_size;
+    // Get the slice we are working with (no refcount change)
+    grpc_slice slice = slice_allocator_.get_slice(buf_data, buf_size);
+    // Extract a subslice of the existing slice (increment refcount)
+    grpc_slice subslice = grpc_slice_sub(slice, begin, end);
+    // Wrap the subslice in a `Message<T>`, but don't increment refcount
+    Message<T> msg(subslice, false);
+    return msg;
+  }
