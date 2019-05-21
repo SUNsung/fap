@@ -1,211 +1,213 @@
 
         
-        namespace tensorflow {
-namespace swig {
+        #include <QDialog>
+    
+    
+static void secp256k1_gej_add_ge(secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_ge *b) {
+    /* Operations: 7 mul, 5 sqr, 4 normalize, 21 mul_int/add/negate/cmov */
+    static const secp256k1_fe fe_1 = SECP256K1_FE_CONST(0, 0, 0, 0, 0, 0, 0, 1);
+    secp256k1_fe zz, u1, u2, s1, s2, t, tt, m, n, q, rr;
+    secp256k1_fe m_alt, rr_alt;
+    int infinity, degenerate;
+    VERIFY_CHECK(!b->infinity);
+    VERIFY_CHECK(a->infinity == 0 || a->infinity == 1);
     }
+    
+    
+    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
+    /* Fail if the secret key is invalid. */
+    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
+        unsigned char nonce32[32];
+        unsigned int count = 0;
+        secp256k1_scalar_set_b32(&msg, msg32, NULL);
+        while (1) {
+            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
+            if (!ret) {
+                break;
+            }
+            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
+            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
+                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
+                    break;
+                }
+            }
+            count++;
+        }
+        memset(nonce32, 0, 32);
+        secp256k1_scalar_clear(&msg);
+        secp256k1_scalar_clear(&non);
+        secp256k1_scalar_clear(&sec);
     }
-    
-    namespace tensorflow {
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
+    } else {
+        memset(signature, 0, sizeof(*signature));
     }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Returns true if 'object' is a PyBfloat16.
-bool PyBfloat16_Check(PyObject* object) {
-  return PyObject_IsInstance(object,
-                             reinterpret_cast<PyObject*>(&PyBfloat16_Type));
+    return ret;
 }
     
     
-    {}  // namespace tensorflow
-    
-    string TryFindKernelClass(const string& serialized_node_def) {
-  tensorflow::NodeDef node_def;
-  if (!node_def.ParseFromString(serialized_node_def)) {
-    LOG(WARNING) << 'Error parsing node_def';
-    return '';
-  }
-    }
-    
-    #include 'tensorflow/stream_executor/lib/status.h'
-#include 'tensorflow/stream_executor/lib/statusor.h'
-#include 'tensorflow/stream_executor/platform/mutex.h'
-#include 'tensorflow/stream_executor/stream_executor_pimpl.h'
-    
-      // Fits a line to the points, returning the fitted line as a pair of
-  // points, and the upper quartile error.
-  double Fit(ICOORD* pt1, ICOORD* pt2) {
-    return Fit(0, 0, pt1, pt2);
-  }
-  // Fits a line to the points, ignoring the skip_first initial points and the
-  // skip_last final points, returning the fitted line as a pair of points,
-  // and the upper quartile error.
-  double Fit(int skip_first, int skip_last, ICOORD* pt1, ICOORD* pt2);
-    
-    #ifndef TESSERACT_CCSTRUCT_LINLSQ_H_
-#define TESSERACT_CCSTRUCT_LINLSQ_H_
-    
-      // Return whether this model is likely to agree with the other model on most
-  // paragraphs they are marked.
-  bool Comparable(const ParagraphModel &other) const;
-    
-      // Copies UNICHAR_IDs from dst to src. Returns the number of ids copied.
-  // The function assumes that the arrays are terminated by INVALID_UNICHAR_ID
-  // and that dst has enough space for all the elements from src.
-  static inline int copy(const UNICHAR_ID src[], UNICHAR_ID dst[]) {
-    int i = 0;
-    do {
-      dst[i] = src[i];
-    } while (dst[i++] != INVALID_UNICHAR_ID);
-    return i - 1;
-  }
-    
-    namespace b2ConvexDecomp {
-    }
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_R11
-	// Encoding bits for the R portion of R11
-	// ################################################################################
-    
-    void Clipper::ClearJoins()
-{
-  for (JoinList::size_type i = 0; i < m_Joins.size(); i++)
-    delete m_Joins[i];
-  m_Joins.resize(0);
+    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
 }
-//------------------------------------------------------------------------------
     
-    //use_int32: When enabled 32bit ints are used instead of 64bit ints. This
-//improve performance but coordinate values are limited to the range +/- 46340
-//#define use_int32
-    
-    /*
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-    
-    /** 16x16 multiplication where the result fits in 32 bits */
-#undef MULT16_16
-static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_16\n\t'
-      'smulbb %0, %1, %2;\n'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
-    
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare('options') != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  ExtensionManager_options_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
+    #include <vector>
     
     
-    {};
-    
-    class InternalExtensionInfo;
-    
-      fprintf(p->out, '\nShell settings:\n');
-  fprintf(p->out, '%13.13s: %s\n', 'echo', p->echoOn != 0 ? 'on' : 'off');
-  fprintf(
-      p->out, '%13.13s: %s\n', 'headers', p->showHeader != 0 ? 'on' : 'off');
-  fprintf(p->out, '%13.13s: %s\n', 'mode', modeDescr[p->mode]);
-  fprintf(p->out, '%13.13s: ', 'nullvalue');
-  output_c_string(p->out, p->nullvalue);
-  fprintf(p->out, '\n');
-  fprintf(p->out,
-          '%13.13s: %s\n',
-          'output',
-          strlen30(p->outfile) != 0 ? p->outfile : 'stdout');
-  fprintf(p->out, '%13.13s: ', 'separator');
-  output_c_string(p->out, p->separator);
-  fprintf(p->out, '\n');
-  fprintf(p->out, '%13.13s: ', 'width');
-  for (int i = 0; i < ArraySize(p->colWidth) && p->colWidth[i] != 0; i++) {
-    fprintf(p->out, '%d ', p->colWidth[i]);
-  }
-  fprintf(p->out, '\n');
-    
-        // We now try to find device information based on any explicit storage
-    // controller info.  Once we find one, we can search until the max ID of
-    // that controller, and assume that all information with that controller
-    // has been retrieved.
-    for (size_t i = 0; i <= type->maxID; i++) {
-      std::string full_type = type->driver + std::to_string(i);
-    }
-    
-    
-    {  FRIEND_TEST(KillswitchTests, test_killswitch_plugin);
+    { protected:
+  TransformationParameter transform_param_;
+  shared_ptr<DataTransformer<Dtype> > data_transformer_;
+  bool output_labels_;
 };
     
-    TEST_F(PerfOutputTests,
-       impl_consumeWrappedMessagesFromCircularBuffer_splited_record_wrapping) {
-  using WrappedMessage = ebpf::PerfOutput<TestMessage>::WrappedMessage;
-  auto const test_size = std::size_t{3};
-  auto buf = std::vector<ebpf::impl::ByteType>(
-      sizeof(WrappedMessage) * test_size + 154, 0);
-  auto const first_part_size = 8;
-  auto const tail = buf.size() - sizeof(WrappedMessage) - first_part_size;
-  auto const head = tail + sizeof(WrappedMessage) * test_size;
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+            static Dictionary Serialize(const FunctionPtr& f);
+    
+        Constant Constant::CloneAs(DataType dataType) const
+    {
+        if (dataType != DataType::Double)
+            InvalidArgument('Constant::Clone: Cannot clone Constant '%S' with DataType '%s' to DataType '%s'.', AsString().c_str(), DataTypeName(GetDataType()), DataTypeName(dataType));
     }
     
-    #include <osquery/tests/integration/tables/helper.h>
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
     
     
+    {private:
+    // parameters
+    vector<ComputationNodeBasePtr> inputNodes;
+    map<wstring, ComputationNodeBasePtr> outputNodes;
+    ParameterTreatment parameterTreatment;
+    // other
+    set<ComputationNodeBasePtr> dependentSet;                                     // set of nodes that outputNodes depend on
+};
+    
+            if (Input(1)->HasMBLayout())
+        {
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0));
+            SetDims(TensorShape(rows0), true);
+        }
+        else // multiplying two straight matrices
+        {
+            size_t cols1 = Input(1)->GetAsMatrixNumCols();
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0, cols1));
+            SetDims(TensorShape(rows0, cols1), false);
+        }
+    
+        virtual void ForwardPropNonLooping() override
     {
-    {} // namespace table_tests
-} // namespace osquery
+        bool isInput0Sparse = Input(0)->template Is<SparseInputValue<ElemType>>();
+        bool isInput1Sparse = Input(1)->template Is<SparseInputValue<ElemType>>();
+        if (isInput0Sparse || isInput1Sparse)
+            LogicError('EditDistanceError node was not tested for sparse inputs.');
+    }
+    
+            std::vector<bool> workspaceFlagVec = {true, false};
+        for (auto& devId : m_deviceIDSet)
+        {
+            for (auto wsFlag : workspaceFlagVec)   // we allocate the workspace memory pointers first, and they are not shared with the non-workspace memory requests
+            {
+                // memAllocInfoVec is a sorted list of memory allocations from smallest to largest in memory size 
+                vector<MemAllocInfo> memAllocInfoVec;
+                int memoryCounter = 0;
+                // we start with memory request that is scalable with minibatch size(usually those require larger memory size)
+                for (auto& memInfo : memInfoVec)
+                {
+                    // check if it's the proper device
+                    if (memInfo.deviceId != devId || memInfo.isWorkSpace != wsFlag || !memInfo.mbScale)
+                        continue;
+    }
+    }
+    }
+    
+    #endif
 
     
-    namespace osquery {
-namespace table_tests {
-    }
-    }
-    
-    class kernelPanics : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
+        dword(vx_formater.instruction);
   }
-};
+  //TODO(rcardoso): Unimplemented instruction formaters
+  void EmitXSForm(const uint8_t op,
+                  const RegNumber rt,
+                  const RegNumber ra,
+                  const uint8_t sh,
+                  const uint16_t xop,
+                  const bool rc = 0){
+    
+    APCHandle::Pair APCCollection::Make(const ObjectData* obj,
+                                    APCHandleLevel level,
+                                    bool unserializeObj) {
+  auto bail = [&] {
+    return APCString::MakeSerializedObject(
+      apc_serialize(Variant(const_cast<ObjectData*>(obj)))
+    );
+  };
+    }
     
     
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    public:
+  static void Add(InfoVec& out, const char* name, const std::string& value);
+  static void AddServerStats(InfoVec& out, const char* name,
+                             const char* statsName = nullptr);
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+        redisReply * reply = static_cast<redisReply *>(r);
+    ExampleQt * ex = static_cast<ExampleQt *>(privdata);
+    if (reply == nullptr || ex == nullptr) return;
+    
+        cache.set('test', val);
+    ASSERT_EQ(cache.get('test').get(), val.get());
+    
+        pid_t server_pid = create_server();
+    
+        //create Server
+    ret = swServer_create(&serv);
+    if (ret < 0)
     {
-    {} // namespace table_tests
-} // namespace osquery
+        swTrace('create server fail[error=%d].\n', ret);
+        exit(0);
+    }
