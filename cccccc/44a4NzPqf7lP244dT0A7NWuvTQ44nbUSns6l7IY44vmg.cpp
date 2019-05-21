@@ -1,251 +1,113 @@
 
         
-          std::vector<string> output;
-  string input_tensors_needed_out;
-  tensorflow::Status status = RunCppShapeInferenceImpl(
-      graph_def_version, serialized_node_def, input_serialized_shapes,
-      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
-      &output, &input_tensors_needed_out);
-    
-    namespace tensorflow {
-namespace python_op_gen_internal {
-    }
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+        
+    {} // namespace caffe2
 
     
-    struct PyDecrefDeleter {
-  void operator()(PyObject* p) const { Py_DECREF(p); }
-};
+    </details>
     
-    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
+    op = core.CreateOperator(
+    'Floor',
+    ['X'],
+    ['X'],
+)
     
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/logging.h'
+#include 'caffe2/core/operator.h'
+#include 'caffe2/utils/math.h'
     
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace atom {
+      // these three metods are querying the state of the WriteController
+  bool IsStopped() const;
+  bool NeedsDelay() const { return total_delayed_.load() > 0; }
+  bool NeedSpeedupCompaction() const {
+    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
+  }
+  // return how many microseconds the caller needs to sleep after the call
+  // num_bytes: how many number of bytes to put into the DB.
+  // Prerequisite: DB mutex held.
+  uint64_t GetDelay(Env* env, uint64_t num_bytes);
+  void set_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    } else if (write_rate > max_delayed_write_rate()) {
+      write_rate = max_delayed_write_rate();
     }
-    
-      // content::WebContentsObserver implementations:
-  void RenderFrameDeleted(content::RenderFrameHost* rfh) override;
-  void RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
-                              content::RenderFrameHost* new_rfh) override;
-  void FrameDeleted(content::RenderFrameHost* rfh) override;
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
-};
-    
-    void OffScreenOutputDevice::Resize(const gfx::Size& pixel_size,
-                                   float scale_factor) {
-  if (viewport_pixel_size_ == pixel_size)
-    return;
-  viewport_pixel_size_ = pixel_size;
-    }
-    
-    #ifndef ATOM_BROWSER_RELAUNCHER_H_
-#define ATOM_BROWSER_RELAUNCHER_H_
-    
-    #include 'atom/browser/relauncher.h'
-    
-    
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-
-    
-    GeneratorFactory::GeneratorFactory() {}
-GeneratorFactory::~GeneratorFactory() {}
-    
-      if (extension_generators_.size() > 0) {
-    // The dynamic methods block is only needed if there are extensions.
-    printer->Print(
-        '@interface $root_class_name$ (DynamicMethods)\n',
-        'root_class_name', root_class_name_);
-    }
-    
-      {
-    string str;
-    StringByteSink sink(&str);
-    limit_source.CopyTo(&sink, limit_source.Available());
-    EXPECT_EQ('ello ', str);
-    EXPECT_EQ(0, limit_source.Available());
-    EXPECT_EQ(6, source.Available());
+    delayed_write_rate_ = write_rate;
   }
     
-    TEST(StatusOr, TestStatus) {
-  StatusOr<int> good(4);
-  EXPECT_TRUE(good.ok());
-  StatusOr<int> bad(Status::CANCELLED);
-  EXPECT_FALSE(bad.ok());
-  EXPECT_EQ(Status::CANCELLED, bad.status());
-}
-    
-    Missing features (represented by empty ranges) filled with default_value.
-    
-    )DOC')
-    .Arg(
-        'values',
-        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
-        true /* required */)
-    .Arg(
-        'dtype',
-        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
-    .Arg(
-        'shape',
-        '*(type: [int])* Desired shape of the *output* tensor.')
-    .Arg(
-        'extra_shape',
-        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
-    .Input(
-        0,
-        'input',
-        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
-    .Output(
-        0,
-        'output',
-        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
-    .TensorInferenceFunction(FillerTensorInference<>);
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
+    class MyMerge : public rocksdb::MergeOperator {
+ public:
+  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
+                           MergeOperationOutput* merge_out) const override {
+    merge_out->new_value.clear();
+    if (merge_in.existing_value != nullptr) {
+      merge_out->new_value.assign(merge_in.existing_value->data(),
+                                  merge_in.existing_value->size());
     }
+    for (const rocksdb::Slice& m : merge_in.operand_list) {
+      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
+      // the compaction filter filters out bad values
+      assert(m.ToString() != 'bad');
+      merge_out->new_value.assign(m.data(), m.size());
+    }
+    return true;
   }
+    }
+    
+    
+    {}  // namespace
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    double ClusterGeneralInfo701::rcs(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 7);
+  uint32_t x = t0.get_byte(0, 8);
+  double ret = x * CLUSTER_RCS_RES + CLUSTER_RCS;
+  return ret;
 }
     
-    // A macro for testing Google Test assertions or code that's expected to
-// generate Google Test non-fatal failures.  It asserts that the given
-// statement will cause exactly one non-fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// 'statement' is allowed to reference local variables and members of
-// the current object.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  If we do that, the code won't compile when the user gives
-// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
-// expands to code containing an unprotected comma.  The
-// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
-// catches that.
-//
-// For the same reason, we have to write
-//   if (::testing::internal::AlwaysTrue()) { statement; }
-// instead of
-//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
-// to avoid an MSVC warning on unreachable code.
-#define EXPECT_NONFATAL_FAILURE(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+    TEST(TestPiecewiseLinearKernel, add_third_order_derivative_matrix) {
+  PiecewiseLinearKernel kernel(10, 0.1);
+  const double init_derivative = 5.0;
+  const double init_second_derivative = 2.0;
+    }
     
-      // Returns true iff the test part failed.
-  bool failed() const { return type_ != kSuccess; }
     
-    # define TYPED_TEST(CaseName, TestName) \
-  template <typename gtest_TypeParam_> \
-  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
-      : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTest< \
-          CaseName, \
-          ::testing::internal::TemplateSel< \
-              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
-          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
-              '', #CaseName, #TestName, 0); \
-  template <typename gtest_TypeParam_> \
-  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
     
-    // FilePath - a class for file and directory pathname manipulation which
-// handles platform-specific conventions (like the pathname separator).
-// Used for helper functions for naming files in a directory for xml output.
-// Except for Set methods, all methods are const or static, which provides an
-// 'immutable value object' -- useful for peace of mind.
-// A FilePath with a value ending in a path separator ('like/this/') represents
-// a directory, otherwise it is assumed to represent a file. In either case,
-// it may or may not represent an actual file or directory in the file system.
-// Names are NOT checked for syntax correctness -- no checking for illegal
-// characters, malformed paths, etc.
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-      // Clears the queue.
-  void Clear() {
-    if (size_ > 0) {
-      // 1. Deletes every node.
-      QueueNode<E>* node = head_;
-      QueueNode<E>* next = node->next();
-      for (; ;) {
-        delete node;
-        node = next;
-        if (node == NULL) break;
-        next = node->next();
-      }
+    namespace apollo {
+namespace canbus {
+namespace gem {
     }
     }
+    }
+    
+    // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
+// 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 48, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 1);
+    }
+    
+    #include 'gtest/gtest.h'
