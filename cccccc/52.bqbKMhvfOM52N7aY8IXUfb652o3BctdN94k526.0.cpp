@@ -1,158 +1,245 @@
 
         
-          /*! \brief internal next function, inlined for fater processing. */
-  inline bool Next_(void) {
-    if (!base_->Next()) return false;
-    const DataInst &src = base_->Value();
-    this->SetOutImg(src);
-    out_.data.resize(2);
-    out_.data[0] = outimg_;
-    out_.data[1] = src.data[1];
-    out_.index = src.index;
-    out_.extra_data = src.extra_data;
-    return true;
-  }
-  /*!
-   * \brief Set the output image, after augmentation and normalization.
-   * \param src The source image.
-   */
-  inline void SetOutImg(const DataInst &src) {
-    using namespace mshadow::expr;  // NOLINT(*)
+        namespace testing {
     }
     
-    struct quantize_2bit {
-  MSHADOW_XINLINE static void Map(int out_block_id,
-                                  int original_size,
-                                  float *out,
-                                  float *grad,
-                                  float *residual,
-                                  const float neg_threshold,
-                                  const float pos_threshold) {
-    // this block contains the compressed representation of
-    // upto 16 values starting from out_block_id*16
-    float *compr_block = out + out_block_id;
-    // init to 0
-    *compr_block = 0;
-    // start and end are indices in original grad array
-    const int start = out_block_id << 4;
-    const int end = (start + 16 <= original_size) ? start + 16 : original_size;
-    // cast as char* to manipulate bits of float addresses
-    char *block_ptr = reinterpret_cast < char * > (compr_block);
-    // masks to set bits when value meets pos_threshold
-    // 0xc0 is mask when value is to be represented by the first two bits in a char*
-    // 0xc0 means first two bits are set to 11
-    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
-    // masks to set bits when value meets neg_threshold
-    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
-    for (int i = start; i < end; i++) {
-      // adds offset to reach appropriate byte
-      char *curr_byte = block_ptr + ((i - start) >> 2);
-      // adds gradient to existing residual to get updated grad
-      residual[i] += grad[i];
-      if (residual[i] >= pos_threshold) {
-        // set data to 11
-        *curr_byte |= posbits[(i & 3)];
-        // reduce residual by pos_threshold
-        residual[i] -= pos_threshold;
-      } else if (residual[i] <= neg_threshold) {
-        // set data to 10
-        *curr_byte |= negbits[(i & 3)];
-        residual[i] -= neg_threshold;
-      }
-    }
+    // Now the tricky part: you need to register all test patterns before
+// you can instantiate them.  The first argument of the macro is the
+// test case name; the rest are the names of the tests in this test
+// case.
+REGISTER_TYPED_TEST_CASE_P(FooTest,
+                           DoesBlah, HasPropertyA);
+    
+    // DeathTest is a class that hides much of the complexity of the
+// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
+// returns a concrete class that depends on the prevailing death test
+// style, as defined by the --gtest_death_test_style and/or
+// --gtest_internal_run_death_test flags.
+    
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
   }
+    }
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+    
+    {  E element_;
+  QueueNode* next_;
 };
     
-    )code' ADD_FILELINE)
-.set_attr<FCompute>('FCompute<cpu>', DivSqrtDimForward_<cpu>)
-.set_attr<nnvm::FGradient>('FGradient', ElemwiseGradUseNone{'_contrib_div_sqrt_dim'});
+      void DoReads(int n);
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator* CreateOp<cpu>(CropParam param) {
-  return new CropOp<cpu>(param);
+      WritableFile* dest_;
+  int block_offset_;  // Current offset in block
+    
+      // Change the options used by this builder.  Note: only some of the
+  // option fields can be changed after construction.  If a field is
+  // not allowed to change dynamically and its value in the structure
+  // passed to the constructor is different from its value in the
+  // structure passed to this method, this method will return an error
+  // without changing any fields.
+  Status ChangeOptions(const Options& options);
+    
+    namespace leveldb {
+    }
+    
+    #include <vector>
+#include 'Ratpack/ratpak.h'
+    
+    // Some commands are not affecting the state machine state of the calc flow. But these are more of
+// some gui mode kind of settings (eg Inv button, or Deg,Rad , Back etc.). This list is getting bigger & bigger
+// so we abstract this as a separate routine. Note: There is another side to this. Some commands are not
+// gui mode setting to begin with, but once it is discovered it is invalid and we want to behave as though it
+// was never inout, we need to revert the state changes made as a result of this test
+bool IsGuiSettingOpCode(OpCode opCode)
+{
+    if (IsOpInRange(opCode, IDM_HEX, IDM_BIN) || IsOpInRange(opCode, IDM_QWORD, IDM_BYTE) || IsOpInRange(opCode, IDM_DEG, IDM_GRAD))
+    {
+        return true;
+    }
+    }
+    
+        if (numwidth >= QWORD_WIDTH && numwidth <= BYTE_WIDTH)
+    {
+        m_numwidth = numwidth;
+        m_dwWordBitWidth = DwWordBitWidthFromeNumWidth(numwidth);
+    }
+    
+    class CBinaryCommand final : public IBinaryCommand
+{
+public:
+    CBinaryCommand(int command);
+    void SetCommand(int command) override;
+    int GetCommand() const override;
+    CalculationManager::CommandType GetCommandType() const override;
+    void Accept(_In_ ISerializeCommandVisitor& commandVisitor) override;
+    }
+    
+    // maximum depth you can get by precedence. It is just an array's size limit.
+static constexpr size_t MAXPRECDEPTH = 25;
+    
+        /**
+     * Constructs a transliterator.
+     */
+    RemoveTransliterator();
+    
+        fFlags            = other.fFlags;
+    fLiteralText      = other.fLiteralText;
+    fMinMatchLen      = other.fMinMatchLen;
+    fFrameSize        = other.fFrameSize;
+    fDataSize         = other.fDataSize;
+    fStaticSets       = other.fStaticSets;
+    fStaticSets8      = other.fStaticSets8;
+    
+    int32_t ScriptSet::nextSetBit(int32_t fromIndex) const {
+    // TODO: Wants a better implementation.
+    if (fromIndex < 0) {
+        return -1;
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    for (int32_t scriptIndex = fromIndex; scriptIndex < (int32_t)sizeof(bits)*8; scriptIndex++) {
+        if (test((UScriptCode)scriptIndex, status)) {
+            return scriptIndex;
+        }
+    }
+    return -1;
 }
+    
+    U_NAMESPACE_BEGIN
+    
+    #ifndef __SHARED_NUMBERFORMAT_H__
+#define __SHARED_NUMBERFORMAT_H__
+    
+    U_NAMESPACE_BEGIN
+    
+    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
     }
-    }
-    
-    MXNET_REGISTER_OP_PROPERTY(_NDArray, NDArrayOpProp)
-.describe('Stub for implementing an operator implemented in native frontend language with ndarray.')
-.add_argument('data', 'NDArray-or-Symbol[]', 'Input data for the custom operator.')
-.add_arguments(NDArrayOpParam::__FIELDS__());
-    
-    
-    
-    
-    
-    namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
 }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword
+     */
+    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+    
+    /**
+ * UnicodeReplacer API
+ */
+UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
+                                                UBool /*escapeUnprintable*/) const {
+    // assert(segmentNumber > 0);
+    rule.truncate(0);
+    rule.append((UChar)0x0024 /*$*/);
+    ICU_Utility::appendNumber(rule, segmentNumber, 10, 1);
+    return rule;
+}
+    
+        /**
+     * Copy constructor
+     * @param o  the object to be copied.
+     */
+    StringMatcher(const StringMatcher& o);
+        
+    /**
+     * Destructor
+     */
+    virtual ~StringMatcher();
+    
+        // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendPlatformName = 'imgui_impl_glfw';
+    
+    
+    {        return &slot->metrics;
     }
     
-    namespace HPHP {
+    namespace ImGuiFreeType
+{
+    // Hinting greatly impacts visuals (and glyph sizes).
+    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
+    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
+    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
     }
     
-    template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 0, rate, fillCols);
-}
-    
-    
-    {}
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
 
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
-  int64_t readImpl(char *buffer, int64_t length) override;
-  int getc() override;
-  String read() override;
-  String read(int64_t length) override;
-  int64_t writeImpl(const char *buffer, int64_t length) override;
-  bool seekable() override { return true;}
-  bool seek(int64_t offset, int whence = SEEK_SET) override;
-  int64_t tell() override;
-  bool eof() override;
-  bool rewind() override;
-  bool flush() override;
-  bool truncate(int64_t size) override;
-  bool stat(struct stat *sb) override;
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+
     
-      virtual void startup() = 0;
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-    #include <cstring>
-    
-      virtual void process() CXX11_OVERRIDE;
-    
-        // output changed array
-    std::cout << object << '\n';
+            ImGui::Text('This is some useful text.');                     // Display some text (you can use a format strings too)
+        ImGui::Checkbox('Demo Window', &show_demo_window);            // Edit bools storing our window open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
     
     
-    // out_of_range.106
+    {    // exception out_of_range.401
     try
     {
-        // try to use an array index with leading '0'
-        json::reference ref = j.at('/array/01'_json_pointer);
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
     }
-    catch (json::parse_error& e)
+    catch (json::out_of_range& e)
     {
         std::cout << e.what() << '\n';
     }
+}
+
     
-    using json = nlohmann::json;
+    int main()
+{
+    // create a JSON value
+    json j =
+    {
+        {'number', 1}, {'string', 'foo'}, {'array', {1, 2}}
+    };
+    }
+    
+    
+    {    std::cout << null << '\n';
+    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
+}
