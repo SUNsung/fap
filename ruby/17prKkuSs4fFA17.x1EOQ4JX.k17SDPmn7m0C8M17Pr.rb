@@ -1,114 +1,81 @@
-    def action_completed(completion_context: nil)
-    end
-    
-          def self.category
-        :source_control
-      end
-    
-          it 'allows you to force the tag creation' do
-        tag = '2.0.0'
-        message = 'message'
-    
-        # the value which is used if there was no given values and no environment values
-    attr_accessor :default_value
-    
-    full_params = ARGV.shelljoin
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Given(/^I make (\d+) deployments$/) do |count|
-  step 'all linked files exists in shared path'
-    
-    MESSAGE
-      end
-    end
-  end
-end
 
+        
+              # Returns true if the given value is present in the set.
+      #
+      # raw_key - The key of the set to check.
+      # value - The value to check for.
+      def self.set_includes?(raw_key, value)
+        key = cache_key_for(raw_key)
     
-    module Precious
-  module Helpers
-    
-        # If --inputs was specified, read it as a file.
-    if !inputs.nil?
-      if !File.exists?(inputs)
-        logger.fatal('File given for --inputs does not exist (#{inputs})')
-        return 1
-      end
-    
-        if(candidate_ret.length != length)
-      length += 1
-      candidate_ret = '#{length.to_s} #{ret}'
-    end
-    
-        # Remove the stuff we don't want
-    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
-    Find.find(staging_path) do |path|
-      if File.file?(path)
-        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
-        begin
-          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
-          File.write(path, content)
-        rescue ArgumentError => e
-          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
+              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
         end
-      end
-      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
-    end
     
-      public(:input)
-end # class FPM::Package::PleaseRun
-
+            def importer_class
+          LfsObjectImporter
+        end
     
-        begin
-      safesystem('#{attributes[:python_bin]} -c 'import pkg_resources'')
-    rescue FPM::Util::ProcessFailed => e
-      logger.error('Your python environment is missing a working setuptools module. I tried to find the 'pkg_resources' module but failed.', :python => attributes[:python_bin], :error => e)
-      raise FPM::Util::ProcessFailed, 'Python (#{attributes[:python_bin]}) is missing pkg_resources module.'
-    end
+            expose_attribute :id, :login
     
-    # Support for self extracting sh files (.sh files)
-#
-# This class only supports output of packages.
-#
-# The sh package is a single sh file with a tar payload concatenated to the end.
-# The script can unpack the tarball to install it and call optional post install scripts.
-class FPM::Package::Sh < FPM::Package
+          new_email = resource_params.fetch(:unconfirmed_email)
     
-      def specfile(builddir)
-    '#{builddir}/pkginfo'
-  end
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for tar.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
     else
-      dir.attributes[:chdir] = build_path
+      head 404
+    end
+  end
+    
+      def compatible_locale
+    http_accept_language.compatible_language_from(available_locales)
+  end
+    
+      def rate_limit_reset
+    (request_time + reset_period_offset).iso8601(6)
+  end
+    
+          attr_reader :page, :diff, :versions, :message, :allow_editing
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+          def author
+        first = page.last_version
+        return DEFAULT_AUTHOR unless first
+        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
+      end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
+    
+        def names_for(klass)
+      @attachments[klass].keys
     end
     
-      def initialize(package_name, opts = {}, &block)
-    @options = OpenStruct.new(:name => package_name.to_s)
-    @source, @target = opts.values_at(:source, :target).map(&:to_s)
-    @directory = File.expand_path(opts[:directory].to_s)
+        def register_new_attachment
+      Paperclip::AttachmentRegistry.register(@klass, @name, @options)
+    end
     
-        process.io.stdout = stdout_w
-    process.io.stderr = stderr_w
-    
-          prefix = ''
-      if name.bytesize > 100 then
-        parts = name.split('/', -1) # parts are never empty here
-        name = parts.pop            # initially empty for names with a trailing slash ('foo/.../bar/')
-        prefix = parts.join('/')    # if empty, then it's impossible to split (parts is empty too)
-        while !parts.empty? && (prefix.bytesize > 155 || name.empty?)
-          name = parts.pop + '/' + name
-          prefix = parts.join('/')
-        end
+        # Returns the Rails.root constant.
+    def rails_root attachment, style_name
+      Rails.root
+    end
