@@ -1,17 +1,58 @@
 
         
-          # Helper for use after calling send_*_instructions methods on a resource.
-  # If we are in paranoid mode, we always act as if the resource was valid
-  # and instructions were sent.
-  def successfully_sent?(resource)
-    notice = if Devise.paranoid
-      resource.errors.clear
-      :send_paranoid_instructions
-    elsif resource.errors.empty?
-      :send_instructions
-    end
+                def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
     
-          private
+          test 'a child inherits layout from abstract controller2' do
+        controller = AbstractWithStringChildDefaultsToInherited.new
+        controller.process(:index)
+        assert_equal 'With String Hello abstract child!', controller.response_body
+      end
+    
+    $LOAD_PATH.unshift File.expand_path('lib', __dir__)
+require 'jekyll/version'
+    
+    def global_require
+  JSON.pretty_generate(DATA)
+end
+    
+    Benchmark.ips do |x|
+  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
+  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+    
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
+      end
+    end
+  end
+end
+
+    
+      # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
+  end
+    
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
+    end
     
         if record.timedout?(last_request_at) &&
         !env['devise.skip_timeout'] &&
@@ -20,96 +61,37 @@
       throw :warden, scope: scope, message: :timeout
     end
     
-    When /^I fill out change password section with my password and '([^']*)' and '([^']*)'$/ do |new_pass, confirm_pass|
-  fill_change_password_section(@me.password, new_pass, confirm_pass)
-end
+    NP = 5
+ROW = 8 + NP
+COL = 8
     
-    def await_condition &condition
-  start_time = Time.zone.now
-  until condition.call
-    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
-    sleep 0.05
-  end
-  true
-end
-
+      context 'called with one color' do
+    it 'applies same color to all sides' do
+      rule = 'border-color: #f00'
     
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-width: 11px; ' +
+                'border-right-width: 12px; ' +
+                'border-left-width: 13px;'
+      bad_rule = 'border-bottom-width: null;'
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
     end
   end
-end
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'padding-top: 11px; ' +
+                'padding-right: 12px; ' +
+                'padding-left: 13px;'
+      bad_rule = 'padding-bottom: null;'
     
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
-    end
-  end
-end
-
-    
-      # fetch data
-  fields = {
-    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
-    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
-    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
-  }
-    
-          class << self
-        alias escape_url escape
-        public :escape_html
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-      class ImageTag < Liquid::Tag
-    @img = nil
-    
-        def type_from_mime_magic
-      @type_from_mime_magic ||= File.open(@filepath) do |file|
-        MimeMagic.by_magic(file).try(:type)
-      end
-    end
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
