@@ -1,92 +1,154 @@
 
         
-        
-class Vehicle(metaclass=ABCMeta):
-    
-    from mrjob.job import MRJob
-    
-    python_2 = (u'thefuck/python2-bash',
-            u'FROM python:2',
-            u'sh')
+            def set(self, results, query):
+        '''Set the result for the given query key in the cache.
     
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-        assert not match(command)
-    
-    
-@pytest.fixture
-def set_help(mocker):
-    mock = mocker.patch('subprocess.Popen')
-    
-    
-def test_match():
-    assert match(Command('apt list --upgradable', match_output))
-    assert match(Command('sudo apt list --upgradable', match_output))
-    
-    
-misspelled_subcommand_with_multiple_options = '''\
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
-    
-        return rabinMiller(num)
-    
-            next_prime_gt = next_prime(value % self.size_table) \
-            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
-        return next_prime_gt - (data % next_prime_gt)
-    
-    __all__ = ['giphy_download']
-    
-        if page is None:
-        page = get_content(url)
-    seq_num = int(re.search(patt, page).group(1)) - 1
-    course_main_title = get_course_title(url, 'public', page)
-    return '{}_第{}讲_{}'.format(course_main_title, seq_num+1, public_course_playlist(url, page)[seq_num][1])
-    
-            # Blur the face image
-        face_image = cv2.GaussianBlur(face_image, (99, 99), 30)
-    
-        pil_image.show()
+if __name__ == '__main__':
+    SpendingByCategory.run()
 
     
-        # Use the KNN model to find the best matches for the test face
-    closest_distances = knn_clf.kneighbors(faces_encodings, n_neighbors=1)
-    are_matches = [closest_distances[0][i][0] <= distance_threshold for i in range(len(X_face_locations))]
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
     
-        # If no valid image file was uploaded, show the file upload form:
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
+    import rsa
+import json
+from binascii import hexlify
     
-        # Let's trace out each facial feature in the image with a line!
-    for facial_feature in face_landmarks.keys():
-        d.line(face_landmarks[facial_feature], width=5)
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
     
-            if match[0]:
-            name = 'Barack Obama'
+        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
+    out = '# Supported sites\n' + ''.join(
+        ' - ' + md + '\n'
+        for md in gen_ies_md(ies))
+    
+    import os
+from os.path import dirname as dirn
+import sys
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        def test_template(self):
+        ie = youtube_dl.extractor.get_info_extractor(test_case['name'])()
+        other_ies = [get_info_extractor(ie_key)() for ie_key in test_case.get('add_ie', [])]
+        is_playlist = any(k.startswith('playlist') for k in test_case)
+        test_cases = test_case.get(
+            'playlist', [] if is_playlist else [test_case])
+    
+    
+if __name__ == '__main__':
+    unittest.main()
+
+    
+        app.connect('doctree-read', collect_scrapy_settings_refs)
+    app.connect('doctree-resolved', replace_settingslist_nodes)
+    
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
+    
+        def run(self, args, opts):
+        if opts.list:
+            self._list_templates()
+            return
+        if opts.dump:
+            template_file = self._find_template(opts.dump)
+            if template_file:
+                with open(template_file, 'r') as f:
+                    print(f.read())
+            return
+        if len(args) != 2:
+            raise UsageError()
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
+    
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
+        else:
+            _S3Connection = _get_boto_connection()
+            try:
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
+        def lineReceived(self, line):
+        return HTTPClient.lineReceived(self, line.rstrip())
+    
+        @classmethod
+    def from_crawler(cls, crawler):
+        if not crawler.settings.getbool('COOKIES_ENABLED'):
+            raise NotConfigured
+        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
+    
+    import josepy as jose
+import pytz
+    
+        # The font size ('10pt', '11pt' or '12pt').
+    #
+    # 'pointsize': '10pt',
+    
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
+    
+    
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
+    
+    		print('Test: insert checking with post order traversal')
+		expectVal = [7, 25, 10, 38, 40, 30, 60, 80, 70, 50]
+		assert_equal(myTree.printPostOrder(), expectVal)
+		expectVal = [91, 81, 71, 61, 51, 41, 31, 21, 11, 1]
+		assert_equal(myTree2.printPostOrder(), expectVal)
+    
+        def decrease_key(self, obj, new_key):
+        for node in self.array:
+            if node.obj is obj:
+                node.key = new_key
+                return node
+        return None
