@@ -1,64 +1,135 @@
 
         
-              it 'requires the passwords to match when changing them' do
-        visit edit_admin_user_path(users(:bob))
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Update User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
-    end
-    
-          expect(agent.control_targets).to eq([bob_weather_agent])
-    end
-    
-        it 'shows the dry run pop up with previous events and allows use previously received event' do
-      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
-      agent.sources << emitter
-      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
-      agent.save!
-    
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
-    
-      describe '#check' do
-    it 'should not emit events on its first run' do
-      expect { @checker.check }.to change { Event.count }.by(0)
-      expect(@checker.memory[:last_event]).to eq '2014-04-17T10:25:31.000+02:00'
-    end
-    it 'should check that initial run creates an event' do
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      expect { @checker.check }.to change { Event.count }.by(1)
-    end
+          def test_vi_paste_next
+    input_keys('abcde\C-[3h')
+    assert_line('abcde')
+    assert_byte_pointer_size('a')
+    assert_cursor(1)
+    assert_cursor_max(5)
+    input_keys('p')
+    assert_line('abcde')
+    assert_byte_pointer_size('a')
+    assert_cursor(1)
+    assert_cursor_max(5)
+    input_keys('d$')
+    assert_line('a')
+    assert_byte_pointer_size('')
+    assert_cursor(0)
+    assert_cursor_max(1)
+    input_keys('p')
+    assert_line('abcde')
+    assert_byte_pointer_size('abcd')
+    assert_cursor(4)
+    assert_cursor_max(5)
+    input_keys('2p')
+    assert_line('abcdebcdebcde')
+    assert_byte_pointer_size('abcdebcdebcd')
+    assert_cursor(12)
+    assert_cursor_max(13)
   end
     
-        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
+    class Vec
+  def initialize(x, y, z)
+    @x = x
+    @y = y
+    @z = z
+  end
     
-          def encode_token(token)
-        Base64.strict_encode64(token)
+    FIRST     = -> l { LEFT[RIGHT[l]] }
+IF        = -> b { b }
+LEFT      = -> p { p[-> x { -> y { x } } ] }
+RIGHT     = -> p { p[-> x { -> y { y } } ] }
+IS_EMPTY  = LEFT
+REST      = -> l { RIGHT[RIGHT[l]] }
+    
+    Given(/^a stage file named (.+)$/) do |filename|
+  TestApp.write_local_stage_file(filename)
+end
+    
+          class Properties
+        def initialize
+          @properties = {}
+        end
+    
+          def role_properties_for(rolenames)
+        roles = rolenames.to_set
+        rps = Set.new unless block_given?
+        roles_for(rolenames).each do |host|
+          host.roles.intersection(roles).each do |role|
+            [host.properties.fetch(role)].flatten(1).each do |props|
+              if block_given?
+                yield host, role, props
+              else
+                rps << (props || {}).merge(role: role, hostname: host.hostname)
+              end
+            end
+          end
+        end
+        block_given? ? nil : rps
       end
     
-          def origin(env)
-        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
+    set_if_empty :default_env, {}
+set_if_empty :keep_releases, 5
+    
+          attr_reader :page, :name
+    
+          def title
+        @page.title
       end
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+          # Returns page content without title if it was extracted.
+      #
+      def content_without_page_header(content)
+        doc = build_document(content)
+          if @h1_title
+            title = find_header_node(doc)
+            title.remove unless title.empty?
+          end
+        # .inner_html will cause href escaping on UTF-8
+        doc.css('div#gollum-root').children.to_xml(@@to_xml)
       end
     end
   end
 end
 
     
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+          ws  = WorkSpace.new(binding)
+      irb = Irb.new(ws)
+    
+        it 'accepts jsfiddle link with a / at the end' do
+      jsfiddle_link = 'http://jsfiddle.net/link2twenty/v2kx9jcd/'
+      expect do
+        generate_new_liquid(jsfiddle_link)
+      end.not_to raise_error
+    end
+    
+      def permitted_attributes_for_preview
+    %i[body_markdown]
+  end
+    
+          it 'unmutes the parent comment if already muted' do
+        sign_in original_commenter
+        parent_comment_by_og.update(receive_notifications: false)
+        patch '/comment_mutes/#{parent_comment_by_og.id}', params: { comment: { receive_notifications: 'true' } }
+        expect(parent_comment_by_og.reload.receive_notifications).to eq true
       end
+    end
