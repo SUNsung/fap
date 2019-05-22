@@ -1,126 +1,124 @@
 
         
-        from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+            def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
+    
+        while True:
+        more_to_read = select.select([sock], [], [], timeout)[0]
+        if not more_to_read:
+            break
+    
+            String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
+    
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
+    
+        def iteritems(self):
+        '''Dict-like iteritems() that returns an iterator of name-value tuples
+        from the jar.
+    
+    
+def test_set_environ_raises_exception():
+    '''Tests set_environ will raise exceptions in context when the
+    value parameter is None.'''
+    with pytest.raises(Exception) as exception:
+        with set_environ('test1', None):
+            raise Exception('Expected exception')
+    
+            self.headers = CaseInsensitiveDict()
+        if headers:
+            for header in headers.items():
+                # Raise exception on invalid header value.
+                check_header_validity(header)
+                name, value = header
+                self.headers[to_native_string(name)] = value
+    
+            try:
+            username, password = get_auth_from_url(new_proxies[scheme])
+        except KeyError:
+            username, password = None, None
+    
+        @pytest.mark.parametrize('method', ('POST', 'PUT', 'PATCH', 'OPTIONS'))
+    def test_no_body_content_length(self, httpbin, method):
+        req = requests.Request(method, httpbin(method.lower())).prepare()
+        assert req.headers['Content-Length'] == '0'
+    
+        Args:
+        x(tf.Tensor):
+        n_unit(int): 
+        act_fn:
+        name(str):
+        reuse(bool):
+    '''
+    # n_input = tf.shape(x)[-1]  # err: need int but tensor
+    n_input = int(x.get_shape()[-1])
+    with tf.variable_scope(name or 'dense', reuse=reuse):
+        W, b = get_wb([n_input, n_unit])
+        o = act_fn(tf.matmul(x, W) + b)
+    return o
+    
+        max_n_word: 句子的最大长度
+    max_n_char: 单词的最大长度
+    
+    References:
+    keras.regularizers
+'''
+import tensorflow as tf
+import numpy as np
+    
+    if word_vec.any():  #
+    word_vec = word_vec / max(1, ngrams_found)
+else:  # 如果一个 ngram 都没找到，gensim 会报错；个人认为把 0 向量传出来也可以
+    raise KeyError('all ngrams for word %s absent from model' % word_unk)
     
     
   def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    self._response = self.PostDataToHandler( request_data,
-                                             'debug_info',
-                                             display_message = False )
+    self.PostDataToHandler( {},
+                            'shutdown',
+                            TIMEOUT_SECONDS,
+                            display_message = False )
     
     
-@YouCompleteMeInstance()
-@patch( 'ycm.client.base_request._logger', autospec = True )
-@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
-def SendCompletionRequest_ErrorFromServer_test( ycm,
-                                                post_vim_message,
-                                                logger ):
-  current_buffer = VimBuffer( 'buffer' )
-  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-    with MockCompletionRequest( ServerError( 'Server error' ) ):
-      ycm.SendCompletionRequest()
-      ok_( ycm.CompletionRequestReady() )
-      response = ycm.GetCompletionResponse()
-      logger.exception.assert_called_with( 'Error while handling server '
-                                           'response' )
-      post_vim_message.assert_has_exact_calls( [
-        call( 'Server error', truncate = True )
-      ] )
-      assert_that(
-        response,
-        has_entries( {
-          'completions': empty(),
-          'completion_start_column': -1
-        } )
-      )
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
+    
+    atexit.register(_python_exit)
 
     
     
-  def result( self ):
-    return self._result
-    
-    
-def KeywordsFromSyntaxListOutput_CppSyntax_test():
-  expected_keywords = (
-    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
-    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
-    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
-    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
-    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
-    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
-    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
-    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
-    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
-    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
-    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
-    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
-    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
-    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
-    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
-    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
-    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
-    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
-    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
-    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
-    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
-    'inline' )
-    
-    # Workers are created as daemon threads. This is done to allow the interpreter
-# to exit when there are still idle threads in a ThreadPoolExecutor's thread
-# pool (i.e. shutdown() was not called). However, allowing workers to die with
-# the interpreter has two undesirable properties:
-#   - The workers would still be running during interpretor shutdown,
-#     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
-#     be bad if the callable being evaluated has external side-effects e.g.
-#     writing to a file.
-#
-# To work around this problem, an exit handler is installed which tells the
-# workers to exit when their work queues are empty and then waits until the
-# threads finish.
-    
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
-    
-    def with_thread_pool_executor():
-    with ThreadPoolExecutor(10) as executor:
-        return list(executor.map(is_prime, PRIMES))
-    
-        def request(self, flow):
-        if not flow.reply.has_message:
-            self.run(flow, flow.request.headers)
-    
-    
-def ckey(attrs: Dict[str, str], f: http.HTTPFlow) -> TOrigin:
-    '''
-        Returns a (domain, port, path) tuple.
-    '''
-    domain = f.request.host
-    path = '/'
-    if 'domain' in attrs:
-        domain = attrs['domain']
-    if 'path' in attrs:
-        path = attrs['path']
-    return (domain, f.request.port, path)
-    
-                self._m_x = (self.x_int / 100000.0)
-            return self._m_x if hasattr(self, '_m_x') else None
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    class BiDi:
+def create_future(state=PENDING, exception=None, result=None):
+    f = Future()
+    f._state = state
+    f._exception = exception
+    f._result = result
+    return f
