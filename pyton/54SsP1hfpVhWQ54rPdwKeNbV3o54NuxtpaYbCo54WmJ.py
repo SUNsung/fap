@@ -1,166 +1,109 @@
 
         
-        
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    
-    
-@pytest.fixture
-def set_help(mocker):
-    mock = mocker.patch('subprocess.Popen')
-    
-    
-def test_get_new_command():
-    new_command = get_new_command(Command('sudo apt update', match_output))
-    assert new_command == 'sudo apt list --upgradable'
-    
-    
-def test_match():
-    assert match(Command('apt list --upgradable', match_output))
-    assert match(Command('sudo apt list --upgradable', match_output))
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
+            @property
+    def body(self):
+        body = self._orig.body
+        if isinstance(body, str):
+            # Happens with JSON/form request data parsed from the command line.
+            body = body.encode('utf8')
+        return body or b''
 
     
-    RETURN = '''
-server_certificate_id:
-    description: The 21 character certificate id
-    returned: success
-    type: str
-    sample: 'ADWAJXWTZAXIPIMQHMJPO'
-certificate_body:
-    description: The asn1der encoded PEM string
-    returned: success
-    type: str
-    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
-server_certificate_name:
-    description: The name of the server certificate
-    returned: success
-    type: str
-    sample: 'server-cert-name'
-arn:
-    description: The Amazon resource name of the server certificate
-    returned: success
-    type: str
-    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
-path:
-    description: The path of the server certificate
-    returned: success
-    type: str
-    sample: '/'
-expiration:
-    description: The date and time this server certificate will expire, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2017-06-15T12:00:00+00:00'
-upload_date:
-    description: The date and time this server certificate was uploaded, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2015-04-25T00:36:40+00:00'
-'''
+    
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
     
     
-def _attach_monitoring_policy_server(module, oneandone_conn, monitoring_policy_id, servers):
-    '''
-    Attaches servers to a monitoring policy.
-    '''
-    try:
-        attach_servers = []
+def test_unicode_raw_json_item_verbose(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
     
-        if purge_rules is True and len(rules) > 0:
-        result['rules_purged'] = len(rules)
-        deletions = result['rules_purged']
-        rules = list()
-        if not module.check_mode:
-            gateway.del_all_nat_rules()
-            task = gateway.save_services_configuration()
-            vca.block_until_completed(task)
-            rules = gateway.get_nat_rules()
-        result['changed'] = True
+    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
+# limit dataset to 5000 people (don't care who they are!)
+X = faces.data[:5000]
+n_samples, h, w = faces.images.shape
+n_features = X.shape[1]
     
-        module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True,
-                           )
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
+
     
+    from sklearn.cluster import AgglomerativeClustering
     
-def get_role_dict(description=None):
-    data = {}
-    if description is not None:
-        data['description'] = description
-    return data
+    input data sparsity: 0.050000
+true coef sparsity: 0.000100
+test data sparsity: 0.027400
+model sparsity: 0.000024
+r^2 on test data (dense model) : 0.233651
+r^2 on test data (sparse model) : 0.233651
+Wrote profile results to sparsity_benchmark.py.lprof
+Timer unit: 1e-06 s
     
-    EXAMPLES = '''
-- airbrake_deployment:
-    token: AAAAAA
-    environment: staging
-    user: ansible
-    revision: '4.2'
-'''
+    Second example
+--------------
+The second example shows the ability of the Minimum Covariance Determinant
+robust estimator of covariance to concentrate on the main mode of the data
+distribution: the location seems to be well estimated, although the covariance
+is hard to estimate due to the banana-shaped distribution. Anyway, we can
+get rid of some outlying observations.
+The One-Class SVM is able to capture the real data structure, but the
+difficulty is to adjust its kernel bandwidth parameter so as to obtain
+a good compromise between the shape of the data scatter matrix and the
+risk of over-fitting the data.
+    
+    This example demonstrates how to generate a checkerboard dataset and
+bicluster it using the Spectral Biclustering algorithm.
+    
+    for name, label in [('Setosa', 0),
+                    ('Versicolour', 1),
+                    ('Virginica', 2)]:
+    ax.text3D(X[y == label, 3].mean(),
+              X[y == label, 0].mean(),
+              X[y == label, 2].mean() + 2, name,
+              horizontalalignment='center',
+              bbox=dict(alpha=.2, edgecolor='w', facecolor='w'))
+# Reorder the labels to have colors matching the cluster results
+y = np.choose(y, [1, 2, 0]).astype(np.float)
+ax.scatter(X[:, 3], X[:, 0], X[:, 2], c=y, edgecolor='k')
     
     '''
+=========================================================
+Vector Quantization Example
+=========================================================
     
-        name = module.params['name']
-    state = module.params['state']
-    timeout = module.params['timeout']
+        def test_parents(self):
+        for _ in range(2):
+            self.assertEqual(self.John.parents, 'Father and mother')
+        self.assertEqual(self.John.call_count2, 1)
+
     
-        if info['status'] == 401:
-        module.fail_json(msg='failed to authenticate to Oneclick server')
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
     
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
+        blackboard.add_expert(Student(blackboard))
+    blackboard.add_expert(Scientist(blackboard))
+    blackboard.add_expert(Professor(blackboard))
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
-    
-    
-def _count_nonzero_coefficients(estimator):
-    a = estimator.coef_.toarray()
-    return np.count_nonzero(a)
-    
-    '''
-print(__doc__)
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    agglo.fit(X)
-X_reduced = agglo.transform(X)
-    
-        plt.figure(figsize=(6, 4))
-    for i in range(X_red.shape[0]):
-        plt.text(X_red[i, 0], X_red[i, 1], str(y[i]),
-                 color=plt.cm.nipy_spectral(labels[i] / 10.),
-                 fontdict={'weight': 'bold', 'size': 9})
+    In Blackboard pattern several specialised sub-systems (knowledge sources)
+assemble their knowledge to build a possibly partial or approximate solution.
+In this way, the sub-systems work together to solve the problem,
+where the solution is the sum of its parts.
     
     
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
-    '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
-    
-    REWRITE_HTTPS_ARGS = [
-    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,NE,R=permanent]']
-'''Apache version<2.3.9 rewrite rule arguments used for redirections to
-https vhost'''
-    
-    
-# -- Options for Texinfo output -------------------------------------------
+class Card2(metaclass=FlyweightMeta):
+    def __init__(self, *args, **kwargs):
+        # print('Init {}: {}'.format(self.__class__, (args, kwargs)))
+        pass
