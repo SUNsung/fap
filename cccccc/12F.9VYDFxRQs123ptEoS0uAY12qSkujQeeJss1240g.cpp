@@ -1,144 +1,279 @@
 
         
-        grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
+                //  Create the Pseudo Console and pipes to it
+        HANDLE hPipeIn{ INVALID_HANDLE_VALUE };
+        HANDLE hPipeOut{ INVALID_HANDLE_VALUE };
+        hr = CreatePseudoConsoleAndPipes(&hPC, &hPipeIn, &hPipeOut);
+        if (S_OK == hr)
+        {
+            // Create & start thread to listen to the incoming pipe
+            // Note: Using CRT-safe _beginthread() rather than CreateThread()
+            HANDLE hPipeListenerThread{ reinterpret_cast<HANDLE>(_beginthread(PipeListener, 0, hPipeIn)) };
     }
-  }
-  return '';
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
+                on_failure)
+    
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
+ public:
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
+};
+    
+      // Formats an int value as '%X'.
+  static std::string FormatHexInt(int value);
+    
+      // Gets the first element of the queue, or NULL if the queue is empty.
+  QueueNode<E>* Head() { return head_; }
+  const QueueNode<E>* Head() const { return head_; }
+    
+        static std::wstring GetTrainerStateCheckpointFilePath(const std::wstring& modelFilePath)
+    {
+        const wchar_t* checkpointExt = L'.ckp';
+        return modelFilePath + checkpointExt;
+    }
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+    
+    
+    {        // Creating Composite Data Reader that allow to combine deserializers.
+        // This should be changed to link statically when SGD uses the new interfaces.
+        wstring ioName = L'ioName';
+        GetReaderProc getReaderProc = (GetReaderProc)Plugin::Load(readerType, GetReaderName(precision));
+        m_ioNames.push_back(ioName);
+        assert(getReaderProc != nullptr);
+        getReaderProc(&m_dataReaders[ioName]);
+    }
+    else
+    {
+        wstring readerType = config(L'readerType', L'Cntk.Deserializers.TextFormat');
+        wstring ioName = L'ioName';
+        // backward support to use only one type of data reader
+        // get the name for the reader we want to use, default to CNTKTextFormatReader
+        GetReaderProc getReaderProc = (GetReaderProc)Plugin::Load(readerType, GetReaderName(precision));
+        m_ioNames.push_back(ioName);
+        assert(getReaderProc != nullptr);
+        getReaderProc(&m_dataReaders[ioName]);
+    }
+    
+    // -----------------------------------------------------------------------
+// (deprecated) PerDimMeanVarNormalizationNode (feature, mean, invStdDev)
+// Computes
+//   output = (feature - mean) .* invStdDev
+// where mean and invStdDev are meant to be single elements while features
+// is minibatch data.
+// Deprecated since it can be trivially expressed in BrainScript.
+// -----------------------------------------------------------------------
+    
+            // Edit distance between subsequences
+        Matrix<float> grid(CPUDEVICE);
+        
+        // Number of insertions between subsequences
+        Matrix<float> insMatrix(CPUDEVICE);
+        
+        //Number of deletions between subsequences
+        Matrix<float> delMatrix(CPUDEVICE);
+    
+        virtual void Save(File& fstream) const override
+    {
+        Base::Save(fstream);
+        fstream << m_isOutputSparse;
+    }
+    
+        template <class ElemType>
+    void OptimizedMemoryAllocationFunc()
+    {
+        vector<MemRequestInfo<ElemType>>& memInfoVec = GetMemRequestInfoVec<ElemType>();
+        if (memInfoVec.empty())
+            return; 
+    }
+    
+    
+    {
+    {    inline Coroutine* pop_coroutine(enum opcode type)
+    {
+        Coroutine* co;
+        if (type == PRODUCER)
+        {
+            co = producer_queue.front();
+            producer_queue.pop_front();
+            swTraceLog(SW_TRACE_CHANNEL, 'resume producer cid=%ld', co->get_cid());
+        }
+        else // if (type == CONSUMER)
+        {
+            co = consumer_queue.front();
+            consumer_queue.pop_front();
+            swTraceLog(SW_TRACE_CHANNEL, 'resume consumer cid=%ld', co->get_cid());
+        }
+        return co;
+    }
+};
+};
+
+    
+        for (i = 0; i < MAP_SIZE; i++)
+    {
+        pkt = (swFdInfo *) malloc(sizeof(swFdInfo));
+        pkt->key = i;
+        pkt->fd = i * 37;
+        swHashMap_add_int(ht, pkt->fd, pkt);
+        lists[i] = pkt;
+    }
+    
+        SwooleG.main_reactor = (swReactor *) sw_malloc(sizeof(swReactor));
+    swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS);
+    
+            if (pid == 0)
+        {
+            usleep(100000);
+            exit(0);
+        }
+    
+    
+    {    unlink(sock1_path);
+    unlink(sock2_path);
 }
-    
-    void CensusClientCallData::Destroy(grpc_call_element* elem,
-                                   const grpc_call_final_info* final_info,
-                                   grpc_closure* then_call_closure) {
-  const uint64_t request_size = GetOutgoingDataSize(final_info);
-  const uint64_t response_size = GetIncomingDataSize(final_info);
-  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
-  ::opencensus::stats::Record(
-      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
-       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
-       {RpcClientRoundtripLatency(), latency_ms},
-       {RpcClientServerLatency(),
-        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
-       {RpcClientSentMessagesPerRpc(), sent_message_count_},
-       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
-      {{ClientMethodTagKey(), method_},
-       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
-  grpc_slice_unref_internal(path_);
-  context_.EndSpan();
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    MeasureInt64 RpcClientSentMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientSentMessagesPerRpcMeasureName,
-                             'Number of messages sent per RPC', kCount);
-  return measure;
-}
-    
-    Status ProtoServerReflection::GetFileContainingSymbol(
-    ServerContext* context, const grpc::string& symbol,
-    ServerReflectionResponse* response) {
-  if (descriptor_pool_ == nullptr) {
-    return Status::CANCELLED;
-  }
-    }
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    #endif  // !GRPC_CUSTOM_DEFAULT_THREAD_POOL
+#endif
 
     
     
-    {}  // namespace
+    {    ASSERT_EQ(swThreadPool_free(&pool), SW_OK);
+    ASSERT_EQ(result, N);
+}
+#endif
     
-    ThreadPoolInterface* CreateDefaultThreadPool();
-    
-    bool __CCCallFuncO::initWithTarget(Ref* selectorTarget, SEL_CallFuncO selector, Ref* object)
+    void swoole_throw_error(int code)
 {
-    if (CallFunc::initWithTarget(selectorTarget))
-    {
-        _object = object;
-        CC_SAFE_RETAIN(_object);
-        
-        _callFuncO = selector;
-        return true;
-    }
+    throw swoole::Exception(code);
+}
+
     
-    return false;
+     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+    
+    
+    {
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
+    }
 }
     
-        
-    /** Gets the duration in seconds of the whole animation. It is the result of totalDelayUnits * delayPerUnit.
-     *
-     * @return Result of totalDelayUnits * delayPerUnit.
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
      */
-    float getDuration() const;
-    
-    /** Gets the array of AnimationFrames.
-     * 
-     * @return The array of AnimationFrames.
-     */
-    const Vector<AnimationFrame*>& getFrames() const { return _frames; };
-    
-    /** Sets the array of AnimationFrames. 
-     *
-     * @param frames The array of AnimationFrames.
-     */
-    void setFrames(const Vector<AnimationFrame*>& frames)
-    {
-        _frames = frames;
+    virtual GridBase* getGrid() override;
     }
     
-    /** Checks whether to restore the original frame when animation finishes. 
-     *
-     * @return Restore the original frame when animation finishes.
-     */
-    bool getRestoreOriginalFrame() const { return _restoreOriginalFrame; };
+    bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
+{
+    _delayPerUnit = delay;
+    _loops = loops;
+    }
     
-    /** Sets whether to restore the original frame when animation finishes. 
+        /** Gets the units of time the frame takes.
      *
-     * @param restoreOriginalFrame Whether to restore the original frame when animation finishes.
+     * @return The units of time the frame takes.
      */
-    void setRestoreOriginalFrame(bool restoreOriginalFrame) { _restoreOriginalFrame = restoreOriginalFrame; };
+    float getDelayUnits() const { return _delayUnits; };
     
-    /** Gets the times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... 
+    /** Sets the units of time the frame takes.
      *
-     * @return The times the animation is going to loop.
+     * @param delayUnits The units of time the frame takes.
      */
-    unsigned int getLoops() const { return _loops; };
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
     
-    /** Sets the times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... 
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
      *
-     * @param loops The times the animation is going to loop.
+     * @return A dictionary as UserInfo
      */
-    void setLoops(unsigned int loops) { _loops = loops; };
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
     
-    // overrides
-    virtual Animation *clone() const override;
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
     
 CC_CONSTRUCTOR_ACCESS:
-    Animation();
-    virtual ~Animation(void);
-    
-    /** Initializes a Animation. */
-    bool init();
-    
-    /** Initializes a Animation with frames and a delay between frames.
-     * @since v0.99.5
+    /**
+     * @js ctor
      */
-    bool initWithSpriteFrames(const Vector<SpriteFrame*>& arrayOfSpriteFrameNames, float delay = 0.0f, unsigned int loops = 1);
-    
-    /** Initializes a Animation with AnimationFrame.
-     * @since v2.0
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
      */
-    bool initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops);
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+    ClippingRectangleNode* ClippingRectangleNode::create(const Rect& clippingRegion)
+{
+    ClippingRectangleNode* node = new (std::nothrow) ClippingRectangleNode();
+    if (node && node->init()) {
+        node->setClippingRegion(clippingRegion);
+        node->autorelease();
+    } else {
+        CC_SAFE_DELETE(node);
+    }
+    
+    return node;
+}
+    
+    
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
