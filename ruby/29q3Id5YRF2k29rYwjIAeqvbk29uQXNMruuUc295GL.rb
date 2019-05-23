@@ -1,63 +1,101 @@
 
         
-                  pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
-          end
-        end
-    
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
-        end
-    
-            expose_attribute :id, :login
-    
-        def assert_index(index)
-      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
-      raise 'No such filter to insert: #{index}' unless i
-      i
+                FastlaneCore::CertChecker.installed_identies
+      end
     end
-  end
-end
+    
+          describe 'running with fastlane' do
+        before do
+          allow(FastlaneCore::Helper).to receive(:fastlane_enabled?).and_return(true)
+          allow(FastlaneCore::FastlaneFolder).to receive(:path).and_return('./fastlane')
+    
+    output = File.new(OUTPUT_FILENAME, 'wb')
+output.write(xml.target!)
+output.close
+    
+    World(RemoteCommandHelpers)
 
     
-        private
-    
-            # Remove examples
-        css('.runnable-example').each do |node|
-          node.parent.remove
-        end
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
-    end
-  end
-end
-
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
-    
-        context 'on a public post from a stranger' do
-      before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+          def with(properties)
+        properties.each { |key, value| add_property(key, value) }
+        self
       end
     
-      <h3>Messages</h3>
-  <% @messages.each do |msg| %>
-    <p><%= msg %></p>
-  <% end %>
+        # @return [String] the ruby version string bundler uses to craft its gem path
+    def gem_ruby_version
+      RbConfig::CONFIG['ruby_version']
+    end
+    
+          def pack_uri(plugin_name)
+        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
+        URI.parse(url)
+      end
+    
+      def validate_cache_location
+    cache_location = LogStash::Environment::CACHE_PATH
+    if File.exist?(cache_location)
+      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
+      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
+      if override
+        FileUtils.rm_rf(cache_location)
+      else
+        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
+        exit
+      end
+    end
+  end
+end
 
     
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
+    safesystem('pkg_create', *args)
+    
+      # Install this package to the staging directory
+  def install_to_staging(setup_py)
+    project_dir = File.dirname(setup_py)
+    
+        args = [ tar_cmd,
+             '-C',
+             staging_path,
+             '-cf',
+             payload_tar,
+             '--owner=0',
+             '--group=0',
+             '--numeric-owner',
+             '.' ]
+    
+      # Input a zipfile.
+  def input(input_path)
+    # use part of the filename as the package name
+    self.name = File.extname(input_path)[1..-1]
+    
+    Given 'I remove turbolinks' do
+  cd('.') do
+    transform_file('app/assets/javascripts/application.js') do |content|
+      content.gsub('//= require turbolinks', '')
+    end
+    transform_file('app/views/layouts/application.html.erb') do |content|
+      content.gsub(', 'data-turbolinks-track' => true', '')
+    end
+  end
+end
+    
+    # The base module that gets included in ActiveRecord::Base. See the
+# documentation for Paperclip::ClassMethods for more useful information.
+module Paperclip
+  extend Helpers
+  extend Logger
+  extend ProcessorHelpers
+    
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
+    end
+    
+        # Returns the interpolated URL. Will raise an error if the url itself
+    # contains ':url' to prevent infinite recursion. This interpolation
+    # is used in the default :path to ease default specifications.
+    RIGHT_HERE = '#{__FILE__.gsub(%r{\A\./}, '')}:#{__LINE__ + 3}'
+    def url attachment, style_name
+      raise Errors::InfiniteInterpolationError if caller.any?{|b| b.index(RIGHT_HERE) }
+      attachment.url(style_name, :timestamp => false, :escape => false)
+    end
