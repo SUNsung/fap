@@ -1,180 +1,60 @@
 
         
-        module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
-    
-            # attributes - A hash containing the raw issue details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-    
-            # Builds a user using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          new(Representation.symbolize_hash(raw_hash))
-        end
-    
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-      # Gets the actual resource stored in the instance variable
-  def resource
-    instance_variable_get(:'@#{resource_name}')
-  end
-    
-    class TestApp < Rails::Application
-  config.root = File.dirname(__FILE__)
-  config.session_store :cookie_store, key: 'cookie_store_key'
-  secrets.secret_token    = 'secret_token'
-  secrets.secret_key_base = 'secret_key_base'
-  config.eager_load = false
-    
-            constant.required_fields(klass).each do |field|
-          failed_attributes << field unless instance.respond_to?(field)
-        end
-      end
-    
-            # Registers additional providers to be available.
+                # Halt the machine. This method should gracefully shut down the
+        # operating system. This method will cause `vagrant halt` and associated
+        # commands to _block_, meaning that if the machine doesn't halt
+        # in a reasonable amount of time, this method should just return.
         #
-        # @param [Symbol] name Name of the provider.
-        def self.provider(name=UNSET_VALUE, &block)
-          data[:providers] ||= Registry.new
-    
-            # The configuration for this provisioner. This will be an instance of
-        # the `Config` class which is part of the provisioner.
-        attr_reader :config
-    
-                    @env.machine_names.each do |machine_name|
-                  if machine_name =~ regex
-                    machines << get_machine.call(machine_name)
-                  end
-                end
+        # If when this method returns, the machine's state isn't 'powered_off,'
+        # Vagrant will proceed to forcefully shut the machine down.
+        def halt
+          raise BaseError, _key: :unsupported_halt
+        end
     
     module Vagrant
   module Plugin
-    module V2
-      # This is the base class for a configuration key defined for
-      # V2. Any configuration key plugins for V2 should inherit from this
-      # class.
-      class Config
-        # This constant represents an unset value. This is useful so it is
-        # possible to know the difference between a configuration value that
-        # was never set, and a value that is nil (explicitly). Best practice
-        # is to initialize all variables to this value, then the {#merge}
-        # method below will 'just work' in many cases.
-        UNSET_VALUE = Object.new
+    module V1
+      # This is the superclass for all V1 plugins.
+      class Plugin
+        # Special marker that can be used for action hooks that matches
+        # all action sequences.
+        ALL_ACTIONS = :__all_actions__
     
-            # This returns all registered provisioners.
-        #
-        # @return [Hash]
-        def provisioners
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.provisioner)
-            end
-          end
+            def initialize(env, config)
+          @env    = env
+          @config = config
         end
     
-        # /RAND/../RAND../
-    if self.junk_directories
-      str.gsub!(/\//) {
-        dirs = ''
-        (rand(5)+5).times {
-          dirs << '/' + Rex::Text.rand_text_alpha(rand(5) + 1) + '/..'
-        }
-        dirs + '/'
-      }
-    end
-    
-        # Linear little-endian signed PCM is our native format
-    when IAX_CODEC_LINEAR_PCM
-      buff
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos AuthorizationData data
-        # definition.
-        class AuthorizationData < Element
-          # @!attribute elements
-          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
-          #   @option [Integer] :type
-          #   @option [String] :data
-          attr_accessor :elements
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KrbError from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-      uninstall_preflight do
-    system_command '#{HOMEBREW_PREFIX}/bin/brew', args: ['cask', 'uninstall', 'adobe-photoshop-lightroom600']
-  end
-    
-        if input_type == 'pleaserun'
-      # Special case for pleaserun that all parameters are considered the 'command'
-      # to run through pleaserun.
-      input.input(args)
-    else
-      # Each remaining command line parameter is used as an 'input' argument.
-      # For directories, this means paths. For things like gem and python, this
-      # means package name or paths to the packages (rails, foo-1.0.gem, django,
-      # bar/setup.py, etc)
-      args.each do |arg|
-        input.input(arg)
-      end
-    end
-    
-        # Parse 'epoch:version-iteration' in the version string
-    version_re = /^(?:([0-9]+):)?(.+?)(?:-(.*))?$/
-    m = version_re.match(control['pkgver'][0])
-    if !m
-      raise 'Unsupported version string '#{control['pkgver'][0]}''
-    end
-    self.epoch, self.version, self.iteration = m.captures
-    
-          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
-      target = File.join(base, 'files')
-      actions_script = File.join(base, 'install_actions.sh')
-      ::PleaseRun::Installer.install_files(platform, target, false)
-      ::PleaseRun::Installer.write_actions(platform, actions_script)
-    end
-    
-      # Where we keep metadata and post install scripts and such
-  def fpm_meta_path
-    @fpm_meta_path ||= begin
-                         path = File.join(staging_path, '.fpm')
-                         FileUtils.mkdir_p(path)
-                         path
-                       end
-  end
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
 end
 
     
-        it 'splits commands into an array' do
-      commands = [
-        'tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ pull C-m',
-        'tmux -f ~/.tmux.mac.conf -L foo send-keys -t sample:1 git\\ merge C-m'
-      ]
-      expect(window.commands).to eq(commands)
-    end
+        # To make sure we have the maximum compatibility
+    # we will ignore theses gems and they won't be included in the pack
+    IGNORE_GEMS_IN_PACK = %w(
+      logstash-core
+      logstash-core-plugin-api
+      jar-dependencies
+    )
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
   end
     
-      orig_stdout = $stdout
-  orig_stderr = $stderr
+      namespace :acceptance do
+    desc 'Run all acceptance'
+    task :all do
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/*_spec.rb']]))
+    end
     
-      describe '.editor?' do
-    context '$EDITOR is set' do
-      before do
-        allow(ENV).to receive(:[]).with('EDITOR') { 'vim' }
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
       end
