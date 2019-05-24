@@ -1,220 +1,331 @@
 
         
-        #endif // BITCOIN_QT_PLATFORMSTYLE_H
+         private:
+  void OnMessageBoxCallback(DialogClosedCallback callback,
+                            const std::string& origin,
+                            int code,
+                            bool checkbox_checked);
     
-    static int secp256k1_ecdsa_sig_recover(const secp256k1_ecmult_context *ctx, const secp256k1_scalar *sigr, const secp256k1_scalar* sigs, secp256k1_ge *pubkey, const secp256k1_scalar *message, int recid) {
-    unsigned char brx[32];
-    secp256k1_fe fx;
-    secp256k1_ge x;
-    secp256k1_gej xj;
-    secp256k1_scalar rn, u1, u2;
-    secp256k1_gej qj;
-    int r;
-    }
-    
-    const UniValue& UniValue::get_obj() const
-{
-    if (typ != VOBJ)
-        throw std::runtime_error('JSON value is not an object as expected');
-    return *this;
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
 }
     
-        BOOST_CHECK(arr.push_back((uint64_t) 400ULL));
-    BOOST_CHECK(arr.push_back((int64_t) -400LL));
-    BOOST_CHECK(arr.push_back((int) -401));
-    BOOST_CHECK(arr.push_back(-40.1));
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
     
-    #if defined(__x86_64__) || defined(__amd64__)
-    
-    // Class to hold an array of bounding boxes for an output word and
-// the bounding box of the whole word.
-class BoxWord {
- public:
-  BoxWord();
-  explicit BoxWord(const BoxWord& src);
-  ~BoxWord() = default;
-    }
-    
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
-  }
-    
-      const UnicharAmbigsVector &dang_ambigs() const { return dang_ambigs_; }
-  const UnicharAmbigsVector &replace_ambigs() const { return replace_ambigs_; }
-    
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+    #endif  // ATOM_BROWSER_RELAUNCHER_H_
 
     
+    namespace internal {
+    }
     
-    {
-    {
-    {  /*!
-   * \brief denotes threshold used for quantization and dequantization
-   * Must be a positive value. All positive gradients will be thresholded to `threshold_` and
-   * all negative gradients will be thresholded to -1*`threshold_`
-   */
-  float threshold_ = 0;
+      button_drag_utils::SetDragImage(
+      GURL(), files[0].LossyDisplayName(), icon.AsImageSkia(), nullptr,
+      *views::Widget::GetTopLevelWidgetForNativeView(view), &data);
+    
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
+    
+    
+    {} // namespace nwapi
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+    
+    void MenuItem::Create(const base::DictionaryValue& option) {
+  std::string type;
+  option.GetString('type', &type);
+  submenu_ = NULL;
+  gtk_accel_group = NULL;
+    }
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
+  return RespondNow(NoArguments());
+}
+    
+    
+    {    for (auto& media_list : media_list_) {
+      media_list->StartUpdating(this);
+    }
+  }
+    
+    #define TegraGenOp_Invoker(name, func, src_cnt, dst_cnt, scale_cnt, ...) \
+template <typename ST, typename DT> \
+class TegraGenOp_##name##_Invoker : public cv::ParallelLoopBody \
+{ \
+public: \
+    TegraGenOp_##name##_Invoker(SRC_ARG##src_cnt \
+                                DST_ARG##dst_cnt \
+                                int width_, int height_ \
+                                SCALE_ARG##scale_cnt) : \
+        cv::ParallelLoopBody(), SRC_STORE##src_cnt \
+                                DST_STORE##dst_cnt \
+                                width(width_), height(height_) \
+                                SCALE_STORE##scale_cnt {} \
+    virtual void operator()(const cv::Range& range) const \
+    { \
+        CAROTENE_NS::func(CAROTENE_NS::Size2D(width, range.end-range.start), __VA_ARGS__); \
+    } \
+private: \
+    SRC_VAR##src_cnt \
+    DST_VAR##dst_cnt \
+    int width, height; \
+    SCALE_VAR##scale_cnt \
+    const TegraGenOp_##name##_Invoker& operator= (const TegraGenOp_##name##_Invoker&); \
 };
-}  // namespace kvstore
-}  // namespace mxnet
-#endif  // MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-
     
-    // C callback that can be used by TVM to extract
-// the WrapAsyncCall function.
-extern 'C' MXNET_DLL int MXTVMBridge(TVMFunctionHandle pregister) {
-  using tvm::runtime::PackedFunc;
-  const PackedFunc& fregister =
-      *static_cast<PackedFunc*>(pregister);
-  fregister('WrapAsyncCall', PackedFunc(mxnet::WrapAsyncCall));
-  return 0;
-}
-
+    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
+#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
+#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
+#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
     
-    /*!
- *  Copyright (c) 2018 by Contributors
- * \file transformer.cc
- * \brief CPU implementation of the operators used in Transformer
- */
-#include <mxnet/base.h>
-#include './transformer-inl.h'
-#include '../tensor/elemwise_unary_op.h'
-    
-    
-    {    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grid = in_data[bs::kGrid].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-    // grid_tmp : (batch, h, w, 2)
-    grid_tmp = transpose(grid, Shape4(0, 2, 3, 1));
-    if (!init_cudnn_) {
-     Init(s, in_data, out_data);
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, f32, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
+             'vcvt.f32.s32 q1, q0                                    \n\t'
+             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3'//,'d4','d5'
+         );
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
+             'vcvt.f32.s32 q1, q0                                    \n\t'
+             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i + 4)
+             : 'd0','d1','d2','d3'//,'d4','d5'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, f32, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline_s32 = vld1q_s32(_src + i);
+         float32x4_t vline_f32 = vcvtq_f32_s32(vline_s32);
+         vst1q_f32(_dst + i, vline_f32);
     }
-    CHECK_EQ(data.CheckContiguous(), true);
-    CHECK_EQ(out.CheckContiguous(), true);
-    CHECK_EQ(grid_tmp.CheckContiguous(), true);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
-                                            st_desc_,
-                                            &alpha,
-                                            in_desc_,
-                                            data.dptr_,
-                                            grid_tmp.dptr_,
-                                            &beta,
-                                            out_desc_,
-                                            out.dptr_));
-  }
+    }
     
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 3U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      if (param_.sampler_type == st::kBilinear) {
-        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                          sampler_,
-                                                          dtype_,
-                                                          4,
-                                                          dim));
+    typedef void (* flipFunc)(const Size2D &size,
+                  const void * srcBase, ptrdiff_t srcStride,
+                  void * dstBase, ptrdiff_t dstStride,
+                  FLIP_MODE flipMode);
+    
+    namespace CAROTENE_NS {
+    }
+    
+      // Get direction
+  PageTransitionDirection getDirection() { return direction; }
+    
+    class PopplerCache
+{
+  public:
+    PopplerCache(int cacheSizeA);
+    ~PopplerCache();
+    
+    /* The item returned is owned by the cache */
+    PopplerCacheItem *lookup(const PopplerCacheKey &key);
+    
+    /* The key and item pointers ownership is taken by the cache */
+    void put(PopplerCacheKey *key, PopplerCacheItem *item);
+    
+    /* The max size of the cache */
+    int size();
+    
+    /* The number of items in the cache */
+    int numberOfItems();
+    
+    /* The n-th item in the cache */
+    PopplerCacheItem *item(int index);
+    
+    /* The n-th key in the cache */
+    PopplerCacheKey *key(int index);
+  
+  private:
+    PopplerCache(const PopplerCache &cache); // not allowed
+  
+    PopplerCacheKey **keys;
+    PopplerCacheItem **items;
+    int lastValidCacheIndex;
+    int cacheSize;
+};
+    
+    
+    {  GBool mono;
+  GBool gray;
+  GBool transparency;
+  GBool gdi;
+  PSLevel level;		// PostScript level (1, 2, separation)
+  GBool level1PSBug;		// gTrue if it uses a feature not supported in PSOutputDev
+};
+    
+    #ifdef _WIN32
+  setmode(fileno(stdin), O_BINARY);
+#endif
+    
+            virtual const std::unordered_set<StreamInformation>& StreamInfos() override { return m_streamInfos; }
+    
+            static bool IsUDF(const FunctionPtr& f);
+    
+        bool hasMultipleReaders = config.Exists(L'readers');
+    // In case when deserializers are specified, use the new logic to compose them.
+    bool hasDeserializers = config.Exists(L'deserializers');
+    if (hasMultipleReaders)
+    {
+        vector<wstring> ioNames = config(L'readers', ConfigRecordType::Array(stringargvector()));
+        // newer code that explicitly place multiple streams for inputs
+        for (const auto& ioName : ioNames) // inputNames should map to node names
+        {
+            const ConfigRecordType& thisIO = config(ioName);
+            wstring readerType = thisIO(L'readerType', L'Cntk.Deserializers.TextFormat');
+    }
+    }
+    
+      while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare('query') != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+    }
+    }
+    }
+    
+    uint32_t InternalExtensionInfo::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin('InternalExtensionInfo');
+    }
+    
+      // Join results..
+  for (auto& entry : hw_info) {
+    bool matched = false;
+    for (auto& row : results) {
+      auto serial = row.find('serial_number');
+      if (serial == row.end()) {
+        continue;
       }
     }
+    }
+    
+    TEST_F(PerfOutputTests, assigning_constructor) {
+  auto buf = std::array<char, 8>{};
+  auto from_obj = ebpf::PerfOutput<TestMessage>{};
+  from_obj.size_ = buf.size();
+  from_obj.fd_ = 42;
+  from_obj.data_ptr_ = static_cast<void*>(buf.data());
+    }
+    
+      ASSERT_GE(data.size(), 0ul);
+    
+    TEST_F(kernelExtensions, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from kernel_extensions');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'idx', IntType}
+  //      {'refs', IntType}
+  //      {'size', IntType}
+  //      {'name', NormalType}
+  //      {'version', NormalType}
+  //      {'linked_against', NormalType}
+  //      {'path', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+    class keychainAcls : public testing::Test {
+ protected:
+  void SetUp() override {
+    setUpEnvironment();
   }
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(NativeOpParam param) {
-  return new NativeOp<cpu>(param);
-}
-    }
-    }
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file identity_attach_KL_sparse_reg.cc
- * \brief\
-*/
-#include './identity_attach_KL_sparse_reg-inl.h'
-#include <nnvm/op_attr_types.h>
-    
-        deleteLinkedList(head);
-    
-        ListNode* curNode = head;
-    while(curNode != NULL){
-        ListNode* delNode = curNode;
-        curNode = curNode->next;
-        delete delNode;
-    }
-    
-            int count[3] = {0};
-        for(int i = 0 ; i < nums.size() ; i ++){
-            assert(nums[i] >= 0 && nums[i] <= 2);
-            count[nums[i]] ++;
-        }
-    
-    #include <iostream>
-    
-    
-    {    return 0;
-}
-
-    
-    
-    {    return 0;
-}
-
-    
-    // PreOrder Morris Traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(1)
-class Solution {
-    }
-    
-        // output changed array
-    std::cout << object << '\n';
-    
-        // create an array from an array_t value
-    json::array_t array_value = {'one', 'two', 3, 4.5, false};
-    json j_array_t(array_value);
+};
