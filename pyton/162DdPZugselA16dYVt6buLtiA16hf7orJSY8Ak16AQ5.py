@@ -1,114 +1,168 @@
 
         
-        
-def add_or_delete_heroku_collaborator(module, client):
-    user = module.params['user']
-    state = module.params['state']
-    affected_apps = []
-    result_state = False
+        import optparse
+import os
+from os.path import dirname as dirn
+import sys
     
-    requirements:
-  - '1and1'
-  - 'python >= 2.6'
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        if event == 'annotation':
-        if not msg:
-            module.fail_json(msg='msg required for annotation events')
-        try:
-            send_annotation_event(module, key, msg, annotated_by, level, instance_id, event_epoch)
-        except Exception as e:
-            module.fail_json(msg='unable to sent annotation event: %s' % to_native(e),
-                             exception=traceback.format_exc())
-    
-    ratio = scikits_time / scipy_time
+    from youtube_dl.extractor import _ALL_CLASSES
+from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
     
     
-def generate_data(case, sparse=False):
-    '''Generate regression/classification data.'''
-    bunch = None
-    if case == 'regression':
-        bunch = datasets.load_boston()
-    elif case == 'classification':
-        bunch = datasets.fetch_20newsgroups_vectorized(subset='all')
-    X, y = shuffle(bunch.data, bunch.target)
-    offset = int(X.shape[0] * 0.8)
-    X_train, y_train = X[:offset], y[:offset]
-    X_test, y_test = X[offset:], y[offset:]
-    if sparse:
-        X_train = csr_matrix(X_train)
-        X_test = csr_matrix(X_test)
-    else:
-        X_train = np.array(X_train)
-        X_test = np.array(X_test)
-    y_test = np.array(y_test)
-    y_train = np.array(y_train)
-    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
-            'y_test': y_test}
-    return data
+def filter_options(readme):
+    ret = ''
+    in_options = False
+    for line in readme.split('\n'):
+        if line.startswith('# '):
+            if line[2:].startswith('OPTIONS'):
+                in_options = True
+            else:
+                in_options = False
     
-    plt.subplot(223)
-plt.scatter(X_varied[:, 0], X_varied[:, 1], c=y_pred)
-plt.title('Unequal Variance')
+                    if ''' not in code and ''' not in code:
+                    continue
+                assertRegexpMatches(
+                    self,
+                    code,
+                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
+                    'unicode_literals import  missing in %s' % fn)
     
-        # ============
-    # Create cluster objects
-    # ============
-    ward = cluster.AgglomerativeClustering(
-        n_clusters=params['n_clusters'], linkage='ward')
-    complete = cluster.AgglomerativeClustering(
-        n_clusters=params['n_clusters'], linkage='complete')
-    average = cluster.AgglomerativeClustering(
-        n_clusters=params['n_clusters'], linkage='average')
-    single = cluster.AgglomerativeClustering(
-        n_clusters=params['n_clusters'], linkage='single')
+        def __str__(self):
+        defaults = dict(type(self).__dict__)
+        actual = dict(defaults)
+        actual.update(self.__dict__)
+        actual['config'] = self.config
+        return repr_dict_nice(dict(
+            (key, value)
+            for key, value in actual.items()
+            if not key.startswith('_'))
+        )
     
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
+        @property
+    def content_type(self):
+        '''Return the message content type.'''
+        ct = self._orig.headers.get('Content-Type', '')
+        if not isinstance(ct, str):
+            ct = ct.decode('utf8')
+        return ct
+    
+        def __init__(self, **kwargs):
+        '''
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+    
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
+    
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME + SEP_CREDENTIALS + PASSWORD,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
     
-class FixedTest(unittest.TestCase):
-    '''Tests for acme.fields.Fixed.'''
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
-        # TODO: decoder should check that nonce is in the protected header
     
-        @mock.patch('certbot_apache.display_ops.display_util')
-    @certbot_util.patch_get_utility()
-    @mock.patch('certbot_apache.display_ops.logger')
-    def test_small_display(self, mock_logger, mock_util, mock_display_util):
-        mock_display_util.WIDTH = 20
-        mock_util().menu.return_value = (display_util.OK, 0)
-        self._call(self.vhosts)
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
     
-            self.assertFalse(self.addr_defined.conflicts(self.addr1))
-        self.assertFalse(self.addr_defined.conflicts(self.addr2))
-        self.assertFalse(self.addr_defined.conflicts(self.addr))
-        self.assertFalse(self.addr_defined.conflicts(self.addr_default))
     
-    Use of this plugin requires a configuration file containing DigitalOcean API
-credentials, obtained from your DigitalOcean account's `Applications & API
-Tokens page <https://cloud.digitalocean.com/settings/api/tokens>`_.
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-    print('Benchmarks (Note: All benchmarks are only using a single CPU core)')
-print()
+        @cookies.setter
+    def cookies(self, jar):
+        '''
+        :type jar: CookieJar
+        '''
+        # http://docs.python.org/2/library/cookielib.html#cookie-objects
+        stored_attrs = ['value', 'path', 'secure', 'expires']
+        self['cookies'] = {}
+        for cookie in jar:
+            self['cookies'][cookie.name] = {
+                attname: getattr(cookie, attname)
+                for attname in stored_attrs
+            }
     
-            # Blur the face image
-        face_image = cv2.GaussianBlur(face_image, (99, 99), 30)
+    # The version info for the project you're documenting, acts as replacement
+# for |version| and |release|, also used in various other places throughout
+# the built documents.
+#
+# The short X.Y version.
+version = face_recognition.__version__
+# The full version, including alpha/beta/rc tags.
+release = face_recognition.__version__
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
+        # Display the resulting image
+    cv2.imshow('Video', frame)
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
     
-    # This is an example of running face recognition on a single image
-# and drawing a box around each person that was identified.
+    
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+    
+    
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
+    
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+        # Every 128 frames (the default batch size), batch process the list of frames to find faces
+    if len(frames) == 128:
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
+    
+        # Sparkle the eyes
+    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
+    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
+    
+    face_recognition_model = face_recognition_models.face_recognition_model_location()
+face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
