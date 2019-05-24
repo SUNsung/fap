@@ -1,92 +1,110 @@
 
         
-        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
-    
-    # the encrypted data can be generate with 'devscripts/generate_aes_testdata.py'
-    
-    
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-    from test.helper import FakeYDL
-from youtube_dl.extractor import IqiyiIE
-    
-        def test_youtube_translated_subtitles(self):
-        # This video has a subtitles track, which can be translated
-        self.url = 'Ky9eprVWzlI'
-        self.DL.params['writeautomaticsub'] = True
-        self.DL.params['subtitleslangs'] = ['it']
-        subtitles = self.getSubtitles()
-        self.assertTrue(subtitles['it'] is not None)
-    
-    
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
-    
-    
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
-    
-    You can download from:
-  https://osxfuse.github.io/
-Error: An unsatisfied requirement failed this build.'''
-    
-        @classmethod
-    def get_session_store_class(cls):
-        raise NotImplementedError
-    
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
-    
-            assert (mocap_id != -1)
-        sim.data.mocap_pos[mocap_id][:] = sim.data.body_xpos[body_idx]
-        sim.data.mocap_quat[mocap_id][:] = sim.data.body_xquat[body_idx]
+        
+def how_to_configure(proc, TIMEOUT):
+    proc.sendline(u'fuck')
+    assert proc.expect([TIMEOUT, u'alias isn't configured'])
 
     
-            if atexit_register:
-            atexit.register(self.close)
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+'''
     
-        def close(self):
-        self.flush()
-        self.closed = True
     
-        rollout = {}
-    rollout['observations'] = observations_hash
-    rollout['actions'] = actions_hash
-    rollout['rewards'] = rewards_hash
-    rollout['dones'] = dones_hash
+@pytest.mark.parametrize('command', [
+    Command('aws dynamdb scan', misspelled_command),
+    Command('aws dynamodb scn', misspelled_subcommand),
+    Command('aws dynamodb t-item',
+            misspelled_subcommand_with_multiple_options)])
+def test_match(command):
+    assert match(command)
     
-    from setuptools import setup, find_packages
-from codecs import open
-from os import path
-import itchat
+    
+@pytest.fixture
+def brew_already_installed():
+    return '''Warning: git-2.3.5 already installed'''
+    
+    
+def quat2mat(quat):
+    ''' Convert Quaternion to Euler Angles.  See rotation.py for notes '''
+    quat = np.asarray(quat, dtype=np.float64)
+    assert quat.shape[-1] == 4, 'Invalid shape quat {}'.format(quat)
+    
+        @type.setter
+    def type(self, type):
+        if type not in ['t', 'e']:
+            raise error.Error('Invalid episode type {}: must be t for training or e for evaluation', type)
+        self._type = type
+    
+    def test_text_envs():
+    env = gym.make('FrozenLake-v0')
+    video = VideoRecorder(env)
+    try:
+        env.reset()
+        video.capture_frame()
+        video.close()
+    finally:
+        os.remove(video.path)
+
+    
+    if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=None)
+    parser.add_argument('env_id', nargs='?', default='CartPole-v0', help='Select the environment to run')
+    args = parser.parse_args()
+    
+        def test_copy_target(self):
+        env = alg.copy_.CopyEnv()
+        self.assertEqual(env.target_from_input_data([0, 1, 2]), [0, 1, 2])
+    
+    
+def docopt_full_help(docstring, *args, **kwargs):
+    try:
+        return docopt(docstring, *args, **kwargs)
+    except DocoptExit:
+        raise SystemExit(docstring)
+    
+        def __init__(self, obj_name, obj, log_name=None, max_lines=10):
+        self.obj_name = obj_name
+        self.obj = obj
+        self.max_lines = max_lines
+        self.log = logging.getLogger(log_name or __name__)
+    
+    
+def sort_service_dicts(services):
+    # Topological sort (Cormen/Tarjan algorithm).
+    unmarked = services[:]
+    temporary_marked = set()
+    sorted_services = []
+    
+        Unrecognised input (anything other than 'y', 'n', 'yes',
+    'no' or '') will return None.
+    '''
+    answer = input(prompt).strip().lower()
+    
+        assert parse_extra_hosts([
+        'www.example.com: 192.168.0.17',
+        'static.example.com:192.168.0.19',
+        'api.example.com: 192.168.0.18',
+        'v6.example.com: ::1'
+    ]) == {
+        'www.example.com': '192.168.0.17',
+        'static.example.com': '192.168.0.19',
+        'api.example.com': '192.168.0.18',
+        'v6.example.com': '::1'
+    }
+    
+        def test_remove_local_volume(self, mock_client):
+        vol = volume.Volume(mock_client, 'foo', 'project')
+        vol.remove()
+        mock_client.remove_volume.assert_called_once_with('foo_project')
