@@ -1,182 +1,110 @@
 
         
-            def long_desc(self):
-        '''A long description of the command. Return short description when not
-        available. It cannot contain newlines, since contents will be formatted
-        by optparser which removes newlines and wraps text.
-        '''
-        return self.short_desc()
-    
-        def __exit__(self, exc_type, exc_value, traceback):
-        self.proc.kill()
-        self.proc.wait()
-        time.sleep(0.2)
-    
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
+        
+if __name__ == '__main__':
+    main()
 
     
-            # If no credentials could be found anywhere,
-        # consider this an anonymous connection request by default;
-        # unless 'anon' was set explicitly (True/False).
-        anon = kw.get('anon')
-        if anon is None and not aws_access_key_id and not aws_secret_access_key:
-            kw['anon'] = True
-        self.anon = kw.get('anon')
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+'''
     
     
-    class ScrapyClientTLSOptions(ClientTLSOptions):
-        '''
-        SSL Client connection creator ignoring certificate verification errors
-        (for genuinely invalid certificates or bugs in verification code).
-    
-        def __init__(self, request, timeout=180):
-        self._url = urldefrag(request.url)[0]
-        # converting to bytes to comply to Twisted interface
-        self.url = to_bytes(self._url, encoding='ascii')
-        self.method = to_bytes(request.method, encoding='ascii')
-        self.body = request.body or None
-        self.headers = Headers(request.headers)
-        self.response_headers = None
-        self.timeout = request.meta.get('download_timeout') or timeout
-        self.start_time = time()
-        self.deferred = defer.Deferred().addCallback(self._build_response, request)
-    
-            # XXX: Google parses at least first 100k bytes; scrapy's redirect
-        # middleware parses first 4k. 4k turns out to be insufficient
-        # for this middleware, and parsing 100k could be slow.
-        # We use something in between (32K) by default.
-        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
-    
-        @certbot_util.patch_get_utility()
-    def test_noninteractive(self, mock_util):
-        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
-        try:
-            self._call(self.vhosts)
-        except errors.MissingCommandlineFlag as e:
-            self.assertTrue('vhost ambiguity' in str(e))
-    
-    Certbot will emit a warning if it detects that the credentials file can be
-accessed by other users on your system. The warning reads 'Unsafe permissions
-on credentials configuration file', followed by the path to the credentials
-file. This warning will be emitted each time Certbot uses the credentials file,
-including for renewal, and cannot be silenced except by addressing the issue
-(e.g., by using a command like ``chmod 600`` to restrict access to the file).
-    
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-    
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-dns-cloudxns', u'certbot-dns-cloudxns Documentation',
-     [author], 1)
-]
-    
-        function_parameters = zip(
-        images_to_check,
-        itertools.repeat(model),
-    )
-    
-    # Get a reference to the Raspberry Pi camera.
-# If this fails, make sure you have a camera connected to the RPi and that you
-# enabled your camera in raspi-config and rebooted first.
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-output = np.empty((240, 320, 3), dtype=np.uint8)
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+Invalid choice: 'scn', maybe you meant:
     
     
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
-                # If a match was found in known_face_encodings, just use the first one.
-            if True in matches:
-                first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
-    
-    
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
-    
-        # Draw a label with a name below the face
-    text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
-    
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
-    
-        def on_operator_inservice(self):
-        raise UnsupportedTransition
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
     
-def main():
-    shapes = (CircleShape(1, 2, 3, DrawingAPI1()), CircleShape(5, 7, 11, DrawingAPI2()))
+@pytest.mark.parametrize('command', [
+    Command('cargo buid', no_such_subcommand_old),
+    Command('cargo buils', no_such_subcommand)])
+def test_match(command):
+    assert match(command)
+    
+    remove_dups(a1)
+print_linked_list(a1)
+remove_dups_wothout_set(a1)
+print_linked_list(a1)
+
+    
+            assert self.CONTROLLER is not None
+    
+        def test_no_body_signing_register(self):
+        res = self.do_login(
+            headers={
+                signing.SIGNATURE_BODY_HEADER: None,
+            },
+            expect_errors=True,
+        )
+        self.assert_403_response(res, 'signing.body.invalid.invalid_format')
+    
+            # Give ourselves enough users that we can get some reasonable amount of
+        # precision when checking amounts per bucket.
+        NUM_USERS = FeatureState.NUM_BUCKETS * 2000
+        fullnames = []
+        for i in xrange(NUM_USERS):
+            fullnames.append('t2_%s' % str(i))
+    
+        def test_float(self):
+        self.assertEquals(3.0, ConfigValue.float('3'))
+        self.assertEquals(-3.0, ConfigValue.float('-3'))
+        with self.assertRaises(ValueError):
+            ConfigValue.float('asdf')
     
     
-class SalesManager:
-    def talk(self):
-        print('Sales Manager ready to talk')
+class TestModuleGetFlattenedSources(unittest.TestCase):
+    def test_flat_modules_include_all_sources(self):
+        test_files = ['foo.js', 'bar.js', 'baz.js', 'qux.js']
+        test_module = TestModule('test_module', *test_files)
+        self.assertEqual(test_module.build(), concat_sources(test_files))
     
-        def test_extended_property_values_cloning(self):
-        sample_object_1 = self.prototype.clone()
-        sample_object_1.some_value = 'test string'
-        sample_object_2 = self.prototype.clone()
-        self.assertRaises(AttributeError, lambda: sample_object_2.some_value)
-    
-    from past.builtins import basestring
-import logging
-import numpy as np
-    
-        # conv 1x1 -> GN (no ReLU)
-    cur = model.ConvGN(
-        cur,
-        prefix + '_branch2c',
-        dim_inner,
-        dim_out,
-        kernel=1,
-        group_gn=get_group_gn(dim_out),
-        stride=1,
-        pad=0,
-    )
-    return cur
+        def test_censor(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image, censor_nsfw=True)
+        self.assertEqual(url, 'https://example.com/a.jpg?blur=600&px=32')
 
     
     
-def add_roi_Xconv1fc_gn_head(model, blob_in, dim_in, spatial_scale):
-    '''Add a X conv + 1fc head, with GroupNorm'''
-    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
-    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
-    roi_feat = model.RoIFeatureTransform(
-        blob_in, 'roi_feat',
-        blob_rois='rois',
-        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
-        resolution=roi_size,
-        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
+class TestLocalResizer(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.provider = NoOpImageResizingProvider()
+    
+        def test_invalid_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        platform = 'test'
+        version = 1
+        header = '1:%s:%s:deadbeef' % (platform, version)
+        self.assert_invalid(
+            body,
+            header=header,
+            error=signing.ERRORS.UNPARSEABLE,
+            global_version=1,
+        )
+    
+    
+MESSAGE = 'the quick brown fox jumped over...'
+BLOCK_O_PADDING = ('\x10\x10\x10\x10\x10\x10\x10\x10'
+                   '\x10\x10\x10\x10\x10\x10\x10\x10')
+SECRET = 'abcdefghijklmnopqrstuvwxyz'
+ENCRYPTED = ('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaIbzth1QTzJxzHbHGnJywG5V1uR3tWtSB'
+             '8hTyIcfg6rUZC4Wo0pT8jkEt9o1c%2FkTn')
