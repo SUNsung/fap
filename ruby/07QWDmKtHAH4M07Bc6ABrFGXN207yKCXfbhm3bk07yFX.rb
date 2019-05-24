@@ -1,137 +1,121 @@
-require 'action_view/helpers/tags/collection_helpers'
+
+        
+            private
     
-          def rate_limit_resets_in
-        # We add a few seconds to the rate limit so we don't _immediately_
-        # resume when the rate limit resets as this may result in us performing
-        # a request before GitHub has a chance to reset the limit.
-        octokit.rate_limit.resets_in + 5
-      end
+        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
+  end
     
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
-      end
-    
-              new(hash)
-        end
-    
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-      end
-    end
+      def setting
+    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
   end
 end
 
     
-        def create
-      authorize :email_domain_block, :create?
-    
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-        web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data,
-      user_id: active_session.user_id,
-      access_token_id: active_session.access_token_id
-    )
-    
-      included do
-    before_action :set_session_activity
+      Devise.omniauth_configs.each_key do |provider|
+    provides_callback_for provider
   end
     
-    namespace :bower do
-    
-        private
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
+      def preferred_locale
+    http_accept_language.preferred_language_from(available_locales)
   end
-end
+    
+      def api_throttle_data
+    most_limited_type, = request.env['rack.attack.throttle_data'].min_by { |_, v| v[:limit] }
+    request.env['rack.attack.throttle_data'][most_limited_type]
+  end
+    
+    
+  # Returns a parsed HTML document.
+  # Instead of using regexes to parse the HTML body, you should use this and use the Nokogiri API.
+  #
+  # @see http://www.nokogiri.org/
+  # @return [Nokogiri::HTML::Document]
+  def get_html_document
+    Nokogiri::HTML(self.body)
+  end
+    
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the kvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_kvno(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes the stime field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_stime(input)
+            input.value[0].value
+          end
+    
+    Vagrant.configure('2') do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+    
+        pkgdata = {
+      'arch' => architecture,
+      'name' => name,
+      'version' => pkg_version,
+      'comment' => description,
+      'desc' => description,
+      'origin' => pkg_origin,
+      'maintainer' => maintainer,
+      'www' => url,
+      # prefix is required, but it doesn't seem to matter
+      'prefix' => '/',
+    }
+    
+      public(:input)
+end # class FPM::Package::NPM
 
     
-      describe '#create' do
-    let(:stranger) { FactoryGirl.create(:user) }
-    
-        streams.each do |stream_path, stream_class|
-      describe 'a GET to #{stream_path}' do
-        it 'assigns a stream of the proper class' do
-          get stream_path
-          expect(response).to be_success
-          expect(assigns[:stream]).to be_a stream_class
-        end
+        if File.exist?(install)
+      functions = parse_install_script(install)
+      if functions.include?('pre_install')
+        self.scripts[:before_install] = functions['pre_install'].join('\n')
       end
-    end
-  end
-    
-          def gets
-        return unless $stdin.tty?
-    
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
-    end
-  end
-end
-    
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
+      if functions.include?('post_install')
+        self.scripts[:after_install] = functions['post_install'].join('\n')
       end
-    end
-  end
-    
-          @command.output_type.tap do |val|
-        next if val.nil?
-        mandatory(FPM::Package.types.include?(val),
-                  'Invalid output package (-t flag) type #{val.inspect}. ' \
-                  'Expected one of: #{types.join(', ')}')
+      if functions.include?('pre_upgrade')
+        self.scripts[:before_upgrade] = functions['pre_upgrade'].join('\n')
       end
-    
-        if attributes[:pear_php_dir]
-      logger.info('Setting php_dir', :php_dir => attributes[:pear_php_dir])
-      safesystem('pear', '-c', config, 'config-set', 'php_dir', '#{staging_path(installroot)}/#{attributes[:pear_php_dir]}')
+      if functions.include?('post_upgrade')
+        self.scripts[:after_upgrade] = functions['post_upgrade'].join('\n')
+      end
+      if functions.include?('pre_remove')
+        self.scripts[:before_remove] = functions['pre_remove'].join('\n')
+      end
+      if functions.include?('post_remove')
+        self.scripts[:after_remove] = functions['post_remove'].join('\n')
+      end
+      FileUtils.rm(install)
     end
     
-        File.write(build_path('build-info'), `pkg_info -X pkg_install | egrep '^(MACHINE_ARCH|OPSYS|OS_VERSION|PKGTOOLS_VERSION)'`)
+            next if attributes[:python_disable_dependency].include?(name)
     
-        args = [ tar_cmd,
-             '-C',
-             staging_path,
-             '-cf',
-             payload_tar,
-             '--owner=0',
-             '--group=0',
-             '--numeric-owner',
-             '.' ]
-    
-        safesystem('tar', *args)
-    
-        realpath = Pathname.new(input_path).realpath.to_s
-    ::Dir.chdir(build_path) do
-      safesystem('unzip', realpath)
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
     end
-    
-      # Get the recommended 'tar' command for this platform.
-  def tar_cmd
-    return @@tar_cmd if defined? @@tar_cmd
