@@ -1,153 +1,244 @@
 
         
-        
-def main():
-    '''Pretty-print the bug information as JSON.'''
-    print(json.dumps(info(), sort_keys=True, indent=2))
+          # Predict all the paths
+  for index in range(len(path_index)):
+    curr_path_vector = path_vectors[index]
     
-        with server as (host, port):
-        url = 'http://{}:{}/'.format(host, port)
-        r = requests.get(url, auth=auth)
-        # Verify server didn't authenticate us.
-        assert r.status_code == 401
-        assert r.history[0].status_code == 401
-        close_server.set()
+        total_cost = total_recon_cost = total_kl_cost = 0.0
+    # normalizing by batch done in distributions.py
+    epoch_size = len(collected_op_values)
+    for op_values in collected_op_values:
+      total_cost += op_values[0]
+      total_recon_cost += op_values[1]
+      total_kl_cost += op_values[2]
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+    # This flag is used for an experiment where one sees if training a model with
+# many days data can be used to learn the dynamics from a held-out days data.
+# If you don't care about that particular experiment, this flag should always be
+# false.
+flags.DEFINE_boolean('do_train_io_only', DO_TRAIN_IO_ONLY,
+                     'Train only the input (readin) and output (readout) \
+                     affine functions.')
     
+    data_train_truth, data_valid_truth = split_list_by_inds(truth_data_e,
+                                                        train_inds,
+                                                        valid_inds)
+data_train_spiking, data_valid_spiking = split_list_by_inds(spiking_data_e,
+                                                            train_inds,
+                                                            valid_inds)
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
+      def encode_chars(self, sentence):
+    chars_ids = [self.word_to_char_ids(cur_word)
+                 for cur_word in sentence.split()]
+    return np.vstack([self.bos_chars] + chars_ids + [self.eos_chars])
     
+      Args:
+    session:  Current tf.Session.
+    lr_update: tf.assign operation.
+    lr_placeholder: tf.placeholder for the new learning rate.
+    new_lr: New learning rate to use.
+  '''
+  session.run(lr_update, feed_dict={lr_placeholder: new_lr})
     
-class ShutdownRequest( BaseRequest ):
-  def __init__( self ):
-    super( ShutdownRequest, self ).__init__()
+      # Forward Discriminator Elements.
+  if not FLAGS.dis_share_embedding:
+    embedding = [
+        v for v in tf.trainable_variables() if v.op.name == 'dis/embedding'
+    ][0]
+  fw_lstm_w_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  fw_lstm_b_0 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  fw_lstm_w_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  fw_lstm_b_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/fw/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
+  if FLAGS.dis_share_embedding:
+    variable_mapping = {
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
+    }
+  else:
+    variable_mapping = {
+        'Model/embedding': embedding,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': fw_lstm_w_0,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': fw_lstm_b_0,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': fw_lstm_w_1,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': fw_lstm_b_1
+    }
+  return variable_mapping
     
-      _assert_accepts( f, { 'text' : 'This is an IMPORTANT taco',
-                        'kind' : 'WARNING' } )
-  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
-                        'kind' : 'ERROR' } )
-    
-    # Output file base name for HTML help builder.
-htmlhelp_basename = 'futuresdoc'
-    
-    if __name__ == '__main__':
-    main()
+          predictions = tf.transpose(predictions, [1, 0, 2])
+      return tf.squeeze(predictions, axis=2)
 
     
-        def test_exception_with_timeout(self):
-        self.assertRaises(futures.TimeoutError,
-                          PENDING_FUTURE.exception, timeout=0)
-        self.assertRaises(futures.TimeoutError,
-                          RUNNING_FUTURE.exception, timeout=0)
-        self.assertRaises(futures.CancelledError,
-                          CANCELLED_FUTURE.exception, timeout=0)
-        self.assertRaises(futures.CancelledError,
-                          CANCELLED_AND_NOTIFIED_FUTURE.exception, timeout=0)
-        self.assertTrue(isinstance(EXCEPTION_FUTURE.exception(timeout=0),
-                                   IOError))
-        self.assertEqual(SUCCESSFUL_FUTURE.exception(timeout=0), None)
     
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-opt, args = parser.parse_args()
+@pytest.mark.parametrize('command, packages, which', [
+    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
+     [], None),
+    (Command('vim', ''), [], None),
+    (Command('', ''), [], None),
+    (Command('vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim'),
+    (Command('sudo vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim')])
+def test_not_match(mocker, command, packages, which):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-    content = open(file_name, 'rb').read()
     
-    for topic_idx, topic in enumerate(nmf.components_):
-    print('Topic #%d:' % topic_idx)
-    print(' '.join([feature_names[i]
-                    for i in topic.argsort()[:-n_top_words - 1:-1]]))
-    print('')
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-    Latin5_BulgarianCharToOrderMap = (
-255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
-253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
-252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
-253, 77, 90, 99,100, 72,109,107,101, 79,185, 81,102, 76, 94, 82,  # 40
-110,186,108, 91, 74,119, 84, 96,111,187,115,253,253,253,253,253,  # 50
-253, 65, 69, 70, 66, 63, 68,112,103, 92,194,104, 95, 86, 87, 71,  # 60
-116,195, 85, 93, 97,113,196,197,198,199,200,253,253,253,253,253,  # 70
-194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,  # 80
-210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,  # 90
- 81,226,227,228,229,230,105,231,232,233,234,235,236, 45,237,238,  # a0
- 31, 32, 35, 43, 37, 44, 55, 47, 40, 59, 33, 46, 38, 36, 41, 30,  # b0
- 39, 28, 34, 51, 48, 49, 53, 50, 54, 57, 61,239, 67,240, 60, 56,  # c0
-  1, 18,  9, 20, 11,  3, 23, 15,  2, 26, 12, 10, 14,  6,  4, 13,  # d0
-  7,  8,  5, 19, 29, 25, 22, 21, 27, 24, 17, 75, 52,241, 42, 16,  # e0
- 62,242,243,244, 58,245, 98,246,247,248,249,250,251, 91,252,253,  # f0
-)
+                with tarfile.TarFile(path, 'r') as archive:
+                archive.extractall()
     
-            if self.state == ProbingState.DETECTING:
-            if (self.distribution_analyzer.got_enough_data() and
-                    (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
-                self._state = ProbingState.FOUND_IT
+    '''
     
-        def __init__(self, lang_filter=None):
-        super(MultiByteCharSetProber, self).__init__(lang_filter=lang_filter)
-        self.distribution_analyzer = None
-        self.coding_sm = None
-        self._last_char = [0, 0]
+            MISSING TOKEN
     
-        def reset(self):
-        super(SingleByteCharSetProber, self).reset()
-        # char order of last character
-        self._last_order = 255
-        self._seq_counters = [0] * SequenceLikelihood.get_num_categories()
-        self._total_seqs = 0
-        self._total_char = 0
-        # characters that fall in our sampling range
-        self._freq_char = 0
+            else:
+            raise TypeError('Invalid arguments')
     
-            # Log all prober confidences if none met MINIMUM_THRESHOLD
-        if self.logger.getEffectiveLevel() == logging.DEBUG:
-            if self.result['encoding'] is None:
-                self.logger.debug('no probers hit minimum threshold')
-                for group_prober in self._charset_probers:
-                    if not group_prober:
-                        continue
-                    if isinstance(group_prober, CharSetGroupProber):
-                        for prober in group_prober.probers:
-                            self.logger.debug('%s %s confidence = %s',
-                                              prober.charset_name,
-                                              prober.language,
-                                              prober.get_confidence())
-                    else:
-                        self.logger.debug('%s %s confidence = %s',
-                                          prober.charset_name,
-                                          prober.language,
-                                          prober.get_confidence())
-        return self.result
-
+        # 'The specifier name is a ``dotted name'' that may resolve ... to ... a
+    # test method within a test case class'
+    def test_loadTestsFromNames__relative_testmethod(self):
+        m = types.ModuleType('m')
+        class MyTestCase(unittest.TestCase):
+            def test(self):
+                pass
+        m.testcase_1 = MyTestCase
     
-    with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+    
+def open_text(package: Package,
+              resource: Resource,
+              encoding: str = 'utf-8',
+              errors: str = 'strict') -> TextIO:
+    '''Return a file-like object opened for text reading of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return TextIOWrapper(reader.open_resource(resource), encoding, errors)
+    _check_location(package)
+    absolute_package_path = os.path.abspath(package.__spec__.origin)
+    package_path = os.path.dirname(absolute_package_path)
+    full_path = os.path.join(package_path, resource)
+    try:
+        return open(full_path, mode='r', encoding=encoding, errors=errors)
+    except OSError:
+        # Just assume the loader is a resource loader; all the relevant
+        # importlib.machinery loaders are and an AttributeError for
+        # get_data() will make it clear what is needed from the loader.
+        loader = cast(ResourceLoader, package.__spec__.loader)
+        data = None
+        if hasattr(package.__spec__.loader, 'get_data'):
+            with suppress(OSError):
+                data = loader.get_data(full_path)
+        if data is None:
+            package_name = package.__spec__.name
+            message = '{!r} resource not found in {!r}'.format(
+                resource, package_name)
+            raise FileNotFoundError(message)
+        else:
+            return TextIOWrapper(BytesIO(data), encoding, errors)
+    
+    import os
+import email
+import mimetypes
+    
+    def handleSlideshow(slideshow):
+    print('<html>')
+    handleSlideshowTitle(slideshow.getElementsByTagName('title')[0])
+    slides = slideshow.getElementsByTagName('slide')
+    handleToc(slides)
+    handleSlides(slides)
+    print('</html>')
+    
+    con = sqlite3.connect(':memory:')
+con.isolation_level = None
+cur = con.cursor()
+    
+    
+def get_build_version():
+    filename = os.path.join(os.path.dirname(compose.__file__), 'GITSHA')
+    if not os.path.exists(filename):
+        return 'unknown'
+    
+    import re
+    
+    from compose.utils import unquote_path
+    
+        def test_sort_service_dicts_circular_imports(self):
+        services = [
+            {
+                'links': ['redis'],
+                'name': 'web'
+            },
+            {
+                'name': 'redis',
+                'links': ['web']
+            },
+        ]
+    
+        def test_parse_volume_windows_absolute_path_native(self):
+        windows_path = 'c:\\Users\\me\\Documents\\shiny\\config:/opt/shiny/config:ro'
+        assert VolumeSpec._parse_win32(windows_path, False) == (
+            'c:\\Users\\me\\Documents\\shiny\\config',
+            '/opt/shiny/config',
+            'ro'
+        )
+    
+        @unittest.skip('registration captcha is unfinished')
+    def test_captcha_blocking(self):
+        with contextlib.nested(
+            self.mock_register(),
+            self.failed_captcha()
+        ):
+            res = self.do_register()
+            self.assert_failure(res, 'BAD_CAPTCHA')
+    
+        def test_bool(self):
+        self.assertEquals(True, ConfigValue.bool('TrUe'))
+        self.assertEquals(False, ConfigValue.bool('fAlSe'))
+        with self.assertRaises(ValueError):
+            ConfigValue.bool('asdf')
+    
+        def test_nested_modules_include_all_sources(self):
+        test_files_a = ['foo.js', 'bar.js']
+        test_module_a = TestModule('test_module_a', *test_files_a)
+        test_files_b = ['baz.js', 'qux.js']
+        test_module_b = TestModule('test_module_b', *test_files_b)
+        test_module = TestModule('test_mobule', test_module_a, test_module_b)
+        self.assertEqual(test_module.build(), concat_sources(test_files_a + test_files_b))
+    
+            perm_set = TestPermissionSet()
+        perm_set['x'] = True
+        self.assertTrue(perm_set['x'])
+        self.assertFalse(perm_set['y'])
+        perm_set['x'] = False
+        self.assertFalse(perm_set['x'])
+        perm_set[perm_set.ALL] = True
+        self.assertTrue(perm_set['x'])
+        self.assertTrue(perm_set['y'])
+        self.assertFalse(perm_set['z'])
+        self.assertTrue(perm_set.get('x', False))
+        self.assertFalse(perm_set.get('z', False))
+        self.assertTrue(perm_set.get('z', True))
+    
+    import unittest
