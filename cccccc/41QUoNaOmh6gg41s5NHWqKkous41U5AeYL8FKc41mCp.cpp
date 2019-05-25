@@ -1,505 +1,459 @@
 
         
-        #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
+        
+    {  return false;
+}
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+     private:
+  ~UvTaskRunner() override;
+  static void OnTimeout(uv_timer_t* timer);
+  static void OnClose(uv_handle_t* handle);
     
-    #include 'atom/browser/atom_quota_permission_context.h'
+     protected:
+  Screen(v8::Isolate* isolate, display::Screen* screen);
+  ~Screen() override;
+    
+    class AtomQuotaPermissionContext : public content::QuotaPermissionContext {
+ public:
+  typedef content::QuotaPermissionContext::QuotaPermissionResponse response;
+    }
+    
+    void AutoUpdater::SetDelegate(Delegate* delegate) {
+  delegate_ = delegate;
+}
+    
+      // There is a new update which has been downloaded.
+  virtual void OnUpdateDownloaded(const std::string& release_notes,
+                                  const std::string& release_name,
+                                  const base::Time& release_date,
+                                  const std::string& update_url) {}
+    
+    #ifndef ATOM_BROWSER_RELAUNCHER_H_
+#define ATOM_BROWSER_RELAUNCHER_H_
+    
+      // PID 1 identifies init. launchd, that is. launchd never starts the
+  // relauncher process directly, having this parent_pid means that the parent
+  // already exited and launchd 'inherited' the relauncher as its child.
+  // There's no reason to synchronize with launchd.
+  if (parent_pid == 1) {
+    LOG(ERROR) << 'unexpected parent_pid';
+    return;
+  }
     
     
     {}  // namespace atom
     
-    #endif  // ATOM_BROWSER_UI_COCOA_VIEWS_DELEGATE_MAC_H_
-
+    #ifndef ATOM_BROWSER_UI_COCOA_VIEWS_DELEGATE_MAC_H_
+#define ATOM_BROWSER_UI_COCOA_VIEWS_DELEGATE_MAC_H_
     
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+#endif
+    
+    from GYBUnicodeDataUtils import GraphemeClusterBreakPropertyTable, get_extended_grapheme_cluster_rules_matrix
+    
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
+    
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
+  }
+  if (!node) {
+    Out << '<<NULL>>';
     return;
   }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
+  }
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
+  }
 }
     
-      if (*BufferPtr == '\n')
-    return 1;
-    
-      public:
-    ClangDiagRenderer(const clang::LangOptions &langOpts,
-                      clang::DiagnosticOptions *diagOpts,
-                      decltype(callback) fn)
-       : DiagnosticNoteRenderer(langOpts, diagOpts),
-         callback(fn) {}
-    
-    #include 'llvm/ADT/Optional.h'
-#include 'llvm/ADT/StringRef.h'
-    
-    
-    
-    
-    {  return encodePunycode(InputCodePoints, OutPunycode);
-}
-    
-    void InterpretJobAction::anchor() {}
-    
-    #include 'ArgsToFrontendOutputsConverter.h'
-#include 'swift/AST/DiagnosticsFrontend.h'
-#include 'swift/Basic/Defer.h'
-#include 'swift/Frontend/FrontendOptions.h'
-#include 'swift/Option/Options.h'
-#include 'swift/Parse/Lexer.h'
-#include 'swift/Strings.h'
-#include 'llvm/Option/Arg.h'
-#include 'llvm/Option/ArgList.h'
-#include 'llvm/Option/Option.h'
-#include 'llvm/Support/ErrorHandling.h'
-#include 'llvm/Support/FileSystem.h'
-#include 'llvm/Support/LineIterator.h'
-#include 'llvm/Support/Path.h'
-    
-    template <> struct wAdd<u32>
-{
-    typedef u32 type;
+    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const InterpretJobAction &job,
+                                     const JobContext &context) const override;
+  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
+                                     const JobContext &context) const override;
     }
     
-    void bitwiseOr(const Size2D &size,
-               const u8 *src0Base, ptrdiff_t src0Stride,
-               const u8 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseOr());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    
-    {
-    {        vst1q_s8(_dst + i, vcombine_s8(vreinterpret_s8_u8(vline1_u8), vreinterpret_s8_u8(vline2_u8)));
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
     }
-})
-#endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC1(s16, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.s16 q3, d4                                       \n\t'
-            'vmovl.s16 q4, d5                                       \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vcvt.f32.s32 q6, q4                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vmul.f32 q8, q6, q0                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vadd.f32 q10, q8, q1                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vcvt.s32.f32 q12, q10                                  \n\t'
-            'vqmovn.s32 d26, q11                                    \n\t'
-            'vqmovn.s32 d27, q12                                    \n\t'
-            'vst1.16 {d26-d27}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-              'w' (vshift), 'w' (vscale)
-            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27'
-        );
-    }
-})
-#else
-CVTS_FUNC1(s16, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int16x8_t vline = vld1q_s16(_src + i);
-        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
-        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
-#endif
-    
-    s32 countNonZero(const Size2D &_size,
-                 const f32 * srcBase, ptrdiff_t srcStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    size_t roiw4 = size.width & ~3u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const f32* src = internal::getRowPtr( srcBase,  srcStride, k);
-        size_t i = 0;
-    }
+  }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
     }
     
-    
-    {
-    {
-    {            vst1_u16(dst + x, ls);
-        }
-        for (s32 h = 0; h < cn; ++h)
-        {
-            u32* ln = lane + h;
-            u16* dt = dst + h;
-            for (size_t k = x; k < colsn; k += cn)
-            {
-                dt[k] = (u16)((ln[k-2*cn] + ln[k+2*cn] + 4*(ln[k-cn] + ln[k+cn]) + 6*ln[k] + (1<<7))>>8);
-            }
-        }
-    }
-#else
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)borderValue;
-    (void)borderMargin;
-#endif
-}
+    #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
     
     
-    {
-    {
-    {             vec128  vs = internal::vld1q( src + i);
-             vec128 vr1 = internal::vld1q(rng1 + i);
-             vec128 vr2 = internal::vld1q(rng2 + i);
-            uvec128 vd1 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-                     vs = internal::vld1q( src + i + 16/sizeof(T));
-                    vr1 = internal::vld1q(rng1 + i + 16/sizeof(T));
-                    vr2 = internal::vld1q(rng2 + i + 16/sizeof(T));
-            uvec128 vd2 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            vnst(dst + i, vd1, vd2);
-        }
-        vtail<T, sizeof(T)>::inRange(src, rng1, rng2, dst, i, size.width);
-        for( ; i < size.width; i++ )
-            dst[i] = (u8)(-(rng1[i] <= src[i] && src[i] <= rng2[i]));
-    }
-}
-    
-    
-    { protected:
-  shared_ptr<SyncedMemory> rand_vec_;
+    { private:
+  // The collection of images to put in the PDF.
+  Pixa* pixa_;
+  // The fonts used to draw text captions.
+  L_Bmf* fonts_;
 };
     
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+      /* Reject modes generated after QUALITY_ACCEPT but before MINIMAL_REJ accep*/
+  R_DOC_REJ,    // TEMP Document rejection
+  R_BLOCK_REJ,  // TEMP Block rejection
+  R_ROW_REJ,    // TEMP Row rejection
+  R_UNLV_REJ,   // TEMP ~ turned to - or ^ turned to space
+    
+    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
 
     
-    /**
- * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
- */
-template <typename Dtype>
-class AccuracyLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
-  explicit AccuracyLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
     }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
-    }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
+    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
+// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
+// death tests are supported; otherwise they just issue a warning.  This is
+// useful when you are combining death test assertions with normal test
+// assertions in one test.
+#if GTEST_HAS_DEATH_TEST
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    EXPECT_DEATH(statement, regex)
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    ASSERT_DEATH(statement, regex)
+#else
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
 #endif
     
-      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
+    template <typename T>
+class TypeWithoutFormatter<T, kProtobuf> {
+ public:
+  static void PrintValue(const T& value, ::std::ostream* os) {
+    const ::testing::internal::string short_str = value.ShortDebugString();
+    const ::testing::internal::string pretty_str =
+        short_str.length() <= kProtobufOneLinerMaxLength ?
+        short_str : ('\n' + value.DebugString());
+    *os << ('<' + pretty_str + '>');
+  }
 };
-#endif
     
-    #include 'caffe/layers/deconv_layer.hpp'
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
  public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
+  ...
+  typedef std::list<T> List;
+  static T shared_;
+  T value_;
+};
+    
+      tuple& operator=(const tuple& t) { return CopyFrom(t); }
+    
+    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
+
+    
+    
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
+}
+    
+    // Clones a 0-terminated C string, allocating memory using new.
+const char* MyString::CloneCString(const char* a_c_string) {
+  if (a_c_string == NULL) return NULL;
     }
     
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
     
-    {}  // namespace caffe
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
+    
+    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
+  if (b->idx.named.grpc_server_stats_bin != nullptr) {
+    ServerStatsDeserialize(
+        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
+            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
+        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
+        elapsed_time);
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
+  }
+}
+    
+      static void OnDoneSendInitialMetadataCb(void* user_data, grpc_error* error);
+    
+    namespace grpc {
+namespace load_reporter {
+    }
+    }
+    
+    using grpc::core::Bucket;
+using grpc::core::Histogram;
+using grpc::core::Metric;
+using grpc::core::Stats;
+    
+    void CoreStatsToProto(const grpc_stats_data& core, grpc::core::Stats* proto);
+void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core);
     
     
     {}  // namespace leveldb
     
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
+    #include 'leveldb/export.h'
+#include 'leveldb/iterator.h'
+    
+    #ifndef STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
+#define STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
+    
+    
+    {}  // namespace leveldb
+    
+     private:
+  void GenerateFilter();
+    
+    char* Arena::AllocateAligned(size_t bytes) {
+  const int align = (sizeof(void*) > 8) ? sizeof(void*) : 8;
+  static_assert((align & (align - 1)) == 0,
+                'Pointer size should be a power of 2');
+  size_t current_mod = reinterpret_cast<uintptr_t>(alloc_ptr_) & (align - 1);
+  size_t slop = (current_mod == 0 ? 0 : align - current_mod);
+  size_t needed = bytes + slop;
+  char* result;
+  if (needed <= alloc_bytes_remaining_) {
+    result = alloc_ptr_ + slop;
+    alloc_ptr_ += needed;
+    alloc_bytes_remaining_ -= needed;
+  } else {
+    // AllocateFallback always returned aligned memory
+    result = AllocateFallback(bytes);
+  }
+  assert((reinterpret_cast<uintptr_t>(result) & (align - 1)) == 0);
+  return result;
+}
+    
+    #endif  // STORAGE_LEVELDB_UTIL_ARENA_H_
+
+    
+    TEST(CacheTest, Prune) {
+  Insert(1, 100);
+  Insert(2, 200);
+    }
+    
+      // Get file to use for testing.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file_name = test_dir + '/open_on_read.txt';
+  WritableFile* writable_file;
+  ASSERT_OK(env_->NewWritableFile(test_file_name, &writable_file));
+    
+    // Helper class to limit resource usage to avoid exhaustion.
+// Currently used to limit read-only file descriptors and mmap file usage
+// so that we do not run out of file descriptors or virtual memory, or run into
+// kernel performance problems for very large databases.
+class Limiter {
  public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
+  // Limit maximum number of resources to |max_acquires|.
+  Limiter(int max_acquires) : acquires_allowed_(max_acquires) {}
+    }
+    
+    #include <vector>
+    
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  auto obs = conti_radar->add_contiobs();
+  obs->set_clusterortrack(true);
+  obs->set_obstacle_id(obstacle_id(bytes, length));
+  obs->set_longitude_dist(longitude_dist(bytes, length));
+  obs->set_lateral_dist(lateral_dist(bytes, length));
+  obs->set_longitude_vel(longitude_vel(bytes, length));
+  obs->set_lateral_vel(lateral_vel(bytes, length));
+  obs->set_rcs(rcs(bytes, length));
+  obs->set_dynprop(dynprop(bytes, length));
+  double timestamp = apollo::common::time::Clock::NowInSeconds();
+  auto header = obs->mutable_header();
+  header->CopyFrom(conti_radar->header());
+  header->set_timestamp_sec(timestamp);
+}
+    
+    
+    {  switch (x) {
+    case 0x0:
+      return OUTPUT_TYPE_NONE;
+    case 0x1:
+      return OUTPUT_TYPE_OBJECTS;
+    case 0x2:
+      return OUTPUT_TYPE_CLUSTERS;
+    default:
+      return OUTPUT_TYPE_ERROR;
   }
-};
+}
     
-      fname = InfoLogFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kInfoLogFile, type);
-    
-        if (resyncing_) {
-      if (record_type == kMiddleType) {
-        continue;
-      } else if (record_type == kLastType) {
-        resyncing_ = false;
-        continue;
-      } else {
-        resyncing_ = false;
-      }
-    }
-    
-      void ConvertLogFilesToTables() {
-    for (size_t i = 0; i < logs_.size(); i++) {
-      std::string logname = LogFileName(dbname_, logs_[i]);
-      Status status = ConvertLogToTable(logs_[i]);
-      if (!status.ok()) {
-        Log(options_.info_log, 'Log #%llu: ignoring conversion error: %s',
-            (unsigned long long) logs_[i],
-            status.ToString().c_str());
-      }
-      ArchiveFile(logname);
-    }
-  }
-    
-    #ifndef STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
-#define STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
-    
-    protected:
-    
-    // FIXME: Passing 'const O *' instead of 'const O&' because HASH_FIND_IT requires the address of a pointer
-// and, it is not possible to get the address of a reference
-size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node *target,
-                                                             int tag)
-{
-    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
-    }
-    
-    
-    /** Returns the numbers of actions that are running in a
-     *  certain target with a specific tag.
-     * Like getNumberOfRunningActionsInTarget Composable actions
-     * are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @param tag       Tag that will be searched.
-     * @return  The numbers of actions that are running in a certain target
-     *          with a specific tag.
-     * @see getNumberOfRunningActionsInTarget
-     * @js NA
-     */
-    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
-    
-        /** 
-    * @brief Initializes the action with grid size, random seed and duration.
-    * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the Initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
-    
-     @since v0.99.2
- */
-class CC_DLL ActionTween : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
-     * @param duration The duration of the ActionTween. It's a value in seconds.
-     * @param key The key of property which should be updated.
-     * @param from The value of the specified property when the action begin.
-     * @param to The value of the specified property when the action end.
-     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
-     */
-    static ActionTween* create(float duration, const std::string& key, float from, float to);
-    }
-    
-    AnimationCache* AnimationCache::getInstance()
-{
-    if (! s_sharedAnimationCache)
-    {
-        s_sharedAnimationCache = new (std::nothrow) AnimationCache();
-        s_sharedAnimationCache->init();
+    namespace apollo {
+namespace localization {
+namespace msf {
     }
     }
+    }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {  double ret = x * 0.001000;
+  return ret;
+}
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    // config detail: {'name': 'longitude_seconds', 'offset': 0.0, 'precision': 1.0,
+// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 47,
+// 'type': 'int', 'order': 'motorola', 'physical_unit': 'sec'}
+int Latlonheadingrpt82::longitude_seconds(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 5);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    #include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
+#include 'base/CCDirector.h'
     
     
     {private:
-    Map<std::string, Animation*> _animations;
-    static AnimationCache* s_sharedAnimationCache;
+    CC_DISALLOW_COPY_AND_ASSIGN(FlipX);
 };
     
-    void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count)
-{
-    /*
-     whole texture UV coordination
-     0,0                  1,0
-     +---------------------+
-     |                     |0.1
-     |                     |0.2
-     |     +--------+      |0.3
-     |     |texRect |      |0.4
-     |     |        |      |0.5
-     |     |        |      |0.6
-     |     +--------+      |0.7
-     |                     |0.8
-     |                     |0.9
-     +---------------------+
-     0,1                  1,1
-     */
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CCACTIONTWEEN_H__
+#define __CCACTIONTWEEN_H__
     
-    CCASSERT(_width && _height, 'please specify width and height for this AutoPolygon instance');
-    float texWidth  = _width;
-    float texHeight = _height;
+    
+    {    /**  A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. If UserInfo is nil, then no notification will be broadcast. */
+    ValueMap _userInfo;
+    
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
+};
+    
+    
+    {
+    {        AnimationCache::getInstance()->addAnimation(animation, name);
     }
+}
     
-        const Rect& getRect() const { return _rect; }
-    void setRect(const Rect& rect) { _rect = rect; }
-    const std::string& getFilename() const { return _filename; }
-    void setFilename(const std::string& filename ) { _filename = filename; }
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    
+#include '2d/CCClippingRectangleNode.h'
+#include 'base/CCDirector.h'
+#include 'renderer/CCRenderer.h'
+#include 'math/Vec2.h'
+#include 'platform/CCGLView.h'
+    
+    #include '2d/CCNode.h'
+#include 'renderer/CCCustomCommand.h'
+#include 'platform/CCGL.h'
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
