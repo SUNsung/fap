@@ -1,189 +1,105 @@
 
         
-        
-DOCUMENTATION = '''
----
-module: ec2_snapshot
-short_description: creates a snapshot from an existing volume
-description:
-    - creates an EC2 snapshot from an existing EBS volume
-version_added: '1.5'
-options:
-  volume_id:
-    description:
-      - volume from which to take the snapshot
-    required: false
-  description:
-    description:
-      - description to be applied to the snapshot
-    required: false
-  instance_id:
-    description:
-    - instance that has the required volume to snapshot mounted
-    required: false
-  device_name:
-    description:
-    - device name of a mounted volume to be snapshotted
-    required: false
-  snapshot_tags:
-    description:
-      - a hash/dictionary of tags to add to the snapshot
-    required: false
-    version_added: '1.6'
-  wait:
-    description:
-      - wait for the snapshot to be ready
-    type: bool
-    required: false
-    default: yes
-    version_added: '1.5.1'
-  wait_timeout:
-    description:
-      - how long before wait gives up, in seconds
-      - specify 0 to wait forever
-    required: false
-    default: 0
-    version_added: '1.5.1'
-  state:
-    description:
-      - whether to add or create a snapshot
-    required: false
-    default: present
-    choices: ['absent', 'present']
-    version_added: '1.9'
-  snapshot_id:
-    description:
-      - snapshot id to remove
-    required: false
-    version_added: '1.9'
-  last_snapshot_min_age:
-    description:
-      - If the volume's most recent snapshot has started less than `last_snapshot_min_age' minutes ago, a new snapshot will not be created.
-    required: false
-    default: 0
-    version_added: '2.0'
+            def __init__(self, rank):
+        self.state = CallState.READY
+        self.rank = rank
+        self.employee = None
     
-        try:
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-        iam = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_kwargs)
-    except botocore.exceptions.ClientError as e:
-        module.fail_json(msg='Boto3 Client Error - ' + str(e.msg))
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-    - oneandone_moitoring_policy:
-    auth_token: oneandone_private_api_key
-    monitoring_policy: ansible monitoring policy
-    name: ansible monitoring policy updated
-    description: Testing creation of a monitoring policy with ansible updated
-    email: another@emailaddress.com
-    thresholds:
-     -
-       cpu:
-         warning:
-           value: 70
-           alert: false
-         critical:
-           value: 90
-           alert: false
-     -
-       ram:
-         warning:
-           value: 70
-           alert: false
-         critical:
-           value: 80
-           alert: false
-     -
-       disk:
-         warning:
-           value: 70
-           alert: false
-         critical:
-           value: 80
-           alert: false
-     -
-       internal_ping:
-         warning:
-           value: 60
-           alert: false
-         critical:
-           value: 90
-           alert: false
-     -
-       transfer:
-         warning:
-           value: 900
-           alert: false
-         critical:
-           value: 1900
-           alert: false
-    wait: true
-    state: update
+    # Read lines from the linkcheck output file
+try:
+    with open('build/linkcheck/output.txt') as out:
+        output_lines = out.readlines()
+except IOError:
+    print('linkcheck output not found; please run linkcheck first.')
+    exit(1)
     
-                if self.requires_template_update(host.TEMPLATE, desired_template_changes):
-                # setup the root element so that pyone will generate XML instead of attribute vector
-                desired_template_changes = {'TEMPLATE': desired_template_changes}
-                if one.host.update(host.ID, desired_template_changes, 1):  # merge the template
-                    result['changed'] = True
-                else:
-                    self.fail(msg='failed to update the host template')
+            if 'latency' in request.args:
+            latency = float(request.args['latency'][0])
+            reactor.callLater(latency, self._finish, request)
+            return NOT_DONE_YET
     
-    # Ensure that dns zone is removed
-- ipa_dnszone:
-    zone_name: example.com
-    ipa_host: localhost
-    ipa_user: admin
-    ipa_pass: topsecret
-    state: absent
-'''
+            self.crawler_process.crawl(spname, **opts.spargs)
+        self.crawler_process.start()
     
-        host = module.params['host']
-    hostcategory = module.params['hostcategory']
-    hostgroup = module.params['hostgroup']
-    service = module.params['service']
-    servicecategory = module.params['servicecategory']
-    servicegroup = module.params['servicegroup']
-    sourcehost = module.params['sourcehost']
-    sourcehostcategory = module.params['sourcehostcategory']
-    sourcehostgroup = module.params['sourcehostgroup']
-    user = module.params['user']
-    usercategory = module.params['usercategory']
-    usergroup = module.params['usergroup']
+        def long_desc(self):
+        return ('Edit a spider using the editor defined in the EDITOR environment'
+                ' variable or else the EDITOR setting')
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--headers', dest='headers', action='store_true', \
+            help='print response HTTP headers instead of body')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
+    
+            if opts.meta:
+            try:
+                opts.meta = json.loads(opts.meta)
+            except ValueError:
+                raise UsageError('Invalid -m/--meta value, pass a valid json string to -m or --meta. ' \
+                                'Example: --meta='{\'foo\' : \'bar\'}'', print_help=False)
+    
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
+    
+        if __password__ and __password__ != kwargs.get('password', ''):
+        start_response('403 Forbidden', [('Content-Type', 'text/html')])
+        yield message_html('403 Wrong password', 'Wrong password(%r)' % kwargs.get('password', ''), 'GoAgent proxy.ini password is wrong!')
+        raise StopIteration
+    
+        Because operations never actually alter the buffer, you may always get
+    the original token stream back without undoing anything.  Since
+    the instructions are queued up, you can easily simulate transactions and
+    roll back any changes if there is an error just by removing instructions.
+    For example,
     
     
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(type='str', required=True),
-            state=dict(type='str', choices=['present', 'absent'], default='present')
-        ),
-        supports_check_mode=True
-    )
+    def setText(self, text):
+        '''
+        Override the text for this token.  getText() will return this text
+        rather than pulling from the buffer.  Note that this does not mean
+        that start/stop indexes are not valid.  It means that that input
+        was converted to a new string in the token object.
+	'''
+        self._text = text
     
+    setup_face_landmarks = '''
+import face_recognition
     
-DOCUMENTATION = '''
----
-module: logentries
-author: 'Ivan Vanderbyl (@ivanvanderbyl)'
-short_description: Module for tracking logs via logentries.com
-description:
-    - Sends logs to LogEntries in realtime
-version_added: '1.6'
-options:
-    path:
-        description:
-            - path to a log file
-        required: true
-    state:
-        description:
-            - following state of the log
-        choices: [ 'present', 'absent' ]
-        required: false
-        default: present
-    name:
-        description:
-            - name of the log
-        required: false
-    logtype:
-        description:
-            - type of the log
-        required: false
+    # Load a test image and get encondings for it
+image_to_test = face_recognition.load_image_file('obama2.jpg')
+image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+    
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
+    
+        return known_names, known_face_encodings
+    
+    # 提示：运行本案例需要安装Flask，你可以用下面的代码安装Flask
+# $ pip3 install flask
+    
+    # Load a sample picture and learn how to recognize it.
+obama_image = face_recognition.load_image_file('obama.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
