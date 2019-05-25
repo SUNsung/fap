@@ -1,152 +1,149 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
+                def render
+          options = @options.stringify_keys
+          options['type']     = 'checkbox'
+          options['value']    = @checked_value
+          options['checked'] = 'checked' if input_checked?(options)
     
-    require 'minitest/autorun'
-    
-    module Devise
-  module Controllers
-    # Provide sign in and sign out functionality.
-    # Included by default in all controllers.
-    module SignInOut
-      # Return true if the given scope is signed in session. If no scope given, return
-      # true if any scope is signed in. This will run authentication hooks, which may
-      # cause exceptions to be thrown from this method; if you simply want to check
-      # if a scope has already previously been authenticated without running
-      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
-      def signed_in?(scope=nil)
-        [scope || Devise.mappings.keys].flatten.any? do |_scope|
-          warden.authenticate?(scope: _scope)
-        end
+          test 'when layout is specified as a proc and the proc returns false, use no layout instead of inherited layout' do
+        controller = WithProcReturningFalse.new
+        controller.process(:index)
+        assert_equal 'Hello false!', controller.response_body
       end
     
-    module Devise
-  module Models
-    # Rememberable manages generating and clearing token for remembering the user
-    # from a saved cookie. Rememberable also has utility methods for dealing
-    # with serializing the user into the cookie and back from the cookie, trying
-    # to lookup the record based on the saved information.
-    # You probably wouldn't use rememberable methods directly, they are used
-    # mostly internally for handling the remember token.
-    #
-    # == Options
-    #
-    # Rememberable adds the following options in devise_for:
-    #
-    #   * +remember_for+: the time you want the user will be remembered without
-    #     asking for credentials. After this time the user will be blocked and
-    #     will have to enter their credentials again. This configuration is also
-    #     used to calculate the expires time for the cookie created to remember
-    #     the user. By default remember_for is 2.weeks.
-    #
-    #   * +extend_remember_period+: if true, extends the user's remember period
-    #     when remembered via cookie. False by default.
-    #
-    #   * +rememberable_options+: configuration options passed to the created cookie.
-    #
-    # == Examples
-    #
-    #   User.find(1).remember_me!  # regenerating the token
-    #   User.find(1).forget_me!    # clearing the token
-    #
-    #   # generating info to put into cookies
-    #   User.serialize_into_cookie(user)
-    #
-    #   # lookup the user based on the incoming cookie information
-    #   User.serialize_from_cookie(cookie_string)
-    module Rememberable
-      extend ActiveSupport::Concern
+      #
+  # The raw command string associated with the header which will vary between
+  # requests and responses.
+  #
+  attr_accessor :junk_headers
+  attr_accessor :cmd_string
+  attr_accessor :fold
     
-      ruby_version_is '2.6' do
-    it 'can be used with jit' do
-      ruby_exe('p :OK', options: '--enable=jit 2>&1').chomp.should == ':OK'
-      ruby_exe('p :OK', options: '--disable=jit 2>&1').chomp.should == ':OK'
-      ruby_exe('p :OK', options: '--enable-jit 2>&1').chomp.should == ':OK'
-      ruby_exe('p :OK', options: '--disable-jit 2>&1').chomp.should == ':OK'
-    end
+    =begin
+   +-------------+---------------+-------------------------------------+
+   | VALUE       | Name          | Description                         |
+   +-------------+---------------+-------------------------------------+
+   | 0x01        | Hangup        | The call has been hungup at the     |
+   |             |               | remote end                          |
+   |             |               |                                     |
+   | 0x02        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
+   |             |               |                                     |
+   | 0x04        | Answer        | Remote end has answered             |
+   |             |               |                                     |
+   | 0x05        | Busy          | Remote end is busy                  |
+   |             |               |                                     |
+   | 0x06        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x07        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x08        | Congestion    | The call is congested               |
+   |             |               |                                     |
+   | 0x09        | Flash Hook    | Flash hook                          |
+   |             |               |                                     |
+   | 0x0a        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x0b        | Option        | Device-specific options are being   |
+   |             |               | transmitted                         |
+   |             |               |                                     |
+   | 0x0c        | Key Radio     | Key Radio                           |
+   |             |               |                                     |
+   | 0x0d        | Unkey Radio   | Unkey Radio                         |
+   |             |               |                                     |
+   | 0x0e        | Call Progress | Call is in progress                 |
+   |             |               |                                     |
+   | 0x0f        | Call          | Call is proceeding                  |
+   |             | Proceeding    |                                     |
+   |             |               |                                     |
+   | 0x10        | Hold          | Call is placed on hold              |
+   |             |               |                                     |
+   | 0x11        | Unhold        | Call is taken off hold              |
+   +-------------+---------------+-------------------------------------+
+=end
+    
+    
+  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
+    con_sid +
+    bmc_sid +
+    con_rid +
+    bmc_rid +
+    bmc_gid +
+    [ auth_level ].pack('C') +
+    [ username.length ].pack('C') +
+    username
   end
     
-      it 'is not called for instance methods' do
-    ScratchPad.record []
+                encoded
+          end
     
-        def get_binding
-      get_binding_and_line[0]
-    end
+              # Encodes the options field
+          #
+          # @return [OpenSSL::ASN1::BitString]
+          def encode_options
+            OpenSSL::ASN1::BitString.new([options].pack('N'))
+          end
     
-        bind.local_variable_defined?(:foo).should == true
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
     
-      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
-  # see https://github.com/Homebrew/homebrew-cask/pull/8887
-  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
+              # Encodes the pa_data field
+          #
+          # @return [String]
+          def encode_pa_data
+            elems = []
+            pa_data.each do |data|
+              elems << data.encode
+            end
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
+                self
+          end
     
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        context 'on a post from a contact' do
-      before do
-        aspect_to_post = bob.aspects.where(:name => 'generic').first
-        @post = bob.post :status_message, :text => 'something', :to => aspect_to_post
+          def eof?
+        @line_no >= @list.size
       end
     
-      def auth_session_error(exception)
-    Rails.logger.info 'AuthSessionError: #{exception.class}: #{exception.message}'
-    redirect_to login_path(:return_to => request.fullpath)
-  end
-    
-      def create
-    @route = @server.routes.build(safe_params)
-    if @route.save
-      redirect_to_with_json [organization, @server, :routes]
+    def piece(n, a, nb)
+  nb.each{|x|
+    a[n] = x
+    if n == NP-1
+      $p << [a.sort]
     else
-      render_form_errors 'new', @route
-    end
-  end
-    
-      def update
-    extra_params = [:spam_threshold, :spam_failure_threshold, :postmaster_address]
-    extra_params += [:send_limit, :allow_sender, :log_smtp_data, :outbound_spam_threshold, :message_retention_days, :raw_message_retention_days, :raw_message_retention_size] if current_user.admin?
-    if @server.update(safe_params(*extra_params))
-      redirect_to_with_json organization_server_path(organization, @server), :notice => 'Server settings have been updated'
-    else
-      render_form_errors 'edit', @server
-    end
-  end
-    
-      def toggle_ssl
-    @track_domain.update(:ssl_enabled => !@track_domain.ssl_enabled)
-    redirect_to_with_json [organization, @server, :track_domains], :notice => 'SSL settings for #{@track_domain.full_name} updated successfully.'
-  end
-    
-          address_endpoints = server.address_endpoints.order(:address).to_a
-      if address_endpoints.present?
-        s << '<optgroup label='Address Endpoints'>'
-        for endpoint in address_endpoints
-          value = '#{endpoint.class}##{endpoint.uuid}'
-          selected = value == selected_value ? 'selected='selected'' : ''
-          s << '<option value='#{value}' #{selected}>#{endpoint.address}</option>'
+      nbc=nb.dup
+      [-ROW, -1, 1, ROW].each{|d|
+        if x+d > 0 and not a.include?(x+d) and not nbc.include?(x+d)
+          nbc << x+d
         end
-        s << '</optgroup>'
+      }
+      nbc.delete x
+      piece(n+1,a[0..n],nbc)
+    end
+  }
+end
+    
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
       end
+    end
+  end
+end
+
+    
+            reaction
+      end
+    
+        it 'redirects requests with sneaky encoded session cookies' do
+      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/path')
+    end
+  end
