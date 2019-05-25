@@ -1,137 +1,120 @@
-    # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
-    end
-  end
-end
 
+        
+        module Fastlane
+  # Handles receiving commands from the socket server, finding the Action to be invoked,
+  # invoking it, and returning any return values
+  class SocketServerActionCommandExecutor < CommandExecutor
+    attr_accessor :runner
+    attr_accessor :actions_requiring_special_handling
     
-        # Releases a local lock on a machine. This does not acquire any locks
-    # so make sure to lock around it.
-    #
-    # @param [String] id
-    def unlocked_release(id)
-      lock_file = @machine_locks[id]
-      if lock_file
-        lock_file.close
-        begin
-          File.delete(lock_file.path)
-        rescue Errno::EACCES
-          # Another process is probably opened it, no problem.
+          xcode_outdated = false
+      begin
+        unless FastlaneCore::Helper.xcode_at_least?(Fastlane::MINIMUM_XCODE_RELEASE)
+          xcode_outdated = true
         end
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
-              end
-            end
-          end
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the superclass for all V2 plugins.
-      class Plugin
-        # Special marker that can be used for action hooks that matches
-        # all action sequences.
-        ALL_ACTIONS = :__all_actions__
-    
-        # Converts this registry to a hash
-    def to_hash
-      result = {}
-      self.each do |key, value|
-        result[key] = value
+      rescue
+        # We don't care about exceptions here
+        # We'll land here if the user doesn't have Xcode at all for example
+        # which is fine for someone who uses fastlane just for Android project
+        # What we *do* care about is when someone links an old version of Xcode
       end
     
-      def test_symlink_exists(path)
-    exists?('L', path)
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :tag,
+                                       env_name: 'FL_GIT_TAG_TAG',
+                                       description: 'Define your own tag text. This will replace all other parameters',
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :grouping,
+                                       env_name: 'FL_GIT_TAG_GROUPING',
+                                       description: 'Is used to keep your tags organised under one 'folder'',
+                                       default_value: 'builds'),
+          FastlaneCore::ConfigItem.new(key: :prefix,
+                                       env_name: 'FL_GIT_TAG_PREFIX',
+                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :postfix,
+                                       env_name: 'FL_GIT_TAG_POSTFIX',
+                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :build_number,
+                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
+                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
+                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
+                                       default_value_dynamic: true,
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :message,
+                                       env_name: 'FL_GIT_TAG_MESSAGE',
+                                       description: 'The tag message. Defaults to the tag's name',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :commit,
+                                       env_name: 'FL_GIT_TAG_COMMIT',
+                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :force,
+                                       env_name: 'FL_GIT_TAG_FORCE',
+                                       description: 'Force adding the tag',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :sign,
+                                       env_name: 'FL_GIT_TAG_SIGN',
+                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false)
+        ]
+      end
+    
+          it 'handles no extension or extensions parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+          def call(env)
+        unless accepts? env
+          instrument env
+          result = react env
+        end
+        result or app.call(env)
+      end
+    
+            directives.compact.sort.join('; ')
+      end
+    
+          def bad_cookies
+        @bad_cookies ||= []
+      end
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
+    expect(last_response).to be_ok
   end
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
-    
-          def select?(options)
-        options.each do |k, v|
-          callable = v.respond_to?(:call) ? v : ->(server) { server.fetch(v) }
-          result = \
-            case k
-            when :filter, :select
-              callable.call(self)
-            when :exclude
-              !callable.call(self)
-            else
-              fetch(k) == v
-            end
-          return false unless result
-        end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
-    
-          # Internal use only.
-      def peek(key, default=nil, &block)
-        value = fetch_for(key, default, &block)
-        while callable_without_parameters?(value)
-          value = (values[key] = value.call)
-        end
-        value
-      end
-    
-    class SinatraWorker
-  include Sidekiq::Worker
-    
-          def create_worker_test
-        template_file = File.join(
-            'test/workers',
-            class_path,
-            '#{file_name}_worker_test.rb'
-        )
-        template 'worker_test.rb.erb', template_file
-      end
-    
-        def initialize(options)
-      @strictly_ordered_queues = !!options[:strict]
-      @queues = options[:queues].map { |q| 'queue:#{q}' }
-      if @strictly_ordered_queues
-        @queues = @queues.uniq
-        @queues << TIMEOUT
+      context 'with default reaction' do
+    before(:each) do
+      mock_app do
+        use Rack::Protection::CookieTossing
+        run DummyApp
       end
     end
     
-      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
-  before_action { params[:id] && @credential = @server.credentials.find_by_key!(params[:id]) }
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
     
-      def verify
-    if @domain.verified?
-      redirect_to [organization, @server, :domains], :alert => '#{@domain.name} has already been verified.'
-      return
+        def add_paperclip_callbacks
+      @klass.send(
+        :define_paperclip_callbacks,
+        :post_process, :'#{@name}_post_process')
     end
-    
-      before_action :require_organization_admin, :only => [:new, :create, :delete, :destroy]
-  before_action :admin_required, :only => [:advanced, :suspend, :unsuspend]
-  before_action { params[:id] && @server = organization.servers.present.find_by_permalink!(params[:id]) }
