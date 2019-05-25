@@ -1,311 +1,177 @@
 
         
-        template<typename Dtype>
-void DelCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
-  for (index_t i=0; i < n_num; ++i)
-    delete v->at(i);
-}
-    
-     private:
-  /*!
-   * \brief Wait for all started threads to signal that they're ready
-   */
-  void WaitForReady() {
-    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
-      ptr->wait();
+          IsFirstLine = true;
+  for (auto &Line : Lines) {
+    if (!IsFirstLine) {
+      Line = Line.drop_front(WhitespaceToTrim);
     }
+    IsFirstLine = false;
   }
     
-    template<typename xpu>
-void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                                const float threshold) {
-  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
-  ::Launch(s,
-          inputs[1].Size(),         // original size
-          inputs[1].dptr<float>(),  // out array
-          inputs[0].dptr<float>(),  // compressed array
-          -1 *threshold,            // negative threshold
-          threshold);               // positive threshold
-}
-    
-      /*!
-   * \brief sets parameters for gradient compression
-   * \param kwargs a vector of pair of strings. A pair represents key and value
-   * of the parameter. Will be parsed by GradientCompressionParam
-   */
-  void SetParams(const std::vector<std::pair<std::string, std::string> >& kwargs);
     
     
-    {  if (has('dist')) {
-#if MXNET_USE_DIST_KVSTORE
-    kv = new kvstore::KVStoreDist(use_device_comm);
-    if (!has('_async') && kv->IsWorkerNode() && kv->get_rank() == 0) {
-      // configure the server to be the sync mode
-      kv->SendCommandToServers(static_cast<int>(kvstore::CommandType::kSyncMode), '');
-    }
-#else
-    LOG(FATAL) << 'compile with USE_DIST_KVSTORE=1 to use ' << tname;
-    return nullptr;
-#endif  // MXNET_USE_DIST_KVSTORE
+    string StripProto(string filename) {
+  if (filename.substr(filename.size() - 11) == '.protodevel') {
+    // .protodevel
+    return filename.substr(0, filename.size() - 11);
   } else {
-    if (has('nccl')) {
-#if MXNET_USE_NCCL
-      kv = new kvstore::KVStoreNCCL();
-#else
-      LOG(FATAL) << 'compile with USE_NCCL=1 to use ' << tname;
-      return nullptr;
-#endif
-    } else {
-      kv =  new kvstore::KVStoreLocal(use_device_comm);
-    }
+    // .proto
+    return filename.substr(0, filename.size() - 6);
   }
-  kv->type_ = tname;
-  return kv;
+}
+    
+    // Main function:  Reads the entire address book from a file,
+//   adds one person based on user input, then writes it back out to the same
+//   file.
+int main(int argc, char* argv[]) {
+  // Verify that the version of the library that we linked against is
+  // compatible with the version of the headers we compiled against.
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+    }
+    
+    #include 'addressbook.pb.h'
+    
+    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
+    
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
 }
     
     
-    {  FreeSpace(&out_t);
-  for (auto &ts_t : ts_t_arr)
-    FreeSpace(&ts_t);
+    {  int ret = x;
+  return ret;
 }
     
-    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
-#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
-#include <vector>
-#include './lrn-inl.h'
     
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file identity_attach_KL_sparse_reg.cc
- * \brief\
-*/
-#include './identity_attach_KL_sparse_reg-inl.h'
-#include <nnvm/op_attr_types.h>
+    {  bool ret = (x == 0x1);
+  return ret;
+}
     
-    struct SrcPos {
-  bool operator==(SrcPos o) const {
-    return line == o.line && col == o.col;
+    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
+    
+    TEST_F(SpeedLimitTest, GetSpeedLimitByS) {
+  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
+  double s = 0.0;
+  const double ds = 0.01;
+  while (s < 99.0) {
+    double v_limit = speed_limit_.GetSpeedLimitByS(s);
+    }
+    }
+    
+    /**
+ * @file
+ **/
+#include 'modules/planning/math/smoothing_spline/piecewise_linear_constraint.h'
+    
+    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateSecondOrderDerivative(num_params);
   }
-  bool operator!=(SrcPos o) const { return !(*this == o); }
-    }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
+  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
     
-        dword(xfx_formater.instruction);
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+      Byte t2(bytes + 2);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    exception_wrapper::VTable const exception_wrapper::uninit_{
+    &noop_<void, exception_wrapper const*, exception_wrapper*>,
+    &noop_<void, exception_wrapper*, exception_wrapper*>,
+    &noop_<void, exception_wrapper*>,
+    &noop_<void, exception_wrapper const*>,
+    &uninit_type_,
+    &noop_<std::exception const*, exception_wrapper const*>,
+    &noop_<exception_wrapper, exception_wrapper const*>};
+    
+      /**
+   * Returns a secure random uint32_t in [min, max). If min == max, returns 0.
+   */
+  static uint32_t secureRand32(uint32_t min, uint32_t max) {
+    SecureRNG<uint32_t> srng;
+    return rand32(min, max, srng);
   }
-  void EmitXFXForm(const uint8_t op,
-                   const RegNumber rs,
-                   const uint16_t mask,
-                   const uint16_t xo,
-                   const uint8_t rsv = 0) {
     
-      if (comma != data) {
-    // we have meta
-    ssize_t meta_len = comma - data;
-    data_len -= meta_len;
-    char* semi = (char*)memchr(data, ';', meta_len);
-    char* slash = (char*)memchr(data, '/', meta_len);
-    }
     
-    ///////////////////////////////////////////////////////////////////////////////
+    {} // namespace folly
+
     
-        int i;
-    for (i = 0; i < SIZE - 1; i++)
-    {
-        int pri = swoole_system_random(10000, 99999);
-        ns = (node_t*) malloc(sizeof(node_t));
-        ns->val = i;
-        ns->pri = pri;
-        swHeap_push(pq, pri, ns);
-        _map[i] = pri;
-    }
+    // Each level of cache has sharing sets, which are the set of cpus
+// that share a common cache at that level.  These are available in a
+// hex bitset form (/sys/devices/system/cpu/cpu0/index0/shared_cpu_map,
+// for example).  They are also available in a human-readable list form,
+// as in /sys/devices/system/cpu/cpu0/index0/shared_cpu_list.  The list
+// is a comma-separated list of numbers and ranges, where the ranges are
+// a pair of decimal numbers separated by a '-'.
+//
+// To sort the cpus for optimum locality we don't really need to parse
+// the sharing sets, we just need a unique representative from the
+// equivalence class.  The smallest value works fine, and happens to be
+// the first decimal number in the file.  We load all of the equivalence
+// class information from all of the cpu*/index* directories, order the
+// cpus first by increasing last-level cache equivalence class, then by
+// the smaller caches.  Finally, we break ties with the cpu number itself.
     
-        inline bool is_closed()
-    {
-        return closed;
-    }
     
-        cache.set('test', val);
-    ASSERT_EQ(cache.get('test').get(), val.get());
+    {} // namespace folly
+
     
-    using namespace std;
+    #include <folly/container/SparseByteSet.h>
     
-            if (pid == 0)
-        {
-            exit(0);
-        }
-    
-    struct defer_task
+    void ServerConfig::setLuaKeysLoading(bool value)
 {
-    swCallback callback;
-    void *data;
-};
-    
-    const char* swoole_strerror(int code)
-{
-    if (code < SW_ERROR_START)
-    {
-        return strerror(code);
-    }
-    /* swstrerror {{{*/
-    switch(code)
-    {
-    case SW_ERROR_MALLOC_FAIL:
-        return 'Malloc fail';
-    case SW_ERROR_SYSTEM_CALL_FAIL:
-        return 'System call fail';
-    case SW_ERROR_PHP_FATAL_ERROR:
-        return 'PHP fatal error';
-    case SW_ERROR_NAME_TOO_LONG:
-        return 'Name too long';
-    case SW_ERROR_INVALID_PARAMS:
-        return 'Invalid params';
-    case SW_ERROR_QUEUE_FULL:
-        return 'Queue full';
-    case SW_ERROR_OPERATION_NOT_SUPPORT:
-        return 'Operation not support';
-    case SW_ERROR_FILE_NOT_EXIST:
-        return 'File not exist';
-    case SW_ERROR_FILE_TOO_LARGE:
-        return 'File too large';
-    case SW_ERROR_FILE_EMPTY:
-        return 'File empty';
-    case SW_ERROR_DNSLOOKUP_DUPLICATE_REQUEST:
-        return 'DNS Lookup duplicate request';
-    case SW_ERROR_DNSLOOKUP_RESOLVE_FAILED:
-        return 'DNS Lookup resolve failed';
-    case SW_ERROR_DNSLOOKUP_RESOLVE_TIMEOUT:
-        return 'DNS Lookup resolve timeout';
-    case SW_ERROR_BAD_IPV6_ADDRESS:
-        return 'Bad ipv6 address';
-    case SW_ERROR_UNREGISTERED_SIGNAL:
-        return 'Unregistered signal';
-    case SW_ERROR_SESSION_CLOSED_BY_SERVER:
-        return 'Session closed by server';
-    case SW_ERROR_SESSION_CLOSED_BY_CLIENT:
-        return 'Session closed by client';
-    case SW_ERROR_SESSION_CLOSING:
-        return 'Session closing';
-    case SW_ERROR_SESSION_CLOSED:
-        return 'Session closed';
-    case SW_ERROR_SESSION_NOT_EXIST:
-        return 'Session not exist';
-    case SW_ERROR_SESSION_INVALID_ID:
-        return 'Session invalid id';
-    case SW_ERROR_SESSION_DISCARD_TIMEOUT_DATA:
-        return 'Session discard timeout data';
-    case SW_ERROR_OUTPUT_BUFFER_OVERFLOW:
-        return 'Output buffer overflow';
-    case SW_ERROR_SSL_NOT_READY:
-        return 'SSL not ready';
-    case SW_ERROR_SSL_CANNOT_USE_SENFILE:
-        return 'SSL cannot use senfile';
-    case SW_ERROR_SSL_EMPTY_PEER_CERTIFICATE:
-        return 'SSL empty peer certificate';
-    case SW_ERROR_SSL_VEFIRY_FAILED:
-        return 'SSL vefiry failed';
-    case SW_ERROR_SSL_BAD_CLIENT:
-        return 'SSL bad client';
-    case SW_ERROR_SSL_BAD_PROTOCOL:
-        return 'SSL bad protocol';
-    case SW_ERROR_PACKAGE_LENGTH_TOO_LARGE:
-        return 'Package length too large';
-    case SW_ERROR_DATA_LENGTH_TOO_LARGE:
-        return 'Data length too large';
-    case SW_ERROR_TASK_PACKAGE_TOO_BIG:
-        return 'Task package too big';
-    case SW_ERROR_TASK_DISPATCH_FAIL:
-        return 'Task dispatch fail';
-    case SW_ERROR_HTTP2_STREAM_ID_TOO_BIG:
-        return 'Http2 stream id too big';
-    case SW_ERROR_HTTP2_STREAM_NO_HEADER:
-        return 'Http2 stream no header';
-    case SW_ERROR_HTTP2_STREAM_NOT_FOUND:
-        return 'Http2 stream not found';
-    case SW_ERROR_AIO_BAD_REQUEST:
-        return 'Aio bad request';
-    case SW_ERROR_AIO_CANCELED:
-        return 'Aio canceled';
-    case SW_ERROR_CLIENT_NO_CONNECTION:
-        return 'Client no connection';
-    case SW_ERROR_SOCKET_CLOSED:
-        return 'Socket closed';
-    case SW_ERROR_SOCKS5_UNSUPPORT_VERSION:
-        return 'Socks5 unsupport version';
-    case SW_ERROR_SOCKS5_UNSUPPORT_METHOD:
-        return 'Socks5 unsupport method';
-    case SW_ERROR_SOCKS5_AUTH_FAILED:
-        return 'Socks5 auth failed';
-    case SW_ERROR_SOCKS5_SERVER_ERROR:
-        return 'Socks5 server error';
-    case SW_ERROR_HTTP_PROXY_HANDSHAKE_ERROR:
-        return 'Http proxy handshake error';
-    case SW_ERROR_HTTP_INVALID_PROTOCOL:
-        return 'Http invalid protocol';
-    case SW_ERROR_WEBSOCKET_BAD_CLIENT:
-        return 'Websocket bad client';
-    case SW_ERROR_WEBSOCKET_BAD_OPCODE:
-        return 'Websocket bad opcode';
-    case SW_ERROR_WEBSOCKET_UNCONNECTED:
-        return 'Websocket unconnected';
-    case SW_ERROR_WEBSOCKET_HANDSHAKE_FAILED:
-        return 'Websocket handshake failed';
-    case SW_ERROR_SERVER_MUST_CREATED_BEFORE_CLIENT:
-        return 'Server must created before client';
-    case SW_ERROR_SERVER_TOO_MANY_SOCKET:
-        return 'Server too many socket';
-    case SW_ERROR_SERVER_WORKER_TERMINATED:
-        return 'Server worker terminated';
-    case SW_ERROR_SERVER_INVALID_LISTEN_PORT:
-        return 'Server invalid listen port';
-    case SW_ERROR_SERVER_TOO_MANY_LISTEN_PORT:
-        return 'Server too many listen port';
-    case SW_ERROR_SERVER_PIPE_BUFFER_FULL:
-        return 'Server pipe buffer full';
-    case SW_ERROR_SERVER_NO_IDLE_WORKER:
-        return 'Server no idle worker';
-    case SW_ERROR_SERVER_ONLY_START_ONE:
-        return 'Server only start one';
-    case SW_ERROR_SERVER_SEND_IN_MASTER:
-        return 'Server send in master';
-    case SW_ERROR_SERVER_INVALID_REQUEST:
-        return 'Server invalid request';
-    case SW_ERROR_SERVER_CONNECT_FAIL:
-        return 'Server connect fail';
-    case SW_ERROR_SERVER_WORKER_EXIT_TIMEOUT:
-        return 'Server worker exit timeout';
-    case SW_ERROR_CO_OUT_OF_COROUTINE:
-        return 'Coroutine out of coroutine';
-    case SW_ERROR_CO_HAS_BEEN_BOUND:
-        return 'Coroutine has been bound';
-    case SW_ERROR_CO_MUTEX_DOUBLE_UNLOCK:
-        return 'Coroutine mutex double unlock';
-    case SW_ERROR_CO_BLOCK_OBJECT_LOCKED:
-        return 'Coroutine block object locked';
-    case SW_ERROR_CO_BLOCK_OBJECT_WAITING:
-        return 'Coroutine block object waiting';
-    case SW_ERROR_CO_YIELD_FAILED:
-        return 'Coroutine yield failed';
-    case SW_ERROR_CO_GETCONTEXT_FAILED:
-        return 'Coroutine getcontext failed';
-    case SW_ERROR_CO_SWAPCONTEXT_FAILED:
-        return 'Coroutine swapcontext failed';
-    case SW_ERROR_CO_MAKECONTEXT_FAILED:
-        return 'Coroutine makecontext failed';
-    case SW_ERROR_CO_IOCPINIT_FAILED:
-        return 'Coroutine iocpinit failed';
-    case SW_ERROR_CO_PROTECT_STACK_FAILED:
-        return 'Coroutine protect stack failed';
-    case SW_ERROR_CO_STD_THREAD_LINK_ERROR:
-        return 'Coroutine std thread link error';
-    case SW_ERROR_CO_DISABLED_MULTI_THREAD:
-        return 'Coroutine disabled multi thread';
-    default:
-        static char buffer[32];
-#ifndef __MACH__
-        snprintf(buffer, sizeof(buffer), 'Unknown error %d', code);
-#else
-        snprintf(buffer, sizeof(buffer), 'Unknown error: %d', code);
-#endif
-        return buffer;
-    }
-/*}}}*/
+    return setParam<bool>('lua_keys_loading', value);
 }
+    
+    
+    
+    bool ConnectionsManager::loadConnectionsConfigFromFile(const QString& config,
+                                                       bool saveChangesToFile) {
+  QJsonArray connections;
+    }
+    
+      Q_INVOKABLE int size();
+    
+    void SortFilterProxyModel::setSortOrder(Qt::SortOrder order)
+{
+    QSortFilterProxyModel::sort(0, order);
+}
+    
+    protected:
+    int roleKey(const QByteArray &role) const;
+    
+    
+    {  m_connection.clear();
+}
+    
+      Q_INVOKABLE virtual void init();
+    
+     public:  // methods exported to QML
+  Q_INVOKABLE void closeTab(int i);
+    
+            static void renderNamespaceItems(QSharedPointer<Operations> operations,
+                                         RedisClient::Connection::NamespaceItems items,
+                                         QSharedPointer<AbstractNamespaceItem> parent,
+                                         const QSet<QByteArray> &expandedNamespaces);
+    
+    
+QString binaryStringToEscapedString(const QByteArray &value)
+{
+    QString val = QString::fromStdString(value.toStdString());
+    }
