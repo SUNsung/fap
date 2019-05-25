@@ -1,161 +1,260 @@
 
         
-          if bidx is not None:
-    data_nxt = data_bxtxn[bidx,:,:].T
-    params_nxt = model_vals['output_dist_params'][bidx,:,:].T
-  else:
-    data_nxt = np.mean(data_bxtxn, axis=0).T
-    params_nxt = np.mean(model_vals['output_dist_params'], axis=0).T
-  if output_dist == 'poisson':
-    means_nxt = params_nxt
-  elif output_dist == 'gaussian': # (means+vars) x time
-    means_nxt = np.vsplit(params_nxt,2)[0] # get means
-  else:
-    assert 'NIY'
-    
-      try:
-    with h5py.File(data_fname, 'r') as hf:
-      data_dict = {k: np.array(v) for k, v in hf.items()}
-      return data_dict
-  except IOError:
-    print('Cannot open %s for reading.' % data_fname)
-    raise
-    
-      def __init__(self, filename):
-    '''Initialize vocabulary.
-    
-      # Pad to shape [height, width]
-  # where height is a multiple of batch_size
-  # and width is a multiple of num_timesteps
-  nrow = int(np.ceil(len(preprocessed) * 1.0 / batch_size))
-  ncol = int(np.ceil(max_len * 1.0 / num_timesteps))
-  height, width = nrow * batch_size, ncol * num_timesteps + 1
-  preprocessed = [sent + [PAD] * (width - len(sent)) for sent in preprocessed]
-  preprocessed += [[PAD] * width] * (height - len(preprocessed))
-    
-      train_data = _read_words(train_path)
-  valid_data = _read_words(valid_path)
-  return train_data, valid_data
+        
+class CITextExtension(CreateExtension):
     
     
-def generate_logs(sess, model, log, id_to_word, feed):
-  '''Impute Sequences using the model for a particular feed and send it to
-  logs.
-  '''
-  # Impute Sequences.
-  [p, inputs_eval, sequence_eval] = sess.run(
-      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
+class ArrayMaxLengthValidator(MaxLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
+        'limit_value')
     
-      for index_batch, pred_batch in zip(indices, predictions):
-    indices_predictions = []
     
-        with tf.variable_scope('rnn') as vs:
-      outputs, _, _ = tf.contrib.rnn.static_bidirectional_rnn(
-          cell_fwd, cell_bwd, rnn_inputs, state_fwd, state_bwd, scope=vs)
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
     
-        publicKey = (keySize, e_1, e_2, p)
-    privateKey = (keySize, d)
     
-    def chunker(seq, size):
-    it = iter(seq)
-    while True:
-       chunk = tuple(itertools.islice(it, size))
-       if not chunk:
-           return
-       yield chunk
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-        print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
-    while True:
-        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
-        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
-            break
     
-    The problem is  :
-Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
-Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
-'''
-from __future__ import print_function
+def test_auth_plugin_parse_auth_false(httpbin):
     
-        return diff
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-                elif opt in ('-V', '--version'):
-                # Display version.
-                log.println('you-get:', log.BOLD)
-                log.println('    version:  {}'.format(__version__))
-                if head is not None:
-                    log.println('    branch:   {}\n    commit:   {}'.format(*head))
+        def test_upload_multiple_fields_with_the_same_name(self, httpbin):
+        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
+                 'test-file@%s' % FILE_PATH_ARG,
+                 'test-file@%s' % FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert r.count('Content-Disposition: form-data; name='test-file';'
+                       ' filename='%s'' % os.path.basename(FILE_PATH)) == 2
+        # Should be 4, but is 3 because httpbin
+        # doesn't seem to support filed field lists
+        assert r.count(FILE_CONTENT) in [3, 4]
+        assert r.count('Content-Type: text/plain') == 2
+    
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=keras.optimizers.Adadelta(),
+              metrics=['accuracy'])
+    
+        return (x_train, y_train), (x_test, y_test)
+
+    
+        def get_config(self):
+        return {'mse_fraction': self.mse_fraction}
+    
+        def compute_output_shape(self, input_shape):
+        if isinstance(input_shape, list):
+            input_shape = input_shape[0]
+    
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+    
+    train_model.compile(optimizer=keras.optimizers.RMSprop(lr=2e-3, decay=1e-5),
+                    loss='categorical_crossentropy',
+                    metrics=['accuracy'],
+                    target_tensors=[targets])
+train_model.summary()
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import keras
+from keras.layers import Activation, Dense, Input
+from keras.layers import Conv2D, Flatten
+from keras.layers import Reshape, Conv2DTranspose
+from keras.models import Model
+from keras import backend as K
+from keras.datasets import mnist
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+    
+    print('Evaluate IRNN...')
+model = Sequential()
+model.add(SimpleRNN(hidden_units,
+                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
+                    recurrent_initializer=initializers.Identity(gain=1.0),
+                    activation='relu',
+                    input_shape=x_train.shape[1:]))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+rmsprop = RMSprop(lr=learning_rate)
+model.compile(loss='categorical_crossentropy',
+              optimizer=rmsprop,
+              metrics=['accuracy'])
+    
+    
+def serialize(loss):
+    return serialize_keras_object(loss)
+    
+            self.host = host
+        self.port = port
+        self.requests_to_handle = requests_to_handle
+    
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
+    
+    try:
+    import threading
+except ImportError:
+    import dummy_threading as threading
+    
+    
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
+    
+    '''
+requests.api
+~~~~~~~~~~~~
+    
+            return (changed, {
+            'id': monitoring_policy['id'],
+            'name': monitoring_policy['name']
+        })
+    except Exception as ex:
+        module.fail_json(msg=str(ex))
+    
+            elif desired_state == 'offline':
+            if current_state == HOST_ABSENT:
+                self.fail(msg='absent host cannot be placed in offline state')
+            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
+                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
+                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
+                    result['changed'] = True
                 else:
-                    log.println('    branch:   {}\n    commit:   {}'.format('(stable)', '(tag v{})'.format(__version__)))
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
-    
-    
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
-    
-            coeff = [0, 0, 0, 0]
-        for num_pair in no_dup:
-            idx = int(num_pair[-1])
-            val = int(num_pair[:-1], 16)
-            coeff[idx] = val
-    
-            # The buffer we got is byte oriented, and a character may span in more than one
-        # buffers. In case the last one or two byte in last buffer is not
-        # complete, we record how many byte needed to complete that character
-        # and skip these bytes here.  We can choose to record those bytes as
-        # well and analyse the character once it is complete, but since a
-        # character will not make much difference, by simply skipping
-        # this character will simply our logic and improve performance.
-        i = self._need_to_skip_char_num
-        while i < num_bytes:
-            order, char_len = self.get_order(byte_str[i:i + 2])
-            i += char_len
-            if i > num_bytes:
-                self._need_to_skip_char_num = i - num_bytes
-                self._last_char_order = -1
+                    self.fail(msg='could not set host offline')
+            elif current_state in [HOST_STATES.OFFLINE]:
+                pass
             else:
-                if (order != -1) and (self._last_char_order != -1):
-                    self._total_rel += 1
-                    if self._total_rel > self.MAX_REL_THRESHOLD:
-                        self._done = True
-                        break
-                    self._rel_sample[jp2CharContext[self._last_char_order][order]] += 1
-                self._last_char_order = order
+                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
     
-    Latin5_BulgarianCharToOrderMap = (
-255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
-253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
-252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
-253, 77, 90, 99,100, 72,109,107,101, 79,185, 81,102, 76, 94, 82,  # 40
-110,186,108, 91, 74,119, 84, 96,111,187,115,253,253,253,253,253,  # 50
-253, 65, 69, 70, 66, 63, 68,112,103, 92,194,104, 95, 86, 87, 71,  # 60
-116,195, 85, 93, 97,113,196,197,198,199,200,253,253,253,253,253,  # 70
-194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,  # 80
-210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,  # 90
- 81,226,227,228,229,230,105,231,232,233,234,235,236, 45,237,238,  # a0
- 31, 32, 35, 43, 37, 44, 55, 47, 40, 59, 33, 46, 38, 36, 41, 30,  # b0
- 39, 28, 34, 51, 48, 49, 53, 50, 54, 57, 61,239, 67,240, 60, 56,  # c0
-  1, 18,  9, 20, 11,  3, 23, 15,  2, 26, 12, 10, 14,  6,  4, 13,  # d0
-  7,  8,  5, 19, 29, 25, 22, 21, 27, 24, 17, 75, 52,241, 42, 16,  # e0
- 62,242,243,244, 58,245, 98,246,247,248,249,250,251, 91,252,253,  # f0
-)
+    DOCUMENTATION = '''
+---
+module: vca_nat
+short_description: add remove nat rules in a gateway  in a vca
+description:
+  - Adds or removes nat rules from a gateway in a vca environment
+version_added: '2.0'
+author: Peter Sprygada (@privateip)
+options:
+    purge_rules:
+      description:
+        - If set to true, it will delete all rules in the gateway that are not given as parameter to this module.
+      type: bool
+      default: false
+    nat_rules:
+      description:
+        - A list of rules to be added to the gateway, Please see examples on valid entries
+      required: True
+      default: false
+extends_documentation_fragment: vca.documentation
+'''
     
-    Latin2HungarianModel = {
-  'char_to_order_map': Latin2_HungarianCharToOrderMap,
-  'precedence_matrix': HungarianLangModel,
-  'typical_positive_ratio': 0.947368,
-  'keep_english_letter': True,
-  'charset_name': 'ISO-8859-2',
-  'language': 'Hungarian',
-}
+    
+def get_hbacrule_dict(description=None, hostcategory=None, ipaenabledflag=None, servicecategory=None,
+                      sourcehostcategory=None,
+                      usercategory=None):
+    data = {}
+    if description is not None:
+        data['description'] = description
+    if hostcategory is not None:
+        data['hostcategory'] = hostcategory
+    if ipaenabledflag is not None:
+        data['ipaenabledflag'] = ipaenabledflag
+    if servicecategory is not None:
+        data['servicecategory'] = servicecategory
+    if sourcehostcategory is not None:
+        data['sourcehostcategory'] = sourcehostcategory
+    if usercategory is not None:
+        data['usercategory'] = usercategory
+    return data
+    
+        # build list of params
+    params = {}
+    
+        if module.params['user']:
+        params['deploy[local_username]'] = module.params['user']
+    
+    
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            path=dict(required=True),
+            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
+            name=dict(required=False, default=None, type='str'),
+            logtype=dict(required=False, default=None, type='str', aliases=['type'])
+        ),
+        supports_check_mode=True
+    )
+    
+        if root.get('error') != 'Success':
+        module.fail_json(msg=root.get('error-message'))
+    
+            :raises .errors.PluginError: If unable to recover the configuration
+    
+    The path to this file can be provided interactively or using the
+``--dns-cloudxns-credentials`` command-line argument. Certbot records the path
+to this file for use during renewal, but does not store the file's contents.
+    
+    
+    def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            # Extract the stream
+            stream_id = kwargs['stream_id']
+    
+        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
+    
+        type, ext, size = url_info(url[0], True)
+    size = urls_size(url)
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
