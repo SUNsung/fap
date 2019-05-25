@@ -1,78 +1,95 @@
 
         
-        puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
+                def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
+        end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
+    
+            def create_labels
+          time = Time.zone.now
+          rows = []
+          target_id = find_target_id
+    
+            def labels?
+          label_names && label_names.any?
+        end
+    
+    module Gitlab
+  module GithubImport
+    module Representation
+      class User
+        include ToHash
+        include ExposeAttribute
+    
+          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
+      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
+    
+        validate_target_file
+    LogStash::Bundler.invoke!({:package => true, :all => true})
+    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
+    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
+    
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+      end
+    end
+  end
 end
-puts '==================================================='
 
     
-      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+          # Returns the delta between this element's delimiter and the argument's.
+      #
+      # @note Pairs with different delimiter styles return a delta of 0
+      #
+      # @return [Integer] the delta between the two delimiters
+      def delimiter_delta(other)
+        HashElementDelta.new(self, other).delimiter_delta
+      end
     
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+          def error_message_on(object, method, _options = {})
+        object = convert_to_model(object)
+        obj = object.respond_to?(:errors) ? object : instance_variable_get('@#{object}')
+    
+            def index
+          @products = if params[:ids]
+                        product_scope.where(id: params[:ids].split(',').flatten)
+                      else
+                        product_scope.ransack(params[:q]).result
+                      end
+    
+              def payment_methods
+            render_serialized_payload { serialize_payment_methods(spree_current_order.available_payment_methods) }
+          end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+      # Used on the blog index to split posts on the <!--more--> marker
+  def excerpt(input)
+    if input.index(/<!--\s*more\s*-->/i)
+      input.split(/<!--\s*more\s*-->/i)[0]
     else
-      vagrant_cli_command('destroy -f')
+      input
     end
   end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-            def call
-          @validator.call
-        end
-      end
-    end
-  end
-end
-
-    
-          # Keys that have been set, but which have never been fetched.
-      def unused_keys
-        keys - fetched_keys
-      end
-    
-        desc 'Generate a valid ssh-config'
-    task :ssh_config do
-      require 'json'
-      # Loop until the Vagrant box finishes SSH bootstrap
-      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
-          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
-      end
-      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
-      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
-    end
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
-    
-          if File.symlink?(includes_dir)
-        return 'Includes directory '#{includes_dir}' cannot be a symlink'
-      end
-    
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
     
         def render(context)
       output = super
@@ -91,35 +108,3 @@ end
         'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
-    
-    # Add a script to run after install (should be in the current directory):
-package.scripts[:after_install] = 'my_after_install_script.sh'
-    
-        # Query details about our now-installed package.
-    # We do this by using 'npm ls' with json + long enabled to query details
-    # about the installed package.
-    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
-    npm_ls = JSON.parse(npm_ls_out)
-    name, info = npm_ls['dependencies'].first
-    
-      def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -p}.chomp
-    when 'all'
-      @architecture = 'i386 value=sparc'
-    end
-    
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
