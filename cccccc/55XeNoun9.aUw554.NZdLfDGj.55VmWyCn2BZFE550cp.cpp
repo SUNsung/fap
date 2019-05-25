@@ -1,148 +1,267 @@
 
         
-        void ProtoFromShapeHandle(tensorflow::shape_inference::ShapeHandle s,
-                          tensorflow::shape_inference::InferenceContext* c,
-                          TensorShapeProto* out) {
-  if (c->RankKnown(s)) {
-    const int32 rank = c->Rank(s);
-    for (int i = 0; i < rank; ++i) {
-      shape_inference::DimensionHandle d = c->Dim(s, i);
-      auto* out_dim = out->add_dim();
-      if (c->ValueKnown(d)) {
-        out_dim->set_size(c->Value(d));
-      } else {
-        out_dim->set_size(-1);
-      }
-    }
-  } else {
-    out->set_unknown_rank(true);
+        
+    {}  // namespace caffe
+    
+    
+    { private:
+  DISABLE_COPY_AND_ASSIGN(Layer);
+};  // class Layer
+    
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+    
+    #endif  // CAFFE_BATCHNORM_LAYER_HPP_
+
+    
+    
+    {}  // namespace caffe
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    /* TessCallback */
+#define GLU_TESS_BEGIN                     100100
+#define GLU_BEGIN                          100100
+#define GLU_TESS_VERTEX                    100101
+#define GLU_VERTEX                         100101
+#define GLU_TESS_END                       100102
+#define GLU_END                            100102
+#define GLU_TESS_ERROR                     100103
+#define GLU_TESS_EDGE_FLAG                 100104
+#define GLU_EDGE_FLAG                      100104
+#define GLU_TESS_COMBINE                   100105
+#define GLU_TESS_BEGIN_DATA                100106
+#define GLU_TESS_VERTEX_DATA               100107
+#define GLU_TESS_END_DATA                  100108
+#define GLU_TESS_ERROR_DATA                100109
+#define GLU_TESS_EDGE_FLAG_DATA            100110
+#define GLU_TESS_COMBINE_DATA              100111
+    
+    
+    {  PDFRectangle mediaBox;
+  PDFRectangle cropBox;
+  GBool haveCropBox;
+  PDFRectangle bleedBox;
+  PDFRectangle trimBox;
+  PDFRectangle artBox;
+  int rotate;
+  Object lastModified;
+  Object boxColorInfo;
+  Object group;
+  Object metadata;
+  Object pieceInfo;
+  Object separationInfo;
+  Object resources;
+};
+    
+      // get direction
+  if (dict->lookup('M', &obj)->isName()) {
+    const char *m = obj.getName();
+    
+    if (strcmp('I', m) == 0)
+      direction = transitionInward;
+    else if (strcmp('O', m) == 0)
+      direction = transitionOutward;
   }
+  obj.free();
+    
+    class PopplerObjectCache
+{
+  public:
+    PopplerObjectCache (int cacheSizeA, XRef *xrefA);
+    ~PopplerObjectCache();
+    }
+    
+      //----- image drawing
+  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+			     int width, int height, GBool invert,
+			     GBool interpolate, GBool inlineImg);
+  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+			 int width, int height, GfxImageColorMap *colorMap,
+			 GBool interpolate, int *maskColors, GBool inlineImg);
+  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+			       int width, int height,
+			       GfxImageColorMap *colorMap,
+			       GBool interpolate,
+			       Stream *maskStr, int maskWidth, int maskHeight,
+			       GBool maskInvert, GBool maskInterpolate);
+  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
+				   int width, int height,
+				   GfxImageColorMap *colorMap,
+				   GBool interpolate,
+				   Stream *maskStr,
+				   int maskWidth, int maskHeight,
+				   GfxImageColorMap *maskColorMap,
+				   GBool maskInterpolate);
+    
+      //----- path clipping
+  virtual void clip(GfxState *state);
+  virtual void eoClip(GfxState *state);
+  virtual void clipToStrokePath(GfxState *state);
+    
+    #include 'StdinPDFDocBuilder.h'
+#include 'CachedFile.h'
+#include 'StdinCachedFile.h'
+    
+            static FunctionPtr Deserialize(const Dictionary& dictionary,
+            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
+            const CNTK::DeviceDescriptor& device);
+    
+    
+    {
+    {        mutable bool m_isPacked;
+        mutable NDArrayViewPtr m_packedData;
+        mutable std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> m_packedDataLayout;
+    };
+}
+
+    
+    
+    {    CopyMBLayoutTo(pMBLayout);
 }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        virtual const char * CallStack() const override { return m_callStack.c_str(); }
     
-    REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
+    void FlipY3D::update(float time)
+{
+    float angle = (float)M_PI * time; // 180 degrees
+    float mz = sinf( angle );
+    angle = angle / 2.0f;     // x calculates degrees from 0 to 90
+    float my = cosf(angle);
     
+    Vec3    v0, v1, v, diff;
     
-    {}  // namespace tensorflow
+    v0 = getOriginalVertex(Vec2(1.0f, 1.0f));
+    v1 = getOriginalVertex(Vec2());
     
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+    float    y0 = v0.y;
+    float    y1 = v1.y;
+    float y;
+    Vec2    a, b, c, d;
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_FFT_H_
-#define TENSORFLOW_STREAM_EXECUTOR_FFT_H_
-    
-    
-    {        if (fWordBreakItr != NULL) {
-#if UCONFIG_NO_BREAK_ITERATION==0
-            UErrorCode status = U_ZERO_ERROR;
-            fWordBreakItr->setText(input, status);
-#endif
-        }
+    if (y0 > y1)
+    {
+        // Normal Grid
+        a.setZero();
+        b.set(0.0f, 1.0f);
+        c.set(1.0f, 0.0f);
+        d.set(1.0f, 1.0f);
+        y = y0;
     }
-    reset();
-    fInputUniStrMaybeMutable = FALSE;
-    
-    #include 'unicode/translit.h'
-    
-    void
-SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-      return;
-    }
+    else
+    {
+        // Reversed Grid
+        b.setZero();
+        a.set(0.0f, 1.0f);
+        d.set(1.0f, 0.0f);
+        c.set(1.0f, 1.0f);
+        y = y1;
     }
     
-        /**
-     * Returns TRUE if this instance represents no constraints on significant
-     * digits.
-     */
-    UBool isNoConstraints() const {
-        return fMin == 0 && fMax == INT32_MAX;
+    diff.y = y - y * my;
+    diff.z = fabsf(floorf((y * mz) / 4.0f));
+    
+    // bottom-left
+    v = getOriginalVertex(a);
+    v.y = diff.y;
+    v.z += diff.z;
+    setVertex(a, v);
+    
+    // upper-left
+    v = getOriginalVertex(b);
+    v.y -= diff.y;
+    v.z -= diff.z;
+    setVertex(b, v);
+    
+    // bottom-right
+    v = getOriginalVertex(c);
+    v.y = diff.y;
+    v.z += diff.z;
+    setVertex(c, v);
+    
+    // upper-right
+    v = getOriginalVertex(d);
+    v.y -= diff.y;
+    v.z -= diff.z;
+    setVertex(d, v);
+}
+    
+        if( _selectorTarget)
+    {
+        a->initWithTarget(_selectorTarget, _callFuncN);
+    }
+    else if( _functionN ){
+        a->initWithFunction(_functionN);
     }
     
-            // Calculate the first STD start time
-        stdRule->getFirstStart(getRawOffset(), dstRule->getDSTSavings(), firstStdStart);
-    
-    
-/**
- * A formatter for small, positive integers.
+    /** @class ActionManager
+ @brief ActionManager is a singleton that manages all the actions.
+ Normally you won't need to use this singleton directly. 99% of the cases you will use the Node interface,
+ which uses this singleton.
+ But there are some cases where you might need to use this singleton.
+ Examples:
+    - When you want to run an action where the target is different from a Node. 
+    - When you want to pause / resume the actions.
+ 
+ @since v0.8
  */
-class U_I18N_API SmallIntFormatter : public UMemory {
+class CC_DLL ActionManager : public Ref
+{
 public:
     /**
-     * Estimates the actual digit count needed to format positiveValue
-     * using the given range of digit counts.
-     * Returns a value that is at least the actual digit count needed.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
+     * @js ctor
      */
-    static int32_t estimateDigitCount(
-            int32_t positiveValue, const IntDigitCountRange &range);
+    ActionManager();
     }
     
-    #if !UCONFIG_NO_FORMATTING
+        /** 
+    @brief Initializes the action with a range, shake Z vertices, grid size and duration.
+    @param duration Specify the duration of the ShakyTiles3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param range Specify the range of the shaky effect.
+    @param shakeZ Specify whether shake on the z axis.
+    @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ);
     
-    //---- Define attributes of all API symbols declarations, e.g. for DLL under Windows.
-//#define IMGUI_API __declspec( dllexport )
-//#define IMGUI_API __declspec( dllimport )
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplFreeGLUT_Init();
-    ImGui_ImplFreeGLUT_InstallFuncs();
-    ImGui_ImplOpenGL2_Init();
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-    
-    {    // Create SwapChain, RenderPass, Framebuffer, etc.
-    ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(g_PhysicalDevice, g_Device, g_QueueFamily, wd, g_Allocator);
-    ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(g_PhysicalDevice, g_Device, wd, g_Allocator, width, height);
-}
-    
-    
-    {    // Create texture sampler
+    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
+{
+    if (ActionInterval::initWithDuration(duration))
     {
-        D3D10_SAMPLER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D10_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
-        desc.ComparisonFunc = D3D10_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
-        g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
+        _key    = key;
+        _to       = to;
+        _from     = from;
+        return true;
     }
+    }
+    
+    Animation* Animation::clone() const
+{
+    // no copy constructor    
+    auto a = new (std::nothrow) Animation();
+    a->initWithAnimationFrames(_frames, _delayPerUnit, _loops);
+    a->setRestoreOriginalFrame(_restoreOriginalFrame);
+    a->autorelease();
+    return a;
 }
+    
+    
+class Animation;
+    
+    #endif // OPENPOSE_CORE_RECTANGLE_HPP
