@@ -1,142 +1,121 @@
 
         
-            File.readlines(Rails.root + 'spec/fixtures/md/spec.txt').each do |line|
-      if line == '```````````````````````````````` example\n'
-        state = :example
-        next
-      end
+            it 'returns a Glyphicon icon element with an addidional class' do
+      icon = icon_tag('glyphicon-help', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
+    end
     
-      def current_db
-    RailsMultisite::ConnectionManagement.current_db
-  end
-    
-      def report
-    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
-      'blocked-uri',
-      'disposition',
-      'document-uri',
-      'effective-directive',
-      'original-policy',
-      'referrer',
-      'script-sample',
-      'status-code',
-      'violated-directive',
-      'line-number',
-      'source-file'
-    )
-  end
-    
-        # if you need to test this and are having ssl issues see:
-    #  http://stackoverflow.com/questions/6756460/openssl-error-using-omniauth-specified-ssl-path-but-didnt-work
-    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development?
-    @omniauth = OmniAuth::Builder.new(app) do
-      Discourse.authenticators.each do |authenticator|
-        authenticator.register_middleware(self)
+          def check
+        create_event :payload => {}
       end
     end
     
-        # JOIN of topics table based on manipulating draft_key seems imperfect
-    builder = DB.build <<~SQL
-      SELECT
-        d.*, t.title, t.id topic_id, t.archetype,
-        t.category_id, t.closed topic_closed, t.archived topic_archived,
-        pu.username, pu.name, pu.id user_id, pu.uploaded_avatar_id, pu.username_lower,
-        du.username draft_username, NULL as raw, NULL as cooked, NULL as post_number
-      FROM drafts d
-      LEFT JOIN LATERAL json_extract_path_text (d.data::json, 'postId') postId ON TRUE
-      LEFT JOIN posts p ON postId :: BIGINT = p.id
-      LEFT JOIN topics t ON
-        CASE
-            WHEN d.draft_key LIKE '%' || '#{EXISTING_TOPIC}' || '%'
-              THEN CAST(replace(d.draft_key, '#{EXISTING_TOPIC}', '') AS INT)
-            ELSE 0
-        END = t.id
-      JOIN users pu on pu.id = COALESCE(p.user_id, t.user_id, d.user_id)
-      JOIN users du on du.id = #{user_id}
-      /*where*/
-      /*order_by*/
-      /*offset*/
-      /*limit*/
-    SQL
-    
-      def build(theme_ids)
-    builder = Builder.new
-    
-          script_srcs = parse(policy)['script-src']
-      expect(script_srcs).to include('https://www.google-analytics.com/analytics.js')
-      expect(script_srcs).to include('https://www.googletagmanager.com/gtm.js')
-    end
-    
-        it 'does not send previously configured receivers when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      sleep 0.5
-      select2('ZKCD', from: 'Receivers')
-      select_agent_type('Email Agent')
-      fill_in(:agent_name, with: 'No receivers')
-      click_on 'Save'
-      expect(page).to have_content('No receivers')
-      agent = Agent.find_by(name: 'No receivers')
-      expect(agent.receivers).to eq([])
-    end
-  end
-end
-
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-      describe '#filename' do
-    it 'strips special characters' do
-      expect(AgentsExporter.new(:name => 'ƏfooƐƕƺbar').filename).to eq('foo-bar.json')
-    end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-    RSpec::Matchers.define :have_value do |expected|
-  match do |actual|
-    await_condition { actual.value && actual.value.include?(expected) }
-  end
-    
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
     end
   end
     
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
+          expect(exporter.as_json[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent) }])
     end
     
-    describe StatusMessagesController, :type => :controller do
-  describe '#bookmarklet' do
-    before do
-      sign_in bob, scope: :user
+        @taoe, Thread.abort_on_exception = Thread.abort_on_exception, false
+    @oso, @ose, $stdout, $stderr = $stdout, $stderr, StringIO.new, StringIO.new
+    
+          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
+    
+        it 'should generate the correct events url' do
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings')
     end
     
-          it 'federates' do
-        allow_any_instance_of(Participation::Generator).to receive(:create!)
-        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
-        post_request!
+    LogStash::Bundler.setup!
+    
+        def post_render(page)
+      OctopressFilters::post_filter(page)
+    end
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
+      super
+    end
     
-      if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+    # Add our files (should be in the current directory):
+package.input('my-executable=/usr/bin/')
+package.input('my-library.so=/usr/lib/')
+    
+        # Publish the package.
+    repo_path = build_path('#{name}_repo')
+    safesystem('pkgrepo', 'create', repo_path)
+    safesystem('pkgrepo', 'set', '-s', repo_path, 'publisher/prefix=#{attributes[:p5p_publisher]}')
+    safesystem('pkgsend', '-s', repo_path,
+      'publish', '-d', '#{staging_path}', '#{build_path}/#{name}.p5m')
+    safesystem('pkgrecv', '-s', repo_path, '-a',
+      '-d', build_path('#{name}.p5p'), name)
+    
+        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
+    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
+    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
+    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
+    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
+    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
+    logger.debug('Package info', :name => self.name, :version => self.version,
+                  :description => self.description)
+    
+    require 'pleaserun/cli'
+    
+    
+    # Convert the 'package directory' built above to a real solaris package.
+    safesystem('pkgtrans', '-s', build_path, output_path, name)
+    safesystem('cp', '#{build_path}/#{output_path}', output_path)
+  end # def output
+    
+        # Write the scripts, too.
+    write_scripts
+    
+        desc 'Package #{@name}' unless ::Rake.application.last_description
+    
+      def create
+    @credential = @server.credentials.build(params.require(:credential).permit(:type, :name, :hold))
+    if @credential.save
+      redirect_to_with_json [organization, @server, :credentials]
+    else
+      render_form_errors 'new', @credential
+    end
   end
     
-      # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
+      include WithinOrganization
+    
+    $LOAD_PATH.unshift 'lib'
+require 'resque/tasks'
+    
+        # Given a Ruby object, returns a string suitable for storage in a
+    # queue.
+    def encode(object)
+      Resque.encode(object)
+    end
