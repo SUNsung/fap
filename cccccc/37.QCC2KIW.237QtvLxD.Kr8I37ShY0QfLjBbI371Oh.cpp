@@ -1,195 +1,178 @@
 
         
-        
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
+        #include <string>
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return !item->icon_.IsEmpty();
+}
+    
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
+ public:
+  NwAppClearCacheFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  void OnBrowsingDataRemoverDone() override;
+    }
+    
+          scw_->WriteImage(*bitmap);
+    
+    class NwObjCallObjectMethodFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCallObjectMethodFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    // A '1' in this array means the character is white space.  A '1' or
+// '2' means the character ends a name or command.
+static const char specialChars[256] = {
+  1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,   // 0x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 1x
+  1, 0, 0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0, 2,   // 2x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0,   // 3x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 4x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 5x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 6x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 7x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 8x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 9x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ax
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // bx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // cx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // dx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ex
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    // fx
 };
     
-    /**
- * Changelog:
- * - March 2013, Diederik Huys:    original version
- * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
- * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
- */
+    class PSTokenizer {
+public:
+    }
     
-        BOOST_CHECK(v.setArray());
-    BOOST_CHECK(v.isArray());
-    BOOST_CHECK_EQUAL(v.size(), 0);
+    Stream *Parser::makeStream(Object *dict, Guchar *fileKey,
+			   CryptAlgorithm encAlgorithm, int keyLength,
+			   int objNum, int objGen, std::set<int> *fetchOriginatorNums) {
+  Object obj;
+  BaseStream *baseStr;
+  Stream *str;
+  Guint pos, endPos, length;
+    }
     
-    /** Encode a Bech32 string. Returns the empty string in case of failure. */
-std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+    //------------------------------------------------------------------------
+// Parser
+//------------------------------------------------------------------------
+    
+    void SplashOutputDev::setVectorAntialias(GBool vaa) {
+  splash->setVectorAntialias(vaa);
+}
+#endif
+    
+        inline size_t GetVersion(const Dictionary& dict)
+    {
+        if (!dict.Contains(versionKey))
+             LogicError('Required key '%ls' is not found in the dictionary.', versionKey.c_str());
+    }
+    
+            Dictionary initConfig;
+        initConfig[InitializerTypeAttributeName] = initializerTypeName;
+        initConfig[ScaleAttributeName] = scale;
+        // Initializers are sometimes created as default arguments in python.
+        // If the value for an automatically-selected seed is assigned here, 
+        // subsequent calls to SetFixedRandomSeed will be ignored.
+        initConfig[RandomSeedAttributeName] = (size_t)seed;        
+        return initConfig;
+    }
+    
+    static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, int outputRank, int filterRank, unsigned long seed)
+    {
+        if (scale <= 0)
+            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
+                initializerTypeName.c_str());
+    
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
+                {
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
     
     
-bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
-                                           int /* size */) {
-  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
-                'Reaching here usually means a ZeroCopyOutputStream '
-                'implementation bug.';
-  return false;
+    {            for (size_t i = 0; i < 2; i++)
+                Input(i)->Gradient().TransferToDeviceIfNotThere(m_deviceId, true);
+        }
+        catch (...)
+        {
+            fprintf(stderr, 'LookupTableNode unit test is not passed!');
+            return false;
+        }
+    
+    #include 'Extension.h'
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/server/TSimpleServer.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TBufferTransports.h>
+    
+    
+InternalOptionInfo::~InternalOptionInfo() throw() {
 }
     
-    
-    {  {
-    string str;
-    StringByteSink sink(&str);
-    source.CopyTo(&sink, source.Available());
-    EXPECT_EQ('world!', str);
-    EXPECT_EQ(0, source.Available());
-  }
-}
-    
-    TEST(StatusOr, TestPointerCopyCtorStatusNotOkConverting) {
-  StatusOr<Derived*> original(Status::CANCELLED);
-  StatusOr<Base2*>   copy(original);
-  EXPECT_EQ(original.status(), copy.status());
-}
-    
-      EnumGenerator(const EnumGenerator&) = delete;
-  EnumGenerator& operator=(const EnumGenerator&) = delete;
-    
-      for (auto& e : idx.outputs()) {
-    ++ref_count[idx.entry_id(e)];
-  }
-  for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    for (auto &e : idx[nid].inputs) {
-      ++ref_count[idx.entry_id(e)];
-    }
-  }
-    
-    namespace mxnet {
-namespace kvstore {
+    namespace osquery {
+namespace tables {
     }
     }
+    
+    #include <vector>
+#include <string>
+    
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
+    
+    namespace osquery {
+namespace table_tests {
+    }
+    }
+    
+    #include <osquery/tests/integration/tables/helper.h>
     
     
     {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
-}  // namespace mxnet
+    {} // namespace table_tests
+} // namespace osquery
 
     
-    Operator* NativeOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
-}
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file identity_attach_KL_sparse_reg.cc
- * \brief\
-*/
-#include './identity_attach_KL_sparse_reg-inl.h'
-#include <nnvm/op_attr_types.h>
-    
-    class DHTBucket;
-class DHTPingReplyMessage;
-    
-    namespace aria2 {
-    }
-    
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-        factory->setRoutingTable(routingTable.get());
-    factory->setConnection(connection.get());
-    factory->setMessageDispatcher(dispatcher.get());
-    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
-    factory->setTokenTracker(tokenTracker.get());
-    factory->setLocalNode(localNode);
-    factory->setBtRegistry(e->getBtRegistry().get());
-    
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
+    class kernelIntegrity : public testing::Test {
+ protected:
+  void SetUp() override {
+    setUpEnvironment();
+  }
 };
     
-    class DHTTask {
-public:
-  virtual ~DHTTask() = default;
-    }
-    
-      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
-    }
+    class keychainItems : public testing::Test {
+ protected:
+  void SetUp() override {
+    setUpEnvironment();
   }
-  return false;
-}
+};
     
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
-  }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
-  }
-}
-    
-    public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
-    
-    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
-    
-      DNSCache& operator=(const DNSCache& c);
-    
-        // out_of_range.402
-    try
-    {
-        // try to use the array index '-'
-        json::reference ref = j.at('/array/-'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    struct CompactionIterationStats {
+  // Compaction statistics
     }
     
-    StopWriteToken::~StopWriteToken() {
-  assert(controller_->total_stopped_ >= 1);
-  --controller_->total_stopped_;
-}
+    #include 'rocksdb/write_batch_base.h'
     
       // put and get from non-default column family
   s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
@@ -198,44 +181,86 @@ public:
   s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
   assert(s.ok());
     
-    int main() {
+      DB* db = nullptr;
+  DestroyDB(kDBPath, options);
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+  assert(db);
+    
+      // destroy and open DB
   DB* db;
-  Options options;
-  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
-  options.IncreaseParallelism();
-  options.OptimizeLevelStyleCompaction();
-  // create the DB if it's not already present
-  options.create_if_missing = true;
-    }
+  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
+  assert(s.ok());
+  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
+  assert(s.ok());
     
+    #pragma once
+#ifndef ROCKSDB_LITE
     
-    {
-    {}  // namespace experimental
-}  // namespace rocksdb
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+    #ifndef ROCKSDB_LITE
+    
+    #endif  // ROCKSDB_LITE
 
     
-    // PersistentCache
-//
-// Persistent cache interface for caching IO pages on a persistent medium. The
-// cache interface is specifically designed for persistent read cache.
-class PersistentCache {
- public:
-  typedef std::vector<std::map<std::string, double>> StatsType;
-    }
-    
-    #include <stddef.h>
-    
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    setInfoLog
- * Signature: (JJ)V
- */
-void Java_org_rocksdb_BackupableDBOptions_setInfoLog(JNIEnv* /*env*/,
-                                                     jobject /*jobj*/,
-                                                     jlong jhandle,
-                                                     jlong /*jlogger_handle*/) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  auto* sptr_logger =
-      reinterpret_cast<std::shared_ptr<rocksdb::LoggerJniCallback>*>(jhandle);
-  bopt->info_log = sptr_logger->get();
+    TEST(Expected, CoroutineFailure) {
+  auto r1 = []() -> Expected<int, Err> {
+    auto x = co_await f1();
+    auto y = co_await f2(x);
+    auto z = co_await f4(x, y, Err::badder());
+    ADD_FAILURE();
+    co_return z;
+  }();
+  EXPECT_TRUE(r1.hasError());
+  EXPECT_EQ(Err::badder(), r1.error());
 }
+    
+        int probeEnd = getNextZero(note, pos, pos + remaining - 1);
+    CHECK_GE(probeEnd, 0);
+    size_t probeLen = probeEnd - pos + 1;
+    std::string probe = getStr(note, pos, probeLen);
+    remaining -= probeLen;
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+    #pragma once
+    
+      template <typename T>
+  static counted_ptr<T, Atom> get_shared_ptr_from_counted_base(
+      counted_base* base,
+      bool inc = true) {
+    auto res = counted_ptr<T, Atom>(counted_shared_tag(), (T*)(base));
+    if (!inc) {
+      release_shared<T>(base, 1);
+    }
+    return res;
+  }
+    
+      static void prepare() noexcept {
+    instance().tasksLock.lock();
+    while (true) {
+      auto& tasks = instance().tasks;
+      auto task = tasks.rbegin();
+      for (; task != tasks.rend(); ++task) {
+        if (!task->prepare()) {
+          break;
+        }
+      }
+      if (task == tasks.rend()) {
+        return;
+      }
+      for (auto untask = tasks.rbegin(); untask != task; ++untask) {
+        untask->parent();
+      }
+    }
+  }
+    
+    #include <bitset>
