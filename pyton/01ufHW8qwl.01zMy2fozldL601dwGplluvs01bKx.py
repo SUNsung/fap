@@ -1,159 +1,222 @@
 
         
-        # pick which RNN is used on each trial
-rnn_to_use = rng.randint(2, size=E)
-ext_input = np.repeat(np.expand_dims(rnn_to_use, axis=1), ntimesteps, axis=1)
-ext_input = np.expand_dims(ext_input, axis=2)  # these are 'a's' in the paper
-    
-    import os
-import h5py
-import json
-    
-        with tf.gfile.Open(filename) as f:
-      idx = 0
-      for line in f:
-        word_name = line.strip()
-        if word_name == '<S>':
-          self._bos = idx
-        elif word_name == '</S>':
-          self._eos = idx
-        elif word_name == '<UNK>':
-          self._unk = idx
-        if word_name == '!!!MAXTERMID':
-          continue
+            assert proc.expect([TIMEOUT, u'Aborted'])
     
     
-def build_vocab(filename):
-  data = _read_words(filename)
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
     
-def generate_logs(sess, model, log, id_to_word, feed):
-  '''Impute Sequences using the model for a particular feed and send it to
-  logs.
-  '''
-  # Impute Sequences.
-  [p, inputs_eval, sequence_eval] = sess.run(
-      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
     
-      def construct_fn(attention_query, attention_keys, attention_values):
-    with tf.variable_scope(name, reuse=reuse) as scope:
-      context = attention_score_fn(attention_query, attention_keys,
-                                   attention_values)
-      concat_input = tf.concat([attention_query, context], 1)
-      attention = tf.contrib.layers.linear(
-          concat_input, num_units, biases_initializer=None, scope=scope)
-      return attention
     
-    try:
-    import simplejson as json
-except ImportError:
-    import json
+@pytest.mark.parametrize('command, packages, which', [
+    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
+     [], None),
+    (Command('vim', ''), [], None),
+    (Command('', ''), [], None),
+    (Command('vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim'),
+    (Command('sudo vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim')])
+def test_not_match(mocker, command, packages, which):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-            # This MUST go after prepare_auth. Authenticators could add a hook
-        self.prepare_hooks(hooks)
+    apt-get is a simple command line interface for downloading and
+installing packages. The most frequently used commands are update
+and install.
     
-    score(y_test, clf.predict(X_test), 'dense model')
-benchmark_dense_predict()
-clf.sparsify()
-score(y_test, clf.predict(X_test), 'sparse model')
-benchmark_sparse_predict()
+    
+Invalid choice: 't-item', maybe you meant:
+    
+    
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-    # to store the results
-scikit_classifier_results = []
-scikit_regressor_results = []
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''CaseInsensitiveDict instance with 'Accept' header.'''
+        self.case_insensitive_dict = CaseInsensitiveDict()
+        self.case_insensitive_dict['Accept'] = 'application/json'
     
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
+        with server as (host, port):
+        url = 'http://{}:{}/'.format(host, port)
+        r = requests.get(url, auth=auth)
+        # Verify server didn't receive auth from us.
+        assert r.status_code == 200
+        assert len(r.history) == 0
+        close_server.set()
     
-    from sklearn.cluster import AgglomerativeClustering
-from sklearn.neighbors import kneighbors_graph
+        def test_requests_after_timeout_are_not_received(self):
+        '''the basic response handler times out when receiving requests'''
+        server = Server.basic_response_server(request_timeout=1)
     
-    
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
-    
-            plt.xlim(-2.5, 2.5)
-        plt.ylim(-2.5, 2.5)
-        plt.xticks(())
-        plt.yticks(())
-        plt.text(.99, .01, ('%.2fs' % (t1 - t0)).lstrip('0'),
-                 transform=plt.gca().transAxes, size=15,
-                 horizontalalignment='right')
-        plot_num += 1
-    
-    # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
-    
-    .. caution::
-   You should protect these API credentials as you would the password to your
-   Cloudflare account. Users who can read this file can use these credentials
-   to issue arbitrary API calls on your behalf. Users who can cause Certbot to
-   run using these credentials can complete a ``dns-01`` challenge to acquire
-   new certificates or revoke existing certificates for associated domains,
-   even if those domains aren't being managed by this server.
-    
-    ==========================================  ===================================
-``--dns-digitalocean-credentials``          DigitalOcean credentials_ INI file.
-                                            (Required)
-``--dns-digitalocean-propagation-seconds``  The number of seconds to wait for
-                                            DNS to propagate before asking the
-                                            ACME server to verify the DNS
-                                            record.
-                                            (Default: 10)
-==========================================  ===================================
-    
-        with tf.variable_scope(name, reuse=reuse):
-        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
-        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
-        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
-    
-    from ..utils import get_wb, permute
-from ..activations import softmax
-    
-        Args:
-        x(tf.Tensor):
-        n_unit(int): 
-        act_fn:
-        name(str):
-        reuse(bool):
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-    # n_input = tf.shape(x)[-1]  # err: need int but tensor
-    n_input = int(x.get_shape()[-1])
-    with tf.variable_scope(name or 'dense', reuse=reuse):
-        W, b = get_wb([n_input, n_unit])
-        o = act_fn(tf.matmul(x, W) + b)
-    return o
     
-    References:
-    keras.regularizers
+        def test_equality(self):
+        cid = CaseInsensitiveDict({'SPAM': 'blueval', 'Eggs': 'redval'})
+        othercid = CaseInsensitiveDict({'spam': 'blueval', 'eggs': 'redval'})
+        assert cid == othercid
+        del othercid['spam']
+        assert cid != othercid
+        assert cid == {'spam': 'blueval', 'eggs': 'redval'}
+        assert cid != object()
+    
+    
+def evaluate_masks(
+    json_dataset,
+    all_boxes,
+    all_segms,
+    output_dir,
+    use_salt=True,
+    cleanup=False
+):
+    if cfg.CLUSTER.ON_CLUSTER:
+        # On the cluster avoid saving these files in the job directory
+        output_dir = '/tmp'
+    res_file = os.path.join(
+        output_dir, 'segmentations_' + json_dataset.name + '_results')
+    if use_salt:
+        res_file += '_{}'.format(str(uuid.uuid4()))
+    res_file += '.json'
+    
+    # coco (val5k)
+# INFO roidb.py: 220: 1        person: 21296
+# INFO roidb.py: 220: 2       bicycle: 628
+# INFO roidb.py: 220: 3           car: 3818
+# INFO roidb.py: 220: 4    motorcycle: 732
+# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
+# INFO roidb.py: 220: 6           bus: 564
+# INFO roidb.py: 220: 7         train: 380
+# INFO roidb.py: 220: 8         truck: 828
+    
+    See: https://arxiv.org/abs/1512.03385, https://arxiv.org/abs/1611.05431.
 '''
-import tensorflow as tf
-import numpy as np
     
-            #Creating directory title page for current directory
-        with open('dir_title.html', 'w') as os_html:
-            os_html.write(header + dir_title)
-        
-        group.append(HTML('dir_title.html').render())
+    
+# octave and aspect fields are only used on RetinaNet. Octave corresponds to the
+# scale of the anchor and aspect denotes which aspect ratio is used in the range
+# of aspect ratios
+FieldOfAnchors = namedtuple(
+    'FieldOfAnchors', [
+        'field_of_anchors', 'num_cell_anchors', 'stride', 'field_size',
+        'octave', 'aspect'
+    ]
+)
+    
+        blobs['keypoint_rois'] = sampled_fg_rois
+    blobs['keypoint_locations_int32'] = heats.astype(np.int32, copy=False)
+    blobs['keypoint_weights'] = weights
+    
+    
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
+    
+    
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
+    
+    
+def HandlePollResponse_SingleDiagnostic_test():
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER' ] },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER' ] )
+  ] )
+    
+        exception = RuntimeError( 'Check client handles exception' )
+    with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseException( exception ) ):
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, None, exception ) )
+    
+        This function is run in a local thread.
+    
+    from __future__ import with_statement
+import atexit
+import threading
+import weakref
+import sys
