@@ -1,107 +1,222 @@
 
         
-        		m_boolBorderPixels = m_pblockParent->HasBorderPixels();
+        
+    {}  // namespace tensorflow
+    
+    ModelAnalyzer::ModelAnalyzer(const GrapplerItem& item) : item_(item) {}
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    {}  // namespace tensorflow
     
-    /** 16x32 multiplication, followed by a 16-bit shift right and 32-bit add.
-    Results fits in 32 bits */
-#define MAC16_32_Q16(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16)))
-    
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
-
-    
-    int main(int, char**)
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    namespace tensorflow {
     }
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
-
+    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
+// will be deleted by TFE_DeleteTensorHandle.
+using Safe_TFE_TensorHandlePtr =
+    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
+Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+      static void OnDoneRecvTrailingMetadataCb(void* user_data, grpc_error* error);
     
-    
-    {    return true;
+    MeasureDouble RpcClientRoundtripLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientRoundtripLatencyMeasureName,
+      'Time between first byte of request sent to last byte of response '
+      'received, or terminal error',
+      kUnitMilliseconds);
+  return measure;
 }
     
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
-{
-    // Avoid rendering when minimized
-    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
-        return;
-    }
+    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerServerLatency();
+::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
     
-    using ::apollo::canbus::ChassisDetail;
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
     
-    TEST(ByteTest, ByteToString) {
-  unsigned char value = 0x34;
-  EXPECT_EQ('34', Byte::byte_to_hex(value));
-  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
-  uint32_t int_value = 0xE13A;
-  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
-}
     
-    TEST(TestPiecewiseLinearConstraint, add_second_derivative_boundary) {
-  PiecewiseLinearConstraint constraint(10, 0.1);
-  std::vector<uint32_t> index_list;
-  std::vector<double> lower_bound;
-  std::vector<double> upper_bound;
-  for (uint32_t i = 0; i < 10; ++i) {
-    index_list.push_back(i);
-    lower_bound.push_back(-4.0);
-    upper_bound.push_back(2.0);
+    {  const protobuf::FileDescriptor* file_desc =
+      descriptor_pool_->FindFileContainingSymbol(symbol);
+  if (file_desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Symbol not found.');
   }
+  std::unordered_set<grpc::string> seen_files;
+  FillFileDescriptorResponse(file_desc, response, &seen_files);
+  return Status::OK;
+}
+    
+    namespace grpc {
+namespace load_reporter {
+    }
     }
     
-      x <<= 16;
-  x >>= 16;
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  FILETIME idle, kernel, user;
+  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
+    total = FiletimeToInt(kernel) + FiletimeToInt(user);
+    busy = total - FiletimeToInt(idle);
+  }
+  return std::make_pair(busy, total);
+}
     
-    // config detail: {'name': 'torque_input', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': True, 'physical_range':
-// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
-// 'motorola', 'physical_unit': 'N-m'}
-double Brakemotorrpt372::torque_input(const std::uint8_t* bytes,
-                                      int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+    ThreadPoolInterface* CreateDefaultThreadPool();
+    
+      // set up the image data
+  if (mode == psModeForm || inType3Char || preload) {
+    if (inlineImg) {
+      // create an array
+      str2 = new FixedLengthEncoder(str, len);
+      str2 = new RunLengthEncoder(str2);
+      if (useASCIIHex) {
+	str2 = new ASCIIHexEncoder(str2);
+      } else {
+	str2 = new ASCII85Encoder(str2);
+      }
+      str2->reset();
+      col = 0;
+      writePS((char *)(useASCIIHex ? '[<' : '[<~'));
+      do {
+	do {
+	  c = str2->getChar();
+	} while (c == '\n' || c == '\r');
+	if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
+	  break;
+	}
+	if (c == 'z') {
+	  writePSChar(c);
+	  ++col;
+	} else {
+	  writePSChar(c);
+	  ++col;
+	  for (i = 1; i <= (useASCIIHex ? 1 : 4); ++i) {
+	    do {
+	      c = str2->getChar();
+	    } while (c == '\n' || c == '\r');
+	    if (c == (useASCIIHex ? '>' : '~') || c == EOF) {
+	      break;
+	    }
+	    writePSChar(c);
+	    ++col;
+	  }
+	}
+	// each line is: '<~...data...~><eol>'
+	// so max data length = 255 - 6 = 249
+	// chunks are 1 or 5 bytes each, so we have to stop at 245
+	// but make it 240 just to be safe
+	if (col > 240) {
+	  writePS((char *)(useASCIIHex ? '>\n<' : '~>\n<~'));
+	  col = 0;
+	}
+      } while (c != (useASCIIHex ? '>' : '~') && c != EOF);
+      writePS((char *)(useASCIIHex ? '>\n' : '~>\n'));
+      // add an extra entry because the RunLengthDecode filter may
+      // read past the end
+      writePS('<>]\n');
+      writePS('0\n');
+      str2->close();
+      delete str2;
+    } else {
+      // make sure the image is setup, it sometimes is not like on bug #17645
+      setupImage(ref->getRef(), str);
+      // set up to use the array already created by setupImages()
+      writePSFmt('ImData_{0:d}_{1:d} 0 0\n', ref->getRefNum(), ref->getRefGen());
     }
+  }
+    
+    // A '1' in this array means the character is white space.  A '1' or
+// '2' means the character ends a name or command.
+static const char specialChars[256] = {
+  1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,   // 0x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 1x
+  1, 0, 0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0, 2,   // 2x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0,   // 3x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 4x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 5x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 6x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 7x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 8x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 9x
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ax
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // bx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // cx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // dx
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ex
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    // fx
+};
+    
+      // in badly damaged PDF files, we can run off the end of the input
+  // stream immediately after the 'stream' token
+  if (!lexer->getStream()) {
+    return NULL;
+  }
+  baseStr = lexer->getStream()->getBaseStream();
+    
+    class PopplerObjectCache
+{
+  public:
+    PopplerObjectCache (int cacheSizeA, XRef *xrefA);
+    ~PopplerObjectCache();
+    }
+    
+    #include <config.h>
+    
+      //
+  // Parse media clip data
+  //
+  if (obj->dictLookup('C', &tmp2)->isDict()) { // media clip
+    hasClip = gTrue;
+    if (tmp2.dictLookup('S', &tmp)->isName()) {
+      if (!strcmp(tmp.getName(), 'MCD')) { // media clip data
+        Object obj1, obj2;
+	if (tmp2.dictLookup('D', &obj1)->isDict()) {
+	  if (obj1.dictLookup('F', &obj2)->isString()) {
+	    fileName = obj2.getString()->copy();
+	  }
+	  obj2.free();
+	  if (obj1.dictLookup('EF', &obj2)->isDict()) {
+	    Object embedded;
+	    if (obj2.dictLookup('F', &embedded)->isStream()) {
+	      isEmbedded = gTrue;
+	      embeddedStream = embedded.getStream();
+	      // 'copy' stream
+	      embeddedStream->incRef();
+	    }
+	    embedded.free();
+	  }
+	  obj2.free();
+    }
+    }
+    }
+    }
+    
+    GBool StdinPDFDocBuilder::supports(const GooString &uri)
+{
+  if (uri.cmpN('fd://0', 6) == 0) {
+    return gTrue;
+  } else {
+    return gFalse;
+  }
+}
