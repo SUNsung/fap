@@ -1,73 +1,72 @@
 
         
-              it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
+              def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+        def default_used_route(options)
+      singularizer = lambda { |s| s.to_s.singularize.to_sym }
+    
+          # Update password saving the record and clearing token. Returns true if
+      # the passwords are valid and the record was saved, false otherwise.
+      def reset_password(new_password, new_password_confirmation)
+        if new_password.present?
+          self.password = new_password
+          self.password_confirmation = new_password_confirmation
+          save
+        else
+          errors.add(:password, :blank)
+          false
+        end
       end
     
-        it 'respects an environment variable that specifies a path or URL to a different scenario' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
-    end
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
     
-          @log.level = -1
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:level)
-    
-            directives.compact.sort.join('; ')
+          # Main menu tree menu
+      def main_menu_tree(text, icon: nil, sub_menu: nil, url: '#')
+        content_tag :li, class: 'sidebar-menu-item d-block w-100' do
+          main_menu_item(text, url: url, icon: icon) +
+            render(partial: 'spree/admin/shared/sub_menu/#{sub_menu}')
+        end
       end
     
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
+            context 'there is enough stock at the other location' do
+          it 'allows me to make a split' do
+            expect(order.shipments.count).to eq(1)
+            expect(order.shipments.first.inventory_units_for(product.master).sum(&:quantity)).to eq(2)
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
+              def find_spree_current_order
+            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: spree_current_store,
+              user: spree_current_user,
+              token: order_token,
+              currency: current_currency
+            )
+          end
     
-    # This stuff needs to be run after Paperclip is defined.
-require 'paperclip/io_adapters/registry'
-require 'paperclip/io_adapters/abstract_adapter'
-require 'paperclip/io_adapters/empty_string_adapter'
-require 'paperclip/io_adapters/identity_adapter'
-require 'paperclip/io_adapters/file_adapter'
-require 'paperclip/io_adapters/stringio_adapter'
-require 'paperclip/io_adapters/data_uri_adapter'
-require 'paperclip/io_adapters/nil_adapter'
-require 'paperclip/io_adapters/attachment_adapter'
-require 'paperclip/io_adapters/uploaded_file_adapter'
-require 'paperclip/io_adapters/uri_adapter'
-require 'paperclip/io_adapters/http_url_proxy_adapter'
-
+            before_action :find_order, except: [:create, :mine, :current, :index, :update, :remove_coupon_code]
     
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
-    end
+              def shipping_rates
+            result = shipping_rates_service.call(order: spree_current_order)
+    
+          @@user_attributes = [:id, :email, :created_at, :updated_at]
