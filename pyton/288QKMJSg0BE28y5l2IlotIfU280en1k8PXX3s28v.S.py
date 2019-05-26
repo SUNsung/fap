@@ -1,192 +1,108 @@
 
         
-            def __init__(self, MAX_SIZE):
-        self.MAX_SIZE = MAX_SIZE
-        self.size = 0
-        self.lookup = {}  # key: query, value: node
-        self.linked_list = LinkedList()
+            READY = 0
+    IN_PROGRESS = 1
+    COMPLETE = 2
     
     
-class RequestStatus(Enum):
+class Motorcycle(Vehicle):
     
-        def take_spot(self, spot):
-        self.spots_taken.append(spot)
     
-        def mapper(self, _, line):
-        yield line, 1
+class SpendingByCategory(MRJob):
     
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
+    #A Python script to generate a single PDF document with all the tldr pages. It works by generating 
+#intermediate HTML files from existing md files using Python-markdown, applying desired formatting 
+#through CSS, and finally rendering them as PDF. There is no LaTeX dependency for generating the PDF.
+    
+    else:
+    text_type = str
+    string_types = (str,)
+    xrange = range
+    
+    Force_Split_Words = set([])
+def load_model():
+    start_p = pickle.load(get_module_res('finalseg', PROB_START_P))
+    trans_p = pickle.load(get_module_res('finalseg', PROB_TRANS_P))
+    emit_p = pickle.load(get_module_res('finalseg', PROB_EMIT_P))
+    return start_p, trans_p, emit_p
+    
+        def testPosseg(self):
+        import jieba.posseg as pseg
+        for content in test_contents:
+            result = pseg.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
+            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
+        print('testPosseg', file=sys.stderr)
+    
+    import logging
+import os
+import sys
+from collections import OrderedDict
+from configparser import ConfigParser
+    
+        @staticmethod
+    def process(old_face, new_face, raw_mask):
+        height, width, _ = old_face.shape
+        height = height // 2
+        width = width // 2
+    
+    
+def get_config(plugin_name):
+    ''' Return the config for the requested model '''
+    return Config(plugin_name).config_dict
+    
+        def process(self, new_face):
+        ''' The blend box function. Adds the created mask to the alpha channel '''
+        if self.skip:
+            logger.trace('Skipping blend box')
+            return new_face
+    
+        def get_erosion_kernel(self, mask):
+        ''' Get the erosion kernel '''
+        erosion_ratio = self.config['erosion'] / 100
+        mask_radius = np.sqrt(np.sum(mask)) / 2
+        kernel_size = max(1, int(abs(erosion_ratio * mask_radius)))
+        erosion_kernel = cv2.getStructuringElement(  # pylint: disable=no-member
+            cv2.MORPH_ELLIPSE,  # pylint: disable=no-member
+            (kernel_size, kernel_size))
+        logger.trace('erosion_kernel shape: %s', erosion_kernel.shape)
+        return erosion_kernel
+    
+        def run(self, new_face):
+        ''' Perform selected adjustment on face '''
+        logger.trace('Performing scaling adjustment')
+        # Remove Mask for processing
+        reinsert_mask = False
+        if new_face.shape[2] == 4:
+            reinsert_mask = True
+            final_mask = new_face[:, :, -1]
+            new_face = new_face[:, :, :3]
+        new_face = self.process(new_face)
+        new_face = np.clip(new_face, 0.0, 1.0)
+        if reinsert_mask and new_face.shape[2] != 4:
+            # Reinsert Mask
+            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
+        logger.trace('Performed scaling adjustment')
+        return new_face
 
     
-                tstart = time()
-            clf.fit(X_train, y_train)
-            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                      y_test)
-            sgd_results[i, j, 1] = time() - tstart
+    import logging
+import os
+import re
     
-        n = 10
-    step = 10000
-    n_samples = 10000
-    dim = 10
-    n_classes = 10
-    for i in range(n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        n_samples += step
-        X = np.random.randn(n_samples, dim)
-        Y = np.random.randint(0, n_classes, (n_samples,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(n_samples)
-        bench_scikit_tree_regressor(X, Y)
+        def check_transparency_format(self):
+        ''' Make sure that the output format is correct if draw_transparent is selected '''
+        transparent = self.config['draw_transparent']
+        if not transparent or (transparent and self.config['format'] in ('png', 'tif')):
+            return
+        logger.warning('Draw Transparent selected, but the requested format does not support '
+                       'transparency. Changing output format to 'png'')
+        self.config['format'] = 'png'
     
-        for line in input_file:
-        linestrip = line.strip()
-        if len(linestrip) == 0:
-            in_exercise_region = False
-        elif linestrip.startswith('# TASK:'):
-            in_exercise_region = True
-    
-    '''
-print(__doc__)
-    
-        plt.xticks([])
-    plt.yticks([])
-    if title is not None:
-        plt.title(title, size=17)
-    plt.axis('off')
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-    
-    # Number of run (with randomly generated dataset) for each strategy so as
-# to be able to compute an estimate of the standard deviation
-n_runs = 5
-    
-    # Initialise the different array to all False
-different = (mbk_means_labels == 4)
-ax = fig.add_subplot(1, 3, 3)
-    
-                appid = random.choice(self.working_appid_list)
-            return str(appid)
-        else:
-            for _ in xrange(0, 10):
-                appid = self.public_appid.get()
-                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
-                    continue
-                else:
-                    return appid
-            return None
-    
-        value = lp[1].strip()
-    return value
-
-    
-            elif isinstance(e, MismatchedTokenException):
-            tokenName = '<unknown>'
-            if e.expecting == EOF:
-                tokenName = 'EOF'
-            else:
-                tokenName = self.tokenNames[e.expecting]
-    
-    # Documents to append as an appendix to all manuals.
-#
-# texinfo_appendices = []
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-            # 更新聚类中心
-        log.info(centers)
-        for i in range(k):
-            data_i = data[ret[:, 0] == i]  # 标签为 i 的样本
-            centers[i, :] = np.mean(data_i, axis=0)  # 按类别过滤样本
-    
-    import os
-    
-    from ..utils import get_w, get_shape
-from ..initializers import constant
-    
-    References:
-    https://github.com/philipperemy/keras-attention-mechanism
-'''
-    
-        with tf.variable_scope(name, reuse=reuse):
-        char_embed_mat = get_w([char_vocab_size, c_embed_size], name='char_embed_matrix')
-    
-    Attention flow layer is responsible for linking and fusing information from the context and the query words.
-    
-        # Perform mask detection on the horizontally flipped image
-    if cfg.TEST.MASK_AUG.H_FLIP:
-        masks_hf = im_detect_mask_hflip(
-            model, im, cfg.TEST.SCALE, cfg.TEST.MAX_SIZE, boxes
-        )
-        masks_ts.append(masks_hf)
-    
-    '''Functions for evaluating results on Cityscapes.'''
-    
-        num = len(roidb)
-    filtered_roidb = [entry for entry in roidb if is_valid(entry)]
-    num_after = len(filtered_roidb)
-    logger.info('Filtered {} roidb entries: {} -> {}'.
-                format(num - num_after, num, num_after))
-    return filtered_roidb
-    
-    
-def _get_voc_results_file_template(json_dataset, salt):
-    info = voc_info(json_dataset)
-    year = info['year']
-    image_set = info['image_set']
-    devkit_path = info['devkit_path']
-    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
-    filename = 'comp4' + salt + '_det_' + image_set + '_{:s}.txt'
-    return os.path.join(devkit_path, 'results', 'VOC' + year, 'Main', filename)
-    
-    
-# ---------------------------------------------------------------------------- #
-# FPN with ResNet
-# ---------------------------------------------------------------------------- #
-    
-        model.AddMetrics(['retnet_fg_num', 'retnet_bg_num'])
-    # ==========================================================================
-    # bbox regression loss - SelectSmoothL1Loss for multiple anchors at a location
-    # ==========================================================================
-    for lvl in range(k_min, k_max + 1):
-        suffix = 'fpn{}'.format(lvl)
-        bbox_loss = model.net.SelectSmoothL1Loss(
-            [
-                'retnet_bbox_pred_' + suffix,
-                'retnet_roi_bbox_targets_' + suffix,
-                'retnet_roi_fg_bbox_locs_' + suffix, 'retnet_fg_num'
-            ],
-            'retnet_loss_bbox_' + suffix,
-            beta=cfg.RETINANET.BBOX_REG_BETA,
-            scale=model.GetLossScale() * cfg.RETINANET.BBOX_REG_WEIGHT
-        )
-        gradients.append(bbox_loss)
-        losses.append('retnet_loss_bbox_' + suffix)
-    
-        # Anchors at a single feature cell
-    cell_anchors = generate_anchors(
-        stride=stride, sizes=anchor_sizes, aspect_ratios=anchor_aspect_ratios
-    )
-    num_cell_anchors = cell_anchors.shape[0]
-    
-    
-def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
-    '''Add RetinaNet blobs.'''
-    # RetinaNet is applied to many feature levels, as in the FPN paper
-    k_max, k_min = cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.RPN_MIN_LEVEL
-    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
-    num_aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
-    aspect_ratios = cfg.RETINANET.ASPECT_RATIOS
-    anchor_scale = cfg.RETINANET.ANCHOR_SCALE
+        def draw_black_image(self):
+        ''' Change image to black at correct dimensions '''
+        logger.trace('Drawing black image')
+        height, width = self.image.shape[:2]
+        self.image = np.zeros((height, width, 3), np.uint8)
