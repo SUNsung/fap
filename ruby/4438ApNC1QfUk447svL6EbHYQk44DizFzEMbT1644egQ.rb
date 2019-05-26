@@ -1,204 +1,256 @@
 
         
-                  # Generate default options for collection helpers, such as :checked and
-          # :disabled.
-          def default_html_options_for_collection(item, value)
-            html_options = @html_options.dup
+                  include_hidden = options.delete('include_hidden') { true }
+          checkbox = tag('input', options)
     
-          def self.delegate_to(klass)
-        self.type_klass = klass
-      end
+    require 'action_view/helpers/tags/collection_helpers'
     
-          test 'when specify to inherit and an :only option which does not match current action name and is opposite from parent controller' do
-        controller = WithOnlyConditionalFlippedAndInheriting.new
+            controller = klass.new
         controller.process(:index)
-        assert_equal 'Overwrite Hello index!', controller.response_body
+        assert_equal 'With String index', controller.response_body
       end
     
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
+      def self.period_types
+    @types ||= Enum.new(all: 1,
+                        yearly: 2,
+                        monthly: 3,
+                        weekly: 4,
+                        daily: 5,
+                        quarterly: 6)
+  end
     
-            def importer_class
-          DiffNoteImporter
+      def report
+    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
+      'blocked-uri',
+      'disposition',
+      'document-uri',
+      'effective-directive',
+      'original-policy',
+      'referrer',
+      'script-sample',
+      'status-code',
+      'violated-directive',
+      'line-number',
+      'source-file'
+    )
+  end
+    
+        it 'rejects invalid directives and ones that are not allowed to be extended' do
+      builder << {
+        invalid_src: ['invalid'],
+      }
+    
+        # if you need to test this and are having ssl issues see:
+    #  http://stackoverflow.com/questions/6756460/openssl-error-using-omniauth-specified-ssl-path-but-didnt-work
+    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development?
+    @omniauth = OmniAuth::Builder.new(app) do
+      Discourse.authenticators.each do |authenticator|
+        authenticator.register_middleware(self)
+      end
+    end
+    
+          if @actions_requiring_special_handling.include?(action_name)
+        command_return = run_action_requiring_special_handling(
+          command: command,
+          parameter_map: parameter_map,
+          action_return_type: action_class_ref.return_type
+        )
+        return command_return
+      end
+    
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
+      end
+    
+          it 'properly shell escapes its message' do
+        tag = '2.0.0'
+        message = 'message with 'quotes' (and parens)'
+    
+          it 'adds docset_xml_filename param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_xml_filename: 'DocSet xml feed filename'
+          )
+        end').runner.execute(:test)
+    
+          it 'sets the toolchain to Swift_2_3' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              toolchain: 'com.apple.dt.toolchain.Swift_2_3'
+            )
+          end').runner.execute(:test)
+    
+          it 'passes a list' do
+        expect_command('git', 'commit')
+        Fastlane::Actions.sh('git', 'commit')
+      end
+    
+          if conflicting_options
+        conflicting_options.each do |conflicting_option_key|
+          UI.user_error!('Conflicting option key must be a symbol') unless conflicting_option_key.kind_of?(Symbol)
         end
+      end
     
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
+    class String
+  # CrossplatformShellwords
+  def shellescape
+    CrossplatformShellwords.shellescape(self)
+  end
+end
+    
+    describe 'monkey patch of Array.shelljoin (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+    end
+    
+          run!
+    end
+  end
+end
+
+    
+        def create
+      authorize ReportNote, :create?
+    
+      def set_locale
+    I18n.locale = default_locale
+    I18n.locale = current_user.locale if user_signed_in?
+  rescue I18n::InvalidLocale
+    I18n.locale = default_locale
+  end
+    
+      def apply_header_remaining
+    response.headers['X-RateLimit-Remaining'] = rate_limit_remaining
+  end
+    
+        AIR_APPLICATION_INSTALLER =
+      '/Applications/Utilities/Adobe AIR Application Installer.app/Contents/MacOS/Adobe AIR Application Installer'
+    
+    gemspec
+    
+      def pod_prefix
+    File.expand_path('../..', pod_bin)
+  end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
           end
-    
-            # attributes - A hash containing the raw issue details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
         end
-    
-            '#{route.request_method} #{route.path}' if route
       end
     end
   end
 end
 
     
-        v = (0.0..1.0).bsearch {|x| x > 0 } # the nearest positive value to 0.0
-    assert_in_delta(0, v, 0.0001)
-    assert_operator(0, :<, v)
-    assert_equal(0.0, (-1.0..0.0).bsearch {|x| x >= 0 })
-    assert_equal(nil, (-1.0...0.0).bsearch {|x| x >= 0 })
+            self.summary = 'The repl listens to commands on standard input'
+        self.description = <<-DESC
+          The repl listens to commands on standard input and prints their
+          result to standard output.
+          It accepts all the other ipc subcommands. The repl will signal the
+          end of output with the the ASCII CR+LF `\\n\\r`.
+        DESC
     
-    def tar_create(tarball, dir)
-  require 'rubygems'
-  require 'rubygems/package'
-  require 'rubygems/package/tar_writer'
-  header = Gem::Package::TarHeader
-  dir_type = '5'
-  uname = gname = 'ruby'
-  File.open(tarball, 'wb') do |f|
-    w = Gem::Package::TarWriter.new(f)
-    Dir.glob('#{dir}/**/*', File::FNM_DOTMATCH) do |path|
-      next if File.basename(path) == '.'
-      s = File.stat(path)
-      mode = 0644
-      case
-      when s.file?
-        type = nil
-        size = s.size
-        mode |= 0111 if s.executable?
-      when s.directory?
-        path += '/'
-        type = dir_type
-        size = 0
-        mode |= 0111
-      else
-        next
-      end
-      name, prefix = w.split_name(path)
-      h = header.new(name: name, prefix: prefix, typeflag: type,
-                     mode: mode, size: size, mtime: s.mtime,
-                     uname: uname, gname: gname)
-      f.write(h)
-      if size > 0
-        IO.copy_stream(path, f)
-        f.write('\0' * (-size % 512))
-      end
-    end
+      @release_paths = (1..count.to_i).map do
+    TestApp.cap('deploy')
+    stdout, _stderr = run_vagrant_command('readlink #{TestApp.current_path}')
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
   end
-  true
-rescue => e
-  warn e.message
-  false
 end
     
-      # :stopdoc:
-  def _dispatch_0() nil end
-  def _dispatch_1(a) a end
-  def _dispatch_2(a, b) a end
-  def _dispatch_3(a, b, c) a end
-  def _dispatch_4(a, b, c, d) a end
-  def _dispatch_5(a, b, c, d, e) a end
-  def _dispatch_6(a, b, c, d, e, f) a end
-  def _dispatch_7(a, b, c, d, e, f, g) a end
-  # :startdoc:
+            value_to_evaluate = block || value
     
-      it 'changes when the module is reachable through a constant path' do
-    m = Module.new
-    module m::N; end
-    m::N.name.should =~ /#<Module:0x[0-9a-f]+>::N/
-    ModuleSpecs::Anonymous::WasAnnon = m::N
-    m::N.name.should == 'ModuleSpecs::Anonymous::WasAnnon'
-  end
+        <div id='rack'>
+      <h3 id='env-info'>Rack ENV</h3>
+      <table class='req'>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
+         <tr>
+           <td><%=h key %></td>
+           <td class='code'><div><%=h val %></div></td>
+         </tr>
+         <% } %>
+      </table>
+      <div class='clear'></div>
+    </div> <!-- /RACK ENV -->
     
-      def test_ed_newline_with_cr
-    input_keys('ab')
-    assert_byte_pointer_size('ab')
-    assert_cursor(2)
-    assert_cursor_max(2)
-    refute(@line_editor.finished?)
-    input_keys('\C-m')
-    assert_line('ab')
-    assert(@line_editor.finished?)
-  end
-    
-        pod 'Alamofire', path: '../Alamofire Example/Alamofire'
-    
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
-  end
-    
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
+          def origin(env)
+        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
       end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
           end
         end
-        block_given? ? nil : rps
-      end
     
-        pax_slash = ret.rindex('/')
-    if(pax_slash == nil)
-      pax_slash = 0
-    else
-      pax_slash = ret.rindex('/', pax_slash-1)
-      if(pax_slash == nil || pax_slash < 0)
-        pax_slash = 0
-      end
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+        it 'sets a session authenticity token if one does not exist' do
+      session = {}
+      allow(Rack::Protection::AuthenticityToken).to receive(:random_token).and_return(token)
+      allow_any_instance_of(Rack::Protection::AuthenticityToken).to receive(:mask_token).and_return(masked_token)
+      Rack::Protection::AuthenticityToken.token(session)
+      expect(session[:csrf]).to eq(token)
+    end
+  end
+    
+      it 'should allow changing report only' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
+      run DummyApp
     end
     
-        args = ['--identifier', identifier,
-            '--info', temp_info,
-            '--version', version.to_s,
-            '--ownership', attributes[:osxpkg_ownership]]
+    LogStash::Bundler.setup!
     
-      def architecture
-    case @architecture
-      when nil
-        return %x{uname -m}.chomp   # default to current arch
-      when 'amd64' # debian and pacman disagree on architecture names
-        return 'x86_64'
-      when 'native'
-        return %x{uname -m}.chomp   # 'native' is current arch
-      when 'all', 'any', 'noarch'
-        return 'any'
-      else
-        return @architecture
+            return nil
+      end
     end
-  end # def architecture
+  end
+end end end
+
     
-      # Returns the path to the tar file containing the packed up staging directory
-  def payload
-    payload_tar = build_path('payload.tar')
-    logger.info('Creating payload tar ', :path => payload_tar)
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
     
-      private
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
