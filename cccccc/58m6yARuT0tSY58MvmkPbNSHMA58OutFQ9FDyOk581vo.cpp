@@ -1,396 +1,162 @@
 
         
-        
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
-  }
-};
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
+    namespace tensorflow {
     }
     
-    #include 'caffe/layers/softmax_layer.hpp'
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    
-    {} // namespace caffe2
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
 
     
-    ```
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    {} // namespace caffe2
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    namespace caffe2 {
-    }
+    #include 'tensorflow/core/framework/graph.pb.h'
+#include 'tensorflow/core/platform/types.h'
     
-    OPERATOR_SCHEMA(GivenTensorDoubleFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(
-        FillerTensorInference<TensorProto_DataType_DOUBLE>);
+      static const unsigned kMask = 0xf;  // Mask of all available flags.
     
-    #endif
-
+    #define SRC_ARG1 ST * src1_data_, size_t src1_step_,
+#define SRC_STORE1 src1_data(src1_data_), src1_step(src1_step_),
+#define SRC_VAR1 ST * src1_data; \
+                 size_t src1_step;
+#define SRC_ARG2 ST * src1_data_, size_t src1_step_, \
+                 ST * src2_data_, size_t src2_step_,
+#define SRC_STORE2 src1_data(src1_data_), src1_step(src1_step_), \
+                   src2_data(src2_data_), src2_step(src2_step_),
+#define SRC_VAR2 ST * src1_data; \
+                 size_t src1_step; \
+                 ST * src2_data; \
+                 size_t src2_step;
     
-    namespace tesseract {
-    }
+                int16x8_t vx2 = vld1q_s16(_dx + j + 8);
+            int16x8_t vy2 = vld1q_s16(_dy + j + 8);
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
+            for (; dj < roiw8; sj += 32, dj += 8)
+        {
+            uint8x8x4_t v_src = vld4_u8(src + sj);
+            vst1_u8(dst + dj, v_src.val[coi]);
+        }
     
-    // Getter for the value.
-STRING ParamContent::GetValue() const {
-  STRING result;
-  if (param_type_ == VT_INTEGER) {
-    result.add_str_int('', *iIt);
-  } else if (param_type_ == VT_BOOLEAN) {
-    result.add_str_int('', *bIt);
-  } else if (param_type_ == VT_DOUBLE) {
-    result.add_str_double('', *dIt);
-  } else if (param_type_ == VT_STRING) {
-    if (((STRING) * (sIt)).string() != nullptr) {
-      result = sIt->string();
-    } else {
-      result = 'Null';
-    }
-  }
-  return result;
-}
-    
-      // Write all (changed_) parameters to a config file.
-  void WriteParams(char* filename, bool changes_only);
-    
-    #ifndef TESSERACT_CCUTIL_BOXREAD_H_
-#define TESSERACT_CCUTIL_BOXREAD_H_
-    
-      // Computes all the cross product distances of the points from the line,
-  // storing the actual (signed) cross products in distances_.
-  // Ignores distances of points that are further away than the previous point,
-  // and overlaps the previous point by at least half.
-  void ComputeDistances(const ICOORD& start, const ICOORD& end);
-    
-    // A simple class to provide a dynamic programming solution to a class of
-// 1st-order problems in which the cost is dependent only on the current
-// step and the best cost to that step, with a possible special case
-// of using the variance of the steps, and only the top choice is required.
-// Useful for problems such as finding the optimal cut points in a fixed-pitch
-// (vertical or horizontal) situation.
-// Skeletal Example:
-// DPPoint* array = new DPPoint[width];
-// for (int i = 0; i < width; i++) {
-//   array[i].AddLocalCost(cost_at_i)
-// }
-// DPPoint* best_end = DPPoint::Solve(..., array);
-// while (best_end != nullptr) {
-//   int cut_index = best_end - array;
-//   best_end = best_end->best_prev();
-// }
-// delete [] array;
-class DPPoint {
- public:
-  // The cost function evaluates the total cost at this (excluding this's
-  // local_cost) and if it beats this's total_cost, then
-  // replace the appropriate values in this.
-  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
-    }
-    
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-    template DataReader::DataReader(const ConfigParameters&);
-template DataReader::DataReader(const ScriptableObjects::IConfigRecord&);
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
+    inline void prefetch(const void *ptr, size_t offset = 32*10)
 {
-public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
-    }
-    
-      virtual void PredictInstance(const SparsePage::Inst& inst,
-                               std::vector<bst_float>* out_preds,
-                               const gbm::GBTreeModel& model,
-                               unsigned ntree_limit = 0,
-                               unsigned root_index = 0) = 0;
-    
-      const dmlc::RowBlock<IndexType>& Value() const override {
-    return out_;
-  }
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
+#if defined __GNUC__
+    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#elif defined _MSC_VER && defined CAROTENE_NEON
+    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#else
+    (void)ptr;
+    (void)offset;
+#endif
 }
     
+                uint32x4_t v_mask0 = vorrq_u32(vceqq_s32(v_src0, v_maxval4), vceqq_s32(v_src0, v_minval4));
+            uint32x4_t v_mask1 = vorrq_u32(vceqq_s32(v_src1, v_maxval4), vceqq_s32(v_src1, v_minval4));
     
-    { private:
-  /*! \brief number of allocated pages */
-  size_t num_free_buffer_;
-  /*! \brief clock_pointer */
-  size_t clock_ptr_;
-  /*! \brief writer threads */
-  std::vector<std::unique_ptr<std::thread> > workers_;
-  /*! \brief recycler queue */
-  dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > qrecycle_;
-  /*! \brief worker threads */
-  std::vector<dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > > qworkers_;
-};
-#endif  // DMLC_ENABLE_STD_THREAD
     
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
+    {} // namespace CAROTENE_NS
+
     
-    SEXP XGBoosterPredict_R(SEXP handle, SEXP dmat, SEXP option_mask, SEXP ntree_limit) {
-  SEXP ret;
-  R_API_BEGIN();
-  bst_ulong olen;
-  const float *res;
-  CHECK_CALL(XGBoosterPredict(R_ExternalPtrAddr(handle),
-                            R_ExternalPtrAddr(dmat),
-                            asInteger(option_mask),
-                            asInteger(ntree_limit),
-                            &olen, &res));
-  ret = PROTECT(allocVector(REALSXP, olen));
-  for (size_t i = 0; i < olen; ++i) {
-    REAL(ret)[i] = res[i];
+    void Laplacian1OpenCV(const Size2D &size,
+                      const u8 * srcBase, ptrdiff_t srcStride,
+                      s16 * dstBase, ptrdiff_t dstStride,
+                      BORDER_MODE border, u8 borderValue)
+{
+    internal::assertSupportedConfiguration(isLaplacianOpenCVSupported(size, border));
+#ifdef CAROTENE_NEON
+    ptrdiff_t rows = size.height, cols = size.width;
+    }
+    
+    #include 'platform.h'  // for TESS_API
+    
+    // A useful base struct to facilitate the common operation of sorting a vector
+// of simple or smart-pointer data using a separate key. Similar to STL pair.
+template <typename Key, typename Data>
+struct KDPair {
+  KDPair() = default;
+  KDPair(Key k, Data d) : data(d), key(k) {}
+    }
+    
+    class QRSequenceGenerator {
+ public:
+  // Object is initialized with the size of the output range.
+  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
+    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
   }
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
+    }
+    
+    
+    {    ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+    if (io.MouseDrawCursor || imgui_cursor == ImGuiMouseCursor_None)
+    {
+        // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
+        al_set_mouse_cursor(g_Display, g_MouseCursorInvisible);
+    }
+    else
+    {
+        ALLEGRO_SYSTEM_MOUSE_CURSOR cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT;
+        switch (imgui_cursor)
+        {
+        case ImGuiMouseCursor_TextInput:    cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT; break;
+        case ImGuiMouseCursor_ResizeAll:    cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_MOVE; break;
+        case ImGuiMouseCursor_ResizeNS:     cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_N; break;
+        case ImGuiMouseCursor_ResizeEW:     cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_E; break;
+        case ImGuiMouseCursor_ResizeNESW:   cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NE; break;
+        case ImGuiMouseCursor_ResizeNWSE:   cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NW; break;
+        }
+        al_set_system_mouse_cursor(g_Display, cursor_id);
+    }
 }
     
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
-    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
-    if (src.size <= maxsize) {
-      this->CopyFrom(src); return;
-    }
-    const RType begin = src.data[0].rmax;
-    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
-    const size_t n = maxsize - 1;
-    data[0] = src.data[0];
-    this->size = 1;
-    // lastidx is used to avoid duplicated records
-    size_t i = 1, lastidx = 0;
-    for (size_t k = 1; k < n; ++k) {
-      RType dx2 =  2 * ((k * range) / n + begin);
-      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
-      while (i < src.size - 1
-             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
-      CHECK(i != src.size - 1);
-      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
-        if (i != lastidx) {
-          data[size++] = src.data[i]; lastidx = i;
-        }
-      } else {
-        if (i + 1 != lastidx) {
-          data[size++] = src.data[i + 1]; lastidx = i + 1;
-        }
-      }
-    }
-    if (lastidx != src.size - 1) {
-      data[size++] = src.data[src.size - 1];
-    }
-  }
-  /*!
-   * \brief set current summary to be merged summary of sa and sb
-   * \param sa first input summary to be merged
-   * \param sb second input summary to be merged
-   */
-  inline void SetCombine(const WQSummary &sa,
-                         const WQSummary &sb) {
-    if (sa.size == 0) {
-      this->CopyFrom(sb); return;
-    }
-    if (sb.size == 0) {
-      this->CopyFrom(sa); return;
-    }
-    CHECK(sa.size > 0 && sb.size > 0);
-    const Entry *a = sa.data, *a_end = sa.data + sa.size;
-    const Entry *b = sb.data, *b_end = sb.data + sb.size;
-    // extended rmin value
-    RType aprev_rmin = 0, bprev_rmin = 0;
-    Entry *dst = this->data;
-    while (a != a_end && b != b_end) {
-      // duplicated value entry
-      if (a->value == b->value) {
-        *dst = Entry(a->rmin + b->rmin,
-                     a->rmax + b->rmax,
-                     a->wmin + b->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        bprev_rmin = b->RMinNext();
-        ++dst; ++a; ++b;
-      } else if (a->value < b->value) {
-        *dst = Entry(a->rmin + bprev_rmin,
-                     a->rmax + b->RMaxPrev(),
-                     a->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        ++dst; ++a;
-      } else {
-        *dst = Entry(b->rmin + aprev_rmin,
-                     b->rmax + a->RMaxPrev(),
-                     b->wmin, b->value);
-        bprev_rmin = b->RMinNext();
-        ++dst; ++b;
-      }
-    }
-    if (a != a_end) {
-      RType brmax = (b_end - 1)->rmax;
-      do {
-        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
-        ++dst; ++a;
-      } while (a != a_end);
-    }
-    if (b != b_end) {
-      RType armax = (a_end - 1)->rmax;
-      do {
-        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
-        ++dst; ++b;
-      } while (b != b_end);
-    }
-    this->size = dst - data;
-    const RType tol = 10;
-    RType err_mingap, err_maxgap, err_wgap;
-    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
-    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
-      LOG(INFO) << 'mingap=' << err_mingap
-                << ', maxgap=' << err_maxgap
-                << ', wgap=' << err_wgap;
-    }
-    CHECK(size <= sa.size + sb.size) << 'bug in combine';
-  }
-  // helper function to print the current content of sketch
-  inline void Print() const {
-    for (size_t i = 0; i < this->size; ++i) {
-      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
-                   << ', rmax=' << data[i].rmax
-                   << ', wmin=' << data[i].wmin
-                   << ', v=' << data[i].value;
-    }
-  }
-  // try to fix rounding error
-  // and re-establish invariance
-  inline void FixError(RType *err_mingap,
-                       RType *err_maxgap,
-                       RType *err_wgap) const {
-    *err_mingap = 0;
-    *err_maxgap = 0;
-    *err_wgap = 0;
-    RType prev_rmin = 0, prev_rmax = 0;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin < prev_rmin) {
-        data[i].rmin = prev_rmin;
-        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
-      } else {
-        prev_rmin = data[i].rmin;
-      }
-      if (data[i].rmax < prev_rmax) {
-        data[i].rmax = prev_rmax;
-        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
-      }
-      RType rmin_next = data[i].RMinNext();
-      if (data[i].rmax < rmin_next) {
-        data[i].rmax = rmin_next;
-        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
-      }
-      prev_rmax = data[i].rmax;
-    }
-  }
-  // check consistency of the summary
-  inline bool Check(const char *msg) const {
-    const float tol = 10.0f;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
-          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
-        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
-        this->Print();
-        return false;
-      }
-    }
-    return true;
-  }
-};
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    TEST(Span, DlfConstructors) {
-  // Dynamic extent
-  {
-    Span<int> s;
-    ASSERT_EQ(s.size(), 0);
-    ASSERT_EQ(s.data(), nullptr);
-    }
-    }
+        // the literals are everything from lit_start to q
+    *pending_literals = (q - lit_start);
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
