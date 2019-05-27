@@ -1,169 +1,117 @@
 
-    # This will hold a lock to the index so it can be read or updated.
-    def with_index_lock
-      lock_path = '#{@index_file}.lock'
-      File.open(lock_path, 'w+') do |f|
-        f.flock(File::LOCK_EX)
-        yield
+        
+        module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class DateSelect < Base # :nodoc:
+        def initialize(object_name, method_name, template_object, options, html_options)
+          @html_options = html_options
+    
+          # The minimum number of requests we want to keep available.
+      #
+      # We don't use a value of 0 as multiple threads may be using the same
+      # token in parallel. This could result in all of them hitting the GitHub
+      # rate limit at once. The threshold is put in place to not hit the limit
+      # in most cases.
+      RATE_LIMIT_THRESHOLD = 50
+    
+            def find_target_id
+          GithubImport::IssuableFinder.new(project, issue).database_id
+        end
       end
-    end
-    
-            # Upload a file to the remote machine.
-        #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
-        end
-    
-              result
-        end
-    
-            # Registers additional provisioners to be available.
-        #
-        # @param [String] name Name of the provisioner.
-        def self.provisioner(name=UNSET_VALUE, &block)
-          data[:provisioners] ||= Registry.new
-    
-              # Determine if we require a local Vagrant environment. There are
-          # two cases that we require a local environment:
-          #
-          #   * We're asking for ANY/EVERY VM (no names given).
-          #
-          #   * We're asking for specific VMs, at least once of which
-          #     is NOT in the local machine index.
-          #
-          requires_local_env = false
-          requires_local_env = true if names.empty?
-          requires_local_env ||= names.any? { |n|
-            !@env.machine_index.include?(n)
-          }
-          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
-    
-            # This contains all the hosts and their parents.
-        #
-        # @return [Registry<Symbol, Array<Class, Symbol>>]
-        attr_reader :hosts
-    
-        using Magic
-    
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
-  end
-  cloned
-end
-    
-        assert_equal 'http://example.org/foo/Home', last_response.headers['Location']
-    
-      test 'uri encode' do
-    c = '한글'
-    assert_equal '%ED%95%9C%EA%B8%80', encodeURIComponent(c)
-    assert_equal '%ED%95%9C%EA%B8%80', CGI::escape(c)
-  end
-end
-    
-          within_row(2) { click_icon :split }
-      targetted_select2 'LA(#{order.reload.shipments.last.number})', from: '#s2id_item_stock_location'
-      click_icon :save
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.reload.shipments.last.id}')).to be_present
     end
   end
 end
 
     
-      def for_each_gem
-    SPREE_GEMS.each do |gem_name|
-      yield 'pkg/spree_#{gem_name}-#{version}.gem'
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
+    else
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
     end
-    yield 'pkg/spree-#{version}.gem'
   end
     
-              if @product.persisted?
-            respond_with(@product, status: 201, default_template: :show)
-          else
-            invalid_resource!(@product)
-          end
-        end
+        context 'on a public post from a stranger' do
+      before do
+        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+      end
     
-              def serialize_shipping_rates(shipments)
-            shipping_rates_serializer.new(
-              shipments,
-              include: [:shipping_rates],
-              params: { show_rates: true }
-            ).serializable_hash
+      it 'prevents ajax requests without a valid token' do
+    expect(post('/', {}, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest')).not_to be_ok
+  end
+    
+      it 'should not set the Content Security Policy for other content types' do
+    headers = get('/', {}, 'wants' => 'text/foo').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
+    
+          expected_header = <<-END.chomp
+rack.%2573ession=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+END
+      expect(last_response.headers['Set-Cookie']).to eq(expected_header)
+    end
+  end
+    
+          options = {:debug => ENV['LS_QA_DEBUG']}
+      puts 'Destroying #{machines}'
+      LogStash::VagrantHelpers.destroy(machines, options)
+      puts 'Bootstrapping #{machines}'
+      LogStash::VagrantHelpers.bootstrap(machines, options)
+    end
+    
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
           end
         end
       end
+    
+          def show_revert
+        !@message
+      end
+    
+          def default_markup
+        Precious::App.settings.default_markup
+      end
     end
   end
 end
 
     
-      <h3>Messages</h3>
-  <% @messages.each do |msg| %>
-    <p><%= msg %></p>
-  <% end %>
-
-    
-      # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+          def format
+        @format = (@page.format || false) if @format.nil?
+        @format.to_s.downcase
+      end
     end
   end
+end
+
     
-    module Jekyll
+    $contexts = []
     
-    # Set some attributes
-package.name = 'my-service'
-package.version = '1.0'
-    
-          @command.dependencies.tap do |dependencies|
-        # Verify dependencies don't include commas (#257)
-        dependencies.each do |dep|
-          next unless dep.include?(',')
-          splitdeps = dep.split(/\s*,\s*/)
-          @messages << 'Dependencies should not ' \
-            'include commas. If you want to specify multiple dependencies, use ' \
-            'the '-d' flag multiple times. Example: ' + \
-            splitdeps.map { |d| '-d '#{d}'' }.join(' ')
-        end
-      end
-    
-      # This method removes excluded files from the staging_path. Subclasses can
-  # remove the files during the input phase rather than deleting them here
-  def exclude
-    return if attributes[:excludes].nil?
-    
-        ret = candidate_ret
-    
-        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
-    safesystem('pkg_create', *args)
-    
-        ::Dir.mkdir(File.join(builddir, 'manifests'))
-    manifests.each do |manifest|
-      dir = File.join(builddir, 'manifests', File.dirname(manifest))
-      logger.info('manifests targeting: #{dir}')
-      ::Dir.mkdir(dir) if !File.directory?(dir)
-    
-      def initialize(package_name, opts = {}, &block)
-    @options = OpenStruct.new(:name => package_name.to_s)
-    @source, @target = opts.values_at(:source, :target).map(&:to_s)
-    @directory = File.expand_path(opts[:directory].to_s)
+      s.executables = ['gollum']
