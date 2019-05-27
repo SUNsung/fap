@@ -1,73 +1,190 @@
 
         
-          def create
-    raise Discourse::NotFound unless report_collection_enabled?
+                # This returns all the config classes for the various pushes.
+        #
+        # @return [Registry]
+        def push_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:push])
+            end
+          end
+        end
     
-          DB.exec(<<~SQL, id: d.id, sequence: sequence, data: data)
-        UPDATE drafts
-           SET sequence = :sequence
-             , data = :data
-             , revisions = revisions + 1
-         WHERE id = :id
-      SQL
-    else
-      Draft.create!(user_id: user.id, draft_key: key, data: data, sequence: sequence)
+        # @return [String] jruby, ruby, rbx, ...
+    def ruby_engine
+      RUBY_ENGINE
     end
     
-        def extendable?(directive)
-      EXTENDABLE_DIRECTIVES.include?(directive)
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
+        end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
+      end
     end
     
-        def cache
-      @cache ||= DistributedCache.new('csp_extensions')
-    end
-    
-        def theme_policy
-      policy([theme.id])
-    end
-    
-    require_relative 'bundler'
-require_relative 'rubygems'
-require 'pathname'
-    
-      let(:unordered_config_parts) { ordered_config_parts.shuffle }
-  let(:settings) { LogStash::SETTINGS }
+      it 'returns the pipeline id' do
+    expect(subject.pipeline_id).to eq(pipeline_id)
+  end
     
     platforms = PlatformConfig.new
     
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
+            def delimiter_delta
+          return 0 if first.same_line?(second)
+          return 0 if first.delimiter != second.delimiter
+    
+            def declaration_with_comment(node)
+          buffer = processed_source.buffer
+          begin_pos = get_source_range(node, comments_as_separators).begin_pos
+          end_line = buffer.line_for_position(node.loc.expression.end_pos)
+          end_pos = buffer.line_range(end_line).end_pos
+          Parser::Source::Range.new(buffer, begin_pos, end_pos)
+        end
+    
+              ignored_end_pos = if ignored_loc.respond_to?(:heredoc_body)
+                              ignored_loc.heredoc_end.end_pos
+                            else
+                              ignored_loc.expression.end_pos
+                            end
+          ignored_end_pos >= node.source_range.end_pos
+        end
+      end
+    
+    module RuboCop
+  module Cop
+    module Lint
+      #
+      # This cop emulates the following Ruby warnings in Ruby 2.6.
+      #
+      # % cat example.rb
+      # ERB.new('hi', nil, '-', '@output_buffer')
+      # % ruby -rerb example.rb
+      # example.rb:1: warning: Passing safe_level with the 2nd argument of
+      # ERB.new is deprecated. Do not use it, and specify other arguments as
+      # keyword arguments.
+      # example.rb:1: warning: Passing trim_mode with the 3rd argument of
+      # ERB.new is deprecated. Use keyword argument like
+      # ERB.new(str, trim_mode:...) instead.
+      # example.rb:1: warning: Passing eoutvar with the 4th argument of ERB.new
+      # is deprecated. Use keyword argument like ERB.new(str, eoutvar: ...)
+      # instead.
+      #
+      # Now non-keyword arguments other than first one are softly deprecated
+      # and will be removed when Ruby 2.5 becomes EOL.
+      # `ERB.new` with non-keyword arguments is deprecated since ERB 2.2.0.
+      # Use `:trim_mode` and `:eoutvar` keyword arguments to `ERB.new`.
+      # This cop identifies places where `ERB.new(str, trim_mode, eoutvar)` can
+      # be replaced by `ERB.new(str, :trim_mode: trim_mode, eoutvar: eoutvar)`.
+      #
+      # @example
+      #   # Target codes supports Ruby 2.6 and higher only
+      #   # bad
+      #   ERB.new(str, nil, '-', '@output_buffer')
+      #
+      #   # good
+      #   ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
+      #
+      #   # Target codes supports Ruby 2.5 and lower only
+      #   # good
+      #   ERB.new(str, nil, '-', '@output_buffer')
+      #
+      #   # Target codes supports Ruby 2.6, 2.5 and lower
+      #   # bad
+      #   ERB.new(str, nil, '-', '@output_buffer')
+      #
+      #   # good
+      #   # Ruby standard library style
+      #   # https://github.com/ruby/ruby/commit/3406c5d
+      #   if ERB.instance_method(:initialize).parameters.assoc(:key) # Ruby 2.6+
+      #     ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
+      #   else
+      #     ERB.new(str, nil, '-', '@output_buffer')
+      #   end
+      #
+      #   # good
+      #   # Use `RUBY_VERSION` style
+      #   if RUBY_VERSION >= '2.6'
+      #     ERB.new(str, trim_mode: '-', eoutvar: '@output_buffer')
+      #   else
+      #     ERB.new(str, nil, '-', '@output_buffer')
+      #   end
+      #
+      class ErbNewArguments < Cop
+        extend TargetRubyVersion
+    
+        def name
+      project.name
     end
     
-          Array(panes_yml).map.with_index do |pane_yml, index|
-        commands =  case pane_yml
-                    when Hash
-                      pane_yml.values.first
-                    when Array
-                      pane_yml
-                    else
-                      pane_yml
-                    end
-    
-      it 'creates an instance' do
-    expect(subject).to be_a(Tmuxinator::Pane)
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
+    end
   end
-    
-      def is_pane
-    @actual.is_a? Tmuxinator::Pane
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
+    end
   end
 end
 
     
-          new_exists = Tmuxinator::Config.exists?(name: new)
-      question = '#{new} already exists, would you like to overwrite it?'
-      if !new_exists || yes?(question, :red)
-        say 'Overwriting #{new}' if Tmuxinator::Config.exists?(name: new)
-        FileUtils.copy_file(existing_config_path, new_config_path)
+        context 'when first window has a name' do
+      it 'returns command to start a new detached session' do
+        expect(project.tmux_kill_session_command).to eq command
+      end
+    end
+  end
+    
+        msg = 'Actual pane does not match expected'
+    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
+    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
+  end
+    
+        class << self
+      # The directory (created if needed) in which to store new projects
+      def directory
+        return environment if environment?
+        return xdg if xdg?
+        return home if home?
+        # No project directory specified or existant, default to XDG:
+        FileUtils::mkdir_p(xdg)
+        xdg
       end
     
-      describe '#render' do
-    it 'renders the template' do
-      expect(File).to receive(:read).at_least(:once) { 'wemux ls 2>/dev/null' }
+          it 'returns true' do
+        expect(described_class.default?).to be_truthy
+      end
+    end
+    
+      context 'called with one size' do
+    it 'applies same width to all sides' do
+      ruleset = 'position: fixed; ' +
+                'top: 1em; ' +
+                'right: 1em; ' +
+                'bottom: 1em; ' +
+                'left: 1em;'
