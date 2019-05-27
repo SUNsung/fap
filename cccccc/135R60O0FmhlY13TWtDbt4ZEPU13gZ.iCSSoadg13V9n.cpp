@@ -1,767 +1,392 @@
 
         
-        namespace atom {
-    }
+        #ifndef PREPOSITION
+#  define PREPOSITION(Word)
+#endif
     
-      // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
+    void PrefixMapKeyPrinter<char>::print(raw_ostream &out, ArrayRef<char> key) {
+  out << QuotedString(StringRef(key.data(), key.size()));
+};
     
-    class Net : public mate::EventEmitter<Net> {
- public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
-    }
     
-    namespace base {
-class SupportsUserData;
+    {    return name;
+  }
+    
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
+  }
+  if (!node) {
+    Out << '<<NULL>>';
+    return;
+  }
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
+  }
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
+  }
 }
     
-     private:
-  void OnMessageBoxCallback(DialogClosedCallback callback,
-                            const std::string& origin,
-                            int code,
-                            bool checkbox_checked);
+    void InputAction::anchor() {}
     
-    #endif  // ATOM_BROWSER_LIB_POWER_OBSERVER_H_
+    class LLVM_LIBRARY_VISIBILITY Windows : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const LinkJobAction &job,
+                                     const JobContext &context) const override;
+    }
+    
+    struct OSBestResult {
+  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
+                   oconfidence(0.0) {}
+  int orientation_id;
+  int script_id;
+  float sconfidence;
+  float oconfidence;
+};
+    
+    class MutableIterator;
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+      double m() const;  // get gradient
+  double c(double m) const;            // get constant
+  double rms(double m, double c) const;            // get error
+  double pearson() const;  // get correlation coefficient.
+    
+    #include 'publictypes.h'
+#include 'elst.h'
+#include 'strngs.h'
+    
+        void setrej_tess_failure();  //Tess generated blank
+    void setrej_small_xht();  //Small xht char/wd
+    void setrej_edge_char();  //Close to image edge
+    void setrej_1Il_conflict();  //Initial reject map
+    void setrej_postNN_1Il();  //1Il after NN
+    void setrej_rej_cblob();  //Insert duff blob
+    void setrej_mm_reject();  //Matrix matcher
+                                 //Odd repeated char
+    void setrej_bad_repetition();
+    void setrej_poor_match();  //Failed Rays heuristic
+                                 //TEMP reject_word
+    void setrej_not_tess_accepted();
+                                 //TEMP reject_word
+    void setrej_contains_blanks();
+    void setrej_bad_permuter();  //POTENTIAL reject_word
+    void setrej_hyphen();  //PostNN dubious hyph or .
+    void setrej_dubious();  //PostNN dubious limit
+    void setrej_no_alphanums();  //TEMP reject_word
+    void setrej_mostly_rej();  //TEMP reject_word
+    void setrej_xht_fixup();  //xht fixup
+    void setrej_bad_quality();  //TEMP reject_word
+    void setrej_doc_rej();  //TEMP reject_word
+    void setrej_block_rej();  //TEMP reject_word
+    void setrej_row_rej();  //TEMP reject_word
+    void setrej_unlv_rej();  //TEMP reject_word
+    void setrej_nn_accept();  //NN Flipped a char
+    void setrej_hyphen_accept();  //Good aspect ratio
+    void setrej_mm_accept();  //Matrix matcher
+                                 //Quality flip a char
+    void setrej_quality_accept();
+                                 //Accept all except blank
+    void setrej_minimal_rej_accept();
+    
+    // A simple object cache which maps a string to an object of type T.
+// Usually, these are expensive objects that are loaded from disk.
+// Reference counting is performed, so every Get() needs to be followed later
+// by a Free().  Actual deletion is accomplished by DeleteUnusedObjects().
+template<typename T>
+class ObjectCache {
+ public:
+  ObjectCache() = default;
+  ~ObjectCache() {
+    mu_.Lock();
+    for (int i = 0; i < cache_.size(); i++) {
+      if (cache_[i].count > 0) {
+        tprintf('ObjectCache(%p)::~ObjectCache(): WARNING! LEAK! object %p '
+                'still has count %d (id %s)\n',
+                this, cache_[i].object, cache_[i].count,
+                cache_[i].id.string());
+      } else {
+        delete cache_[i].object;
+        cache_[i].object = nullptr;
+      }
+    }
+    mu_.Unlock();
+  }
+    }
+    
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2005 Martin Kretzschmar <martink@gnome.org>
+// Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
+// Copyright (C) 2006-2008 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2007 Brad Hards <bradh@kde.org>
+// Copyright (C) 2009, 2010 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2009 Till Kamppeter <till.kamppeter@gmail.com>
+// Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2009, 2011 William Bader <williambader@hotmail.com>
+// Copyright 2010 Hib Eris <hib@hiberis.nl>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
+    
+    
+    {      /* Convert the ascii number string to ucs2 and append. */
+      len = number_string.getLength ();
+      ucs2_char[0] = 0;
+      for (i = 0; i < len; ++i) {
+	  ucs2_char[1] = number_string.getChar(i);
+	  label->append(ucs2_char, 2);
+      }
+      ucs2_char[1] = 0;
+      label->append(ucs2_char, 2);
+  } else {
+      label->append(&number_string);
+  }
+    
+    #ifndef PARSER_H
+#define PARSER_H
+    
+    
+    {  GBool mono;
+  GBool gray;
+  GBool transparency;
+  GBool gdi;
+  PSLevel level;		// PostScript level (1, 2, separation)
+  GBool level1PSBug;		// gTrue if it uses a feature not supported in PSOutputDev
+};
+    
+    #ifndef PROFILE_DATA_H
+#define PROFILE_DATA_H
+    
+    void Config::ParseIniString(const std::string &iniStr, IniSettingMap &ini,
+                            const bool constants_only /* = false */ ) {
+  Config::SetParsedIni(ini, iniStr, '', constants_only, true);
+}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+    static int InputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+    {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        std::string* str = user_data->Str;
+        IM_ASSERT(data->Buf == str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
+    }
+    else if (user_data->ChainCallback)
+    {
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+    }
+    return 0;
+}
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    
+    {    ImGuiIO& io = ImGui::GetIO();
+    if (g_pVertexShaderBlob) { g_pVertexShaderBlob->Release(); g_pVertexShaderBlob = NULL; }
+    if (g_pPixelShaderBlob) { g_pPixelShaderBlob->Release(); g_pPixelShaderBlob = NULL; }
+    if (g_pRootSignature) { g_pRootSignature->Release(); g_pRootSignature = NULL; }
+    if (g_pPipelineState) { g_pPipelineState->Release(); g_pPipelineState = NULL; }
+    if (g_pFontTextureResource) { g_pFontTextureResource->Release(); g_pFontTextureResource = NULL; io.Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
+    for (UINT i = 0; i < g_numFramesInFlight; i++)
+    {
+        FrameResources* fr = &g_pFrameResources[i];
+        if (fr->IndexBuffer)  { fr->IndexBuffer->Release();  fr->IndexBuffer = NULL; }
+        if (fr->VertexBuffer) { fr->VertexBuffer->Release(); fr->VertexBuffer = NULL; }
+    }
+}
+    
+        std::unique_ptr<DHTTaskFactory> taskFactory;
+    
+    
+    {} // namespace aria2
 
     
-    #ifndef ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-#define ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-    
-    // static
-void App::EmitReopenEvent() {
-  std::set<RenderProcessHost*> rphs;
-  std::set<RenderProcessHost*>::iterator it;
-    }
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
-    
-    
-    {}  // namespace nwapi
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    MenuDelegate::MenuDelegate(ObjectManager* object_manager)
-    : object_manager_(object_manager) {
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-    
-    {  // Convert from content coordinates to window coordinates.
-  // This code copied from chrome_web_contents_view_delegate_views.cc
-  aura::Window* target_window = GetActiveNativeView(rfh);
-  aura::Window* root_window = target_window->GetRootWindow();
-  views::Widget* top_level_widget =
-    views::Widget::GetTopLevelWidgetForNativeView(target_window);
-  aura::client::ScreenPositionClient* screen_position_client =
-        aura::client::GetScreenPositionClient(root_window);
-  if (screen_position_client) {
-    screen_position_client->ConvertPointToScreen(target_window,
-             &screen_point);
-  }
-  set_delay_destruction(true);
-  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
-                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
-  menu_runner_->RunMenuAt(top_level_widget,
-                       nullptr,
-                       gfx::Rect(screen_point, gfx::Size()),
-                       views::MENU_ANCHOR_TOPRIGHT,
-                       ui::MENU_SOURCE_NONE);
-  // It is possible for the same MenuMessageLoopAura to start a nested
-  // message-loop while it is already running a nested loop. So make
-  // sure the quit-closure gets reset to the outer loop's quit-closure
-  // once the innermost loop terminates.
-  {
-    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
-                                                      base::Closure());
-  
-    //base::MessageLoop* loop = base::MessageLoop::current();
-    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
-    base::RunLoop run_loop;
-    message_loop_quit_ = run_loop.QuitClosure();
-  
-    run_loop.Run();
-  }
-  set_delay_destruction(false);
-  if (pending_destruction())
-    object_manager_->OnDeallocateObject(id_);
-}
-    
-    bool MenuItem::GetChecked() {
-  return is_checked_;
-}
+      std::vector<std::shared_ptr<DHTNode>> nodes_;
     
     
     {
-  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.getListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardGetListSyncFunction);
-};
-    
-    NwObjCreateFunction::NwObjCreateFunction() {
-}
-    
-    Contrast Example 2 with Example 1. For each data point per feature, the values
-are sorted by the corresponding KEY.
-)DOC')
-    .Input(0, 'DATA', 'Tensor of rank 1.')
-    .Input(
-        1,
-        'RANGES',
-        'Tensor of int32/int64 ranges, of dims (N, M, 2). '
-        'Where N is number of examples and M is a size of each example. '
-        'Last dimention represents a range in the format (start, lengths)')
-    .Input(2, 'KEY', 'Tensor of rank 1 and type int64.')
-    .Output(0, 'OUTPUT', '1-D tensor of size sum of range lengths')
-    .Arg('lengths', 'Expected lengths for ranges')
-    .TensorInferenceFunction([](const OperatorDef& def,
-                                const vector<TensorShape>& in) {
-      ArgumentHelper helper(def);
-      auto lengths = helper.GetRepeatedArgument<int>('lengths');
-      CAFFE_ENFORCE_EQ(in[0].dims_size(), 1, 'DATA should be 1-D tensor.');
-      CAFFE_ENFORCE_EQ(in[1].dims_size(), 3, 'RANGES should be 3-D tensor.');
-      if (in.size() > 2) {
-        CAFFE_ENFORCE_EQ(in[2].dims_size(), 1, 'KEY should be 1-D tensor.');
+    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
+                                                   : PREF_DHT_ENTRY_POINT_HOST6;
+    if (!e->getOption()->get(prefEntryPointHost).empty()) {
+      {
+        PrefPtr prefEntryPointPort = family == AF_INET
+                                         ? PREF_DHT_ENTRY_POINT_PORT
+                                         : PREF_DHT_ENTRY_POINT_PORT6;
+        std::pair<std::string, uint16_t> addr(
+            e->getOption()->get(prefEntryPointHost),
+            e->getOption()->getAsInt(prefEntryPointPort));
+        std::vector<std::pair<std::string, uint16_t>> entryPoints;
+        entryPoints.push_back(addr);
+        auto command = make_unique<DHTEntryPointNameResolveCommand>(
+            e->newCUID(), e, family, entryPoints);
+        command->setBootstrapEnabled(true);
+        command->setTaskQueue(taskQueue.get());
+        command->setTaskFactory(taskFactory.get());
+        command->setRoutingTable(routingTable.get());
+        command->setLocalNode(localNode);
+        tempCommands.push_back(std::move(command));
       }
-      CAFFE_ENFORCE_GT(lengths.size(), 0, 'lengths should be non-empty.');
-      std::vector<TensorShape> out(lengths.size());
-      for (int i = 0; i < lengths.size(); ++i) {
-        out[i].set_data_type(in[0].data_type());
-        out[i].add_dims(in[1].dims(0));
-        out[i].add_dims(lengths[i]);
-      }
-      return out;
-    });
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47>
-class ValueArray47 {
- public:
-  ValueArray47(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
-      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15), v16_(v16),
-      v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21), v22_(v22),
-      v23_(v23), v24_(v24), v25_(v25), v26_(v26), v27_(v27), v28_(v28),
-      v29_(v29), v30_(v30), v31_(v31), v32_(v32), v33_(v33), v34_(v34),
-      v35_(v35), v36_(v36), v37_(v37), v38_(v38), v39_(v39), v40_(v40),
-      v41_(v41), v42_(v42), v43_(v43), v44_(v44), v45_(v45), v46_(v46),
-      v47_(v47) {}
     }
-    
-      tuple() : f0_(), f1_(), f2_(), f3_(), f4_(), f5_(), f6_(), f7_() {}
-    
-    // The prime table interface.
-class PrimeTable {
- public:
-  virtual ~PrimeTable() {}
+    else {
+      A2_LOG_INFO('No DHT entry point specified.');
     }
-    
-    // Clones a 0-terminated C string, allocating memory using new.
-const char* MyString::CloneCString(const char* a_c_string) {
-  if (a_c_string == NULL) return NULL;
-    }
-    
-    
-UBool ScriptSet::operator == (const ScriptSet &other) const {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        if (bits[i] != other.bits[i]) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-        static const int32_t gDigitCount[] = {
-        1,1,1,1,1,1,1,1,
-        1,1,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4};
-    
-            // Midnight/Noon -> General Periods.
-        if ((toAppend == NULL || toAppend->isBogus()) &&
-                (periodType == DayPeriodRules::DAYPERIOD_MIDNIGHT ||
-                 periodType == DayPeriodRules::DAYPERIOD_NOON)) {
-            periodType = ruleSet->getDayPeriodForHour(hour);
-            index = (int32_t)periodType;
-    }
-    
-            void addWrite() {
-            if (m_write) return;
-            m_write = new QSocketNotifier(m_ctx->c.fd, QSocketNotifier::Write, 0);
-            connect(m_write, SIGNAL(activated(int)), this, SLOT(write()));
-        }
-    
-            yield_count = 0;
-        do
-        {
-            ptr = pool->alloc(pool, size);
-            if (ptr)
-            {
-                break;
-            }
-            else
-            {
-                yield_count++;
-                yield_total_count++;
-                usleep(10);
-            }
-        } while (yield_count < 100);
-    
-    static inline void coro_test(std::initializer_list<std::pair<coroutine_func_t, void*>> args)
-{
-    int complete_num = 0;
-    }
-    
-    TEST(os_wait, waitpid_before_child_exit)
-{
-    coro_test([](void *arg)
     {
-        swoole_coroutine_signal_init();
+      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
+      command->setMessageDispatcher(dispatcher.get());
+      command->setMessageReceiver(receiver.get());
+      command->setTaskQueue(taskQueue.get());
+      command->setReadCheckSocket(connection->getSocket());
+      command->setConnection(std::move(connection));
+      command->setUDPTrackerClient(udpTrackerClient);
+      tempRoutineCommands.push_back(std::move(command));
     }
+    {
+      auto command = make_unique<DHTTokenUpdateCommand>(
+          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
+      command->setTokenTracker(tokenTracker.get());
+      tempCommands.push_back(std::move(command));
     }
+    {
+      auto command = make_unique<DHTBucketRefreshCommand>(
+          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
+      command->setTaskQueue(taskQueue.get());
+      command->setRoutingTable(routingTable.get());
+      command->setTaskFactory(taskFactory.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTPeerAnnounceCommand>(
+          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
+      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command =
+          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
+      command->setLocalNode(localNode);
+      command->setRoutingTable(routingTable.get());
+      tempCommands.push_back(std::move(command));
+    }
+    // add deserialized nodes to routing table
+    auto& desnodes = deserializer.getNodes();
+    for (auto& node : desnodes) {
+      routingTable->addNode(node);
+    }
+    if (!desnodes.empty()) {
+      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
+          taskFactory->createBucketRefreshTask());
+      task->setForceRefresh(true);
+      taskQueue->addPeriodicTask1(task);
+    }
+    // assign them into DHTRegistry
+    if (family == AF_INET) {
+      DHTRegistry::getMutableData().localNode = localNode;
+      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData().messageFactory = std::move(factory);
+      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
+      DHTRegistry::setInitialized(true);
+    }
+    else {
+      DHTRegistry::getMutableData6().localNode = localNode;
+      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData6().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
+      DHTRegistry::setInitialized6(true);
+    }
+    if (e->getBtRegistry()->getUdpPort() == 0) {
+      // We assign port last so that no exception gets in the way
+      e->getBtRegistry()->setUdpPort(port);
+    }
+  }
+  catch (RecoverableException& ex) {
+    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
+                        ' DHT is disabled.'),
+                    ex);
+    tempCommands.clear();
+    tempRoutineCommands.clear();
+    if (family == AF_INET) {
+      DHTRegistry::clearData();
+      e->getBtRegistry()->setUDPTrackerClient(
+          std::shared_ptr<UDPTrackerClient>{});
+    }
+    else {
+      DHTRegistry::clearData6();
+    }
+  }
+  return std::make_pair(std::move(tempCommands),
+                        std::move(tempRoutineCommands));
+}
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
+    
+    void DHTTaskFactoryImpl::setMessageDispatcher(DHTMessageDispatcher* dispatcher)
+{
+  dispatcher_ = dispatcher;
+}
