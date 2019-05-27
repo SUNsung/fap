@@ -1,141 +1,180 @@
 
         
         
-def build_completion(opt_parser):
-    commands = []
+class Rank(Enum):
     
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-from youtube_dl.version import __version__
-version = __version__
-# The full version, including alpha/beta/rc tags.
-release = version
-    
-    from __future__ import unicode_literals
-    
-            jsi = JSInterpreter('function f(){return 19 & 21;}')
-        self.assertEqual(jsi.call_function('f'), 17)
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    
-def test_index(client, auth):
-    response = client.get('/')
-    assert b'Log In' in response.data
-    assert b'Register' in response.data
-    
-        This function's response will be pretty printed if the
-    ``JSONIFY_PRETTYPRINT_REGULAR`` config parameter is set to True or the
-    Flask app is running in debug mode. Compressed (not pretty) formatting
-    currently means no indents and no spaces after separators.
-    
-    from __future__ import absolute_import
-    
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def long_desc(self):
-        return 'Run the spider defined in the given file'
-    
-    from scrapy import twisted_version
-    
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
+        def park_vehicle(self, vehicle):
+        spot = self._find_available_spot(vehicle)
+        if spot is None:
+            return None
         else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
+            spot.park_vehicle(vehicle)
+            return spot
+    
+        def mapper(self, _, line):
+        yield line, 1
+    
+    
+class QueryApi(object):
+    
+        def __init__(self):
+        self.name = 'btree_gin'
+    
+        def save(self, must_create=False):
+        '''
+        Save the current session data to the database. If 'must_create' is
+        True, raise a database error if the saving operation doesn't create a
+        new entry (as opposed to possibly updating an existing entry).
+        '''
+        if self.session_key is None:
+            return self.create()
+        data = self._get_session(no_load=must_create)
+        obj = self.create_model_instance(data)
+        using = router.db_for_write(self.model, instance=obj)
+        try:
+            with transaction.atomic(using=using):
+                obj.save(force_insert=must_create, force_update=not must_create, using=using)
+        except IntegrityError:
+            if must_create:
+                raise CreateError
+            raise
+        except DatabaseError:
+            if not must_create:
+                raise UpdateError
+            raise
+    
+                appid = random.choice(self.working_appid_list)
+            return str(appid)
+        else:
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
+    
+    import os
+import sys
+import glob
+import binascii
+import time
+import random
+import base64
+import hashlib
+import threading
+import subprocess
+import datetime
+    
+        if sys.platform == 'win32':
+        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
+        sys.path.append(win32_lib)
+    elif sys.platform.startswith('linux'):
+        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
+        sys.path.append(linux_lib)
+    
+        if prober.nat_type in ('cone', 'restricted'):
+        usable = 'usable'
+    elif prober.nat_type == 'offline':
+        usable = 'unusable'
+    else:
+        usable = 'unknown'
+    
+            c = classmethod(f)
+        self.assertTrue(c.__func__ is f)
+    
+        # #14971: Make sure the dotted name resolution works even if the actual
+    # function doesn't have the same name as is used to find it.
+    def test_loadTestsFromName__function_with_different_name_than_method(self):
+        # lambdas have the name '<lambda>'.
+        m = types.ModuleType('m')
+        class MyTestCase(unittest.TestCase):
+            test = lambda: 1
+        m.testcase_1 = MyTestCase
+    
+    PYTHON2_EXCEPTIONS = (
+    'ArithmeticError',
+    'AssertionError',
+    'AttributeError',
+    'BaseException',
+    'BufferError',
+    'BytesWarning',
+    'DeprecationWarning',
+    'EOFError',
+    'EnvironmentError',
+    'Exception',
+    'FloatingPointError',
+    'FutureWarning',
+    'GeneratorExit',
+    'IOError',
+    'ImportError',
+    'ImportWarning',
+    'IndentationError',
+    'IndexError',
+    'KeyError',
+    'KeyboardInterrupt',
+    'LookupError',
+    'MemoryError',
+    'NameError',
+    'NotImplementedError',
+    'OSError',
+    'OverflowError',
+    'PendingDeprecationWarning',
+    'ReferenceError',
+    'RuntimeError',
+    'RuntimeWarning',
+    # StandardError is gone in Python 3, so we map it to Exception
+    'StopIteration',
+    'SyntaxError',
+    'SyntaxWarning',
+    'SystemError',
+    'SystemExit',
+    'TabError',
+    'TargetScopeError',
+    'TypeError',
+    'UnboundLocalError',
+    'UnicodeDecodeError',
+    'UnicodeEncodeError',
+    'UnicodeError',
+    'UnicodeTranslateError',
+    'UnicodeWarning',
+    'UserWarning',
+    'ValueError',
+    'Warning',
+    'ZeroDivisionError',
+)
+    
+            self.assertEqual(result,
+                         ['    ENCODING   'utf-8'       (0, 0) (0, 0)'] +
+                         expected.rstrip().splitlines())
+    
+        This code is new in Python 3.2, but this class can be copy pasted into
+    user code for use with earlier Python versions.
+    '''
+    
+    
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
+    test()
 
     
-    logger = logging.getLogger(__name__)
+    # Register the converter
+sqlite3.register_converter('point', convert_point)
     
-                ret[i, :] = i_label, i_score
+    import sys
+import os
+from unittest.mock import MagicMock
     
-    from ..activations import relu
-from ..utils import get_wb, get_shape
-    
-        Returns:
-    
-    
-def permute(x, perm):
+        :param X_img_path: path to image to be recognized
+    :param knn_clf: (optional) a knn classifier object. if not specified, model_save_path must be specified.
+    :param model_path: (optional) path to a pickled knn classifier. if not specified, model_save_path must be knn_clf.
+    :param distance_threshold: (optional) distance threshold for face classification. the larger it is, the more chance
+           of mis-classifying an unknown person as a known one.
+    :return: a list of names and face locations for the recognized faces in the image: [(name, bounding box), ...].
+        For faces of unrecognized persons, the name 'unknown' will be returned.
     '''
-    Examples:
-        x.shape == [128, 32, 1]
-        x = permute(x, [0, 2, 1])
-        x.shape == [128, 1, 32]
+    if not os.path.isfile(X_img_path) or os.path.splitext(X_img_path)[1][1:] not in ALLOWED_EXTENSIONS:
+        raise Exception('Invalid image path: {}'.format(X_img_path))
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def _CreateInitialGroupMap():
-  def AddToGroupMap( name, parent ):
-    new_group = SyntaxGroup( name )
-    group_name_to_group[ name ] = new_group
-    parent.children.append( new_group )
-    
-    
-@patch( 'ycm.client.messages_request.PostVimMessage',
-        new_callable = ExtendedMock )
-def HandlePollResponse_MultipleMessages_test( post_vim_message ):
-  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' },
-                                      { 'message': 'this is another one' } ] ,
-                                    None ),
-               equal_to( True ) )
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
