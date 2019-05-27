@@ -1,223 +1,214 @@
 
         
         
-    {  *file_path = current_directory.Append(*file_path);
-  return true;
+    {    return GenericTypeParamType::get(genericParam->getDepth(),
+                                     genericParam->getIndex(), ctx);
+  };
+  auto conformanceToSyntheticConformanceFn =
+      MakeAbstractConformanceForGenericType();
+    
+    /// Determine whether this typedef is a CF type.
+bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
+    
+    namespace clang {
+class Sema;
+class NamedDecl;
+class TypeDecl;
+class FunctionDecl;
 }
     
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/api_messages.h'
-#include 'content/public/renderer/render_view.h'
-#include 'content/public/renderer/render_thread.h'
-#include 'content/public/renderer/v8_value_converter.h'
-#include 'third_party/WebKit/public/web/WebView.h'
-#include 'third_party/WebKit/public/web/WebLocalFrame.h'
-#include 'ui/base/resource/resource_bundle.h'
-    
-    // Get RenderView from current js context (only works under window context).
-content::RenderView* GetCurrentRenderView();
-content::RenderView* GetEnteredRenderView();
-    
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
   }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
 }
     
-    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+      enum class SpecialReg {
+    XER      = 1,
+    DSCR     = 3,
+    LR       = 8,
+    CTR      = 9,
+    AMR      = 13,
+    TFHAR    = 128,
+    TFIAR    = 129,
+    TEXASR   = 130,
+    TEXASRU  = 131,
+    VRSAVE   = 256,
+    SPEFSCR  = 512,
+    MMCR2    = 769,
+    MMCRA    = 770,
+    PMC1     = 771,
+    PMC2     = 772,
+    PMC3     = 773,
+    PMC4     = 774,
+    PMC5     = 775,
+    PMC6     = 776,
+    MMCR0    = 779,
+    BESCRS   = 800,
+    BESCRSU  = 801,
+    BESCRR   = 802,
+    BESCRRU  = 803,
+    EBBHR    = 804,
+    EBBRR    = 805,
+    BESCR    = 806,
+    TAR      = 815,
+    PPR      = 896,
+    PPR32    = 898
+  };
     
-    MeasureDouble RpcClientServerLatency() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientServerLatencyMeasureName,
-      'Time between first byte of request received to last byte of response '
-      'sent, or terminal error (propagated from the server)',
-      kUnitMilliseconds);
-  return measure;
-}
+    public:
+  static void Add(InfoVec& out, const char* name, const std::string& value);
+  static void AddServerStats(InfoVec& out, const char* name,
+                             const char* statsName = nullptr);
     
-    #include <grpcpp/grpcpp.h>
-#include 'src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h'
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    #include <grpc/support/port_platform.h>
-    
-    #include <grpc/support/port_platform.h>
-    
-    
-    {  // Schedule the given callback for execution.
-  virtual void Add(const std::function<void()>& callback) = 0;
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
 };
     
-    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
-  memset(core, 0, sizeof(*core));
-  for (const auto& m : proto.metrics()) {
-    switch (m.value_case()) {
-      case Metric::VALUE_NOT_SET:
-        break;
-      case Metric::kCount:
-        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
-          if (m.name() == grpc_stats_counter_name[i]) {
-            core->counters[i] = m.count();
-            break;
-          }
-        }
-        break;
-      case Metric::kHistogram:
-        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
-          if (m.name() == grpc_stats_histogram_name[i]) {
-            const auto& h = m.histogram();
-            bool valid = true;
-            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              if (grpc_stats_histo_bucket_boundaries[i][j] !=
-                  h.buckets(j).start()) {
-                valid = false;
-              }
-            }
-            if (!valid) {
-              gpr_log(GPR_ERROR,
-                      'Found histogram %s but shape is different from proto',
-                      m.name().c_str());
-            }
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              core->histograms[grpc_stats_histo_start[i] + j] =
-                  h.buckets(j).count();
-            }
-          }
-        }
-        break;
-    }
-  }
+    template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 0, rate, fillCols);
 }
     
+    NS_CC_END
     
-    {    // out_of_range.404
-    try
+        //
+    // Overrides
+    //
+    virtual CallFuncN* clone() const override;
+    virtual void execute() override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    CallFuncN():_functionN(nullptr){}
+    virtual ~CallFuncN(){}
+    
+    http://www.cocos2d-x.org
+    
+        /** @deprecated Use method getTrianglesCount() instead */
+    CC_DEPRECATED_ATTRIBUTE unsigned int getTriaglesCount() const;
+    
+    /**
+     * get sum of all triangle area size
+     * @return sum of all triangle area size
+     */
+    float getArea() const;
+    
+    protected:
+    Node* _stencil;
+    GLProgram* _originStencilProgram;
+   
+    StencilStateManager* _stencilStateManager;
+    
+    GroupCommand _groupCommand;
+    CustomCommand _beforeVisitCmd;
+    CustomCommand _afterDrawStencilCmd;
+    CustomCommand _afterVisitCmd;
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+            /**
+         * Not equal comparison operator.
+         * @param point Point<T> to be compared.
+         * @result Whether the instance satisfies the condition with respect to point.
+         */
+        inline bool operator!=(const Point<T>& point) const
+        {
+            return area() != point.area();
+        }
+    
+    
+    {    // Rendering parameters
+    const auto FACE_DEFAULT_ALPHA_KEYPOINT = POSE_DEFAULT_ALPHA_KEYPOINT;
+    const auto FACE_DEFAULT_ALPHA_HEAT_MAP = POSE_DEFAULT_ALPHA_HEAT_MAP;
+}
+    
+    #include <atomic>
+#include <tuple>
+#include <unordered_map>
+#include <unordered_set>
+#include <openpose/core/common.hpp>
+    
+        template<typename T>
+    Point<T> Rectangle<T>::bottomRight() const
     {
-        // try to use a JSON pointer that cannot be resolved
-        json::reference ref = j.at('/number/foo'_json_pointer);
+        try
+        {
+            return Point<T>{T(x + width), T(y + height)};
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Point<T>{};
+        }
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    
+    protected Q_SLOTS:
+  void runAllTests();
+  void layoutAboutToBeChanged();
+  void layoutChanged();
+  void rowsAboutToBeInserted( const QModelIndex &parent, int start, int end );
+  void rowsInserted( const QModelIndex & parent, int start, int end );
+  void rowsAboutToBeRemoved( const QModelIndex &parent, int start, int end );
+  void rowsRemoved( const QModelIndex & parent, int start, int end );
+  void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+  void headerDataChanged(Qt::Orientation orientation, int start, int end);
+    
+    void ConnectionsManager::createServerItemForConnection(
+    QSharedPointer<RedisClient::Connection> connection,
+    QSharedPointer<TreeOperations> treeModel) {
+  using namespace ConnectionsTree;
+  QString name = connection->getConfig().name();
+  auto serverItem = QSharedPointer<ServerItem>(
+      new ServerItem(name, treeModel.dynamicCast<ConnectionsTree::Operations>(),
+                     *static_cast<ConnectionsTree::Model*>(this)));
     }
+    
+    
+    {    return a.exec();
+}
+    
+    int SortFilterProxyModel::roleKey(const QByteArray &role) const
+{
+    QHash<int, QByteArray> roles = roleNames();
+    QHashIterator<int, QByteArray> it(roles);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value() == role)
+            return it.key();
+    }
+    return -1;
 }
 
     
-    int ObjectExtendedInfo60D::obstacle_class(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 3);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-      Byte t1(bytes + 6);
-  int32_t t = t1.get_byte(5, 3);
+     signals:
+  void error(const QString& error);
     
     
-    {  int ret = x;
-  return ret;
+    {  return QVariant();
 }
     
+            Q_INVOKABLE QVariantMap getRow(int i);
     
-    {  int ret = x;
-  return ret;
-}
+            QChar c(val.at(index));
     
-    unsigned int BaseMapMatrix::CreateBinary(unsigned char* buf,
-                                         unsigned int buf_size) const {
-  return 0;
-}
+        #ifdef Q_OS_MACX
+        platform = 'osx'; 
+    #endif
     
-    TEST_F(SpeedLimitTest, SimpleSpeedLimitCreation) {
-  SpeedLimit simple_speed_limit;
-  EXPECT_TRUE(simple_speed_limit.speed_limit_points().empty());
-  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
-}
-    
-    const PolynomialXd& Spline1dSeg::spline_func() const { return spline_func_; }
-    
-    GemMessageManager::GemMessageManager() {
-  // Control Messages
-  AddSendProtocolData<Accelcmd67, true>();
-  AddSendProtocolData<Brakecmd6b, true>();
-  AddSendProtocolData<Globalcmd69, true>();
-  AddSendProtocolData<Headlightcmd76, true>();
-  AddSendProtocolData<Horncmd78, true>();
-  AddSendProtocolData<Shiftcmd65, true>();
-  AddSendProtocolData<Steeringcmd6d, true>();
-  AddSendProtocolData<Turncmd63, true>();
-  AddSendProtocolData<Wipercmd90, true>();
-    }
-    
-    
-    {
-    {
-    {}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
-    
-    // config detail: {'name': 'shaft_position', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': True, 'physical_range':
-// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
-// 'motorola', 'physical_unit': 'radians'}
-double Brakemotorrpt170::shaft_position(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-      Byte t2(bytes + 6);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-      x <<= 0;
-  x >>= 0;
-    
-    
-    {  Global_rpt_6a::Brk_can_timeoutType ret =
-      static_cast<Global_rpt_6a::Brk_can_timeoutType>(x);
-  return ret;
-}
-    
-    // config detail: {'name': 'manual_input', 'enum': {0: 'MANUAL_INPUT_OFF', 1:
-// 'MANUAL_INPUT_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 7, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Manual_inputType Hornrpt79::manual_input(const std::uint8_t* bytes,
-                                                      int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
+    QUrl updateUrl(
+        QString('http://%1/get-update?version=%2&platform=%3')
+            .arg('redisdesktop.com')
+            .arg(QCoreApplication::applicationVersion())
+            .arg(platform)
+        );
