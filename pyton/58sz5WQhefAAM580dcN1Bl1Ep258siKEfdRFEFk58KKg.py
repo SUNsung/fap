@@ -1,255 +1,178 @@
 
         
-          Args:
-    pairs: the word pairs (list of tuple of two strings).
-    labels: the gold-standard labels for these pairs (array of rel ID).
-    predictions: the predicted labels for these pairs (array of rel ID).
-    classes: a list of relation names.
-    predictions_file: where to save the predictions.
-  '''
-  with open(predictions_file, 'w') as f_out:
-    for pair, label, pred in zip(pairs, labels, predictions):
-      w1, w2 = pair
-      f_out.write('\t'.join([w1, w2, classes[label], classes[pred]]) + '\n')
-
-    
-      if FLAGS.noise_type == 'poisson':
-    noisy_data = spikify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  elif FLAGS.noise_type == 'gaussian':
-    noisy_data = gaussify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  else:
-    raise ValueError('Only noise types supported are poisson or gaussian')
-    
-      return data_e, x0s, inputs_e
-    
-        sys.stderr.write('Eval Step: %d, Average Perplexity: %f.\n' %
-                     (i, perplexity))
-    
-        yield (x, y, w)
-
-    
-    
-def create_dis_train_op(hparams, dis_loss, global_step):
-  '''Create Discriminator train op.'''
-  with tf.name_scope('train_discriminator'):
-    dis_optimizer = tf.train.AdamOptimizer(hparams.dis_learning_rate)
-    dis_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
-    ]
-    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
-      shared_embedding = [
-          v for v in tf.trainable_variables()
-          if v.op.name == 'gen/decoder/rnn/embedding'
-      ][0]
-      dis_vars.append(shared_embedding)
-    print('\nOptimizing Discriminator vars:')
-    for v in dis_vars:
-      print(v)
-    dis_grads = tf.gradients(dis_loss, dis_vars)
-    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
-                                                  FLAGS.grad_clipping)
-    dis_train_op = dis_optimizer.apply_gradients(
-        zip(dis_grads_clipped, dis_vars), global_step=global_step)
-    return dis_train_op, dis_grads_clipped, dis_vars
-    
-          # combine cell_input and attention
-      next_input = tf.concat([cell_input, attention], 1)
-    
-        template = template.replace('@SITES@', textwrap.indent('\n'.join(ie_htmls), '\t'))
-    
-    import io
-import optparse
-    
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
-    
-                        # Pandoc's definition_lists. See http://pandoc.org/README.html
-                    # for more information.
-                    ret += '\n%s\n:   %s\n' % (option, description)
-                    continue
-            ret += line.lstrip() + '\n'
+        
+def check_entry(line_num, segments):
+    # START Title
+    raw_title = segments[index_title]
+    title_re_match = link_re.match(raw_title)
+    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
+    if not title_re_match:
+        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
+    else:
+        # do not allow '... API' in the entry title
+        title = title_re_match.group(1)
+        if title.upper().endswith(' API'):
+            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
+        # do not allow duplicate links
+        link = title_re_match.group(2)
+        if link in previous_links:
+            add_error(line_num, 'Duplicate link - entries should only be included in one section')
         else:
-            ret += line + '\n'
+            previous_links.append(link)
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
     
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
+    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
     
-        if not HAS_PYTHON26:
-        module.fail_json(
-            msg='GCE module requires python's 'ast' module, python v2.6+')
+    if __name__ == '__main__':
+    list_n_samples = np.linspace(100, 10000, 5).astype(np.int)
+    list_n_features = [10, 100, 1000]
+    n_test = 1000
+    max_iter = 1000
+    noise = 0.1
+    alpha = 0.01
+    sgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    elnet_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    ridge_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    asgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    for i, n_train in enumerate(list_n_samples):
+        for j, n_features in enumerate(list_n_features):
+            X, y, coef = make_regression(
+                n_samples=n_train + n_test, n_features=n_features,
+                noise=noise, coef=True)
     
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
-    
-        module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True
-                           )
+    Does two benchmarks
     
     
 if __name__ == '__main__':
-    main()
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    legend2_values_list = list(legend2.values())
+legend2_keys_list = list(legend2.keys())
+    
+    We generate data from three groups of waveforms. Two of the waveforms
+(waveform 1 and waveform 2) are proportional one to the other. The cosine
+distance is invariant to a scaling of the data, as a result, it cannot
+distinguish these two waveforms. Thus even with no noise, clustering
+using this distance will not separate out waveform 1 and 2.
+    
+    fig.show()
 
     
-            self.module.exit_json(changed=change_applied)
+    import numpy as np
+import matplotlib.pyplot as plt
     
-        if module.params.get('state') == 'present':
-        add_device()
-    else:
-        remove_device()
     
-        module = AnsibleModule(
-        argument_spec=dict(
-            key=dict(required=True),
-            event=dict(required=True, choices=['deploy', 'annotation']),
-            msg=dict(),
-            revision_id=dict(),
-            annotated_by=dict(default='Ansible'),
-            level=dict(default='INFO', choices=['INFO', 'WARN', 'ERROR']),
-            instance_id=dict(),
-            event_epoch=dict(),
-            deployed_by=dict(default='Ansible'),
-            deployed_to=dict(),
-            repository=dict(),
-        ),
-        supports_check_mode=True
-    )
+def best_server(probe_nat=False):
+    best_server = None
+    prober = new_pteredor(probe_nat=probe_nat)
+    prober.qualified = True
+    if not probe_nat:
+        prober.nat_type = 'unknown'
+        prober.rs_cone_flag = 0
     
-        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
-    # JSONObjectWithFields is tricky...
-    header_cls = Header
-    header = jose.Field(
-        'header', omitempty=True, default=header_cls(),
-        decoder=header_cls.from_json)
+    '''
     
-            self.assertEqual(len(self.parser.filter_args_num(matches, 1)), 3)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 2)), 2)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 3)), 1)
+    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
+# by parser.
+HIDDEN_CHANNEL = 99
     
-            print('****************** Testing Edit Distance DP Algorithm ******************')
-        print()
+        def backwards(self, orm):
+        'Write your backwards methods here.'
     
-    def revise_centroids(data, k, cluster_assignment):
-    new_centroids = []
-    for i in range(k):
-        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
-        member_data_points = data[cluster_assignment==i]
-        # Compute the mean of the data points. Fill in the blank (RHS only)
-        centroid = member_data_points.mean(axis=0)
-        new_centroids.append(centroid)
-    new_centroids = np.array(new_centroids)
     
-    return new_centroids
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'VersionDSymFile'
+        db.create_table(
+            'sentry_versiondsymfile', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProjectDSymFile'], null=True
+                    )
+                ), (
+                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.DSymApp']
+                    )
+                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
+                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['VersionDSymFile'])
     
-            a += a
-        b >>= 1
-    
-    def getLetterCount(message):
-    letterCount = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0, 'H': 0,
-                   'I': 0, 'J': 0, 'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0,
-                   'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 'W': 0, 'X': 0,
-                   'Y': 0, 'Z': 0}
-    for letter in message.upper():
-        if letter in LETTERS:
-            letterCount[letter] += 1
-    
-    Win1250HungarianModel = {
-  'char_to_order_map': win1250HungarianCharToOrderMap,
-  'precedence_matrix': HungarianLangModel,
-  'typical_positive_ratio': 0.947368,
-  'keep_english_letter': True,
-  'charset_name': 'windows-1250',
-  'language': 'Hungarian',
-}
-
-    
-    SJIS_CLS = (
-    1,1,1,1,1,1,1,1,  # 00 - 07
-    1,1,1,1,1,1,0,0,  # 08 - 0f
-    1,1,1,1,1,1,1,1,  # 10 - 17
-    1,1,1,0,1,1,1,1,  # 18 - 1f
-    1,1,1,1,1,1,1,1,  # 20 - 27
-    1,1,1,1,1,1,1,1,  # 28 - 2f
-    1,1,1,1,1,1,1,1,  # 30 - 37
-    1,1,1,1,1,1,1,1,  # 38 - 3f
-    2,2,2,2,2,2,2,2,  # 40 - 47
-    2,2,2,2,2,2,2,2,  # 48 - 4f
-    2,2,2,2,2,2,2,2,  # 50 - 57
-    2,2,2,2,2,2,2,2,  # 58 - 5f
-    2,2,2,2,2,2,2,2,  # 60 - 67
-    2,2,2,2,2,2,2,2,  # 68 - 6f
-    2,2,2,2,2,2,2,2,  # 70 - 77
-    2,2,2,2,2,2,2,1,  # 78 - 7f
-    3,3,3,3,3,2,2,3,  # 80 - 87
-    3,3,3,3,3,3,3,3,  # 88 - 8f
-    3,3,3,3,3,3,3,3,  # 90 - 97
-    3,3,3,3,3,3,3,3,  # 98 - 9f
-    #0xa0 is illegal in sjis encoding, but some pages does
-    #contain such byte. We need to be more error forgiven.
-    2,2,2,2,2,2,2,2,  # a0 - a7
-    2,2,2,2,2,2,2,2,  # a8 - af
-    2,2,2,2,2,2,2,2,  # b0 - b7
-    2,2,2,2,2,2,2,2,  # b8 - bf
-    2,2,2,2,2,2,2,2,  # c0 - c7
-    2,2,2,2,2,2,2,2,  # c8 - cf
-    2,2,2,2,2,2,2,2,  # d0 - d7
-    2,2,2,2,2,2,2,2,  # d8 - df
-    3,3,3,3,3,3,3,3,  # e0 - e7
-    3,3,3,3,3,4,4,4,  # e8 - ef
-    3,3,3,3,3,3,3,3,  # f0 - f7
-    3,3,3,3,3,0,0,0)  # f8 - ff
-    
-        def get_confidence(self):
-        context_conf = self.context_analyzer.get_confidence()
-        distrib_conf = self.distribution_analyzer.get_confidence()
-        return max(context_conf, distrib_conf)
+        complete_apps = ['sentry']
 
     
     
-def get_tls_version(environment):
-    compose_tls_version = environment.get('COMPOSE_TLS_VERSION', None)
-    if not compose_tls_version:
-        return None
+class TestDynamicExpanding(unittest.TestCase):
+    def setUp(self):
+        self.John = Person('John', 'Coder')
     
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
     
-def format_return(result, max_lines):
-    if isinstance(result, (list, tuple, set)):
-        return '({0} with {1} items)'.format(type(result).__name__, len(result))
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
+        from pprint import pprint
     
-class TLSConfigTestCase(unittest.TestCase):
-    cert_path = 'tests/fixtures/tls/'
-    ca_cert = os.path.join(cert_path, 'ca.pem')
-    client_cert = os.path.join(cert_path, 'cert.pem')
-    key = os.path.join(cert_path, 'key.pem')
+        @staticmethod
+    def check_range(request):
+        if 0 <= request < 10:
+            print('request {} handled in handler 0'.format(request))
+            return True
