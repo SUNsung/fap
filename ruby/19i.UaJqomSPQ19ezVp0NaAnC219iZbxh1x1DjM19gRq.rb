@@ -1,159 +1,169 @@
 
         
-            def initialize
-      @async = !Rails.env.test?
-      @queue = Queue.new
-      @mutex = Mutex.new
-      @paused = false
-      @thread = nil
-      @reactor = nil
-      @timeout = DEFAULT_TIMEOUT
-    end
-    
-      def self.period_types
-    @types ||= Enum.new(all: 1,
-                        yearly: 2,
-                        monthly: 3,
-                        weekly: 4,
-                        daily: 5,
-                        quarterly: 6)
-  end
-    
-        private
-    
-              # options
-          p.css('li[#{DATA_PREFIX}option-id]').each do |o|
-            option_id = o.attributes[DATA_PREFIX + 'option-id'].value.to_s
-            poll['options'] << { 'id' => option_id, 'html' => o.inner_html.strip }
+                  lfs_objects.each do |object|
+            yield object
           end
-    
-          it 'handles the extension parameter correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb')
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.rb')
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
+        end
       end
+    end
+  end
+end
+
     
-        # Determines the defined data type of this ConfigItem
-    def data_type
-      if @data_type.kind_of?(Symbol)
-        nil
-      elsif @data_type
-        @data_type
+            def id_for_already_imported_cache(note)
+          note.id
+        end
+      end
+    end
+  end
+end
+
+    
+              new(hash)
+        end
+    
+        def extract_to_dir(unpack_dir, basename:, verbose:)
+      system_command! AIR_APPLICATION_INSTALLER,
+                      args:    ['-silent', '-location', unpack_dir, path],
+                      verbose: verbose
+    end
+  end
+end
+
+    
+        def URIAddEncodedOctetToBuffer(octet, result, index)
+      result[index] = 37; # Char code of '%'.
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet >> 4];
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet & 0x0F];
+      index += 1
+      return index;
+    end
+    
+    opts = OptionParser.new do |opts|
+  # define program name (although this defaults to the name of the file, just in case...)
+  opts.program_name = 'gollum'
+    
+  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
+  opts.banner = '
+  Gollum is a multi-format Wiki Engine/API/Frontend.
+    
+  Usage:
+      gollum [options] [git-repo]
+    
+  Arguments:
+      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
+  
+  Notes:
+      Paths for all options are relative to <git-repo> unless absolute.
+      This message is only a basic description. For more information, please visit:
+          https://github.com/gollum/gollum
+  
+  OPTIONS'
+  
+  # define gollum options  
+  opts.separator ''
+  opts.separator '  Major:'
+  
+  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
+    options[:bind] = host
+  end
+  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
+    begin
+      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
+      options[:port] = Integer(port)
+    rescue ArgumentError
+      puts 'Error: '#{port}' is not a valid port number.'
+      exit 1
+    end
+  end
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
+    options[:config] = file
+  end
+  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
+    wiki_options[:ref] = ref
+  end
+  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
+    wiki_options[:repo_is_bare] = true
+  end
+  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
+    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
+      
+    # first trim a leading slash, if any
+    base_path.sub!(/^\/+/, '')
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
       else
-        (@is_string ? String : nil)
+        fail ArgumentError, 'emoji `#{name}' not found'
       end
     end
     
-      # GET /resource/unlock?unlock_token=abcdef
-  def show
-    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
-    yield resource if block_given?
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
     
-    MESSAGE
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+    
+    desc 'Deploy website via rsync'
+task :rsync do
+  exclude = ''
+  if File.exists?('./rsync-exclude')
+    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
   end
+  puts '## Deploying website via Rsync'
+  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
+end
     
-      before_action :authenticate_user!
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
       end
-    
-            # Recreate the user based on the stored cookie
-        def serialize_from_cookie(*args)
-          id, token, generated_at = *args
-    
-        def root
-      _yaml_root || _project_root
+      super
     end
     
-            expect(project.startup_window).to eq('sample:8')
-      end
-    end
-  end
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
     
-          def default
-        '#{directory}/default.yml'
-      end
-    
-        context 'and there is no local project config' do
-      context 'when no args are supplied' do
-        it 'should call ::start' do
-          expect(cli).to receive(:start).with([])
-          subject
-        end
-      end
-    
-        def attach?
-      yaml_attach = if yaml['attach'].nil?
-                      true
-                    else
-                      yaml['attach']
-                    end
-      attach = force_attach || !force_detach && yaml_attach
-      attach
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
     end
     
-          # Store the result ready to return
-      result = {:message_id => nil, :messages => {}}
-      params.rcpt_to.uniq.each do |rcpt_to|
-        message = identity.server.message_db.new_message
-        message.rcpt_to = rcpt_to
-        message.mail_from = params.mail_from
-        message.raw_message = raw_message
-        message.received_with_ssl = true
-        message.scope = 'outgoing'
-        message.domain_id = authenticated_domain.id
-        message.credential_id = identity.id
-        message.bounce = params.bounce ? 1 : 0
-        message.save
-        result[:message_id] = message.message_id if result[:message_id].nil?
-        result[:messages][rcpt_to] = {:id => message.id, :token => message.token}
-      end
-      result
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
+    
+        def blank_name?
+      @filepath.nil? || @filepath.empty?
     end
-  end
-    
-        if current_user.admin?
-      @domain.verification_method = 'DNS'
-      @domain.verified_at = Time.now
-    end
-    
-      def destroy
-    @http_endpoint.destroy
-    redirect_to_with_json [organization, @server, :http_endpoints]
-  end
-    
-      def held
-    get_messages('held')
-  end
