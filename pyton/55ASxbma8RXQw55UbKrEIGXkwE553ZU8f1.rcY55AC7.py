@@ -1,135 +1,101 @@
 
         
-        with tf.Session() as sess:
-  # restore the latest model ckpt
-  if FLAGS.checkpoint_path == 'SAMPLE_CHECKPOINT':
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    model_checkpoint_path = os.path.join(dir_path, 'trained_itb/model-65000')
-  else:
-    model_checkpoint_path = FLAGS.checkpoint_path
-  try:
-    saver.restore(sess, model_checkpoint_path)
-    print ('Model restored from', model_checkpoint_path)
-  except:
-    assert False, ('No checkpoints to restore from, is the path %s correct?'
-                   %model_checkpoint_path)
+            messages = {
+        'missing_keys': _('Some keys were missing: %(keys)s'),
+        'extra_keys': _('Some unknown keys were provided: %(keys)s'),
+    }
+    strict = False
     
-      Args:
-    datasets: The dictionary of dataset structures.
-    npcs:  The number of pcs for each, basically like lfads factors.
-    nsamples (optional): Number of samples to take for each dataset.
-    ntime (optional): Number of time steps to take in each sample.
+        @classmethod
+    def get_model_class(cls):
+        # Avoids a circular import and allows importing SessionStore when
+        # django.contrib.sessions is not in INSTALLED_APPS.
+        from django.contrib.sessions.models import Session
+        return Session
     
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
     
-PAD = '<padding>'
+            # Force reload if files were modified
+        # This is needed to recalculate augeas directive span
+        if save_files:
+            for sf in save_files:
+                self.aug.remove('/files/'+sf)
+            self.aug.load()
+        if title and not temporary:
+            self.finalize_checkpoint(title)
     
-    import tensorflow as tf
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
     
-      # 0th token always present.
-  p = np.concatenate((np.ones((FLAGS.batch_size, 1)), p), axis=1)
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-      Returns:
-    loss: Scalar tf.float32 total loss.
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  gan_loss = -tf.log(dis_predictions)
-  loss_matrix = tf.where(is_real_input, cross_entropy_loss, gan_loss)
-  return tf.reduce_mean(loss_matrix)
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
     
-        for index, pred in zip(index_batch, pred_batch):
-      indices_predictions.append([str(id_to_word[index]), pred])
-    batch_of_indices_predictions.append(indices_predictions)
-  return batch_of_indices_predictions
-    
-      Args:
-    init_savers:  Dictionary of init_savers.  'init_saver_name': init_saver.
-    sess:  tf.Session.
-  '''
-  ## Load Generator weights from MaskGAN checkpoint.
-  if FLAGS.maskgan_ckpt:
-    print('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
-    tf.logging.info('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
-    print('Asserting Generator is a seq2seq-variant.')
-    tf.logging.info('Asserting Generator is a seq2seq-variant.')
-    assert FLAGS.generator_model.startswith('seq2seq')
-    init_saver = init_savers['init_saver']
-    init_saver.restore(sess, FLAGS.maskgan_ckpt)
-    
-        yield app
-    
-    # the signals
-from .signals import (
-    signals_available,
-    template_rendered,
-    request_started,
-    request_finished,
-    got_request_exception,
-    request_tearing_down,
-    appcontext_tearing_down,
-    appcontext_pushed,
-    appcontext_popped,
-    message_flashed,
-    before_render_template,
-)
-    
-            This is often useful when configuration options map directly to
-        keyword arguments in functions or class constructors.
-    
-        def pop(self, exc=_sentinel):
-        '''Pops the request context and unbinds it by doing that.  This will
-        also trigger the execution of functions registered by the
-        :meth:`~flask.Flask.teardown_request` decorator.
-    
-    from ..utils import get_wb
-from ..activations import relu
-from ..activations import linear
-    
-        return o
-    
-    References:
-    [paper] Bidirectional Attention Flow for Machine Comprehension (https://arxiv.org/abs/1611.01603)
-    [github/DuReader] https://github.com/baidu/DuReader/blob/master/tensorflow/layers/match_layer.py
-    [github/BiDAF(PyTorch)] https://github.com/jojonki/BiDAF/blob/master/layers/bidaf.py
-'''
-    
-        def __call__(self, x):
-        '''
-        Args:
-            x: 注意 x.dtype == float32
-        '''
-        # x = tf.cast(x, dtype=tf.float32)  # 交给外部处理
-        loss_regularization = 0.
-        if self.l1:
-            loss_regularization += tf.reduce_sum(self.l1 * tf.abs(x))
-        if self.l2:
-            loss_regularization += tf.reduce_sum(self.l2 * tf.square(x))
-        return loss_regularization
-    
-    SPLIT_LINE = '-----------'
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = u'0'
+# The full version, including alpha/beta/rc tags.
+release = u'0'
     
     
-def permute(x, perm):
-    '''
-    Examples:
-        x.shape == [128, 32, 1]
-        x = permute(x, [0, 2, 1])
-        x.shape == [128, 1, 32]
+class ChineseTokenizer(Tokenizer):
+    
+        def __cut_detail(self, sentence):
+        blocks = re_han_detail.split(sentence)
+        for blk in blocks:
+            if re_han_detail.match(blk):
+                for word in self.__cut(blk):
+                    yield word
+            else:
+                tmp = re_skip_detail.split(blk)
+                for x in tmp:
+                    if x:
+                        if re_num.match(x):
+                            yield pair(x, 'm')
+                        elif re_eng.match(x):
+                            yield pair(x, 'eng')
+                        else:
+                            yield pair(x, 'x')
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    content = open(file_name, 'rb').read()
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+    nmf = decomposition.NMF(n_components=n_topic).fit(tfidf)
+print('done in %0.3fs.' % (time.time() - t0))
     
     
-def HandlePollResponse_MultipleDiagnostics_test():
-  diagnostics_handler = ExtendedMock()
-  messages = [
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
-    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
-    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
-  ]
-  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
-               equal_to( True ) )
-  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
-    call( 'foo', [ 'PLACEHOLDER1' ] ),
-    call( 'bar', [ 'PLACEHOLDER2' ] ),
-    call( 'baz', [ 'PLACEHOLDER3' ] ),
-    call( 'foo', [ 'PLACEHOLDER4' ] )
-  ] )
+
+    
+    t2 = time.time()
+tm_cost = t2-t1
+    
+            reset_mocap2body_xpos(sim)
+        sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
+        sim.data.mocap_quat[:] = sim.data.mocap_quat + quat_delta
+    
+    import sys, gym, time
