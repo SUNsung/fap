@@ -1,241 +1,162 @@
 
         
-                    content
-          end
-        end
+          context 'as an admin' do
+    before :each do
+      login_as(users(:jane))
+    end
     
-          def with_module
-        render inline: 'Module <%= included_method %>'
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+        it 'returns a correct icon tag for GitHub' do
+      icon = omniauth_provider_icon(:github)
+      expect(icon).to be_html_safe
+      elem = Nokogiri(icon).at('i.fa.fa-github')
+      expect(elem).to be_a Nokogiri::XML::Element
+    end
+    
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+    
+          it 'handles signals' do
+        @agent_runner.instance_variable_set(:@signal_queue, ['TERM'])
+        @agent_runner.run
       end
     end
     
-            def id_for_already_imported_cache(note)
-          note.id
-        end
-      end
+        it 'should work with the human task agent' do
+      valid_params = {
+        'expected_receive_period_in_days' => 2,
+        'trigger_on' => 'event',
+        'hit' =>
+          {
+            'assignments' => 1,
+            'title' => 'Sentiment evaluation',
+            'description' => 'Please rate the sentiment of this message: '<$.message>'',
+            'reward' => 0.05,
+            'lifetime_in_seconds' => 24 * 60 * 60,
+            'questions' =>
+              [
+                {
+                  'type' => 'selection',
+                  'key' => 'sentiment',
+                  'name' => 'Sentiment',
+                  'required' => 'true',
+                  'question' => 'Please select the best sentiment value:',
+                  'selections' =>
+                    [
+                      { 'key' => 'happy', 'text' => 'Happy' },
+                      { 'key' => 'sad', 'text' => 'Sad' },
+                      { 'key' => 'neutral', 'text' => 'Neutral' }
+                    ]
+                },
+                {
+                  'type' => 'free_text',
+                  'key' => 'feedback',
+                  'name' => 'Have any feedback for us?',
+                  'required' => 'false',
+                  'question' => 'Feedback',
+                  'default' => 'Type here...',
+                  'min_length' => '2',
+                  'max_length' => '2000'
+                }
+              ]
+          }
+      }
+      @agent = Agents::HumanTaskAgent.new(:name => 'somename', :options => valid_params)
+      @agent.user = users(:jane)
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options['hit']['description']).to eq('Please rate the sentiment of this message: '{{message}}'')
     end
   end
 end
-
     
-          def cache_key
-        CACHE_KEY % {
-          project: project.id,
-          type: cache_key_type,
-          iid: cache_key_iid
-        }
-      end
+        stub_request(:get, /trackings/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
     
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-      end
-    end
-  end
-end
-
-    
-            if controller.content_type == 'text/html'
-          action
-        else
-          '#{action} (#{controller.content_type})'
-        end
-      end
-    
-      it 'allows to click on on the agent name in select2 tags' do
-    visit new_agent_path
-    select_agent_type('Website Agent scrapes')
-    select2('SF Weather', from: 'Sources')
-    click_on 'SF Weather'
-    expect(page).to have_content 'Editing your WeatherAgent'
-  end
-    
-    describe ScenarioHelper do
-  let(:scenario) { users(:bob).scenarios.build(name: 'Scene', tag_fg_color: '#AAAAAA', tag_bg_color: '#000000') }
-    
-            context 'when the schema_version is less than 1' do
-          before do
-            valid_parsed_weather_agent_data[:keep_events_for] = 2
-            valid_parsed_data.delete(:schema_version)
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
           end
+        end
     
-    describe AgentRunner do
-  context 'without traps' do
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+    RSpec::Matchers.define :have_path_in do |expected|
+  match do |actual|
+    await_condition { expected.include? actual.current_path }
+  end
+    
+    describe ContactsController, :type => :controller do
+  describe '#index' do
     before do
-      stub.instance_of(Rufus::Scheduler).every
-      stub.instance_of(AgentRunner).set_traps
-      @agent_runner = AgentRunner.new
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
     end
     
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
-    }
-  end
-    
-        def root_page?
-      subpath.blank? || subpath == '/' || subpath == root_path
+        it 'generates a jasmine fixture', :fixture => true do
+      get :bookmarklet
+      save_fixture(html_for('body'), 'bookmarklet')
     end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+        it 'marks a notification as unread if it is told to' do
+      note = FactoryGirl.create(:notification)
+      expect(Notification).to receive(:where).and_return([note])
+      expect(note).to receive(:set_read_state).with(false)
+      get :update, params: {id: note.id, set_unread: 'true'}, format: :json
     end
     
-          def initialize(limit)
-        @limit = limit
-        @minute = nil
-        @counter = 0
+          # Returns the keyword of the `case` statement as a string.
+      #
+      # @return [String] the keyword of the `case` statement
+      def keyword
+        'case'
       end
     
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
-        end
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-            css('header').each do |node|
-          node.before(node.children).remove
-        end
+            private
     
-              # First determine the proper array of VMs.
-          vms = []
-          if names.length > 0
-            names.each do |name|
-              if pattern = name[/^\/(.+?)\/$/, 1]
-                # This is a regular expression name, so we convert to a regular
-                # expression and allow that sort of matching.
-                regex = Regexp.new(pattern)
+            def correct(processed_source, node,
+                    previous_declaration, comments_as_separators)
+          @processed_source = processed_source
+          @comments_as_separators = comments_as_separators
     
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
+            private
     
-            # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
-    
-              results
-        end
-    
-          @report_note = current_account.report_notes.new(resource_params)
-      @report = @report_note.report
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
-    else
-      ['Unknown mode: #{hub_mode}', 422]
-    end
-  end
-    
-      def future_expires
-    Time.now.utc + lease_seconds_or_default
-  end
-    
-      def setting
-    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
-  end
+      puts '\n== Restarting application server =='
+  system! 'bin/rails restart'
 end
 
     
-      private
-    
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
-    
-      SPREE_GEMS.each do |gem_name|
-    rm_f  '#{gem_name}/Gemfile.lock'
-    rm_rf '#{gem_name}/pkg'
-    rm_rf '#{gem_name}/spec/dummy'
-  end
-end
-    
-            def empty
-          authorize! :update, @order, order_token
-          @order.empty!
-          render plain: nil, status: 204
-        end
-    
-              def remove_store_credit_service
-            Spree::Api::Dependencies.storefront_checkout_remove_store_credit_service.constantize
-          end
-    
-          @@inventory_unit_attributes = [
-        :id, :lock_version, :state, :variant_id, :shipment_id,
-        :return_authorization_id
-      ]
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
