@@ -1,94 +1,207 @@
 
         
-        task :default => :test
-task :spec => :test
+        Rails.application.initialize!
     
-    module Sinatra
-  # Sinatra::ShowExceptions catches all exceptions raised from the app it
-  # wraps. It shows a useful backtrace with the sourcefile and clickable
-  # context, the whole Rack environment and the request data.
-  #
-  # Be careful when you use this on public-facing sites as it could reveal
-  # information helpful to attackers.
-  class ShowExceptions < Rack::ShowExceptions
-    @@eats_errors = Object.new
-    def @@eats_errors.flush(*) end
-    def @@eats_errors.puts(*) end
-    
-          def empty_cookie(host, path)
-        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+          def stored_location_key_for(resource_or_scope)
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        '#{scope}_return_to'
       end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
     end
     
-        class << self
-      def elastic_pack_base_uri
-        env_url = ENV['LOGSTASH_PACK_URL']
-        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+          def time_from_json(value)
+        if value =~ /\A\d+\.\d+\Z/
+          Time.at(value.to_f)
+        else
+          Time.parse(value) rescue nil
+        end
       end
     
-          post_install_messages.compact.each do |message|
-        PluginManager.ui.info(message)
+          # Look for IAX_AUTH_MD5 (2) as an available auth method
+      if res[2][14].unpack('n')[0] & 2 <= 0
+        dprint('REGAUTH: MD5 authentication is not enabled on the server')
+        return
       end
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+            private
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
+          #
+          # @return [String] encoded principal
+          def encode
+            encoded = ''
+            encoded << encode_name_type
+            encoded << [components.length].pack('N')
+            encoded << encode_realm
+            encoded << encode_components
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+                cipher = OpenSSL::Cipher.new('rc4')
+            cipher.encrypt
+            cipher.key = k3
+            encrypted = cipher.update(data_encrypt) + cipher.final
+    
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+              # Decodes the start_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_start_time(input)
+            input.value[0].value
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcRequest from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcRequest, invalid input'
+            end
+    
+              # Decodes the ticket field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::Ticket]
+          def decode_ticket(input)
+            Rex::Proto::Kerberos::Model::Ticket.decode(input.value[0])
+          end
+    
+    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
+# requests with `config.assets.quiet`, because the default silence method of
+# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
+Logging::Logger.send :alias_method, :local_level, :level
+Logging::Logger.send :alias_method, :local_level=, :level=
+Logging::Logger.send :include, LoggerSilence
+
+    
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+    describe ConversationsController, :type => :controller do
+  describe '#index' do
+    before do
+      @person = alice.contacts.first.person
+      hash = {
+        :author => @person,
+        :participant_ids => [alice.person.id, @person.id],
+        :subject => 'not spam',
+        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      }
+      @conv1 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+    
+        context 'on my own post' do
+      it 'succeeds' do
+        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
+        post :create, params: like_hash, format: :json
+        expect(response.code).to eq('201')
+      end
+    end
+    
+        context 'on a public post from a stranger' do
+      before do
+        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+      end
+    
+          it 'returns reshares without login' do
+        bob.reshare!(@post)
+        sign_out :user
+        get :index, params: {post_id: @post.id}, format: :json
+        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
       end
     end
   end
 end
 
     
-          def footer
-        if @footer.nil?
-          if page = @page.footer
-            @footer = page.text_data
-          else
-            @footer = false
-          end
-        end
-        @footer
+    # Website =============================================================
+    
+          def xor_byte_strings(s1, s2)
+        s1.bytes.zip(s2.bytes).map { |(c1,c2)| c1 ^ c2 }.pack('c*')
       end
-    
-          # Extracts title from page if present.
-      #
-      def page_header_from_content(content)
-        doc   = build_document(content)
-        title = find_header_node(doc).inner_text.strip
-        title = nil if title.empty?
-        title
-      end
-    
-      test 'utf-8 kcode' do
-    assert_equal 'μ†ℱ'.scan(/./), ['μ', '†', 'ℱ']
-  end
-    
-        assert body.include?('<span class='username'>Charles Pence</span>'), '/latest_changes should include the Author Charles Pence'
-    assert body.include?('a8ad3c0'), '/latest_changes should include the :latest_changes_count commit'
-    assert !body.include?('60f12f4'), '/latest_changes should not include more than latest_changes_count commits'
-    assert body.include?('<a href='Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e'>Data-Two.csv</a>'), '/latest_changes include links to modified files in #{body}'
-    assert body.include?('<a href='Hobbit/874f597a5659b4c3b153674ea04e406ff393975e'>Hobbit.md</a>'), '/latest_changes should include links to modified pages in #{body}'
-  end
-    
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
-      end
-    end
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
   end
 end
+
+    
+        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
+    expect(last_response).to be_ok
+  end
+    
+      it 'should set the Content Security Policy' do
+    expect(
+      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
+    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
+  end
+    
+            include Spree::Core::ControllerHelpers::Auth
+        include Spree::Core::ControllerHelpers::Order
+        # This before_action comes from Spree::Core::ControllerHelpers::Order
+        skip_before_action :set_current_order
+    
+            def mine
+          if current_api_user.persisted?
+            @orders = current_api_user.orders.reverse_chronological.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          else
+            render 'spree/api/errors/unauthorized', status: :unauthorized
+          end
+        end
+    
+                result = update_service.call(
+              order: spree_current_order,
+              params: params,
+              # defined in https://github.com/spree/spree/blob/master/core/lib/spree/core/controller_helpers/strong_parameters.rb#L19
+              permitted_attributes: permitted_checkout_attributes,
+              request_env: request.headers.env
+            )
+    
+    @@ index
+  <h1>Sinatra + Sidekiq Example</h1>
+  <h2>Failed: <%= @failed %></h2>
+  <h2>Processed: <%= @processed %></h2>
+    
+      # Enable/disable caching. By default caching is disabled.
+  # Run rails dev:cache to toggle caching.
+  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+    config.action_controller.perform_caching = true
