@@ -1,93 +1,62 @@
 
         
-        SUITE.each do |key, text|
-  Benchmark.ips do |x|
-    x.report('regex-check   - #{key}') { check_with_regex(text) }
-    x.report('builtin-check - #{key}') { check_with_builtin(text) }
-    x.compare!
-  end
-end
-# ------------------------------------------------------------------------
-    
-    # No trailing slash
+        # Just a slash
 Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
+  path = '/'
   x.report('pre_pr:#{path}')    { pre_pr(path) }
   x.report('pr:#{path}')        { pr(path) }
   x.report('envygeeks:#{path}') { pr(path) }
   x.compare!
 end
     
-    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
-COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-                  EM.start_server(
-                opts['host'],
-                opts['livereload_port'],
-                HttpAwareConnection,
-                opts
-              ) do |ws|
-                handle_websockets_event(ws)
-              end
-    
-        def url
-      @url ||= URL.parse request.base_url
-    end
-    
-          max_length = if tag = str.slice!(/ \[.+\]\z/)
-        terminal_width - tag.length
-      else
-        terminal_width
-      end
-    
-          private
-    
-              # Lock this machine
-          lock_file = lock_machine(uuid)
-          if !lock_file
-            raise Errors::MachineLocked,
-              name: entry.name,
-              provider: entry.provider
-          end
-    
-            def initialize(argv, env)
-          @argv = argv
-          @env  = env
-          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
+    module Jekyll
+  module Filters
+    module GroupingFilters
+      # Group an array of items by a property
+      #
+      # input - the inputted Enumerable
+      # property - the property
+      #
+      # Returns an array of Hashes, each looking something like this:
+      #  {'name'  => 'larry'
+      #   'items' => [...] } # all the items where `property` == 'larry'
+      def group_by(input, property)
+        if groupable?(input)
+          groups = input.group_by { |item| item_property(item, property).to_s }
+          grouped_array(groups)
+        else
+          input
         end
-    
-            # This returns all the action hooks.
-        #
-        # @return [Array]
-        def action_hooks(hook_name)
-          result = []
-    
-    def pboard
-  return # skip print
-  print 'No. #$no\n'
-  (0...COL).each{|i|
-    print '|'
-    (0...ROW-NP).each{|j|
-      x = $b[i*ROW+j]
-      if x < 0
-        print '..|'
-      else
-        printf '%2d|',x+1
       end
-    }
-    print '\n'
-  }
-  print '\n'
-end
     
-        prefixes
+        status, headers, body = @app.call(env)
+    headers ||= {}
+    
+        plugin.enabled = true
+    expect(parse(policy)['script-src']).to include('https://from-plugin.com')
+    expect(parse(policy)['object-src']).to include('https://test-stripping.com')
+    expect(parse(policy)['object-src']).to_not include(''none'')
+    
+          render plain: svg_sprite, disposition: nil, content_type: 'application/javascript'
+    end
   end
     
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+              if !poll
+            raise StandardError.new I18n.t('poll.no_poll_with_this_name', name: poll_name) if raise_errors
+            return
+          end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+    class Api::SalmonController < Api::BaseController
+  include SignatureVerification
+    
+      private
