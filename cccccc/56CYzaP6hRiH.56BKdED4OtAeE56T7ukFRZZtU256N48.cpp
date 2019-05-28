@@ -1,108 +1,145 @@
 
         
-        int ObjectQualityInfo60C::lateral_accel_rms(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(2, 5);
+        // if_ is a templatized conditional statement.
+// if_<cond, A, B> is a compile time evaluation of cond.
+// if_<>::type contains A if cond is true, B otherwise.
+template<bool cond, typename A, typename B>
+struct if_{
+  typedef A type;
+};
+    
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
+    
+    
+    { private:
+  const EnumDescriptor* descriptor_;
+  std::vector<const EnumValueDescriptor*> base_values_;
+  std::vector<const EnumValueDescriptor*> all_values_;
+  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
+  const string name_;
+};
+    
+        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 4));
     }
+    input_blob_names.push_back(GO(4));
     
-    namespace apollo {
-namespace planning {
-    }
-    }
+    REGISTER_CUDA_OPERATOR(LC1D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC1DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
-    #include 'modules/planning/math/smoothing_spline/spline_1d_seg.h'
-    
-    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateThirdOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
-  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
-      .cwiseProduct(term_matrix);
-}
-    
-    // config detail: {'name': 'encoder_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 7, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::encoder_temperature(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    // config detail: {'name': 'usr_can_timeout', 'offset': 0.0, 'precision': 1.0,
-// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 5,
-// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
-bool Globalrpt6a::usr_can_timeout(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(5, 1);
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-    int main (int argc, char **argv) {
-    }
-    
-    protected:
-    size_t capacity = 1;
-    bool closed = false;
-    std::list<Coroutine *> producer_queue;
-    std::list<Coroutine *> consumer_queue;
-    std::queue<void *> data_queue;
-    
-    
-    {    cache.clear();
-    ASSERT_EQ(cache.get('test'), nullptr);
-}
-    
-            size_t size = cache_list.size();
-        if (size == cache_capacity && size > 0)
-        {
-            auto del = cache_list.back();
-            cache_map.erase(del.first);
-            cache_list.pop_back();
-        }
-    
-        time_t start = time(nullptr);
-    while (i != 1000)
-    {
-        usleep(100);
-        
-        if ((time(nullptr) - start) > 3)
-        {
-            ASSERT_TRUE(false);
-        }
-    }
-    
-        unlink(sock1_path);
-    unlink(sock2_path);
-    
-    
-    {    sigemptyset(&curset);
-    sigprocmask(SIG_BLOCK, NULL, &curset);
-    ret = sigismember(&curset,SIGUSR1);
-    ASSERT_EQ(ret, 0);
-}
-#endif
+    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
 
     
     
-    {        G_a.x = 1234;
-        int y = 5678;
-        G_a.y = &y;
-        /**
-         * 这里协程挂起后，协程2 会执行，在协程2中修改了 x, y 值
-         * 协程2 退出或挂起后，重新回到协程1，这里的x和y的值已经不符合预期了
-         */
-        Coroutine::sleep(1);
-        //这里会显示 100
-        cout << 'X=' << G_a.x << endl;
-        //这里会读到空指针
-        cout << 'Y=' << *G_a.y << endl;
-    });
+    {    // Some corruption was detected.  'size' is the approximate number
+    // of bytes dropped due to the corruption.
+    virtual void Corruption(size_t bytes, const Status& status) = 0;
+  };
+    
+    
+    {  // OK status has a null state_.  Otherwise, state_ is a new[] array
+  // of the following form:
+  //    state_[0..3] == length of message
+  //    state_[4]    == code
+  //    state_[5..]  == message
+  const char* state_;
+};
+    
+    #ifndef STORAGE_LEVELDB_INCLUDE_TABLE_BUILDER_H_
+#define STORAGE_LEVELDB_INCLUDE_TABLE_BUILDER_H_
+    
+     private:
+  void GenerateFilter();
+    
+    TEST(CacheTest, HitAndMiss) {
+  ASSERT_EQ(-1, Lookup(100));
+    }
+    
+      Extension_ping_result result;
+  try {
+    iface_->ping(result.success);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, 'Extension.ping');
+    }
+    }
+    
+      uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+    
+      oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+    
+    class osqueryConstants {
+ public:
+  osqueryConstants();
+    }
+    
+    
+    {} // namespace osquery
+
+    
+    TEST_F(iokitDevicetree, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from iokit_devicetree');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'name', NormalType}
+  //      {'class', NormalType}
+  //      {'id', IntType}
+  //      {'parent', IntType}
+  //      {'device_path', NormalType}
+  //      {'service', IntType}
+  //      {'busy_state', IntType}
+  //      {'retain_count', IntType}
+  //      {'depth', IntType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
+    
+    
+    {  ValidatatioMap row_map = {{'filter_name', NonEmptyString},
+                            {'chain', NormalType},
+                            {'policy', NormalType},
+                            {'target', NormalType},
+                            {'protocol', IntType},
+                            {'src_port', IntMinMaxCheck(0, 65535)},
+                            {'dst_port', IntMinMaxCheck(0, 65535)},
+                            {'src_ip', verifyEmptyStringOrIpAddress},
+                            {'src_mask', verifyEmptyStringOrIpAddress},
+                            {'iniface', NormalType},
+                            {'iniface_mask', verifyEmptyStringOrIpAddress},
+                            {'dst_ip', verifyEmptyStringOrIpAddress},
+                            {'dst_mask', verifyEmptyStringOrIpAddress},
+                            {'outiface', NormalType},
+                            {'outiface_mask', verifyEmptyStringOrIpAddress},
+                            {'match', SpecificValuesCheck{'yes', 'no'}},
+                            {'packets', NonNegativeInt},
+                            {'bytes', NonNegativeInt}};
+  validate_rows(data, row_map);
+}
+    
+    // Sanity check integration test for kernel_integrity
+// Spec file: specs/linux/kernel_integrity.table
