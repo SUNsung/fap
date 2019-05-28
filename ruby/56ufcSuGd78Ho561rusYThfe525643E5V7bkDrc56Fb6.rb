@@ -1,73 +1,62 @@
 
         
-          def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+            def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
 end
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+    desc 'Default deploy task'
+task :deploy do
+  # Check if preview posts exist, which should not be published
+  if File.exists?('.preview-mode')
+    puts '## Found posts in preview mode, regenerating files ...'
+    File.delete('.preview-mode')
+    Rake::Task[:generate].execute
+  end
+    
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
 
     
-              self.reset_password_token   = enc
-          self.reset_password_sent_at = Time.now.utc
-          save(validate: false)
-          raw
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
         end
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
-  end
-end
-
     
-      # Get the contents of the script by a given name.
-  #
-  # If template_scripts? is set in attributes (often by the --template-scripts
-  # flag), then apply it as an ERB template.
-  def script(script_name)
-    if attributes[:template_scripts?]
-      erb = ERB.new(scripts[script_name], nil, '-')
-      # TODO(sissel): find the original file name for the file.
-      erb.filename = 'script(#{script_name})'
-      return erb.result(binding)
-    else
-      return scripts[script_name]
-    end
-  end # def script
+        def pre
+      _pre = yaml['pre']
     
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
-  end
-    
-          scripts_path(filename).tap do |pkgscript|
-        logger.info('Writing pkg script', :source => filename, :target => pkgscript)
-        File.write(pkgscript, script(scriptname))
-        # scripts are required to be executable
-        File.chmod(0755, pkgscript)
+            Tmuxinator::Project.load(project_file, options).validate!
       end
-    end
-  end # def write_scripts
     
-        attributes[:pleaserun_name] ||= File.basename(command.first)
-    attributes[:prefix] ||= '/usr/share/pleaserun/#{attributes[:pleaserun_name]}'
-    
-        def default_for(key)
-      self.class.send key
+          it 'returns true' do
+        expect(described_class.installed?).to be_truthy
+      end
     end
