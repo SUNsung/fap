@@ -1,120 +1,118 @@
 
         
-            it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
-    
-        context '#run' do
-      before do
-        mock(@agent_runner).run_workers
-      end
-    
-        it 'should convert the 'escape' method correctly' do
-      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
-                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
-      )
-    end
-    
-      describe '#jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('\\u003c/script\\u003e')
-    end
-    
-        stub(services(:generic)).refresh_token!
-  end
-    
-      def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
-    end
-  end
-end
-
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
-      end
-    
-          attr_reader :scope_name, :resource
-    
-        # Include the chosen devise modules in your model:
-    #
-    #   devise :database_authenticatable, :confirmable, :recoverable
-    #
-    # You can also give any of the devise configuration values in form of a hash,
-    # with specific values for this model. Please check your Devise initializer
-    # for a complete description on those values.
-    #
-    def devise(*modules)
-      options = modules.extract_options!.dup
-    
-            def set_reset_password_token
-          raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
-    
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
-    
-          # The receiver of the method definition, if any.
-      #
-      # @return [Node, nil] the receiver of the method definition, or `nil`.
-      def receiver
-        node_parts[3]
-      end
-    
-          dir = if File.directory?(file_or_dir)
-              file_or_dir
-            else
-              File.dirname(file_or_dir)
-            end
-      @path_cache[dir] ||= ConfigLoader.configuration_file_for(dir)
-      path = @path_cache[dir]
-      @object_cache[path] ||= begin
-                                print 'For #{dir}: ' if ConfigLoader.debug?
-                                ConfigLoader.configuration_from_file(path)
-                              end
-    end
-  end
-end
-
-    
-          def part_of_ignored_node?(node)
-        ignored_nodes.map(&:loc).any? do |ignored_loc|
-          if ignored_loc.expression.begin_pos > node.source_range.begin_pos
-            next false
-          end
-    
-              if all_arguments.none?(&:referenced?)
-            proc_message = 'Also consider using a proc without arguments ' \
-                           'instead of a lambda if you want it ' \
-                           'to accept any arguments but don't care about them.'
-          end
-    
-            include Spree::Core::ControllerHelpers::Auth
-        include Spree::Core::ControllerHelpers::Order
-        # This before_action comes from Spree::Core::ControllerHelpers::Order
-        skip_before_action :set_current_order
-    
-                render_order(result)
-          end
-    
-          def variant_attributes
-        if @current_user_roles&.include?('admin')
-          @@variant_attributes + [:cost_price]
-        else
-          @@variant_attributes
+                # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
         end
+    
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
+        end
+    
+            # This contains all the provider plugins by name, and returns
+        # the provider class and options.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :providers
+    
+            # This returns all the registered provider capabilities.
+        #
+        # @return [Hash]
+        def provider_capabilities
+          results = Hash.new { |h, k| h[k] = Registry.new }
+    
+            # This method is called if the underlying machine ID changes. Providers
+        # can use this method to load in new data for the actual backing
+        # machine or to realize that the machine is now gone (the ID can
+        # become `nil`). No parameters are given, since the underlying machine
+        # is simply the machine instance given to this object. And no
+        # return value is necessary.
+        def machine_id_changed
+        end
+    
+      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
+  # see https://github.com/Homebrew/homebrew-cask/pull/8887
+  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
+    
+          def use_identicon
+        @page.wiki.user_icons == 'identicon'
       end
-    end
+    
+        end
   end
 end
+
+    
+    # Commit file to wiki, overwriting previous versions of that file
+def commit_test_file(wiki, dir, filename, ext, content)
+  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
+  committer.add_to_index(dir, filename, ext, content, true)
+    committer.after_commit do |committer, sha|
+      wiki.clear_cache
+      committer.update_working_dir(dir, filename, ext)
+    end
+  committer.commit
+end
+
+    
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
+    end
+    
+      s.require_paths = %w[lib]
+    
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+    
+      private
+    
+      def update
+    if @ip_address.update(safe_params)
+      redirect_to_with_json [:edit, @ip_pool]
+    else
+      render_form_errors 'edit', @ip_address
+    end
+  end
+    
+      def index
+    if @server
+      @ip_pool_rules = @server.ip_pool_rules
+    else
+      @ip_pool_rules = organization.ip_pool_rules
+    end
+  end
+    
+      def persist
+    auth_session.persist! if logged_in?
+    render :plain => 'OK'
+  end
