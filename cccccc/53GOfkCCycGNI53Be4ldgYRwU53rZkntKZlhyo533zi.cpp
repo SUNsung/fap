@@ -1,465 +1,388 @@
 
         
-        /**
- * @brief A wrapper around SyncedMemory holders serving as the basic
- *        computational unit through which Layer%s, Net%s, and Solver%s
- *        interact.
- *
- * TODO(dox): more thorough description.
- */
-template <typename Dtype>
-class Blob {
- public:
-  Blob()
-       : data_(), diff_(), count_(0), capacity_(0) {}
-    }
-    
-      /**
-   * @brief Return whether to allow force_backward for a given bottom blob
-   *        index.
-   *
-   * If AllowForceBackward(i) == false, we will ignore the force_backward
-   * setting and backpropagate to blob i only if it needs gradient information
-   * (as is done when force_backward == false).
-   */
-  virtual inline bool AllowForceBackward(const int bottom_index) const {
-    return true;
-  }
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    namespace caffe {
-    }
-    
-    namespace caffe {
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    bool b2Polygon::IsCCW() {
-	return (GetArea() > 0.0f);
-}
-	
-void b2Polygon::MergeParallelEdges(float32 tolerance) {
-	if (nVertices <= 3) return; //Can't do anything useful here to a triangle
-	bool* mergeMe = new bool[nVertices];
-	int32 newNVertices = nVertices;
-	for (int32 i = 0; i < nVertices; ++i) {
-		int32 lower = (i == 0) ? (nVertices - 1) : (i - 1);
-		int32 middle = i;
-		int32 upper = (i == nVertices - 1) ? (0) : (i + 1);
-		float32 dx0 = x[middle] - x[lower];
-		float32 dy0 = y[middle] - y[lower];
-		float32 dx1 = x[upper] - x[middle];
-		float32 dy1 = y[upper] - y[middle];
-		float32 norm0 = sqrtf(dx0*dx0+dy0*dy0);
-		float32 norm1 = sqrtf(dx1*dx1+dy1*dy1);
-		if ( !(norm0 > 0.0f && norm1 > 0.0f) && newNVertices > 3 ) {
-			//Merge identical points
-			mergeMe[i] = true;
-			--newNVertices;
-		}
-		dx0 /= norm0; dy0 /= norm0;
-		dx1 /= norm1; dy1 /= norm1;
-		float32 cross = dx0 * dy1 - dx1 * dy0;
-		float32 dot = dx0 * dx1 + dy0 * dy1;
-		if (fabs(cross) < tolerance && dot > 0 && newNVertices > 3) {
-			mergeMe[i] = true;
-			--newNVertices;
-		} else {
-			mergeMe[i] = false;
-		}
-	}
-	if(newNVertices == nVertices || newNVertices == 0) {
-		delete[] mergeMe;
-		return;
-	}
-	float32* newx = new float32[newNVertices];
-	float32* newy = new float32[newNVertices];
-	int32 currIndex = 0;
-	for (int32 i=0; i < nVertices; ++i) {
-		if (mergeMe[i] || newNVertices == 0 || currIndex == newNVertices) continue;
-		b2Assert(currIndex < newNVertices);
-		newx[currIndex] = x[i];
-		newy[currIndex] = y[i];
-		++currIndex;
-	}
-	delete[] x;
-	delete[] y;
-	delete[] mergeMe;
-	x = newx;
-	y = newy;
-	nVertices = newNVertices;
-	//printf('%d \n', newNVertices);
-}
-	
-    /* 
-	 *	Allocates and returns pointer to vector vertex array.
-     *  Length of array is nVertices.
-	 */
-b2Vec2* b2Polygon::GetVertexVecs() {
-        b2Vec2* out = new b2Vec2[nVertices];
-        for (int32 i = 0; i < nVertices; ++i) {
-            out[i].Set(x[i], y[i]);
-        }
-        return out;
-}
-	
-b2Polygon::b2Polygon(b2Triangle& t) {
-	nVertices = 3;
-	x = new float[nVertices];
-	y = new float[nVertices];
-	for (int32 i = 0; i < nVertices; ++i) {
-		x[i] = t.x[i];
-		y[i] = t.y[i];
-	}
-}
-	
-void b2Polygon::Set(const b2Polygon& p) {
-        if (nVertices != p.nVertices){
-			nVertices = p.nVertices;
-			delete[] x;
-			delete[] y;
-			x = new float32[nVertices];
-			y = new float32[nVertices];
-        }
-		
-        for (int32 i = 0; i < nVertices; ++i) {
-            x[i] = p.x[i];
-            y[i] = p.y[i];
-        }
-	areaIsSet = false;
-}
-	
-    /*
-     * Assuming the polygon is simple, checks if it is convex.
-     */
-bool b2Polygon::IsConvex() {
-        bool isPositive = false;
-        for (int32 i = 0; i < nVertices; ++i) {
-            int32 lower = (i == 0) ? (nVertices - 1) : (i - 1);
-            int32 middle = i;
-            int32 upper = (i == nVertices - 1) ? (0) : (i + 1);
-            float32 dx0 = x[middle] - x[lower];
-            float32 dy0 = y[middle] - y[lower];
-            float32 dx1 = x[upper] - x[middle];
-            float32 dy1 = y[upper] - y[middle];
-            float32 cross = dx0 * dy1 - dx1 * dy0;
-            // Cross product should have same sign
-            // for each vertex if poly is convex.
-            bool newIsP = (cross >= 0) ? true : false;
-            if (i == 0) {
-                isPositive = newIsP;
-            }
-            else if (isPositive != newIsP) {
-                return false;
-            }
-        }
-        return true;
-}
-    
-    
-	// ----------------------------------------------------------------------------------------------------
-	//
-    
-    class PolyNode 
-{ 
-public:
-    PolyNode();
-    virtual ~PolyNode(){};
-    Path Contour;
-    PolyNodes Childs;
-    PolyNode* Parent;
-    PolyNode* GetNext() const;
-    bool IsHole() const;
-    bool IsOpen() const;
-    int ChildCount() const;
-private:
-    //PolyNode& operator =(PolyNode& other); 
-    unsigned Index; //node index in Parent.Childs
-    bool m_IsOpen;
-    JoinType m_jointype;
-    EndType m_endtype;
-    PolyNode* GetNextSiblingUp() const;
-    void AddChild(PolyNode& child);
-    friend class Clipper; //to access Index
-    friend class ClipperOffset; 
-};
-    
-    #endif /* OPUS_HAVE_RTCD */
-    
-    /** 16x16 multiply-add where the result fits in 32 bits */
-#undef MAC16_16
-static OPUS_INLINE opus_val32 MAC16_16_armv5e(opus_val32 c, opus_val16 a,
- opus_val16 b)
-{
-  int res;
-  __asm__(
-      '#MAC16_16\n\t'
-      'smlabb %0, %1, %2, %3;\n'
-      : '=r'(res)
-      : 'r'(a), 'r'(b), 'r'(c)
-  );
-  return res;
-}
-#define MAC16_16(c, a, b) (MAC16_16_armv5e(c, a, b))
-    
-    #include <dmlc/registry.h>
-#include <functional>
-#include <vector>
-#include <utility>
-#include <string>
-#include './base.h'
-#include './data.h'
-#include './tree_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
-}
-    
-    
-    {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
-};
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
+        
+    {}  // namespace nwapi
 
     
     
-    {  /*!
-   * \brief dump the model in the requested format
-   * \param fmap feature map that may help give interpretations of feature
-   * \param with_stats extra statistics while dumping model
-   * \param format the format to dump the model in
-   * \return a vector of dump for boosters.
-   */
-  virtual std::vector<std::string> DumpModel(const FeatureMap& fmap,
-                                             bool with_stats,
-                                             std::string format) const = 0;
-  /*!
-   * \brief create a gradient booster from given name
-   * \param name name of gradient booster
-   * \param cache_mats The cache data matrix of the Booster.
-   * \param base_margin The base margin of prediction.
-   * \return The created booster.
-   */
-  static GradientBooster* Create(
-      const std::string& name,
-      const std::vector<std::shared_ptr<DMatrix> >& cache_mats,
-      bst_float base_margin);
-};
+    {}  // namespace nwapi
     
-      XGBOOST_DEVICE void operator()() {
-    this->operator()(0);
-  }
-  XGBOOST_DEVICE void operator()(int _idx) {
-    float arr[16];
-    InitializeRange(arr, arr + 16);
-    Span<float> s (arr);
-    Span<float>::iterator left { s.begin() };
-    Span<float>::iterator right { s.end() };
-    }
-    
-      bool addNode(const std::shared_ptr<DHTNode>& node, bool good);
-    
-    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
-    
-      DHTTaskExecutor periodicTaskQueue2_;
-    
-    void DHTTokenUpdateCommand::process()
-{
-  try {
-    tokenTracker_->updateTokenSecret();
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
-  }
-}
-    
-    
-    {  void setTokenTracker(DHTTokenTracker* tokenTracker);
-};
-    
-    #include <fstream>
-    
-    namespace osquery {
-namespace table_tests {
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
     }
     
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
-    {  sender.Update();
-  sender.Stop();
-  EXPECT_FALSE(sender.IsRunning());
-}
-    
-    int ClusterQualityInfo702::invalid_state(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(3, 5);
+    void Menu::Create(const base::DictionaryValue& option) {
+  is_menu_modified_ = true;
+  menu_delegate_.reset(new MenuDelegate(object_manager()));
+  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
     }
     
-    class SpeedLimitTest : public ::testing::Test {
+    namespace extensions {
+NwAppQuitFunction::NwAppQuitFunction() {
+    }
+    }
+    
+    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
  public:
-  virtual void SetUp() {
-    speed_limit_.Clear();
-    for (int i = 0; i < 100; ++i) {
-      std::pair<double, double> sp;
-      sp.first = i * 1.0;
-      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
-      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
-    }
+  NwAppGetDataPathFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwAppGetDataPathFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
+};
+    
+    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
+}
+    
+      // Called when |old_display| has been removed.
+  void NwScreenDisplayObserver::OnDisplayRemoved(const display::Display& old_display) {
+    std::unique_ptr<base::ListValue> args =
+      nwapi::nw__screen::OnDisplayRemoved::Create(*ConvertGfxDisplay(old_display));
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN,
+      nwapi::nw__screen::OnDisplayRemoved::kEventName,
+      std::move(args));
   }
+    
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-      const double init_derivative = 0.1;
-  constraint.AddSecondDerivativeBoundary(init_derivative, index_list,
-                                         lower_bound, upper_bound);
-  const auto mat = constraint.inequality_constraint_matrix();
-  const auto bd = constraint.inequality_constraint_boundary();
     
-    void SplineSegKernel::CalculateSecondOrderDerivative(
-    const uint32_t num_params) {
-  kernel_second_order_derivative_ =
-      Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 2; r < kernel_second_order_derivative_.rows(); ++r) {
-    for (int c = 2; c < kernel_second_order_derivative_.cols(); ++c) {
-      kernel_second_order_derivative_(r, c) =
-          (r * r - r) * (c * c - c) / (r + c - 3.0);
+    {  // Moving to a message on the arena should lead to a copy.
+  *message2_on_arena = std::move(message1);
+  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
+  TestUtil::ExpectAllFieldsSet(message1);
+  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+}
+    
+    
+    {
+    {
+    {}  // namespace io
+}  // namespace protobuf
+}  // namespace google
+
+    
+    
+    {  {
+    string str;
+    StringByteSink sink(&str);
+    source.CopyTo(&sink, source.Available());
+    EXPECT_EQ('world!', str);
+    EXPECT_EQ(0, source.Available());
+  }
+}
+    
+    TEST(StatusOr, TestPointerDefaultCtor) {
+  StatusOr<int*> thing;
+  EXPECT_FALSE(thing.ok());
+  EXPECT_EQ(Status::UNKNOWN, thing.status());
+}
+    
+    
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace internal
+}  // namespace protobuf
+}  // namespace google
+
+    
+    class Proto3DataStripper : public DataStripper {
+ private:
+  virtual bool ShouldBeClear(const FieldDescriptor *field) {
+    return field->type() == FieldDescriptor::TYPE_GROUP ||
+           field->is_extension();
+  }
+};
+    
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+    }
+    }
+    }
+    
+      bool Generate(const FileDescriptor* file,
+                        const string& parameter,
+                        GeneratorContext* context,
+                        string* error) const {
+    FileDescriptorProto new_file;
+    file->CopyTo(&new_file);
+    SchemaGroupStripper::StripFile(file, &new_file);
+    }
+    
+    #include <string>
+#include <set>
+#include <vector>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
+    
+    
+    {  // Schedule the given callback for execution.
+  virtual void Add(const std::function<void()>& callback) = 0;
+};
+    
+      // rotate
+  dict->lookup('Rotate', &obj1);
+  if (obj1.isInt()) {
+    rotate = obj1.getInt();
+  }
+  obj1.free();
+  while (rotate < 0) {
+    rotate += 360;
+  }
+  while (rotate >= 360) {
+    rotate -= 360;
+  }
+    
+      // get direction
+  if (dict->lookup('M', &obj)->isName()) {
+    const char *m = obj.getName();
+    
+    if (strcmp('I', m) == 0)
+      direction = transitionInward;
+    else if (strcmp('O', m) == 0)
+      direction = transitionOutward;
+  }
+  obj.free();
+    
+    Object *Parser::getObj(Object *obj, Guchar *fileKey,
+           CryptAlgorithm encAlgorithm, int keyLength,
+           int objNum, int objGen) {
+  std::set<int> fetchOriginatorNums;
+  return getObj(obj, fileKey, encAlgorithm, keyLength, objNum, objGen, &fetchOriginatorNums);
+}
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma interface
+#endif
+    
+      // duration parsing
+  // duration's default value is set to 0, which means : intrinsinc media duration
+  if (obj->dictLookup('D', &tmp)->isDict()) {
+    Object oname, ddict, tmp2;
+    if (tmp.dictLookup('S', &oname)->isName()) {
+      char* name = oname.getName();
+      if (!strcmp(name, 'F'))
+	duration = -1; // infinity
+      else if (!strcmp(name, 'T')) {
+	if (tmp.dictLookup('T', &ddict)->isDict()) {
+	  if (ddict.dictLookup('V', &tmp2)->isNum()) {
+	    duration = Gulong(tmp2.getNum());
+	  }
+	  tmp2.free();
+	}
+	ddict.free();
+      }
+    }
+    oname.free();
+  }
+  tmp.free();
+    
+    
+    {  for (i = 0; i < splashColorModeNComps[cm]; ++i) {
+#ifdef SPLASH_CMYK
+    if (cm == splashModeCMYK8)
+    {
+      blend[i] = dest[i] < src[i] ? 255 - (src[i] - dest[i]) : 255 - (dest[i] - src[i]);
+    }
+    else
+#endif
+    {
+      blend[i] = dest[i] < src[i] ? src[i] - dest[i] : dest[i] - src[i];
     }
   }
 }
     
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
+      virtual GBool isStatic() { return gFalse; }
     
-    Brakerpt6c::Brakerpt6c() {}
-const int32_t Brakerpt6c::ID = 0x6C;
-    
-    // config detail: {'name': 'usr_can_timeout', 'offset': 0.0, 'precision': 1.0,
-// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 5,
-// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
-bool Globalrpt6a::usr_can_timeout(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(5, 1);
+        if (regionStart>regionLimit || regionStart<0 || regionLimit<0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     
-    // config detail: {'name': 'manual_input', 'enum': {0:
-// 'MANUAL_INPUT_HEADLIGHTS_OFF', 1: 'MANUAL_INPUT_LOW_BEAMS', 2:
-// 'MANUAL_INPUT_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
-// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 7, 'type': 'enum',
-// 'order': 'motorola', 'physical_unit': ''}
-Headlight_rpt_77::Manual_inputType Headlightrpt77::manual_input(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
+        if(result == CollationFastLatin::BAIL_OUT_RESULT) {
+        if(settings->dontCheckFCD()) {
+            UTF8CollationIterator leftIter(data, numeric, left, equalPrefixLength, leftLength);
+            UTF8CollationIterator rightIter(data, numeric, right, equalPrefixLength, rightLength);
+            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+        } else {
+            FCDUTF8CollationIterator leftIter(data, numeric, left, equalPrefixLength, leftLength);
+            FCDUTF8CollationIterator rightIter(data, numeric, right, equalPrefixLength, rightLength);
+            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+        }
+    }
+    if(result != UCOL_EQUAL || settings->getStrength() < UCOL_IDENTICAL || U_FAILURE(errorCode)) {
+        return (UCollationResult)result;
     }
     
-        while ((n = (node_t*) swHeap_pop(pq)))
+    void SearchIterator::setMatchNotFound() 
+{
+    setMatchStart(USEARCH_DONE);
+    setMatchLength(0);
+    UErrorCode status = U_ZERO_ERROR;
+    // by default no errors should be returned here since offsets are within 
+    // range.
+    if (m_search_->isForwardSearching) {
+        setOffset(m_search_->textLength, status);
+    }
+    else {
+        setOffset(0, status);
+    }
+}
+    
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    void
+SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
+                           int32_t time, TimeMode mode, UErrorCode& status)
+{
+    endMonth     = (int8_t)month;
+    endDay       = (int8_t)dayOfWeekInMonth;
+    endDayOfWeek = (int8_t)dayOfWeek;
+    endTime      = time;
+    endTimeMode  = mode;
+    decodeEndRule(status);
+    transitionRulesInitialized = FALSE;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    
+    {    return *this;
+}
+    
+        std::unique_ptr<DHTMessageFactory> messageFactory;
+    
+    class DHTNode;
+class DHTBucket;
+class DHTTaskQueue;
+class DHTTaskFactory;
+class DHTBucketTreeNode;
+    
+    
+    {} // namespace aria2
+
+    
+        receiver->setMessageFactory(factory.get());
+    receiver->setRoutingTable(routingTable.get());
+    
+    namespace aria2 {
+    }
+    
+      DHTTokenTracker(const unsigned char* initialSecret);
+    
+    class DHTTokenTracker;
+    
+    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
+    
+        for (i = 1; i < 1024; i++)
     {
-        ASSERT_EQ(_map[n->val], n->pri);
-        free(n);
+        uint32_t key = ((rand() % 19999) + 1) * 37;
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_GT(ret, 0);
+        lists.insert(key);
     }
     
-        ExampleQt example(argv[argc-1]);
+        friend
+    void RedisQtDelRead(void * adapter) {
+        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
+        a->delRead();
+    }
     
+        private:
+        const char * m_value;
+        redisAsyncContext * m_ctx;
+        RedisQtAdapter m_adapter;
     
-    {    friend
-    void getCallback(redisAsyncContext *, void *, void *);
-};
+    protected:
+    size_t capacity = 1;
+    bool closed = false;
+    std::list<Coroutine *> producer_queue;
+    std::list<Coroutine *> consumer_queue;
+    std::queue<void *> data_queue;
+    
+        tmp = (swFdInfo *) swHashMap_find_int(ht, 37 * 8);
+    ASSERT_NE((void* )tmp, nullptr);
+    
+        pid_t server_pid = create_server();
     
     
     {    ASSERT_GT(cid, 0);
     Coroutine::get_by_cid(cid)->resume();
     ASSERT_EQ(cid, _cid);
 }
+
+    
+    void swReactor_defer_task_destroy(swReactor *reactor)
+{
+    list<defer_task *> *tasks = (list<defer_task *> *) reactor->defer_tasks;
+    delete tasks;
+}
+    
+    class MyServer : public Server
+{
+public:
+    MyServer(string _host, int _port, int _mode = SW_MODE_PROCESS, int _type = SW_SOCK_TCP) :
+            Server(_host, _port, _mode, _type)
+    {
+        serv.worker_num = 4;
+        serv.task_worker_num = 2;
+    }
+    }
+    
+        ret = swPipeBase_create(&p, 1);
+    ASSERT_EQ(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
+    ASSERT_GT(ret, 0);
