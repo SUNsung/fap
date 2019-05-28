@@ -1,278 +1,306 @@
 
         
-        #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-    
-    #endif // BITCOIN_REVERSELOCK_H
-
-    
-    
-    {    count = 0;
-    for (i = 0; i < len; i++) {
-        r[i].infinity = a[i].infinity;
-        if (!a[i].infinity) {
-            secp256k1_ge_set_gej_zinv(&r[i], &a[i], &azi[count++]);
-        }
+        // A helper for the POSIX Env to facilitate testing.
+class EnvPosixTestHelper {
+ private:
+  friend class EnvPosixTest;
     }
-    free(azi);
-}
     
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
     
-      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
-  // Add must be called on points in sequence along the line.
-  void Add(const ICOORD& pt);
-  // Associates a half-width with the given point if a point overlaps the
-  // previous point by more than half the width, and its distance is further
-  // than the previous point, then the more distant point is ignored in the
-  // distance calculation. Useful for ignoring i dots and other diacritics.
-  void Add(const ICOORD& pt, int halfwidth);
+    {  // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+};
     
-    class BLOCK;
-class FCOORD;
-class TBOX;
-class UNICHARSET;
-    
-    STRING ParagraphModel::ToString() const {
-  char buffer[200];
-  const STRING &alignment = ParagraphJustificationToString(justification_);
-  snprintf(buffer, sizeof(buffer),
-           'margin: %d, first_indent: %d, body_indent: %d, alignment: %s',
-           margin_, first_indent_, body_indent_, alignment.string());
-  return STRING(buffer);
-}
-
-    
-      // A hole in the heap exists at hole_index, and we want to fill it with the
-  // given pair. SiftDown sifts the hole downward to the correct position and
-  // returns the destination index without actually putting pair there.
-  int SiftDown(int hole_index, const Pair& pair) {
-    int heap_size = heap_.size();
-    int child;
-    while ((child = LeftChild(hole_index)) < heap_size) {
-      if (child + 1 < heap_size && heap_[child + 1] < heap_[child])
-        ++child;
-      if (heap_[child] < pair) {
-        heap_[hole_index] = heap_[child];
-        hole_index = child;
+    template <typename Key, class Comparator>
+typename SkipList<Key, Comparator>::Node* SkipList<Key, Comparator>::FindLast()
+    const {
+  Node* x = head_;
+  int level = GetMaxHeight() - 1;
+  while (true) {
+    Node* next = x->Next(level);
+    if (next == nullptr) {
+      if (level == 0) {
+        return x;
       } else {
-        break;
+        // Switch to next list
+        level--;
       }
+    } else {
+      x = next;
     }
-    return hole_index;
+  }
+}
+    
+    class TableCache {
+ public:
+  TableCache(const std::string& dbname, const Options& options, int entries);
+  ~TableCache();
+    }
+    
+      // Verify that overwriting an open file will result in the new file data
+  // being read from files opened before the write.
+  Slice result;
+  char scratch[kFileDataLen];
+  ASSERT_OK(rand_file->Read(0, kFileDataLen, &result, scratch));
+  ASSERT_EQ(0, result.compare(kWrite2Data));
+    
+      // Moves to the next entry in the source.  After this call, Valid() is
+  // true iff the iterator was not positioned at the last entry in the source.
+  // REQUIRES: Valid()
+  virtual void Next() = 0;
+    
+      // Finish building the table.  Stops using the file passed to the
+  // constructor after this function returns.
+  // REQUIRES: Finish(), Abandon() have not been called
+  Status Finish();
+    
+    
+    {
+    {    case kSnappyCompression: {
+      std::string* compressed = &r->compressed_output;
+      if (port::Snappy_Compress(raw.data(), raw.size(), compressed) &&
+          compressed->size() < raw.size() - (raw.size() / 8u)) {
+        block_contents = *compressed;
+      } else {
+        // Snappy not supported, or compressed less than 12.5%, so just
+        // store uncompressed form
+        block_contents = raw;
+        type = kNoCompression;
+      }
+      break;
+    }
+  }
+  WriteRawBlock(block_contents, type, handle);
+  r->compressed_output.clear();
+  block->Reset();
+}
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file inplace_addto_detect_pass.cc
+ * \brief Detect whether inplace addto operation is possible for certain op.
+ */
+#include <mxnet/base.h>
+#include <mxnet/operator.h>
+#include <mxnet/op_attr_types.h>
+#include <nnvm/graph_attr_types.h>
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file iter_normalize.h
+ * \brief Iterator that subtracts mean and do a few augmentations.
+ */
+#ifndef MXNET_IO_ITER_NORMALIZE_H_
+#define MXNET_IO_ITER_NORMALIZE_H_
+    
+    namespace mxnet {
+namespace io {
+// iterator on image recordio
+class PrefetcherIter : public IIterator<DataBatch> {
+ public:
+  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
+      : loader_(base), out_(nullptr) {}
+    }
+    }
+    }
+    
+      /*!
+   * \brief sets parameters for gradient compression
+   * \param kwargs a vector of pair of strings. A pair represents key and value
+   * of the parameter. Will be parsed by GradientCompressionParam
+   */
+  void SetParams(const std::vector<std::pair<std::string, std::string> >& kwargs);
+    
+    #ifndef DECL_TERNARY
+#define DECL_TERNARY(XPU, OP, FUN)                                          \
+  template<>                                                                \
+  void Eval<XPU, OP>(const TBlob &lhs, const TBlob &mhs,                    \
+                     const TBlob &rhs, TBlob *ret, RunContext ctx) {        \
+    FUN<XPU, OP>(lhs, mhs, rhs, ret, ctx);                                  \
+  }
+#endif
+    
+    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
+with width and height of the second input symbol, i.e., with one input, we need h_w to
+specify the crop height and width, otherwise the second input symbol's size will be used
+)code' ADD_FILELINE)
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_NE(req[bs::kData], kWriteInplace);
+    CHECK_NE(req[bs::kGrid], kWriteInplace);
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    CHECK_EQ(out_grad.size(), 1U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> gdata = in_grad[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> ggrid = in_grad[bs::kGrid].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grad = out_grad[bs::kOut].get<gpu, 4, DType>(s);
+    }
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(out_grad.size(), 1U);
+    CHECK_EQ(in_data.size(), 1U);
+    CHECK_EQ(out_data.size(), 2U);
+    CHECK_EQ(req.size(), 1U);
+    CHECK_EQ(in_grad.size(), 1U);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> grad = out_grad[lrn_enum::kOut].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> output_data = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> input_grad = in_grad[lrn_enum::kData].get<gpu, 4, DType>(s);
+    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
+    CUDNN_CALL(cudnnLRNCrossChannelBackward(s->dnn_handle_,
+                                            lrn_desc_,
+                                            CUDNN_LRN_CROSS_CHANNEL_DIM1,
+                                            &alpha,
+                                            shape_desc_,
+                                            output_data.dptr_,
+                                            shape_desc_,
+                                            grad.dptr_,
+                                            shape_desc_,
+                                            data.dptr_,
+                                            &beta,
+                                            shape_desc_,
+                                            input_grad.dptr_));
   }
     
-    
-    {	if (!noError && printErrors){
-		printf('Found invalid polygon, ');
-		switch(error){
-			case 0:
-				printf('must have between 3 and %d vertices.\n',b2_maxPolygonVertices);
-				break;
-			case 1:
-				printf('must be convex.\n');
-				break;
-			case 2:
-				printf('must be simple (cannot intersect itself).\n');
-				break;
-			case 3:
-				printf('area is too small.\n');
-				break;
-			case 4:
-				printf('sides are too close to parallel.\n');
-				break;
-			case 5:
-				printf('polygon is too thin.\n');
-				break;
-			case 6:
-				printf('core shape generation would move edge past centroid (too thin).\n');
-				break;
-			default:
-				printf('don't know why.\n');
-		}
-	}
-	return noError;
-}
-    
-    			m_pencodingbitsRGB8->differential.dred2 = iDRed2;
-			m_pencodingbitsRGB8->differential.dgreen2 = iDGreen2;
-			m_pencodingbitsRGB8->differential.dblue2 = iDBlue2;
-		}
-		else
-		{
-			m_pencodingbitsRGB8->individual.red1 = (unsigned int)m_frgbaColor1.IntRed(15.0f);
-			m_pencodingbitsRGB8->individual.green1 = (unsigned int)m_frgbaColor1.IntGreen(15.0f);
-			m_pencodingbitsRGB8->individual.blue1 = (unsigned int)m_frgbaColor1.IntBlue(15.0f);
-    
-        /* ignored for horizontal metrics */
-    FT_UInt          blue_count;
-    AF_LatinBlueRec  blues[AF_BLUE_STRINGSET_MAX];
-    
-    #endif /* FASTLZ_H */
+    #endif  // MXNET_OPERATOR_NN_CONCAT_INL_H_
 
     
-    /** Negate a 16-bit value */
-#define NEG16(x) (-(x))
-/** Negate a 32-bit value */
-#define NEG32(x) (-(x))
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
+};
     
-    #define silk_ADD_LSHIFT(a, b, shift)        ((a) + silk_LSHIFT((b), (shift)))               /* shift >= 0 */
-#define silk_ADD_LSHIFT32(a, b, shift)      silk_ADD32((a), silk_LSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_ADD_LSHIFT_uint(a, b, shift)   ((a) + silk_LSHIFT_uint((b), (shift)))          /* shift >= 0 */
-#define silk_ADD_RSHIFT(a, b, shift)        ((a) + silk_RSHIFT((b), (shift)))               /* shift >= 0 */
-#define silk_ADD_RSHIFT32(a, b, shift)      silk_ADD32((a), silk_RSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_ADD_RSHIFT_uint(a, b, shift)   ((a) + silk_RSHIFT_uint((b), (shift)))          /* shift >= 0 */
-#define silk_SUB_LSHIFT32(a, b, shift)      silk_SUB32((a), silk_LSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_SUB_RSHIFT32(a, b, shift)      silk_SUB32((a), silk_RSHIFT32((b), (shift)))    /* shift >= 0 */
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
     
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionManagerHandler> handler(new ExtensionManagerHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionManagerProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-    }
-    
-    
-    {};
-    
-    
-    {
-    {      auto serial = resp.content.find('serial_number');
-      if (serial != resp.content.end()) {
-        hw_info[serial->second] = resp.content;
-      };
-    }
+    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4)
+.describe('Apply LZ4 binary data compression for ext memory.')
+.set_body([]() {
+    return new SparsePageLZ4Format<bst_uint>(false);
   });
     
-    /**
- * @brief Intel HECI GUID for the update application.
- *
- * This GUID can be used on every OS over the HECI protocol to inspect the
- * FW version.
- */
-const std::vector<uint8_t> kMEIUpdateGUID{
-    232, 205, 157, 48, 177, 204, 98, 64, 143, 120, 96, 1, 21, 163, 67, 39,
-};
+    #include 'modules/drivers/radar/conti_radar/protocol/cluster_general_info_701.h'
     
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    // Sanity check integration test for kernel_extensions
-// Spec file: specs/darwin/kernel_extensions.table
-    
-    TEST_F(kernelPanics, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_panics');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'path', NormalType}
-  //      {'time', NormalType}
-  //      {'registers', NormalType}
-  //      {'frame_backtrace', NormalType}
-  //      {'module_backtrace', NormalType}
-  //      {'dependencies', NormalType}
-  //      {'name', NormalType}
-  //      {'os_version', NormalType}
-  //      {'kernel_version', NormalType}
-  //      {'system_model', NormalType}
-  //      {'uptime', IntType}
-  //      {'last_loaded', NormalType}
-  //      {'last_unloaded', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
+    {  int ret = x;
+  return ret;
 }
     
-    #include <osquery/tests/integration/tables/helper.h>
     
-    
-    {protected:
-    //! Duration in seconds.
-    float _duration;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FiniteTimeAction);
-};
-    
-    NS_CC_END
+    {
+    {
+    {}  // namespace conti_radar
+}  // namespace drivers
+}  // namespace apollo
 
     
-        if (action)
+    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
+  spline_func_ = spline_func;
+  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
+  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
+  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
+}
+    
+    
     {
-        if (action->initWithDuration(duration, gridSize, position, radius, waves, amplitude))
-        {
-            action->autorelease();
-        }
-        else
-        {
-            CC_SAFE_RELEASE_NULL(action);
-        }
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    // config detail: {'name': 'shaft_position', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': True, 'physical_range':
+// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
+// 'motorola', 'physical_unit': 'radians'}
+double Brakemotorrpt170::shaft_position(const std::uint8_t* bytes,
+                                        int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-    /** @class Place
-* @brief Places the node in a certain position.
-*/
-class CC_DLL Place : public ActionInstant
-{
-public:
+    // config detail: {'name': 'veh_can_timeout', 'offset': 0.0, 'precision': 1.0,
+// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 2,
+// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
+bool Globalrpt6a::veh_can_timeout(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(2, 1);
     }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    struct Tile;
-/**
-@brief ShuffleTiles action.
-@details This action make the target node shuffle with many tiles in random order.
-        You can create the action by these parameters:
-        duration, grid size, the random seed.
-*/
-class CC_DLL ShuffleTiles : public TiledGrid3DAction
-{
-public:
-    /** 
-    * @brief Create the action with grid size, random seed and duration.
-    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
-    */
-    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
-    }
-    
-    #include '2d/CCActionTween.h'
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCAnimation.h'
-#include 'renderer/CCTextureCache.h'
-#include 'renderer/CCTexture2D.h'
-#include 'base/CCDirector.h'
