@@ -1,60 +1,84 @@
 
         
-            # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
+          #
+  # The raw command string associated with the header which will vary between
+  # requests and responses.
+  #
+  attr_accessor :junk_headers
+  attr_accessor :cmd_string
+  attr_accessor :fold
     
-      table td.code       {width:750px}
-  table td.code div   {width:750px;overflow:hidden}
-</style>
-</head>
-<body>
-  <div id='wrap'>
-    <div id='header'>
-      <img src='<%= env['SCRIPT_NAME'] %>/__sinatra__/500.png' alt='application error' height='161' width='313' />
-      <div id='summary'>
-        <h1><strong><%=h exception.class %></strong> at <strong><%=h path %>
-          </strong></h1>
-        <h2><%=h exception.message %></h2>
-        <ul>
-          <li class='first'><strong>file:</strong> <code>
-            <%=h frames.first.filename.split('/').last %></code></li>
-          <li><strong>location:</strong> <code><%=h frames.first.function %>
-            </code></li>
-          <li class='last'><strong>line:
-            </strong> <%=h frames.first.lineno %></li>
-        </ul>
-      </div>
-      <div class='clear'></div>
-    </div>
-    
-          def react(env)
-        result = send(options[:reaction], env)
-        result if Array === result and result.size == 3
-      end
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
-    
-      it 'accepts post requests with masked X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
-    expect(last_response).to be_ok
+        json
   end
     
-      it 'should allow changing report only' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
-      run DummyApp
+      def decode_audio_frame(buff)
+    case self.codec
+    
+    
+  # open rmcpplus_request with cipherzero
+  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
+    
+              private
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
+    
+                seq_values.each do |val|
+              case val.tag
+              when 0
+                self.etype = decode_etype(val)
+              when 1
+                self.kvno = decode_kvno(val)
+              when 2
+                self.cipher = decode_cipher(val)
+              else
+                raise ::RuntimeError, 'Failed to decode EncryptedData SEQUENCE'
+              end
+            end
+          end
+    
+                self
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
+    
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
+  end
+    
+        module ClassMethods
+      def attachment_definitions
+        Paperclip::AttachmentRegistry.definitions_for(self)
+      end
     end
+  end
+end
