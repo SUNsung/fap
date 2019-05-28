@@ -1,153 +1,192 @@
 
         
-        # TODO: ensure that history changes.
-
+            assert proc.expect([TIMEOUT, u'usage'])
     
     
 @pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
+def test_how_to_configure_alias(proc, TIMEOUT):
+    proc.sendline('unset -f fuck')
+    how_to_configure(proc, TIMEOUT)
 
     
-        print('Writing private key to file %s_privkey.txt...' % name)
-    with open('%s_privkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, privateKey[0], privateKey[1]))
     
-            next_prime_gt = next_prime(value % self.size_table) \
-            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
-        return next_prime_gt - (data % next_prime_gt)
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-    min_length = 8
-max_length = 16
-password = ''.join(random.choice(chars) for x in range(random.randint(min_length, max_length)))
-print('Password: ' + password)
-print('[ If you are thinking of using this passsword, You better save it. ]')
-    
-        def get_config(self):
-        return {'l1': float(self.l1),
-                'l2': float(self.l2)}
-    
-        y_a = K.variable(np.random.randint(0, 7, (6,)))
-    y_b = K.variable(np.random.random((6, 7)))
-    assert K.eval(losses.sparse_categorical_crossentropy(y_a, y_b)).shape == (6,)
+    match_output = '''
+Listing... Done
+heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
+resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
+squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
+unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
+'''
     
     
-def _get_available_devices():
-    return [x.name for x in K.get_session().list_devices()]
-    
-    train_model.fit(epochs=epochs,
-                steps_per_epoch=steps_per_epoch)
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
-data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
-if not os.path.isdir(data_path):
-    data_path = current_path
-    
-    log_file = os.path.join(data_path, 'ipv6_tunnel.log')
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
-                    
-                    if snext < 0:
-                        #print 'not a normal transition'
-                        # was in range but not a normal transition
-                        # must check EOT, which is like the else clause.
-                        # eot[s]>=0 indicates that an EOT edge goes to another
-                        # state.
-                        if self.eot[s] >= 0: # EOT Transition to accept state?
-                            #print 'EOT trans to accept state %d' % self.eot[s]
-                            
-                            s = self.eot[s]
-                            input.consume()
-                            # TODO: I had this as return accept[eot[s]]
-                            # which assumed here that the EOT edge always
-                            # went to an accept...faster to do this, but
-                            # what about predicated edges coming from EOT
-                            # target?
-                            continue
-    
-        with tf.variable_scope(name, reuse=reuse):
-        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
-        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
-        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
-    
-    # 构建 FastText 模型
-sentences = [['Hello', 'World', '!'], ['I', 'am', 'huay', '.']]
-min_ngrams, max_ngrams = 2, 4  # ngrams 范围
-model = FastText(sentences, size=5, min_count=1, min_n=min_ngrams, max_n=max_ngrams)
-    
-    def clean_text(text, replacements = {':': '_', ' ': '_', '/': '_', '.': '', ''': ''}):
-    for key, rep in replacements.items():
-        text = text.replace(key, rep)
-    return text    
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
     
-class TestProvider(unittest.TestCase):
-    '''
-    Integration tests ~ provider class with as little mocking as possible.
-    '''
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    side_effect(Command(script.format(filename.format(ext)), ''), None)
+    assert set(os.listdir('.')) == {unquoted.format(ext), 'd'}
+    
+    # Remove a subnet group
+- elasticache_subnet_group:
+    state: absent
+    name: norwegian-blue
+'''
+    
+    - oneandone_moitoring_policy:
+    auth_token: oneandone_private_api_key
+    monitoring_policy: ansible monitoring policy updated
+    remove_servers:
+     - server01
+    wait: true
+    state: update
+'''
     
     
-class StandbyStateTest(unittest.TestCase):
-    ''' Exemplary 2nd level state test class (here: Standby state). Add missing
-    state test classes... '''
+def protocol_to_string(protocol):
+    protocol = protocol_to_tuple(protocol)
+    if protocol[0] is True:
+        return 'Tcp'
+    elif protocol[1] is True:
+        return 'Udp'
+    elif protocol[2] is True:
+        return 'Icmp'
+    elif protocol[3] is True:
+        return 'Other'
+    elif protocol[4] is True:
+        return 'Any'
     
-        def __init__(self):
-        self.time_provider = datetime.datetime.now
+        if not hasattr(env, 'scrapy_all_settings'):
+        env.scrapy_all_settings = []
+    
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
     
     
-class RegistryHolder(type):
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+    
+        def syntax(self):
+        return '[options] <spider_file>'
+    
+        try:
+        import boto.auth
+    except ImportError:
+        _S3Connection = _v19_S3Connection
+    else:
+        _S3Connection = _v20_S3Connection
+    
+        def backwards(self, orm):
+        'Write your backwards methods here.'
     
     
-if __name__ == '__main__':
-    instances_pool = getattr(Card2, 'pool')
-    cm1 = Card2('10', 'h', a=1)
-    cm2 = Card2('10', 'h', a=1)
-    cm3 = Card2('10', 'h', a=2)
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'EnvironmentProject'
+        db.create_table(
+            'sentry_environmentproject', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Environment']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['EnvironmentProject'])
     
-            # dictionary that will be used to determine which static method is
-        # to be executed but that will be also used to store possible param
-        # value
-        self._static_method_choices = {'param_value_1': self._static_method_1, 'param_value_2': self._static_method_2}
+        def backwards(self, orm):
     
-    Request receiver in simple form keeps a reference to a single successor.
-As a variation some receivers may be capable of sending requests out
-in several directions, forming a `tree of responsibility`.
+            for name, organization_id in dupe_envs:
+            envs = list(
+                orm.Environment.objects.filter(
+                    name=name,
+                    organization_id=organization_id,
+                ).order_by('date_added')
+            )
+            to_env = envs[0]
+            from_envs = envs[1:]
+    
+            # Adding field 'ApiAuthorization.scope_list'
+        db.add_column(
+            'sentry_apiauthorization',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'VersionDSymFile'
+        db.create_table(
+            'sentry_versiondsymfile', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProjectDSymFile'], null=True
+                    )
+                ), (
+                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.DSymApp']
+                    )
+                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
+                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['VersionDSymFile'])
+    
+            # Deleting field 'ReleaseFile.dist'
+        db.delete_column('sentry_releasefile', 'dist_id')
