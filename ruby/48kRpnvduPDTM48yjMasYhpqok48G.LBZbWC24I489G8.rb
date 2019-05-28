@@ -1,303 +1,153 @@
 
         
-              protected
+          def self.period_types
+    @types ||= Enum.new(all: 1,
+                        yearly: 2,
+                        monthly: 3,
+                        weekly: 4,
+                        daily: 5,
+                        quarterly: 6)
+  end
     
-          alias :expire_data_after_sign_out! :expire_data_after_sign_in!
+        # if you need to test this and are having ssl issues see:
+    #  http://stackoverflow.com/questions/6756460/openssl-error-using-omniauth-specified-ssl-path-but-didnt-work
+    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development?
+    @omniauth = OmniAuth::Builder.new(app) do
+      Discourse.authenticators.each do |authenticator|
+        authenticator.register_middleware(self)
+      end
     end
+    
+        # JOIN of topics table based on manipulating draft_key seems imperfect
+    builder = DB.build <<~SQL
+      SELECT
+        d.*, t.title, t.id topic_id, t.archetype,
+        t.category_id, t.closed topic_closed, t.archived topic_archived,
+        pu.username, pu.name, pu.id user_id, pu.uploaded_avatar_id, pu.username_lower,
+        du.username draft_username, NULL as raw, NULL as cooked, NULL as post_number
+      FROM drafts d
+      LEFT JOIN LATERAL json_extract_path_text (d.data::json, 'postId') postId ON TRUE
+      LEFT JOIN posts p ON postId :: BIGINT = p.id
+      LEFT JOIN topics t ON
+        CASE
+            WHEN d.draft_key LIKE '%' || '#{EXISTING_TOPIC}' || '%'
+              THEN CAST(replace(d.draft_key, '#{EXISTING_TOPIC}', '') AS INT)
+            ELSE 0
+        END = t.id
+      JOIN users pu on pu.id = COALESCE(p.user_id, t.user_id, d.user_id)
+      JOIN users du on du.id = #{user_id}
+      /*where*/
+      /*order_by*/
+      /*offset*/
+      /*limit*/
+    SQL
+    
+        private
+    
+          svg_sprite = 'window.__svg_sprite = #{SvgSprite.bundle(theme_ids).inspect};'
+    
+          # Reads an integer from the cache, or returns nil if no value was found.
+      #
+      # See Caching.read for more information.
+      def self.read_integer(raw_key, timeout: TIMEOUT)
+        value = read(raw_key, timeout: timeout)
+    
+          def remaining_requests
+        octokit.rate_limit.remaining
+      end
+    
+          # Imports all objects in parallel by scheduling a Sidekiq job for every
+      # individual object.
+      def parallel_import
+        waiter = JobWaiter.new
+    
+        it 'returns a label 'Yes' if a given agent is working' do
+      stub(@agent).working? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Yes'
+    end
+    
+              expect(weather_agent.name).to eq('a weather agent')
+          expect(weather_agent.schedule).to eq('5pm')
+          expect(weather_agent.keep_events_for).to eq(14.days)
+          expect(weather_agent.propagate_immediately).to be_falsey
+          expect(weather_agent).to be_disabled
+          expect(weather_agent.memory).to be_empty
+          expect(weather_agent.options).to eq(weather_agent_options)
+    
+          context '#run_workers' do
+        it 'runs all the workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+        end
+    
+        it 'should work with nested arrays' do
+      @agent.options['array'] = ['one', '$.two']
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
+    
+      let :reverted_extract do
+    old_extract
+  end
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+        end
   end
 end
 
     
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
+          private
     
-          # Checks if the reset password token sent is within the limit time.
-      # We do this by calculating if the difference between today and the
-      # sending date does not exceed the confirm in time configured.
-      # Returns true if the resource is not responding to reset_password_sent_at at all.
-      # reset_password_within is a model configuration, must always be an integer value.
-      #
-      # Example:
-      #
-      #   # reset_password_within = 1.day and reset_password_sent_at = today
-      #   reset_password_period_valid?   # returns true
-      #
-      #   # reset_password_within = 5.days and reset_password_sent_at = 4.days.ago
-      #   reset_password_period_valid?   # returns true
-      #
-      #   # reset_password_within = 5.days and reset_password_sent_at = 5.days.ago
-      #   reset_password_period_valid?   # returns false
-      #
-      #   # reset_password_within = 0.days
-      #   reset_password_period_valid?   # will always return false
-      #
-      def reset_password_period_valid?
-        reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago.utc
-      end
-    
-          module ClassMethods
-        # Create the cookie key using the record id and remember_token
-        def serialize_into_cookie(record)
-          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
-        end
-    
-        # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
-    end
-  end
-end
-
-    
-        # Tests if the index has the given UUID.
-    #
-    # @param [String] uuid
-    # @return [Boolean]
-    def include?(uuid)
-      @lock.synchronize do
-        with_index_lock do
-          unlocked_reload
-          return !!find_by_prefix(uuid)
-        end
-      end
+        def self.xtest(*args)
     end
     
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
+      test 'transliteration' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
     
-              @registered.each do |plugin|
-            providers.merge!(plugin.provider.to_hash)
-          end
-    
-              # We split the arguments into two: One set containing any
-          # flags before a word, and then the rest. The rest are what
-          # get actually sent on to the subcommand.
-          argv.each_index do |i|
-            if !argv[i].start_with?('-')
-              # We found the beginning of the sub command. Split the
-              # args up.
-              main_args   = argv[0, i]
-              sub_command = argv[i]
-              sub_args    = argv[i + 1, argv.length - i + 1]
-    
-            # This contains all the synced folder implementations by name.
-        #
-        # @return [Registry<Symbol, Array<Class, Integer>>]
-        attr_reader :synced_folders
-    
-      # An irb inspector
-  #
-  # In order to create your own custom inspector there are two things you
-  # should be aware of:
-  #
-  # Inspector uses #inspect_value, or +inspect_proc+, for output of return values.
-  #
-  # This also allows for an optional #init+, or +init_proc+, which is called
-  # when the inspector is activated.
-  #
-  # Knowing this, you can create a rudimentary inspector as follows:
-  #
-  #     irb(main):001:0> ins = IRB::Inspector.new(proc{ |v| 'omg! #{v}' })
-  #     irb(main):001:0> IRB.CurrentContext.inspect_mode = ins # => omg! #<IRB::Inspector:0x007f46f7ba7d28>
-  #     irb(main):001:0> 'what?' #=> omg! what?
-  #
-  class Inspector
-    # Default inspectors available to irb, this includes:
-    #
-    # +:pp+::       Using Kernel#pretty_inspect
-    # +:yaml+::     Using YAML.dump
-    # +:marshal+::  Using Marshal.dump
-    INSPECTORS = {}
-    
-      def test_gc_stress_on_realloc
-    assert_normal_exit(<<-'end;', '[Bug #9859]')
-      class C
-        def initialize
-          @a = nil
-          @b = nil
-          @c = nil
-          @d = nil
-          @e = nil
-          @f = nil
-        end
-      end
-    
-    $x = Hash.new{[]}
-test_ok($x[22] == [])
-test_ok(!$x[22].equal?($x[22]))
-    
-        if t > 0.0 and t < isect.t then
-      isect.hit = true
-      isect.t = t
-      isect.n = @n
-      isect.pl = Vec.new(ray.org.x + t * ray.dir.x,
-                        ray.org.y + t * ray.dir.y,
-                        ray.org.z + t * ray.dir.z)
-    end
-    nil
-  end
+    # assumes x.y.z all digit version
+def next_version
+  # x.y.z
+  v = version.split '.'
+  # bump z
+  v[-1] = v[-1].to_i + 1
+  v.join '.'
 end
     
-    def to_boolean(proc)
-  IF[proc][true][false]
+    # Read command line options into `options` hash
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts 'gollum: #{$!.message}'
+  puts 'gollum: try 'gollum --help' for more information'
+  exit
 end
     
-      # Configure an appender that will write log events to STDOUT. A colorized
-  # pattern layout is used to format the log events into strings before
-  # writing.
-  Logging.appenders.stdout('stdout',
-                           auto_flushing: true,
-                           layout:        Logging.layouts.pattern(
-                             pattern:      pattern,
-                             color_scheme: 'bright'
-                           )
-                          ) if config.log_to.include? 'stdout'
-    
-    def await_condition &condition
-  start_time = Time.zone.now
-  until condition.call
-    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
-    sleep 0.05
-  end
-  true
+    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
+task :clean do
+  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
 end
-
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-    
-      describe '#create' do
-    it 'redirects to /stream for a non-mobile user' do
-      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
-      expect(response).to be_redirect
-      expect(response.location).to match /^#{stream_url}\??$/
-    end
-    
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
-    
-      desc 'Build all spree gems'
-  task :build do
-    pkgdir = File.expand_path('../pkg', __FILE__)
-    FileUtils.mkdir_p pkgdir
-    
-              def ensure_order
-            raise ActiveRecord::RecordNotFound if spree_current_order.nil?
-          end
-    
-            def create
-          authorize! :create, Spree::Order
-          if can?(:admin, Spree::Order)
-            order_user = if @current_user_roles.include?('admin') && order_params[:user_id]
-                           Spree.user_class.find(order_params[:user_id])
-                         else
-                           current_api_user
-                         end
-    
-            def set_up_shipping_category
-          if shipping_category = params[:product].delete(:shipping_category)
-            id = ShippingCategory.find_or_create_by(name: shipping_category).id
-            params[:product][:shipping_category_id] = id
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-              def next_service
-            Spree::Api::Dependencies.storefront_checkout_next_service.constantize
-          end
+    module Jekyll
     
           unless file.file?
         return 'File #{file} could not be found'
       end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
+      # Used on the blog index to split posts on the <!--more--> marker
+  def excerpt(input)
+    if input.index(/<!--\s*more\s*-->/i)
+      input.split(/<!--\s*more\s*-->/i)[0]
+    else
+      input
     end
-    
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
-end
+  end
