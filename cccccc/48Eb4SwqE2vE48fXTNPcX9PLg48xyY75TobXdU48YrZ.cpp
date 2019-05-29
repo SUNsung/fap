@@ -1,197 +1,154 @@
 
         
-          // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
+          // Calculate the depth at which the requirement's generic parameters
+  // appear in the synthetic signature.
+  unsigned depth = 0;
+  if (covariantSelf) {
+    depth++;
+  }
+  if (conformanceSig) {
+    depth += conformanceSig->getGenericParams().back()->getDepth() + 1;
   }
     
-    #include 'caffe/layers/neuron_layer.hpp'
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
     
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
-    
-      vector<shared_ptr<Batch<Dtype> > > prefetch_;
-  BlockingQueue<Batch<Dtype>*> prefetch_free_;
-  BlockingQueue<Batch<Dtype>*> prefetch_full_;
-  Batch<Dtype>* prefetch_current_;
-    
-      virtual inline const char* type() const { return 'BNLL'; }
-    
-      virtual inline int ExactNumBottomBlobs() const { return 3; }
-  virtual inline const char* type() const { return 'ContrastiveLoss'; }
-  /**
-   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
-   * to the first two inputs.
-   */
-  virtual inline bool AllowForceBackward(const int bottom_index) const {
-    return bottom_index != 2;
+      IsFirstLine = true;
+  for (auto &Line : Lines) {
+    if (!IsFirstLine) {
+      Line = Line.drop_front(WhitespaceToTrim);
+    }
+    IsFirstLine = false;
   }
     
-    namespace caffe {
+    namespace swift {
     }
     
-    #include <vector>
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
-    }
-    
-        pq = swHeap_new(SIZE, SW_MAX_HEAP);
-    ASSERT_NE(pq, nullptr);
-    
-    
-    {    //1
-    ret = p.read(&p, buf, sizeof(buf));
-    if (ret < 0)
     {
-        swSysError('read() failed.');
-    }
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world1', buf), 0);
-    //2
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world2', buf), 0);
-    //3
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world3', buf), 0);
+    {
+    {
+    {}  // namespace cpp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    #include <gtest/gtest.h>
+    
+    
+    {  input_for_decode =
+      'longFieldNameIsLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong1000';
+  desired_output_for_decode =
+      'long_field_name_is_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_1000';
+  expected = string('\x04\xA5\xA4\xA2\xBF\x1F\x0E\x84\x0', 9);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
 }
     
-    TEST(coroutine_socket, connect_with_dns)
-{
-    coro_test([](void *arg)
-    {
-        Socket sock(SW_SOCK_TCP);
-        bool retval = sock.connect('www.baidu.com', 80, 0.5);
-        ASSERT_EQ(retval, true);
-        ASSERT_EQ(sock.errCode, 0);
-    });
+    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
+    const unittest::TestArenaMapLite& message) {
+  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_BAZ_LITE>(
+      message);
 }
     
-    static inline void coro_test(std::initializer_list<std::pair<coroutine_func_t, void*>> args)
-{
-    int complete_num = 0;
+    
+    {  source.CopyTo(&sink, data.size());
+  EXPECT_EQ(data, str);
+}
+    
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+    
+    #ifdef _WIN32
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO 1
+#endif
+#endif
+    
+    namespace {
     }
     
-    TEST(coroutine_base, get_current)
-{
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        auto co = Coroutine::get_current();
-        *(long *) arg = co->get_cid();
-    }, &_cid);
+    // Main function:  Reads the entire address book from a file and prints all
+//   the information inside.
+int main(int argc, char* argv[]) {
+  // Verify that the version of the library that we linked against is
+  // compatible with the version of the headers we compiled against.
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
     }
     
-        static BOOST_FORCEINLINE bool compare_exchange_strong(
-        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order success_order, memory_order) BOOST_NOEXCEPT
-    {
-        base_type::fence_before(success_order);
-        bool success;
-        __asm
+            try
         {
-            mov esi, expected
-            mov edi, storage
-            movzx eax, word ptr [esi]
-            movzx edx, desired
-            lock cmpxchg word ptr [edi], dx
-            mov word ptr [esi], ax
-            sete success
-        };
-        // The success and failure fences are equivalent anyway
-        base_type::fence_after(success_order);
-        return success;
-    }
+            addrat(&lhsRat, rhsRat, RATIONAL_PRECISION);
+            destroyrat(rhsRat);
+        }
+        catch (uint32_t error)
+        {
+            destroyrat(lhsRat);
+            destroyrat(rhsRat);
+            throw(error);
+        }
     
-    #include <string>
+    // Read strings for keys, errors, trig types, etc.
+// These will be copied from the resources to local memory.
     
-    #endif  // CORE_RENDER_NODE_FACTORY_RENDER_CREATOR_H_
-
-    
-    	// Where the last (currently read) token has started.
-	const char *tokenStart_ = nullptr;
-    
-    #include <QtCore/QString>
-#include <QtCore/QByteArray>
-#include <QtCore/QVector>
-    
-    	bool read() {
-		if (!file_.read()) {
-			return false;
-		}
-		pos_ = file_.data();
-		end_ = file_.end();
-		return true;
-	}
-	bool atEnd() const {
-		return (pos_ == end_);
-	}
-	char currentChar() const {
-		return atEnd() ? 0 : *pos_;
-	}
-	bool skipChar() {
-		if (atEnd()) {
-			return false;
-		}
-		++pos_;
-		return true;
-	}
-	const char *currentPtr() const {
-		return pos_;
-	}
-	int charsLeft() const {
-		return (end_ - pos_);
-	}
-    
-    	bool finalize();
-    
-    static constexpr int kErrorInternal = 666;
-    
-    For license and copyright information please follow this link:
-https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
-*/
-#include 'codegen/emoji/options.h'
-    
-    
+    void COpndCommand::RemoveFromEnd()
+{
+    if (m_fSciFmt)
     {
-    {} // namespace lang
-} // namespace codegen
-
-    
-    bool Processor::write(const LangPack &langpack) const {
-	bool forceReGenerate = false;
-	QDir dir(options_.outputPath);
-	if (!dir.mkpath('.')) {
-		common::logError(kErrorCantWritePath, 'Command Line') << 'can not open path for writing: ' << dir.absolutePath().toStdString();
-		return false;
-	}
+        ClearAllAndAppendCommand(CalculationManager::Command::Command0);
+    }
+    else
+    {
+        unsigned int nCommands;
+        m_commands->GetSize(&nCommands);
+    }
     }
     
+        // Check for WSI support
+    VkBool32 res;
+    vkGetPhysicalDeviceSurfaceSupportKHR(g_PhysicalDevice, g_QueueFamily, wd->Surface, &res);
+    if (res != VK_TRUE)
+    {
+        fprintf(stderr, 'Error no WSI support on physical device 0\n');
+        exit(-1);
+    }
     
-    {};
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
+    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
+        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
+    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
+    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
+    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
+    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
+    if (g_fence) { g_fence->Release(); g_fence = NULL; }
+    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+}
+    
+    
+    {    printf('DestroyContext()\n');
+    ImGui::DestroyContext();
+    return 0;
+}
+
+    
+    // Important note to the reader who wish to integrate imgui_impl_vulkan.cpp/.h in their own engine/app.
+// - Common ImGui_ImplVulkan_XXX functions and structures are used to interface with imgui_impl_vulkan.cpp/.h.
+//   You will use those if you want to use this rendering back-end in your engine/app.
+// - Helper ImGui_ImplVulkanH_XXX functions and structures are only used by this example (main.cpp) and by 
+//   the back-end itself (imgui_impl_vulkan.cpp), but should PROBABLY NOT be used by your own engine/app code.
+// Read comments in imgui_impl_vulkan.h.
