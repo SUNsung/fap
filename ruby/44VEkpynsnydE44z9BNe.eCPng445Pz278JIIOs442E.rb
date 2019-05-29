@@ -1,207 +1,55 @@
 
         
-        Rails.application.initialize!
+        class Devise::SessionsController < DeviseController
+  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :allow_params_authentication!, only: :create
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
     
-          def stored_location_key_for(resource_or_scope)
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        '#{scope}_return_to'
-      end
-    
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
+  end
     
-          def time_from_json(value)
-        if value =~ /\A\d+\.\d+\Z/
-          Time.at(value.to_f)
-        else
-          Time.parse(value) rescue nil
-        end
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
     
-          # Look for IAX_AUTH_MD5 (2) as an available auth method
-      if res[2][14].unpack('n')[0] & 2 <= 0
-        dprint('REGAUTH: MD5 authentication is not enabled on the server')
-        return
+          attr_reader :scope_name, :resource
+    
+          selected_modules = modules.map(&:to_sym).uniq.sort_by do |s|
+        Devise::ALL.index(s) || -1  # follow Devise::ALL order
       end
     
-            private
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
     
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
     
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
+        puts('Packaging plugins for offline usage')
     
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.encrypt
-            cipher.key = k3
-            encrypted = cipher.update(data_encrypt) + cipher.final
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
     
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
+      describe 'on #{logstash.hostname}' do
+    context 'with a direct internet connection' do
+      context 'when the plugin exist' do
+        context 'from a local `.GEM` file' do
+          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
+          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
+          before(:each) do
+            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
           end
-    
-              # Decodes the start_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_start_time(input)
-            input.value[0].value
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KdcRequest from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KdcRequest, invalid input'
-            end
-    
-              # Decodes the ticket field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::Ticket]
-          def decode_ticket(input)
-            Rex::Proto::Kerberos::Model::Ticket.decode(input.value[0])
-          end
-    
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
-    
-      class SendPublic < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
-    
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-    
-        context 'on my own post' do
-      it 'succeeds' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        post :create, params: like_hash, format: :json
-        expect(response.code).to eq('201')
-      end
-    end
-    
-        context 'on a public post from a stranger' do
-      before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
-      end
-    
-          it 'returns reshares without login' do
-        bob.reshare!(@post)
-        sign_out :user
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
-      end
-    end
-  end
-end
-
-    
-    # Website =============================================================
-    
-          def xor_byte_strings(s1, s2)
-        s1.bytes.zip(s2.bytes).map { |(c1,c2)| c1 ^ c2 }.pack('c*')
-      end
-    end
-  end
-end
-
-    
-        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
-    expect(last_response).to be_ok
-  end
-    
-      it 'should set the Content Security Policy' do
-    expect(
-      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
-    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
-  end
-    
-            include Spree::Core::ControllerHelpers::Auth
-        include Spree::Core::ControllerHelpers::Order
-        # This before_action comes from Spree::Core::ControllerHelpers::Order
-        skip_before_action :set_current_order
-    
-            def mine
-          if current_api_user.persisted?
-            @orders = current_api_user.orders.reverse_chronological.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          else
-            render 'spree/api/errors/unauthorized', status: :unauthorized
-          end
-        end
-    
-                result = update_service.call(
-              order: spree_current_order,
-              params: params,
-              # defined in https://github.com/spree/spree/blob/master/core/lib/spree/core/controller_helpers/strong_parameters.rb#L19
-              permitted_attributes: permitted_checkout_attributes,
-              request_env: request.headers.env
-            )
-    
-    @@ index
-  <h1>Sinatra + Sidekiq Example</h1>
-  <h2>Failed: <%= @failed %></h2>
-  <h2>Processed: <%= @processed %></h2>
-    
-      # Enable/disable caching. By default caching is disabled.
-  # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
-    config.action_controller.perform_caching = true
