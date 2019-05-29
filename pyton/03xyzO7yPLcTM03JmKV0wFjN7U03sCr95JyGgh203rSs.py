@@ -1,199 +1,211 @@
 
         
-            print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
-    while True:
-        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
-        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
-            break
-    
-            print('step {0}'.format(step_ord))
-        print([i for i in range(len(self.values))])
-        print(self.values)
-    
-    from .hash_table import HashTable
-    
-    The problem is :
-Given two strings A and B. Find the minimum number of operations to string B such that A = B. The permitted operations are removal,  insertion, and substitution.
-'''
-from __future__ import print_function
-    
-    try:
-	raw_input		#Python 2
-except NameError:
-	raw_input = input	#Python 3
-    
-    def md5me(testString):
-	'''[summary]
-	Returns a 32-bit hash code of the string 'testString'
-    
-                self.decision_boundary = X[best_split]
-            self.left = Decision_Tree(depth = self.depth - 1, min_leaf_size = self.min_leaf_size)
-            self.right = Decision_Tree(depth = self.depth - 1, min_leaf_size = self.min_leaf_size)
-            self.left.train(left_X, left_y)
-            self.right.train(right_X, right_y)
-        else:
-            self.prediction = np.mean(y)
-    
-    # If true, show URL addresses after external links.
-#man_show_urls = False
-    
-            self.assertEqual(self.vhosts[5], self._call(self.vhosts))
-    
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-    
-    
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
-    'certbot': ('https://certbot.eff.org/docs/', None),
+        html_theme = 'flask'
+html_theme_options = {'index_sidebar_logo': False}
+html_context = {
+    'project_links': [
+        ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate'),
+        ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/'),
+        ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/'),
+        ProjectLink('Source Code', 'https://github.com/pallets/flask/'),
+        ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/'),
+    ]
 }
+html_sidebars = {
+    'index': ['project.html', 'localtoc.html', 'versions.html', 'searchbox.html'],
+    '**': ['localtoc.html', 'relations.html', 'versions.html', 'searchbox.html'],
+}
+singlehtml_sidebars = {'index': ['project.html', 'versions.html', 'localtoc.html']}
+html_static_path = ['_static']
+html_favicon = '_static/flask-icon.png'
+html_logo = '_static/flask-logo-sidebar.png'
+html_title = 'Flask Documentation ({})'.format(version)
+html_show_sourcelink = False
+html_domain_indices = False
+    
+        def dispatch_request(self):
+        '''Subclasses have to override this method to implement the
+        actual view function code.  This method is called with all
+        the arguments from the URL rule.
+        '''
+        raise NotImplementedError()
+    
+    
+def test_explicit_head(app, client):
+    class Index(flask.views.MethodView):
+        def get(self):
+            return 'GET'
+    
+    from .app import Flask, Request, Response
+from .config import Config
+from .helpers import (
+    url_for,
+    flash,
+    send_file,
+    send_from_directory,
+    get_flashed_messages,
+    get_template_attribute,
+    make_response,
+    safe_join,
+    stream_with_context,
+)
+from .globals import (
+    current_app,
+    g,
+    request,
+    session,
+    _request_ctx_stack,
+    _app_ctx_stack,
+)
+from .ctx import (
+    has_request_context,
+    has_app_context,
+    after_this_request,
+    copy_current_request_context,
+)
+from .blueprints import Blueprint
+from .templating import render_template, render_template_string
+    
+            # No redirect was found. Return the response.
+        return response
 
     
-    .. code-block:: bash
-   :caption: To acquire a certificate for ``example.com``
+        def label_tag(self, contents=None, attrs=None, label_suffix=None):
+        '''
+        Wrap the given contents in a <label>, if the field has an ID attribute.
+        contents should be mark_safe'd to avoid HTML escaping. If contents
+        aren't given, use the field's HTML-escaped label.
+    
+        By default, it represents the actual environment.
+    All of the attributes can be overwritten though, which
+    is used by the test suite to simulate various scenarios.
     
     
-# -- Options for LaTeX output ---------------------------------------------
-    
-       # DigitalOcean API credentials used by Certbot
-   dns_digitalocean_token = 0000111122223333444455556666777788889999aaaabbbbccccddddeeeeffff
-    
-            for i in range(n):  # 对每个数据
-            i_score = np.inf
-            i_label = -1
-            for j in range(k):  # 与每个质心比较
-                s_ij = score(data[i], centers[j])
-                if s_ij < i_score:
-                    i_score = s_ij
-                    i_label = j
-    
-        return g
-    
-            y.shape == [128, 64, 32]
-        y = permute(x, [2, 1, 0])
-        y.shape == [32, 64, 128]
-    
-    if word_vec.any():  #
-    word_vec = word_vec / max(1, ngrams_found)
-else:  # 如果一个 ngram 都没找到，gensim 会报错；个人认为把 0 向量传出来也可以
-    raise KeyError('all ngrams for word %s absent from model' % word_unk)
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
     
-def filter_for_training(roidb):
-    '''Remove roidb entries that have no usable RoIs based on config settings.
-    '''
-    def is_valid(entry):
-        # Valid images have:
-        #   (1) At least one foreground RoI OR
-        #   (2) At least one background RoI
-        overlaps = entry['max_overlaps']
-        # find boxes with sufficient overlap
-        fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
-        # image is only valid if such boxes exist
-        valid = len(fg_inds) > 0 or len(bg_inds) > 0
-        if cfg.MODEL.KEYPOINTS_ON:
-            # If we're training for keypoints, exclude images with no keypoints
-            valid = valid and entry['has_visible_keypoints']
-        return valid
-    
-    Flexible network configuration is achieved by specifying the function name that
-builds a network module (e.g., the name of the conv backbone or the mask roi
-head). However we may wish to change names over time without breaking previous
-config files. This module provides backwards naming compatibility by providing
-a mapping from the old name to the new name.
-    
-    
-def add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale):
-    '''Add RPN outputs to a single scale model (i.e., no FPN).'''
-    anchors = generate_anchors(
-        stride=1. / spatial_scale,
-        sizes=cfg.RPN.SIZES,
-        aspect_ratios=cfg.RPN.ASPECT_RATIOS
+def test_missing_auth(httpbin):
+    r = http(
+        '--auth-type=basic',
+        'GET',
+        httpbin + '/basic-auth/user/password',
+        error_exit_ok=True
     )
-    num_anchors = anchors.shape[0]
-    dim_out = dim_in
-    # RPN hidden representation
-    model.Conv(
-        blob_in,
-        'conv_rpn',
-        dim_in,
-        dim_out,
-        kernel=3,
-        pad=1,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
+    assert HTTP_OK not in r
+    assert '--auth required' in r.stderr
+
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
     )
-    model.Relu('conv_rpn', 'conv_rpn')
-    # Proposal classification scores
-    model.Conv(
-        'conv_rpn',
-        'rpn_cls_logits',
-        dim_in,
-        num_anchors,
-        kernel=1,
-        pad=0,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
+    
+    
+def test_unicode_json_item_verbose(httpbin):
+    r = http('--verbose', '--json',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+        DEFAULTS = {
+        'default_options': []
+    }
+    
+            # host:port => host_port
+        hostname = hostname.replace(':', '_')
+        path = os.path.join(config_dir,
+                            SESSIONS_DIR_NAME,
+                            hostname,
+                            session_name + '.json')
+    
+        def unsaved_files(self):
+        '''Lists files that have modified Augeas DOM but the changes have not
+        been written to the filesystem yet, used by `self.save()` and
+        ApacheConfigurator to check the file state.
+    
+        @certbot_util.patch_get_utility()
+    def test_successful_choice(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 3)
+        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
+    
+    
+Credentials
+-----------
+    
+    Use of this plugin requires a configuration file containing DigitalOcean API
+credentials, obtained from your DigitalOcean account's `Applications & API
+Tokens page <https://cloud.digitalocean.com/settings/api/tokens>`_.
+    
+      Args:
+    clean_lines: A CleansedLines instance containing the file.
+    nesting_state: A NestingState instance which maintains information about
+                   the current stack of nested blocks being parsed.
+    expr: The expression to check.
+  Returns:
+    True, if token looks like a type.
+  '''
+  # Keep only the last token in the expression
+  last_word = Match(r'^.*(\b\S+)$', expr)
+  if last_word:
+    token = last_word.group(1)
+  else:
+    token = expr
+    
+    from ycm.client.base_request import BaseRequest, BuildRequestData
+from ycm.vimsupport import PostVimMessage
+    
+    
+class ShutdownRequest( BaseRequest ):
+  def __init__( self ):
+    super( ShutdownRequest, self ).__init__()
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
     )
-    # Proposal bbox regression deltas
-    model.Conv(
-        'conv_rpn',
-        'rpn_bbox_pred',
-        dim_in,
-        4 * num_anchors,
-        kernel=1,
-        pad=0,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    
-        kp_fg_rois_per_this_image = np.minimum(fg_rois_per_image, kp_fg_inds.size)
-    if kp_fg_inds.size > kp_fg_rois_per_this_image:
-        kp_fg_inds = np.random.choice(
-            kp_fg_inds, size=kp_fg_rois_per_this_image, replace=False
-        )
-    
-    from detectron.core.config import cfg
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-import detectron.roi_data.retinanet as retinanet_roi_data
-import detectron.roi_data.rpn as rpn_roi_data
-import detectron.utils.blob as blob_utils
-    
-        blobs['retnet_fg_num'], blobs['retnet_bg_num'] = 0.0, 0.0
-    for im_i, entry in enumerate(roidb):
-        scale = im_scales[im_i]
-        im_height = np.round(entry['height'] * scale)
-        im_width = np.round(entry['width'] * scale)
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        assert len(gt_inds) > 0, \
-            'Empty ground truth empty for image is not allowed. Please check.'
+  )
     
     
-def loader_loop(roi_data_loader):
-    load_timer = Timer()
-    iters = 100
-    for i in range(iters):
-        load_timer.tic()
-        roi_data_loader.get_next_minibatch()
-        load_timer.toc()
-        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
-              i + 1, iters, load_timer.average_time))
-    
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
-        else:
-            print(url, file=sys.stderr)
+def KeywordsFromSyntaxListOutput_StatementAndTypeGroups_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+foogroup xxx foo bar
+             links to Statement
+bargroup xxx zoo goo
+             links to Type''' ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
