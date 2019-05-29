@@ -1,178 +1,125 @@
 
         
-        
-def check_entry(line_num, segments):
-    # START Title
-    raw_title = segments[index_title]
-    title_re_match = link_re.match(raw_title)
-    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
-    if not title_re_match:
-        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
-    else:
-        # do not allow '... API' in the entry title
-        title = title_re_match.group(1)
-        if title.upper().endswith(' API'):
-            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
-        # do not allow duplicate links
-        link = title_re_match.group(2)
-        if link in previous_links:
-            add_error(line_num, 'Duplicate link - entries should only be included in one section')
-        else:
-            previous_links.append(link)
-    # END Title
-    # START Description
-    # first character should be capitalized
-    char = segments[index_desc][0]
-    if char.upper() != char:
-        add_error(line_num, 'first character of description is not capitalized')
-    # last character should not punctuation
-    char = segments[index_desc][-1]
-    if char in punctuation:
-        add_error(line_num, 'description should not end with {}'.format(char))
-    desc_length = len(segments[index_desc])
-    if desc_length > 100:
-        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
-    # END Description
-    # START Auth
-    # values should conform to valid options only
-    auth = segments[index_auth]
-    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
-        add_error(line_num, 'auth value is not enclosed with `backticks`')
-    if auth.replace('`', '') not in auth_keys:
-        add_error(line_num, '{} is not a valid Auth option'.format(auth))
-    # END Auth
-    # START HTTPS
-    # values should conform to valid options only
-    https = segments[index_https]
-    if https not in https_keys:
-        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
-    # END HTTPS
-    # START CORS
-    # values should conform to valid options only
-    cors = segments[index_cors]
-    if cors not in cors_keys:
-        add_error(line_num, '{} is not a valid CORS option'.format(cors))
-    # END CORS
+            # Set the random seed
+    if hparams.random_seed > 0:
+      tf.set_random_seed(hparams.random_seed)
     
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+      # Note that we put these 'truth' rates and input into this
+  # structure, the only data that is used in LFADS are the noisy
+  # data e.g. spike trains.  The rest is either for printing or posterity.
+  data = {'train_truth': rates_train,
+          'valid_truth': rates_valid,
+          'input_train_truth' : input_train,
+          'input_valid_truth' : inputs_valid,
+          'train_data' : noisy_data_train,
+          'valid_data' : noisy_data_valid,
+          'train_percentage' : train_percentage,
+          'nreplications' : nreplications,
+          'dt' : rnn['dt'],
+          'input_magnitude' : input_magnitude,
+          'input_times_train' : input_times_train,
+          'input_times_valid' : input_times_valid,
+          'P_sxn' : P_sxn,
+          'condition_labels_train' : condition_labels_train,
+          'condition_labels_valid' : condition_labels_valid,
+          'conversion_factor': 1.0 / rnn['conversion_factor']}
+  datasets[dataset_name] = data
     
-    if __name__ == '__main__':
-    list_n_samples = np.linspace(100, 10000, 5).astype(np.int)
-    list_n_features = [10, 100, 1000]
-    n_test = 1000
-    max_iter = 1000
-    noise = 0.1
-    alpha = 0.01
-    sgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    elnet_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    ridge_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    asgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    for i, n_train in enumerate(list_n_samples):
-        for j, n_features in enumerate(list_n_features):
-            X, y, coef = make_regression(
-                n_samples=n_train + n_test, n_features=n_features,
-                noise=noise, coef=True)
+    DATA_DIR = 'rnn_synth_data_v1.0'
     
-    Does two benchmarks
+        # Split special chars at the start of word
+    will_split = True
+    while will_split:
+      will_split = False
+      for char in _START_SPECIAL_CHARS:
+        if word.startswith(char):
+          tokenized.append(char)
+          word = word[len(char):]
+          will_split = True
+    
+      wasserstein_loss = real_avg - fake_avg
+  return wasserstein_loss
+    
+          for s in xrange(t, FLAGS.sequence_length):
+        cum_advantage += reward_missing_list[s] * np.power(gamma, (s - t)) * (
+            rewards_list[s] - baselines[s])
+      # Clip advantages.
+      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
+                                       FLAGS.advantage_clipping)
+      advantages.append(reward_missing_list[t] * cum_advantage)
+      final_gen_objective += tf.multiply(
+          log_probability,
+          reward_missing_list[t] * tf.stop_gradient(cum_advantage))
+    
+      for var in variables:
+    clipped_var = tf.clip_by_value(var, c_lower, c_upper)
+    
+    
+def construct_ngrams_dict(ngrams_list):
+  '''Construct a ngram dictionary which maps an ngram tuple to the number
+  of times it appears in the text.'''
+  counts = {}
+    
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
+    
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
     
     
 if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    legend2_values_list = list(legend2.values())
-legend2_keys_list = list(legend2.keys())
-    
-    We generate data from three groups of waveforms. Two of the waveforms
-(waveform 1 and waveform 2) are proportional one to the other. The cosine
-distance is invariant to a scaling of the data, as a result, it cannot
-distinguish these two waveforms. Thus even with no noise, clustering
-using this distance will not separate out waveform 1 and 2.
-    
-    fig.show()
+    main()
 
     
-    import numpy as np
-import matplotlib.pyplot as plt
+                        # Pandoc's definition_lists. See http://pandoc.org/README.html
+                    # for more information.
+                    ret += '\n%s\n:   %s\n' % (option, description)
+                    continue
+            ret += line.lstrip() + '\n'
+        else:
+            ret += line + '\n'
     
+    import io
+import re
     
-def best_server(probe_nat=False):
-    best_server = None
-    prober = new_pteredor(probe_nat=probe_nat)
-    prober.qualified = True
-    if not probe_nat:
-        prober.nat_type = 'unknown'
-        prober.rs_cone_flag = 0
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
+        @pytest.mark.parametrize('error', [IOError, OSError])
+    def test_super_len_handles_files_raising_weird_errors_in_tell(self, error):
+        '''If tell() raises errors, assume the cursor is at position zero.'''
+        class BoomFile(object):
+            def __len__(self):
+                return 5
+    
+            This function eventually generates a ``Cookie`` header from the
+        given cookies using cookielib. Due to cookielib's design, the header
+        will not be regenerated if it already exists, meaning this function
+        can only be called once for the life of the
+        :class:`PreparedRequest <PreparedRequest>` object. Any subsequent calls
+        to ``prepare_cookies`` will have no actual effect, unless the 'Cookie'
+        header is removed beforehand.
+        '''
+        if isinstance(cookies, cookielib.CookieJar):
+            self._cookies = cookies
+        else:
+            self._cookies = cookiejar_from_dict(cookies)
+    
+        :rtype: str
     '''
-    
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
-    
-        def backwards(self, orm):
-        'Write your backwards methods here.'
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'VersionDSymFile'
-        db.create_table(
-            'sentry_versiondsymfile', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ProjectDSymFile'], null=True
-                    )
-                ), (
-                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.DSymApp']
-                    )
-                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
-                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['VersionDSymFile'])
-    
-        complete_apps = ['sentry']
-
-    
-    
-class TestDynamicExpanding(unittest.TestCase):
-    def setUp(self):
-        self.John = Person('John', 'Coder')
-    
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        from pprint import pprint
-    
-        @staticmethod
-    def check_range(request):
-        if 0 <= request < 10:
-            print('request {} handled in handler 0'.format(request))
-            return True
+    scheme, netloc, path, params, query, fragment = urlparse(url, new_scheme)
