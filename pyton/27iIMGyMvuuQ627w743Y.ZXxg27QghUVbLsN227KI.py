@@ -1,114 +1,159 @@
 
         
-        
-class RequestStatus(Enum):
+        KEY_PREFIX = 'django.contrib.sessions.cache'
     
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
+        def create_model_instance(self, data):
+        '''
+        Return a new instance of the session model object, which represents the
+        current session state. Intended to be used for saving the session data
+        to the database.
+        '''
+        return self.model(
+            session_key=self._get_or_create_session_key(),
+            session_data=self.encode(data),
+            expire_date=self.get_expiry_date(),
+        )
     
-        def append_to_front(self, node):
-        ...
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
     
-        # Test that writing over the input data works predictably
-    for mode in ['torch', 'tf']:
-        x = np.random.uniform(0, 255, (2, 10, 10, 3))
-        xint = x.astype('int')
-        x2 = utils.preprocess_input(x, mode=mode)
-        xint2 = utils.preprocess_input(xint)
-        assert_allclose(x, x2)
-        assert xint.astype('float').max() != xint2.max()
-    # Caffe mode works differently from the others
+    
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
+    
+    
+def test_preprocess_input():
+    # Test image batch with float and int image input
     x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    xint = x.astype('int')
-    x2 = utils.preprocess_input(x, data_format='channels_last', mode='caffe')
-    xint2 = utils.preprocess_input(xint)
-    assert_allclose(x, x2[..., ::-1])
-    assert xint.astype('float').max() != xint2.max()
-    
-    model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
-    
-    print('Vectorizing sequence data...')
-tokenizer = Tokenizer(num_words=max_words)
-x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
-x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
     
     
-def sparse_categorical_crossentropy(y_true, y_pred):
-    return K.sparse_categorical_crossentropy(y_true, y_pred)
+def test_kernel_regularization():
+    x_train, y_train = get_data()
+    for reg in [regularizers.l1(),
+                regularizers.l2(),
+                regularizers.l1_l2()]:
+        model = create_model(kernel_regularizer=reg)
+        model.compile(loss='categorical_crossentropy', optimizer='sgd')
+        assert len(model.losses) == 1
+        model.train_on_batch(x_train, y_train)
     
-    Originally created for this issue:
-https://github.com/scrapy/scrapy/issues/606
     
-        def set_crawler(self, crawler):
-        assert not hasattr(self, '_crawler'), 'crawler already set'
-        self._crawler = crawler
+def normalize(x, axis=-1, order=2):
+    '''Normalizes a Numpy array.
+    
+        Example 1 - Training models with weights merge on CPU
     
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
+def test_deconv_length():
+    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
+    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
+    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
+    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
+    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
+    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
     
-            def creatorForNetloc(self, hostname, port):
-            return ScrapyClientTLSOptions(hostname.decode('ascii'), self.getContext())
+        assert len(blobs_in) == k_max - k_min + 1
+    bbox_feat_list = []
+    cls_pred_dim = (
+        model.num_classes if cfg.RETINANET.SOFTMAX else (model.num_classes - 1)
+    )
+    # unpacked bbox feature and add prediction layers
+    bbox_regr_dim = (
+        4 * (model.num_classes - 1) if cfg.RETINANET.CLASS_SPECIFIC_BBOX else 4
+    )
     
-            if not aws_access_key_id:
-            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
-        if not aws_secret_access_key:
-            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-            # XXX: Google parses at least first 100k bytes; scrapy's redirect
-        # middleware parses first 4k. 4k turns out to be insufficient
-        # for this middleware, and parsing 100k could be slow.
-        # We use something in between (32K) by default.
-        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
+def add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale):
+    '''Add RPN outputs to a single scale model (i.e., no FPN).'''
+    anchors = generate_anchors(
+        stride=1. / spatial_scale,
+        sizes=cfg.RPN.SIZES,
+        aspect_ratios=cfg.RPN.ASPECT_RATIOS
+    )
+    num_anchors = anchors.shape[0]
+    dim_out = dim_in
+    # RPN hidden representation
+    model.Conv(
+        blob_in,
+        'conv_rpn',
+        dim_in,
+        dim_out,
+        kernel=3,
+        pad=1,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    model.Relu('conv_rpn', 'conv_rpn')
+    # Proposal classification scores
+    model.Conv(
+        'conv_rpn',
+        'rpn_cls_logits',
+        dim_in,
+        num_anchors,
+        kernel=1,
+        pad=0,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    # Proposal bbox regression deltas
+    model.Conv(
+        'conv_rpn',
+        'rpn_bbox_pred',
+        dim_in,
+        4 * num_anchors,
+        kernel=1,
+        pad=0,
+        stride=1,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
     
-    import logging
-import numpy as np
+        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
+    bg_inds = np.where(
+        (max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
+        (max_overlaps >= cfg.TRAIN.BG_THRESH_LO)
+    )[0]
+    # Compute number of background RoIs to take from this image (guarding
+    # against there being fewer than desired)
+    bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
+    bg_rois_per_this_image = np.minimum(bg_rois_per_this_image, bg_inds.size)
+    # Sample foreground regions without replacement
+    if bg_inds.size > 0:
+        bg_inds = npr.choice(
+            bg_inds, size=bg_rois_per_this_image, replace=False
+        )
     
-        def blend(self, mask):
-        ''' Blur mask if requested '''
-        logger.trace('Blending mask')
-        mask = BlurMask(self.config['type'],
-                        mask,
-                        self.config['radius'],
-                        self.config['passes']).blurred
-        return mask
-
     
-    logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
-    
-            # Check that ref_vid is a video when it needs to be
-        if self.args.action in self._actions_req_ref_video:
-            if self.ref_vid.is_type('none'):
-                raise ValueError('The file chosen as the reference video is '
-                                 'not a video, either leave the field blank '
-                                 'or type 'None': '
-                                 '{}'.format(self.ref_vid.path))
-        elif self.args.action in self._actions_can_use_ref_video:
-            if self.ref_vid.is_type('none'):
-                logger.warning('Warning: no reference video was supplied, even though '
-                               'one may be used with the chosen action. If this is '
-                               'intentional then ignore this warning.')
-    
-        def draw_black_image(self):
-        ''' Change image to black at correct dimensions '''
-        logger.trace('Drawing black image')
-        height, width = self.image.shape[:2]
-        self.image = np.zeros((height, width, 3), np.uint8)
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
