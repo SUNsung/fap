@@ -1,200 +1,124 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
+                      # Rename :minute and :second to :min and :sec
+              default[:min] ||= default[:minute]
+              default[:sec] ||= default[:second]
+    
+          delegate_to Type
+    
+        attr_reader :filters
+    
+        def effective_path
+      @effective_path ||= effective_url.path
+    end
+  end
 end
 
     
-            @hide_this_step = false
-        if exception
-          if @exceptions.include?(exception)
-            @hide_this_step = true
-            return
-          end
+        self.params = {}
+    self.headers = { 'User-Agent' => 'DevDocs' }
+    self.force_gzip = false
     
-            def log_error(error)
-          Jekyll.logger.error 'LiveReload experienced an error. ' \
-            'Run with --trace for more information.'
-          raise error
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
         end
-      end
+    
+        def deconstruct_keys(keys)
+      C.keys = keys
+      @obj
     end
   end
-end
-
     
-          attr_accessor :page, :layout, :content, :paginator
-      attr_accessor :highlighter_prefix, :highlighter_suffix
-    
-            parsed_expr = parse_expression(expression)
-        @context.stack do
-          groups = input.group_by do |item|
-            @context[variable] = item
-            parsed_expr.render(@context)
-          end
-          grouped_array(groups)
+    $testnum=0
+$ntest=0
+$failed = 0
+class Progress
+  def initialize
+    @color = nil
+    @tty = nil
+    @quiet = nil
+    @verbose = nil
+    ARGV.each do |arg|
+      case arg
+      when /\A--color(?:=(?:always|(auto)|(never)|(.*)))?\z/
+        warn 'unknown --color argument: #$3' if $3
+        @color = $1 ? nil : !$2
+      when /\A--tty(=(?:yes|(no)|(.*)))?\z/
+        warn 'unknown --tty argument: #$3' if $3
+        @tty = !$1 || !$2
+        true
+      when /\A-(q|-quiet)\z/
+        @quiet = true
+      when /\A-(v|-verbose)\z/
+        @verbose = true
+      end
+    end
+    @tty = STDERR.tty? && !STDOUT.tty? && /dumb/ !~ ENV['TERM'] if @tty.nil?
+    @eol = @tty && !@verbose ? '\r\e[K\r' : '\n'
+    case @color
+    when nil
+      @color = @tty
+    end
+    if @color
+      # dircolors-like style
+      colors = (colors = ENV['TEST_COLORS']) ? Hash[colors.scan(/(\w+)=([^:\n]*)/)] : {}
+      begin
+        File.read(File.join(__dir__, '../test/colors')).scan(/(\w+)=([^:\n]*)/) do |n, c|
+          colors[n] ||= c
         end
+      rescue
       end
-    
-          it 'activates an existing user' do
-        users(:bob).deactivate!
-        visit admin_users_path
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
-        expect(page).to have_no_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).to be_active
-      end
-    end
-  end
-end
-
-    
-        it 'does not send previously configured sources when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      select2('SF Weather', from: 'Sources')
-      select_agent_type('Webhook Agent')
-      fill_in(:agent_name, with: 'No sources')
-      click_on 'Save'
-      expect(page).to have_content('No sources')
-      agent = Agent.find_by(name: 'No sources')
-      expect(agent.sources).to eq([])
-    end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-          it 'should be valid with a valid uploaded scenario' do
-        subject.file = StringIO.new(valid_data)
-        expect(subject).to be_valid
-      end
-    end
-  end
-    
-          it 'loads only the workers specified in the :only option' do
-        agent_runner = AgentRunner.new(only: HuginnScheduler)
-        workers = agent_runner.send(:load_workers)
-        expect(workers.keys).to eq(['HuginnScheduler'])
-        agent_runner.stop
-      end
-    
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-      describe '#recursively_interpolate_jsonpaths' do
-    it 'interpolates all string values in a structure' do
-      struct = {
-        :int => 5,
-        :string => 'this <escape $.works>',
-        :array => ['<works>', 'now', '<$.there.world>'],
-        :deep => {
-          :string => 'hello <there.world>',
-          :hello => :world
-        }
-      }
-      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
-      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
-        :int => 5,
-        :string => 'this should+work',
-        :array => ['should work', 'now', 'WORLD'],
-        :deep => {
-          :string => 'hello WORLD',
-          :hello => :world
-        }
-      })
-    end
-  end
-    
-    describe Agents::BoxcarAgent do
-  before(:each) do
-  @valid_params = {
-                    'user_credentials' => 'access_token',
-                    'title' => 'Sample Title',
-                    'body' => 'Sample Body'
-                  }
-  @checker = Agents::BoxcarAgent.new(:name => 'boxcartest', :options => @valid_params)
-  @checker.user = users(:bob)
-  @checker.save!
-    
-      add_filter %r{^/build.rb$}
-  add_filter %r{^/config.rb$}
-  add_filter %r{^/constants.rb$}
-  add_filter %r{^/postinstall.rb$}
-  add_filter %r{^/test.rb$}
-  add_filter %r{^/compat/}
-  add_filter %r{^/dev-cmd/tests.rb$}
-  add_filter %r{^/test/}
-  add_filter %r{^/vendor/}
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
-    
-      config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = 'test'
-    puppet.manifest_file = 'vagrant.pp'
-  end
-end
-
-    
-          logger.fatal('Fix the above problems, and you'll be rolling packages in no time!')
-      return 1
-    end
-    input_class = FPM::Package.types[input_type]
-    output_class = FPM::Package.types[output_type]
-    
-      # Does this package have the given script?
-  def script?(name)
-    return scripts.include?(name)
-  end # def script?
-    
-        if self.attributes[:osxpkg_payload_free?]
-      args << '--nopayload'
+      @passed = '\e[;#{colors['pass'] || '32'}m'
+      @failed = '\e[;#{colors['fail'] || '31'}m'
+      @reset = '\e[m'
     else
-      args += ['--root', staging_path]
+      @passed = @failed = @reset = ''
     end
+    extend(Rotator) if @tty
+  end
     
-      end # def input
-end # class FPM::Package::PEAR
+    undef printf
+alias printf printf_orig
 
     
-        # Copy 'files' from builddir to :output/files
-    Find.find('files', 'manifests') do |path|
-      logger.info('Copying path: #{path}')
-      if File.directory?(path)
-        ::Dir.mkdir(File.join(params[:output], path))
-      else
-        FileUtils.cp(path, File.join(params[:output], path))
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+      def execute
+    signal_deprecation_warning_for_pack
+    
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
+    
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
       end
+    
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+        def poster
+      'poster='#{@poster}'' if @poster
     end
-  end # def build!
     
-      # Output a tarball.
-  #
-  # If the output path ends predictably (like in .tar.gz) it will try to obey
-  # the compression type.
-  def output(output_path)
-    output_check(output_path)
+    Given /^(?:|I )am on (.+)$/ do |page_name|
+  visit path_to(page_name)
+end
     
-    # Use a zip as a package.
-#
-# This provides no metadata. Both input and output are supported.
-class FPM::Package::Zip < FPM::Package
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+  end
+    
+        # Returns the underscored, pluralized version of the class name.
+    # e.g. 'users' for the User class.
+    # NOTE: The arguments need to be optional, because some tools fetch
+    # all class names. Calling #class will return the expected class.
+    def class attachment = nil, style_name = nil
+      return super() if attachment.nil? && style_name.nil?
+      plural_cache.underscore_and_pluralize_class(attachment.instance.class)
+    end
