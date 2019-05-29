@@ -1,243 +1,233 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    // Called by python code on initialization.
-//
-// 'trampoline' must represent a python function which has the
-// following signature:
-//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
-//     ndarray | list(ndarray) | python scalar |
-//     EagerTensor | list(EagerTensor) | None
-//
-// The trampoline takes two arguments, the first is a string token
-// used by the python frontend's dispatching logic; the second is a
-// list of numpy ndarrays or EagerTensor objects. It can return a
-// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
-// EagerTensor, a list of EagerTensors, or None.
-//
-// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
-// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
-// of EagerTensors, or None.
-//
-// The C++ runtime converts outputs back to Tensor objects.
-//
-// This function is called by script_ops.py during its module initialization.
-//
-// TODO(zhifengc): Support distributed runtime.
-void InitializePyTrampoline(PyObject* trampoline);
-    
-    
-    {}  // namespace tensorflow
-
-    
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    bool HostTimer::Stop(Stream* stream) {
-  return stream->ThenDoHostCallback([this]() { this->StopNow(); }).ok();
+        
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-      // Stops the timer at the present point in the stream.
-  bool Stop(Stream *stream);
-    
-    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            appendTo.append(fBeginMarkup);
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getEndIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(fEndMarkup);
-            break;
-        default:
-            break;
-        }
-    }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
-}
-    
-    ScriptSet & ScriptSet::operator =(const ScriptSet &other) {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] = other.bits[i];
-    }
-    return *this;
-}
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
-
-    
-    void
-SimpleTimeZone::initTransitionRules(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (transitionRulesInitialized) {
-        return;
-    }
-    deleteTransitionRules();
-    UnicodeString tzid;
-    getID(tzid);
-    }
-    
-    #include 'unicode/uobject.h'
-#include 'unicode/utypes.h'
-    
-    #include 'unicode/utypes.h'
-    
-        /**
-     * Remove any match data.  This must be called before performing a
-     * set of matches with this segment.
-     */
-    void resetMatch();
-    
-            for (oOutput=0; oOutput<output.length(); ) {
-            if (oOutput == cursorPos) {
-                // Record the position of the cursor
-                newStart = destLimit - destStart; // relative to start
-            }
-            UChar32 c = output.char32At(oOutput);
-            UnicodeReplacer* r = data->lookupReplacer(c);
-            if (r == NULL) {
-                // Accumulate straight (non-segment) text.
-                buf.append(c);
-            } else {
-                isComplex = TRUE;
-    }
-    }
-    
-    #endif
-
-    
-    namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-    
-    {  // We had a counted inner array---we need to do an O(N) copy to get the
-  // collection into the request local heap.
-  auto const apcArr = APCArray::fromHandle(m_arrayHandle);
-  auto const col = Object::attach(collections::alloc(m_colType));
-  switch (m_colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    fillCollection(static_cast<BaseVector*>(col.get()), apcArr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    fillCollection(static_cast<BaseSet*>(col.get()), apcArr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    fillMap(static_cast<BaseMap*>(col.get()), apcArr);
-    break;
-  case CollectionType::Pair:
-    always_assert(0);
-    break;
+    // Popup menus may get squished if they open up too close to the bottom of the
+// screen. This function takes the size of the screen, the size of the menu,
+// an optional widget, the Y position of the mouse click, and adjusts the popup
+// menu's Y position to make it fit if it's possible to do so.
+// Returns the new Y position of the popup menu.
+int CalculateMenuYPosition(const GdkRectangle* screen_rect,
+                           const GtkRequisition* menu_req,
+                           GtkWidget* widget, const int y) {
+  CHECK(screen_rect);
+  CHECK(menu_req);
+  // If the menu would run off the bottom of the screen, and there is enough
+  // screen space upwards to accommodate the menu, then pop upwards. If there
+  // is a widget, then also move the anchor point to the top of the widget
+  // rather than the bottom.
+  const int screen_top = screen_rect->y;
+  const int screen_bottom = screen_rect->y + screen_rect->height;
+  const int menu_bottom = y + menu_req->height;
+  int alternate_y = y - menu_req->height;
+  if (widget) {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    alternate_y -= allocation.height;
   }
-  return col;
+  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
+    return alternate_y;
+  return y;
 }
     
-    void Config::ParseIniFile(const std::string &filename, IniSettingMap &ini,
-                          const bool constants_only /* = false */,
-                          const bool is_system /* = true */ ) {
-    std::ifstream ifs(filename);
-    std::string str((std::istreambuf_iterator<char>(ifs)),
-                    std::istreambuf_iterator<char>());
-    std::string with_includes;
-    Config::ReplaceIncludesWithIni(filename, str, with_includes);
-    Config::SetParsedIni(ini, with_includes, filename, constants_only,
-                         is_system);
+    void Menu::Popup(int x, int y, content::RenderFrameHost* rfh) {
+  // Rebuild();
+    }
+    
+    
+    {  base::ListValue args;
+  dispatcher_host()->SendEvent(this, 'click', args);
 }
+    
+    using namespace extensions::nwapi::nw__app;
+    
+    
+    {} // namespace extensions
+#endif
+
+    
+      /// @brief Deprecated; use <code>Reshape(const vector<int>& shape)</code>.
+  void Reshape(const int num, const int channels, const int height,
+      const int width);
+  /**
+   * @brief Change the dimensions of the blob, allocating new memory if
+   *        necessary.
+   *
+   * This function can be called both to create an initial allocation
+   * of memory, and to adjust the dimensions of a top blob during Layer::Reshape
+   * or Layer::Forward. When changing the size of blob, memory will only be
+   * reallocated if sufficient memory does not already exist, and excess memory
+   * will never be freed.
+   *
+   * Note that reshaping an input blob and immediately calling Net::Backward is
+   * an error; either Net::Forward or Net::Reshape need to be called to
+   * propagate the new input shape to higher layers.
+   */
+  void Reshape(const vector<int>& shape);
+  void Reshape(const BlobShape& shape);
+  void ReshapeLike(const Blob& other);
+  inline string shape_string() const {
+    ostringstream stream;
+    for (int i = 0; i < shape_.size(); ++i) {
+      stream << shape_[i] << ' ';
+    }
+    stream << '(' << count_ << ')';
+    return stream.str();
+  }
+  inline const vector<int>& shape() const { return shape_; }
+  /**
+   * @brief Returns the dimension of the index-th axis (or the negative index-th
+   *        axis from the end, if index is negative).
+   *
+   * @param index the axis index, which may be negative as it will be
+   *        'canonicalized' using CanonicalAxisIndex.
+   *        Dies on out of range index.
+   */
+  inline int shape(int index) const {
+    return shape_[CanonicalAxisIndex(index)];
+  }
+  inline int num_axes() const { return shape_.size(); }
+  inline int count() const { return count_; }
+    
+    #include 'caffe/common.hpp'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the predictions @f$ x @f$, a Blob with values in
+   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
+   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
+   *      label @f$ \hat{l}_n @f$ given by its maximal index:
+   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
+   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+   *      the labels @f$ l @f$, an integer-valued Blob with values
+   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
+   *      indicating the correct class label among the @f$ K @f$ classes
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      the computed accuracy: @f$
+   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
+   *      @f$, where @f$
+   *      \delta\{\mathrm{condition}\} = \left\{
+   *         \begin{array}{lr}
+   *            1 & \mbox{if condition} \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      /// @brief The spatial dimensions of a filter kernel.
+  Blob<int> kernel_shape_;
+  /// @brief The spatial dimensions of the stride.
+  Blob<int> stride_;
+  /// @brief The spatial dimensions of the padding.
+  Blob<int> pad_;
+  /// @brief The spatial dimensions of the dilation.
+  Blob<int> dilation_;
+  /// @brief The spatial dimensions of the convolution input.
+  Blob<int> conv_input_shape_;
+  /// @brief The spatial dimensions of the col_buffer.
+  vector<int> col_buffer_shape_;
+  /// @brief The spatial dimensions of the output.
+  vector<int> output_shape_;
+  const vector<int>* bottom_shape_;
+    
+    
+    {  // extra temporarary variables is used to carry out sums/broadcasting
+  // using BLAS
+  Blob<Dtype> batch_sum_multiplier_;
+  Blob<Dtype> num_by_chans_;
+  Blob<Dtype> spatial_sum_multiplier_;
+};
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
+}
+    
+    #include <grpc/support/port_platform.h>
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    #include <grpc/support/time.h>
+#include <grpcpp/support/config.h>
+#include <grpcpp/support/time.h>
+    
+    class Env;
+class WriteControllerToken;
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    // PersistentCache
+//
+// Persistent cache interface for caching IO pages on a persistent medium. The
+// cache interface is specifically designed for persistent read cache.
+class PersistentCache {
+ public:
+  typedef std::vector<std::map<std::string, double>> StatsType;
+    }
+    
+      // Control over blocks (user data is stored in a set of blocks, and
+  // a block is the unit of reading from disk).
     
     /*
- * Attempt to log an entry to the perf warning service.
- *
- * If StructuredLog::enabled() returns false or this event is discarded by the
- * effective sample rate, nothing will be logged. If both of those checks pass,
- * fillCols will be passed a StructuredLogEntry& to populate, which will then
- * be logged. The column names 'event_name' and 'priority' are reserved and
- * will be overwritten is fillCols() sets them.
- *
- * The effective sample rate is determined by Eval.PerfWarningSampleRate * rate
- * (or kDefaultPerfWarningRate for the overloads that don't take a rate). If
- * the effective sample rate is 0, all events will be discarded.
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    setInfoLog
+ * Signature: (JJ)V
  */
-template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols);
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols);
-    
-      FILE *getStream() { return m_stream;}
+void Java_org_rocksdb_BackupableDBOptions_setInfoLog(JNIEnv* /*env*/,
+                                                     jobject /*jobj*/,
+                                                     jlong jhandle,
+                                                     jlong /*jlogger_handle*/) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  auto* sptr_logger =
+      reinterpret_cast<std::shared_ptr<rocksdb::LoggerJniCallback>*>(jhandle);
+  bopt->info_log = sptr_logger->get();
+}
