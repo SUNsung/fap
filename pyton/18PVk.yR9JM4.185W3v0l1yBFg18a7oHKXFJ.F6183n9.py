@@ -1,76 +1,28 @@
 
         
-        
-class DefaultCategories(Enum):
-    
-        def within_past_week(self, timestamp):
-        '''Return True if timestamp is within past week, False otherwise.'''
-        ...
-    
-    
-class UserGraphService(object):
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
-            help='also display twisted/python/platform info (useful for bug reports)')
-    
-        @classmethod
-    def default_decoder(cls, value):
-        try:
-            return pyrfc3339.parse(value)
-        except ValueError as error:
-            raise jose.DeserializationError(error)
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-    AUTOHSTS_FREQ = 172800
-'''Minimum time since last increase to perform a new one: 48h'''
+            # Generate canonical proposals from shifted anchors
+    # Enumerate all shifted positions on the (H, W) grid
+    fpn_max_size = cfg.FPN.COARSEST_STRIDE * np.ceil(
+        cfg.TRAIN.MAX_SIZE / float(cfg.FPN.COARSEST_STRIDE)
+    )
+    field_size = int(np.ceil(fpn_max_size / float(stride)))
+    shifts = np.arange(0, field_size) * stride
+    shift_x, shift_y = np.meshgrid(shifts, shifts)
+    shift_x = shift_x.ravel()
+    shift_y = shift_y.ravel()
+    shifts = np.vstack((shift_x, shift_y, shift_x, shift_y)).transpose()
     
     
-here = os.path.abspath(os.path.dirname(__file__))
-    
-    
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
-    
-    
-  def Start( self ):
-    request_data = BuildRequestData( self._buffer_number )
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data[ 'event_name' ] = self._event_name
-    
-      with CurrentWorkingDirectory( unicode_dir ):
-    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-      with MockCompletionRequest( ServerResponse ):
-        ycm.SendCompletionRequest()
-        ok_( ycm.CompletionRequestReady() )
-        assert_that(
-          ycm.GetCompletionResponse(),
-          has_entries( {
-            'completions': empty(),
-            'completion_start_column': 1
-          } )
-        )
-    
-        server_message = {
-      'message': 'this message came from the server'
-    }
-    
-    def is_prime(n):
-    if n % 2 == 0:
-        return False
+def add_mask_rcnn_blobs(blobs, sampled_boxes, roidb, im_scale, batch_idx):
+    '''Add Mask R-CNN specific blobs to the input blob dictionary.'''
+    # Prepare the mask targets by associating one gt mask to each training roi
+    # that has a fg (non-bg) class label.
+    M = cfg.MRCNN.RESOLUTION
+    polys_gt_inds = np.where(
+        (roidb['gt_classes'] > 0) & (roidb['is_crowd'] == 0)
+    )[0]
+    polys_gt = [roidb['segms'][i] for i in polys_gt_inds]
+    boxes_from_polys = segm_utils.polys_to_boxes(polys_gt)
+    fg_inds = np.where(blobs['labels_int32'] > 0)[0]
+    roi_has_mask = blobs['labels_int32'].copy()
+    roi_has_mask[roi_has_mask > 0] = 1
