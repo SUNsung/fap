@@ -1,97 +1,118 @@
 
         
-                def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
+                if explicit_plugins.any? { |spec| filename =~ /^#{spec.name}/ }
+          FileUtils.mv(gem_file, ::File.join(explicit_path, filename))
+        else
+          FileUtils.mv(gem_file, ::File.join(dependencies_path, filename))
         end
-    
-          test 'a child inherits layout from abstract controller2' do
-        controller = AbstractWithStringChildDefaultsToInherited.new
-        controller.process(:index)
-        assert_equal 'With String Hello abstract child!', controller.response_body
-      end
-    
-    $LOAD_PATH.unshift File.expand_path('lib', __dir__)
-require 'jekyll/version'
-    
-    def global_require
-  JSON.pretty_generate(DATA)
-end
-    
-    Benchmark.ips do |x|
-  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
-  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
       end
     end
-  end
-end
-
     
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
+      def update_gems!
+    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
+    previous_gem_specs_map = find_latest_gem_specs
+    
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
   end
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
     end
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
+      end
     
-    NP = 5
-ROW = 8 + NP
-COL = 8
-    
-      context 'called with one color' do
-    it 'applies same color to all sides' do
-      rule = 'border-color: #f00'
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-width: 11px; ' +
-                'border-right-width: 12px; ' +
-                'border-left-width: 13px;'
-      bad_rule = 'border-bottom-width: null;'
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
     end
   end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
     
-      context 'called with null values' do
-    it 'writes rules for others' do
-      ruleset = 'position: static; ' +
-                'top: 11px; ' +
-                'left: 13px;'
-      bad_rule = 'position-bottom: null; position-right: null;'
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+              # directories have a magic string inserted into their name
+          full_record_path = extension_header[TAR_NAME_OFFSET_START..TAR_NAME_OFFSET_END].delete('\0')
+          full_record_path = add_paxstring(full_record_path)
+    
+      # Take a flat package as input
+  def input(input_path)
+    # TODO: Fail if it's a Distribution pkg or old-fashioned
+    expand_dir = File.join(build_path, 'expand')
+    # expand_dir must not already exist for pkgutil --expand
+    safesystem('pkgutil --expand #{input_path} #{expand_dir}')
+    
+        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
+    libs.each do |file|
+      base = staging_path(File.join(attributes[:prefix]))
+      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
+      File.chmod(0755, File.join(base, file))
+    end
+    
+        begin
+      safesystem('#{attributes[:python_bin]} -c 'import pkg_resources'')
+    rescue FPM::Util::ProcessFailed => e
+      logger.error('Your python environment is missing a working setuptools module. I tried to find the 'pkg_resources' module but failed.', :python => attributes[:python_bin], :error => e)
+      raise FPM::Util::ProcessFailed, 'Python (#{attributes[:python_bin]}) is missing pkg_resources module.'
+    end
+    
+        safesystem('tar', *args)
+  end # def output
