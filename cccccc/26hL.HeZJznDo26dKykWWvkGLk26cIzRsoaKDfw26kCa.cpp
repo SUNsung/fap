@@ -1,159 +1,982 @@
 
         
-          EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
+        VERB(abbreviate)
+VERB(accept)
+VERB(activate)
+VERB(add)
+VERB(adjust)
+VERB(admire)
+VERB(admit)
+VERB(advise)
+VERB(afford)
+VERB(agree)
+VERB(alert)
+VERB(allow)
+VERB(alter)
+VERB(amuse)
+VERB(analyse)
+VERB(analyze)
+VERB(animate)
+VERB(announce)
+VERB(annoy)
+VERB(answer)
+VERB(apologise)
+VERB(appear)
+VERB(append)
+VERB(applaud)
+VERB(apply)
+VERB(apportion)
+VERB(appreciate)
+VERB(approve)
+VERB(argue)
+VERB(arrange)
+VERB(arrest)
+VERB(arrive)
+VERB(ask)
+VERB(assign)
+VERB(attach)
+VERB(attack)
+VERB(attempt)
+VERB(attend)
+VERB(attract)
+VERB(avoid)
+VERB(awake)
+VERB(back)
+VERB(bake)
+VERB(balance)
+VERB(ban)
+VERB(bang)
+VERB(bare)
+VERB(bat)
+VERB(bathe)
+VERB(battle)
+VERB(be)
+VERB(beat)
+VERB(become)
+VERB(beg)
+VERB(begin)
+VERB(behave)
+VERB(belong)
+VERB(bend)
+VERB(bet)
+VERB(bid)
+VERB(bite)
+VERB(bleach)
+VERB(bless)
+VERB(blind)
+VERB(blink)
+VERB(blot)
+VERB(blow)
+VERB(blush)
+VERB(boast)
+VERB(boil)
+VERB(bolt)
+VERB(bomb)
+VERB(book)
+VERB(bore)
+VERB(borrow)
+VERB(bounce)
+VERB(bow)
+VERB(box)
+VERB(brake)
+VERB(branch)
+VERB(break)
+VERB(breathe)
+VERB(bring)
+VERB(broadcast)
+VERB(bruise)
+VERB(brush)
+VERB(bubble)
+VERB(build)
+VERB(bump)
+VERB(burn)
+VERB(bury)
+VERB(buy)
+VERB(buzz)
+VERB(calculate)
+VERB(call)
+VERB(camp)
+VERB(cancel)
+VERB(capture)
+VERB(care)
+VERB(carry)
+VERB(carve)
+VERB(cast)
+VERB(catch)
+VERB(cause)
+VERB(center)
+VERB(challenge)
+VERB(change)
+VERB(charge)
+VERB(chase)
+VERB(cheat)
+VERB(check)
+VERB(cheer)
+VERB(chew)
+VERB(choke)
+VERB(choose)
+VERB(chop)
+VERB(claim)
+VERB(clap)
+VERB(clean)
+VERB(clear)
+VERB(click)
+VERB(close)
+VERB(coach)
+VERB(coil)
+VERB(collect)
+VERB(collapse)
+VERB(colour)
+VERB(comb)
+VERB(come)
+VERB(command)
+VERB(commit)
+VERB(communicate)
+VERB(compare)
+VERB(compete)
+VERB(complain)
+VERB(complete)
+VERB(concentrate)
+VERB(concern)
+VERB(confess)
+VERB(confuse)
+VERB(connect)
+VERB(consider)
+VERB(consist)
+VERB(contain)
+VERB(contains)
+VERB(continue)
+VERB(convert)
+VERB(copy)
+VERB(correct)
+VERB(cough)
+VERB(cost)
+VERB(count)
+VERB(cover)
+VERB(crack)
+VERB(crash)
+VERB(crawl)
+VERB(cross)
+VERB(crush)
+VERB(cry)
+VERB(cure)
+VERB(curl)
+VERB(curve)
+VERB(customize)
+VERB(cut)
+VERB(cycle)
+VERB(dam)
+VERB(damage)
+VERB(dance)
+VERB(dare)
+VERB(decay)
+VERB(deceive)
+VERB(decide)
+VERB(decode)
+VERB(decorate)
+VERB(defer)
+VERB(define)
+VERB(delay)
+VERB(delete)
+VERB(delight)
+VERB(deliver)
+VERB(depend)
+VERB(describe)
+VERB(deselect)
+VERB(desert)
+VERB(deserve)
+VERB(destroy)
+VERB(detach)
+VERB(detect)
+VERB(develop)
+VERB(dig)
+VERB(dim)
+VERB(disagree)
+VERB(disappear)
+VERB(disapprove)
+VERB(disarm)
+VERB(discover)
+VERB(dislike)
+VERB(dismiss)
+VERB(display)
+VERB(divide)
+VERB(do)
+VERB(double)
+VERB(doubt)
+VERB(drag)
+VERB(drain)
+VERB(draw)
+VERB(dream)
+VERB(dress)
+VERB(drink)
+VERB(drip)
+VERB(drive)
+VERB(drop)
+VERB(drown)
+VERB(drum)
+VERB(dry)
+VERB(duplicate)
+VERB(dust)
+VERB(earn)
+VERB(eat)
+VERB(echo)
+VERB(edit)
+VERB(educate)
+VERB(embarrass)
+VERB(employ)
+VERB(empty)
+VERB(enable)
+VERB(encode)
+VERB(encourage)
+VERB(end)
+VERB(enjoy)
+VERB(enter)
+VERB(entertain)
+VERB(enumerate)
+VERB(enqueue)
+VERB(escape)
+VERB(examine)
+VERB(excite)
+VERB(excuse)
+VERB(execute)
+VERB(exercise)
+VERB(exist)
+VERB(expand)
+VERB(expect)
+VERB(explain)
+VERB(explode)
+VERB(export)
+VERB(extend)
+VERB(face)
+VERB(fade)
+VERB(fail)
+VERB(fancy)
+VERB(fasten)
+VERB(fax)
+VERB(fear)
+VERB(feel)
+VERB(fence)
+VERB(fetch)
+VERB(fight)
+VERB(fill)
+VERB(film)
+VERB(find)
+VERB(finish)
+VERB(fire)
+VERB(fit)
+VERB(fix)
+VERB(flap)
+VERB(flash)
+VERB(flatten)
+VERB(flip)
+VERB(float)
+VERB(flood)
+VERB(flow)
+VERB(flower)
+VERB(fly)
+VERB(focus)
+VERB(fold)
+VERB(follow)
+VERB(fool)
+VERB(force)
+VERB(forget)
+VERB(forgive)
+VERB(form)
+VERB(found)
+VERB(freeze)
+VERB(frighten)
+VERB(fry)
+VERB(gain)
+VERB(gather)
+VERB(gaze)
+VERB(generate)
+VERB(get)
+VERB(give)
+VERB(glow)
+VERB(glue)
+VERB(go)
+VERB(grab)
+VERB(grate)
+VERB(grease)
+VERB(greet)
+VERB(grin)
+VERB(grip)
+VERB(groan)
+VERB(grow)
+VERB(guarantee)
+VERB(guard)
+VERB(guess)
+VERB(guide)
+VERB(hammer)
+VERB(hand)
+VERB(handle)
+VERB(hang)
+VERB(happen)
+VERB(harass)
+VERB(harm)
+VERB(hate)
+VERB(haunt)
+VERB(head)
+VERB(heal)
+VERB(heap)
+VERB(hear)
+VERB(heat)
+VERB(help)
+VERB(hide)
+VERB(highlight)
+VERB(hit)
+VERB(hold)
+VERB(hook)
+VERB(hop)
+VERB(hope)
+VERB(hover)
+VERB(hug)
+VERB(hum)
+VERB(hunt)
+VERB(hurry)
+VERB(hurt)
+VERB(identify)
+VERB(ignore)
+VERB(imagine)
+VERB(import)
+VERB(impress)
+VERB(improve)
+VERB(include)
+VERB(increase)
+VERB(influence)
+VERB(inform)
+VERB(inject)
+VERB(injure)
+VERB(insert)
+VERB(instruct)
+VERB(intend)
+VERB(interest)
+VERB(interfere)
+VERB(interrupt)
+VERB(intersect)
+VERB(intersects)
+VERB(introduce)
+VERB(invent)
+VERB(invite)
+VERB(irritate)
+VERB(itch)
+VERB(jail)
+VERB(jam)
+VERB(jog)
+VERB(join)
+VERB(joke)
+VERB(judge)
+VERB(juggle)
+VERB(jump)
+VERB(keep)
+VERB(kick)
+VERB(kill)
+VERB(kiss)
+VERB(kneel)
+VERB(knit)
+VERB(knock)
+VERB(knot)
+VERB(know)
+VERB(label)
+VERB(land)
+VERB(last)
+VERB(laugh)
+VERB(launch)
+VERB(lay)
+VERB(lead)
+VERB(learn)
+VERB(leave)
+VERB(lend)
+VERB(let)
+VERB(level)
+VERB(license)
+VERB(lick)
+VERB(lie)
+VERB(lighten)
+VERB(like)
+VERB(listen)
+VERB(live)
+VERB(load)
+VERB(localize)
+VERB(lock)
+VERB(long)
+VERB(look)
+VERB(lose)
+VERB(love)
+VERB(maintain)
+VERB(make)
+VERB(man)
+VERB(manage)
+VERB(march)
+VERB(mark)
+VERB(marry)
+VERB(match)
+VERB(mate)
+VERB(matter)
+VERB(mean)
+VERB(measure)
+VERB(meddle)
+VERB(meet)
+VERB(melt)
+VERB(memorise)
+VERB(mend)
+VERB(merge)
+VERB(mess)
+VERB(milk)
+VERB(mine)
+VERB(miss)
+VERB(minus)
+VERB(mix)
+VERB(moan)
+VERB(moor)
+VERB(mourn)
+VERB(move)
+VERB(muddle)
+VERB(mug)
+VERB(multiply)
+VERB(murder)
+VERB(nail)
+VERB(nest)
+VERB(nod)
+VERB(normalize)
+VERB(note)
+VERB(notice)
+VERB(notify)
+VERB(number)
+VERB(obey)
+VERB(observe)
+VERB(obtain)
+VERB(occur)
+VERB(offend)
+VERB(offer)
+VERB(open)
+VERB(order)
+VERB(overflow)
+VERB(owe)
+VERB(own)
+VERB(pack)
+VERB(paddle)
+VERB(paint)
+VERB(park)
+VERB(part)
+VERB(pass)
+VERB(paste)
+VERB(pat)
+VERB(pause)
+VERB(pay)
+VERB(peck)
+VERB(pedal)
+VERB(peel)
+VERB(peep)
+VERB(perform)
+VERB(permit)
+VERB(phone)
+VERB(pick)
+VERB(pinch)
+VERB(pine)
+VERB(place)
+VERB(plan)
+VERB(plant)
+VERB(play)
+VERB(please)
+VERB(plug)
+VERB(poke)
+VERB(polish)
+VERB(pop)
+VERB(possess)
+VERB(post)
+VERB(pour)
+VERB(practice)
+VERB(practise)
+VERB(pray)
+VERB(preach)
+VERB(precede)
+VERB(prefer)
+VERB(preload)
+VERB(prepare)
+VERB(prepend)
+VERB(present)
+VERB(preserve)
+VERB(press)
+VERB(pretend)
+VERB(prevent)
+VERB(prick)
+VERB(print)
+VERB(produce)
+VERB(program)
+VERB(promise)
+VERB(protect)
+VERB(provide)
+VERB(pull)
+VERB(pump)
+VERB(punch)
+VERB(puncture)
+VERB(punish)
+VERB(push)
+VERB(put)
+VERB(question)
+VERB(queue)
+VERB(race)
+VERB(radiate)
+VERB(rain)
+VERB(raise)
+VERB(reach)
+VERB(read)
+VERB(realise)
+VERB(receive)
+VERB(recognise)
+VERB(record)
+VERB(reduce)
+VERB(reflect)
+VERB(refuse)
+VERB(register)
+VERB(regret)
+VERB(reign)
+VERB(reject)
+VERB(rejoice)
+VERB(relax)
+VERB(release)
+VERB(rely)
+VERB(remain)
+VERB(remember)
+VERB(remind)
+VERB(remove)
+VERB(repair)
+VERB(repeat)
+VERB(replace)
+VERB(reply)
+VERB(report)
+VERB(request)
+VERB(require)
+VERB(resize)
+VERB(rescue)
+VERB(resolve)
+VERB(retain)
+VERB(retire)
+VERB(return)
+VERB(reverse)
+VERB(review)
+VERB(rhyme)
+VERB(ride)
+VERB(ring)
+VERB(rinse)
+VERB(rise)
+VERB(risk)
+VERB(rob)
+VERB(rock)
+VERB(roll)
+VERB(rot)
+VERB(rub)
+VERB(ruin)
+VERB(rule)
+VERB(run)
+VERB(rush)
+VERB(sack)
+VERB(sail)
+VERB(satisfy)
+VERB(save)
+VERB(saw)
+VERB(say)
+VERB(scale)
+VERB(scare)
+VERB(scatter)
+VERB(scold)
+VERB(scorch)
+VERB(scrape)
+VERB(scratch)
+VERB(scream)
+VERB(screw)
+VERB(scribble)
+VERB(scroll)
+VERB(scrub)
+VERB(seal)
+VERB(search)
+VERB(see)
+VERB(select)
+VERB(sell)
+VERB(send)
+VERB(separate)
+VERB(serve)
+VERB(settle)
+VERB(shade)
+VERB(share)
+VERB(shave)
+VERB(shelter)
+VERB(shiver)
+VERB(shock)
+VERB(shop)
+VERB(show)
+VERB(shrug)
+VERB(shut)
+VERB(sigh)
+VERB(sign)
+VERB(signal)
+VERB(sin)
+VERB(sing)
+VERB(sip)
+VERB(sit)
+VERB(ski)
+VERB(skip)
+VERB(slap)
+VERB(sleep)
+VERB(slip)
+VERB(slow)
+VERB(smash)
+VERB(smell)
+VERB(smile)
+VERB(smoke)
+VERB(snatch)
+VERB(sneeze)
+VERB(sniff)
+VERB(snore)
+VERB(snow)
+VERB(soak)
+VERB(soothe)
+VERB(sound)
+VERB(spare)
+VERB(spark)
+VERB(sparkle)
+VERB(speak)
+VERB(spell)
+VERB(spend)
+VERB(spill)
+VERB(spoil)
+VERB(spot)
+VERB(spray)
+VERB(sprout)
+VERB(squash)
+VERB(squeak)
+VERB(squeal)
+VERB(squeeze)
+VERB(stain)
+VERB(stamp)
+VERB(stand)
+VERB(standardise)
+VERB(standardize)
+VERB(stare)
+VERB(start)
+VERB(stay)
+VERB(steer)
+VERB(step)
+VERB(stir)
+VERB(stitch)
+VERB(stop)
+VERB(store)
+VERB(strap)
+VERB(strengthen)
+VERB(stretch)
+VERB(strip)
+VERB(stroke)
+VERB(stuff)
+VERB(subtract)
+VERB(succeed)
+VERB(suck)
+VERB(suffer)
+VERB(suggest)
+VERB(suit)
+VERB(supply)
+VERB(support)
+VERB(suppose)
+VERB(suppress)
+VERB(surprise)
+VERB(surround)
+VERB(suspect)
+VERB(suspend)
+VERB(swim)
+VERB(switch)
+VERB(take)
+VERB(talk)
+VERB(tame)
+VERB(tap)
+VERB(taste)
+VERB(teach)
+VERB(tear)
+VERB(tease)
+VERB(telephone)
+VERB(tell)
+VERB(tempt)
+VERB(terrify)
+VERB(test)
+VERB(thank)
+VERB(thaw)
+VERB(think)
+VERB(throw)
+VERB(tick)
+VERB(tickle)
+VERB(tie)
+VERB(time)
+VERB(tip)
+VERB(tire)
+VERB(toggle)
+VERB(touch)
+VERB(tour)
+VERB(tow)
+VERB(trace)
+VERB(trade)
+VERB(train)
+VERB(translate)
+VERB(transform)
+VERB(transport)
+VERB(trap)
+VERB(travel)
+VERB(traverse)
+VERB(treat)
+VERB(tremble)
+VERB(trick)
+VERB(trip)
+VERB(trot)
+VERB(trouble)
+VERB(truncate)
+VERB(trust)
+VERB(try)
+VERB(tug)
+VERB(tumble)
+VERB(turn)
+VERB(twist)
+VERB(understand)
+VERB(undress)
+VERB(unfasten)
+VERB(union)
+VERB(unite)
+VERB(unload)
+VERB(unlock)
+VERB(unpack)
+VERB(untidy)
+VERB(up)
+VERB(update)
+VERB(use)
+VERB(validate)
+VERB(vanish)
+VERB(visit)
+VERB(wail)
+VERB(wait)
+VERB(wake)
+VERB(walk)
+VERB(wander)
+VERB(want)
+VERB(warm)
+VERB(warn)
+VERB(wash)
+VERB(waste)
+VERB(watch)
+VERB(water)
+VERB(wave)
+VERB(wear)
+VERB(weigh)
+VERB(welcome)
+VERB(whine)
+VERB(whip)
+VERB(whirl)
+VERB(whisper)
+VERB(whistle)
+VERB(win)
+VERB(wink)
+VERB(wipe)
+VERB(wish)
+VERB(wobble)
+VERB(wonder)
+VERB(work)
+VERB(worry)
+VERB(wrap)
+VERB(wreck)
+VERB(wrestle)
+VERB(wriggle)
+VERB(write)
+VERB(yawn)
+VERB(yell)
+VERB(zip)
+VERB(zoom)
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-    
-    class Base1 {
- public:
-  virtual ~Base1() {}
-  int pad;
+    struct IAMOptions {
+  // TODO: fine-grained control over how we infer
+  static IAMOptions getDefault();
 };
     
-    REGISTER_GRADIENT(Sub, GetSubGradient);
-    
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    UnicodeString &ScriptSet::displayScripts(UnicodeString &dest) const {
-    UBool firstTime = TRUE;
-    for (int32_t i = nextSetBit(0); i >= 0; i = nextSetBit(i + 1)) {
-        if (!firstTime) {
-            dest.append((UChar)0x20);
-        }
-        firstTime = FALSE;
-        const char *scriptName = uscript_getShortName((UScriptCode(i)));
-        dest.append(UnicodeString(scriptName, -1, US_INV));
-    }
-    return dest;
+    bool ArgsToFrontendInputsConverter::forAllFilesInFilelist(
+    Arg const *const pathArg, llvm::function_ref<void(StringRef)> fn) {
+  if (!pathArg)
+    return false;
+  StringRef path = pathArg->getValue();
+  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> filelistBufferOrError =
+      llvm::MemoryBuffer::getFile(path);
+  if (!filelistBufferOrError) {
+    Diags.diagnose(SourceLoc(), diag::cannot_open_file, path,
+                   filelistBufferOrError.getError().message());
+    return true;
+  }
+  for (auto file :
+       llvm::make_range(llvm::line_iterator(*filelistBufferOrError->get()),
+                        llvm::line_iterator()))
+    fn(file);
+  ConfigurationFileBuffers.push_back(std::move(*filelistBufferOrError));
+  return false;
 }
     
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
     
-    U_NAMESPACE_END
+    {}  // namespace leveldb
     
-    U_NAMESPACE_END
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
-    
-    #endif
-
-    
-        /**
-     * Returns TRUE if this instance represents no constraints on significant
-     * digits.
-     */
-    UBool isNoConstraints() const {
-        return fMin == 0 && fMax == INT32_MAX;
+    namespace leveldb {
     }
     
-    // A hash code of kInvalidHashCode indicates that the hash code needs
-// to be computed. A hash code of kEmptyHashCode is used for empty keys
-// and for any key whose computed hash code is kInvalidHashCode.
-static const int32_t kInvalidHashCode = 0;
-static const int32_t kEmptyHashCode = 1;
-// The 'bogus hash code' replaces a separate fBogus flag.
-static const int32_t kBogusHashCode = 2;
+    TEST(HASH, SignedUnsignedIssue) {
+  const uint8_t data1[1] = {0x62};
+  const uint8_t data2[2] = {0xc3, 0x97};
+  const uint8_t data3[3] = {0xe2, 0x99, 0xa5};
+  const uint8_t data4[4] = {0xe1, 0x80, 0xb9, 0x32};
+  const uint8_t data5[48] = {
+      0x01, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
+      0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00, 0x18, 0x28, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  };
+    }
     
-      port::CondVar* GetCondVar() {
-    return &cv_;
+      void PartialCompactTestReopenWithFault(ResetMethod reset_method,
+                                         int num_pre_sync, int num_post_sync) {
+    env_->SetFilesystemActive(false);
+    CloseDB();
+    ResetDBState(reset_method);
+    ASSERT_OK(OpenDB());
+    ASSERT_OK(Verify(0, num_pre_sync, FaultInjectionTest::VAL_EXPECT_NO_ERROR));
+    ASSERT_OK(Verify(num_pre_sync, num_post_sync,
+                     FaultInjectionTest::VAL_EXPECT_ERROR));
   }
     
-    Status WriteBatchBase::Delete(ColumnFamilyHandle* column_family,
-                              const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return Delete(column_family, key_slice);
+    bool Reader::SkipToInitialBlock() {
+  const size_t offset_in_block = initial_offset_ % kBlockSize;
+  uint64_t block_start_location = initial_offset_ - offset_in_block;
+    }
+    
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        static_assert(kHeaderSize == 7, '');
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
+    
+    // Footer encapsulates the fixed information stored at the tail
+// end of every table file.
+class Footer {
+ public:
+  // Encoded length of a Footer.  Note that the serialization of a
+  // Footer will always occupy exactly this many bytes.  It consists
+  // of two block handles and a magic number.
+  enum { kEncodedLength = 2 * BlockHandle::kMaxEncodedLength + 8 };
+    }
+    
+    
+    {
+    {  void FindShortSuccessor(std::string* key) const override {
+    // Find first character that can be incremented
+    size_t n = key->size();
+    for (size_t i = 0; i < n; i++) {
+      const uint8_t byte = (*key)[i];
+      if (byte != static_cast<uint8_t>(0xff)) {
+        (*key)[i] = byte + 1;
+        key->resize(i + 1);
+        return;
+      }
+    }
+    // *key is a run of 0xffs.  Leave it alone.
+  }
+};
+}  // namespace
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size / 5 - 1048576);
 }
     
-      // open DB with two column families
-  std::vector<ColumnFamilyDescriptor> column_families;
-  // have to open default column family
-  column_families.push_back(ColumnFamilyDescriptor(
-      kDefaultColumnFamilyName, ColumnFamilyOptions()));
-  // open the new one, too
-  column_families.push_back(ColumnFamilyDescriptor(
-      'new_cf', ColumnFamilyOptions()));
-  std::vector<ColumnFamilyHandle*> handles;
-  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
-  assert(s.ok());
+      ~Writer();
     
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
     
-      // Attempt to acquire lock.  Return OK on success, or other Status on failure.
-  // If returned status is OK, TransactionDB will eventually call UnLock().
-  virtual Status Lock() = 0;
+    {
+    {    for (const auto &batch : (*dmat)->GetRowBatches()) {
+      for (int i = 0; i < batch.Size(); i++) {
+        auto inst = batch[i];
+        for (int j = 0; i < inst.size(); i++) {
+          ASSERT_EQ(inst[j].fvalue, 1.5);
+        }
+      }
+    }
+    delete dmat;
+  }
+}
+
+    
+      devices = GPUSet::Range(1, 0);
+  EXPECT_EQ(devices.Size(), 0);
+  EXPECT_TRUE(devices.IsEmpty());
+    
+    
+    {
+    {XGBOOST_REGISTER_LINEAR_UPDATER(ShotgunUpdater, 'shotgun')
+    .describe(
+        'Update linear model according to shotgun coordinate descent '
+        'algorithm.')
+    .set_body([]() { return new ShotgunUpdater(); });
+}  // namespace linear
+}  // namespace xgboost
+
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(6, 2);
+    
+    int RadarState201::radar_power(const std::uint8_t* bytes,
+                               int32_t length) const {
+  Byte t0(bytes + 3);
+  uint32_t x = t0.get_byte(0, 2);
+    }
+    
+      MatrixXd offset_golden(10, 1);
+  offset_golden << 0, 0, -80, 0, -160, 0, -240, 0, 0, 0;
+    
+    double Spline1dSeg::Derivative(const double x) const { return derivative_(x); }
+    
+    SplineSegKernel::SplineSegKernel() {
+  const int reserved_num_params = reserved_order_ + 1;
+  CalculateFx(reserved_num_params);
+  CalculateDerivative(reserved_num_params);
+  CalculateSecondOrderDerivative(reserved_num_params);
+  CalculateThirdOrderDerivative(reserved_num_params);
+}
+    
+    // config detail: {'name': 'angular_speed', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
+// 'bit': 39, 'type': 'double', 'order': 'motorola', 'physical_unit': 'rev/s'}
+double Brakemotorrpt271::angular_speed(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    TEST(Brake61Test, General) {
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
+    }
+    
+    void Headlightrpt77::Parse(const std::uint8_t* bytes, int32_t length,
+                           ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_headlight_rpt_77()->set_commanded_value(
+      commanded_value(bytes, length));
+}
