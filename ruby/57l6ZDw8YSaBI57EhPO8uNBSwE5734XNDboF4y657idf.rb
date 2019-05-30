@@ -1,67 +1,66 @@
 
         
-        def piece(n, a, nb)
-  nb.each{|x|
-    a[n] = x
-    if n == NP-1
-      $p << [a.sort]
-    else
-      nbc=nb.dup
-      [-ROW, -1, 1, ROW].each{|d|
-        if x+d > 0 and not a.include?(x+d) and not nbc.include?(x+d)
-          nbc << x+d
-        end
-      }
-      nbc.delete x
-      piece(n+1,a[0..n],nbc)
-    end
-  }
-end
+          # :stopdoc:
+  def _dispatch_0() nil end
+  def _dispatch_1(a) a end
+  def _dispatch_2(a, b) a end
+  def _dispatch_3(a, b, c) a end
+  def _dispatch_4(a, b, c, d) a end
+  def _dispatch_5(a, b, c, d, e) a end
+  def _dispatch_6(a, b, c, d, e, f) a end
+  def _dispatch_7(a, b, c, d, e, f, g) a end
+  # :startdoc:
     
-    Given(/^a linked file '(.*?)'$/) do |file|
-  # ignoring other linked files
-  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
-end
+        a = []
+    (0..).step {|x| a << x; break if a.size == 10 }
+    assert_equal([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], a)
     
-      def test_file_exists(path)
-    exists?('f', path)
+    @output = nil
+def self.output=(output)
+  if @output and @output != output
+    raise 'you can specify only one of --changed, --revision.h and --doxygen'
+  end
+  @output = output
+end
+@suppress_not_found = false
+    
+    class TestTime < Test::Unit::TestCase
+  def setup
+    @verbose = $VERBOSE
+    $VERBOSE = nil
   end
     
-        def setup_filters
-      @filters = cmdline_filters
-      @filters += @custom_filters if @custom_filters
-      @filters << Filter.new(:role, ENV['ROLES']) if ENV['ROLES']
-      @filters << Filter.new(:host, ENV['HOSTS']) if ENV['HOSTS']
-      fh = fetch_for(:filter, {}) || {}
-      @filters << Filter.new(:host, fh[:hosts]) if fh[:hosts]
-      @filters << Filter.new(:role, fh[:roles]) if fh[:roles]
-      @filters << Filter.new(:host, fh[:host]) if fh[:host]
-      @filters << Filter.new(:role, fh[:role]) if fh[:role]
-    end
-    
-          def ask_question
-        $stdout.print question
-        $stdout.flush
-      end
-    
-            def keys
-          @properties.keys
+            occisect = Isect.new
+        @spheres[0].intersect(ray, occisect)
+        @spheres[1].intersect(ray, occisect)
+        @spheres[2].intersect(ray, occisect)
+        @plane.intersect(ray, occisect)
+        if occisect.hit then
+          occlusion = occlusion + 1.0
+        else
+          0.0
         end
-    
-          # Returns an array of source file location(s) where the given key was
-      # assigned (i.e. where `set` was called). If the key was never assigned,
-      # returns `nil`.
-      def source_locations(key)
-        locations[key]
-      end
-    
-    set_if_empty :local_user, -> { ENV['USER'] || ENV['LOGNAME'] || ENV['USERNAME'] }
-
-    
-        it 'rejects XSS attempts' do
-      xss_links.each do |link|
-        expect { generate_new_liquid(link) }.to raise_error(StandardError)
       end
     end
-  end
+    
+      array
 end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+        def initialize(klass, name, options)
+      @klass = klass
+      @name = name
+      @options = options
+    end
