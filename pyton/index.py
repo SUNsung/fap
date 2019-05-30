@@ -1,146 +1,109 @@
 
         
-          return values_b_txn
+            # The output is [num_batch_paths, max_path_len, output_dim].
+    self.lstm_outputs, _ = tf.nn.dynamic_rnn(
+        lstm_cell, self.path_matrix, dtype=tf.float32,
+        sequence_length=self.sequence_lengths)
     
-          while cur_pos < num_steps:
-        if cur_stream[i] is None or len(cur_stream[i][0]) <= 1:
-          try:
-            cur_stream[i] = list(generator.next())
-          except StopIteration:
-            # No more data, exhaust current streams and quit
-            no_more_data = True
-            break
+      # Sample neuron subsets.  The assumption is the PC axes of the RNN
+  # are not unit aligned, so sampling units is adequate to sample all
+  # the high-variance PCs.
+  P_sxn = np.eye(S,N)
+  for m in range(n):
+    P_sxn = np.roll(P_sxn, S, axis=1)
     
-        softmax = self.sess.run(self.tensors['softmax_out'], feed_dict={
-        self.tensors['inputs_in']: input_ids,
-        self.tensors['char_inputs_in']: input_char_ids
-    })
+    np.set_printoptions(precision=3)
+np.set_printoptions(suppress=True)
     
-        self._word_char_ids = np.zeros([num_words, max_word_length], dtype=np.int32)
+      data_len = len(raw_data)
+  batch_len = data_len // batch_size
+  data = np.full([batch_size, batch_len], EOS_INDEX, dtype=np.int32)
+  for i in range(batch_size):
+    data[i] = raw_data[batch_len * i:batch_len * (i + 1)]
     
-        if FLAGS.prefix_label and use_prefix:
-      label = sequence_example.context.feature['class'].int64_list.value[0]
-      review_words = [EOS_INDEX + 1 + label]
-    else:
-      review_words = []
-    review_words.extend([
-        f.int64_list.value[0]
-        for f in sequence_example.feature_lists.feature_list['token_id'].feature
-    ])
-    all_words.append(review_words)
-  return all_words
+              eval_feed = {model.inputs: x, model.targets: y, model.present: p}
     
-        state_fwd = cell_fwd.zero_state(FLAGS.batch_size, tf.float32)
-    state_bwd = cell_bwd.zero_state(FLAGS.batch_size, tf.float32)
+    import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
+    import io
+import sys
+import re
     
-@pytest.fixture(autouse=True)
-def logs(mocker):
-    return mocker.patch('thefuck.entrypoints.not_configured.logs',
-                        new_callable=MagicMock)
+    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+README_FILE = os.path.join(ROOT_DIR, 'README.md')
     
+        def test_comments(self):
+        'Skipping: Not yet fully implemented'
+        return
+        jsi = JSInterpreter('''
+        function x() {
+            var x = /* 1 + */ 2;
+            var y = /* 30
+            * 40 */ 50;
+            return x + y;
+        }
+        ''')
+        self.assertEqual(jsi.call_function('x'), 52)
     
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+            self.port = random.randint(20000, 30000)
+        self.server_process = subprocess.Popen([
+            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
-    \tDid you mean `build`?
-'''
+    query                                    | scan
+update-item                              | update-table
     
-    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
-parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
-    ('foo{}', 'foo{}', 'foo{}'),
-    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
-    
-        try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
+    parametrize_script = pytest.mark.parametrize('script, fixed', [
+    ('tar xvf {}', 'mkdir -p {dir} && tar xvf {filename} -C {dir}'),
+    ('tar -xvf {}', 'mkdir -p {dir} && tar -xvf {filename} -C {dir}'),
+    ('tar --extract -f {}', 'mkdir -p {dir} && tar --extract -f {filename} -C {dir}')])
     
     
-class RedirectFallbackMiddleware(MiddlewareMixin):
-    # Defined as class-level attributes to be subclassing-friendly.
-    response_gone_class = HttpResponseGone
-    response_redirect_class = HttpResponsePermanentRedirect
+@functools.lru_cache()
+def get_citext_oids(connection_alias):
+    '''Return citext array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
+        return tuple(row[0] for row in cursor)
     
-        fpath = os.path.join(path, 'test')
-    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
-    
-        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
-                      output_shape=x.shape[1:])(inputs)
-    model1 = Model(inputs, outputs1)
-    out1 = model1.predict(x)
-    x2 = np.transpose(x, (0, 3, 1, 2))
-    inputs2 = Input(shape=x2.shape[1:])
-    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
-                      output_shape=x2.shape[1:])(inputs2)
-    model2 = Model(inputs2, outputs2)
-    out2 = model2.predict(x2)
-    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
+        def process_response(self, request, response):
+        # No need to check for a redirect for non-404 responses.
+        if response.status_code != 404:
+            return response
     
     
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+class settingslist_node(nodes.General, nodes.Element):
+    pass
     
-        return x_train, y_train
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
+        else:
+            # If this is a new file
+            if newfilename != _filename:
     
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+        def __exit__(self, exc_type, exc_value, traceback):
+        self.proc.kill()
+        self.proc.wait()
+        time.sleep(0.2)
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
 
     
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
     
-            # Adding field 'ApiToken.refresh_token'
-        db.add_column(
-            'sentry_apitoken',
-            'refresh_token',
-            self.gf('django.db.models.fields.CharField')(max_length=64, unique=True, null=True),
-            keep_default=False
-        )
+class Command(ScrapyCommand):
     
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'UserOption.organization'
-        db.add_column(
-            'sentry_useroption',
-            'organization',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.Organization'], null=True
-            ),
-            keep_default=False
-        )
+            if not self._has_ajax_crawlable_variant(response):
+            return response
