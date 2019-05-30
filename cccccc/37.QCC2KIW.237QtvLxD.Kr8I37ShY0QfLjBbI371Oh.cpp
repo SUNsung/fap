@@ -1,266 +1,292 @@
 
         
-        #include <string>
+        ```
     
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return !item->icon_.IsEmpty();
-}
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
-    
-    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
  public:
-  NwAppClearCacheFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-  void OnBrowsingDataRemoverDone() override;
-    }
-    
-          scw_->WriteImage(*bitmap);
-    
-    class NwObjCallObjectMethodFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCallObjectMethodFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    // A '1' in this array means the character is white space.  A '1' or
-// '2' means the character ends a name or command.
-static const char specialChars[256] = {
-  1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,   // 0x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 1x
-  1, 0, 0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0, 2,   // 2x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0,   // 3x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 4x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 5x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 6x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0,   // 7x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 8x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // 9x
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ax
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // bx
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // cx
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // dx
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   // ex
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    // fx
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    class PSTokenizer {
-public:
+    REGISTER_CUDA_OPERATOR(LC3D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC3DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
+    
+    
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
+};
+    
+    #include 'b2Glue.h'
+    
+    namespace Etc
+{
+	class Block4x4EncodingBits;
     }
     
-    Stream *Parser::makeStream(Object *dict, Guchar *fileKey,
-			   CryptAlgorithm encAlgorithm, int keyLength,
-			   int objNum, int objGen, std::set<int> *fetchOriginatorNums) {
-  Object obj;
-  BaseStream *baseStr;
-  Stream *str;
-  Guint pos, endPos, length;
-    }
     
-    //------------------------------------------------------------------------
-// Parser
-//------------------------------------------------------------------------
-    
-    void SplashOutputDev::setVectorAntialias(GBool vaa) {
-  splash->setVectorAntialias(vaa);
+    {#if defined (__cplusplus)
 }
 #endif
     
-        inline size_t GetVersion(const Dictionary& dict)
-    {
-        if (!dict.Contains(versionKey))
-             LogicError('Required key '%ls' is not found in the dictionary.', versionKey.c_str());
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.*/
+    
+    void silk_decode_pitch(
+    opus_int16                  lagIndex,           /* I                                                                */
+    opus_int8                   contourIndex,       /* O                                                                */
+    opus_int                    pitch_lags[],       /* O    4 pitch values                                              */
+    const opus_int              Fs_kHz,             /* I    sampling frequency (kHz)                                    */
+    const opus_int              nb_subfr            /* I    number of sub frames                                        */
+);
+    
+        Rational result{ prat };
+    destroyrat(prat);
+    
+    #include <algorithm>
+#include 'Header Files/Number.h'
+    
+    void CCalcEngine::SettingsChanged()
+{
+    wchar_t lastDec = m_decimalSeparator;
+    wstring decStr = m_resourceProvider->GetCEngineString(L'sDecimal');
+    m_decimalSeparator = decStr.empty() ? DEFAULT_DEC_SEPARATOR : decStr.at(0);
+    // Until it can be removed, continue to set ratpak decimal here
+    SetDecimalSeparator(m_decimalSeparator);
     }
     
-            Dictionary initConfig;
-        initConfig[InitializerTypeAttributeName] = initializerTypeName;
-        initConfig[ScaleAttributeName] = scale;
-        // Initializers are sometimes created as default arguments in python.
-        // If the value for an automatically-selected seed is assigned here, 
-        // subsequent calls to SetFixedRandomSeed will be ignored.
-        initConfig[RandomSeedAttributeName] = (size_t)seed;        
-        return initConfig;
+    
+    {    AutomationProperties::SetName(m_host, announcement->Announcement);
+    AutomationPeer ^ peer = FrameworkElementAutomationPeer::FromElement(m_host);
+    if (peer != nullptr)
+    {
+        peer->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
+    }
+}
+
+    
+    namespace xgboost {
+namespace obj {
+    }
     }
     
-    static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, int outputRank, int filterRank, unsigned long seed)
+          ASSERT_TRUE(input == output);
+    
+    TEST(SparseColumn, Test) {
+  auto dmat = CreateDMatrix(100, 1, 0.85);
+  GHistIndexMatrix gmat;
+  gmat.Init((*dmat).get(), 256);
+  ColumnMatrix column_matrix;
+  column_matrix.Init(gmat, 0.5);
+  auto col = column_matrix.GetColumn(0);
+  ASSERT_EQ(col.Size(), gmat.index.size());
+  for (auto i = 0ull; i < col.Size(); i++) {
+    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
+              col.GetGlobalBinIdx(i));
+  }
+  delete dmat;
+}
+    
+      /*!
+   * \brief feature contributions to individual predictions; the output will be a vector
+   *         of length (nfeats + 1) * num_output_group * nsample, arranged in that order
+   * \param dmat feature matrix
+   * \param out_contribs output vector to hold the contributions
+   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
+   *    we do not limit number of trees
+   * \param approximate use a faster (inconsistent) approximation of SHAP values
+   * \param condition condition on the condition_feature (0=no, -1=cond off, 1=cond on).
+   * \param condition_feature feature to condition on (i.e. fix) during calculations
+   */
+  virtual void PredictContribution(DMatrix* dmat,
+                           std::vector<bst_float>* out_contribs,
+                           unsigned ntree_limit = 0, bool approximate = false,
+                           int condition = 0, unsigned condition_feature = 0) = 0;
+    
+    #include '../../src/common/host_device_vector.h'
+    
+        // Render command lists
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
-        if (scale <= 0)
-            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
-                initializerTypeName.c_str());
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
+        const int nVert = cmd_list->VtxBuffer.Size;
+        CIwFVec2* pVertStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwFVec2* pUVStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwColour* pColStream = IW_GX_ALLOC(CIwColour, nVert);
+    }
     
-                if (m_varKind == VariableKind::Input)
-            {
-                for (auto dim : m_shape.Dimensions())
-                {
-                    if (dim == 0)
-                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
-                }
-            }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
     
-    {            for (size_t i = 0; i < 2; i++)
-                Input(i)->Gradient().TransferToDeviceIfNotThere(m_deviceId, true);
-        }
-        catch (...)
+    #include 'imgui.h'
+#include 'imgui_impl_win32.h'
+#include 'imgui_impl_dx10.h'
+#include <d3d10_1.h>
+#include <d3d10.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+        // Show the window
+    ::ShowWindow(hwnd, SW_SHOWDEFAULT);
+    ::UpdateWindow(hwnd);
+    
+        // Poll and handle events (inputs, window resize, etc.)
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        ImGui_ImplSDL2_ProcessEvent(&event);
+        // Capture events here, based on io.WantCaptureMouse and io.WantCaptureKeyboard
+    }
+    
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-            fprintf(stderr, 'LookupTableNode unit test is not passed!');
-            return false;
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
+                done = true;
         }
+    }
     
-    #include 'Extension.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    
-InternalOptionInfo::~InternalOptionInfo() throw() {
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
 }
     
-    namespace osquery {
-namespace tables {
+    
+    {  int ret = x;
+  return ret;
+}
+    
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     2, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -2,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -1,  2, -1,  0,  0,  0,  0,  0,  0,  0,
+     1, -2,  1,  0,  0,  0,  0,  0,  0,  0,
+     0, -1,  2, -1,  0,  0,  0,  0,  0,  0,
+     0,  1, -2,  1,  0,  0,  0,  0,  0,  0,
+     0,  0, -1,  2, -1,  0,  0,  0,  0,  0,
+     0,  0,  1, -2,  1,  0,  0,  0,  0,  0,
+     0,  0,  0, -1,  2, -1,  0,  0,  0,  0,
+     0,  0,  0,  1, -2,  1,  0,  0,  0,  0,
+     0,  0,  0,  0, -1,  2, -1,  0,  0,  0,
+     0,  0,  0,  0,  1, -2,  1,  0,  0,  0,
+     0,  0,  0,  0,  0, -1,  2, -1,  0,  0,
+     0,  0,  0,  0,  0,  1, -2,  1,  0,  0,
+     0,  0,  0,  0,  0,  0, -1,  2, -1,  0,
+     0,  0,  0,  0,  0,  0,  1, -2,  1,  0,
+     0,  0,  0,  0,  0,  0,  0, -1,  2, -1,
+     0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    namespace apollo {
+namespace planning {
     }
     }
     
-    #include <vector>
-#include <string>
-    
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t pid,
-                                  int cpu,
-                                  int group_fd,
-                                  unsigned long const flags);
-    
-    namespace osquery {
-namespace table_tests {
+    namespace apollo {
+namespace planning {
     }
     }
     
-    #include <osquery/tests/integration/tables/helper.h>
+    void Accelrpt68::Parse(const std::uint8_t* bytes, int32_t length,
+                       ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_accel_rpt_68()->set_output_value(
+      output_value(bytes, length));
+}
+    
+    #include 'gtest/gtest.h'
+    
+      Byte t2(bytes + 6);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    TEST(Brake61Test, General) {
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
+    }
     
     
     {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    class kernelIntegrity : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
-    
-    class keychainItems : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
-    
-    struct CompactionIterationStats {
-  // Compaction statistics
-    }
-    
-    #include 'rocksdb/write_batch_base.h'
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
-  assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
-    
-      DB* db = nullptr;
-  DestroyDB(kDBPath, options);
-  Status s = DB::Open(options, kDBPath, &db);
-  assert(s.ok());
-  assert(db);
-    
-      // destroy and open DB
-  DB* db;
-  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
-  assert(s.ok());
-  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
-  assert(s.ok());
-    
-    #pragma once
-#ifndef ROCKSDB_LITE
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    #ifndef ROCKSDB_LITE
-    
-    #endif  // ROCKSDB_LITE
-
-    
-    TEST(Expected, CoroutineFailure) {
-  auto r1 = []() -> Expected<int, Err> {
-    auto x = co_await f1();
-    auto y = co_await f2(x);
-    auto z = co_await f4(x, y, Err::badder());
-    ADD_FAILURE();
-    co_return z;
-  }();
-  EXPECT_TRUE(r1.hasError());
-  EXPECT_EQ(Err::badder(), r1.error());
+    {
+    {
+    {  Headlight_rpt_77::Commanded_valueType ret =
+      static_cast<Headlight_rpt_77::Commanded_valueType>(x);
+  return ret;
 }
-    
-        int probeEnd = getNextZero(note, pos, pos + remaining - 1);
-    CHECK_GE(probeEnd, 0);
-    size_t probeLen = probeEnd - pos + 1;
-    std::string probe = getStr(note, pos, probeLen);
-    remaining -= probeLen;
-    
-    template <class UIntType, size_t w, size_t s, size_t r>
-struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
-  // [rand.eng.sub]: r * ceil(w / 32)
-  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
-};
-    
-    #pragma once
-    
-      template <typename T>
-  static counted_ptr<T, Atom> get_shared_ptr_from_counted_base(
-      counted_base* base,
-      bool inc = true) {
-    auto res = counted_ptr<T, Atom>(counted_shared_tag(), (T*)(base));
-    if (!inc) {
-      release_shared<T>(base, 1);
-    }
-    return res;
-  }
-    
-      static void prepare() noexcept {
-    instance().tasksLock.lock();
-    while (true) {
-      auto& tasks = instance().tasks;
-      auto task = tasks.rbegin();
-      for (; task != tasks.rend(); ++task) {
-        if (!task->prepare()) {
-          break;
-        }
-      }
-      if (task == tasks.rend()) {
-        return;
-      }
-      for (auto untask = tasks.rbegin(); untask != task; ++untask) {
-        untask->parent();
-      }
-    }
-  }
-    
-    #include <bitset>
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
