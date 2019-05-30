@@ -1,173 +1,729 @@
 
         
-        namespace {
-    }
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {}
+        REGISTER_OP('ShapelessOp');
     
     
-    {}  // namespace auto_updater
-
-    
-    namespace {
-    }
-    
-    workspace.RunOperatorOnce(op)
-print('indices: \n', workspace.FetchBlob('indices'))
-    
-    op = core.CreateOperator(
-    'Floor',
-    ['X'],
-    ['X'],
-)
-    
-    REGISTER_CPU_OPERATOR(GatherRangesToDense, GatherRangesToDenseOp<CPUContext>);
-NO_GRADIENT(GatherRangesToDense);
-    
-    OPERATOR_SCHEMA(GivenTensorBoolFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_BOOL>);
-    
-    class GetCol2ImGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
-  }
-};
-REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
-    
-    
-    {  // Set the maximum number of read-only files that will be mapped via mmap.
-  // Must be called before creating an Env.
-  static void SetReadOnlyMMapLimit(int limit);
-};
-    
-      uint32_t target_size = 10000;
-  uint32_t num_items = 0;
-  uint32_t count = 0;
-  std::string key;
-  std::string value, old_value;
-    
-    // Snapshots are kept in a doubly-linked list in the DB.
-// Each SnapshotImpl corresponds to a particular sequence number.
-class SnapshotImpl : public Snapshot {
- public:
-  SnapshotImpl(SequenceNumber sequence_number)
-      : sequence_number_(sequence_number) {}
-    }
-    
-    struct TableAndFile {
-  RandomAccessFile* file;
-  Table* table;
-};
-    
-    TEST(VersionEditTest, EncodeDecode) {
-  static const uint64_t kBig = 1ull << 50;
-    }
-    
-    // A file abstraction for sequential writing.  The implementation
-// must provide buffering since callers may append small fragments
-// at a time to the file.
-class LEVELDB_EXPORT WritableFile {
- public:
-  WritableFile() = default;
-    }
-    
-            int32_t const& Sign() const;
-        int32_t const& Exp() const;
-        std::vector<uint32_t> const& Mantissa() const;
-    
-    int CCalcEngine::IsNumberInvalid(const wstring& numberString, int iMaxExp, int iMaxMantissa, uint32_t radix) const
-{
-    int iError = 0;
-    }
-    
-            case IDC_PERCENT:
-        {
-            // If the operator is multiply/divide, we evaluate this as 'X [op] (Y%)'
-            // Otherwise, we evaluate it as 'X [op] (X * Y%)'
-            if (m_nOpCode == IDC_MUL || m_nOpCode == IDC_DIV)
-            {
-                result = rat / 100;
-            }
-            else
-            {
-                result = rat * (m_lastVal / 100);
-            }
-            break;
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
         }
+      }
+    }
+  }
+}
     
-    inline constexpr auto IDS_DIVBYZERO = IDS_ERRORS_FIRST;
-inline constexpr auto IDS_DOMAIN = IDS_ERRORS_FIRST + 1;
-inline constexpr auto IDS_UNDEFINED = IDS_ERRORS_FIRST + 2;
-inline constexpr auto IDS_POS_INFINITY = IDS_ERRORS_FIRST + 3;
-inline constexpr auto IDS_NEG_INFINITY = IDS_ERRORS_FIRST + 4;
-inline constexpr auto IDS_NOMEM = IDS_ERRORS_FIRST + 6;
-inline constexpr auto IDS_TOOMANY = IDS_ERRORS_FIRST + 7;
-inline constexpr auto IDS_OVERFLOW = IDS_ERRORS_FIRST + 8;
-inline constexpr auto IDS_NORESULT = IDS_ERRORS_FIRST + 9;
-inline constexpr auto IDS_INSUFFICIENT_DATA = IDS_ERRORS_FIRST + 10;
+    #include 'tensorflow/stream_executor/host/host_platform_id.h'
     
-        if (install_callbacks)
+    
     {
-        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
+    {}  // namespace host
+}  // namespace stream_executor
+    
+    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ALL_THREADS, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Expands to the namespace name that the type-parameterized tests for
+// the given type-parameterized test case are defined in.  The exact
+// name of the namespace is subject to change without notice.
+# define GTEST_CASE_NAMESPACE_(TestCaseName) \
+  gtest_case_##TestCaseName##_
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT2.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT2_(pred_format, v1, v2, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, v1, v2), \
+                on_failure)
+    
+      template <GTEST_9_TYPENAMES_(U)>
+  tuple(const GTEST_9_TUPLE_(U)& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_),
+      f3_(t.f3_), f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_), f8_(t.f8_) {}
+    
+    
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
+    
+    
+//--------------------------------------------------------------------------
+//
+//   Copy Constructor        Note:  This is a rather inefficient implementation,
+//                                  but it probably doesn't matter.
+//
+//--------------------------------------------------------------------------
+RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
+    init();
+    *this = other;
+}
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
+            DecimalFormat *fmtToAdopt, UErrorCode &status) {
+    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
+}
+    
+    
+ScriptSet &ScriptSet::resetAll() {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        bits[i] = 0;
+    }
+    return *this;
+}
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
+};
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+    SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
+                                   const UnicodeString& override,
+                                   const Locale& locale,
+                                   UErrorCode& status)
+:   fPattern(pattern),
+    fLocale(locale),
+    fTimeZoneFormat(NULL),
+    fSharedNumberFormatters(NULL),
+    fCapitalizationBrkIter(NULL)
+{
     }
     
-        IMGUI_API bool BuildFontAtlas(ImFontAtlas* atlas, unsigned int extra_flags = 0);
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword
+     */
+    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
     
-    static ImGui_ImplVulkanH_Window g_MainWindowData;
-static int                      g_MinImageCount = 2;
-static bool                     g_SwapChainRebuild = false;
-static int                      g_SwapChainResizeWidth = 0;
-static int                      g_SwapChainResizeHeight = 0;
+        /**
+     * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
+     * and return the pointer.
+     * @return the UnicodeReplacer pointer.
+     */
+    virtual UnicodeReplacer* toReplacer() const;
     
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    {    return outLen;
+}
     
-            // Start the Dear ImGui frame
-        ImGui_ImplAllegro5_NewFrame();
-        ImGui::NewFrame();
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
     
-        // Setup Platform/Renderer bindings
-    ImGui_Marmalade_Init(true);
+    struct CompactionIterationStats {
+  // Compaction statistics
+    }
     
-    // note that you can play with the hashing functions all you
-// want without needing to change the decompressor
-#define stb__hc(q,h,c)      (((h) << 7) + ((h) >> 25) + q[c])
-#define stb__hc2(q,h,c,d)   (((h) << 14) + ((h) >> 18) + (q[c] << 7) + q[d])
-#define stb__hc3(q,c,d,e)   ((q[c] << 14) + (q[d] << 7) + q[e])
+    bool WriteController::IsStopped() const {
+  return total_stopped_.load(std::memory_order_relaxed) > 0;
+}
+// This is inside DB mutex, so we can't sleep and need to minimize
+// frequency to get time.
+// If it turns out to be a performance issue, we can redesign the thread
+// synchronization model here.
+// The function trust caller will sleep micros returned.
+uint64_t WriteController::GetDelay(Env* env, uint64_t num_bytes) {
+  if (total_stopped_.load(std::memory_order_relaxed) > 0) {
+    return 0;
+  }
+  if (total_delayed_.load(std::memory_order_relaxed) == 0) {
+    return 0;
+  }
+    }
     
-            // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!), 
-        // you may need to backup/reset/restore current shader using the commented lines below.
-        //GLint last_program; 
-        //glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-        //glUseProgram(0);
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        //glUseProgram(last_program);
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    
+    {    std::vector<std::string> input_file_names;
+    for (auto level : cf_meta.levels) {
+      for (auto file : level.files) {
+        if (file.being_compacted) {
+          return nullptr;
+        }
+        input_file_names.push_back(file.name);
+      }
+    }
+    return new CompactionTask(
+        db, this, cf_name, input_file_names,
+        options_.num_levels - 1, compact_options_, false);
+  }
+    
+    #include <string>
+    
+      // Approximate size of user data packed per block.  Note that the
+  // block size specified here corresponds to uncompressed data.  The
+  // actual size of the unit read from disk may be smaller if
+  // compression is enabled.  This parameter can be changed dynamically.
+  //
+  // Default: 4K
+  size_t block_size;
+    
+    #pragma once
+// lua headers
+extern 'C' {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+    
+      // Block current thread until condition variable is notified by a call to
+  // Notify() or NotifyAll().  Wait() will be called with mutex locked.
+  // Returns OK if notified.
+  // Returns non-OK if TransactionDB should stop waiting and fail the operation.
+  // May return OK spuriously even if not notified.
+  virtual Status Wait(std::shared_ptr<TransactionDBMutex> mutex) = 0;
