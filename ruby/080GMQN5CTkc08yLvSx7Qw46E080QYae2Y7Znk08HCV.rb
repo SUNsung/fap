@@ -1,161 +1,274 @@
 
         
-              private
-    
-          if period_type == :all
-        DB.exec <<~SQL
-          UPDATE user_stats s
-          SET likes_given         = d.likes_given,
-              likes_received      = d.likes_received,
-              topic_count         = d.topic_count,
-              post_count          = d.post_count
-    
-        def build
-      policy = ActionDispatch::ContentSecurityPolicy.new
-    
-        def initialize
-      @directives = {}.tap do |directives|
-        directives[:base_uri] = [:none]
-        directives[:object_src] = [:none]
-        directives[:script_src] = script_src
-        directives[:worker_src] = worker_src
-        directives[:report_uri] = report_uri if SiteSetting.content_security_policy_collect_reports
-      end
-    end
-    
-              # either staff member or OP
-          unless post.user_id == user&.id || user&.staff?
-            raise StandardError.new I18n.t('poll.only_staff_or_op_can_toggle_status') if raise_errors
-            return
-          end
-    
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-      private
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def template_paths
-        template_path = _prefixes.dup
-        template_path.unshift '#{@devise_mapping.scoped_path}/mailer' if self.class.scoped_views?
-        template_path
+                @status = status
       end
     
-          def self.required_fields(klass)
-        [:reset_password_sent_at, :reset_password_token]
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
-    
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-    def_name_to_int('rsock_family_to_int', /\A(AF_|PF_)/, 'AF_')
-def_name_to_int('rsock_socktype_to_int', /\ASOCK_/, 'SOCK_')
-def_name_to_int('rsock_ipproto_to_int', /\AIPPROTO_/, 'IPPROTO_')
-def_name_to_int('rsock_unknown_level_to_int', /\ASOL_SOCKET\z/, 'SOL_')
-def_name_to_int('rsock_ip_level_to_int', /\A(SOL_SOCKET\z|IPPROTO_)/, /\A(SOL_|IPPROTO_)/)
-def_name_to_int('rsock_so_optname_to_int', /\ASO_/, 'SO_')
-def_name_to_int('rsock_ip_optname_to_int', /\AIP_/, 'IP_')
-def_name_to_int('rsock_ipv6_optname_to_int', /\AIPV6_/, 'IPV6_', 'IPPROTO_IPV6')
-def_name_to_int('rsock_tcp_optname_to_int', /\ATCP_/, 'TCP_')
-def_name_to_int('rsock_udp_optname_to_int', /\AUDP_/, 'UDP_')
-def_name_to_int('rsock_shutdown_how_to_int', /\ASHUT_/, 'SHUT_')
-def_name_to_int('rsock_scm_optname_to_int', /\ASCM_/, 'SCM_')
-    
-        v = (-inf..0).bsearch {|x| x != -inf }
-    assert_operator(-Float::MAX, :>=, v)
-    assert_operator(-inf, :<, v)
-    
-    srcdir ||= File.dirname(File.dirname(Program))
-begin
-  vcs = VCS.detect(srcdir)
-rescue VCS::NotFoundError => e
-  abort '#{File.basename(Program)}: #{e.message}' unless @suppress_not_found
-else
-  ok = true
-  (ARGV.empty? ? [nil] : ARGV).each do |arg|
-    begin
-      puts @output[*vcs.get_revisions(arg)]
-    rescue => e
-      next if @suppress_not_found and VCS::NotFoundError === e
-      warn '#{File.basename(Program)}: #{e.message}'
-      ok = false
     end
-  end
-  exit ok
-end
-
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-    
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
-  end
-    
-    # test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
-def context(*args, &block)
-  return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
-    def self.test(name, &block)
-      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
-    end
-    
-    desc 'Validate lib files and version file'
-task :validate do
-  libfiles = Dir['lib/*'] - ['lib/#{name}.rb', 'lib/#{name}']
-  unless libfiles.empty?
-    puts 'Directory `lib` should only contain a `#{name}.rb` file and `#{name}` dir.'
-    exit!
-  end
-  unless Dir['VERSION*'].empty?
-    puts 'A `VERSION` file at root level violates Gem best practices.'
-    exit!
   end
 end
 
     
-    # internal
-require File.expand_path('../gollum/uri_encode_component', __FILE__)
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
+        end
+      end
+    end
+  end
+end
+
+    
+        it 'returns an active nav link' do
+      stub(self).current_page?('/things') { true }
+      nav = nav_link('Things', '/things')
+      expect(nav).to be_html_safe
+      a = Nokogiri(nav).at('li.active > a[href='/things']')
+      expect(a).to be_a Nokogiri::XML::Element
+      expect(a.text.strip).to eq('Things')
+    end
+    
+      describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
+    
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
+    
+            it 'adds errors when updated agents are invalid' do
+          scenario_import.merges = {
+            '0' => {
+              'name' => '',
+              'schedule' => 'foo',
+              'keep_events_for' => 2.days.to_i.to_s,
+              'options' => weather_agent_options.merge('api_key' => '').to_json
+            }
+          }
+    
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+    end
+    
+      it 'truncates message to a reasonable length' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
+    log.message = 'a' * 11_000
+    log.save!
+    expect(log.message.length).to eq(10_000)
+  end
+    
+          def extract_renamed_path_destination(file)
+        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+      end
+    
+    # Commit file to wiki, overwriting previous versions of that file
+def commit_test_file(wiki, dir, filename, ext, content)
+  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
+  committer.add_to_index(dir, filename, ext, content, true)
+    committer.after_commit do |committer, sha|
+      wiki.clear_cache
+      committer.update_working_dir(dir, filename, ext)
+    end
+  committer.commit
+end
+
+    
+        # make a backup of the option and sanitize it
+    base_path_original = base_path.dup
+    base_path = CGI.escape(base_path)
+    
+    # then let the user know if we changed the URL
+    unless base_path_original == base_path
+      puts <<MSG
+Warning: your base-path has been sanitized:
+  - original: '#{base_path_original}'
+  - sanitized: '#{base_path}'
+MSG
+    end
+      
+    # and finally, let others enjoy our hard work:
+    wiki_options[:base_path] = base_path
+  end
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.', 
+    'Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.') do |path|
+    wiki_options[:page_file_dir] = path
+  end
+  opts.on('--css', 'Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).') do
+    wiki_options[:css] = true
+  end
+  opts.on('--js', 'Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).') do
+    wiki_options[:js] = true
+  end
+  opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:).') do
+    wiki_options[:emoji] = true
+  end
+  opts.on('--no-edit', 'Disable the feature of editing pages.')  do
+    wiki_options[:allow_editing] = false
+  end
+  opts.on('--live-preview', 'Enable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = true
+  end
+  opts.on('--no-live-preview', 'Disable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = false
+  end
+  opts.on('--allow-uploads [MODE]', [:dir, :page], 'Enable file uploads.',
+    'If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.',
+    'If set to 'page', Gollum will store each upload at the currently edited page.') do |mode|
+    wiki_options[:allow_uploads]    = true
+    wiki_options[:per_page_uploads] = true if mode == :page
+  end
+  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
+    'By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.') do
+    wiki_options[:mathjax] = true
+  end
+  opts.on('--irb', 'Launch Gollum in 'console mode', with a predefined API.') do
+    options[:irb] = true
+  end
+  
+  opts.separator ''
+  opts.separator '  Minor:'
+  
+  opts.on('--h1-title', 'Use the first '<h1>' as page title.') do
+    wiki_options[:h1_title] = true
+  end
+  opts.on('--show-all', 'Also show files in the file view. By default, only valid pages are shown.') do
+    wiki_options[:show_all] = true
+  end
+  opts.on('--collapse-tree', 'Collapse the tree, when file view is opened. By default, the tree is expanded.') do
+    wiki_options[:collapse_tree] = true
+  end
+  opts.on('--user-icons [MODE]', [:gravatar, :identicon, :none], 'Use specific user-icons for history view.',
+    'Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.') do |mode|
+    wiki_options[:user_icons] = mode
+  end
+  opts.on('--mathjax-config [FILE]', 'Specify path to a custom MathJax configuration.',
+    'If not specified, uses the '<git-repo>/mathjax.config.js' file.') do |file|
+    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
+  end
+  opts.on('--plantuml-url [URL]', 'Sets the PlantUML server endpoint.') do |url|
+    wiki_options[:plantuml_url] = url
+  end
+  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
+    wiki_options[:template_dir] = path
+  end
+  
+  opts.separator ''
+  opts.separator '  Common:'
+  
+  opts.on('--help', 'Display this message.') do
+    puts opts
+    exit 0
+  end
+  opts.on('--version', 'Display the current version of Gollum.') do
+    puts 'Gollum ' + Gollum::VERSION
+    exit 0
+  end
+  
+  opts.separator ''
+end
+    
+      s.add_development_dependency 'rack-test', '~> 0.6.2'
+  s.add_development_dependency 'shoulda', '~> 3.5.0'
+  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
+  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
+  s.add_development_dependency 'mocha', '~> 1.1.0'
+  s.add_development_dependency 'test-unit', '~> 3.1.0'
+  s.add_development_dependency 'webrick', '~> 1.3.1'
+    
+    # Add a script to run after install (should be in the current directory):
+package.scripts[:after_install] = 'my_after_install_script.sh'
+    
+          mandatory(@command.args.any? || @command.inputs || @command.input_type == 'empty',
+                'No parameters given. You need to pass additional command ' \
+                'arguments so that I know what you want to build packages ' \
+                'from. For example, for '-s dir' you would pass a list of ' \
+                'files and directories. For '-s gem' you would pass a one' \
+                ' or more gems to package from. As a full example, this ' \
+                'will make an rpm of the 'json' rubygem: ' \
+                '`fpm -s gem -t rpm json`')
+    end # def validate
+    
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
+    
+      end
+    
+          if !attributes[:python_install_data].nil?
+        flags += [ '--install-data', File.join(prefix, attributes[:python_install_data]) ]
+      elsif !attributes[:prefix].nil?
+        # prefix given, but not python_install_data, assume PREFIX/data
+        flags += [ '--install-data', File.join(prefix, 'data') ]
+      end
+    
+        safesystem('tar', *args)
+  end # def output
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
+    end
+    
+        args.flatten!.compact!
+    
+          process.io.stdin.close        if opts[:stdin] and not process.io.stdin.closed?
+      stdout_r.close                unless stdout_r.closed?
+      stderr_r.close                unless stderr_r.closed?
+    else
+      # Log both stdout and stderr as 'info' because nobody uses stderr for
+      # actually reporting errors and as a result 'stderr' is a misnomer.
+      logger.pipe(stdout_r => :info, stderr_r => :info)
+    end
+    
+          prefix = ''
+      if name.bytesize > 100 then
+        parts = name.split('/', -1) # parts are never empty here
+        name = parts.pop            # initially empty for names with a trailing slash ('foo/.../bar/')
+        prefix = parts.join('/')    # if empty, then it's impossible to split (parts is empty too)
+        while !parts.empty? && (prefix.bytesize > 155 || name.empty?)
+          name = parts.pop + '/' + name
+          prefix = parts.join('/')
+        end
