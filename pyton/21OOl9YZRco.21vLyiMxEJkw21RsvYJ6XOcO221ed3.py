@@ -1,7 +1,22 @@
 
         
-            def __init__(self):
-        self.name = 'pg_trgm'
+            try:
+        oids, array_oids = get_hstore_oids(connection.alias)
+        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
+    except ProgrammingError:
+        # Hstore is not available on the database.
+        #
+        # If someone tries to create an hstore field it will error there.
+        # This is necessary as someone may be using PSQL without extensions
+        # installed but be using other features of contrib.postgres.
+        #
+        # This is also needed in order to create the connection in order to
+        # install the hstore extension.
+        pass
+    
+        @property
+    def cache_key(self):
+        return self.cache_key_prefix + self._get_or_create_session_key()
     
             if data is None:
             s = self._get_session_from_db()
@@ -12,101 +27,51 @@
                 data = {}
         return data
     
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
-        try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
     
     
-@x_robots_tag
-def index(request, sitemaps,
-          template_name='sitemap_index.xml', content_type='application/xml',
-          sitemap_url_name='django.contrib.sitemaps.views.sitemap'):
     
+class CheckNetwork(object):
+    def __init__(self, type='IPv4'):
+        self.type = type
+        self.urls = []
+        self._checking_lock = threading.Lock()
+        self._checking_num = 0
+        self.network_stat = 'unknown'
+        self.last_check_time = 0
+        self.continue_fail_count = 0
     
-def report_fail(ip):
-    if '.' in ip:
-        IPv4.report_fail()
-    else:
-        IPv6.report_fail()
+        def __init__(self, json_name, value):
+        self.value = value
+        super(Fixed, self).__init__(
+            json_name=json_name, default=value, omitempty=False)
     
-            if cmd.startswith('#'):
-            log.write('%s' % cmd)
-            continue
+    # Load a test image and get encondings for it
+image_to_test = face_recognition.load_image_file('obama2.jpg')
+image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
     
-        def test_nosigning_register(self):
-        res = self.do_register(
-            headers={
-                signing.SIGNATURE_UA_HEADER: None,
-                signing.SIGNATURE_BODY_HEADER: None,
-            },
-            expect_errors=True,
-        )
-        self.assert_403_response(res, 'signing.ua.invalid.invalid_format')
+        pool = context.Pool(processes=processes)
     
-        def test_login_wrong_password(self):
-        with patch.object(Account, '_by_name', side_effect=NotFound):
-            res = self.do_login()
-            self.assert_failure(res, 'WRONG_PASSWORD')
+            # If you had more than 2 faces, you could make this logic a lot prettier
+        # but I kept it simple for the demo
+        name = None
+        if match[0]:
+            name = 'Lin-Manuel Miranda'
+        elif match[1]:
+            name = 'Alex Lacamoire'
     
-    from pylons import app_globals as g
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
     
+            self.assertEqual(type(match_results), list)
+        self.assertTrue(match_results[0])
+        self.assertTrue(match_results[1])
+        self.assertFalse(match_results[2])
     
-class TestModuleGetFlattenedSources(unittest.TestCase):
-    def test_flat_modules_include_all_sources(self):
-        test_files = ['foo.js', 'bar.js', 'baz.js', 'qux.js']
-        test_module = TestModule('test_module', *test_files)
-        self.assertEqual(test_module.build(), concat_sources(test_files))
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
     
-    from r2.lib.media import _get_scrape_url
-from r2.models import Link
-    
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'https://example.com/a.jpg')
-    
-    import unittest
-    
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'https://unsplash.it/200/400')
-    
-        def test_bacon_reader_detector(self):
-        user_agent = 'BaconReader/3.0 (iPhone; iOS 9.3.2; Scale/2.00)'
-        agent_parsed = {}
-        result = BaconReaderDetector().detect(user_agent, agent_parsed)
-        self.assertTrue(result)
-        self.assertEqual(agent_parsed['browser']['name'],
-                         BaconReaderDetector.name)
-        self.assertEqual(agent_parsed['browser']['version'], '3.0')
-        self.assertEqual(agent_parsed['platform']['name'], 'iOS')
-        self.assertEqual(agent_parsed['platform']['version'], '9.3.2')
-        self.assertEqual(agent_parsed['app_name'],
-                         agent_parsed['browser']['name'])
-    
-        def test_garbage_header(self):
-        body = '{'user': 'reddit', 'password': 'hunter2'}'
-        self.assert_invalid(
-            body,
-            header='idontneednosignature',
-            error=signing.ERRORS.INVALID_FORMAT,
-        )
+            # Find all the faces and face encodings in the frame of video, cost most time
+        face_locations = face_recognition.face_locations(rgb_frame)
+        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
