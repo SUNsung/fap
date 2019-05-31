@@ -1,160 +1,166 @@
 
         
-            # test that successful registration redirects to the login page
-    response = client.post(
-        '/auth/register', data={'username': 'a', 'password': 'a'}
-    )
-    assert 'http://localhost/auth/login' == response.headers['Location']
+          if bidx is None:
+    vals_txn = np.mean(vals_bxtxn, axis=0)
+  else:
+    vals_txn = vals_bxtxn[bidx,:,:]
     
-    from .globals import request
+    flags = tf.app.flags
+flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
+                    'Directory for saving data.')
+flags.DEFINE_string('datafile_name', 'thits_data',
+                    'Name of data file for input case.')
+flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
+flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
+flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
+flags.DEFINE_integer('C', 100, 'Number of conditions')
+flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
+flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
+flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
+flags.DEFINE_float('train_percentage', 4.0/5.0,
+                   'Percentage of train vs validation trials')
+flags.DEFINE_integer('nreplications', 40,
+                     'Number of noise replications of the same underlying rates.')
+flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
+flags.DEFINE_float('x0_std', 1.0,
+                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
+flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
+flags.DEFINE_float('dt', 0.010, 'Time bin')
+flags.DEFINE_float('input_magnitude', 20.0,
+                   'For the input case, what is the value of the input?')
+flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
+FLAGS = flags.FLAGS
     
+      Args:
+    data_e: nexamples length list of NxT trials
+    dt: how often the data are sampled
+    max_firing_rate: the firing rate that is associated with a value of 1.0
+  Returns:
+    gauss_e: a list of length b of the data with noise.
+    '''
     
-DOCUMENTATION = '''
----
-module: elasticache_subnet_group
-version_added: '2.0'
-short_description: manage Elasticache subnet groups
-description:
-     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
-options:
-  state:
-    description:
-      - Specifies whether the subnet should be present or absent.
-    required: true
-    default: present
-    choices: [ 'present' , 'absent' ]
-  name:
-    description:
-      - Database subnet group identifier.
-    required: true
-  description:
-    description:
-      - Elasticache subnet group description. Only set when a new group is added.
-  subnets:
-    description:
-      - List of subnet IDs that make up the Elasticache subnet group.
-author: 'Tim Mahoney (@timmahoney)'
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
+      # print('Number of batches per epoch: %d' % epoch_size)
+  for i in range(epoch_size):
+    x = data[:, i * num_steps:(i + 1) * num_steps]
+    y = data[:, i * num_steps + 1:(i + 1) * num_steps + 1]
+    w = np.ones_like(x)
+    yield (x, y, w)
+
     
-        lambda_facts = dict()
-    params = dict()
-    function_name = module.params.get('function_name')
+      for i, sample in enumerate(samples):
+    print('Sample', i, '. ', sample)
+    log.write('\nSample ' + str(i) + '. ' + sample)
+  log.write('\n')
+  print('\n')
+  log.flush()
     
-    EXAMPLES = '''
-    
-            _processes = []
-        for process in processes:
-            _process = oneandone.client.Process(
-                process=process['process'],
-                alert_if=process['alert_if'],
-                email_notification=str(process['email_notification']).lower())
-            _processes.append(_process)
-    
-            # if we reach this point we can assume that the host was taken to the desired state
-    
-        changed = False
-    if state == 'present':
-        if not ipa_role:
-            changed = True
-            if not module.check_mode:
-                ipa_role = client.role_add(name=name, item=module_role)
-        else:
-            diff = get_role_diff(client, ipa_role, module_role)
-            if len(diff) > 0:
-                changed = True
-                if not module.check_mode:
-                    data = {}
-                    for key in diff:
-                        data[key] = module_role.get(key)
-                    client.role_mod(name=name, item=data)
+      if FLAGS.dis_share_embedding:
+    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
+        'If you wish to share Discriminator/Generator embeddings, they must be'
+        ' same dimension.')
+    with tf.variable_scope('gen/rnn', reuse=True):
+      embedding = tf.get_variable('embedding',
+                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
     
     
-DOCUMENTATION = '''
----
-module: airbrake_deployment
-version_added: '1.2'
-author: 'Bruce Pennypacker (@bpennypacker)'
-short_description: Notify airbrake about app deployments
-description:
-   - Notify airbrake about app deployments (see http://help.airbrake.io/kb/api-2/deploy-tracking)
-options:
-  token:
-    description:
-      - API token.
-    required: true
-  environment:
-    description:
-      - The airbrake environment name, typically 'production', 'staging', etc.
-    required: true
-  user:
-    description:
-      - The username of the person doing the deployment
-    required: false
-  repo:
-    description:
-      - URL of the project repository
-    required: false
-  revision:
-    description:
-      - A hash, number, tag, or other identifier showing what revision was deployed
-    required: false
-  url:
-    description:
-      - Optional URL to submit the notification to. Use to send notifications to Airbrake-compliant tools like Errbit.
-    required: false
-    default: 'https://airbrake.io/deploys.txt'
-    version_added: '1.5'
-  validate_certs:
-    description:
-      - If C(no), SSL certificates for the target url will not be validated. This should only be used
-        on personally controlled sites using self-signed certificates.
-    required: false
-    default: 'yes'
-    type: bool
+class ArrayMinLengthValidator(MinLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
+        'limit_value')
     
-                    log.println('    platform: {}'.format(platform.platform()))
-                log.println('    python:   {}'.format(sys.version.split('\n')[0]))
+    from django.conf import settings
+from django.contrib.sessions.backends.db import SessionStore as DBStore
+from django.core.cache import caches
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+        sites = []  # all sections' sitemap URLs
+    for section, site in sitemaps.items():
+        # For each section label, add links of all pages of its sitemap
+        # (usually generated by the `sitemap` view).
+        if callable(site):
+            site = site()
+        protocol = req_protocol if site.protocol is None else site.protocol
+        sitemap_url = reverse(sitemap_url_name, kwargs={'section': section})
+        absolute_url = '%s://%s%s' % (protocol, req_site.domain, sitemap_url)
+        sites.append(absolute_url)
+        # Add links to all pages of the sitemap.
+        for page in range(2, site.paginator.num_pages + 1):
+            sites.append('%s?p=%s' % (absolute_url, page))
     
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+        def test_decode_bad(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
     
-        type, ext, size = url_info(urls[0], True)
-    size = urls_size(urls)
+    Certbot will emit a warning if it detects that the credentials file can be
+accessed by other users on your system. The warning reads 'Unsafe permissions
+on credentials configuration file', followed by the path to the credentials
+file. This warning will be emitted each time Certbot uses the credentials file,
+including for renewal, and cannot be silenced except by addressing the issue
+(e.g., by using a command like ``chmod 600`` to restrict access to the file).
     
-                print_info(site_info, title_i, ext, size)
-            if not info_only:
-                download_urls([real_url], title_i, ext, size, output_dir, merge = merge)
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-dns-cloudxns.tex', u'certbot-dns-cloudxns Documentation',
+     u'Certbot Project', 'manual'),
+]
     
     
-def icourses_playlist_new(url, page=None):
-    # 2 helpers using same interface in the js code
-    def to_chap(course_id, chap_id, mod):
-        ep = 'http://www.icourses.cn/jpk/viewCharacterDetail2.action?courseId={}&characId={}&mod={}'
-        req = post_content(ep.format(course_id, chap_id, mod), post_data={})
-        return req
+def _FormatCompleterDebugInfo( completer ):
+  message = '{0} completer debug information:\n'.format( completer[ 'name' ] )
+  for server in completer[ 'servers' ]:
+    name = server[ 'name' ]
+    if server[ 'is_running' ]:
+      address = server[ 'address' ]
+      port = server[ 'port' ]
+      if address and port:
+        message += '  {0} running at: http://{1}:{2}\n'.format( name,
+                                                                address,
+                                                                port )
+      else:
+        message += '  {0} running\n'.format( name )
+      message += '  {0} process ID: {1}\n'.format( name, server[ 'pid' ] )
+    else:
+      message += '  {0} not running\n'.format( name )
+    message += '  {0} executable: {1}\n'.format( name, server[ 'executable' ] )
+    logfiles = server[ 'logfiles' ]
+    if logfiles:
+      message += '  {0} logfiles:\n'.format( name )
+      for logfile in logfiles:
+        message += '    {0}\n'.format( logfile )
+    else:
+      message += '  No logfiles available\n'
+    if 'extras' in server:
+      for extra in server[ 'extras' ]:
+        message += '  {0} {1}: {2}\n'.format( name,
+                                              extra[ 'key' ],
+                                              extra[ 'value' ] )
+  for item in completer[ 'items' ]:
+    message += '  {0}: {1}\n'.format( item[ 'key' ].capitalize(),
+                                      item[ 'value' ] )
+  return message
+    
+    
+def _ExtractKeywordsFromLine( line ):
+  if line.startswith( 'links to ' ):
+    return []
+    
+      _assert_rejects( f, 'This is a Taco' )
+  _assert_rejects( f, 'This is a Burrito' )
+  _assert_accepts( f, 'This is some Nachos' )
+    
+            It is safe to call this method several times. Otherwise, no other
+        methods can be called after this one.
+    
+    class ThreadPoolExecutor(_base.Executor):
+    def __init__(self, max_workers):
+        '''Initializes a new ThreadPoolExecutor instance.
+    
+    def download_urls_sequential(urls, timeout=60):
+    url_to_content = {}
+    for url in urls:
+        try:
+            url_to_content[url] = load_url(url, timeout=timeout)
+        except:
+            pass
+    return url_to_content
