@@ -1,184 +1,367 @@
 
         
-        OPERATOR_SCHEMA(GivenTensorIntFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/utils/math.h'
-    
-    
-    {
-}
-
-    
-    		inline float GetError(void)
-		{
-			assert(m_fError >= 0.0f);
-    }
-    
-    
-  typedef struct  AF_Blue_StringRec_
-  {
-    AF_Blue_String  string;
-    FT_UShort       properties;
-    }
-    
-    #define PSHR(a,shift)   (a)
-#define SHR(a,shift)    (a)
-#define SHL(a,shift)    (a)
-#define SATURATE(x,a)   (x)
-#define SATURATE16(x)   (x)
-    
-    
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q15
-#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
-    
-      xfer += oprot->writeStructBegin('ExtensionManager_extensions_result');
-    
-    class ExtensionManager_deregisterExtension_presult {
+        // Class to hold an array of bounding boxes for an output word and
+// the bounding box of the whole word.
+class BoxWord {
  public:
+  BoxWord();
+  explicit BoxWord(const BoxWord& src);
+  ~BoxWord() = default;
     }
     
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-    }
     
-      std::string content;
-  auto status = readFile('/etc/exports', content);
-  if (!status.ok()) {
-    VLOG(1) << 'Error reading /etc/exports: ' << status.toString();
-    return {};
-  }
+    {  // Stores all the source points in the order they were given and their
+  // halfwidths, if any.
+  GenericVector<PointWidth> pts_;
+  // Stores the computed perpendicular distances of (some of) the pts_ from a
+  // given vector (assuming it goes through the origin, making it a line).
+  // Since the distances may be a subset of the input points, and get
+  // re-ordered by the nth_item function, the original point is stored
+  // along side the distance.
+  GenericVector<DistPointPair> distances_;  // Distances of points.
+  // The squared length of the vector used to compute distances_.
+  double square_length_;
+};
     
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    TEST(SocketCanClientRawTest, simple_test) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-    }
-    
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    int ClusterQualityInfo702::invalid_state(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(3, 5);
-    }
-    
-    int ObjectGeneralInfo60B::dynprop(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    BaseMapMatrix::~BaseMapMatrix() {}
-    
-    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateThirdOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
-  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
-      .cwiseProduct(term_matrix);
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
 }
     
-    Accelrpt68::Accelrpt68() {}
-const int32_t Accelrpt68::ID = 0x68;
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
     
-    namespace apollo {
-namespace canbus {
-namespace gem {
+        int16_t accept_count();  //How many accepted?
+    
+    
+    {}  // namespace tesseract.
+    
+      void DeleteUnusedObjects() {
+    mu_.Lock();
+    for (int i = cache_.size() - 1; i >= 0; i--) {
+      if (cache_[i].count <= 0) {
+        delete cache_[i].object;
+        cache_.remove(i);
+      }
     }
+    mu_.Unlock();
+  }
+    
+    /*!
++ * \brief The result holder of dispatch mode of each Node in the graph.
++ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
++ *
++ * \code
++ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
++ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
++ *  // get dispatch mode by entry node id
++ *  int node_type = dispatch_modes[nid];
++ * \endcode
++ *
++ * \sa FInferStorageType
++ */
+using DispatchModeVector = std::vector<DispatchMode>;
+    
+      virtual bool Next(void) {
+    // MxNet iterator is expected to return CPU-accessible memory
+    if (::caffe::Caffe::mode() != ::caffe::Caffe::CPU) {
+      ::caffe::Caffe::set_mode(::caffe::Caffe::CPU);
+      CHECK_EQ(::caffe::Caffe::mode(), ::caffe::Caffe::CPU);
     }
+    caffe_data_layer_->Forward(bottom_, top_);
+    CHECK_GT(batch_size_, 0) << 'batch size must be greater than zero';
+    CHECK_EQ(out_.batch_size, batch_size_) << 'Internal Error: batch size mismatch';
     }
     
-    // config detail: {'name': 'torque_output', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': True, 'physical_range':
-// '[-2147483.648|2147483.647]', 'bit': 7, 'type': 'double', 'order':
-// 'motorola', 'physical_unit': 'N-m'}
-double Brakemotorrpt372::torque_output(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
+  }
+    
+    /*!
+ * \brief Iterator that normalize a image.
+ *  It also applies a few augmention before normalization.
+ */
+class ImageNormalizeIter : public IIterator<DataInst> {
+ public:
+  explicit ImageNormalizeIter(IIterator<DataInst> *base)
+      : base_(base), meanfile_ready_(false) {
+  }
     }
     
-    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
-// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
+      virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    InitParams(kwargs);
+    // use the kwarg to init batch loader
+    loader_->Init(kwargs);
+    iter.Init([this](DataBatch **dptr) {
+        if (!loader_->Next()) return false;
+        const TBlobBatch& batch = loader_->Value();
+        if (*dptr == nullptr) {
+          // allocate databatch
+          *dptr = new DataBatch();
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+          (*dptr)->data.resize(batch.data.size());
+          (*dptr)->index.resize(batch.batch_size);
+          for (size_t i = 0; i < batch.data.size(); ++i) {
+            auto dtype = param_.dtype
+                             ? param_.dtype.value()
+                             : batch.data[i].type_flag_;
+            (*dptr)->data.at(i) = NDArray(batch.data[i].shape_,
+                                          Context::CPU(), false,
+                                          dtype);
+          }
+        }
+        CHECK(batch.data.size() == (*dptr)->data.size());
+        // copy data over
+        for (size_t i = 0; i < batch.data.size(); ++i) {
+          CHECK_EQ((*dptr)->data.at(i).shape(), batch.data[i].shape_);
+          MSHADOW_TYPE_SWITCH(batch.data[i].type_flag_, DType, {
+              mshadow::Copy(((*dptr)->data)[i].data().FlatTo2D<cpu, DType>(),
+                        batch.data[i].FlatTo2D<cpu, DType>());
+          });
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+        }
+        if (batch.inst_index) {
+          std::copy(batch.inst_index,
+                    batch.inst_index + batch.batch_size,
+                    (*dptr)->index.begin());
+        }
+       return true;
+      },
+      [this]() { loader_->BeforeFirst(); });
+  }
+    
+    template<typename xpu, typename OP>
+void EvalOneHot_(const TBlob &index, const TBlob &rhs,
+                 TBlob *ret, RunContext ctx) {
+  LOG(INFO) << 'The operator onehot_encode is deprecated; use one_hot instead.';
+  using namespace mshadow::expr;
+  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
+  // TODO(eric): support mixed type encoding, i.e. int index and float rhs.
+  CHECK_EQ(ret->type_flag_, mshadow::default_type_flag)
+    << 'one_hot_encode only support float32 as input/output';
+  CHECK_EQ(rhs.type_flag_, mshadow::default_type_flag)
+    << 'one_hot_encode only support float32 as input/output';
+  CHECK_EQ(index.type_flag_, mshadow::default_type_flag)
+    << 'one_hot_encode only support float32 as input/output';
+  ret->get<xpu, 2, real_t>(s) =
+    one_hot_encode(index.get<xpu, 1, real_t>(s),
+                   rhs.shape_[1]);
+}
+    
+    template<>
+Operator* CreateOp<gpu>(NDArrayOpParam param) {
+  return new NDArrayOp<gpu>(param);
+}
+#endif  // MXNET_USE_CUDA
+    
+    template<typename xpu>
+void ConcatCSRImpl(const nnvm::NodeAttrs& attrs,
+                   const OpContext& ctx,
+                   const std::vector<NDArray>& inputs,
+                   const std::vector<OpReqType>& req,
+                   const std::vector<NDArray>& outputs) {
+  using namespace mshadow;
+  using namespace mxnet_op;
+  using namespace csr;
+  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
+  int num_args = param.num_args;
+  int concat_dim = param.dim;
+  CHECK_EQ(inputs.size(), num_args);
+  CHECK_EQ(outputs.size(), 1);
+  int axis = CheckAxis(concat_dim, inputs[0].shape().ndim());
+  CHECK_EQ(axis, 0) << 'concat of csr ndarrays on axis 1 is not supported.';
+  if (req[0] == kNullOp) return;
+  Stream<xpu>* s = ctx.get_stream<xpu>();
+  nnvm::dim_t nnz = 0;
+  for (int i=0; i < num_args; i++) {
+    nnz += inputs[i].aux_shape(kIdx)[0];
+  }
+  const NDArray& out = outputs[0];
+  if (nnz == 0) {
+    FillZerosCsrImpl(s, out);
+    return;
+  }
+  const nnvm::dim_t num_rows = out.shape()[0];
+  out.CheckAndAllocAuxData(kIndPtr, Shape1(num_rows+1));
+    }
+    
+    
+    {
+    {
+    {      // Test write Symbol
+      std::vector<unsigned char> buffer2(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+      for (int i = 0; i < input.size(); i++) {
+        cbw.WriteSymbol(buffer2.data(), input[i], i);
+      }
+      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
+      std::vector<int> output2(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output2[i] = ci2[i];
+      }
+      ASSERT_TRUE(input == output2);
+    }
+  }
+}
+    
+    
+    {
+    {  // declare parameters
+  DMLC_DECLARE_PARAMETER(LearnerTrainParam) {
+    DMLC_DECLARE_FIELD(seed).set_default(0).describe(
+        'Random number seed during training.');
+    DMLC_DECLARE_FIELD(seed_per_iteration)
+        .set_default(false)
+        .describe(
+            'Seed PRNG determnisticly via iterator number, '
+            'this option will be switched on automatically on distributed '
+            'mode.');
+    DMLC_DECLARE_FIELD(dsplit)
+        .set_default(DataSplitMode::kAuto)
+        .add_enum('auto', DataSplitMode::kAuto)
+        .add_enum('col', DataSplitMode::kCol)
+        .add_enum('row', DataSplitMode::kRow)
+        .describe('Data split mode for distributed training.');
+    DMLC_DECLARE_FIELD(tree_method)
+        .set_default(TreeMethod::kAuto)
+        .add_enum('auto', TreeMethod::kAuto)
+        .add_enum('approx', TreeMethod::kApprox)
+        .add_enum('exact', TreeMethod::kExact)
+        .add_enum('hist', TreeMethod::kHist)
+        .add_enum('gpu_exact', TreeMethod::kGPUExact)
+        .add_enum('gpu_hist', TreeMethod::kGPUHist)
+        .describe('Choice of tree construction method.');
+    DMLC_DECLARE_FIELD(nthread).set_default(0).describe(
+        'Number of threads to use.');
+    DMLC_DECLARE_FIELD(disable_default_eval_metric)
+        .set_default(0)
+        .describe('flag to disable default metric. Set to >0 to disable');
+    DMLC_DECLARE_FIELD(gpu_id)
+        .set_default(0)
+        .describe('The primary GPU device ordinal.');
+    DMLC_DECLARE_FIELD(n_gpus)
+        .set_default(0)
+        .set_lower_bound(-1)
+        .describe('Number of GPUs to use for multi-gpu algorithms.');
+  }
+};
+}  // namespace xgboost
+    
+      /**
+   * \fn  virtual void Predictor::Init(const std::vector<std::pair<std::string,
+   * std::string> >&cfg ,const std::vector<std::shared_ptr<DMatrix> > &cache);
+   *
+   * \brief Configure and register input matrices in prediction cache.
+   *
+   * \param cfg   The configuration.
+   * \param cache Vector of DMatrix's to be used in prediction.
+   */
+    
+    static void ImGui_ImplGlfw_UpdateGamepads()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    memset(io.NavInputs, 0, sizeof(io.NavInputs));
+    if ((io.ConfigFlags & ImGuiConfigFlags_NavEnableGamepad) == 0)
+        return;
+    }
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+            // Rendering
+        ImGui::Render();
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
+    
+        if (g_pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, g_frameContext[0].CommandAllocator, NULL, IID_PPV_ARGS(&g_pd3dCommandList)) != S_OK ||
+        g_pd3dCommandList->Close() != S_OK)
+        return false;
+    
+    
+    {        ImGui::Render();
+    }
+    
+        // Create Window Surface
+    VkSurfaceKHR surface;
+    VkResult err;
+    if (SDL_Vulkan_CreateSurface(window, g_Instance, &surface) == 0)
+    {
+        printf('Failed to create Vulkan surface.\n');
+        return 1;
+    }
+    
+    
+    {    // Destroy SDL mouse cursors
+    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
+        SDL_FreeCursor(g_MouseCursors[cursor_n]);
+    memset(g_MouseCursors, 0, sizeof(g_MouseCursors));
+}
+    
+      static Data data_;
+  static Data data6_;
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+    
+    {} // namespace aria2
+    
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                                   int numRetry)
+{
+  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+    
+    {  void updateTokenSecret();
+};
+    
+    namespace aria2 {
     }
