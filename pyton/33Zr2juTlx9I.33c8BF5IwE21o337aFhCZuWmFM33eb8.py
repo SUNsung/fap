@@ -1,136 +1,135 @@
 
         
-            num_train_samples = 50000
-    
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
-    
-             try:
-             parallel_model = multi_gpu_model(model, cpu_relocation=True)
-             print('Training using multiple GPUs..')
-         except ValueError:
-             parallel_model = model
-             print('Training using single GPU or CPU..')
-         parallel_model.compile(..)
-         ..
-    ```
-    
-        t = now()
-    model.fit(x_train, y_train,
-              batch_size=batch_size,
-              epochs=epochs,
-              verbose=1,
-              validation_data=(x_test, y_test))
-    print('Training time: %s' % (now() - t))
-    score = model.evaluate(x_test, y_test, verbose=0)
-    print('Test score:', score[0])
-    print('Test accuracy:', score[1])
-    
-    # Reference
+            # #14971: Make sure the dotted name resolution works even if the actual
+    # function doesn't have the same name as is used to find it.
+    def test_loadTestsFromName__function_with_different_name_than_method(self):
+        # lambdas have the name '<lambda>'.
+        m = types.ModuleType('m')
+        class MyTestCase(unittest.TestCase):
+            test = lambda: 1
+        m.testcase_1 = MyTestCase
     
     
-def test_conv_input_length():
-    assert conv_utils.conv_input_length(None, 7, 'same', 1) is None
-    assert conv_utils.conv_input_length(112, 7, 'same', 1) == 112
-    assert conv_utils.conv_input_length(112, 7, 'same', 2) == 223
-    assert conv_utils.conv_input_length(28, 5, 'valid', 1) == 32
-    assert conv_utils.conv_input_length(14, 5, 'valid', 2) == 31
-    assert conv_utils.conv_input_length(36, 5, 'full', 1) == 32
-    assert conv_utils.conv_input_length(18, 5, 'full', 2) == 31
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-                tstart = time()
-            clf.fit(X_train, y_train)
-            asgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                       y_test)
-            asgd_results[i, j, 1] = time() - tstart
-    
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
-    
-    
-# Plot the distances
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    avg_dist = np.zeros((n_clusters, n_clusters))
-    plt.figure(figsize=(5, 4.5))
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
-                                                metric=metric).mean()
-    avg_dist /= avg_dist.max()
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            plt.text(i, j, '%5.3f' % avg_dist[i, j],
-                     verticalalignment='center',
-                     horizontalalignment='center')
-    
-    
-# Code source: Gaël Varoquaux
-# Modified for documentation by Jaques Grobler
-# License: BSD 3 clause
-    
-    plt.show()
-
-    
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
-    
-                    # look for a normal char transition
-                c = input.LA(1)
-    
-            pass
-    
-    # -- General configuration ---------------------------------------------
-    
-    
-def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
-    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
-    execution_time = fastest_execution / iterations_per_test
-    fps = 1.0 / execution_time
-    return execution_time, fps
-    
-    Algorithm Description:
-The knn classifier is first trained on a set of labeled (known) faces and can then predict the person
-in an unknown image by finding the k most similar faces (images with closet face-features under eucledian distance)
-in its training set, and performing a majority vote (possibly weighted) on their label.
-    
-    for face_location in face_locations:
-    
-            # Now let's list all the faces we found in all 128 frames
-        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
-            number_of_faces_in_frame = len(face_locations)
-    
-            result = runner.invoke(face_detection_cli.main, args=[image_file])
-        self.assertEqual(result.exit_code, 0)
-        self.assertTrue('obama_partial_face2.jpg' in result.output)
-        self.assertTrue('obama.jpg' in result.output)
-        self.assertTrue('obama2.jpg' in result.output)
-        self.assertTrue('obama3.jpg' in result.output)
-        self.assertTrue('biden.jpg' in result.output)
-    
-    def download_pdf(link, location, name):
+def open_binary(package: Package, resource: Resource) -> BinaryIO:
+    '''Return a file-like object opened for binary reading of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.open_resource(resource)
+    _check_location(package)
+    absolute_package_path = os.path.abspath(package.__spec__.origin)
+    package_path = os.path.dirname(absolute_package_path)
+    full_path = os.path.join(package_path, resource)
     try:
-        response = requests.get(link)
-        with open(os.path.join(location, name), 'wb') as f:
-        	f.write(response.content)
-        	f.close()
-    except HTTPError:
-        print('>>> Error 404: cannot be downloaded!\n') 
-        raise   
-    except socket.timeout:
-        print(' '.join(('can't download', link, 'due to connection timeout!')) )
-        raise
+        return open(full_path, mode='rb')
+    except OSError:
+        # Just assume the loader is a resource loader; all the relevant
+        # importlib.machinery loaders are and an AttributeError for
+        # get_data() will make it clear what is needed from the loader.
+        loader = cast(ResourceLoader, package.__spec__.loader)
+        data = None
+        if hasattr(package.__spec__.loader, 'get_data'):
+            with suppress(OSError):
+                data = loader.get_data(full_path)
+        if data is None:
+            package_name = package.__spec__.name
+            message = '{!r} resource not found in {!r}'.format(
+                resource, package_name)
+            raise FileNotFoundError(message)
+        else:
+            return BytesIO(data)
+    
+        def testRead(self):
+        self.createTempFile()
+        with BZ2File(self.filename) as bz2f:
+            self.assertRaises(TypeError, bz2f.read, float())
+            self.assertEqual(bz2f.read(), self.TEXT)
+    
+    def f(x):
+    return 1.0 / (x - 5.0)
+    
+    def test():
+    NUMBER_OF_PROCESSES = 4
+    TASKS1 = [(mul, (i, 7)) for i in range(20)]
+    TASKS2 = [(plus, (i, 8)) for i in range(10)]
+    
+    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
+cur.execute('insert into people (name_last, age) values ('Putin',     51)')
+    
+    
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
+    
+    
+  def _ThreadMain( self ):
+    while True:
+      time.sleep( self._ping_interval_seconds )
+    
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
+    
+    delim = text_type(args.delimiter)
+cutall = args.cutall
+hmm = args.hmm
+fp = open(args.filename, 'r') if args.filename else sys.stdin
+    
+            return ws
+    
+    seg_list = jieba.cut_for_search('小明硕士毕业于中国科学院计算所，后在日本京都大学深造')  # 搜索引擎模式
+print(', '.join(seg_list))
+    
+    USAGE = 'usage:    python extract_tags.py [file name] -k [top k]'
+    
+    content = open(file_name, 'rb').read()
+    
+        def testDefaultCut(self):
+        for content in test_contents:
+            result = jieba.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testDefaultCut', file=sys.stderr)
+    
+    import jieba
+    
+        output_predict_file = os.path.join(FLAGS.output_dir, 'test_results.tsv')
+    with tf.gfile.GFile(output_predict_file, 'w') as writer:
+      tf.logging.info('***** Predict results *****')
+      for prediction in result:
+        probabilities = prediction['probabilities']
+        output_line = '\t'.join(
+            str(class_probability)
+            for class_probability in probabilities) + '\n'
+        writer.write(output_line)
+    
+        self.assertAllEqual(
+        tokenizer.tokenize('unwanted running'),
+        ['un', '##want', '##ed', 'runn', '##ing'])
+    
+            assert filter_storage.isMuted('1C5sgvWaSgfaTpV5kjBCnCiKtENNMYo69q')
+        assert site.storage.query(query_num_json).fetchone()['num'] == 0
+    
+        def _decode_array(self, size, offset):
+        array = []
+        for _ in range(size):
+            (value, offset) = self.decode(offset)
+            array.append(value)
+        return array, offset
+    
+            server_change_attributes(compute_api=compute_api, target_server=target_server, wished_server=wished_server)
