@@ -1,137 +1,124 @@
 
         
-                private
+        protected
     
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
     
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
+# Codecs
+IAX_CODEC_G711_MULAW  = 0x00000004
+IAX_CODEC_G711_ALAW   = 0x00000008
+IAX_CODEC_LINEAR_PCM  = 0x00000040
     
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class TextField < Base # :nodoc:
-        include Placeholderable
-    
-          test 'when layout is overwritten by :default in render, render default layout' do
-        controller = WithString.new
-        controller.process(:overwrite_default)
-        assert_equal 'With String Hello string!', controller.response_body
-      end
-    
-          it 'deactivates an existing user' do
-        visit admin_users_path
-        expect(page).to have_no_text('inactive')
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
-        expect(page).to have_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).not_to be_active
-      end
-    
-        it 'returns a Glyphicon icon element with an addidional class' do
-      icon = icon_tag('glyphicon-help', class: 'text-info')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
     end
-    
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
-    
-                expect(trigger_agent.sources).to eq([weather_agent])
-            expect(weather_agent.controllers.to_a).to eq([trigger_agent])
-            expect(trigger_agent.control_targets.to_a).to eq([weather_agent])
-          end
-    
-          it 'loads only the workers specified in the :only option' do
-        agent_runner = AgentRunner.new(only: HuginnScheduler)
-        workers = agent_runner.send(:load_workers)
-        expect(workers.keys).to eq(['HuginnScheduler'])
-        agent_runner.stop
-      end
-    
-      describe '#pretty_jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('<\\/script>')
-    end
-  end
-    
-        stub_request(:get, /trackings/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    
-        it 'should raise error when response has an error' do
-      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
-    end
-  end
+end
+end
 end
 
     
-              # Encodes the realm field
+              # Encodes the components field
           #
           # @return [String]
-          def encode_realm
+          def encode_components
             encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
     
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+                checksum = cipher[0, 16]
+            data = cipher[16, cipher.length - 1]
+    
+              # Encodes the authenticator field
+          #
+          # @return [String]
+          def encode_authenticator
+            authenticator.encode
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            seq_values = input.value
+    
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
           #
           # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
           end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos EncryptionKey data
-        # definition
-        class EncryptionKey < Element
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-              # @!attribute type
-          #   @return [Integer] The type of value
-          attr_accessor :type
-          # @!attribute value
-          #   @return [Time] the time of the last request
-          attr_accessor :value
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
-  end
-    
-          get_web_content(redirected_url)
+        def self.clear
+      instance.clear
     end
     
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
+    
+          # Parse through mail to get the from/sender headers
+      mail = Mail.new(raw_message.split('\r\n\r\n', 2).first)
+      from_headers = {'from' => mail.from, 'sender' => mail.sender}
+      authenticated_domain = identity.server.find_authenticated_domain_from_headers(from_headers)
+    
+      expansion(:inspection) {
+    {
+      :inspected => o.inspected == 1 ? true : false,
+      :spam => o.spam == 1 ? true : false,
+      :spam_score => o.spam_score.to_f,
+      :threat => o.threat == 1 ? true : false,
+      :threat_details => o.threat_details
+    }
+  }
+    
+      def create
+    @address_endpoint = @server.address_endpoints.build(safe_params)
+    if @address_endpoint.save
+      flash[:notice] = params[:return_notice] if params[:return_notice].present?
+      redirect_to_with_json [:return_to, [organization, @server, :address_endpoints]]
+    else
+      render_form_errors 'new', @address_endpoint
+    end
+  end
+    
+      def render_form_errors(action_name, object)
+    respond_to do |wants|
+      wants.html { render action_name }
+      wants.json { render :json => {:form_errors => object.errors.full_messages}, :status => 422 }
+    end
+  end
+    
+      def setup
+    unless @domain.verified?
+      redirect_to [:verify, organization, @server, @domain], :alert => 'You can't set up DNS for this domain until it has been verified.'
+    end
+  end
+    
+      def index
+    @routes = @server.routes.order(:name).includes(:domain, :endpoint).to_a
+  end
+    
+      def index
+    @smtp_endpoints = @server.smtp_endpoints.order(:name).to_a
+  end
+    
+      def new
+    @track_domain = @server.track_domains.build
+  end
+    
+      def new
+    @organization_user = organization.organization_users.build
   end
