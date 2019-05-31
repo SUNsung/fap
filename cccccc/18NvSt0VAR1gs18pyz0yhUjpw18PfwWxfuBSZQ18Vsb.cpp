@@ -1,117 +1,62 @@
 
         
         
-    {  bool rword_indicates_list_item;
-  bool rword_likely_starts_idea;
-  bool rword_likely_ends_idea;
+    {} // namespace CAROTENE_NS
+
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const T * src = getRowPtr((const T *)srcBase, srcStride, i);
+        T * dst = getRowPtr((T *)dstBase, dstStride, (flipMode & FLIP_VERTICAL_MODE) != 0 ? size.height - i - 1 : i);
+        size_t j = 0, js = 0, jd = size.width * 3;
+    }
+    
+        std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> output(
+        context->Open(basename + '.proto'));
+    string content = GetPool()->BuildFile(new_file)->DebugString();
+    Printer printer(output.get(), '$');
+    printer.WriteRaw(content.c_str(), content.size());
+    
+    #include <ctime>
+#include <fstream>
+#include <google/protobuf/util/time_util.h>
+#include <iostream>
+#include <string>
+    
+      TemporaryFile() {
+    path = tmppath();
+  }
+    
+    
+    {    return SingleGradientDef(
+        'MergeMultiListFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
+  }
+    
+    
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
 };
     
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
     
-    // A CostFunc that takes the variance of step into account in the cost.
-int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
-  if (prev == nullptr || prev == this) {
-    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
-    return 0;
-  }
-    }
+    {}
+#endif
+
     
+    		virtual bool GetFlip(void) = 0;
     
-    {  // Best available image.
-  Pix* pix_;
-  // True if the source image is white-on-black.
-  bool inverse_;
-  // Block the word came from. If not null, block->re_rotation() takes the
-  // 'untransformed' coordinates even further back to the original image.
-  // Used only on the first DENORM in a chain.
-  const BLOCK* block_;
-  // Rotation to apply between translation to the origin and scaling.
-  const FCOORD* rotation_;
-  // Previous transformation in a chain.
-  const DENORM* predecessor_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding x-coord. Owned by the DENORM.
-  GenericVector<float>* x_map_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding y-coord. Owned by the DENORM.
-  GenericVector<float>* y_map_;
-  // x-coordinate to be mapped to final_xshift_ in the result.
-  float x_origin_;
-  // y-coordinate to be mapped to final_yshift_ in the result.
-  float y_origin_;
-  // Scale factors for x and y coords. Applied to pre-rotation system.
-  float x_scale_;
-  float y_scale_;
-  // Destination coords of the x_origin_ and y_origin_.
-  float final_xshift_;
-  float final_yshift_;
-};
-    
-      // Removes the MAXIMUM element of the heap. (MIN from a MAX heap.) If entry is
-  // not nullptr, the element is copied into *entry, otherwise it is discarded.
-  // Time = O(n). Returns false if the heap was already empty.
-  bool PopWorst(Pair* entry) {
-    int worst_index = IndexOfWorst();
-    if (worst_index < 0) return false;  // It cannot be empty!
-    // Extract the worst element from the heap, leaving a hole at worst_index.
-    if (entry != nullptr)
-      *entry = heap_[worst_index];
-    int heap_size = heap_.size() - 1;
-    if (heap_size > 0) {
-      // Sift the hole upwards to match the last element of the heap_
-      Pair hole_pair = heap_[heap_size];
-      int hole_index = SiftUp(worst_index, hole_pair);
-      heap_[hole_index] = hole_pair;
-    }
-    heap_.truncate(heap_size);
-    return true;
-  }
-    
-    // A simple object cache which maps a string to an object of type T.
-// Usually, these are expensive objects that are loaded from disk.
-// Reference counting is performed, so every Get() needs to be followed later
-// by a Free().  Actual deletion is accomplished by DeleteUnusedObjects().
-template<typename T>
-class ObjectCache {
- public:
-  ObjectCache() = default;
-  ~ObjectCache() {
-    mu_.Lock();
-    for (int i = 0; i < cache_.size(); i++) {
-      if (cache_[i].count > 0) {
-        tprintf('ObjectCache(%p)::~ObjectCache(): WARNING! LEAK! object %p '
-                'still has count %d (id %s)\n',
-                this, cache_[i].object, cache_[i].count,
-                cache_[i].id.string());
-      } else {
-        delete cache_[i].object;
-        cache_[i].object = nullptr;
-      }
-    }
-    mu_.Unlock();
-  }
-    }
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// initialization of encoding state from a prior encoding using encoding bits
-	// [a_uiSourceH,a_uiSourceV] is the location of the block in a_pimageSource
-	// a_paucEncodingBits is the place to read the prior encoding
-	// a_imageformat is used to determine how to interpret a_paucEncodingBits
-	// a_errormetric was used for the prior encoding
-	//
-	void Block4x4::InitFromEtcEncodingBits(Image::Format a_imageformat,
-											unsigned int a_uiSourceH, unsigned int a_uiSourceV,
-											unsigned char *a_paucEncodingBits,
-											Image *a_pimageSource,
-											ErrorMetric a_errormetric)
-	{
-		Block4x4();
-    }
-    
-    		void CalcBlockError(void);
+    	// ################################################################################
+	// Block4x4EncodingBits
+	// Base class for Block4x4EncodingBits_XXXX
+	// ################################################################################
     
     //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
 static const tran_high_t sinpi_1_9 = 5283;
@@ -119,102 +64,236 @@ static const tran_high_t sinpi_2_9 = 9929;
 static const tran_high_t sinpi_3_9 = 13377;
 static const tran_high_t sinpi_4_9 = 15212;
     
-    #define C_SUBFROM( res , a)\
-    do {\
-            CHECK_OVERFLOW_OP((res).r,-,(a).r)\
-            CHECK_OVERFLOW_OP((res).i,-,(a).i)\
-            (res).r -= (a).r;  (res).i -= (a).i; \
-    }while(0)
-#endif /* C_ADD defined */
+      int lookChar();
+  void consumeChar();
+  int getChar();
     
-    #define NORM_SCALING 16384
     
-    #define EXTEND32(x) EXTEND32_(x, __FILE__, __LINE__)
-static OPUS_INLINE int EXTEND32_(int x, char *file, int line)
+    {private:
+  
+  PageTransitionType type;           // transition style
+  int duration;                      // duration of the effect in seconds
+  PageTransitionAlignment alignment; // dimension of the effect
+  PageTransitionDirection direction; // direction of motion
+  int angle;                         // direction in degrees
+  double scale;                      // scale
+  GBool rectangular;                 // is the area to be flown in rectangular?
+  GBool ok;                          // set if created successfully
+};
+    
+    PopplerCacheItem::~PopplerCacheItem()
 {
-   int res;
-   if (!VERIFY_SHORT(x))
-   {
-      fprintf (stderr, 'EXTEND32: input is not short: %d in %s: line %d\n', x, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = x;
-   celt_mips++;
-   return res;
 }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+        Object *put(const Ref &ref);
+    Object *lookup(const Ref &ref, Object *obj);
     
-    /* Adds two signed 32-bit values in a way that can overflow, while not relying on undefined behaviour
-   (just standard two's complement implementation-specific behaviour) */
-#define silk_ADD32_ovflw(a, b)              ((opus_int32)((opus_uint32)(a) + (opus_uint32)(b)))
-/* Subtractss two signed 32-bit values in a way that can overflow, while not relying on undefined behaviour
-   (just standard two's complement implementation-specific behaviour) */
-#define silk_SUB32_ovflw(a, b)              ((opus_int32)((opus_uint32)(a) - (opus_uint32)(b)))
+    void PreScanOutputDev::drawSoftMaskedImage(GfxState * /*state*/, Object * /*ref*/,
+					   Stream * /*str*/,
+					   int /*width*/, int /*height*/,
+					   GfxImageColorMap *colorMap,
+					   GBool /*interpolate*/,
+					   Stream * /*maskStr*/,
+					   int /*maskWidth*/, int /*maskHeight*/,
+					   GfxImageColorMap * /*maskColorMap*/,
+					   GBool /*maskInterpolate*/) {
+  GfxColorSpace *colorSpace;
+    }
     
-        UBool         retVal  = FALSE;
-    RegexPattern *pat     = NULL;
-    RegexMatcher *matcher = NULL;
+      // Constructor.
+  ProfileData ();
     
-    #endif // __SCRIPTSET_H__
+      // If the mask is higher resolution than the image, use
+  // drawSoftMaskedImage() instead.
+  if (maskWidth > width || maskHeight > height) {
+    decodeLow.initInt(maskInvert ? 0 : 1);
+    decodeHigh.initInt(maskInvert ? 1 : 0);
+    maskDecode.initArray(xref);
+    maskDecode.arrayAdd(&decodeLow);
+    maskDecode.arrayAdd(&decodeHigh);
+    maskColorMap = new GfxImageColorMap(1, &maskDecode,
+					new GfxDeviceGrayColorSpace());
+    maskDecode.free();
+    drawSoftMaskedImage(state, ref, str, width, height, colorMap, interpolate,
+			maskStr, maskWidth, maskHeight, maskColorMap, maskInterpolate);
+    delete maskColorMap;
+    }
+    
+    
+    {
+    {}  // namespace exec
+}  // namespace mxnet
 
     
-    void SearchIterator::setAttribute(USearchAttribute       attribute,
-                                  USearchAttributeValue  value,
-                                  UErrorCode            &status)
-{
-    if (U_SUCCESS(status)) {
-        switch (attribute)
-        {
-        case USEARCH_OVERLAP :
-            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_CANONICAL_MATCH :
-            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_ELEMENT_COMPARISON :
-            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
-                m_search_->elementComparisonType = (int16_t)value;
-            } else {
-                m_search_->elementComparisonType = 0;
-            }
-            break;
-        default:
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
     }
-    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
+    
+    struct dequantize_2bit {
+  MSHADOW_XINLINE static void Map(int i,
+                                  float *out,
+                                  float *in,
+                                  const float neg_threshold,
+                                  const float pos_threshold) {
+    // get position of dequantized value to fill
+    float *outval = out + i;
+    // gets byte which holds quantized value for this position
+    char *ch_ptr = reinterpret_cast<char *>(in + (i >> 4));
+    ch_ptr += ((i & 15) >> 2);
+    // masks used to quantize data
+    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
+    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
+    // col denotes which two bits of a byte are set for this value
+    // col=0 implies first two bits, col=3 implies last two bits,...
+    const int col = i & 3;
+    const uint8_t mask = posbits[col];
+    const uint8_t negmask = negbits[col];
+    const uint8_t masked = *ch_ptr & mask;
+    if (masked == mask) {
+      *outval = pos_threshold;
+    } else if (masked == negmask) {
+      // use posbits for mask as posbits are both 1s
+      // then compare masked with negbits to see if only negbits were set
+      *outval = neg_threshold;
+    } else {
+      *outval = 0;
+    }
+  }
+};
+    
+    
+    {  if (has('dist')) {
+#if MXNET_USE_DIST_KVSTORE
+    kv = new kvstore::KVStoreDist(use_device_comm);
+    if (!has('_async') && kv->IsWorkerNode() && kv->get_rank() == 0) {
+      // configure the server to be the sync mode
+      kv->SendCommandToServers(static_cast<int>(kvstore::CommandType::kSyncMode), '');
+    }
+#else
+    LOG(FATAL) << 'compile with USE_DIST_KVSTORE=1 to use ' << tname;
+    return nullptr;
+#endif  // MXNET_USE_DIST_KVSTORE
+  } else {
+    if (has('nccl')) {
+#if MXNET_USE_NCCL
+      kv = new kvstore::KVStoreNCCL();
+#else
+      LOG(FATAL) << 'compile with USE_NCCL=1 to use ' << tname;
+      return nullptr;
+#endif
+    } else {
+      kv =  new kvstore::KVStoreLocal(use_device_comm);
+    }
+  }
+  kv->type_ = tname;
+  return kv;
 }
     
-    U_NAMESPACE_END
+      void Run(const RunContext& rctx) {
+    // setup DLTensor
+    for (size_t i = 0; i < array_loc_.size(); ++i) {
+      values_[array_loc_[i]].v_handle =
+          const_cast<DLTensor*>(&(array_data_[i].data().dltensor()));
+    }
+    // run the packed function
+    TVMRetValue rv;
+    TVMArgs args(&values_[0], &type_codes_[0], values_.size());
+    if (ctx().dev_type == Context::kGPU) {
+#if MXNET_USE_CUDA
+      // pass stream via last argument.
+      void* strm = static_cast<void*>(rctx.get_stream<gpu>()->stream_);
+      int dev_type = kDLGPU;
+      fset_stream_(dev_type, rctx.ctx.dev_id, strm);
+      func_.CallPacked(args, &rv);
+      fset_stream_(dev_type, rctx.ctx.dev_id, nullptr);
+#else
+      LOG(FATAL) << 'Please compile with CUDA enabled for cuda features';
+#endif
+    } else {
+      func_.CallPacked(args, &rv);
+    }
+  }
     
+      // Check all input and output matrices have the same number
+  // of columns and the output matrix has the right number of rows
+  int ncols = static_cast<int>(out.size(1));
+  int nrows = 1;
+  for (auto & ts : ts_arr) {
+    CHECK_EQ(ncols, static_cast<int>(ts.size(1)))
+      << 'All input and output matrices must have the same number of columns.';
+    nrows *= ts.size(0);
+  }
+  CHECK_EQ(nrows, static_cast<int>(out.size(0)));
     
-//------------------------------------------------------------------------------
-//
-//   smpdtfmt_cleanup     Memory cleanup function, free/delete all
-//                      cached memory.  Called by ICU's u_cleanup() function.
-//
-//------------------------------------------------------------------------------
-UBool
-SimpleDateFormatStaticSets::cleanup(void)
-{
-    delete gStaticSets;
-    gStaticSets = NULL;
-    gSimpleDateFormatStaticSetsInitOnce.reset();
-    return TRUE;
-}
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                        sampler_,
+                                                        dtype_,
+                                                        4,
+                                                        dim));
+    }
+  }
