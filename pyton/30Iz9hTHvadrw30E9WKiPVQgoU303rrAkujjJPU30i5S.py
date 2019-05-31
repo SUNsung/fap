@@ -1,128 +1,144 @@
 
         
-        import io
-import optparse
-import os
-import sys
-    
-        with open(ZSH_COMPLETION_FILE, 'w') as f:
-        f.write(template)
-    
-        def debug(self, msg):
-        pass
+            The response code line has the form
     
     
-def unicode_is_ascii(u_string):
-    '''Determine if unicode string only contains ASCII characters.
+# Is a path a directory?
+# This follows symbolic links, so both islink() and isdir()
+# can be true for the same path on systems that support symlinks
+def isdir(s):
+    '''Return true if the pathname refers to an existing directory.'''
+    try:
+        st = os.stat(s)
+    except (OSError, ValueError):
+        return False
+    return stat.S_ISDIR(st.st_mode)
     
+        Directories are *not* resources.
+    '''
+    package = _get_package(package)
+    _normalize_path(name)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.is_resource(name)
+    try:
+        package_contents = set(contents(package))
+    except (NotADirectoryError, FileNotFoundError):
+        return False
+    if name not in package_contents:
+        return False
+    # Just because the given file_name lives as an entry in the package's
+    # contents doesn't necessarily mean it's a resource.  Directories are not
+    # resources, so let's try to find out if it's a directory or not.
+    path = Path(package.__spec__.origin).parent / name
+    return path.is_file()
     
-class CaseInsensitiveDict(MutableMapping):
-    '''A case-insensitive ``dict``-like object.
+    dom = xml.dom.minidom.parseString(document)
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
-    
-        :param pool_connections: The number of urllib3 connection pools to cache.
-    :param pool_maxsize: The maximum number of connections to save in the pool.
-    :param max_retries: The maximum number of retries each connection
-        should attempt. Note, this applies only to failed DNS lookups, socket
-        connections and connection timeouts, never to requests where data has
-        made it to the server. By default, Requests does not retry failed
-        connections. If you need granular control over the conditions under
-        which we retry a request, import urllib3's ``Retry`` class and pass
-        that instead.
-    :param pool_block: Whether the connection pool should block for connections.
-    
-    This module handles import compatibility issues between Python 2 and
-Python 3.
-'''
-    
-                # the (n+1)th request fails
-            with pytest.raises(requests.exceptions.ConnectionError):
-                r = requests.get(server_url)
-    
-    Some codes have multiple names, and both upper- and lower-case versions of
-the names are allowed. For example, ``codes.ok``, ``codes.OK``, and
-``codes.okay`` all correspond to the HTTP status code 200.
-'''
-    
-        def test_cookie_removed_on_expire(self, httpbin):
-        s = requests.session()
-        s.get(httpbin('cookies/set?foo=bar'))
-        assert s.cookies['foo'] == 'bar'
-        s.get(
-            httpbin('response-headers'),
-            params={
-                'Set-Cookie':
-                    'foo=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT'
-            }
-        )
-        assert 'foo' not in s.cookies
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import boto3_conn, camel_dict_to_snake_dict
-from ansible.module_utils.ec2 import ec2_argument_spec, get_aws_connection_info
-    
-            if state == 'absent' and user in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.remove_collaborator(user)
-            affected_apps += [app]
-            result_state = True
-        elif state == 'present' and user not in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.add_collaborator(user_id_or_email=user, silent=module.params['suppress_invitation'])
-            affected_apps += [app]
-            result_state = True
-    
-        vca = vca_login(module)
-    
-    EXAMPLES = '''
-# Ensure role is present
-- ipa_role:
-    name: dba
-    description: Database Administrators
-    state: present
-    user:
-    - pinky
-    - brain
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    # Copyright 2014 Benjamin Curtis <benjamin.curtis@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-    
-    RETURN = '''
-#
-'''
-    
-        def load_word_tag(self, f):
-        self.word_tag_tab = {}
-        f_name = resolve_filename(f)
-        for lineno, line in enumerate(f, 1):
+            print('Testing IMapIterator.next() with timeout:', end=' ')
+        it = pool.imap(calculatestar, TASKS)
+        while 1:
+            sys.stdout.flush()
             try:
-                line = line.strip().decode('utf-8')
-                if not line:
-                    continue
-                word, _, tag = line.split(' ')
-                self.word_tag_tab[word] = tag
-            except Exception:
-                raise ValueError(
-                    'invalid POS dictionary entry in %s at Line %s: %s' % (f_name, lineno, line))
-        f.close()
+                sys.stdout.write('\n\t%s' % it.next(0.02))
+            except StopIteration:
+                break
+            except multiprocessing.TimeoutError:
+                sys.stdout.write('.')
+        print()
+        print()
+    
+    print('Enter your SQL commands to execute in sqlite3.')
+print('Enter a blank line to exit.')
     
     
-def get_top_states(t_state_v, K=4):
-    return sorted(t_state_v, key=t_state_v.__getitem__, reverse=True)[:K]
+if __name__ == '__main__':
+    main()
     
-    content = open(file_name, 'rb').read()
+        # TODO: It would be better if we had unit tests for each
+    # method in addition to the following end-to-end test
+    def test_end_to_end(self):
+        print('Test: Empty stack')
+        stack = Stack()
+        assert_equal(stack.peek(), None)
+        assert_equal(stack.pop(), None)
     
-    print(','.join(tags))
-
+    		elif current.rightChild is None:
+			if current is self.root:
+				self.root = current.leftChild
+			elif isLeft:
+				parent.leftChild = current.leftChild
+			else:
+				parent.rightChild = current.leftChild
+    
+    	def test_insert_traversals (self):
+		myTree = BinaryTree()
+		myTree2 = BinaryTree()
+		for num in [50, 30, 70, 10, 40, 60, 80, 7, 25, 38]:
+			myTree.insert(num)
+		[myTree2.insert(num) for num in range (1, 100, 10)]
+    
+        def extract_min(self):
+        if not self.array:
+            return None
+        minimum = sys.maxsize
+        for index, node in enumerate(self.array):
+            if node.key < minimum:
+                minimum = node.key
+                minimum_index = index
+        return self.array.pop(minimum_index)
+    
+        def configure(self, updated):
+        # We're already streaming - stop the previous stream and restart
+        if 'save_stream_filter' in updated:
+            if ctx.options.save_stream_filter:
+                self.filt = flowfilter.parse(ctx.options.save_stream_filter)
+                if not self.filt:
+                    raise exceptions.OptionsError(
+                        'Invalid filter specification: %s' % ctx.options.save_stream_filter
+                    )
+            else:
+                self.filt = None
+        if 'save_stream_file' in updated or 'save_stream_filter' in updated:
+            if self.stream:
+                self.done()
+            if ctx.options.save_stream_file:
+                self.start_stream_to_path(ctx.options.save_stream_file, self.filt)
+    
+    from mitmproxy.net.http import http1
+from mitmproxy import exceptions
+from mitmproxy import ctx
+from mitmproxy.utils import human
+    
+        def configure(self, updated):
+        # FIXME: We're doing this because our proxy core is terminally confused
+        # at the moment. Ideally, we should be able to check if we're in
+        # reverse proxy mode at the HTTP layer, so that scripts can put the
+        # proxy in reverse proxy mode for specific requests.
+        if 'upstream_auth' in updated:
+            if ctx.options.upstream_auth is None:
+                self.auth = None
+            else:
+                self.auth = parse_upstream_auth(ctx.options.upstream_auth)
+    
+        def add(self, path: str, func: typing.Callable):
+        self.commands[path] = Command(self, path, func)
+    
+    from mitmproxy import certs
+from mitmproxy import exceptions
+from mitmproxy import stateobject
+from mitmproxy.net import tcp
+from mitmproxy.net import tls
+from mitmproxy.utils import human
+from mitmproxy.utils import strutils
     
     
-t0 = time.time()
-print('training...')
+class Reply:
+    '''
+    Messages sent through a channel are decorated with a 'reply' attribute. This
+    object is used to respond to the message through the return channel.
+    '''
+    def __init__(self, obj):
+        self.obj = obj
+        # Spawn an event loop in the current thread
+        self.q = queue.Queue()
