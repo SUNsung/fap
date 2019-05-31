@@ -1,112 +1,98 @@
 
         
-            it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
-    
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-          def check
-        create_event :payload => {}
-      end
-    end
-    
-    describe ScenarioHelper do
-  let(:scenario) { users(:bob).scenarios.build(name: 'Scene', tag_fg_color: '#AAAAAA', tag_bg_color: '#000000') }
-    
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
-    end
-    
-    class FormulaPin
-  def initialize(f)
-    @f = f
-  end
-    
-    
-    
-          <ul id='backtrace-ul'>
-    
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
-      end
-    
-      it 'denies post requests with wrong X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => bad_token)
-    expect(last_response).not_to be_ok
-  end
-    
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-          def header_format
-        has_header && @header.format.to_s
-      end
-    
-    def normal(text)
-  text.gsub!(' ', '')
-  text.gsub!('\n', '')
-  text
-end
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      test 'transliteration' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-    
-    module Gollum
-  VERSION = '4.1.4'
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-        def cache(gist, file, data)
-      cache_file = get_cache_file_for gist, file
-      File.open(cache_file, 'w') do |io|
-        io.write data
-      end
-    end
-    
-      class ImageTag < Liquid::Tag
-    @img = nil
-    
-        def post_render(post)
-      OctopressFilters::post_filter(post)
+            change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
   end
 end
+
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+          it 'should be catched when it means that the target is not found' do
+        post :create, params: {post_id: -1}, format: :json
+        expect(response.code).to eq('422')
+      end
+    
+          it 'it doesn't call toggle_hidden_shareable' do
+        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
+        begin
+          put :update, params: {id: 42, post_id: @status.id}, format: :js
+        rescue ActiveRecord::RecordNotFound
+        end
+      end
+    end
+  end
+end
+
+    
+        context 'filter on payment state' do
+      it 'only shows the orders with the selected payment state' do
+        select Spree.t('payment_states.#{order1.payment_state}'), from: 'Payment State'
+        click_on 'Filter Results'
+        within_row(1) { expect(page).to have_content('R100') }
+        within('table#listing_orders') { expect(page).not_to have_content('R200') }
+      end
+    end
+    
+    namespace :gem do
+  def version
+    require 'spree/core/version'
+    Spree.version
+  end
+    
+              def serialize_order(order)
+            resource_serializer.new(order.reload, include: resource_includes, fields: sparse_fields).serializable_hash
+          end
+    
+            def update
+          @line_item = find_line_item
+    
+      # Ensures that a master key has been made available in either ENV['RAILS_MASTER_KEY']
+  # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
+  # config.require_master_key = true
+    
+          it 'mutes the parent comment' do
+        sign_in original_commenter
+        patch '/comment_mutes/#{parent_comment_by_og.id}', params: { comment: { receive_notifications: 'false' } }
+        expect(parent_comment_by_og.reload.receive_notifications).to be false
+      end
+    
+      def broadcast_params
+    params.permit(:title, :processed_html, :type_of, :sent)
+    # left out body_markdown and processed_html attributes
+    #   until we decide we're using them
+  end
+end
+
+    
+    desc 'Clean up files.'
+task :clean do |t|
+  FileUtils.rm_rf 'doc'
+  FileUtils.rm_rf 'tmp'
+  FileUtils.rm_rf 'pkg'
+  FileUtils.rm_rf 'public'
+  FileUtils.rm 'test/debug.log' rescue nil
+  FileUtils.rm 'test/paperclip.db' rescue nil
+  Dir.glob('paperclip-*.gem').each{|f| FileUtils.rm f }
+end
+
+    
+      def framework_version
+    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
+  end
     
     require 'erb'
 require 'digest'
@@ -139,3 +125,22 @@ require 'paperclip/has_attached_file'
 require 'paperclip/attachment_registry'
 require 'paperclip/filename_cleaner'
 require 'paperclip/rails_environment'
+    
+        # Returns the width and height in a format suitable to be passed to Geometry.parse
+    def to_s
+      s = ''
+      s << width.to_i.to_s if width > 0
+      s << 'x#{height.to_i}' if height > 0
+      s << modifier.to_s
+      s
+    end
+    
+        def raise_if_blank_file
+      if path.blank?
+        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
+      end
+    end
+    
+        def register_new_attachment
+      Paperclip::AttachmentRegistry.register(@klass, @name, @options)
+    end
