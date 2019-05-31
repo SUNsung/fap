@@ -1,69 +1,33 @@
 
         
-            private
+        module Admin
+  class ReportNotesController < BaseController
+    before_action :set_report_note, only: [:destroy]
     
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
-        end
+      private
     
-      def create
-    active_session = current_session
-    
-      before_action :require_user!
-    
-      included do
-    before_action :authenticate_user!
-    before_action :load_export
+      def compatible_locale
+    http_accept_language.compatible_language_from(available_locales)
   end
     
-      def set_user_activity
-    return unless user_needs_sign_in_update?
-    current_user.update_tracked_fields!(request)
-  end
+        @save_to.each { |_, v| FileUtils.mkdir_p(v) }
     
-          def decode_token(token)
-        Base64.strict_decode64(token)
-      end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+        def initialize(*args)
+      @s = StringScanner.new(*args)
     end
     
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-            options[:class] = 'sidebar-menu-item d-block w-100'
-        options[:class] << ' selected' if is_selected
-        content_tag(:li, options) do
-          link_to(link_text, url, class: '#{'text-success' if is_selected} py-1 px-3 d-block sidebar-submenu-item')
-        end
-      end
-    
-            def load_order_with_lock
-          load_order(true)
-        end
-    
-            def approve
-          authorize! :approve, @order, params[:token]
-          @order.approved_by(current_api_user)
-          respond_with(@order, default_template: :show)
-        end
-    
-          it 'does not mute the other commenter's comments in the same thread' do
-        results = parent_comment_by_og.subtree.where(user: other_commenter).pluck(:receive_notifications)
-        expect(results.uniq).to eq [true]
-      end
+          expect(Notification.find(note.id).unread).to eq(true)
     end
   end
-end
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
