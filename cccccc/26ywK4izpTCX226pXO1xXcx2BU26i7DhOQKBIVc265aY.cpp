@@ -1,123 +1,124 @@
 
         
-          int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
+        // Hash function for PyBfloat16. We use the identity function, which is a weak
+// hash function.
+HashType PyBfloat16_Hash(PyObject* self) {
+  bfloat16 x = reinterpret_cast<PyBfloat16*>(self)->value;
+  return x.value;
+}
     
-      // Deletes the box with the given index, and shuffles up the rest.
-  // Recomputes the bounding box.
-  void DeleteBox(int index);
+    #include <Python.h>
     
-    namespace tesseract {
+    Status TF_TensorToPyArray(Safe_TF_TensorPtr tensor, PyObject** out_ndarray);
+    
+    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
+// pointer to the pyobj in a buffer to be dereferenced later when we're actually
+// holding the GIL. Data and len are ignored.
+void DelayedNumpyDecref(void* data, size_t len, void* obj);
+    
+    #include <Python.h>
+    
+    string TryFindKernelClass(const string& serialized_node_def) {
+  tensorflow::NodeDef node_def;
+  if (!node_def.ParseFromString(serialized_node_def)) {
+    LOG(WARNING) << 'Error parsing node_def';
+    return '';
+  }
     }
     
-    template <typename T> class GenericVector;
-    
-    ELISTIZE(PARA)
-    
-      // Simple accessors.
-  bool empty() const {
-    return heap_.empty();
-  }
-  int size() const {
-    return heap_.size();
-  }
-  int size_reserved() const {
-    return heap_.size_reserved();
-  }
-  void clear() {
-    // Clear truncates to 0 to keep the number reserved in tact.
-    heap_.truncate(0);
-  }
-  // Provides access to the underlying vector.
-  // Caution! any changes that modify the keys will invalidate the heap!
-  GenericVector<Pair>* heap() {
-    return &heap_;
-  }
-  // Provides read-only access to an element of the underlying vector.
-  const Pair& get(int index) const {
-    return heap_[index];
-  }
-    
-        //
-    // Override
-    //
-    virtual Speed* clone() const override;
-    virtual Speed* reverse() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void stop() override;
-    /**
-     * @param dt in seconds.
-     */
-    virtual void step(float dt) override;
-    /** Return true if the action has finished.
-     *
-     * @return Is true if the action has finished.
-     */
-    virtual bool isDone() const  override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Speed();
-    virtual ~Speed(void);
-    /** Initializes the action. */
-    bool initWithAction(ActionInterval *action, float speed);
-    
-    ssize_t PointArray::count() const
-{
-    return _controlPoints.size();
-}
-    
-    CallFuncN * CallFuncN::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) CallFuncN();
+    // This enum represents potential configurations of L1/shared memory when
+// running a particular kernel. These values represent user preference, and
+// the runtime is not required to respect these choices.
+enum class KernelCacheConfig {
+  // Indicates no preference for device L1/shared memory configuration.
+  kNoPreference,
     }
     
-        /** Removes an action given its tag and the target.
-     *
-     * @param tag       The action's tag.
-     * @param target    A certain target.
-     */
-    virtual void removeActionByTag(int tag, Node *target);
-    
-    /** Removes all actions given its tag and the target.
-     *
-     * @param tag       The actions' tag.
-     * @param target    A certain target.
-     * @js NA
-     */
-    virtual void removeAllActionsByTag(int tag, Node *target);
-    
-    AnimationCache* AnimationCache::s_sharedAnimationCache = nullptr;
-    
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
-    
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
-    
-      x <<= 4;
-  x |= t;
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-    void Spline1dSeg::SetParams(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    Eigen::MatrixXd SplineSegKernel::Kernel(const uint32_t num_params,
-                                        const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateFx(num_params);
+    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
+                        CanGenericSignature Generics,
+                        ArrayRef<SILField> Fields) {
+  id.AddPointer(Generics.getPointer());
+  for (auto &field : Fields) {
+    id.AddPointer(field.getLoweredType().getPointer());
+    id.AddBoolean(field.isMutable());
   }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'fx', &term_matrix);
-  return kernel_fx_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
+}
+
+    
+      char *oldBegin = Begin;
+  char *oldEnd = End;
+  std::size_t oldSize = (std::size_t) (oldEnd - oldBegin);
+    
+      // If this is a getter/setter, the other accessor
+  const clang::FunctionDecl *pairedAccessor = nullptr;
+    
+    
+    {  return 0;
 }
     
-    class Accelrpt68Test : public ::testing::Test {
- public:
-  virtual void SetUp() {}
-};
+      FrontendInputsAndOutputs result;
+  for (auto &file : Files) {
+    bool isPrimary = primaryFiles.count(file) > 0;
+    result.addInput(InputFile(file, isPrimary));
+    if (isPrimary)
+      primaryFiles.erase(file);
+  }
+    
+            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
+            size_t minibatchSizeInSamples,
+            size_t minibatchSizeInSequences,
+            size_t numberOfWorkers,
+            size_t workerRank,
+            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
+    
+            bool result = (!m_distributed) ?
+            TrainLocalMinibatch(GetInputs(arguments), outputsToFetch, IsAtSweepEnd(arguments), computeDevice) :
+            TrainDistributedMinibatch(GetInputs(arguments), outputsToFetch, IsAtSweepEnd(arguments), computeDevice);
+    
+            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
+        {
+            // failed to acquire
+            int rc = ::CloseHandle(m_handle);
+            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+            {
+                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
+            }
+            m_handle = NULL;
+            return false;
+        }
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+                Input(0)->SetDims1(nInput, nHidden);
+            Input(0)->UpdateFunctionValuesSize();
+            Input(0)->Value().SetValue(1.0);
+            Input(1)->Value().TransferFromDeviceToDevice(m_deviceId, CPUDEVICE, true);
+            Input(1)->Value().SwitchToMatrixType(DENSE, matrixFormatDense, false);
+            Input(1)->SetDims1(nHidden, nOutput);
+            Input(1)->UpdateFunctionValuesSize();
+            Input(1)->Value().SetValue(0.0);
+            Input(1)->Value().SetValue(0, 0, 1.0);
+            Input(1)->Value().SetValue(1, 1, 2.0);
+            Input(1)->Value().TransferFromDeviceToDevice(CPUDEVICE, m_deviceId, true);
+            Input(1)->Value().SwitchToMatrixType(SPARSE, matrixFormatSparseCSC, true);
+            SetDims1(nInput, nOutput);
+            UpdateFunctionValuesSize();
+    
+        template <class ElemType>
+    void RequestRelease(shared_ptr<Matrix<ElemType>> *pMatrixPtr)
+    {
+        auto memInfo = GetMemInfo(pMatrixPtr);
+        if (memInfo != nullptr)
+        {
+            memInfo->SetReleaseStep(m_stepCounter);
+        }
+        m_stepCounter++; 
+    }
