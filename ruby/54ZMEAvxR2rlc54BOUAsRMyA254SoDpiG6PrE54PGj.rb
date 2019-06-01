@@ -1,113 +1,138 @@
-      it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
+
+        
+              command_return = ActionCommandReturn.new(
+        return_value: action_return,
+        return_value_type: action_return_type,
+        closure_argument_value: closure_argument_value
+      )
+    
+              it '--log-path option is present' do
+            result = Fastlane::FastFile.new.parse('lane :test do
+                carthage(command: '#{command}', log_path: 'bla.log')
+              end').runner.execute(:test)
+            expect(result).to eq('carthage build --log-path bla.log')
+          end
+        end
+    
+          it 'handles the extensions parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
       end
     
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
+          it 'works with all parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: /.*/,
+              exclude_regex: /Test.m/,
+              report_type: 'pmd',
+              report_path: 'report_path.xml',
+              max_priority_1: 10,
+              max_priority_2: 20,
+              max_priority_3: 30,
+              thresholds: ['LONG_LINE=200', 'LONG_METHOD=200'],
+              enable_rules: ['DoubleNegative', 'DeadCode'],
+              disable_rules: ['GotoStatement', 'ShortVariableName'],
+              list_enabled_rules: true,
+              enable_clang_static_analyzer: true,
+              enable_global_analysis: true,
+              allow_duplicated_violations: true
+            )
+          end').runner.execute(:test)
+    
+        def ensure_generic_type_passes_validation(value)
+      if @skip_type_validation
+        return
       end
     
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
+    # The * turns the array into a parameter list
+# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
+# We need to use that, because otherwise invocations like
+# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
+exec(*exec_arr)
+
+    
+        def insert_after(index, *names)
+      insert assert_index(index) + 1, *names
     end
     
-          describe '#generate_diff' do
-        it 'returns AgentDiff objects for the incoming Agents' do
-          expect(scenario_import).to be_valid
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
+      end
     
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
-    end
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
     
-      describe 'path request must exist' do
-    it 'should check that validation added if path does not exist' do
-      opts = @opts.tap { |o| o.delete('path') }
-      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
-      @checker.user = users(:bob)
-      expect(@checker.save).to eq false
-      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
-    end
-  end
-    
-      describe '#working?' do
-    it 'it is working when at least one event was emitted' do
-      expect(@checker).not_to be_working
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      @checker.check
-      expect(@checker.reload).to be_working
+          def _devise_route_context
+        @_devise_route_context ||= send(Devise.available_router_name)
+      end
     end
   end
 end
 
     
-        it 'should raise error when invalid response arrives' do
-      stub(HTTParty).post { {'blah' => 'blah'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Invalid response from Boxcar:/)
+            # Removes reset_password token
+        def clear_reset_password_token
+          self.reset_password_token = nil
+          self.reset_password_sent_at = nil
+        end
+    
+            Devise::Models.config(self, :remember_for, :extend_remember_period, :rememberable_options, :expire_all_remember_me_on_sign_out)
+      end
     end
-    
-        private
-    
-      private
-    
-      def compatible_locale
-    http_accept_language.compatible_language_from(available_locales)
-  end
-    
-      config.vm.define 'debian7' do |debian7|
-    debian7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
-  end
-    
-      option '--name', 'SERVICE_NAME', 'The name of the service you are creating'
-  option '--chdir', 'CHDIR', 'The working directory used by the service'
-    
-        safesystem('tar', *args)
-  end # def output
-    
-      # Output a zipfile.
-  def output(output_path)
-    output_check(output_path)
-    realpath = Pathname.new(output_path).realdirpath.to_s
-    ::Dir.chdir(staging_path) do
-      safesystem('zip', '-9r', realpath, '.')
-    end
-  end # def output
-end # class FPM::Package::Tar
-
-    
-    module WithinHelpers
-  def with_scope(locator)
-    locator ? within(*selector_for(locator)) { yield } : yield
   end
 end
-World(WithinHelpers)
+
     
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
+        end
     
-        def self.clear
-      instance.clear
+            # This returns all the registered guests.
+        #
+        # @return [Hash]
+        def hosts
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.hosts)
+            end
+          end
+        end
+    
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
+    
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
+    
+        def render(context)
+      includes_dir = File.join(context.registers[:site].source, '_includes')
+    
+        def post_render(post)
+      OctopressFilters::post_filter(post)
     end
+  end
+end
