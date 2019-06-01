@@ -1,124 +1,249 @@
 
         
-            def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
+            long_description = README,
     
-        while True:
-        more_to_read = select.select([sock], [], [], timeout)[0]
-        if not more_to_read:
-            break
-    
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    from collections.abc import Callable, Mapping, MutableMapping
-    
-        def iteritems(self):
-        '''Dict-like iteritems() that returns an iterator of name-value tuples
-        from the jar.
+            video_id = match1(html, r'data-brightcove-id='(\d+)'')
+        
+        assert account_number, video_id
     
     
-def test_set_environ_raises_exception():
-    '''Tests set_environ will raise exceptions in context when the
-    value parameter is None.'''
-    with pytest.raises(Exception) as exception:
-        with set_environ('test1', None):
-            raise Exception('Expected exception')
+    def download_by_id(self, vid = '', title = None, output_dir='.', merge=True, info_only=False,**kwargs):
+        '''self, str->None
+        
+        Keyword arguments:
+        self: self
+        vid: The video ID for BokeCC cloud, something like
+        FE3BB999594978049C33DC5901307461
+        
+        Calls the prepare() to download the video.
+        
+        If no title is provided, this method shall try to find a proper title
+        with the information providin within the
+        returned content of the API.'''
     
-            self.headers = CaseInsensitiveDict()
-        if headers:
-            for header in headers.items():
-                # Raise exception on invalid header value.
-                check_header_validity(header)
-                name, value = header
-                self.headers[to_native_string(name)] = value
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
     
-            try:
-            username, password = get_auth_from_url(new_proxies[scheme])
-        except KeyError:
-            username, password = None, None
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
     
-        @pytest.mark.parametrize('method', ('POST', 'PUT', 'PATCH', 'OPTIONS'))
-    def test_no_body_content_length(self, httpbin, method):
-        req = requests.Request(method, httpbin(method.lower())).prepare()
-        assert req.headers['Content-Length'] == '0'
+        Each code snipped should get additional C++ code around it to help compile the line in context, with
+    some heuristic guessing of what is needed around. The wrapping code should have a token in each line allowing
+    other tools to filter out these lines
     
-        Args:
-        x(tf.Tensor):
-        n_unit(int): 
-        act_fn:
-        name(str):
-        reuse(bool):
-    '''
-    # n_input = tf.shape(x)[-1]  # err: need int but tensor
-    n_input = int(x.get_shape()[-1])
-    with tf.variable_scope(name or 'dense', reuse=reuse):
-        W, b = get_wb([n_input, n_unit])
-        o = act_fn(tf.matmul(x, W) + b)
-    return o
+        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
+        subscription = 'sub msg'
+        pro = Provider()
+        cls.assertEqual(len(pro.subscribers), 0)
+        sub = Subscriber('sub name', pro)
+        sub.subscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 1)
     
-        max_n_word: 句子的最大长度
-    max_n_char: 单词的最大长度
-    
-    References:
-    keras.regularizers
-'''
-import tensorflow as tf
-import numpy as np
-    
-    if word_vec.any():  #
-    word_vec = word_vec / max(1, ngrams_found)
-else:  # 如果一个 ngram 都没找到，gensim 会报错；个人认为把 0 向量传出来也可以
-    raise KeyError('all ngrams for word %s absent from model' % word_unk)
-    
-    
-  def Start( self ):
-    self.PostDataToHandler( {},
-                            'shutdown',
-                            TIMEOUT_SECONDS,
-                            display_message = False )
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
-    
-    atexit.register(_python_exit)
+        def test_parents(self):
+        for _ in range(2):
+            self.assertEqual(self.John.parents, 'Father and mother')
+        self.assertEqual(self.John.call_count2, 1)
 
     
+        def test_particular_properties_retrieving(self):
+        self.assertEqual(self.dispatcher.get_objects()['A'].value, 'a-value')
+        self.assertEqual(self.dispatcher.get_objects()['B'].value, 'b-value')
+        self.assertEqual(self.dispatcher.get_objects()['C'].value, 'default')
     
-def create_future(state=PENDING, exception=None, result=None):
-    f = Future()
-    f._state = state
-    f._exception = exception
-    f._result = result
-    return f
+        def test_dog_shall_bark(self):
+        noise = self.dog.bark()
+        expected_noise = 'woof!'
+        self.assertEqual(noise, expected_noise)
+    
+    
+def main():
+    '''
+    Before subclassing
+    >>> sorted(RegistryHolder.REGISTRY)
+    ['BaseRegisteredClass']
+    
+    EUCKR_CLS  = (
+    1,1,1,1,1,1,1,1,  # 00 - 07
+    1,1,1,1,1,1,0,0,  # 08 - 0f
+    1,1,1,1,1,1,1,1,  # 10 - 17
+    1,1,1,0,1,1,1,1,  # 18 - 1f
+    1,1,1,1,1,1,1,1,  # 20 - 27
+    1,1,1,1,1,1,1,1,  # 28 - 2f
+    1,1,1,1,1,1,1,1,  # 30 - 37
+    1,1,1,1,1,1,1,1,  # 38 - 3f
+    1,1,1,1,1,1,1,1,  # 40 - 47
+    1,1,1,1,1,1,1,1,  # 48 - 4f
+    1,1,1,1,1,1,1,1,  # 50 - 57
+    1,1,1,1,1,1,1,1,  # 58 - 5f
+    1,1,1,1,1,1,1,1,  # 60 - 67
+    1,1,1,1,1,1,1,1,  # 68 - 6f
+    1,1,1,1,1,1,1,1,  # 70 - 77
+    1,1,1,1,1,1,1,1,  # 78 - 7f
+    0,0,0,0,0,0,0,0,  # 80 - 87
+    0,0,0,0,0,0,0,0,  # 88 - 8f
+    0,0,0,0,0,0,0,0,  # 90 - 97
+    0,0,0,0,0,0,0,0,  # 98 - 9f
+    0,2,2,2,2,2,2,2,  # a0 - a7
+    2,2,2,2,2,3,3,3,  # a8 - af
+    2,2,2,2,2,2,2,2,  # b0 - b7
+    2,2,2,2,2,2,2,2,  # b8 - bf
+    2,2,2,2,2,2,2,2,  # c0 - c7
+    2,3,2,2,2,2,2,2,  # c8 - cf
+    2,2,2,2,2,2,2,2,  # d0 - d7
+    2,2,2,2,2,2,2,2,  # d8 - df
+    2,2,2,2,2,2,2,2,  # e0 - e7
+    2,2,2,2,2,2,2,2,  # e8 - ef
+    2,2,2,2,2,2,2,2,  # f0 - f7
+    2,2,2,2,2,2,2,0   # f8 - ff
+)
+    
+    EUCJP_CLS = (
+    4,4,4,4,4,4,4,4,  # 00 - 07
+    4,4,4,4,4,4,5,5,  # 08 - 0f
+    4,4,4,4,4,4,4,4,  # 10 - 17
+    4,4,4,5,4,4,4,4,  # 18 - 1f
+    4,4,4,4,4,4,4,4,  # 20 - 27
+    4,4,4,4,4,4,4,4,  # 28 - 2f
+    4,4,4,4,4,4,4,4,  # 30 - 37
+    4,4,4,4,4,4,4,4,  # 38 - 3f
+    4,4,4,4,4,4,4,4,  # 40 - 47
+    4,4,4,4,4,4,4,4,  # 48 - 4f
+    4,4,4,4,4,4,4,4,  # 50 - 57
+    4,4,4,4,4,4,4,4,  # 58 - 5f
+    4,4,4,4,4,4,4,4,  # 60 - 67
+    4,4,4,4,4,4,4,4,  # 68 - 6f
+    4,4,4,4,4,4,4,4,  # 70 - 77
+    4,4,4,4,4,4,4,4,  # 78 - 7f
+    5,5,5,5,5,5,5,5,  # 80 - 87
+    5,5,5,5,5,5,1,3,  # 88 - 8f
+    5,5,5,5,5,5,5,5,  # 90 - 97
+    5,5,5,5,5,5,5,5,  # 98 - 9f
+    5,2,2,2,2,2,2,2,  # a0 - a7
+    2,2,2,2,2,2,2,2,  # a8 - af
+    2,2,2,2,2,2,2,2,  # b0 - b7
+    2,2,2,2,2,2,2,2,  # b8 - bf
+    2,2,2,2,2,2,2,2,  # c0 - c7
+    2,2,2,2,2,2,2,2,  # c8 - cf
+    2,2,2,2,2,2,2,2,  # d0 - d7
+    2,2,2,2,2,2,2,2,  # d8 - df
+    0,0,0,0,0,0,0,0,  # e0 - e7
+    0,0,0,0,0,0,0,0,  # e8 - ef
+    0,0,0,0,0,0,0,0,  # f0 - f7
+    0,0,0,0,0,0,0,5  # f8 - ff
+)
+    
+        @property
+    def language(self):
+        return 'Japanese'
+    
+        @property
+    def charset_name(self):
+        return 'utf-8'
+    
+    
+def get_handler(command_class, command):
+    command = command.replace('-', '_')
+    # we certainly want to have 'exec' command, since that's what docker client has
+    # but in python exec is a keyword
+    if command == 'exec':
+        command = 'exec_command'
+    
+    
+def get_tty_width():
+    tty_size = os.popen('stty size 2> /dev/null', 'r').read().split()
+    if len(tty_size) != 2:
+        return 0
+    _, width = tty_size
+    return int(width)
+    
+    
+def get_service_dependents(service_dict, services):
+    name = service_dict['name']
+    return [
+        service for service in services
+        if (name in get_service_names(service.get('links', [])) or
+            name in get_service_names_from_volumes_from(service.get('volumes_from', [])) or
+            name == get_service_name_from_network_mode(service.get('network_mode')) or
+            name == get_service_name_from_network_mode(service.get('pid')) or
+            name in service.get('depends_on', []))
+    ]
+    
+    It has been modified to mimic the behaviour of
+https://golang.org/pkg/time/#ParseDuration
+'''
+# MIT LICENSE
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation files
+# (the 'Software'), to deal in the Software without restriction,
+# including without limitation the rights to use, copy, modify, merge,
+# publish, distribute, sublicense, and/or sell copies of the Software,
+# and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+from __future__ import absolute_import
+from __future__ import unicode_literals
+    
+        def download_from_bintray(self, repo_name, filename):
+        print('Downloading {} from bintray'.format(filename))
+        url = '{base}/{repo_name}/{filename}'.format(
+            base=self.base_bintray_url, repo_name=repo_name, filename=filename
+        )
+        full_dest = os.path.join(REPO_ROOT, self.destination, filename)
+        return self._download(url, full_dest)
+    
+        def test_format_call(self):
+        prefix = '' if six.PY3 else 'u'
+        expected = '(%(p)s'arg1', True, key=%(p)s'value')' % dict(p=prefix)
+        actual = verbose_proxy.format_call(
+            ('arg1', True),
+            {'key': 'value'})
+    
+            with pytest.raises(DependencyError) as exc:
+            sort_service_dicts(services)
+        assert 'web' in exc.exconly()
+    
+    from compose.config.errors import ConfigurationError
+from compose.config.types import parse_extra_hosts
+from compose.config.types import ServicePort
+from compose.config.types import VolumeFromSpec
+from compose.config.types import VolumeSpec
+from compose.const import COMPOSEFILE_V1 as V1
+from compose.const import COMPOSEFILE_V2_0 as V2_0
+    
+            results, errors = parallel_execute(
+            objects=list(range(tasks)),
+            func=f,
+            get_name=six.text_type,
+            msg='Testing',
+            limit=limit,
+        )
