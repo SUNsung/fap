@@ -1,121 +1,52 @@
 
         
-                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
-    
-            def render
-          error_wrapping(datetime_selector(@options, @html_options).send('select_#{select_type}').html_safe)
-        end
-    
-              content = if block_given?
-            @template_object.capture(builder, &block)
-          elsif @content.present?
-            @content.to_s
-          else
-            render_component(builder)
-          end
-    
-        class AbstractInvalidHelpers < AbstractHelpers
-      include ActionController::Helpers
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Given(/^servers with the roles app and web$/) do
-  begin
-    vagrant_cli_command('up')
-  rescue
-    nil
-  end
-end
-    
-    module VagrantHelpers
-  extend self
-    
-        def version
-      ['--version', '-V',
-       'Display the program version.',
-       lambda do |_value|
-         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
-         exit
-       end]
-    end
-    
-          def response
-        return @response if defined? @response
-    
-          def warn_set_scm_is_deprecated
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure your project is compatible with future versions of Capistrano,
-remove the :scm setting and instead add these lines to your Capfile after
-`require 'capistrano/deploy'`:
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-          def decode_token(token)
-        Base64.strict_decode64(token)
+              it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
       end
     
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+              it 'translates keep_events_for from days to seconds' do
+            scenario_import.import
+            expect(scenario_import.errors).to be_empty
+            weather_agent = scenario_import.scenario.agents.find_by(:guid => 'a-weather-agent')
+            trigger_agent = scenario_import.scenario.agents.find_by(:guid => 'a-trigger-agent')
+    
+        context '#run' do
+      before do
+        mock(@agent_runner).run_workers
       end
     
-      it 'should not set the Content Security Policy for other content types' do
-    headers = get('/', {}, 'wants' => 'text/foo').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
   end
     
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
+        it 'should generate the correct specific tracking url' do
+      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
     end
     
-        @wiki.clear_cache
+              [message, proc_message].compact.join(' ')
+        end
     
-    context 'Precious::Helpers' do
-  include Precious::Helpers
-    
-      test 'h1 title sanitizes correctly' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-    #############################################################################
-#
-# Helper functions
-#
-#############################################################################
-    
-          ws  = WorkSpace.new(binding)
-      irb = Irb.new(ws)
-    
-    module Precious
-  module Helpers
+      # Store uploaded files on the local file system (see config/storage.yml for options)
+  config.active_storage.service = :local
