@@ -1,240 +1,408 @@
 
         
-        class GetMergeMultiMapFeatureTensorsGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    vector<string> input_blob_names{};
-    vector<string> output_blob_names{};
-    }
+        #endif // BITCOIN_QT_NETWORKSTYLE_H
+
+    
+    namespace Ui {
+    class OpenURIDialog;
+}
+    
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
+{
+public:
     }
     
-    const AuthProperty AuthPropertyIterator::operator*() {
-  return std::pair<grpc::string_ref, grpc::string_ref>(
-      property_->name,
-      grpc::string_ref(property_->value, property_->value_length));
+    #endif /* SECP256K1_MODULE_RECOVERY_MAIN_H */
+
+    
+    #define TINYFORMAT_ARGTYPES(n) TINYFORMAT_ARGTYPES_ ## n
+#define TINYFORMAT_VARARGS(n) TINYFORMAT_VARARGS_ ## n
+#define TINYFORMAT_PASSARGS(n) TINYFORMAT_PASSARGS_ ## n
+#define TINYFORMAT_PASSARGS_TAIL(n) TINYFORMAT_PASSARGS_TAIL_ ## n
+    
+    int UniValue::get_int() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int32_t retval;
+    if (!ParseInt32(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
 }
+    
+    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
+std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+    /*
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Copyright (c) 2012, Intel Corporation 
+; 
+; All rights reserved. 
+; 
+; Redistribution and use in source and binary forms, with or without
+; modification, are permitted provided that the following conditions are
+; met: 
+; 
+; * Redistributions of source code must retain the above copyright
+;   notice, this list of conditions and the following disclaimer.  
+; 
+; * Redistributions in binary form must reproduce the above copyright
+;   notice, this list of conditions and the following disclaimer in the
+;   documentation and/or other materials provided with the
+;   distribution. 
+; 
+; * Neither the name of the Intel Corporation nor the names of its
+;   contributors may be used to endorse or promote products derived from
+;   this software without specific prior written permission. 
+; 
+; 
+; THIS SOFTWARE IS PROVIDED BY INTEL CORPORATION 'AS IS' AND ANY
+; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+; PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL CORPORATION OR
+; CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+; EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+; PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+; LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Example YASM command lines:
+; Windows:  yasm -Xvc -f x64 -rnasm -pnasm -o sha256_sse4.obj -g cv8 sha256_sse4.asm
+; Linux:    yasm -f x64 -f elf64 -X gnu -g dwarf2 -D LINUX -o sha256_sse4.o sha256_sse4.asm
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; This code is described in an Intel White-Paper:
+; 'Fast SHA-256 Implementations on Intel Architecture Processors'
+;
+; To find it, surf to http://www.intel.com/p/en_US/embedded 
+; and search for that title.
+; The paper is expected to be released roughly at the end of April, 2012
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; This code schedules 1 blocks at a time, with 4 lanes per block
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    TEST(ByteSourceTest, LimitByteSource) {
+  StringPiece data('Hello world!');
+  MockByteSource source(data, 3);
+  LimitByteSource limit_source(&source, 6);
+  EXPECT_EQ(6, limit_source.Available());
+  limit_source.Skip(1);
+  EXPECT_EQ(5, limit_source.Available());
+    }
+    
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
+    
+    int main(int argc, char *argv[]) {
+  if (argc % 2 == 0 || argc == 1) {
+    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
+        'input_files are one to one mapping to output_file_names.' <<
+        std::endl;
+    return 1;
+  }
+    }
+    
+      {
+    // Write the new address book back to disk.
+    fstream output(argv[1], ios::out | ios::trunc | ios::binary);
+    if (!address_book.SerializeToOstream(&output)) {
+      cerr << 'Failed to write address book.' << endl;
+      return -1;
+    }
+  }
     
     
     { private:
-  CensusContext context_;
-  // Metadata elements for tracing and census stats data.
-  grpc_linked_mdelem stats_bin_;
-  grpc_linked_mdelem tracing_bin_;
-  // Client method.
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // The recv trailing metadata callbacks.
-  grpc_metadata_batch* recv_trailing_metadata_;
-  grpc_closure* initial_on_done_recv_trailing_metadata_;
-  grpc_closure on_done_recv_trailing_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  // Start time (for measuring latency).
-  absl::Time start_time_;
-  // Server elapsed time in nanoseconds.
-  uint64_t elapsed_time_;
-  // The received message--may be null.
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  // Number of messages in this RPC.
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference when adding trace context
-  // metatdata to outgoing message.
-  char tracing_buf_[kMaxTraceContextLen];
+  const EnumDescriptor* descriptor_;
+  std::vector<const EnumValueDescriptor*> base_values_;
+  std::vector<const EnumValueDescriptor*> all_values_;
+  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
+  const string name_;
 };
     
-    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first. Tags are directly
-// serialized into the given grpc_slice.
-size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
     
-    // Client
-MeasureDouble RpcClientSentBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientSentBytesPerRpcMeasureName,
-      'Total bytes sent across all request messages per RPC', kUnitBytes);
-  return measure;
+    {}  // namespace grpc
+    
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
+    
+     private:
+  // Parses the next field from the incoming buffer and stores the parsed value
+  // in a GrpcTraceContext struct.  If it does not recognize the field ID it
+  // will return 0, otherwise it returns the number of bytes read.
+  static size_t ParseField(absl::string_view buf, GrpcTraceContext* tc) {
+    // TODO: Add support for multi-byte field IDs.
+    if (buf.empty()) {
+      return 0;
+    }
+    // Field ID is always the first byte in a field.
+    uint32_t field_id = buf[0];
+    size_t bytes_read = kFieldIdSize;
+    switch (field_id) {
+      case kTraceIdField:
+        bytes_read += kTraceIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_id, &buf[kFieldIdSize],
+               opencensus::trace::TraceId::kSize);
+        break;
+      case kSpanIdField:
+        bytes_read += kSpanIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->span_id, &buf[kFieldIdSize],
+               opencensus::trace::SpanId::kSize);
+        break;
+      case kTraceOptionsField:
+        bytes_read += kTraceOptionsSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_options, &buf[kFieldIdSize],
+               opencensus::trace::TraceOptions::kSize);
+        break;
+      default:  // Invalid field ID
+        return 0;
+    }
+    }
+    
+    
+    {}  // namespace
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  host_cpu_load_info_data_t cpuinfo;
+  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
+  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
+                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
+    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
+    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
+  }
+  return std::make_pair(busy, total);
 }
     
+    PerBalancerStore* PerHostStore::FindPerBalancerStore(
+    const grpc::string& lb_id) const {
+  return per_balancer_stores_.find(lb_id) != per_balancer_stores_.end()
+             ? per_balancer_stores_.find(lb_id)->second.get()
+             : nullptr;
+}
     
-    {  // TODO: For performance:
-  // uint8_t version;
-  // uint8_t trace_id_field_id;
-  uint8_t trace_id[::opencensus::trace::TraceId::kSize];
-  // uint8_t span_id_field_id;
-  uint8_t span_id[::opencensus::trace::SpanId::kSize];
-  // uint8_t trace_options_field_id;
-  uint8_t trace_options[::opencensus::trace::TraceOptions::kSize];
-};
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-            bool IsInfinite() override;
-    
-        template <>
-    /*static*/ NDArrayViewPtr NDArrayView::RandomUniform<int8_t>(const NDShape& shape, double rangeBegin, double rangeEnd, unsigned long seed, const DeviceDescriptor& device)
-    {
-        return NDArrayView::_RandomUniform<int8_t, char>(shape, rangeBegin, rangeEnd, seed, device);
-    }
-    
-    // base class that we can catch, independent of the type parameter
-struct /*interface*/ IExceptionWithCallStackBase
-{
-    virtual const char * CallStack() const = 0;
-    virtual ~IExceptionWithCallStackBase() noexcept = default;
-};
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
-    
-    
-    {
-    {      if (size_to_read != 0) {
-        CHECK_EQ(fi->Read(dmlc::BeginPtr(data_vec) + offset_vec[i],
-                          size_to_read * sizeof(Entry)),
-                 size_to_read * sizeof(Entry))
-            << 'Invalid SparsePage file';
-        curr_offset += size_to_read;
-      }
-      i = j;
-    }
-    // seek to end of record
-    if (curr_offset != disk_offset_.back()) {
-      fi->Seek(begin + disk_offset_.back() * sizeof(Entry));
-    }
-    return true;
-  }
-    
-      // localnode
-  // 8bytes reserved
-  readBytes(fp, buf, buf.size(), 8);
-  // localnode ID
-  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-  auto localNode = std::make_shared<DHTNode>(buf);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
-    
-    
-    {} // namespace aria2
+    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
 
     
-    DHTTaskFactoryImpl::DHTTaskFactoryImpl()
-    : routingTable_(nullptr),
-      dispatcher_(nullptr),
-      factory_(nullptr),
-      taskQueue_(nullptr),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-      // returns 'unknown'
-  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
-    
-    std::vector<DNSCache::AddrEntry>::const_iterator
-DNSCache::CacheEntry::find(const std::string& addr) const
-{
-  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return i;
+      int height = RandomHeight();
+  if (height > GetMaxHeight()) {
+    for (int i = GetMaxHeight(); i < height; i++) {
+      prev[i] = head_;
     }
+    // It is ok to mutate max_height_ without any synchronization
+    // with concurrent readers.  A concurrent reader that observes
+    // the new value of max_height_ will see either the old value of
+    // new level pointers from head_ (nullptr), or a new value set in
+    // the loop below.  In the former case the reader will
+    // immediately drop to the next level since nullptr sorts after all
+    // keys.  In the latter case the reader will use the new node.
+    max_height_.store(height, std::memory_order_relaxed);
   }
-  return addrEntries_.end();
+    
+      int level_;
+  uint64_t max_output_file_size_;
+  Version* input_version_;
+  VersionEdit edit_;
+    
+      const char kWrite2Data[] = 'Write #2 data';
+  ASSERT_OK(WriteStringToFile(env_, kWrite2Data, kTestFileName));
+    
+    
+    {  const FilterPolicy* policy_;
+  std::string keys_;             // Flattened key contents
+  std::vector<size_t> start_;    // Starting index in keys_ of each key
+  std::string result_;           // Filter data computed so far
+  std::vector<Slice> tmp_keys_;  // policy_->CreateFilter() argument
+  std::vector<uint32_t> filter_offsets_;
+};
+    
+    char* Arena::AllocateNewBlock(size_t block_bytes) {
+  char* result = new char[block_bytes];
+  blocks_.push_back(result);
+  memory_usage_.fetch_add(block_bytes + sizeof(char*),
+                          std::memory_order_relaxed);
+  return result;
 }
     
-    namespace aria2 {
+    inline char* Arena::Allocate(size_t bytes) {
+  // The semantics of what to return are a bit messy if we allow
+  // 0-byte allocations, so we disallow them here (we don't need
+  // them for our internal use).
+  assert(bytes > 0);
+  if (bytes <= alloc_bytes_remaining_) {
+    char* result = alloc_ptr_;
+    alloc_ptr_ += bytes;
+    alloc_bytes_remaining_ -= bytes;
+    return result;
+  }
+  return AllocateFallback(bytes);
+}
+    
+    TEST(EnvWindowsTest, TestOpenOnRead) {
+  // Write some test data to a single file that will be opened |n| times.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file = test_dir + '/open_on_read.txt';
     }
     
-    class ExtensionManagerProcessorFactory : public ::apache::thrift::TProcessorFactory {
- public:
-  ExtensionManagerProcessorFactory(const ::apache::thrift::stdcxx::shared_ptr< ExtensionManagerIfFactory >& handlerFactory) :
-      handlerFactory_(handlerFactory) {}
-    }
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
     
-    #include 'ExtensionManager.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    
-    {};
-    
-          resp = smartctl.getDevInfo(devname, full_type);
-      if (resp.err != NOERR) {
-        LOG(WARNING) << 'There was an error retrieving drive information with '
-                        'hardware driver: '
-                     << libsmartctl::errStr(resp.err);
-        return;
-      }
-      // Only consider found if no error was returned.
-      found = true;
-    
-    TEST_F(kernelExtensions, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_extensions');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'idx', IntType}
-  //      {'refs', IntType}
-  //      {'size', IntType}
-  //      {'name', NormalType}
-  //      {'version', NormalType}
-  //      {'linked_against', NormalType}
-  //      {'path', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    #include <osquery/tests/integration/tables/helper.h>
-    
-    using ::apollo::canbus::ChassisDetail;
-    
-    #include 'glog/logging.h'
-    
-    unsigned int BaseMapMatrix::CreateBinary(unsigned char* buf,
-                                         unsigned int buf_size) const {
-  return 0;
-}
-    
-    
-    {
-    {
-    {}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    #endif // OPENPOSE_GUI_GUI_ADAM_HPP
+#endif
 
     
-    // config detail: {'name': 'commanded_value', 'enum': {0:
-// 'COMMANDED_VALUE_HEADLIGHTS_OFF', 1: 'COMMANDED_VALUE_LOW_BEAMS', 2:
-// 'COMMANDED_VALUE_HIGH_BEAMS'}, 'precision': 1.0, 'len': 8, 'is_signed_var':
-// False, 'offset': 0.0, 'physical_range': '[0|2]', 'bit': 15, 'type': 'enum',
-// 'order': 'motorola', 'physical_unit': ''}
-Headlight_rpt_77::Commanded_valueType Headlightrpt77::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
+        template<typename T>
+    Rectangle<T>::Rectangle(Rectangle<T>&& rectangle)
+    {
+        try
+        {
+            x = rectangle.x;
+            y = rectangle.y;
+            width = rectangle.width;
+            height = rectangle.height;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+        }
     }
+    
+          case 0xF6:
+        { data++;
+          int mod, regop, rm;
+          get_modrm(*data, &mod, &regop, &rm);
+          if (regop == eax) {
+            AppendToBuffer('test_b ');
+            data += PrintRightByteOperand(data);
+            int32_t imm = *data;
+            AppendToBuffer(',0x%x', imm);
+            data++;
+          } else {
+            UnimplementedInstruction();
+          }
+        }
+        break;
+    
+    void MacroAssembler::LeaveApiExitFrame() {
+  mov(esp, ebp);
+  pop(ebp);
+    }
+    
+    #define SSSE3_INSTRUCTION_LIST(V) \
+  V(phaddd, 66, 0F, 38, 02)       \
+  V(phaddw, 66, 0F, 38, 01)       \
+  V(pshufb, 66, 0F, 38, 00)       \
+  V(psignb, 66, 0F, 38, 08)       \
+  V(psignw, 66, 0F, 38, 09)       \
+  V(psignd, 66, 0F, 38, 0A)
+    
+    
+    {  flatbuffers::grpc::MessageBuilder mb_;
+};
+    
+    #ifndef GRPC_CUSTOM_STRING
+#  include <string>
+#  define GRPC_CUSTOM_STRING std::string
+#endif
+    
+      // We now have a FlatBuffer that can be stored on disk or sent over a network.
+    
+      if (jsongen != jsonfile) {
+    printf('%s----------------\n%s', jsongen.c_str(), jsonfile.c_str());
+  }
+    
+    
+    {      GenReceiver(struct_def, code_ptr);
+      code += MakeCamel(NormalizedName(field)) + 'Length()\n';
+      code += OffsetPrefix(field);
+      code += std::string(Indent) + Indent + 'return ' + SelfData + ':VectorLen(o)\n';
+      code += std::string(Indent) + End;
+      code += std::string(Indent) + 'return 0\n';
+      code += EndFunc;
+    }
+    
+      // Get a struct by initializing an existing struct.
+  // Specific to Table.
+  void GetStructFieldOfTable(const StructDef &struct_def,
+                             const FieldDef &field,
+                             std::string *code_ptr) {
+    std::string &code = *code_ptr;
+    GenReceiver(struct_def, code_ptr);
+    code += MakeCamel(NormalizedName(field));
+    code += '(self):';
+    code += OffsetPrefix(field);
+    if (field.value.type.struct_def->fixed) {
+      code += Indent + Indent + Indent + 'x = o + self._tab.Pos\n';
+    } else {
+      code += Indent + Indent + Indent;
+      code += 'x = self._tab.Indirect(o + self._tab.Pos)\n';
+    }
+    code += Indent + Indent + Indent;
+    code += 'from .' + TypeName(field) + ' import ' + TypeName(field) + '\n';
+    code += Indent + Indent + Indent + 'obj = ' + TypeName(field) + '()\n';
+    code += Indent + Indent + Indent + 'obj.Init(self._tab.Bytes, x)\n';
+    code += Indent + Indent + Indent + 'return obj\n';
+    code += Indent + Indent + 'return None\n\n';
+  }
+    
+    std::string TextMakeRule(const Parser &parser, const std::string &path,
+                         const std::string &file_name) {
+  if (!parser.builder_.GetSize() || !parser.root_struct_def_) return '';
+  std::string filebase =
+      flatbuffers::StripPath(flatbuffers::StripExtension(file_name));
+  std::string make_rule = TextFileName(path, filebase) + ': ' + file_name;
+  auto included_files =
+      parser.GetIncludedFilesRecursive(parser.root_struct_def_->file);
+  for (auto it = included_files.begin(); it != included_files.end(); ++it) {
+    make_rule += ' ' + *it;
+  }
+  return make_rule;
+}
+    
+    void message_builder_tests();
