@@ -1,128 +1,182 @@
 
         
-              def remaining_requests
-        octokit.rate_limit.remaining
-      end
+        # Mimic how the proposed change would first execute a couple of checks and
+# proceed to process with Liquid if necessary
+def conditional_liquid(content)
+  return content if content.nil? || content.empty?
+  return content unless content.include?('{%') || content.include?('{{')
+  always_liquid(content)
+end
+    }
+    }
+    }
     
-            def representation_class
-          Representation::Note
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
+    
+        def document?
+      @content =~ DOCUMENT_RGX
+    end
+    
+        class RateLimiter
+      attr_accessor :limit
+    
+          str.truncate(max_length).ljust(max_length) << tag.to_s
+    end
+    
+            if at_css('.api-type-label.module')
+          at_css('h1').content = subpath.remove('api/')
         end
     
-          # Associates the given database ID with the current object.
+            name = name.split(':').first
+    
       #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
-      end
+  # Parses a header from a string.
+  #
+  # XXX - Putting : in a header value breaks this badly
+  def from_s(header)
+    reset
     
-            # Fix the order of receivers
-        @agents.each do |agent|
-          stub.proxy(agent).receivers { |orig| orig.order(:id) }
-        end
-      end
+      # open rmcpplus_request
+  def self.create_ipmi_session_open_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
     
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-        it 'returns nil when passed nil' do
-      expect(Utils.parse_duration(nil)).to be_nil
-    end
-    
-        it 'requires a message' do
-      @log.message = ''
-      expect(@log).not_to be_valid
-      @log.message = nil
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:message)
-    end
-    
-              # Return the result
-          result
-        end
-    
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
+            # Receives a Kerberos Response over a tcp connection
         #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
+        # @raise [RuntimeError] if the response can't be processed
+        # @raise [EOFError] if expected data can't be read
+        def recv_response_tcp
+          length_raw = connection.get_once(4, timeout)
+          unless length_raw && length_raw.length == 4
+            raise ::RuntimeError, 'Kerberos Client: failed to read response'
+          end
+          length = length_raw.unpack('N')[0]
     
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
+                data_encrypt = Rex::Text::rand_text(8) + data
     
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
+          end
     
-    def await_condition &condition
-  start_time = Time.zone.now
-  until condition.call
-    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
-    sleep 0.05
-  end
-  true
-end
-
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        class EncKdcResponse < Element
+          # @!attribute key
+          #   @return [Rex::Proto::Kerberos::Model::EncryptionKey] The session key
+          attr_accessor :key
+          # @!attribute last_req
+          #   @return [Array<Rex::Proto::Kerberos::Model::LastRequest>] This field is returned by the KDC and specifies the time(s)
+          #   of the last request by a principal
+          attr_accessor :last_req
+          # @!attribute nonce
+          #   @return [Integer] random number
+          attr_accessor :nonce
+          # @!attribute key_expiration
+          #   @return [Time] The key-expiration field is part of the response from the
+          #   KDC and specifies the time that the client's secret key is due to expire
+          attr_accessor :key_expiration
+          # @!attribute flags
+          #   @return [Integer] This field indicates which of various options were used or
+          #   requested when the ticket was issued
+          attr_accessor :flags
+          # @!attribute auth_time
+          #   @return [Time] the time of initial authentication for the named principal
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Time] Specifies the time after which the ticket is valid
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Time] This field contains the time after which the ticket will
+          #   not be honored (its expiration time)
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Time] This field is only present in tickets that have the
+          #   RENEWABLE flag set in the flags field.  It indicates the maximum
+          #   endtime that may be included in a renewal
+          attr_accessor :renew_till
+          # @!attribute srealm
+          #   @return [String] The realm part of the server's principal identifier
+          attr_accessor :srealm
+          # @!attribute sname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
+          attr_accessor :sname
     
-      class SendPrivate < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos KRB-ERROR (response error)
+        # message definition.
+        class KrbError < Element
+          # @!attribute pvno
+          #   @return [Integer] The protocol version number
+          attr_accessor :pvno
+          # @!attribute msg_type
+          #   @return [Integer] The type of a protocol message
+          attr_accessor :msg_type
+          # @!attribute ctime
+          #   @return [Time] The current time of the client's host
+          attr_accessor :ctime
+          # @!attribute cusec
+          #   @return [Integer] The microseconds part of the client timestamp
+          attr_accessor :cusec
+          # @!attribute stime
+          #   @return [Time] The current time of the server
+          attr_accessor :stime
+          # @!attribute susec
+          #   @return [Integer] The microseconds part of the server timestamp
+          attr_accessor :susec
+          # @!attribute error_code
+          #   @return [Integer] The error request returned by kerberos or the server when a request fails
+          attr_accessor :error_code
+          # @!attribute crealm
+          #   @return [String] The realm part of the client's principal identifier
+          attr_accessor :crealm
+          # @!attribute cname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
+          attr_accessor :cname
+          # @!attribute realm
+          #   @return [String] The realm part of the server's principal identifier
+          attr_accessor :realm
+          # @!attribute sname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
+          attr_accessor :sname
+          # @!attribute e_data
+          #   @return [String] additional data about the error (ASN.1 encoded data)
+          attr_accessor :e_data
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-    
-        it 'does not let a user destroy other likes' do
-      like2 = eve.like!(@message)
-      like_count = Like.count
-    
-        context 'with a public post' do
-      before do
-        sign_in(alice, scope: :user)
-        @post = alice.post(:status_message, text: 'hey', public: true)
-      end
+              workspace = eval(code, binding, f.path)
+          assert_equal(<<~EOS, without_term { workspace.code_around_binding })
     
             # Set these key values to boolean 'true' to include in policy
         NO_ARG_DIRECTIVES.each do |d|
@@ -131,22 +185,31 @@ end
           end
         end
     
-            close_body(body) if reaction
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+      subject { described_class.new(lambda {}) }
     
-      # The CategoryIndex class creates a single category page for the specified category.
-  class CategoryIndex < Page
+          def field_container(model, method, options = {}, &block)
+        css_classes = options[:class].to_a
+        css_classes << 'field'
+        css_classes << 'withError' if error_message_on(model, method).present?
+        content_tag(
+          :div, capture(&block),
+          options.merge(class: css_classes.join(' '), id: '#{model}_#{method}_field')
+        )
+      end
     
-    require 'pathname'
-require './plugins/octopress_filters'
+        it 'is able to apply a ransack filter by clicking a quickfilter icon', js: true do
+      label_pending = page.find '.badge-pending'
+      parent_td = label_pending.find(:xpath, '..')
     
-        it 'accepts jsfiddle link' do
-      liquid = generate_new_liquid(jsfiddle_link)
-      rendered_jsfiddle_iframe = liquid.render
-      Approvals.verify(rendered_jsfiddle_iframe, name: 'jsfiddle_liquid_tag', format: :html)
-    end
+              def find_spree_current_order
+            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: spree_current_store,
+              user: spree_current_user,
+              token: order_token,
+              currency: current_currency
+            )
+          end
