@@ -1,29 +1,92 @@
-  def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
+
+        
+                private
     
-      if respond_to?(:helper)
-    helper DeviseHelper
-  end
-    
-    class DeviseCreateUsers < ActiveRecord::Migration
-  def change
-    create_table(:users) do |t|
-      t.string :email,              null: false
-      t.string :encrypted_password, null: true
-      t.timestamps null: false
-    end
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+          test 'when a grandchild has no layout specified, the child has an implied layout, and the ' \
+        'parent has specified a layout, use the child controller layout' do
+        controller = WithChildOfImplied.new
+        controller.process(:index)
+        assert_equal 'With Implied Hello string!', controller.response_body
       end
+    
+        def valid_extension?(extension)
+      extension.is_a?(Hash)
+    end
+  end
+end
+
+    
+      def build(theme_ids)
+    builder = Builder.new
+    
+        # this is only required for NGINX X-SendFile it seems
+    response.headers['Content-Length'] = File.size(cache_file).to_s
+    set_cache_control_headers
+    send_file(cache_file, disposition: :inline)
+  end
+    
+          if api_key.allowed_ips.present? && !api_key.allowed_ips.any? { |ip| ip.include?(request.ip) }
+        Rails.logger.warn('[Unauthorized API Access] username: #{api_username}, IP address: #{request.ip}')
+        return nil
+      end
+    
+          def request_count_counter
+        @request_counter ||= Gitlab::Metrics.counter(
+          :github_importer_request_count,
+          'The number of GitHub API calls performed when importing projects'
+        )
+      end
+    end
+  end
+end
+
+    
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
+        end
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
+      end
+    
+            # attributes - A hash containing the raw issue details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+          # Sign out a given user or scope. This helper is useful for signing out a user
+      # after deleting accounts. Returns true if there was a logout and false if there
+      # is no user logged in on the referred scope
+      #
+      # Examples:
+      #
+      #   sign_out :user     # sign_out(scope)
+      #   sign_out @user     # sign_out(resource)
+      #
+      def sign_out(resource_or_scope=nil)
+        return sign_out_all_scopes unless resource_or_scope
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
     
             # Attempt to find a user by its reset_password_token to reset its
         # password. If a user is found and token is still valid, reset its password and automatically
@@ -35,6 +98,12 @@
           reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
     
           module ClassMethods
+        # Create the cookie key using the record id and remember_token
+        def serialize_into_cookie(record)
+          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
+        end
+    
+          module ClassMethods
         Devise::Models.config(self, :timeout_in)
       end
     end
@@ -42,59 +111,97 @@
 end
 
     
-          # This module extends user defined helpers
-      # to provide some API-specific functionality.
-      module BaseHelper
-        attr_accessor :api
-        def params(name, &block)
-          @named_params ||= {}
-          @named_params[name] = block
+      # Add groups and the proper project name to the output.
+  project_name 'Homebrew'
+  add_group 'Cask', %r{^/cask/}
+  add_group 'Commands', [%r{/cmd/}, %r{^/dev-cmd/}]
+  add_group 'Extensions', %r{^/extend/}
+  add_group 'OS', [%r{^/extend/os/}, %r{^/os/}]
+  add_group 'Requirements', %r{^/requirements/}
+  add_group 'Scripts', [
+    %r{^/brew.rb$},
+    %r{^/build.rb$},
+    %r{^/postinstall.rb$},
+    %r{^/test.rb$},
+  ]
+end
+
+    
+        head + [data.length].pack('v') + data
+  end
+    
+            # Receives a kerberos response through the connection
+        #
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos
+        #   response message
+        # @raise [RuntimeError] if the connection isn't established, the transport protocol is unknown, not supported
+        #   or the response can't be parsed
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def recv_response
+          if connection.nil?
+            raise ::RuntimeError, 'Kerberos Client: connection not established'
+          end
+    
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
+    
+              # Encodes the start_time field
+          #
+          # @return [String]
+          def encode_start_time
+            [start_time].pack('N')
+          end
+    
+              # Decodes the srealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_srealm(input)
+            input.value[0].value
+          end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_value(input)
+            input.value[0].value
+          end
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
+end
+
+    
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+          sign_in alice, scope: :user
+    end
+    
+        context 'on a post you can't see' do
+      before do
+        sign_in(eve, scope: :user)
+      end
+    
+        context 'filter on promotions' do
+      let!(:promotion) { create(:promotion_with_item_adjustment) }
+    
+            # Should be overriden if you have areas of your checkout that don't match
+        # up to a step within checkout_steps, such as a registration step
+        def skip_state_validation?
+          false
         end
     
-              if args.include?(:all)
-            namespace_inheritable(:rescue_all, true)
-            namespace_inheritable :all_rescue_handler, handler
-          elsif args.include?(:grape_exceptions)
-            namespace_inheritable(:rescue_all, true)
-            namespace_inheritable(:rescue_grape_exceptions, true)
-          else
-            handler_type =
-              case options[:rescue_subclasses]
-              when nil, true
-                :rescue_handlers
-              else
-                :base_only_rescue_handlers
-              end
-    
-            # Opens a root-level ParamsScope, defining parameter coercions and
-        # validations for the endpoint.
-        # @yield instance context of the new scope
-        def params(&block)
-          Grape::Validations::ParamsScope.new(api: self, type: Hash, &block)
+            def index
+          authorize! :index, Order
+          @orders = Order.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@orders)
         end
-    
-    # Example:
-#
-# set :output, '/path/to/my/cron_log.log'
-#
-# every 2.hours do
-#   command '/usr/bin/some_great_command'
-#   runner 'MyModel.some_method'
-#   rake 'some:great:rake:task'
-# end
-#
-# every 4.days do
-#   runner 'AnotherModel.prune_old_records'
-# end
-    
-            def whenever_options
-          fetch(:whenever_options)
-        end
-    
-            start += frequency unless (max + 1).modulo(frequency).zero? || start > 0
-        output = (start..max).step(frequency).to_a
-    
-              # :cron_log was an old option for output redirection, it remains for backwards compatibility
-          options[:output] = (options[:cron_log] || @cron_log) if defined?(@cron_log) || options.has_key?(:cron_log)
-          # :output is the newer, more flexible option.
-          options[:output] = @output if defined?(@output) && !options.has_key?(:output)
