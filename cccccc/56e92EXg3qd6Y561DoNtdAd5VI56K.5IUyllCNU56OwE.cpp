@@ -1,308 +1,280 @@
 
         
-        
-    {    struct KeypointStore {
-        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
-        virtual ~KeypointStore() {};
-    };
-}
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vabd(v_src0, v_src1);
+          // Finally, add the generic parameters from the requirement.
+  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
+    // The only depth that makes sense is depth == 1, the generic parameters
+    // of the requirement itself. Anything else is from invalid code.
+    if (genericParam->getDepth() != 1) {
+      return;
+    }
     }
     
-                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
-            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst0))),
-                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst0))));
-    
-    template <typename T> struct TypeTraits;
-template <> struct TypeTraits< u8> { typedef u16 wide;                     typedef  u8 unsign; typedef  uint8x16_t vec128; };
-template <> struct TypeTraits< s8> { typedef s16 wide;                     typedef  u8 unsign; typedef   int8x16_t vec128; };
-template <> struct TypeTraits<u16> { typedef u32 wide; typedef  u8 narrow; typedef u16 unsign; typedef  uint16x8_t vec128; };
-template <> struct TypeTraits<s16> { typedef s32 wide; typedef  s8 narrow; typedef u16 unsign; typedef   int16x8_t vec128; };
-template <> struct TypeTraits<u32> { typedef u64 wide; typedef u16 narrow; typedef u32 unsign; typedef  uint32x4_t vec128; };
-template <> struct TypeTraits<s32> { typedef s64 wide; typedef s16 narrow; typedef u32 unsign; typedef   int32x4_t vec128; };
-template <> struct TypeTraits<f32> { typedef f64 wide;                                         typedef float32x4_t vec128; };
-    
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = vorrq_u8(v_src0, v_src1);
-    }
-    
-    
-    {} // namespace CAROTENE_NS
-
-    
-    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
-#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
-#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
-#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
-    
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
-    {
-        v_dst = internal::vmvnq(internal::vceqq(v_src0, v_src1));
-    }
-    
-                s32 val = 0;
-            for (s32 _y = 0; _y < 3; ++_y)
-                val += prevx[_y] * kernelBase[(2 - _y) * 3 + 2] +
-                       currx[_y] * kernelBase[(2 - _y) * 3 + 1] +
-                       nextx[_y] * kernelBase[(2 - _y) * 3 + 0];
-    
-                    uint8x16_t vs1 = vld1q_u8(src0 + i);
-                uint8x16_t vs2 = vld1q_u8(src1 + i);
-    
-    template <typename T>
-void flip(const Size2D & size,
-          const void * srcBase, ptrdiff_t srcStride,
-          void * dstBase, ptrdiff_t dstStride,
-          FLIP_MODE flipMode)
+    class SubstitutionMap::Storage final
+  : public llvm::FoldingSetNode,
+    llvm::TrailingObjects<Storage, Type, ProtocolConformanceRef>
 {
-    using namespace internal;
+  friend TrailingObjects;
     }
     
-    void gaussianBlur5x5(const Size2D &size, s32 cn,
-                     const s32 * srcBase, ptrdiff_t srcStride,
-                     s32 * dstBase, ptrdiff_t dstStride,
-                     BORDER_MODE borderType, s32 borderValue, Margin borderMargin)
-{
-    internal::assertSupportedConfiguration(isGaussianBlur5x5Supported(size, cn, borderType));
-#ifdef CAROTENE_NEON
-    size_t colsn = size.width * cn;
-    }
-    
-    void sqrIntegral(const Size2D &size,
-                 const u8 * srcBase, ptrdiff_t srcStride,
-                 f64 * sqsumBase, ptrdiff_t sqsumStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    uint16x8_t v_zero8 = vmovq_n_u16(0u);
-    }
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
-{
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
-}
-    
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
-    
-    #ifndef MXNET_RTC_H_
-#define MXNET_RTC_H_
-#include './base.h'
-#if MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#include <nvrtc.h>
-#include <cuda.h>
-    
-      // override set_default
-  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
-    }
-    
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
+      static CFPointeeInfo forConstVoid() {
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = true;
+    info.Decl = nullptr;
+    return info;
   }
     
-    // these gpu functions are defined in gradient_compression.cu
-void Quantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                      const float threshold);
-void Dequantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                        const float threshold);
+    #include 'swift/Driver/Action.h'
     
-      // Create an intermediate space of the same shape as out
-  //
-  // Suppose storage stores the result at step i-1, we'd
-  // compute and store the result into out for step i;
-  // we then proceed to compute and store the result in storage
-  // for step i+1 and so on and so forth, by alternating using
-  // storage and out to store the given variable and the result variable
-  Tensor<cpu, 2, DType> storage(out.shape_);
-  AllocSpace(&storage);
+    Optional<std::set<StringRef>>
+ArgsToFrontendInputsConverter::readPrimaryFiles() {
+  std::set<StringRef> primaryFiles;
+  for (const Arg *A : Args.filtered(options::OPT_primary_file))
+    primaryFiles.insert(A->getValue());
+  if (forAllFilesInFilelist(
+          PrimaryFilelistPathArg,
+          [&](StringRef file) -> void { primaryFiles.insert(file); }))
+    return None;
+  return primaryFiles;
+}
     
-    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
-with width and height of the second input symbol, i.e., with one input, we need h_w to
-specify the crop height and width, otherwise the second input symbol's size will be used
-)code' ADD_FILELINE)
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+}
     
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                        sampler_,
-                                                        dtype_,
-                                                        4,
-                                                        dim));
+    void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
+  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
+                                unittest::MAP_ENUM_BAR_LITE,
+                                unittest::MAP_ENUM_BAZ_LITE>(message);
+}
+    
+    const Status Status::OK = Status();
+const Status Status::CANCELLED = Status(error::CANCELLED, '');
+const Status Status::UNKNOWN = Status(error::UNKNOWN, '');
+    
+    #include <google/protobuf/stubs/common.h>
+#include <gtest/gtest.h>
+    
+    // integral_constant, defined in tr1, is a wrapper for an integer
+// value. We don't really need this generality; we could get away
+// with hardcoding the integer type to bool. We use the fully
+// general integer_constant for compatibility with tr1.
+    
+    // Iterates though all people in the AddressBook and prints info about them.
+void ListPeople(const tutorial::AddressBook& address_book) {
+  for (int i = 0; i < address_book.people_size(); i++) {
+    const tutorial::Person& person = address_book.people(i);
     }
+    }
+    
+    
+    { private:
+  const EnumDescriptor* descriptor_;
+  std::vector<const EnumValueDescriptor*> base_values_;
+  std::vector<const EnumValueDescriptor*> all_values_;
+  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
+  const string name_;
+};
+    
+    
+    {  int (*getCharFunc)(void *);
+  void *data;
+  int charBuf;
+};
+    
+    private:
+  struct Interval {
+    Interval(Object *dict, int baseA);
+    ~Interval();
+    GooString *prefix;
+    enum NumberStyle {
+      None,
+      Arabic,
+      LowercaseRoman,
+      UppercaseRoman,
+      UppercaseLatin,
+      LowercaseLatin
+    } style;
+    int first, base, length;
+  };
+    
+      // get length
+  dict->dictLookup('Length', &obj, fetchOriginatorNums);
+  if (obj.isInt()) {
+    length = (Guint)obj.getInt();
+    obj.free();
+  } else {
+    error(getPos(), 'Bad 'Length' attribute in stream');
+    obj.free();
+    length = 0;
   }
     
     
+    {  if (inlineImg) {
+    str->reset();
+    j = height * ((width * colorMap->getNumPixelComps() *
+		   colorMap->getBits() + 7) / 8);
+    for (i = 0; i < j; ++i)
+      str->getChar();
+    str->close();
+  }
+}
+    
+    
+    {  if (!ok) {
+    return gFalse;
+  }
+  if (authData) {
+    ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
+    userPassword = ((StandardAuthData *)authData)->userPassword;
+  } else {
+    ownerPassword = NULL;
+    userPassword = NULL;
+  }
+  if (!Decrypt::makeFileKey(encVersion, encRevision, fileKeyLength,
+			    ownerKey, userKey, permFlags, fileID,
+			    ownerPassword, userPassword, fileKey,
+			    encryptMetadata, &ownerPasswordOk)) {
+    return gFalse;
+  }
+  return gTrue;
+}
+    
+    void SplashOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+				int width, int height,
+				GfxImageColorMap *colorMap,
+				GBool interpolate,
+				int *maskColors, GBool inlineImg) {
+  double *ctm;
+  SplashCoord mat[6];
+  SplashOutImageData imgData;
+  SplashColorMode srcMode;
+  SplashImageSource src;
+  GfxGray gray;
+  GfxRGB rgb;
+#if SPLASH_CMYK
+  GfxCMYK cmyk;
+#endif
+  Guchar pix;
+  int n, i;
+    }
+    
+      GBool isReverseVideo() { return reverseVideo; }
+  void setReverseVideo(GBool reverseVideoA) { reverseVideo = reverseVideoA; }
+    
+    RemoveTransliterator::~RemoveTransliterator() {}
+    
+    U_NAMESPACE_BEGIN
+    
+        case UDAT_FLEXIBLE_DAY_PERIOD_FIELD:
     {
-    {}  // namespace op
-}  // namespace mxnet
+        // TODO: Maybe fetch the DayperiodRules during initialization (instead of at the first
+        // loading of an instance) if a relevant pattern character (b or B) is used.
+        const DayPeriodRules *ruleSet = DayPeriodRules::getInstance(this->getSmpFmtLocale(), status);
+        if (U_FAILURE(status)) {
+            // Data doesn't conform to spec, therefore loading failed.
+            break;
+        }
+        if (ruleSet == NULL) {
+            // Data doesn't exist for the locale we're looking for.
+            // Falling back to am/pm.
+            subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
+                      handler, cal, mutableNFs, status);
+            break;
+        }
+    }
+    
+    
+SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    U_NAMESPACE_BEGIN
+    
+      explicit Assembler(HPHP::CodeBlock& cb) : codeBlock(cb) {}
+  ~Assembler(){}
+    
+    #ifndef incl_HPHP_OUTPUT_FILE_H_
+#define incl_HPHP_OUTPUT_FILE_H_
+    
+    #endif // incl_HPHP_URL_FILE_H_
+
+    
+    using apollo::common::ErrorCode;
+    
+    TEST(ByteTest, SetBit) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  value.set_bit_0(1);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_bit_0(7);
+  EXPECT_EQ(0x7D, value.get_byte());
+  value.set_bit_1(7);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_value(0x77);
+  value.set_bit_1(0);
+  EXPECT_EQ(0x77, value.get_byte());
+    }
+    
+    
+    {  // Report Messages
+  AddRecvProtocolData<Accelrpt68, true>();
+  AddRecvProtocolData<Brakemotorrpt170, true>();
+  AddRecvProtocolData<Brakemotorrpt271, true>();
+  AddRecvProtocolData<Brakemotorrpt372, true>();
+  AddRecvProtocolData<Brakerpt6c, true>();
+  AddRecvProtocolData<Datetimerpt83, true>();
+  AddRecvProtocolData<Globalrpt6a, true>();
+  AddRecvProtocolData<Headlightrpt77, true>();
+  AddRecvProtocolData<Hornrpt79, true>();
+  AddRecvProtocolData<Latlonheadingrpt82, true>();
+  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
+  AddRecvProtocolData<Shiftrpt66, true>();
+  AddRecvProtocolData<Steeringmotorrpt173, true>();
+  AddRecvProtocolData<Steeringmotorrpt274, true>();
+  AddRecvProtocolData<Steeringmotorrpt375, true>();
+  AddRecvProtocolData<Steeringrpt16e, true>();
+  AddRecvProtocolData<Turnrpt64, true>();
+  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
+  AddRecvProtocolData<Wheelspeedrpt7a, true>();
+  AddRecvProtocolData<Wiperrpt91, true>();
+  AddRecvProtocolData<Yawraterpt81, true>();
+}
+    
+    
+    {
+    {
+    {
+    {  Brake_rpt_6c::Brake_on_offType ret =
+      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
 
     
     
-    {  CHECK(param_.pinfo->forward(ptrs.size(), ptrs.data(), tags.data(), param_.pinfo->p_forward));
-  Engine::Get()->PushAsync(
-      [ndcpy, ctx](RunContext rctx, Engine::CallbackOnComplete on_complete) {
-        ctx.async_on_complete();
-        on_complete();
-      }, ndctx, ndvar, {}, FnProperty::kNormal, 0, 'NDArrayOpForward');
+    {  Global_rpt_6a::Pacmod_statusType ret =
+      static_cast<Global_rpt_6a::Pacmod_statusType>(x);
+  return ret;
 }
     
-    void querySmartDevices(
-    libsmartctl::ClientInterface& smartctl,
-    std::function<void(
-        std::function<void(const std::string&, hardwareDriver*)>)> walk_func,
-    QueryData& results) {
-  // hw_info is for tracking info retrieve with an explicit HW controller.  It
-  // is indexed by serial_number, since that's how you correlate the data with
-  // auto-detect retrieved SMART info.
-  std::map<std::string, Row> hw_info;
+    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
+// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
     }
-    
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t pid,
-                                  int cpu,
-                                  int group_fd,
-                                  unsigned long const flags);
-    
-    #include <gtest/gtest.h>
-    
-    DEFINE_int32(threads, 16, 'Number of concurrent threads to run.');
-DEFINE_int64(cache_size, 8 * KB * KB,
-             'Number of bytes to use as a cache of uncompressed data.');
-DEFINE_int32(num_shard_bits, 4, 'shard_bits.');
-    
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-    // Example structure that describes a compaction task.
-struct CompactionTask {
-  CompactionTask(
-      DB* _db, Compactor* _compactor,
-      const std::string& _column_family_name,
-      const std::vector<std::string>& _input_file_names,
-      const int _output_level,
-      const CompactionOptions& _compact_options,
-      bool _retry_on_fail)
-          : db(_db),
-            compactor(_compactor),
-            column_family_name(_column_family_name),
-            input_file_names(_input_file_names),
-            output_level(_output_level),
-            compact_options(_compact_options),
-            retry_on_fail(_retry_on_fail) {}
-  DB* db;
-  Compactor* compactor;
-  const std::string& column_family_name;
-  std::vector<std::string> input_file_names;
-  int output_level;
-  CompactionOptions compact_options;
-  bool retry_on_fail;
-};
-    
-    #pragma once
-    
-    
-    {  // Unblocks all threads waiting on *this.
-  virtual void NotifyAll() = 0;
-};
-    
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    setCallbackTriggerIntervalSize
- * Signature: (JJ)V
- */
-void Java_org_rocksdb_BackupableDBOptions_setCallbackTriggerIntervalSize(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle,
-    jlong jcallback_trigger_interval_size) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  bopt->callback_trigger_interval_size =
-      static_cast<uint64_t>(jcallback_trigger_interval_size);
-}
