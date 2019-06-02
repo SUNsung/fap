@@ -1,177 +1,351 @@
 
         
-          IsFirstLine = true;
-  for (auto &Line : Lines) {
-    if (!IsFirstLine) {
-      Line = Line.drop_front(WhitespaceToTrim);
+        /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
-    IsFirstLine = false;
+    
+    static void secp256k1_ecdsa_recoverable_signature_save(secp256k1_ecdsa_recoverable_signature* sig, const secp256k1_scalar* r, const secp256k1_scalar* s, int recid) {
+    if (sizeof(secp256k1_scalar) == 32) {
+        memcpy(&sig->data[0], r, 32);
+        memcpy(&sig->data[32], s, 32);
+    } else {
+        secp256k1_scalar_get_b32(&sig->data[0], r);
+        secp256k1_scalar_get_b32(&sig->data[32], s);
+    }
+    sig->data[64] = recid;
+}
+    
+    
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
+}
+}
+    
+    BOOST_AUTO_TEST_CASE(univalue_set)
+{
+    UniValue v(UniValue::VSTR, 'foo');
+    v.clear();
+    BOOST_CHECK(v.isNull());
+    BOOST_CHECK_EQUAL(v.getValStr(), '');
+    }
+    
+    #include <stdint.h>
+#include <stdlib.h>
+    
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
+    
+    namespace leveldb {
+    }
+    
+    std::string CurrentFileName(const std::string& dbname) {
+  return dbname + '/CURRENT';
+}
+    
+      /*!
+   * \brief sets parameters for gradient compression
+   * \param kwargs a vector of pair of strings. A pair represents key and value
+   * of the parameter. Will be parsed by GradientCompressionParam
+   */
+  void SetParams(const std::vector<std::pair<std::string, std::string> >& kwargs);
+    
+    #ifndef DECL_SCALAR
+#define DECL_SCALAR(XPU, OP, FUN, REVERSE)                           \
+  template<>                                                         \
+  void Eval<XPU, OP, REVERSE>(const TBlob &lhs, const real_t &rhs,   \
+                                     TBlob *ret, RunContext ctx) {   \
+    FUN<XPU, OP, REVERSE>(lhs, rhs, ret, ctx);                       \
   }
+#endif
+    
+    /*!
+ *  Copyright (c) 2018 by Contributors
+ * \file transformer.cc
+ * \brief CPU implementation of the operators used in Transformer
+ */
+#include <mxnet/base.h>
+#include './transformer-inl.h'
+#include '../tensor/elemwise_unary_op.h'
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file ndarray_op.cc
+ * \brief
+ * \author Junyuan Xie
+*/
+#include './ndarray_op-inl.h'
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
     
     
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
+      }
+    });
+}  // namespace op
+}  // namespace mxnet
     
-    string StripProto(string filename) {
-  if (filename.substr(filename.size() - 11) == '.protodevel') {
-    // .protodevel
-    return filename.substr(0, filename.size() - 11);
-  } else {
-    // .proto
-    return filename.substr(0, filename.size() - 6);
+    template<typename xpu>
+void ConcatCompute(const nnvm::NodeAttrs& attrs, const OpContext& ctx,
+                   const std::vector<TBlob>& inputs,
+                   const std::vector<OpReqType>& req,
+                   const std::vector<TBlob>& outputs) {
+  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
+  MSHADOW_TYPE_SWITCH(inputs[concat_enum::kData0].type_flag_, DType, {
+    ConcatOp<xpu, DType> op;
+    op.Init(param);
+    op.Forward(ctx, inputs, req, outputs);
+  });
+}
+    
+        private:
+        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
+        {
+            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
+            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
+            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
+            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
+            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
+        }
+    
+    
+    {        switch (m_dataType)
+        {
+        case DataType::Float:
+        {
+            auto sourceMatrix = source.GetMatrix<float>();
+            auto destMatrix = GetWritableMatrix<float>();
+            destMatrix->AssignValuesOf(*sourceMatrix);
+            break;
+        }
+        case DataType::Double:
+        {
+            auto sourceMatrix = source.GetMatrix<double>();
+            auto destMatrix = GetWritableMatrix<double>();
+            destMatrix->AssignValuesOf(*sourceMatrix);
+            break;
+        }
+        case DataType::Float16:
+        {
+            auto sourceMatrix = source.GetMatrix<half>();
+            auto destMatrix = GetWritableMatrix<half>();
+            destMatrix->AssignValuesOf(*sourceMatrix);
+            break;
+        }
+        case DataType::Int8:
+        {
+            auto sourceMatrix = source.GetMatrix<char>();
+            auto destMatrix = GetWritableMatrix<char>();
+            destMatrix->AssignValuesOf(*sourceMatrix);
+            break;
+        }
+        case DataType::Int16:
+        {
+            auto sourceMatrix = source.GetMatrix<short>();
+            auto destMatrix = GetWritableMatrix<short>();
+            destMatrix->AssignValuesOf(*sourceMatrix);
+            break;
+        }
+        default:
+            LogicError('NDArrayView::CopyFrom: Unsupported DataType %s', DataTypeName(m_dataType));
+            break;
+        }
+    }
+    
+    
+    void Trainer::ExecuteForwardBackward(const std::unordered_map<Variable, ValuePtr>& arguments, std::unordered_map<Variable, ValuePtr>& outputsToFetch, const DeviceDescriptor& computeDevice, std::unordered_map<Variable, ValuePtr>& parameterGradients)
+    {
+#ifndef  CNTK_UWP
+        auto profForwardBackward = Microsoft::MSR::CNTK::ScopeProfile(Microsoft::MSR::CNTK::profilerEvtMainFB);
+#endif
+        std::unordered_map<Variable, ValuePtr> outputs = { { m_aggregatedLossFunction, nullptr }, { m_trainingSampleCountVar, nullptr } };
+        if (m_aggregatedEvaluationFunction)
+            outputs.insert({ m_aggregatedEvaluationFunction, nullptr });
+    }
+    
+    #pragma once
+    
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
+    }
+    
+        // release temp matrices that are only used by forward computation
+    // don't release matrices that need to be used in the gradient computation
+    virtual void ReleaseMatricesAfterForwardProp(MatrixPool& matrixPool)
+    {
+        Base::ReleaseMatricesAfterForwardProp(matrixPool);
+        ReleaseMatrixToPool(m_maxIndexes0, matrixPool);
+        ReleaseMatrixToPool(m_maxIndexes1, matrixPool);
+        ReleaseMatrixToPool(m_maxValues, matrixPool);
+    }
+    
+    
+    {
+    {
+    {
+    {                // now assign the actual pointers 
+                for (int i = 0; i < memoryCounter; i++)
+                {
+                    auto matrixPtr = make_shared<Matrix<ElemType>>(devId);
+                    if (!matrixPtr) // this can't really happen, because we haven't started allocating memory yet
+                        LogicError('MatrixPool: failed to get a valid matrix.');
+                    for (auto& memInfo : memInfoVec)
+                    {
+                        if (memInfo.deviceId == devId && memInfo.isWorkSpace == wsFlag && memInfo.memoryId == i)
+                        {
+                            for (auto pOutMatrixPtr : memInfo.pMatrixPtrs)
+                            {
+                                *pOutMatrixPtr = matrixPtr;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+    
+    vector<size_t> numSequencesForFrame;
+// -----------------------------------------------------------------------
+// OptimizedRNNStackNode
+// -----------------------------------------------------------------------
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {}
+    
+    
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
+};
+    
+    void Config::ReplaceIncludesWithIni(const std::string& original_ini_filename,
+                                    const std::string& iniStr,
+                                    std::string& with_includes) {
+  std::istringstream iss(iniStr);
+  std::string line;
+  while (std::getline(iss, line)) {
+    // Handle cases like
+    //   #include           ''
+    //   ##includefoo barbaz'myconfig.ini' how weird is that
+    // Anything that is not a syntactically correct #include 'file' after
+    // this pre-processing, will be treated as an ini comment and processed
+    // as such in the ini parser
+    auto pos = line.find_first_not_of(' ');
+    if (pos == std::string::npos ||
+        line.compare(pos, strlen('#include'), '#include') != 0) {
+      // treat as normal ini line, including comment that doesn't start with
+      // #include
+      with_includes += line + '\n';
+      continue;
+    }
+    pos += strlen('#include');
+    auto start = line.find_first_not_of(' ', pos);
+    auto end = line.find_last_not_of(' ');
+    if ((start == std::string::npos || line[start] != ''') ||
+        (end == start || line[end] != ''')) {
+      with_includes += line + '\n'; // treat as normal comment
+      continue;
+    }
+    std::string file = line.substr(start + 1, end - start - 1);
+    const std::string logger_file = file;
+    boost::filesystem::path p(file);
+    if (!p.is_absolute()) {
+      boost::filesystem::path opath(original_ini_filename);
+      p = opath.parent_path()/p;
+    }
+    if (boost::filesystem::exists(p)) {
+      std::ifstream ifs(p.string());
+      const std::string contents((std::istreambuf_iterator<char>(ifs)),
+                                 std::istreambuf_iterator<char>());
+      Config::ReplaceIncludesWithIni(p.string(), contents, with_includes);
+    } else {
+      Logger::Warning('ini include file %s not found', logger_file.c_str());
+    }
   }
 }
     
-    // Main function:  Reads the entire address book from a file,
-//   adds one person based on user input, then writes it back out to the same
-//   file.
-int main(int argc, char* argv[]) {
-  // Verify that the version of the library that we linked against is
-  // compatible with the version of the headers we compiled against.
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-    }
-    
-    #include 'addressbook.pb.h'
-    
-    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
-    
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
-}
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    
-    {  bool ret = (x == 0x1);
-  return ret;
-}
-    
-    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
-    
-    TEST_F(SpeedLimitTest, GetSpeedLimitByS) {
-  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
-  double s = 0.0;
-  const double ds = 0.01;
-  while (s < 99.0) {
-    double v_limit = speed_limit_.GetSpeedLimitByS(s);
-    }
-    }
+    #include <memory>
     
     /**
- * @file
- **/
-#include 'modules/planning/math/smoothing_spline/piecewise_linear_constraint.h'
-    
-    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateSecondOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
-  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
-}
-    
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-      Byte t2(bytes + 2);
-  t = t2.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    exception_wrapper::VTable const exception_wrapper::uninit_{
-    &noop_<void, exception_wrapper const*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*>,
-    &noop_<void, exception_wrapper const*>,
-    &uninit_type_,
-    &noop_<std::exception const*, exception_wrapper const*>,
-    &noop_<exception_wrapper, exception_wrapper const*>};
-    
-      /**
-   * Returns a secure random uint32_t in [min, max). If min == max, returns 0.
-   */
-  static uint32_t secureRand32(uint32_t min, uint32_t max) {
-    SecureRNG<uint32_t> srng;
-    return rand32(min, max, srng);
-  }
-    
-    
-    {} // namespace folly
-
-    
-    // Each level of cache has sharing sets, which are the set of cpus
-// that share a common cache at that level.  These are available in a
-// hex bitset form (/sys/devices/system/cpu/cpu0/index0/shared_cpu_map,
-// for example).  They are also available in a human-readable list form,
-// as in /sys/devices/system/cpu/cpu0/index0/shared_cpu_list.  The list
-// is a comma-separated list of numbers and ranges, where the ranges are
-// a pair of decimal numbers separated by a '-'.
-//
-// To sort the cpus for optimum locality we don't really need to parse
-// the sharing sets, we just need a unique representative from the
-// equivalence class.  The smallest value works fine, and happens to be
-// the first decimal number in the file.  We load all of the equivalence
-// class information from all of the cpu*/index* directories, order the
-// cpus first by increasing last-level cache equivalence class, then by
-// the smaller caches.  Finally, we break ties with the cpu number itself.
-    
-    
-    {} // namespace folly
-
-    
-    #include <folly/container/SparseByteSet.h>
-    
-    void ServerConfig::setLuaKeysLoading(bool value)
-{
-    return setParam<bool>('lua_keys_loading', value);
-}
-    
-    
-    
-    bool ConnectionsManager::loadConnectionsConfigFromFile(const QString& config,
-                                                       bool saveChangesToFile) {
-  QJsonArray connections;
+ * Implement this interface to report information to debugger or execute
+ * debugger commands.
+ */
+struct IDebuggable {
+  enum Support {
+    SupportInfo = 1,
+    SupportDump = 2,
+    SupportVerb = 4,
+  };
     }
     
-      Q_INVOKABLE int size();
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
     
-    void SortFilterProxyModel::setSortOrder(Qt::SortOrder order)
-{
-    QSortFilterProxyModel::sort(0, order);
-}
-    
-    protected:
-    int roleKey(const QByteArray &role) const;
-    
-    
-    {  m_connection.clear();
-}
-    
-      Q_INVOKABLE virtual void init();
-    
-     public:  // methods exported to QML
-  Q_INVOKABLE void closeTab(int i);
-    
-            static void renderNamespaceItems(QSharedPointer<Operations> operations,
-                                         RedisClient::Connection::NamespaceItems items,
-                                         QSharedPointer<AbstractNamespaceItem> parent,
-                                         const QSet<QByteArray> &expandedNamespaces);
-    
-    
-QString binaryStringToEscapedString(const QByteArray &value)
-{
-    QString val = QString::fromStdString(value.toStdString());
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
     }
+  );
+}
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+    using json = nlohmann::json;
