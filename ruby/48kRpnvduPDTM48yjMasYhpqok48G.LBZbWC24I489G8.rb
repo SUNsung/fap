@@ -1,153 +1,160 @@
 
         
-          def self.period_types
-    @types ||= Enum.new(all: 1,
-                        yearly: 2,
-                        monthly: 3,
-                        weekly: 4,
-                        daily: 5,
-                        quarterly: 6)
-  end
+            def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
     
-        # if you need to test this and are having ssl issues see:
-    #  http://stackoverflow.com/questions/6756460/openssl-error-using-omniauth-specified-ssl-path-but-didnt-work
-    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE if Rails.env.development?
-    @omniauth = OmniAuth::Builder.new(app) do
-      Discourse.authenticators.each do |authenticator|
-        authenticator.register_middleware(self)
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
       end
     end
     
-        # JOIN of topics table based on manipulating draft_key seems imperfect
-    builder = DB.build <<~SQL
-      SELECT
-        d.*, t.title, t.id topic_id, t.archetype,
-        t.category_id, t.closed topic_closed, t.archived topic_archived,
-        pu.username, pu.name, pu.id user_id, pu.uploaded_avatar_id, pu.username_lower,
-        du.username draft_username, NULL as raw, NULL as cooked, NULL as post_number
-      FROM drafts d
-      LEFT JOIN LATERAL json_extract_path_text (d.data::json, 'postId') postId ON TRUE
-      LEFT JOIN posts p ON postId :: BIGINT = p.id
-      LEFT JOIN topics t ON
-        CASE
-            WHEN d.draft_key LIKE '%' || '#{EXISTING_TOPIC}' || '%'
-              THEN CAST(replace(d.draft_key, '#{EXISTING_TOPIC}', '') AS INT)
-            ELSE 0
-        END = t.id
-      JOIN users pu on pu.id = COALESCE(p.user_id, t.user_id, d.user_id)
-      JOIN users du on du.id = #{user_id}
-      /*where*/
-      /*order_by*/
-      /*offset*/
-      /*limit*/
-    SQL
-    
-        private
-    
-          svg_sprite = 'window.__svg_sprite = #{SvgSprite.bundle(theme_ids).inspect};'
-    
-          # Reads an integer from the cache, or returns nil if no value was found.
-      #
-      # See Caching.read for more information.
-      def self.read_integer(raw_key, timeout: TIMEOUT)
-        value = read(raw_key, timeout: timeout)
-    
-          def remaining_requests
-        octokit.rate_limit.remaining
-      end
-    
-          # Imports all objects in parallel by scheduling a Sidekiq job for every
-      # individual object.
-      def parallel_import
-        waiter = JobWaiter.new
-    
-        it 'returns a label 'Yes' if a given agent is working' do
-      stub(@agent).working? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Yes'
+        def parse_as_fragment
+      Nokogiri::HTML.fragment @content, 'UTF-8'
     end
-    
-              expect(weather_agent.name).to eq('a weather agent')
-          expect(weather_agent.schedule).to eq('5pm')
-          expect(weather_agent.keep_events_for).to eq(14.days)
-          expect(weather_agent.propagate_immediately).to be_falsey
-          expect(weather_agent).to be_disabled
-          expect(weather_agent.memory).to be_empty
-          expect(weather_agent.options).to eq(weather_agent_options)
-    
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-        end
-    
-        it 'should work with nested arrays' do
-      @agent.options['array'] = ['one', '$.two']
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
-    
-      let :reverted_extract do
-    old_extract
-  end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-        end
   end
 end
 
     
-          private
+            subclass.class_eval do
+          extend AutoloadHelper
+          autoload_all 'docs/filters/#{to_s.demodulize.underscore}', 'filter'
+        end
     
-        def self.xtest(*args)
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
+    
+            css('td h3', '.l-sub-section > h3', '.alert h3', '.row-margin > h3', '.api-heading ~ h3', '.api-heading + h2', '.metadata-member h3').each do |node|
+          node.name = 'h4'
+        end
+    
+              # Return the registry
+          data[:provisioners]
+        end
+    
+            # This contains all the configuration plugins by scope.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :configs
+    
+            # Registers additional providers to be available.
+        #
+        # @param [Symbol] name Name of the provider.
+        def self.provider(name=UNSET_VALUE, options=nil, &block)
+          options ||= {}
+          options[:priority] ||= 5
+    
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
     end
     
-      test 'transliteration' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    require 'ripper.so'
     
-    # assumes x.y.z all digit version
-def next_version
-  # x.y.z
-  v = version.split '.'
-  # bump z
-  v[-1] = v[-1].to_i + 1
-  v.join '.'
-end
-    
-    # Read command line options into `options` hash
+    $x = test_ev
+test_ok(eval('local1', $x) == 'local1') # normal local var
+test_ok(eval('local2', $x) == 'local2') # nested local var
+$bad = true
 begin
-  opts.parse!
-rescue OptionParser::InvalidOption
-  puts 'gollum: #{$!.message}'
-  puts 'gollum: try 'gollum --help' for more information'
-  exit
+  p eval('local1')
+rescue NameError		# must raise error
+  $bad = false
 end
+test_ok(!$bad)
     
-    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
-task :clean do
-  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
-end
-    
-    module Jekyll
-    
-          unless file.file?
-        return 'File #{file} could not be found'
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
       end
-    
-      # Used on the blog index to split posts on the <!--more--> marker
-  def excerpt(input)
-    if input.index(/<!--\s*more\s*-->/i)
-      input.split(/<!--\s*more\s*-->/i)[0]
-    else
-      input
     end
   end
+end
+
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+          * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of Google Inc. nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+    
+          def _identicon_code(blob)
+        string_to_code blob + @request.host
+      end
+    
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+            :files     => v.stats.files.map { |f,*rest|
+              page_path = extract_renamed_path_destination(f)
+              page_path = remove_page_extentions(page_path)
+              { :file => f,
+                :link => '#{page_path}/#{v.id}'
+              }
+            }
+          }
+        end
+      end
+    
+    context 'Precious::Views::Editing' do
+  include Rack::Test::Methods
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    Precious::App.set(:gollum_path, @path)
+    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+      class DuplicatePageError < Error
+    attr_accessor :dir
+    attr_accessor :existing_path
+    attr_accessor :attempted_path
+    
+    desc 'Start an IRB session with all necessary files required.'
+task :shell do |t|
+  chdir File.dirname(__FILE__)
+  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
+end
+    
+    Given /^I run a paperclip generator to add a paperclip '([^']*)' to the '([^']*)' model$/ do |attachment_name, model_name|
+  step %[I successfully run `rails generate paperclip #{model_name} #{attachment_name}`]
+end
+    
+        # Returns the width and height in a format suitable to be passed to Geometry.parse
+    def to_s
+      s = ''
+      s << width.to_i.to_s if width > 0
+      s << 'x#{height.to_i}' if height > 0
+      s << modifier.to_s
+      s
+    end
