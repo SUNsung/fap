@@ -1,399 +1,343 @@
 
         
-        
-    {}  // namespace atom
-
+          /// @brief Deprecated; use <code>Blob(const vector<int>& shape)</code>.
+  explicit Blob(const int num, const int channels, const int height,
+      const int width);
+  explicit Blob(const vector<int>& shape);
     
-    namespace api {
+      /**
+   * Called by SetUp to initialize the weights associated with any top blobs in
+   * the loss function. Store non-zero loss weights in the diff blob.
+   */
+  inline void SetLossWeights(const vector<Blob<Dtype>*>& top) {
+    const int num_loss_weights = layer_param_.loss_weight_size();
+    if (num_loss_weights) {
+      CHECK_EQ(top.size(), num_loss_weights) << 'loss_weight must be '
+          'unspecified or specified once per top blob.';
+      for (int top_id = 0; top_id < top.size(); ++top_id) {
+        const Dtype loss_weight = layer_param_.loss_weight(top_id);
+        if (loss_weight == Dtype(0)) { continue; }
+        this->set_loss(top_id, loss_weight);
+        const int count = top[top_id]->count();
+        Dtype* loss_multiplier = top[top_id]->mutable_cpu_diff();
+        caffe_set(count, loss_weight, loss_multiplier);
+      }
+    }
+  }
+    
+    template <typename Dtype>
+class Layer;
+    
+    #include <utility>
+#include <vector>
+    
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
     }
     
      protected:
-  WebRequest(v8::Isolate* isolate, AtomBrowserContext* browser_context);
-  ~WebRequest() override;
-    
-        v8::MaybeLocal<v8::Object> object = weak_map_->Get(isolate, id);
-    if (object.IsEmpty())
-      return nullptr;
-    
-    namespace atom {
-    }
-    
-      // Checking to see if there is an update
-  virtual void OnCheckingForUpdate() {}
-    
-    namespace atom {
-    }
-    
-    const SkBitmap* OffscreenViewProxy::GetBitmap() const {
-  return view_bitmap_.get();
-}
-    
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
-    
-    namespace nwapi {
-    }
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    #include <map>
-    
-    MenuDelegate::~MenuDelegate() {
-}
-    
-    // Popup menus may get squished if they open up too close to the bottom of the
-// screen. This function takes the size of the screen, the size of the menu,
-// an optional widget, the Y position of the mouse click, and adjusts the popup
-// menu's Y position to make it fit if it's possible to do so.
-// Returns the new Y position of the popup menu.
-int CalculateMenuYPosition(const GdkRectangle* screen_rect,
-                           const GtkRequisition* menu_req,
-                           GtkWidget* widget, const int y) {
-  CHECK(screen_rect);
-  CHECK(menu_req);
-  // If the menu would run off the bottom of the screen, and there is enough
-  // screen space upwards to accommodate the menu, then pop upwards. If there
-  // is a widget, then also move the anchor point to the top of the widget
-  // rather than the bottom.
-  const int screen_top = screen_rect->y;
-  const int screen_bottom = screen_rect->y + screen_rect->height;
-  const int menu_bottom = y + menu_req->height;
-  int alternate_y = y - menu_req->height;
-  if (widget) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
-    alternate_y -= allocation.height;
-  }
-  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
-    return alternate_y;
-  return y;
-}
-    
-    namespace {
-    }
-    
-    #include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'gdk/gdkkeysyms.h'//to get keyval from name
-    
-    bool MenuItem::GetChecked() {
-  return is_checked_;
-}
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+  cudnnPoolingDescriptor_t  pooling_desc_;
+  cudnnPoolingMode_t        mode_;
 };
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
-};
-    
-        void DispatchEvent(
-        events::HistogramValue histogram_value,
-        const std::string& event_name,
-        std::unique_ptr<base::ListValue> args) {
-      DCHECK_CURRENTLY_ON(BrowserThread::UI);
-      ExtensionsBrowserClient::Get()->BroadcastEventToRenderers(
-                                                                histogram_value, event_name, std::move(args));
-    }
-    
-    
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-    namespace leveldb {
-    }
-    
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(!Overlaps('199', '199'));
-  ASSERT_TRUE(!Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
-}
-    
-    #include 'table/two_level_iterator.h'
-    
-    // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-    }
-    
-    #include <atomic>
-#include <deque>
-#include <set>
-#include <string>
-    
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        DecimalFormat *fmtToAdopt, Style *styleToAdopt, UErrorCode &status)
-        : fPreExponent(),
-          fDecimalFormat(fmtToAdopt),
-          fStyle(styleToAdopt),
-          fStaticSets(NULL) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (fDecimalFormat == NULL || fStyle == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
-    if (sym == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    getPreExponent(*sym, fPreExponent);
-    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
-}
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    class BreakIterator;
-    
-    class U_I18N_API SharedCalendar : public SharedObject {
-public:
-    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
-    virtual ~SharedCalendar();
-    const Calendar *get() const { return ptr; }
-    const Calendar *operator->() const { return ptr; }
-    const Calendar &operator*() const { return *ptr; }
-private:
-    Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
-};
-    
-    // Map index into pattern character string to Calendar field number.
-const UCalendarDateFields
-SimpleDateFormat::fgPatternIndexToCalendarField[] =
-{
-    /*GyM*/ UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-    /*dkH*/ UCAL_DATE, UCAL_HOUR_OF_DAY, UCAL_HOUR_OF_DAY,
-    /*msS*/ UCAL_MINUTE, UCAL_SECOND, UCAL_MILLISECOND,
-    /*EDF*/ UCAL_DAY_OF_WEEK, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK_IN_MONTH,
-    /*wWa*/ UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_AM_PM,
-    /*hKz*/ UCAL_HOUR, UCAL_HOUR, UCAL_ZONE_OFFSET,
-    /*Yeu*/ UCAL_YEAR_WOY, UCAL_DOW_LOCAL, UCAL_EXTENDED_YEAR,
-    /*gAZ*/ UCAL_JULIAN_DAY, UCAL_MILLISECONDS_IN_DAY, UCAL_ZONE_OFFSET,
-    /*v*/   UCAL_ZONE_OFFSET,
-    /*c*/   UCAL_DOW_LOCAL,
-    /*L*/   UCAL_MONTH,
-    /*Q*/   UCAL_MONTH,
-    /*q*/   UCAL_MONTH,
-    /*V*/   UCAL_ZONE_OFFSET,
-    /*U*/   UCAL_YEAR,
-    /*O*/   UCAL_ZONE_OFFSET,
-    /*Xx*/  UCAL_ZONE_OFFSET, UCAL_ZONE_OFFSET,
-    /*r*/   UCAL_EXTENDED_YEAR,
-    /*bB*/   UCAL_FIELD_COUNT, UCAL_FIELD_COUNT,  // no mappings to calendar fields
-#if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
-    /*:*/   UCAL_FIELD_COUNT, /* => no useful mapping to any calendar field */
-#else
-    /*no pattern char for UDAT_TIME_SEPARATOR_FIELD*/   UCAL_FIELD_COUNT, /* => no useful mapping to any calendar field */
 #endif
-};
+    
+    #include 'util/coding.h'
+    
+        switch (record_type) {
+      case kFullType:
+        if (in_fragmented_record) {
+          // Handle bug in earlier versions of log::Writer where
+          // it could emit an empty kFirstType record at the tail end
+          // of a block followed by a kFullType or kFirstType record
+          // at the beginning of the next block.
+          if (!scratch->empty()) {
+            ReportCorruption(scratch->size(), 'partial record without end(1)');
+          }
+        }
+        prospective_record_offset = physical_record_offset;
+        scratch->clear();
+        *record = fragment;
+        last_record_offset_ = prospective_record_offset;
+        return true;
+    }
+    
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        static_assert(kHeaderSize == 7, '');
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
+    
+      Footer() = default;
+    
+    Comparator::~Comparator() = default;
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size / 5 - 1048576);
+}
+    
+    #include 'db/log_format.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+    
+     private:
+  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+    
+    
+        case URX_STRING:
+            {
+                // Test input against a literal string.
+                // Strings require two slots in the compiled pattern, one for the
+                //   offset to the string text, and one for the length.
+                int32_t   stringStartIdx = opValue;
+                int32_t   stringLen;
+    }
+    
+    U_CAPI UBool U_EXPORT2
+uhash_equalsScriptSet(const UElement key1, const UElement key2) {
+    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
+    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
+    return (*s1 == *s2);
+}
+    
+    #include 'unicode/messagepattern.h'
+#include 'unicode/rbnf.h'
+#include 'unicode/selfmt.h'
+#include 'unicode/uchar.h'
+#include 'unicode/ucnv_err.h'
+#include 'unicode/umsg.h'
+#include 'unicode/ustring.h'
+#include 'unicode/utypes.h'
+#include 'cmemory.h'
+#include 'messageimpl.h'
+#include 'patternprops.h'
+#include 'selfmtimpl.h'
+#include 'uassert.h'
+#include 'ustrfmt.h'
+#include 'util.h'
+#include 'uvector.h'
+    
+    // SharedBreakIterator encapsulates a shared BreakIterator. Because
+// BreakIterator has mutable semantics, clients must ensure that all uses
+// of a particular shared BreakIterator is protected by the same mutex
+// ensuring that only one thread at a time gets access to that shared
+// BreakIterator. Clients can accomplish this by creating a mutex for all
+// uses of break iterator within a particular class. Then objects of that
+// class may then freely share break iterators among themselves. However,
+// these shared break iterators must never be exposed outside of that class.
+class U_I18N_API SharedBreakIterator : public SharedObject {
+public:
+    SharedBreakIterator(BreakIterator *biToAdopt);
+    virtual ~SharedBreakIterator();
+    }
     
         /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     * Sets maximum significant digits. 0 or negative means no maximum.
+     */
+    void setMax(int32_t count) {
+        fMax = count <= 0 ? INT32_MAX : count;
+    }
+    
+    
+    {    /**
+     * Formats positiveValue using the given range of digit counts.
+     * Always uses standard digits '0' through '9'. Formatted value is
+     * left padded with '0' as necessary to achieve minimum digit count.
+     * Does not produce any grouping separators or trailing decimal point.
+     * Calling format to format a value with a particular digit count range
+     * when canFormat indicates that the same value and digit count range
+     * cannot be formatted results in undefined behavior.
      *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
      */
-    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+    static UnicodeString &format(
+            int32_t positiveValue,
+            const IntDigitCountRange &range,
+            UnicodeString &appendTo);
     
-        /**
-     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
-     * and return the pointer.
-     * @return the UnicodeMatcher point.
-     */
-    virtual UnicodeMatcher* toMatcher() const;
-    
-      void showBuckets() const;
-    
-    
-    {  const int clen = bittorrent::getCompactLength(family_);
-  // nodes
-  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
-                                                             eoi = nodes_.end();
-       i != eoi; ++i) {
-    const std::shared_ptr<DHTNode>& node = *i;
-    // Write IP address + port in Compact IP-address/port info form.
-    unsigned char compactPeer[COMPACT_LEN_IPV6];
-    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
-                                             node->getPort());
-    if (compactlen != clen) {
-      memset(compactPeer, 0, clen);
-    }
-    uint8_t clen1 = clen;
-    // 1byte compact peer format length
-    WRITE_CHECK(fp, &clen1, sizeof(clen1));
-    // 7bytes reserved
-    WRITE_CHECK(fp, zero, 7);
-    // clen bytes compact peer
-    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
-    // 24-clen bytes reserved
-    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
-    // 20bytes: node ID
-    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
-    // 4bytes reserved
-    WRITE_CHECK(fp, zero, 4);
-  }
-  if (fp.close() == EOF) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  if (!File(filenameTemp).renameTo(filename)) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  A2_LOG_INFO('DHT routing table was saved successfully');
-}
-    
-    namespace aria2 {
-    }
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
-    
-    namespace {
-const size_t NUM_CONCURRENT_TASK = 15;
-} // namespace
-    
-    
-    {  virtual void
-  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
 };
     
-    #include 'TimeBasedCommand.h'
+        case UDAT_QUARTER_FIELD:
+        if (count >= 4)
+            _appendSymbol(appendTo, value/3, fSymbols->fQuarters,
+                          fSymbols->fQuartersCount);
+        else if (count == 3)
+            _appendSymbol(appendTo, value/3, fSymbols->fShortQuarters,
+                          fSymbols->fShortQuartersCount);
+        else
+            zeroPaddingNumber(currentNumberFormat,appendTo, (value/3) + 1, count, maxIntCount);
+        break;
     
-      static const std::string E;
     
-    bool DNSCache::CacheEntry::contains(const std::string& addr) const
-{
-  return find(addr) != addrEntries_.end();
-}
-    
-    void ActionEase::startWithTarget(Node *target)
-{
-    if (target && _inner)
-    {
-        ActionInterval::startWithTarget(target);
-        _inner->startWithTarget(_target);
-    }
-    else
-    {
-        log('ActionEase::startWithTarget error: target or _inner is nullptr!');
+    {    if (length > 0) {
+        uprv_memcpy(getBytes(), other.getBytes(), length);
     }
 }
     
-    
-    {
-    {
-    {
-    {
-    {                    float l = logf(pre_log) * _lensEffect;
-                    float new_r = expf( l ) * _radius;
-                    
-                    if (vect.getLength() > 0)
-                    {
-                        vect.normalize();
-                        Vec2 new_vect = vect * new_r;
-                        v.z += (_concave ? -1.0f : 1.0f) * new_vect.getLength() * _lensEffect;
-                    }
+    /**
+ * Implement UnicodeMatcher
+ */
+UMatchDegree StringMatcher::matches(const Replaceable& text,
+                                    int32_t& offset,
+                                    int32_t limit,
+                                    UBool incremental) {
+    int32_t i;
+    int32_t cursor = offset;
+    if (limit < cursor) {
+        // Match in the reverse direction
+        for (i=pattern.length()-1; i>=0; --i) {
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                if (cursor > limit &&
+                    keyChar == text.charAt(cursor)) {
+                    --cursor;
+                } else {
+                    return U_MISMATCH;
                 }
-                
-                setVertex(Vec2(i, j), v);
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
             }
         }
-        
-        _dirty = false;
+        // Record the match position, but adjust for a normal
+        // forward start, limit, and only if a prior match does not
+        // exist -- we want the rightmost match.
+        if (matchStart < 0) {
+            matchStart = cursor+1;
+            matchLimit = offset+1;
+        }
+    } else {
+        for (i=0; i<pattern.length(); ++i) {
+            if (incremental && cursor == limit) {
+                // We've reached the context limit without a mismatch and
+                // without completing our match.
+                return U_PARTIAL_MATCH;
+            }
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                // Don't need the cursor < limit check if
+                // incremental is TRUE (because it's done above); do need
+                // it otherwise.
+                if (cursor < limit &&
+                    keyChar == text.charAt(cursor)) {
+                    ++cursor;
+                } else {
+                    return U_MISMATCH;
+                }
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
+            }
+        }
+        // Record the match position
+        matchStart = offset;
+        matchLimit = cursor;
     }
+    }
+    
+                    // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(destLimit, destLimit, buf);
+                    destLimit += buf.length();
+                    buf.truncate(0);
+                }
+    
+    #include 'gtest/gtest.h'
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    // config detail: {'name': 'latitude_minutes', 'offset': 0.0, 'precision': 1.0,
+// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 15,
+// 'type': 'int', 'order': 'motorola', 'physical_unit': 'min'}
+int Latlonheadingrpt82::latitude_minutes(const std::uint8_t* bytes,
+                                         int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    // move-only type
+Expected<std::unique_ptr<int>, Err> f3(int x, double y) {
+  return std::make_unique<int>(int(x + y));
 }
     
-        if (ret && ret->initWithFlipX(x))
-    {
-        ret->autorelease();
-        return ret;
+    namespace folly {
     }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    #include <folly/concurrency/AtomicSharedPtr.h>
+#include <folly/concurrency/CacheLocality.h>
+#include <folly/container/Enumerate.h>
+#include <folly/synchronization/Hazptr.h>
     
-        /** Gets the total Delay units of the Animation. 
-     *
-     * @return The total Delay units of the Animation.
-     */
-    float getTotalDelayUnits() const { return _totalDelayUnits; };
-    
-    /** Sets the delay in seconds of the 'delay unit'.
-     *
-     * @param delayPerUnit The delay in seconds of the 'delay unit'.
-     */
-    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
-    
-    /** Gets the delay in seconds of the 'delay unit'.
-     * 
-     * @return The delay in seconds of the 'delay unit'.
-     */
-    float getDelayPerUnit() const { return _delayPerUnit; };
-    
-    
-    {private:
-    void releaseVertsAndIndices();
+    struct AtForkTask {
+  void* object;
+  folly::Function<bool()> prepare;
+  folly::Function<void()> parent;
+  folly::Function<void()> child;
 };
+    
+    #include <folly/detail/RangeCommon.h>
