@@ -1,123 +1,174 @@
 
         
-            # Set the random seed
-    if hparams.random_seed > 0:
-      tf.set_random_seed(hparams.random_seed)
+                if error is None:
+            # the name is available, store it in the database and go to
+            # the login page
+            db.execute(
+                'INSERT INTO user (username, password) VALUES (?, ?)',
+                (username, generate_password_hash(password)),
+            )
+            db.commit()
+            return redirect(url_for('auth.login'))
     
-    flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'conditioned_rnn_data',
-                    'Name of data file for input case.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 400, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 10,
-                     'Number of spikifications of the same underlying rates.')
-flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
-flags.DEFINE_float('x0_std', 1.0,
-                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
-FLAGS = flags.FLAGS
     
-    def get_train_n_valid_inds(num_trials, train_fraction, nreplications):
-  '''Split the numbers between 0 and num_trials-1 into two portions for
-  training and validation, based on the train fraction.
-  Args:
-    num_trials: the number of trials
-    train_fraction: (e.g. .80)
-    nreplications: the number of spiking trials per initial condition
-  Returns:
-    a 2-tuple of two lists: the training indices and validation indices
-    '''
-  train_inds = []
-  valid_inds = []
-  for i in range(num_trials):
-    # This line divides up the trials so that within one initial condition,
-    # the randomness of spikifying the condition is shared among both
-    # training and validation data splits.
-    if (i % nreplications)+1 > train_fraction * nreplications:
-      valid_inds.append(i)
-    else:
-      train_inds.append(i)
+def test_update(client, auth, app):
+    auth.login()
+    assert client.get('/1/update').status_code == 200
+    client.post('/1/update', data={'title': 'updated', 'body': ''})
     
-      return values_bxtxn
+        assert 'closed' in str(e)
     
-    '''Losses for Generator and Discriminator.'''
-    
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
-    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
-    is_training:  Whether the model is training.
-    reuse (Optional):  Whether to reuse the model.
-    
-        while s % 2 == 0:
-        s = s // 2
-        t += 1
-    
-                if new_key is None:
-                break
-    
-        return diff
+        try:
+        citext_oids = get_citext_oids(connection.alias)
+        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
+        psycopg2.extensions.register_type(array_type, None)
+    except ProgrammingError:
+        # citext is not available on the database.
+        #
+        # The same comments in the except block of the above call to
+        # register_hstore() also apply here.
+        pass
 
     
+        def load(self):
+        try:
+            session_data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            session_data = None
+        if session_data is not None:
+            return session_data
+        self._session_key = None
+        return {}
+    
+    
+class SessionStore(SessionBase):
     '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+    Implement database session store.
+    '''
+    def __init__(self, session_key=None):
+        super().__init__(session_key)
+    
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+            return self.__dict__.get(key, None)
+    
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
+        )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
+    
+    # Syntax sugar.
+_ver = sys.version_info
+    
+        By default, the pair of `name` and `value` will be set for the domain ''
+    and sent on every request (this is sometimes called a 'supercookie').
+    '''
+    result = {
+        'version': 0,
+        'name': name,
+        'value': value,
+        'port': None,
+        'domain': '',
+        'path': '/',
+        'secure': False,
+        'expires': None,
+        'discard': True,
+        'comment': None,
+        'comment_url': None,
+        'rest': {'HttpOnly': None},
+        'rfc2109': False,
+    }
+    
+    
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
 
     
-    def englishFreqMatchScore(message):
-    '''
-    >>> englishFreqMatchScore('Hello World')
-    1
-    '''
-    freqOrder = getFrequencyOrder(message)
-    matchScore = 0
-    for commonLetter in ETAOIN[:6]:
-        if commonLetter in freqOrder[:6]:
-            matchScore += 1
+        # find the first valid part of the provided path and treat that as a zip archive
+    # assume the rest of the path is the name of a member in the archive
+    archive, member = os.path.split(path)
+    while archive and not os.path.exists(archive):
+        archive, prefix = os.path.split(archive)
+        member = '/'.join([prefix, member])
     
-    bokecc_download_by_id = site.download_by_id
+    from scrapy.spiders import Spider
+from scrapy.http import Request
+    
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
+    
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+    
+        requires_project = True
+    default_settings = {'LOG_ENABLED': False}
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+    
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
 
     
-    __all__ = ['cbs_download']
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'acme-python', u'acme-python Documentation',
+     author, 'acme-python', 'One line description of project.',
+     'Miscellaneous'),
+]
     
-    __all__ = ['ckplayer_download']
-    
-        video_url = match1(html, r'filepath=(.+)&sec')
-    video_url = video_url.replace('&mid', '?mid')
-    
-    __all__ = ['flickr_download_main']
-    
-            for p in js_path:
-            if 'mtool' in p or 'mcore' in p:
-                js_text = get_content(p)
-                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+        @certbot_util.patch_get_utility()
+    def test_noninteractive(self, mock_util):
+        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
+        try:
+            self._call(self.vhosts)
+        except errors.MissingCommandlineFlag as e:
+            self.assertTrue('vhost ambiguity' in str(e))
     
     
-def clean_trailing_newlines(linebuffer):
-    result = []
-    code_started = False
-    linebuffer.reverse()
-    for line in linebuffer:
-        if not code_started and line == '\n':
-            continue
-        code_started = True
-        result.append(line)
-    result.reverse()
-    return result
+Named Arguments
+---------------
+    
+    # The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+    
+       certbot certonly \\
+     --dns-digitalocean \\
+     --dns-digitalocean-credentials ~/.secrets/certbot/digitalocean.ini \\
+     -d example.com
