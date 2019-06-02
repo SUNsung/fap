@@ -1,222 +1,124 @@
 
         
-            f32 alpha, beta, gamma;
-    typedef typename TypeTraits<T>::wide wtype;
-    wAdd<wtype> wideAdd;
-    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
-        alpha(_alpha), beta(_beta), gamma(_gamma),
-        wideAdd(_alpha, _beta, _gamma) {}
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
-    {
-        v_dst = internal::vmvn(internal::vceq(v_src0, v_src1));
+          // Finally, add the generic parameters from the requirement.
+  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
+    // The only depth that makes sense is depth == 1, the generic parameters
+    // of the requirement itself. Anything else is from invalid code.
+    if (genericParam->getDepth() != 1) {
+      return;
+    }
     }
     
-             int8x8_t vline_s8 = vqmovn_s16(vcombine_s16(vline1_s16, vline2_s16));
-    
-                    if( mask[0] == 0 )
-                {
-                    if (mask[1] != 0)
-                    {
-                        j -= 8;
-                        ptr -= 8;
-                    }
-                    continue;
-                }
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
-{
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
+    void CacheImpl::releaseValue(void *Value) {
+  cache_release_value(static_cast<cache_t*>(Impl), Value);
 }
     
-            if (IsReadOnly())
-            RuntimeError('NDArrayView::CopyFrom: Cannot modify contents of a readonly NDArrayView.');
+      Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-                m_samples.second += samples;
-            m_updates.second++;
-            m_totalUpdates++;
-            
-            if (ShouldWriteUpdate(m_updates.second))
-            {
-                // Time to output the accumulated updates.
-                // Note that we take snapshot of the accumulated loss/metric only when we want to write.
-                // We do it this way on purpose, since accumulated loss/metric may be stored on a GPU
-                // and we want to minimize the number of GPU->CPU data transfers.
-                if (accumulatedLoss)
-                {
-                    m_loss.second = accumulatedLoss->AsScalar<double>();
-                }
-    }
-    
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-    
-template <class ConfigRecordType>
-void DataReader::InitFromConfig(const ConfigRecordType& /*config*/)
-{
-    RuntimeError('Init shouldn't be called, use constructor');
-    // not implemented, calls the underlying class instead
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
     
-    {private:
-    long long m_start;
-    long long m_end;
+void ClangDiagnosticConsumer::HandleDiagnostic(
+    clang::DiagnosticsEngine::Level clangDiagLevel,
+    const clang::Diagnostic &clangDiag) {
+  // Handle the module-not-found diagnostic specially if it's a top-level module
+  // we're looking for.
+  if (clangDiag.getID() == clang::diag::err_module_not_found &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    return;
+  }
+    }
+    
+    
+    { protected:
+  int n_ = 0;
+  std::mutex m_;
+  std::condition_variable cv_;
 };
     
-            int m_id;         // sample id
-        int m_rank0;        // original rank based on label
-        int m_rank;         // rank based on s in the associated query
-        ElemType m_score;    // score
-        ElemType m_gain;    // gain
-        bool operator < (const Url &url) const{
-            // tie breaking
-            if (m_score == url.m_score || std::isnan(m_score) || std::isnan(url.m_score))
-            {
-                return m_gain < url.m_gain;
-            }
+    
+    {} // namespace
+    
+    OPERATOR_SCHEMA(FindDuplicateElements)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
+    
+    template <typename T, class Context>
+class BernoulliJSDOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+    struct SrcPos {
+  bool operator==(SrcPos o) const {
+    return line == o.line && col == o.col;
+  }
+  bool operator!=(SrcPos o) const { return !(*this == o); }
     }
     
-    private: 
-    bool CheckOverlap(pair<int, int>occ, vector<pair<int, int>>&occVec)
-    {
-        bool bRet = false;
-        for (auto& o : occVec)
-        {
-            if (occ.first <= o.second && occ.second >= o.first)
-            {
-                bRet = true;
-                break;
-            }
+      // The HHIRLICM runtime option is all capitals, so separation
+  // cannot be determined. Special case it.
+  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
+  // The HHVM ini option becomes the standard PHP option.
+  boost::replace_first(out,
+                       'hhvm.server.upload.max_file_uploads',
+                       'max_file_uploads');
+  // Make sure IPv6 or IPv4 are handled correctly
+  boost::replace_first(out, '_i_pv', '_ipv');
+  boost::replace_first(out, '.i_pv', '.ipv');
+  // urls are special too. Let's not have 'ur_ls'
+  boost::replace_first(out, '_ur_ls', '_urls');
+  boost::replace_first(out, '.ur_ls', '.urls');
+  // No use of Eval in our ini strings
+  boost::replace_first(out, '.eval.', '.');
+  boost::replace_first(out, '.my_sql.', '.mysql.');
+  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
         }
-//#define SUPRESS_MEMSHARING // #define this to disable memory sharing by always return true 
-// TODO: Make this a runtime option.
-#ifdef SUPRESS_MEMSHARING
-        bRet = true; 
-#endif
-        return bRet;
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
     }
+  }
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
     
-    class DHTNode;
-class DHTRoutingTable;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTPeerAnnounceStorage;
-class DHTTokenTracker;
-class DHTMessageDispatcher;
-class DHTMessageReceiver;
-class DHTMessageFactory;
-    
-      bool addGoodNode(const std::shared_ptr<DHTNode>& node);
-    
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
-{
-}
-    
-    
-    {} // namespace aria2
-    
-      virtual std::shared_ptr<DHTTask>
-  createReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                        const std::shared_ptr<DHTNode>& newNode) CXX11_OVERRIDE;
-    
-    #include 'DHTTaskQueue.h'
-#include 'DHTTaskExecutor.h'
-    
-        std::vector<AddrEntry>::const_iterator find(const std::string& addr) const;
-    
-    
-    {  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-    
-      virtual ~ExtensionManagerIfFactory() {}
-    
-    #include 'ExtensionManager.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    class KernelInfo : public testing::Test {
-  protected:
-    void SetUp() override {
-      setUpEnvironment();
-    }
-};
-    
-    TEST_F(kernelIntegrity, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_integrity');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'sycall_addr_modified', IntType}
-  //      {'text_segment_hash', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    TEST_F(kernelPanics, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_panics');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'path', NormalType}
-  //      {'time', NormalType}
-  //      {'registers', NormalType}
-  //      {'frame_backtrace', NormalType}
-  //      {'module_backtrace', NormalType}
-  //      {'dependencies', NormalType}
-  //      {'name', NormalType}
-  //      {'os_version', NormalType}
-  //      {'kernel_version', NormalType}
-  //      {'system_model', NormalType}
-  //      {'uptime', IntType}
-  //      {'last_loaded', NormalType}
-  //      {'last_unloaded', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    TEST_F(keychainAcls, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from keychain_acls');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'keychain_path', NormalType}
-  //      {'authorizations', NormalType}
-  //      {'path', NormalType}
-  //      {'description', NormalType}
-  //      {'label', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
+    #include 'hphp/runtime/base/directory.h'
