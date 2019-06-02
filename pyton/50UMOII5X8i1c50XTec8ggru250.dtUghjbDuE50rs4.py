@@ -1,147 +1,165 @@
 
         
-        import re
-import sys
+            def approve_friend_request(self, friend_id):
+        pass
     
-        def logout(self):
-        return self._client.get('/auth/logout')
+        def mapper(self, _, line):
+        yield line, 1
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
     
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
+class CaseInsensitiveDict(MutableMapping):
+    '''A case-insensitive ``dict``-like object.
     
-        def fake_init_db():
-        Recorder.called = True
+        @possible_keys
+    def test_getitem(self, key):
+        assert self.case_insensitive_dict[key] == 'application/json'
     
-    # This was the only thing that Flask used to export at one point and it had
-# a more generic name.
-jsonify = json.jsonify
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
+    
+    
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
 
     
-            :param filename: the filename of the config.  This can either be an
-                         absolute filename or a filename relative to the
-                         root path.
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
+            ('hTTp://u:p@Some.Host/path', 'socks5://some.host.proxy', all_proxies),
+        ('hTTp://u:p@Other.Host/path', 'socks5://http.proxy', all_proxies),
+        ('hTTp:///path', 'socks5://http.proxy', all_proxies),
+        ('hTTps://Other.Host', 'socks5://http.proxy', all_proxies),
     
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
-    
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                for template in loader.list_templates():
-                    result.add(template)
-    
-        output = []
-    Stream = get_stream_type(env, args)
-    
-    USERNAME = 'user'
-PASSWORD = 'password'
-# Basic auth encoded `USERNAME` and `PASSWORD`
-# noinspection SpellCheckingInspection
-BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
-BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
-AUTH_OK = {'authenticated': True, 'user': USERNAME}
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-    error_msg = None
+        def test_http_error(self):
+        error = requests.exceptions.HTTPError()
+        assert not error.response
+        response = requests.Response()
+        error = requests.exceptions.HTTPError(response=response)
+        assert error.response == response
+        error = requests.exceptions.HTTPError('message', response=response)
+        assert str(error) == 'message'
+        assert error.response == response
     
     
-def test_unicode_url_query_arg_item(httpbin):
-    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['args'] == {'test': UNICODE}, r
+def compute_bench(alpha, n_samples, n_features, precompute):
+    lasso_results = []
+    lars_lasso_results = []
     
-    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
-# smaller distance are more similar to each other than ones with a larger distance.
+            start = time.time()
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
     
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
-
+def score(y_test, y_pred, case):
+    r2 = r2_score(y_test, y_pred)
+    print('r^2 on test data (%s) : %f' % (case, r2))
     
     
 if __name__ == '__main__':
-    main()
-
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
     
-        # Create workers
-    for worker_id in range(1, worker_num + 1):
-        p.append(Process(target=process, args=(worker_id, read_frame_list, write_frame_list)))
-        p[worker_id].start()
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-        # Draw a label with a name below the face
-    text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+#----------------------------------------------------------------------
+# Visualize the clustering
+def plot_clustering(X_red, labels, title=None):
+    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
+    X_red = (X_red - x_min) / (x_max - x_min)
     
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
+                s_width, s_height = widget.winfo_screenwidth(), widget.winfo_screenheight()
     
-    try:
-    from unittest.mock import patch, call
-except ImportError:
-    from mock import patch, call
+        def __call__(self, shape, dtype='float32'):  # tf needs partition_info=None
+        shape = list(shape)
+        if self.scale == 1:
+            return self.initializer(shape)
+        new_shape = shape[:3] + [shape[3] // (self.scale ** 2)]
+        if type(self.initializer) is dict:
+            self.initializer = initializers.deserialize(self.initializer)
+        var_x = self.initializer(new_shape, dtype)
+        var_x = tf.transpose(var_x, perm=[2, 0, 1, 3])
+        var_x = tf.image.resize_nearest_neighbor(
+                         var_x,
+                         size=(shape[0] * self.scale, shape[1] * self.scale),
+                         align_corners=True)
+        var_x = tf.space_to_depth(var_x, block_size=self.scale, data_format='NHWC')
+        var_x = tf.transpose(var_x, perm=[1, 2, 0, 3])
+        return var_x
     
-        def test_parents(self):
-        for _ in range(2):
-            self.assertEqual(self.John.parents, 'Father and mother')
-        self.assertEqual(self.John.call_count2, 1)
-
+        def build_gui(self, debug_console):
+        ''' Build the GUI '''
+        logger.debug('Building GUI')
+        self.title('Faceswap.py')
+        self.tk.call('wm', 'iconphoto', self._w, get_images().icons['favicon'])
+        self.configure(menu=MainMenuBar(self))
     
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
+        @staticmethod
+    def update_kwargs(kwargs):
+        ''' Set the default kernel initializer to he_uniform() '''
+        kwargs['kernel_initializer'] = kwargs.get('kernel_initializer', he_uniform())
+        return kwargs
     
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
     
-        assert (cm1 == cm2) and (cm1 != cm3)
-    assert (cm1 is cm2) and (cm1 is not cm3)
-    assert len(instances_pool) == 2
+def build_config(contents, **kwargs):
+    return load(build_config_details(contents, **kwargs))
+    
+    import pytest
+    
+    
+def patch_find_executable(side_effect):
+    return mock.patch(
+        'compose.cli.errors.find_executable',
+        autospec=True,
+        side_effect=side_effect)
+    
+        def test_format_info(self):
+        output = self.formatter.format(make_log_record(logging.INFO))
+        assert output == MESSAGE
+    
+    from compose.utils import unquote_path
+    
+        def test_no_end_separator(self):
+        def reader():
+            yield b'abc\n'
+            yield b'def\n'
+            yield b'ghi'
