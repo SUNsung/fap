@@ -1,347 +1,168 @@
 
         
-          void AddDocStringArgs();
-  void AddDocStringInputs();
-  void AddDocStringAttrs();
-  void AddDocStringNameArg();
-  void AddOutputGlobals();
-  void AddDocStringOutputs();
-  void AddBody(const string& prefix);
-  void AddBodyNoReturn(const string& apply_prefix);
-  void AddExport();
+        template <typename Key, class Comparator>
+void SkipList<Key, Comparator>::Insert(const Key& key) {
+  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
+  // here since Insert() is externally synchronized.
+  Node* prev[kMaxHeight];
+  Node* x = FindGreaterOrEqual(key, prev);
+    }
     
     
-    {}  // namespace tensorflow
+    {}  // namespace leveldb
+
     
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
     
-    
-    {  // Maps error codes to the corresponding Python exception type.
-  std::map<TF_Code, PyObject*> exc_types_;
+    {  static CacheTest* current_;
 };
+CacheTest* CacheTest::current_;
     
-    Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle) {
-  return Safe_TFE_TensorHandlePtr(handle);
-}
-    
-      static const unsigned kMask = 0xf;  // Mask of all available flags.
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {        // these are measured in elements
-        size_t left, right, top, bottom;
-    };
-    
-    
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_src = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            int16x8_t v_dst = vld1q_s16(dst + j);
-            int16x4_t v_srclo = vget_low_s16(v_src), v_srchi = vget_high_s16(v_src);
-            v_dst = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst))),
-                                 vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst))));
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    void add(const Size2D &size,
-         const s32 * src0Base, ptrdiff_t src0Stride,
-         const s32 * src1Base, ptrdiff_t src1Stride,
-         s32 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
+    void CHistoryCollector::AddBinOpToHistory(int nOpCode, bool fNoRepetition)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<s32, s64>());
+    int iCommandEnd = AddCommand(std::make_shared<CBinaryCommand>(nOpCode));
+    m_lastBinOpStartIndex = IchAddSzToEquationSz(L' ', -1);
     }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<s32, s64>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
     
-    void extract2(const Size2D &size,
-              const u8 * srcBase, ptrdiff_t srcStride,
-              u8 * dstBase, ptrdiff_t dstStride,
-              u32 coi)
+    
+    {        DisplayNum();
+        m_HistoryCollector.AddUnaryOpToHistory(IDC_SIGN, m_bInv, m_angletype);
+    }
+    break;
+    
+    CalculatorHistory::CalculatorHistory(size_t maxSize)
+    : m_maxHistorySize(maxSize)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    
-    {            vst1q_s16(dst + j, vshlq_n_s16(v_dst0, shift));
-            vst1q_s16(dst + j + 8, vshlq_n_s16(v_dst1, shift));
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            vst1q_s16(dst + j, vshlq_n_s16(v_dst, shift));
-        }
-    
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        s32* dst = internal::getRowPtr(dstBase, dstStride, i);
-        //vertical convolution
-        ptrdiff_t idx_rm2 = internal::borderInterpolate(i - 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-    }
-    
-    #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
-         ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
-      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 2));
-    }
-    input_blob_names.push_back(GO(2));
-    
-    **Result**
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
-  }
 }
     
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
+        static void LoadEngineStrings(CalculationManager::IResourceProvider& resourceProvider);
+    static int IdStrFromCmdId(int id)
+    {
+        return id - IDC_FIRSTCONTROL + IDS_ENGINESTR_FIRST;
+    }
     
     
     {
-    {    private:
-        Number m_p;
-        Number m_q;
-    };
+    {        #define MAP_BUTTON(NAV_NO, BUTTON_ENUM)     { io.NavInputs[NAV_NO] = (gamepad.wButtons & BUTTON_ENUM) ? 1.0f : 0.0f; }
+        #define MAP_ANALOG(NAV_NO, VALUE, V0, V1)   { float vn = (float)(VALUE - V0) / (float)(V1 - V0); if (vn > 1.0f) vn = 1.0f; if (vn > 0.0f && io.NavInputs[NAV_NO] < vn) io.NavInputs[NAV_NO] = vn; }
+        MAP_BUTTON(ImGuiNavInput_Activate,      XINPUT_GAMEPAD_A);              // Cross / A
+        MAP_BUTTON(ImGuiNavInput_Cancel,        XINPUT_GAMEPAD_B);              // Circle / B
+        MAP_BUTTON(ImGuiNavInput_Menu,          XINPUT_GAMEPAD_X);              // Square / X
+        MAP_BUTTON(ImGuiNavInput_Input,         XINPUT_GAMEPAD_Y);              // Triangle / Y
+        MAP_BUTTON(ImGuiNavInput_DpadLeft,      XINPUT_GAMEPAD_DPAD_LEFT);      // D-Pad Left
+        MAP_BUTTON(ImGuiNavInput_DpadRight,     XINPUT_GAMEPAD_DPAD_RIGHT);     // D-Pad Right
+        MAP_BUTTON(ImGuiNavInput_DpadUp,        XINPUT_GAMEPAD_DPAD_UP);        // D-Pad Up
+        MAP_BUTTON(ImGuiNavInput_DpadDown,      XINPUT_GAMEPAD_DPAD_DOWN);      // D-Pad Down
+        MAP_BUTTON(ImGuiNavInput_FocusPrev,     XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
+        MAP_BUTTON(ImGuiNavInput_FocusNext,     XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
+        MAP_BUTTON(ImGuiNavInput_TweakSlow,     XINPUT_GAMEPAD_LEFT_SHOULDER);  // L1 / LB
+        MAP_BUTTON(ImGuiNavInput_TweakFast,     XINPUT_GAMEPAD_RIGHT_SHOULDER); // R1 / RB
+        MAP_ANALOG(ImGuiNavInput_LStickLeft,    gamepad.sThumbLX,  -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32768);
+        MAP_ANALOG(ImGuiNavInput_LStickRight,   gamepad.sThumbLX,  +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
+        MAP_ANALOG(ImGuiNavInput_LStickUp,      gamepad.sThumbLY,  +XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, +32767);
+        MAP_ANALOG(ImGuiNavInput_LStickDown,    gamepad.sThumbLY,  -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, -32767);
+        #undef MAP_BUTTON
+        #undef MAP_ANALOG
+    }
+}
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    
+    // Build with, e.g:
+//   # cl.exe binary_to_compressed_c.cpp
+//   # gcc binary_to_compressed_c.cpp
+// You can also find a precompiled Windows binary in the binary/demo package available from https://github.com/ocornut/imgui
+    
+    // Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    
+        // Create the D3DDevice
+    ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
+    g_d3dpp.Windowed = TRUE;
+    g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    g_d3dpp.EnableAutoDepthStencil = TRUE;
+    g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+    g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;           // Present with vsync
+    //g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;   // Present without vsync, maximum unthrottled framerate
+    if (g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
+        return false;
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
 }
 
     
-    Rational RationalMath::Frac(Rational const& rat)
-{
-    PRAT prat = rat.ToPRAT();
-    try
-    {
-        fracrat(&prat, RATIONAL_BASE, RATIONAL_PRECISION);
+    using apollo::common::ErrorCode;
+    
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
     }
-    catch (uint32_t error)
-    {
-        destroyrat(prat);
-        throw(error);
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
     }
     }
     
     
-    {
-    {    private:
-        int32_t m_sign;
-        int32_t m_exp;
-        std::vector<uint32_t> m_mantissa;
-    };
+    {  Byte t1(bytes + 5);
+  uint32_t t = t1.get_byte(6, 2);
+  x <<= 2;
+  x |= t;
+  double ret = x * CLUSTER_VREL_RES + CLUSTER_VREL_LONG_MIN;
+  return ret;
 }
-
     
-        if (nullptr != m_pHistoryDisplay)
-    {
-        unsigned int addedItemIndex = m_pHistoryDisplay->AddToHistory(m_spTokens, m_spCommands, numStr);
-        m_pCalcDisplay->OnHistoryItemAdded(addedItemIndex);
-    }
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
     
-            try
-        {
-            subrat(&lhsRat, rhsRat, RATIONAL_PRECISION);
-            destroyrat(rhsRat);
-        }
-        catch (uint32_t error)
-        {
-            destroyrat(lhsRat);
-            destroyrat(rhsRat);
-            throw(error);
-        }
-    
-        struct HISTORYITEMVECTOR
-    {
-        std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> spTokens;
-        std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> spCommands;
-        std::wstring expression;
-        std::wstring result;
-    };
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
+    unsigned int BaseMapMatrix::CreateBinary(unsigned char* buf,
+                                         unsigned int buf_size) const {
+  return 0;
 }
-}  // namespace data
     
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
+    // config detail: {'name': 'motor_current', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
+// 'bit': 7, 'type': 'double', 'order': 'motorola', 'physical_unit': 'amps'}
+double Brakemotorrpt170::motor_current(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
-  }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
     
-    
-    {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
-};
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
-
-    
-    
-    {
-    {
-    {      for (size_t j = 0; j < info.num_row_; ++j) {
-        for (int l = 0; l < ngroup; ++l) {
-          const unsigned o_offset = j * row_chunk + l * mrow_chunk + i * (ncolumns + 1);
-          const unsigned c_offset = j * crow_chunk + l * (ncolumns + 1);
-          contribs[o_offset + i] = 0;
-          for (size_t k = 0; k < ncolumns + 1; ++k) {
-            // fill in the diagonal with additive effects, and off-diagonal with the interactions
-            if (k == i) {
-              contribs[o_offset + i] += contribs_diag[c_offset + k];
-            } else {
-              contribs[o_offset + k] = (contribs_on[c_offset + k] - contribs_off[c_offset + k])/2.0;
-              contribs[o_offset + i] -= contribs[o_offset + k];
-            }
-          }
-        }
-      }
+    namespace apollo {
+namespace canbus {
+namespace gem {
     }
-  }
-  std::vector<RegTree::FVec> thread_temp;
-};
-    
-    
-    {
-    {    for (const auto &batch : (*dmat)->GetRowBatches()) {
-      for (int i = 0; i < batch.Size(); i++) {
-        auto inst = batch[i];
-        for (int j = 0; i < inst.size(); i++) {
-          ASSERT_EQ(inst[j].fvalue, 1.5);
-        }
-      }
     }
-    delete dmat;
-  }
-}
-
+    }
     
-    
-    {
-    { public:
-  std::string page_id_;
-  std::string ref_;
-  std::string parent_ref_;
-  int index_;
-};
-}  // namespace WeexCore
-    
-    namespace WeexCore {
+    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Brakerpt6c::output_value(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
     }
