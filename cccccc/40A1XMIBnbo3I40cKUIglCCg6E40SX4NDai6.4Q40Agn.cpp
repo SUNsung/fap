@@ -1,152 +1,266 @@
 
         
-        A common use case is with the DeconvolutionLayer acting as upsampling.
-You can upsample a feature map with shape of (B, C, H, W) by any integer factor
-using the following proto.
-\code
-layer {
-  name: 'upsample', type: 'Deconvolution'
-  bottom: '{{bottom_name}}' top: '{{top_name}}'
-  convolution_param {
-    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
-    num_output: {{C}} group: {{C}}
-    pad: {{ceil((factor - 1) / 2.)}}
-    weight_filler: { type: 'bilinear' } bias_term: false
-  }
-  param { lr_mult: 0 decay_mult: 0 }
-}
-\endcode
-Please use this by replacing `{{}}` with your values. By specifying
-`num_output: {{C}} group: {{C}}`, it behaves as
-channel-wise convolution. The filter shape of this deconvolution layer will be
-(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
-interpolation kernel for every channel of the filter identically. The resulting
-shape of the top feature map will be (B, C, factor * H, factor * W).
-Note that the learning rate and the
-weight decay are set to 0 in order to keep coefficient values of bilinear
-interpolation unchanged during training. If you apply this to an image, this
-operation is equivalent to the following call in Python with Scikit.Image.
-\code{.py}
-out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
-\endcode
- */
-template <typename Dtype>
-class BilinearFiller : public Filler<Dtype> {
+        
+    {}  // namespace api
+    
+     private:
+  atom::RenderProcessPreferences preferences_;
+    
+      gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+    
+    #include 'atom/browser/net/about_protocol_handler.h'
+    
+    class AboutProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
  public:
-  explicit BilinearFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
-    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
-    Dtype* data = blob->mutable_cpu_data();
-    int f = ceil(blob->width() / 2.);
-    Dtype c = (blob->width() - 1) / (2. * f);
-    for (int i = 0; i < blob->count(); ++i) {
-      Dtype x = i % blob->width();
-      Dtype y = (i / blob->width()) % blob->height();
-      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
+  AboutProtocolHandler();
+  ~AboutProtocolHandler() override;
     }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
+    
+    #include 'ui/gfx/image/image.h'
+    
+        Rational result{ prat };
+    destroyrat(prat);
+    
+    void CCalcEngine::LoadEngineStrings(CalculationManager::IResourceProvider& resourceProvider)
+{
+    for (const auto& sid : g_sids)
+    {
+        auto locKey = wstring{ sid };
+        auto locString = resourceProvider.GetCEngineString(locKey);
+        if (!locString.empty())
+        {
+            s_engineStrings[locKey] = locString;
+        }
+    }
+}
+    
+    shared_ptr<HISTORYITEM> const& CalculatorHistory::GetHistoryItem(_In_ unsigned int uIdx)
+{
+    assert(uIdx >= 0 && uIdx < m_historyItems.size());
+    return m_historyItems.at(uIdx);
+}
+    
+    using namespace ::apache::thrift;
+using namespace ::apache::thrift::protocol;
+using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
+    
+    void ExtensionStatus::__set_message(const std::string& val) {
+  this->message = val;
+}
+    
+    
+    {
+    {} // namespace tables
+} // namespace osquery
+
+    
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
   }
+    
+          resp = smartctl.getDevInfo(devname, full_type);
+      if (resp.err != NOERR) {
+        LOG(WARNING) << 'There was an error retrieving drive information with '
+                        'hardware driver: '
+                     << libsmartctl::errStr(resp.err);
+        return;
+      }
+      // Only consider found if no error was returned.
+      found = true;
+    
+    #include <string>
+    
+    namespace osquery {
+namespace tables {
+    }
+    }
+    
+    class iptables : public testing::Test {
+  protected:
+    void SetUp() override {
+      setUpEnvironment();
+    }
 };
     
-      /**
-   * @brief Sets the loss associated with a top blob at a given index.
-   */
-  inline void set_loss(const int top_index, const Dtype value) {
-    if (loss_.size() <= top_index) {
-      loss_.resize(top_index + 1, Dtype(0));
-    }
-    loss_[top_index] = value;
-  }
+    #include <osquery/tests/integration/tables/helper.h>
     
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
-    namespace caffe {
-    }
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
     
-    namespace caffe {
+    #include 'gtest/gtest.h'
+    
+    BaseMapMatrix::BaseMapMatrix() {}
+    
+    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::output_value(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
     }
     
+      Byte t1(bytes + 1);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+    void Brakerpt6c::Parse(const std::uint8_t* bytes, int32_t length,
+                       ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_brake_on_off(
+      brake_on_off(bytes, length));
+}
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    // config detail: {'name': 'veh_can_timeout', 'offset': 0.0, 'precision': 1.0,
+// 'len': 1, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 2,
+// 'type': 'bool', 'order': 'motorola', 'physical_unit': ''}
+bool Globalrpt6a::veh_can_timeout(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(2, 1);
+    }
+    
+    
+    {
+    {
+    {
+    {  Headlight_rpt_77::Commanded_valueType ret =
+      static_cast<Headlight_rpt_77::Commanded_valueType>(x);
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    // config detail: {'name': 'latitude_degrees', 'offset': 0.0, 'precision': 1.0,
+// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 7,
+// 'type': 'int', 'order': 'motorola', 'physical_unit': 'deg'}
+int Latlonheadingrpt82::latitude_degrees(const std::uint8_t* bytes,
+                                         int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    
+    {
+    {        _target->setPosition(clampf(tempPos.x, _leftBoundary, _rightBoundary),
+                                   clampf(tempPos.y, _bottomBoundary, _topBoundary));
+    }
+    else
+    {
+        _target->setPosition(_halfScreenSize - _followedNode->getPosition());
+    }
+}
+    
+    void CallFunc::update(float time)
+{
+    ActionInstant::update(time);
+    this->execute();
+}
+    
+    NS_CC_END
+
+    
+    protected:
+    float _to;
+    float _from;
+    
+    
+    {
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
+};
+/** @} */
+NS_CC_END
+    
+    
+    {protected:
+    ClippingRectangleNode()
+    : _clippingEnabled(true)
+    {
+    }
+    
+    void onBeforeVisitScissor();
+    void onAfterVisitScissor();
+    
+    Rect _clippingRegion;
+    bool _clippingEnabled;
+    
+    CustomCommand _beforeVisitCmdScissor;
+    CustomCommand _afterVisitCmdScissor;
 };
     
-    			if(mip == 0)
-			{
-				pImageData = a_pafSourceRGBA;
-			}
-			else
-			{
-				pMipImage = new float[mipWidth*mipHeight*4];
-				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
-				{
-					pImageData = pMipImage;
-				}
-			}
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_A8
-	// Encoding bits for the A portion of RGBA8
-	// ################################################################################
-    
-    /* Split signal in two decimated bands using first-order allpass filters */
-void silk_ana_filt_bank_1(
-    const opus_int16            *in,                /* I    Input signal [N]                                            */
-    opus_int32                  *S,                 /* I/O  State vector [2]                                            */
-    opus_int16                  *outL,              /* O    Low band [N/2]                                              */
-    opus_int16                  *outH,              /* O    High band [N/2]                                             */
-    const opus_int32            N                   /* I    Number of input samples                                     */
-);
-    
-      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
-    
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
+    static bool sendComponentEventToJS(Component* node, int action)
 {
-  getBucketFor(node)->dropNode(node);
-}
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
-  }
-*/
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
+    auto scriptEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     
-      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
-    
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) = 0;
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
-{
-  immediateTaskQueue_.addTask(task);
-}
-    
-    class DHTTaskQueueImpl : public DHTTaskQueue {
-private:
-  DHTTaskExecutor periodicTaskQueue1_;
+    if (scriptEngine->isCalledFromScript())
+    {
+        scriptEngine->setCalledFromScript(false);
+    }
+    else
+    {
+        BasicScriptData data(node,(void*)&action);
+        ScriptEvent scriptEvent(kComponentEvent,(void*)&data);
+        if (scriptEngine->sendEvent(&scriptEvent))
+            return true;
     }
     
-    void DHTTokenUpdateCommand::preProcess()
-{
-  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
-      getDownloadEngine()->isHaltRequested()) {
-    enableExit();
-  }
+    return false;
 }
     
-    #include <memory>
+    class CC_DLL ComponentContainer
+{
+protected:
+    /**
+     * @js ctor
+     */
+    ComponentContainer(Node* node);
+    
+public:
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~ComponentContainer();
+    
+	/**
+     * @js getComponent
+     */
+	Component* get(const std::string& name) const;
+    }
+    
+        //
+    // Override
+    //
+    virtual std::string getDescription() const override;
+    virtual void draw(Renderer *renderer, const Mat4& transform, uint32_t flags) override;
+    void removeChild(Node* child, bool cleanup = true) override;
