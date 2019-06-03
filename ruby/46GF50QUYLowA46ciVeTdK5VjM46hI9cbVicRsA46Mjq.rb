@@ -1,76 +1,89 @@
 
         
-        def remove_head_from_history(markdown)
-  index = markdown =~ %r!^##\s+\d+\.\d+\.\d+!
-  markdown[index..-1]
-end
-    
-    require 'benchmark/ips'
-require 'jekyll'
-require 'json'
-    
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
+              if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
       end
     end
-  end
     
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
+    module Admin
+  class ReportNotesController < BaseController
+    before_action :set_report_note, only: [:destroy]
     
-          it 'should be invalid when the referenced url doesn't contain a scenario' do
-        stub_request(:get, 'http://example.com/scenarios/1/export.json').to_return(:status => 200, :body => invalid_data)
-        subject.url = 'http://example.com/scenarios/1/export.json'
-        expect(subject).not_to be_valid
-        expect(subject.errors[:base]).to include('The provided data does not appear to be a valid Scenario.')
-      end
-    
-      describe '#working?' do
-    it 'it is working when at least one event was emitted' do
-      expect(@checker).not_to be_working
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      @checker.check
-      expect(@checker.reload).to be_working
+      def after_sign_in_path_for(resource)
+    if resource.email_verified?
+      root_path
+    else
+      finish_signup_path
     end
   end
 end
 
     
-    Given /^I add this snippet to config\/application.rb:$/ do |snippet|
-  file_name = 'config/application.rb'
-  cd('.') do
-    content = File.read(file_name)
-    File.open(file_name, 'w') {|f| f << content.sub(/class Application < Rails::Application.*$/, 'class Application < Rails::Application\n#{snippet}\n')}
+      included do
+    before_action :set_session_activity
+  end
+    
+          def title
+        'Create a new page'
+      end
+    
+        end
   end
 end
+
     
-      def self.source_root
-    @source_root ||= File.expand_path('../templates', __FILE__)
+    module Gollum
+end
+Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
+    
+      test 'create sets the correct path for a relative path subdirectory with the page file directory set' do
+    Precious::App.set(:wiki_options, { :page_file_dir => 'foo' })
+    dir  = 'bardir'
+    name = '#{dir}/baz'
+    get '/create/foo/#{name}'
+    assert_match(/\/#{dir}/, last_response.body)
+    assert_no_match(/[^\/]#{dir}/, last_response.body)
+    # reset page_file_dir
+    Precious::App.set(:wiki_options, { :page_file_dir => nil })
   end
     
-        def initialize
-      clear
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+    def version
+  line = File.read('lib/#{name}.rb')[/^\s*VERSION\s*=\s*.*/]
+  line.match(/.*VERSION\s*=\s*[''](.*)['']/)[1]
+end
+    
+    exec         = {}
+options      = {
+  :port => 4567,
+  :bind => '0.0.0.0',
+}
+wiki_options = {
+  :live_preview  => false,
+  :allow_uploads => false,
+  :allow_editing => true,
+}
+    
+        # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      end
     end
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
+      puts '\n== Restarting application server =='
+  system! 'bin/rails restart'
+end
+
     
-        private
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
