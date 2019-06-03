@@ -1,155 +1,160 @@
 
         
-        # the signals
-from .signals import (
-    signals_available,
-    template_rendered,
-    request_started,
-    request_finished,
-    got_request_exception,
-    request_tearing_down,
-    appcontext_tearing_down,
-    appcontext_pushed,
-    appcontext_popped,
-    message_flashed,
-    before_render_template,
-)
-    
-        try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
+            try:
+        citext_oids = get_citext_oids(connection.alias)
+        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
+        psycopg2.extensions.register_type(array_type, None)
+    except ProgrammingError:
+        # citext is not available on the database.
+        #
+        # The same comments in the except block of the above call to
+        # register_hstore() also apply here.
         pass
-    
-        Defines all the global objects that are proxies to the current
-    active context.
-    
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
+
     
     
-def test_on_run_after_other_commands(usage_tracker_io, shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.get_history.return_value = ['fuck', 'ls']
-    _change_tracker(usage_tracker_io, 12)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
+class ArrayMaxLengthValidator(MaxLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
+        'limit_value')
+    
+        def get_decoded(self):
+        session_store_class = self.get_session_store_class()
+        return session_store_class().decode(self.session_data)
+
+    
+        for node in doctree.traverse(is_setting_index):
+        targetnode = get_setting_target(node)
+        assert isinstance(targetnode, nodes.target), 'Next node is not a target'
+    
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
+    
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+            try:
+            spidercls = self.crawler_process.spider_loader.load(name)
+        except KeyError:
+            pass
+        else:
+            # if spider already exists and not --force then halt
+            if not opts.force:
+                print('Spider %r already exists in module:' % name)
+                print('  %s' % spidercls.__module__)
+                return
+        template_file = self._find_template(opts.template)
+        if template_file:
+            self._genspider(module, name, domain, opts.template, template_file)
+            if opts.edit:
+                self.exitcode = os.system('scrapy edit '%s'' % name)
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+        filename = args[0]
+        if not os.path.exists(filename):
+            raise UsageError('File not found: %s\n' % filename)
+        try:
+            module = _import_file(filename)
+        except (ImportError, ValueError) as e:
+            raise UsageError('Unable to load %r: %s\n' % (filename, e))
+        spclasses = list(iter_spider_classes(module))
+        if not spclasses:
+            raise UsageError('No spider found in file: %s\n' % filename)
+        spidercls = spclasses.pop()
+    
+        @classmethod
+    def threshold(cls, severity):
+        threshold = cls.SEVERITY_LEVELS[severity]
+    
+            backlogged, size = None, 0
+        from sentry.monitoring.queues import backend
+        if backend is not None:
+            size = backend.get_size('default')
+            backlogged = size > 0
     
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+class TagKeyNotFound(Exception):
+    pass
     
+    from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
     
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+        # Flag to indicate if this migration is too risky
+    # to run online and needs to be coordinated for offline
+    is_dangerous = True
     
+            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
+        db.create_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'null': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
+    }
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
-    
-        def __init__(self, msg, with_headers=True, with_body=True,
-                 on_body_chunk_downloaded=None):
-        '''
-        :param msg: a :class:`models.HTTPMessage` subclass
-        :param with_headers: if `True`, headers will be included
-        :param with_body: if `True`, body will be included
-    
-            '''
-        self.enabled = True
-        self.kwargs = kwargs
-    
-    
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
-    
-            # host:port => host_port
-        hostname = hostname.replace(':', '_')
-        path = os.path.join(config_dir,
-                            SESSIONS_DIR_NAME,
-                            hostname,
-                            session_name + '.json')
-    
-        def reset_appid(self):
-        # called by web_control
-        with self.lock:
-            self.working_appid_list = list()
-            for appid in self.config.GAE_APPIDS:
-                if not appid:
-                    self.config.GAE_APPIDS.remove(appid)
-                    continue
-                self.working_appid_list.append(appid)
-            self.not_exist_appids = []
-            self.out_of_quota_appids = []
-        self.last_reset_time = time.time()
-    
-            self.last_check_time = time_now
-        threading.Thread(target=self._simple_check_worker).start()
-    
-    try:
-    from io import BytesIO
-except ImportError:
-    from cStringIO import StringIO as BytesIO
-try:
-    from google.appengine.api import urlfetch
-    from google.appengine.runtime import apiproxy_errors
-except ImportError:
-    urlfetch = None
-try:
-    import sae
-except ImportError:
-    sae = None
-try:
-    import bae.core.wsgi
-except ImportError:
-    bae = None
-try:
-    import socket
-    import select
-except ImportError:
-    socket = None
-try:
-    import OpenSSL
-except ImportError:
-    OpenSSL = None
-    
-    '''
-    
-        pass
-    
-            An index from 0..n-1 of the token object in the input stream.
-        This must be valid in order to use the ANTLRWorks debugger.
-        
-        Using setter/getter methods is deprecated. Use o.index instead.'''
+        project_id = BoundedBigIntegerField()
+    group_id = BoundedBigIntegerField()
+    event_id = BoundedBigIntegerField()
+    key = FlexibleForeignKey('tagstore.TagKey', db_column='key_id')
+    value = FlexibleForeignKey('tagstore.TagValue', db_column='value_id')
+    date_added = models.DateTimeField(default=timezone.now, db_index=True)
