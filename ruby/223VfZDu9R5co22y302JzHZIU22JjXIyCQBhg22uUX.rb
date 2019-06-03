@@ -1,169 +1,133 @@
 
         
-                def find_target_id
-          GithubImport::IssuableFinder.new(project, issue).database_id
-        end
-      end
-    end
-  end
-end
+                SiteSetting.enable_markdown_linkify = false
+        cooked = PrettyText.markdown(md, sanitize: false)
+        cooked.strip!
+        cooked.gsub!(' class=\'lang-auto\'', '')
+        cooked.gsub!(/<span class='hashtag'>(.*)<\/span>/, '\\1')
+        # we don't care about this
+        cooked.gsub!('<blockquote>\n</blockquote>', '<blockquote></blockquote>')
+        html.gsub!('<blockquote>\n</blockquote>', '<blockquote></blockquote>')
+        html.gsub!('language-ruby', 'lang-ruby')
+        # strip out unsupported languages
+        html.gsub!(/ class='language-[;f].*'/, '')
+    
+        cors_origins = @global_origins || []
+    cors_origins += SiteSetting.cors_origins.split('|') if SiteSetting.cors_origins.present?
+    cors_origins = cors_origins.presence
+    
+      def create
+    raise Discourse::NotFound unless report_collection_enabled?
+    
+    # == Schema Information
+#
+# Table name: drafts
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer          not null
+#  draft_key  :string           not null
+#  data       :text             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  sequence   :integer          default(0), not null
+#  revisions  :integer          default(1), not null
+#
+# Indexes
+#
+#  index_drafts_on_user_id_and_draft_key  (user_id,draft_key)
+#
 
     
-            def sidekiq_worker_class
-          ImportLfsObjectWorker
+        def base_url
+      @base_url || Discourse.base_url
+    end
+    attr_writer :base_url
+  end
+    
+        # this is only required for NGINX X-SendFile it seems
+    response.headers['Content-Length'] = File.size(cache_file).to_s
+    set_cache_control_headers
+    send_file(cache_file, disposition: :inline)
+  end
+    
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
+        #
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
         end
     
-              waiter.jobs_remaining += 1
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
+    
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
+        #
+        # @return [MachineState]
+        def state
+          nil
         end
     
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
     
-              res
-        end
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
     
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-    
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
           end
     
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
     
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
     end
   end
 end
-    
-              def self.decode(input)
-            elem = self.new
-            elem.decode(input)
-          end
-    
-              # Decodes the start_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_start_time(input)
-            input.value[0].value
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-    def system!(*args)
-  system(*args) || abort('\n== Command #{args} failed ==')
-end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
-    
-    Liquid::Template.register_tag('config_tag', ConfigTag)
-    
-    module Jekyll
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
-    end
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-        # Returns an extension based on the content type. e.g. 'jpeg' for
-    # 'image/jpeg'. If the style has a specified format, it will override the
-    # content-type detection.
-    #
-    # Each mime type generally has multiple extensions associated with it, so
-    # if the extension from the original filename is one of these extensions,
-    # that extension is used, otherwise, the first in the list is used.
-    def content_type_extension attachment, style_name
-      mime_type = MIME::Types[attachment.content_type]
-      extensions_for_mime_type = unless mime_type.empty?
-        mime_type.first.extensions
-      else
-        []
-      end
