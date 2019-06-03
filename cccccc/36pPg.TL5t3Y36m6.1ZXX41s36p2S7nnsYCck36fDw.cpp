@@ -1,212 +1,189 @@
 
         
-        // Verify that ByteSink is subclassable and Flush() overridable.
-class FlushingByteSink : public StringByteSink {
+        namespace Ui {
+    class OpenURIDialog;
+}
+    
+    bool ParseInt32(const std::string& str, int32_t *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    char *endp = NULL;
+    errno = 0; // strtol will not set errno if valid
+    long int n = strtol(str.c_str(), &endp, 10);
+    if(out) *out = (int32_t)n;
+    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
+    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
+    // platforms the size of these types may be different.
+    return endp && *endp == 0 && !errno &&
+        n >= std::numeric_limits<int32_t>::min() &&
+        n <= std::numeric_limits<int32_t>::max();
+}
+    
+    
+    {} // namespace bech32
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+    #include <ctype.h>
+#include <stdio.h>
+#include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'util/logging.h'
+    
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
+    
+      /** @brief Using the CPU device, compute the layer output. */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) = 0;
+  /**
+   * @brief Using the GPU device, compute the layer output.
+   *        Fall back to Forward_cpu() if unavailable.
+   */
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+    // LOG(WARNING) << 'Using CPU code as backup.';
+    return Forward_cpu(bottom, top);
+  }
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    class ExtensionManagerClient : virtual public ExtensionManagerIf, public ExtensionClient {
  public:
-  explicit FlushingByteSink(string* dest) : StringByteSink(dest) {}
-  virtual void Flush() { Append('z', 1); }
- private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(FlushingByteSink);
+  ExtensionManagerClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) :
+    ExtensionClient(prot, prot) {}
+  ExtensionManagerClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) :    ExtensionClient(iprot, oprot) {}
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getInputProtocol() {
+    return piprot_;
+  }
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
+    return poprot_;
+  }
+  void extensions(InternalExtensionList& _return);
+  void send_extensions();
+  void recv_extensions(InternalExtensionList& _return);
+  void options(InternalOptionList& _return);
+  void send_options();
+  void recv_options(InternalOptionList& _return);
+  void registerExtension(ExtensionStatus& _return, const InternalExtensionInfo& info, const ExtensionRegistry& registry);
+  void send_registerExtension(const InternalExtensionInfo& info, const ExtensionRegistry& registry);
+  void recv_registerExtension(ExtensionStatus& _return);
+  void deregisterExtension(ExtensionStatus& _return, const ExtensionRouteUUID uuid);
+  void send_deregisterExtension(const ExtensionRouteUUID uuid);
+  void recv_deregisterExtension(ExtensionStatus& _return);
+  void query(ExtensionResponse& _return, const std::string& sql);
+  void send_query(const std::string& sql);
+  void recv_query(ExtensionResponse& _return);
+  void getQueryColumns(ExtensionResponse& _return, const std::string& sql);
+  void send_getQueryColumns(const std::string& sql);
+  void recv_getQueryColumns(ExtensionResponse& _return);
 };
     
-    class GoGoProtoGenerator : public CodeGenerator {
- public:
-  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        bool can_generate =
-            (new_pool_.FindFileByName(file->name()) == nullptr);
-        for (int j = 0; j < file->dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->public_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->public_dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->weak_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->weak_dependency(j)->name()) != nullptr);
-        }
-        if (can_generate) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
+    #include <fstream>
     
-      cout << 'Enter name: ';
-  getline(cin, *person->mutable_name());
+     private:
+  bool isNewCodeEnabled(const std::string& key);
     
-        private:
-        std::unordered_set<StreamInformation> m_streamInfos;
-        bool m_epochEndReached;
-        size_t m_numWorkers;
-        size_t m_workerRank;
-        size_t m_prevMinibatchSize;
-        size_t m_maxNumSamplesToRead;
-        size_t m_maxNumSweepsToRead;
-        size_t m_truncationLength;
-        size_t m_maxErrors;
-        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
+    /**
+ * @brief Intel HECI GUID for the update application.
+ *
+ * This GUID can be used on every OS over the HECI protocol to inspect the
+ * FW version.
+ */
+const std::vector<uint8_t> kMEIUpdateGUID{
+    232, 205, 157, 48, 177, 204, 98, 64, 143, 120, 96, 1, 21, 163, 67, 39,
+};
     
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-#include 'Matrix.h'
-#include <algorithm>
-#include 'TensorShape.h'
-    
-            Dictionary initConfig;
-        initConfig[InitializerTypeAttributeName] = initializerTypeName;
-        initConfig[ScaleAttributeName] = scale;
-        // Initializers are sometimes created as default arguments in python.
-        // If the value for an automatically-selected seed is assigned here, 
-        // subsequent calls to SetFixedRandomSeed will be ignored.
-        initConfig[RandomSeedAttributeName] = (size_t)seed;        
-        return initConfig;
-    }
-    
-    static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, int outputRank, int filterRank, unsigned long seed)
-    {
-        if (scale <= 0)
-            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
-                initializerTypeName.c_str());
-    
-        // return the randomized feature bounds for a time range
-    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
-    {
-        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
-        size_t tend = min(te + randomizationrange / 2, map.size());
-        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
-    }
-    
-    // ===================================================================
-// ComputationNetworkWithEdits
-// scripting wrapper to construct by modifying an input network (aka 'Edit')
-// ===================================================================
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        auto sliceInputValue  = InputRef(0).ValueFor(fr);
-        auto sliceOutputValue =           ValueFor(fr); // row vector
-    }
-    
-                Gradient().Resize(nInput, nOutput);
-            Gradient().SetValue(1.0);
-            for (size_t i = 0; i < 2; i++)
-            {
-                Input(i)->Gradient().Resize(Input(i)->Value().GetNumRows(), Input(i)->Value().GetNumCols());
-                Input(i)->Gradient().SetValue(0);
-            }
-            for (size_t i = 0; i < 2; i++)
-                BackpropTo(i, FrameRange(m_pMBLayout));
-    
-    
-    {
-    {        // Do the work
-        m_transposedOutput->RNNBackwardData(*m_transposedDOutput, paramW, *m_transposedDInput, m_rnnAttributes, *m_reserve, *m_workspace);
-        m_BackwardDataCalledYet = true;
-    }
-    if (inputIndex == 0) // parameters
-    {
-        Matrix<ElemType>& paramDW = InputRef(0).Gradient();
-        m_transposedOutput->RNNBackwardWeights(*m_transposedInput, *m_transposedOutput, paramDW, m_rnnAttributes, *m_reserve, *m_workspace);
-    }
-    else if (inputIndex == 1) // data
-    {
-        // all of the work was done above, where RNNBackwardData is called. Now, just unpack the result.
-        if (m_rnnAttributes.IsSpatialRecurrence())
-        {
-            TensorShape tmp;
-            TransposeHelper(m_transposedDInput, shapeXT, InputRef(1).GradientPtr(), tmp);
-        }
-        else
-        {
-            InputRef(1).Gradient().DoScatterColumnsOf(1.0, *(this->m_packingIndex), *m_transposedDInput, 1.0, /*idxHaveDups*/ false);
-        }
-    }
+    TEST_F(iokitRegistry, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from iokit_registry');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'name', NormalType}
+  //      {'class', NormalType}
+  //      {'id', IntType}
+  //      {'parent', IntType}
+  //      {'busy_state', IntType}
+  //      {'retain_count', IntType}
+  //      {'depth', IntType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
 }
     
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
+  }
     
-    {    default:
-        assert(false && L'Unexpected AutomationNotificationKind');
-    }
+      {
+    std::string string_val;
+    // If it cannot pin the value, it copies the value to its internal buffer.
+    // The intenral buffer could be set during construction.
+    PinnableSlice pinnable_val(&string_val);
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+    // If the value is not pinned, the internal buffer must have the value.
+    assert(pinnable_val.IsPinned() || string_val == 'value');
+  }
     
-                static void OnVirtualKeyShiftChordPropertyChanged(
-                Windows::UI::Xaml::DependencyObject^ target,
-                MyVirtualKey oldValue,
-                MyVirtualKey newValue);
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
     
-    #pragma once
+      // Approximate size of user data packed per block.  Note that the
+  // block size specified here corresponds to uncompressed data.  The
+  // actual size of the unit read from disk may be smaller if
+  // compression is enabled.  This parameter can be changed dynamically.
+  //
+  // Default: 4K
+  size_t block_size;
     
-            ~TraceActivity()
-        {
-            if (m_activity != nullptr)
-            {
-                // Write the activity's STOP event.
-                m_activity.StopActivity(m_activityName, m_fields);
-                m_activity = nullptr;
-            }
-        }
-    
-    namespace CalculatorApp
-{
-    namespace DataLoaders
-    {
-        class CurrencyHttpClient : public ICurrencyHttpClient
-        {
-        public:
-            CurrencyHttpClient();
-    }
-    }
-    }
-    
-                // store history in app data functions
-            Platform::String^ SerializeHistoryItem(_In_ std::shared_ptr<CalculationManager::HISTORYITEM> const &item);
-            void SaveHistory();
-    
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-    
-    using ::apollo::canbus::ChassisDetail;
-    
-    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
-    
-      const auto mat = kernel.kernel_matrix() / (2.0 * 1.0 / std::pow(0.1, 6));
-  const auto offset = kernel.offset_matrix();
-    
-    
-    {  acc.Parse(bytes, length, &chassis_detail);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
-                   0.772);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
-}
-    
-    #include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
-    
-    
-    {  double ret = x * 0.001000;
-  return ret;
-}
-    
-    
-    {  Headlight_rpt_77::Output_valueType ret =
-      static_cast<Headlight_rpt_77::Output_valueType>(x);
-  return ret;
-}
-    
-    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
-// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
-    }
+    class Transaction;
