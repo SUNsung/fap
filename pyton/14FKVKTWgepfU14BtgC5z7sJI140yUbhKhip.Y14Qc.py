@@ -1,147 +1,99 @@
 
         
-            auth.login()
-    # current user can't modify other user's post
-    assert client.post('/1/update').status_code == 403
-    assert client.post('/1/delete').status_code == 403
-    # current user doesn't see edit link
-    assert b'href='/1/update'' not in client.get('/').data
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-        try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:  # noqa: B001
-            # We intentionally use a bare except here. See the comment above
-            # regarding a pypy bug as to why.
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
-        pass
-    
-            #: a dictionary with all options that were passed to the
-        #: :meth:`~flask.Flask.register_blueprint` method.
-        self.options = options
-    
-            buf.append(
-            '  Make sure to directly send your %s-request to this URL '
-            'since we can't make browsers or HTTP clients redirect '
-            'with form data reliably or without user interaction.' % request.method
-        )
-        buf.append('\n\nNote: this exception is only raised in debug mode')
-        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
-    
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
-    
-        CHUNK_SIZE = 1
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-        def test_print_overridable_when_stdout_redirected(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
-        assert HTTP_OK in r
-
+        def __init__(self, unpacked, extra):
+        self.unpacked = unpacked
+        self.extra = extra
     
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+def testSimpleValue():
+    check(b'\x93\xc0\xc2\xc3', (None, False, True, ))
     
-    def empty_cell(empty=True):
-    '''Create an empty cell.'''
-    def f():
-        print(a)
-    # the intent of the following line is simply 'if False:';  it's
-    # spelt this way to avoid the danger that a future optimization
-    # might simply remove an 'if False:' code block.
-    if not empty:
-        a = 1729
-    return f.__closure__[0]
     
-            if isinstance(obj, types.ModuleType):
-            return self.loadTestsFromModule(obj)
-        elif isinstance(obj, type) and issubclass(obj, case.TestCase):
-            return self.loadTestsFromTestCase(obj)
-        elif (isinstance(obj, types.FunctionType) and
-              isinstance(parent, type) and
-              issubclass(parent, case.TestCase)):
-            name = parts[-1]
-            inst = parent(name)
-            # static methods follow a different path
-            if not isinstance(getattr(inst, name), types.FunctionType):
-                return self.suiteClass([inst])
-        elif isinstance(obj, suite.TestSuite):
-            return obj
-        if callable(obj):
-            test = obj()
-            if isinstance(test, suite.TestSuite):
-                return test
-            elif isinstance(test, case.TestCase):
-                return self.suiteClass([test])
+@pytest.mark.parametrize('na_option', [True, 'bad', 1])
+@pytest.mark.parametrize('ties_method', [
+    'average', 'min', 'max', 'first', 'dense'])
+@pytest.mark.parametrize('ascending', [True, False])
+@pytest.mark.parametrize('pct', [True, False])
+@pytest.mark.parametrize('vals', [
+    ['bar', 'bar', 'foo', 'bar', 'baz'],
+    ['bar', np.nan, 'foo', np.nan, 'baz'],
+    [1, np.nan, 2, np.nan, 3]
+])
+def test_rank_naoption_raises(ties_method, ascending, na_option, pct, vals):
+    df = DataFrame({'key': ['foo'] * 5, 'val': vals})
+    msg = 'na_option must be one of 'keep', 'top', or 'bottom''
+    
+    All the tests in these modules use ``self.assert_frame_equal`` or
+``self.assert_series_equal`` for dataframe or series comparisons. By default,
+they use the usual ``pandas.testing.assert_frame_equal`` and
+``pandas.testing.assert_series_equal``. You can override the checks used
+by defining the staticmethods ``assert_frame_equal`` and
+``assert_series_equal`` on your base test class.
+    
+    
+class Formatter(object):
+    '''Format tabular data for printing.'''
+    def table(self, headers, rows):
+        table = texttable.Texttable(max_width=get_tty_width())
+        table.set_cols_dtype(['t' for h in headers])
+        table.add_rows([headers] + rows)
+        table.set_deco(table.HEADER)
+        table.set_chars(['-', '|', '+', '-'])
+    
+    import re
+    
+        def test_unicode_path_from_options(self):
+        paths = [b'\xe5\xb0\xb1\xe5\x90\x83\xe9\xa5\xad/docker-compose.yml']
+        opts = {'--file': paths}
+        environment = Environment.from_env_file('.')
+        assert get_config_path_from_options(
+            '.', opts, environment
+        ) == ['就吃饭/docker-compose.yml']
+    
+    from compose.cli import verbose_proxy
+from tests import unittest
+    
+    
+def test_hour_minute():
+    assert timeparse.timeparse('2h32m') == 9120
+    
+        def test_remove_local_volume(self, mock_client):
+        vol = volume.Volume(mock_client, 'foo', 'project')
+        vol.remove()
+        mock_client.remove_volume.assert_called_once_with('foo_project')
+    
+        def configure(self, updated):
+        if 'stickycookie' in updated:
+            if ctx.options.stickycookie:
+                flt = flowfilter.parse(ctx.options.stickycookie)
+                if not flt:
+                    raise exceptions.OptionsError(
+                        'stickycookie: invalid filter expression: %s' % ctx.options.stickycookie
+                    )
+                self.flt = flt
             else:
-                raise TypeError('calling %s returned %s, not a test' %
-                                (obj, test))
-        else:
-            raise TypeError('don't know how to make test from: %s' % obj)
+                self.flt = None
     
-        # 'The specifier name is a ``dotted name'' that may resolve either to
-    # a module, a test case class, a TestSuite instance, a test method
-    # within a test case class, or a callable object which returns a
-    # TestCase or TestSuite instance.'
-    #
-    # What happens when the module is found, but the attribute isn't?
-    def test_loadTestsFromName__unknown_attr_name_on_package(self):
-        loader = unittest.TestLoader()
+        def __init__(self, address, source_address=None, spoof_source_address=None):
+        tcp.TCPClient.__init__(self, address, source_address, spoof_source_address)
+    
+    				strTag = self.codePages[self.currentCodePage].getTag(token)
+				if (strTag == None):
+					strTag = 'UNKNOWN_TAG_{0,2:X}'.format(token)
     
     
-class TestSymbolGeneration(unittest.TestCase):
+def save_flows(path: pathlib.Path, flows: typing.Iterable[flow.Flow]) -> None:
+    with open(str(path / 'flows.json'), 'w') as f:
+        json.dump(
+            [flow_to_json(f) for f in flows],
+            f
+        )
     
-        def testSeekPreStartMultiStream(self):
-        self.createTempFile(streams=2)
-        with BZ2File(self.filename) as bz2f:
-            bz2f.seek(-150)
-            self.assertEqual(bz2f.tell(), 0)
-            self.assertEqual(bz2f.read(), self.TEXT * 2)
-    
-    # Create the base text message.
-msg = EmailMessage()
-msg['Subject'] = 'Ayons asperges pour le déjeuner'
-msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
-msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
-             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
-msg.set_content('''\
-Salut!
-    
-    '''Send the contents of a directory as a MIME message.'''
-    
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
-    
-        print('-' * 20)
-    
-    def plus(a, b):
-    time.sleep(0.5*random.random())
-    return a + b
-    
-    if os.path.exists(DB_FILE):
-    os.remove(DB_FILE)
-    
-    '''
-*What is this pattern about?
+                    line = next_line
