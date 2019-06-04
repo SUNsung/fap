@@ -1,172 +1,248 @@
 
         
-        class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
- public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
-    }
-    
-    void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
-}
-    
-    #include 'atom/browser/api/event_emitter.h'
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
-    }
-    
-    void AutoUpdater::CheckForUpdates() {}
+        // ##########################################################
     
     
-    {}  // namespace atom
+<details>
     
-    void OffscreenViewProxy::SetObserver(OffscreenViewProxyObserver* observer) {
-  if (observer_) {
-    observer_->ProxyViewDestroyed(this);
-  }
-  observer_ = observer;
-}
+    REGISTER_CUDA_OPERATOR(LC3D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC3DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
-    int LaunchProgram(const StringVector& relauncher_args,
-                  const StringVector& argv) {
-  base::LaunchOptions options;
-  base::Process process =
-      base::LaunchProcess(ArgvToCommandLineString(argv), options);
-  return process.IsValid() ? 0 : 1;
-}
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
     
     
-    {    QString appName;
-    QIcon appIcon;
-    QIcon trayAndWindowIcon;
-    QString titleAddText;
+    { private:
+  // The collection of images to put in the PDF.
+  Pixa* pixa_;
+  // The fonts used to draw text captions.
+  L_Bmf* fonts_;
 };
     
-        /** Colorize an icon (given object) with the text color */
-    QIcon TextColorIcon(const QIcon& icon) const;
+    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
+
     
+    /* NurbsCallback */
+#define GLU_NURBS_ERROR                    100103
+#define GLU_ERROR                          100103
+#define GLU_NURBS_BEGIN                    100164
+#define GLU_NURBS_BEGIN_EXT                100164
+#define GLU_NURBS_VERTEX                   100165
+#define GLU_NURBS_VERTEX_EXT               100165
+#define GLU_NURBS_NORMAL                   100166
+#define GLU_NURBS_NORMAL_EXT               100166
+#define GLU_NURBS_COLOR                    100167
+#define GLU_NURBS_COLOR_EXT                100167
+#define GLU_NURBS_TEXTURE_COORD            100168
+#define GLU_NURBS_TEX_COORD_EXT            100168
+#define GLU_NURBS_END                      100169
+#define GLU_NURBS_END_EXT                  100169
+#define GLU_NURBS_BEGIN_DATA               100170
+#define GLU_NURBS_BEGIN_DATA_EXT           100170
+#define GLU_NURBS_VERTEX_DATA              100171
+#define GLU_NURBS_VERTEX_DATA_EXT          100171
+#define GLU_NURBS_NORMAL_DATA              100172
+#define GLU_NURBS_NORMAL_DATA_EXT          100172
+#define GLU_NURBS_COLOR_DATA               100173
+#define GLU_NURBS_COLOR_DATA_EXT           100173
+#define GLU_NURBS_TEXTURE_COORD_DATA       100174
+#define GLU_NURBS_TEX_COORD_DATA_EXT       100174
+#define GLU_NURBS_END_DATA                 100175
+#define GLU_NURBS_END_DATA_EXT             100175
     
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
+      void writePSChar(char c);
+  void writePS(char *s);
+  void writePSBuf(char *s, int len);
+  void writePSFmt(const char *fmt, ...);
+  void writePSString(GooString *s);
+  void writePSName(char *s);
+  GooString *filterPSLabel(GooString *label, GBool *needParens=0);
+  void writePSTextLine(GooString *s);
     
-    #define Ch(x,y,z) ((z) ^ ((x) & ((y) ^ (z))))
-#define Maj(x,y,z) (((x) & (y)) | ((z) & ((x) | (y))))
-#define Sigma0(x) (((x) >> 2 | (x) << 30) ^ ((x) >> 13 | (x) << 19) ^ ((x) >> 22 | (x) << 10))
-#define Sigma1(x) (((x) >> 6 | (x) << 26) ^ ((x) >> 11 | (x) << 21) ^ ((x) >> 25 | (x) << 7))
-#define sigma0(x) (((x) >> 7 | (x) << 25) ^ ((x) >> 18 | (x) << 14) ^ ((x) >> 3))
-#define sigma1(x) (((x) >> 17 | (x) << 15) ^ ((x) >> 19 | (x) << 13) ^ ((x) >> 10))
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
+// Copyright (C) 2008 Albert Astals Cid <aacid@kde.org>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
     
-        /* Generate a random key and message. */
-    {
-        secp256k1_scalar msg, key;
-        random_scalar_order_test(&msg);
-        random_scalar_order_test(&key);
-        secp256k1_scalar_get_b32(privkey, &key);
-        secp256k1_scalar_get_b32(message, &msg);
-    }
+      Gfx *createGfx(OutputDev *out, double hDPI, double vDPI,
+		 int rotate, GBool useMediaBox, GBool crop,
+		 int sliceX, int sliceY, int sliceW, int sliceH,
+		 GBool printing, Catalog *catalog,
+		 GBool (*abortCheckCbk)(void *data),
+		 void *abortCheckCbkData,
+		 GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
+		 void *annotDisplayDecideCbkData);
     
+      // Get angle
+  int getAngle() { return angle; }
     
-    {    arr.clear();
-    BOOST_CHECK(arr.empty());
-    BOOST_CHECK_EQUAL(arr.size(), 0);
-}
-    
-    template <typename T>
-struct AbsDiffSigned
+    void PopplerCache::put(PopplerCacheKey *key, PopplerCacheItem *item)
 {
-    typedef T type;
+  int movingStartIndex = lastValidCacheIndex + 1;
+  if (lastValidCacheIndex == cacheSize - 1) {
+    delete keys[lastValidCacheIndex];
+    delete items[lastValidCacheIndex];
+    movingStartIndex = cacheSize - 1;
+  } else {
+    lastValidCacheIndex++;
+  }
+  for (int i = movingStartIndex; i > 0; i--) {
+    keys[i] = keys[i - 1];
+    items[i] = items[i - 1];
+  }
+  keys[0] = key;
+  items[0] = item;
+}
+    
+      // Constructor.
+  ProfileData ();
+    
+    GBool StandardSecurityHandler::authorize(void *authData) {
+  GooString *ownerPassword, *userPassword;
     }
     
-            x -= 8;
-        if (x == width)
-            --x;
     
-        Size2D size(_size);
-    if (srcStride == dstStride &&
-        srcStride == rng1Stride &&
-        srcStride == rng2Stride &&
-        srcStride == (ptrdiff_t)(size.width))
+    {  GooString *ownerKey, *userKey;
+  GooString *fileID;
+  GBool ok;
+};
+    
+    enum SoundKind {
+  soundEmbedded,		// embedded sound
+  soundExternal			// external sound
+};
+    
+    public:
+    
+    static const UChar kSuperscriptPlusSign = 0x207A;
+static const UChar kSuperscriptMinusSign = 0x207B;
+    
+    //----------------------------------------------------------------------------
+//
+//  ScriptSet implementation
+//
+//----------------------------------------------------------------------------
+ScriptSet::ScriptSet() {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        bits[i] = 0;
+    }
+}
+    
+    USearchAttributeValue SearchIterator::getAttribute(
+                                          USearchAttribute  attribute) const
+{
+    switch (attribute) {
+    case USEARCH_OVERLAP :
+        return (m_search_->isOverlap == TRUE ? USEARCH_ON : USEARCH_OFF);
+    case USEARCH_CANONICAL_MATCH :
+        return (m_search_->isCanonicalMatch == TRUE ? USEARCH_ON : 
+                                                                USEARCH_OFF);
+    case USEARCH_ELEMENT_COMPARISON :
+        {
+            int16_t value = m_search_->elementComparisonType;
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                return (USearchAttributeValue)value;
+            } else {
+                return USEARCH_STANDARD_ELEMENT_COMPARISON;
+            }
+        }
+    default :
+        return USEARCH_DEFAULT;
+    }
+}
+    
+int32_t SearchIterator::getMatchedStart() const
+{
+    return m_search_->matchedIndex;
+}
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    int main(int, char**)
+{
+    // Setup GLFW window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    }
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the example_glfw_opengl2/ folder**
+// See imgui_impl_glfw.cpp for details.
+    
+            g_pSwapChain->Present(1, 0); // Present with vsync
+        //g_pSwapChain->Present(0, 0); // Present without vsync
+    
+    
     {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    const size_t width = size.width & ~( 32/sizeof(T) - 1 );
-    
-                // make extrapolation for the first elements
-            if (!x)
-            {
-                // make border
-                if (border == BORDER_MODE_CONSTANT)
-                    tcurr = v_border_x3;
-                else if (border == BORDER_MODE_REPLICATE)
-                    tcurr = vdupq_n_u16(vgetq_lane_u16(tnext, 0));
+    {
+    {
+    {                    // Bind texture, Draw
+                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
+                    glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer);
+                }
+            }
+            idx_buffer += pcmd->ElemCount;
+        }
     }
     
-    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    #include <osquery/tables.h>
     
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    </details>
-    
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
-}
-    
-      CensusClientCallData()
-      : recv_trailing_metadata_(nullptr),
-        initial_on_done_recv_trailing_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        elapsed_time_(0),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&stats_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&tracing_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_trailing_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+      // Start looping through starting at the first options
+  // (so skip the exports)
+  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
+    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
+      readonly = 1;
+    }
   }
     
-    void InitProtoReflectionServerBuilderPlugin() {
-  static bool already_here = false;
-  if (already_here) return;
-  already_here = true;
-  ::grpc::ServerBuilder::InternalAddPluginFactory(&CreateProtoReflection);
-}
-    
-    namespace grpc {
+    class Killswitch : private boost::noncopyable {
+ public:
+  static const char* killswitch_;
+  static const char* action_;
+  static const char* isEnabled_;
+  static const char* key_;
+  static const char* refresh_;
     }
+    
+    // Sanity check integration test for iokit_registry
+// Spec file: specs/darwin/iokit_registry.table
+    
+    // Sanity check integration test for kernel_modules
+// Spec file: specs/linux/kernel_modules.table
+    
+    // Sanity check integration test for keychain_acls
+// Spec file: specs/darwin/keychain_acls.table
