@@ -1,101 +1,75 @@
 
         
-                FastlaneCore::CertChecker.installed_identies
-      end
-    end
-    
-          describe 'running with fastlane' do
-        before do
-          allow(FastlaneCore::Helper).to receive(:fastlane_enabled?).and_return(true)
-          allow(FastlaneCore::FastlaneFolder).to receive(:path).and_return('./fastlane')
-    
-    output = File.new(OUTPUT_FILENAME, 'wb')
-output.write(xml.target!)
-output.close
-    
-    World(RemoteCommandHelpers)
-
-    
-          def with(properties)
-        properties.each { |key, value| add_property(key, value) }
-        self
-      end
-    
-        # @return [String] the ruby version string bundler uses to craft its gem path
-    def gem_ruby_version
-      RbConfig::CONFIG['ruby_version']
-    end
-    
-          def pack_uri(plugin_name)
-        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
-        URI.parse(url)
-      end
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
+            def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
       else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
+        puts dark cyan s
+      end
+    end
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+      def validate_target_file
+    if File.exist?(target_file)
+      if  delete_target_file?
+        File.delete(target_file)
+      else
+        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
+      end
+    end
+  end
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+      parameter '[PLUGIN] ...', 'Plugin name(s) to upgrade to latest version', :attribute_name => :plugins_arg
+  option '--[no-]verify', :flag, 'verify plugin validity before installation', :default => true
+  option '--local', :flag, 'force local-only plugin update. see bin/logstash-plugin package|unpack', :default => false
+    
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+        end
+      end
+    end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
     end
   end
 end
-
-    
-        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
-    safesystem('pkg_create', *args)
-    
-      # Install this package to the staging directory
-  def install_to_staging(setup_py)
-    project_dir = File.dirname(setup_py)
-    
-        args = [ tar_cmd,
-             '-C',
-             staging_path,
-             '-cf',
-             payload_tar,
-             '--owner=0',
-             '--group=0',
-             '--numeric-owner',
-             '.' ]
-    
-      # Input a zipfile.
-  def input(input_path)
-    # use part of the filename as the package name
-    self.name = File.extname(input_path)[1..-1]
-    
-    Given 'I remove turbolinks' do
-  cd('.') do
-    transform_file('app/assets/javascripts/application.js') do |content|
-      content.gsub('//= require turbolinks', '')
-    end
-    transform_file('app/views/layouts/application.html.erb') do |content|
-      content.gsub(', 'data-turbolinks-track' => true', '')
-    end
-  end
-end
-    
-    # The base module that gets included in ActiveRecord::Base. See the
-# documentation for Paperclip::ClassMethods for more useful information.
-module Paperclip
-  extend Helpers
-  extend Logger
-  extend ProcessorHelpers
-    
-        def self.definitions_for(klass)
-      instance.definitions_for(klass)
-    end
-    
-        # Returns the interpolated URL. Will raise an error if the url itself
-    # contains ':url' to prevent infinite recursion. This interpolation
-    # is used in the default :path to ease default specifications.
-    RIGHT_HERE = '#{__FILE__.gsub(%r{\A\./}, '')}:#{__LINE__ + 3}'
-    def url attachment, style_name
-      raise Errors::InfiniteInterpolationError if caller.any?{|b| b.index(RIGHT_HERE) }
-      attachment.url(style_name, :timestamp => false, :escape => false)
-    end
