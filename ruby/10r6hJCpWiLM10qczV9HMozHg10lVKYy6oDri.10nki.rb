@@ -1,48 +1,71 @@
 
         
-          def parse(*paths)
-    paths.flatten
-         .compact
-         .flat_map { |p| Pathname.new(p).to_path.split(File::PATH_SEPARATOR) }
-         .uniq
+          def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
   end
 end
 
     
-            line_num = e.sass_line + 1 - line_offset
-        min = [line_num - 6, 0].max
-        section = e.sass_template.rstrip.split('\n')[min...line_num + 5]
-        return e.sass_backtrace_str if section.nil? || section.empty?
+        def translation_scope
+      'devise.unlocks'
+    end
+end
+
     
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
+    class BugTest < ActionDispatch::IntegrationTest
+  include Rack::Test::Methods
+  include Warden::Test::Helpers
+    
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
+        end
       end
     
-                platform = target.platform_name
-            case platform
-            when :osx
-              execute_command 'xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build'
-            when :ios
-              test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+    module Sinatra
+  class Application < Base
+    
+      <script type='text/javascript'>
+  //<!--
+  function toggle(id) {
+    var pre  = document.getElementById('pre-' + id);
+    var post = document.getElementById('post-' + id);
+    var context = document.getElementById('context-' + id);
+    }
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+        # Loops through the list of category pages and processes each one.
+    def write_category_indexes
+      if self.layouts.key? 'category_index'
+        dir = self.config['category_dir'] || 'categories'
+        self.categories.keys.each do |category|
+          self.write_category_index(File.join(dir, category.to_url), category)
+        end
