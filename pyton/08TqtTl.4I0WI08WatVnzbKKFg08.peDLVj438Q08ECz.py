@@ -1,211 +1,129 @@
 
         
-            def pop(self, exc=_sentinel):
-        '''Pops the app context.'''
+            def database_backwards(self, app_label, schema_editor, from_state, to_state):
+        schema_editor.execute('DROP EXTENSION %s' % schema_editor.quote_name(self.name))
+        # Clear cached, stale oids.
+        get_hstore_oids.cache_clear()
+        get_citext_oids.cache_clear()
+    
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
+    
+        def _close_server_sock_ignore_errors(self):
         try:
-            self._refcnt -= 1
-            if self._refcnt <= 0:
-                if exc is _sentinel:
-                    exc = sys.exc_info()[1]
-                self.app.do_teardown_appcontext(exc)
-        finally:
-            rv = _app_ctx_stack.pop()
-        assert rv is self, 'Popped wrong app context.  (%r instead of %r)' % (rv, self)
-        appcontext_popped.send(self.app)
+            self.server_sock.close()
+        except IOError:
+            pass
     
-        with pytest.raises(NoAppException):
-        locate_app(info, iname, aname)
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
     
-        #: The canonical way to decorate class-based views is to decorate the
-    #: return value of as_view().  However since this moves parts of the
-    #: logic from the class declaration to the place where it's hooked
-    #: into the routing system.
-    #:
-    #: You can place one or more decorators in this list and whenever the
-    #: view function is created the result is automatically decorated.
-    #:
-    #: .. versionadded:: 0.8
-    decorators = ()
+        if isinstance(cookies, dict):
+        cookiejar = cookiejar_from_dict(
+            cookies, cookiejar=cookiejar, overwrite=False)
+    elif isinstance(cookies, cookielib.CookieJar):
+        try:
+            cookiejar.update(cookies)
+        except AttributeError:
+            for cookie_in_jar in cookies:
+                cookiejar.set_cookie(cookie_in_jar)
     
-    # utilities we import from Werkzeug and Jinja2 that are unused
-# in the module but are exported as public interface.
-from werkzeug.exceptions import abort
-from werkzeug.utils import redirect
-from jinja2 import Markup, escape
-    
-    
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
-    
-        @property
-    def cache_key(self):
-        return self.cache_key_prefix + self._get_or_create_session_key()
-    
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-        @cached_property
-    def initial(self):
-        data = self.form.get_initial_for_field(self.field, self.name)
-        # If this is an auto-generated default date, nix the microseconds for
-        # standardized handling. See #22502.
-        if (isinstance(data, (datetime.datetime, datetime.time)) and
-                not self.field.widget.supports_microseconds):
-            data = data.replace(microsecond=0)
-        return data
-    
-        If the constructor, ``.update``, or equality comparison
-    operations are given keys that have equal ``.lower()``s, the
-    behavior is undefined.
+        See https://github.com/requests/requests/issues/1979.
     '''
+    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
+                b'Content-Length: 0\r\n'
+                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
+                b', opaque='372825293d1c26955496c80ed6426e9e', '
+                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
+    
+            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(b'send something')
+            time.sleep(2.5)
+            sock.sendall(b'still alive')
+            block_server.set()  # release server block
     
     
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
+@pytest.mark.parametrize(
+    'value, expected', (
+        ('example.com/path', 'http://example.com/path'),
+        ('//example.com/path', 'http://example.com/path'),
+    ))
+def test_prepend_scheme_if_needed(value, expected):
+    assert prepend_scheme_if_needed(value, 'http') == expected
     
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
+    # Add any extra paths that contain custom files (such as robots.txt or
+# .htaccess) here, relative to this directory. These files are copied
+# directly to the root of the documentation.
+# html_extra_path = []
     
     
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
+if __name__ == '__main__':
+    main()
 
     
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-            # Test for whitespace
-        with pytest.raises(InvalidHeader):
-            r = requests.get(httpbin('get'), headers=headers_space)
-        # Test for tab
-        with pytest.raises(InvalidHeader):
-            r = requests.get(httpbin('get'), headers=headers_tab)
-    
-                tested_methods = conman.tested_methods_from_spidercls(spidercls)
-            if opts.list:
-                for method in tested_methods:
-                    contract_reqs[spidercls.name].append(method)
-            elif tested_methods:
-                self.crawler_process.crawl(spidercls)
-    
-            self.crawler_process.crawl(spname, **opts.spargs)
-        self.crawler_process.start()
-    
-        def long_desc(self):
-        return 'Fetch a URL using the Scrapy downloader and print its content ' \
-            'to stdout. You may want to use --nolog to disable logging'
-    
-            # If no credentials could be found anywhere,
-        # consider this an anonymous connection request by default;
-        # unless 'anon' was set explicitly (True/False).
-        anon = kw.get('anon')
-        if anon is None and not aws_access_key_id and not aws_secret_access_key:
-            kw['anon'] = True
-        self.anon = kw.get('anon')
-    
-    
-class AjaxCrawlMiddleware(object):
-    '''
-    Handle 'AJAX crawlable' pages marked as crawlable via meta tag.
-    For more info see https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
-    '''
-    
-    if args.quiet:
-    jieba.setLogLevel(60)
-if args.pos:
-    import jieba.posseg
-    posdelim = args.pos
-    def cutfunc(sentence, _, HMM=True):
-        for w, f in jieba.posseg.cut(sentence, HMM):
-            yield w + posdelim + f
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
+    else:
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
+        else:
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
 else:
-    cutfunc = jieba.cut
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
     
+        try:
+        os.mkdir(args.directory)
+    except FileExistsError:
+        pass
     
-def __cut(sentence):
-    global emit_P
-    prob, pos_list = viterbi(sentence, 'BMES', start_P, trans_P, emit_P)
-    begin, nexti = 0, 0
-    # print pos_list, sentence
-    for i, char in enumerate(sentence):
-        pos = pos_list[i]
-        if pos == 'B':
-            begin = i
-        elif pos == 'E':
-            yield sentence[begin:i + 1]
-            nexti = i + 1
-        elif pos == 'S':
-            yield char
-            nexti = i + 1
-    if nexti < len(sentence):
-        yield sentence[nexti:]
-    
-        def load_word_tag(self, f):
-        self.word_tag_tab = {}
-        f_name = resolve_filename(f)
-        for lineno, line in enumerate(f, 1):
-            try:
-                line = line.strip().decode('utf-8')
-                if not line:
-                    continue
-                word, _, tag = line.split(' ')
-                self.word_tag_tab[word] = tag
-            except Exception:
-                raise ValueError(
-                    'invalid POS dictionary entry in %s at Line %s: %s' % (f_name, lineno, line))
-        f.close()
-    
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-parser.add_option('-w', dest='withWeight')
-opt, args = parser.parse_args()
-    
-    
-
-    
-        mat = np.empty(quat.shape[:-1] + (3, 3), dtype=np.float64)
-    mat[..., 0, 0] = 1.0 - (yY + zZ)
-    mat[..., 0, 1] = xY - wZ
-    mat[..., 0, 2] = xZ + wY
-    mat[..., 1, 0] = xY + wZ
-    mat[..., 1, 1] = 1.0 - (xX + zZ)
-    mat[..., 1, 2] = yZ - wX
-    mat[..., 2, 0] = xZ - wY
-    mat[..., 2, 1] = yZ + wX
-    mat[..., 2, 2] = 1.0 - (xX + yY)
-    return np.where((Nq > _FLOAT_EPS)[..., np.newaxis, np.newaxis], mat, np.eye(3))
-    
-        def __init__(self, atexit_register=True):
-        self.lock = threading.Lock()
-        self.next_id = -1
-        self.closeables = weakref.WeakValueDictionary()
-    
-            filename = '{}.stats.json'.format(self.file_prefix)
-        self.path = os.path.join(self.directory, filename)
-    
-    class UnrecordableEnv(object):
-    metadata = {'render.modes': [None]}
+        op = manager.operator()
+    print('op.add(23, 45) =', op.add(23, 45))
+    print('op.pow(2, 94) =', op.pow(2, 94))
+    print('op._exposed_ =', op._exposed_)
