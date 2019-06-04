@@ -1,36 +1,36 @@
 
         
-        def version
-  Jekyll::VERSION
-end
+                def representation_class
+          Representation::Note
+        end
     
-            UI.message('Adding git tag '#{tag}' 🎯.')
-        Actions.sh(cmd.join(' '))
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
+    
+          def echo?
+        (options || {}).fetch(:echo, true)
+      end
+    end
+  end
+end
+
+    
+            if built_in_scm_name?
+          load_built_in_scm
+        else
+          # Compatibility with existing 3.x third-party SCMs
+          register_legacy_scm_hooks
+          load_legacy_scm_by_name
+        end
       end
     
-    # Here be monkey patches
-    
-    # remove all double quotes completely
-def simulate_normal_shell_unwrapping(string)
-  string.gsub!(''', '')
-  regex = /^(')(\S*)(')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
-  end
-  return string
-end
-    
-      zap trash: [
-               '~/Library/Application Support/Adobe/Lightroom',
-               '~/Library/Preferences/com.adobe.Lightroom#{version.major}.plist',
-             ]
-    
-      def commands_match
-    @actual.commands == commands
-  end
-    
-          private
-    
-          expect(described_class.configs).
-        to eq ['both', 'both', 'dup/local-dup', 'home', 'local-dup', 'xdg']
-    end
+          def add_property(key, value)
+        if respond_to?('#{key}=')
+          send('#{key}=', value)
+        else
+          set(key, value)
+        end
+      end
