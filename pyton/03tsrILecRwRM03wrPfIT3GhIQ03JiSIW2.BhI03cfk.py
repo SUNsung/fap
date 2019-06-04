@@ -1,67 +1,78 @@
 
         
-        
-def hex_str(int_list):
-    return codecs.encode(intlist_to_bytes(int_list), 'hex')
+        # read in SQL for populating test data
+with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
+    _data_sql = f.read().decode('utf8')
     
-    new_version = {}
+        .. versionchanged:: 1.0.3
     
-        template = template.replace('@SITES@', textwrap.indent('\n'.join(ie_htmls), '\t'))
+            if cls.decorators:
+            view.__name__ = name
+            view.__module__ = cls.__module__
+            for decorator in cls.decorators:
+                view = decorator(view)
     
-    if __name__ == '__main__':
-    main()
+    
+class ArrayMinLengthValidator(MinLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
+        'limit_value')
+    
+        def save(self, must_create=False):
+        if self.session_key is None:
+            return self.create()
+        if must_create:
+            func = self._cache.add
+        elif self._cache.get(self.cache_key) is not None:
+            func = self._cache.set
+        else:
+            raise UpdateError
+        result = func(self.cache_key,
+                      self._get_session(no_load=must_create),
+                      self.get_expiry_age())
+        if must_create and not result:
+            raise CreateError
+    
+        def flush(self):
+        '''
+        Remove the current session data from the database and regenerate the
+        key.
+        '''
+        self.clear()
+        self.delete(self.session_key)
+        self._session_key = None
 
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
-
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
     
-            final_headers[name] = value
-    return final_headers
+            '''
+        assert with_headers or with_body
+        self.msg = msg
+        self.with_headers = with_headers
+        self.with_body = with_body
+        self.on_body_chunk_downloaded = on_body_chunk_downloaded
     
-        @property
-    def body(self):
-        body = self._orig.body
-        if isinstance(body, str):
-            # Happens with JSON/form request data parsed from the command line.
-            body = body.encode('utf8')
-        return body or b''
-
+        def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
     
-    from httpie.plugins.base import AuthPlugin
-    
-    
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
+    USERNAME = 'user'
+PASSWORD = 'password'
+# Basic auth encoded `USERNAME` and `PASSWORD`
+# noinspection SpellCheckingInspection
+BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
+BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
+AUTH_OK = {'authenticated': True, 'user': USERNAME}
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-def test_unicode_json_item_verbose(httpbin):
-    r = http('--verbose', '--json',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+def test_unicode_raw_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
     assert HTTP_OK in r
-    assert UNICODE in r
-    
-        def test_request_body_from_file_by_path_no_field_name_allowed(
-            self, httpbin):
-        env = MockEnvironment(stdin_isatty=True)
-        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
-                 env=env, error_exit_ok=True)
-        assert 'perhaps you meant --form?' in r.stderr
-    
-        def failed(self):
-        self._progress_reporter.stop()
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
