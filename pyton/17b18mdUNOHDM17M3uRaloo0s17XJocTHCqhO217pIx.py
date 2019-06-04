@@ -1,92 +1,207 @@
 
         
-        
-@pytest.mark.parametrize('url', [
-    'username@example.org',
-    'username:@example.org',
-])
-def test_only_username_in_url(url):
-    '''
-    https://github.com/jakubroztocil/httpie/issues/242
+            def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
-        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
-        r = http('--json', 'GET', httpbin.url + '/headers',
-                 'Accept:application/xml',
-                 'Content-Type:application/xml')
-        assert HTTP_OK in r
-        assert ''Accept': 'application/xml'' in r
-        assert ''Content-Type': 'application/xml'' in r
+            r = None
+        try:
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
     
     
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
+@functools.lru_cache()
+def get_default_renderer():
+    renderer_class = import_string(settings.FORM_RENDERER)
+    return renderer_class()
     
-        def _get_path(self):
-        return os.path.join(self.directory, self.name + '.json')
-    
-            self.output.write(SUMMARY.format(
-            downloaded=humanize_bytes(actually_downloaded),
-            total=(self.status.total_size
-                   and humanize_bytes(self.status.total_size)),
-            speed=humanize_bytes(speed),
-            time=time_taken,
-        ))
-        self.output.flush()
-
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
+        def __eq__(self, other):
+        if isinstance(other, Mapping):
+            other = CaseInsensitiveDict(other)
         else:
-            out = string.decode(encoding)
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
     
-        @classmethod
-    def text_response_server(cls, text, request_timeout=0.5, **kwargs):
-        def text_response_handler(sock):
-            request_content = consume_socket_content(sock, timeout=request_timeout)
-            sock.send(text.encode('utf-8'))
+        def proxy_headers(self, proxy):
+        '''Returns a dictionary of the headers to add to any request sent
+        through a proxy. This works with urllib3 magic to ensure that they are
+        correctly sent to the proxy, rather than in a tunnelled request if
+        CONNECT is being used.
     
-            Punctuation:               'bold #000000',   # class: 'p'
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-        def add_header(self, key, val):
-        '''cookielib has no legitimate use for this method; add it back if you find one.'''
-        raise NotImplementedError('Cookie headers should be added with add_unredirected_header()')
+    
+def morsel_to_cookie(morsel):
+    '''Convert a Morsel object into a Cookie containing the one k/v pair.'''
     
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+def info():
+    '''Generate information for a bug report.'''
+    try:
+        platform_info = {
+            'system': platform.system(),
+            'release': platform.release(),
+        }
+    except IOError:
+        platform_info = {
+            'system': 'Unknown',
+            'release': 'Unknown',
+        }
+    
+                sock.close()
+    
+        if no_proxy:
+        # We need to check whether we match here. We need to see if we match
+        # the end of the hostname, both with and without the port.
+        no_proxy = (
+            host for host in no_proxy.replace(' ', '').split(',') if host
+        )
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'Home-Assistant', 'Home Assistant Documentation',
+     author, 'Home Assistant', 'Open-source home automation platform.',
+     'Miscellaneous'),
+]
+    
+    
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
+    
+    
+@asyncio.coroutine
+def test_if_fires_on_hass_start(hass):
+    '''Test the firing when HASS starts.'''
+    calls = async_mock_service(hass, 'test', 'automation')
+    hass.state = CoreState.not_running
+    config = {
+        automation.DOMAIN: {
+            'alias': 'hello',
+            'trigger': {
+                'platform': 'homeassistant',
+                'event': 'start',
+            },
+            'action': {
+                'service': 'test.automation',
+            }
+        }
+    }
+    
+    
+def _expand_to_class_specific_mask_targets(masks, mask_class_labels):
+    '''Expand masks from shape (#masks, M ** 2) to (#masks, #classes * M ** 2)
+    to encode class specific mask targets.
+    '''
+    assert masks.shape[0] == mask_class_labels.shape[0]
+    M = cfg.MRCNN.RESOLUTION
+    
+        net = core.Net('dequeue_net')
+    net.type = 'dag'
+    all_blobs = []
+    for gpu_id in range(cfg.NUM_GPUS):
+        with core.NameScope('gpu_{}'.format(gpu_id)):
+            with core.DeviceScope(muji.OnGPU(gpu_id)):
+                for blob_name in blob_names:
+                    blob = core.ScopedName(blob_name)
+                    all_blobs.append(blob)
+                    workspace.CreateBlob(blob)
+                    logger.info('Creating blob: {}'.format(blob))
+                net.DequeueBlobs(
+                    roi_data_loader._blobs_queue_name, blob_names)
+    logger.info('Protobuf:\n' + str(net.Proto()))
+    
+    
+if __name__ == '__main__':
+    sys.exit(main())
 
     
-        def __init__(self):
-        self._content = False
-        self._content_consumed = False
-        self._next = None
     
-    def get_marker(line):
-    matchlist = TAG_REGEX.findall(line)
-    if matchlist:
-        namematch = NAMED_A_TAG_REGEX.match(line)
-        if namematch:
-            return namematch.group(1) # group 0 is full match
+@pytest.mark.parametrize(
+    'invalid_css,remainder', [
+        # No colon
+        ('hello-world', ''),
+        ('border-style: solid; hello-world', 'border-style: solid'),
+        ('border-style: solid; hello-world; font-weight: bold',
+         'border-style: solid; font-weight: bold'),
+        # Unclosed string fail
+        # Invalid size
+        ('font-size: blah', 'font-size: 1em'),
+        ('font-size: 1a2b', 'font-size: 1em'),
+        ('font-size: 1e5pt', 'font-size: 1em'),
+        ('font-size: 1+6pt', 'font-size: 1em'),
+        ('font-size: 1unknownunit', 'font-size: 1em'),
+        ('font-size: 10', 'font-size: 1em'),
+        ('font-size: 10 pt', 'font-size: 1em'),
+    ])
+def test_css_parse_invalid(invalid_css, remainder):
+    with tm.assert_produces_warning(CSSWarning):
+        assert_same_resolution(invalid_css, remainder)
     
-        with tf.variable_scope(name or 'conv2d', reuse=reuse):
-        W, b = get_wb(kernel_shape)
+        logging.warning('Starting fetch with curl client')
+    curl_client = CurlAsyncHTTPClient()
+    curl_client.fetch('http://localhost:%d/' % options.port,
+                      callback=callback)
+    IOLoop.current().start()
     
-        '''
-    max_sentence_len, max_word_len, char_vocab_size = get_shape(x)[1:]
+       Tornado requires the `~asyncio.AbstractEventLoop.add_reader` family of
+   methods, so it is not compatible with the `~asyncio.ProactorEventLoop` on
+   Windows. Use the `~asyncio.SelectorEventLoop` instead.
+'''
     
-    import tensorflow as tf
-import keras.backend as K
+        def get_target_delegate(
+        self, target: Any, request: httputil.HTTPServerRequest, **target_params: Any
+    ) -> Optional[httputil.HTTPMessageDelegate]:
+        '''Returns an instance of `~.httputil.HTTPMessageDelegate` for a
+        Rule's target. This method is called by `~.find_handler` and can be
+        extended to provide additional target types.
