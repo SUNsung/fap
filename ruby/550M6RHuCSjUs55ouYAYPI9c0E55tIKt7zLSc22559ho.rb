@@ -1,33 +1,18 @@
 
         
-            private
-    
-    namespace :bower do
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
+          not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
   end
-end
-
     
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
-    
-            def error_formatter(format, options)
-          formatter = if options.is_a?(Hash) && options.key?(:with)
-                        options[:with]
-                      else
-                        options
-                      end
-    
-          include Grape::DSL::Configuration
