@@ -1,213 +1,268 @@
 
         
-        namespace atom {
-    }
+          DCache.CBs.valueRetainCB(Value, nullptr);
+  DCache.Entries[CKey] = Value;
     
-    namespace atom {
-    }
-    
-    #include 'atom/browser/render_process_preferences.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
-    
-    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
-    
-    AboutProtocolHandler::AboutProtocolHandler() {}
-    
-    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
-                                       net::NetworkDelegate* network_delegate)
-    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
-    
-    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
-
-    
-    void OffscreenViewProxy::RemoveObserver() {
-  observer_ = nullptr;
-}
-    
-    StringType ArgvToCommandLineString(const StringVector& argv);
-#endif
-    
-    
-    {}  // namespace internal
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See data_layer.cpp for an example.
-   */
-  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
-    
-      /**
-   * @brief Specifies whether the layer should compute gradients w.r.t. a
-   *        parameter at a particular index given by param_id.
-   *
-   * You can safely ignore false values and always compute gradients
-   * for all parameters, but possibly with wasteful computation.
-   */
-  inline bool param_propagate_down(const int param_id) {
-    return (param_propagate_down_.size() > param_id) ?
-        param_propagate_down_[param_id] : false;
+    char Mangle::getStandardTypeSubst(StringRef TypeName) {
+#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
+  if (TypeName == #TYPENAME) {                       \
+    return #MANGLING[0];                             \
   }
-  /**
-   * @brief Sets whether the layer should compute gradients w.r.t. a
-   *        parameter at a particular index given by param_id.
-   */
-  inline void set_param_propagate_down(const int param_id, const bool value) {
-    if (param_propagate_down_.size() <= param_id) {
-      param_propagate_down_.resize(param_id + 1, true);
     }
-    param_propagate_down_[param_id] = value;
+    
+    namespace tesseract {
+    }
+    
+      int num_words;
+  TBOX lword_box;     // in normalized (horiz text rows) space
+  TBOX rword_box;     // in normalized (horiz text rows) space
+    
+    #include 'allheaders.h'
+    
+      // Computes and returns the squared evaluation metric for a line fit.
+  double EvaluateLineFit();
+    
+    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
+  if (justification_ != other.justification_)
+    return false;
+  if (justification_ == JUSTIFICATION_CENTER ||
+      justification_ == JUSTIFICATION_UNKNOWN)
+    return true;
+  int tolerance = (tolerance_ + other.tolerance_) / 4;
+  return NearlyEqual(margin_ + first_indent_,
+                     other.margin_ + other.first_indent_, tolerance) &&
+         NearlyEqual(margin_ + body_indent_,
+                     other.margin_ + other.body_indent_, tolerance);
+}
+    
+    // A geometric model of paragraph indentation and alignment.
+//
+// Measurements are in pixels. The meaning of the integer arguments changes
+// depending upon the value of justification.  Distances less than or equal
+// to tolerance apart we take as 'equivalent' for the purpose of model
+// matching, and in the examples below, we assume tolerance is zero.
+//
+// justification = LEFT:
+//   margin       the 'ignored' margin to the left block edge.
+//   first_indent indent from the left margin to a typical first text line.
+//   body_indent  indent from the left margin of a typical body text line.
+//
+// justification = RIGHT:
+//   margin       the 'ignored' margin to the right block edge.
+//   first_indent indent from the right margin to a typical first text line.
+//   body_indent  indent from the right margin of a typical body text line.
+//
+// justification = CENTER:
+//   margin       ignored
+//   first_indent ignored
+//   body_indent  ignored
+//
+//  ====== Extended example, assuming each letter is ten pixels wide: =======
+//
+// +--------------------------------+
+// |      Awesome                   | ParagraphModel(CENTER, 0, 0, 0)
+// |   Centered Title               |
+// | Paragraph Detection            |
+// |      OCR TEAM                  |
+// |  10 November 2010              |
+// |                                |
+// |  Look here, I have a paragraph.| ParagraphModel(LEFT, 0, 20, 0)
+// |This paragraph starts at the top|
+// |of the page and takes 3 lines.  |
+// |  Here I have a second paragraph| ParagraphModel(LEFT, 0, 20, 0)
+// |which indicates that the first  |
+// |paragraph is not a continuation |
+// |from a previous page, as it is  |
+// |indented just like this second  |
+// |paragraph.                      |
+// |   Here is a block quote. It    | ParagraphModel(LEFT, 30, 0, 0)
+// |   looks like the prior text    |
+// |   but it  is indented  more    |
+// |   and is fully justified.      |
+// |  So how does one deal with     | ParagraphModel(LEFT, 0, 20, 0)
+// |centered text, block quotes,    |
+// |normal paragraphs, and lists    |
+// |like what follows?              |
+// |1. Make a plan.                 | ParagraphModel(LEFT, 0, 0, 30)
+// |2. Use a heuristic, for example,| ParagraphModel(LEFT, 0, 0, 30)
+// |   looking for lines where the  |
+// |   first word of the next line  |
+// |   would fit on the previous    |
+// |   line.                        |
+// |8. Try to implement the plan in | ParagraphModel(LEFT, 0, 0, 30)
+// |   Python and try it out.       |
+// |4. Determine how to fix the     | ParagraphModel(LEFT, 0, 0, 30)
+// |   mistakes.                    |
+// |5. Repeat.                      | ParagraphModel(LEFT, 0, 0, 30)
+// |  For extra painful penalty work| ParagraphModel(LEFT, 0, 20, 0)
+// |you can try to identify source  |
+// |code.  Ouch!                    |
+// +--------------------------------+
+class ParagraphModel {
+ public:
+  ParagraphModel(tesseract::ParagraphJustification justification,
+                 int margin,
+                 int first_indent,
+                 int body_indent,
+                 int tolerance)
+      : justification_(justification),
+        margin_(margin),
+        first_indent_(first_indent),
+        body_indent_(body_indent),
+        tolerance_(tolerance) {
+    // Make one of {first_indent, body_indent} is 0.
+    int added_margin = first_indent;
+    if (body_indent < added_margin)
+      added_margin = body_indent;
+    margin_ += added_margin;
+    first_indent_ -= added_margin;
+    body_indent_ -= added_margin;
   }
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ x @f$, a Blob with values in
-   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
-   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
-   *      label @f$ \hat{l}_n @f$ given by its maximal index:
-   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels @f$ l @f$, an integer-valued Blob with values
-   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
-   *      indicating the correct class label among the @f$ K @f$ classes
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      the computed accuracy: @f$
-   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
-   *      @f$, where @f$
-   *      \delta\{\mathrm{condition}\} = \left\{
-   *         \begin{array}{lr}
-   *            1 & \mbox{if condition} \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
     }
     
+    /* REJECT MAP VALUES */
     
-    { private:
-  Blob<Dtype> bias_multiplier_;
-  int outer_dim_, bias_dim_, inner_dim_, dim_;
-};
+    // A useful base struct to facilitate the common operation of sorting a vector
+// of simple or smart-pointer data using a separate key. Similar to STL pair.
+template <typename Key, typename Data>
+struct KDPair {
+  KDPair() = default;
+  KDPair(Key k, Data d) : data(d), key(k) {}
+    }
+    
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
+    }
+    
+        // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    
+            // Rendering
+        ImGui::Render();
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
     
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
     
-      virtual inline const char* type() const { return 'Concat'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+        // Our state (make them static = more or less global) as a convenience to keep the example terse.
+    static bool show_demo_window = true;
+    static bool show_another_window = false;
+    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     
-    Rational RationalMath::Integer(Rational const& rat)
+        // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!),
+    // you may need to backup/reset/restore current shader using the lines below. DO NOT MODIFY THIS FILE! Add the code in your calling function:
+    //  GLint last_program;
+    //  glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
+    //  glUseProgram(0);
+    //  ImGui_ImplOpenGL2_RenderDrawData(...);
+    //  glUseProgram(last_program)
+    
+    namespace ImGuiFreeType
 {
-    PRAT prat = rat.ToPRAT();
-    try
-    {
-        intrat(&prat, RATIONAL_BASE, RATIONAL_PRECISION);
-    }
-    catch (uint32_t error)
-    {
-        destroyrat(prat);
-        throw(error);
-    }
+    // Hinting greatly impacts visuals (and glyph sizes).
+    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
+    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
+    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
     }
     
+      static Data data_;
+  static Data data6_;
     
-    {
-    {    private:
-        int32_t m_sign;
-        int32_t m_exp;
-        std::vector<uint32_t> m_mantissa;
-    };
-}
-
+    namespace aria2 {
+    }
     
-    void CCalcEngine::SettingsChanged()
+    std::string DHTResponseMessage::toString() const
 {
-    wchar_t lastDec = m_decimalSeparator;
-    wstring decStr = m_resourceProvider->GetCEngineString(L'sDecimal');
-    m_decimalSeparator = decStr.empty() ? DEFAULT_DEC_SEPARATOR : decStr.at(0);
-    // Until it can be removed, continue to set ratpak decimal here
-    SetDecimalSeparator(m_decimalSeparator);
-    }
-    
-        struct HISTORYITEMVECTOR
-    {
-        std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> spTokens;
-        std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> spCommands;
-        std::wstring expression;
-        std::wstring result;
-    };
-    
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetDisplayUpdatedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement, CalculatorActivityIds::DisplayUpdated, AutomationNotificationKind::Other, AutomationNotificationProcessing::ImportantMostRecent);
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
 }
     
-    using namespace  ::osquery::extensions;
+        DHTRoutingTableDeserializer deserializer(family);
+    const std::string& dhtFile = e->getOption()->get(
+        family == AF_INET ? PREF_DHT_FILE_PATH : PREF_DHT_FILE_PATH6);
+    try {
+      deserializer.deserialize(dhtFile);
+      localNode = deserializer.getLocalNode();
+    }
+    catch (RecoverableException& e) {
+      A2_LOG_ERROR_EX(
+          fmt('Exception caught while loading DHT routing table from %s',
+              dhtFile.c_str()),
+          e);
+    }
+    if (!localNode) {
+      localNode = std::make_shared<DHTNode>();
+    }
     
+    namespace aria2 {
+    }
     
-    {
-    {}} // namespace
+    class DHTUnknownMessage : public DHTMessage {
+private:
+  unsigned char* data_;
+  size_t length_;
+  std::string ipaddr_;
+  uint16_t port_;
+    }
     
-    #include <osquery/utils/expected/expected.h>
-#include <osquery/utils/system/posix/errno.h>
+    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
     
-    #include <osquery/core.h>
-#include <osquery/utils/expected/expected.h>
-#include <osquery/utils/status/status.h>
-    
-    namespace osquery {
-namespace table_tests {
+    namespace apollo {
+namespace drivers {
+namespace conti_radar {
     }
     }
-    
-        // change an array element
-    j.at('/array/1'_json_pointer) = 21;
-    // output the changed array
-    std::cout << j['array'] << '\n';
-    
-        // out_of_range.401
-    try
-    {
-        // try to use a an invalid array index
-        json::const_reference ref = j.at('/array/4'_json_pointer);
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    
+    Eigen::MatrixXd SplineSegKernel::Kernel(const uint32_t num_params,
+                                        const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateFx(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'fx', &term_matrix);
+  return kernel_fx_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'glog/logging.h'
+    
+    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
+// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
     }
