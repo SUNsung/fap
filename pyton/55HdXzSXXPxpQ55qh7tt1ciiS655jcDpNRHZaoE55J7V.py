@@ -1,208 +1,136 @@
 
         
-            softmax = self.sess.run(self.tensors['softmax_out'], feed_dict={
-        self.tensors['inputs_in']: input_ids,
-        self.tensors['char_inputs_in']: input_char_ids
-    })
+        
+iv = key = [0x20, 0x15] + 14 * [0]
     
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
     
-def generator_GAN_loss(predictions):
-  '''Generator GAN loss based on Discriminator predictions.'''
-  return -tf.log(tf.reduce_mean(predictions))
+        def test_parens(self):
+        jsi = JSInterpreter('function f(){return (1) + (2) * ((( (( (((((3)))))) )) ));}')
+        self.assertEqual(jsi.call_function('f'), 7)
     
-        rewards = rewards_half
-    critic_loss = None
-    maintain_averages_op = None
-    baselines = tf.stack(baselines, axis=1)
-    advantages = tf.stack(advantages, axis=1)
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
     
+        for i in range(1, n+1):
+        for j in range(1, s+1):
+            dp[i][j]= dp[i][j-1]
     
-def init_fn(init_savers, sess):
-  '''The init_fn to be passed to the Supervisor.
-    
-      return decoder_fn
-    
-            flash(error)
-    
-        def logout(self):
-        return self._client.get('/auth/logout')
-    
-        with pytest.raises(sqlite3.ProgrammingError) as e:
-        db.execute('SELECT 1')
-    
-    # We're not exposing the actual json module but a convenient wrapper around
-# it.
-from . import json
-    
-        def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
-    
-            if index is None:
-            self.order.append(tag)
-        else:
-            self.order.insert(index, tag)
-    
-        if not has_level_handler(logger):
-        logger.addHandler(default_handler)
-    
-            # server name not set, cache False to return none next time
-        if not rv:
-            app.config['SESSION_COOKIE_DOMAIN'] = False
-            return None
-    
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                for template in loader.list_templates():
-                    result.add(template)
-    
-        fpath = os.path.join(path, 'test')
-    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
-    
-    from keras.applications import imagenet_utils as utils
-from keras.models import Model
-from keras.layers import Input, Lambda
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        deserialized = losses.deserialize(serialized)
-    assert isinstance(deserialized, MSE_MAE_loss)
-    assert deserialized.mse_fraction == 0.3
-    
-    
-def test_activity_regularization():
-    x_train, y_train = get_data()
-    for reg in [regularizers.l1(), regularizers.l2()]:
-        model = create_model(activity_regularizer=reg)
-        model.compile(loss='categorical_crossentropy', optimizer='sgd')
-        assert len(model.losses) == 1
-        model.train_on_batch(x_train, y_train)
-    
-        available_devices = _get_available_devices()
-    available_devices = [_normalize_device_name(name)
-                         for name in available_devices]
-    if not gpus:
-        # Using all visible GPUs when not specifying `gpus`
-        # e.g. CUDA_VISIBLE_DEVICES=0,2 python keras_mgpu.py
-        gpus = len([x for x in available_devices if 'gpu' in x])
-    
-    # MNIST dataset
-(x_train, _), (x_test, _) = mnist.load_data()
-    
-    
-class Formatting(object):
-    '''A delegate class that invokes the actual processors.'''
-    
-    
-class BasicAuthPlugin(BuiltinAuthPlugin):
-    
-        Assumes `from __future__ import division`.
-    
-    USERNAME = 'user'
-PASSWORD = 'password'
-# Basic auth encoded `USERNAME` and `PASSWORD`
-# noinspection SpellCheckingInspection
-BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
-BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
-AUTH_OK = {'authenticated': True, 'user': USERNAME}
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-    from httpie import ExitStatus
-from httpie.core import main
-    
-    
-if __name__ == '__main__':
-    from glmnet.elastic_net import Lasso as GlmnetLasso
-    from sklearn.linear_model import Lasso as ScikitLasso
-    # Delayed import of matplotlib.pyplot
-    import matplotlib.pyplot as plt
-    
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
-    
-    import time
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.parasite_axes import host_subplot
-from mpl_toolkits.axisartist.axislines import Axes
-from scipy.sparse.csr import csr_matrix
-    
-    from sklearn.datasets import make_biclusters
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralCoclustering
-from sklearn.metrics import consensus_score
-    
-                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
-                                left=0, right=1)
-            plt.suptitle('n_cluster=%i, connectivity=%r' %
-                         (n_clusters, connectivity is not None), size=17)
-    
-    When we apply clustering to the data, we find that the clustering
-reflects what was in the distance matrices. Indeed, for the Euclidean
-distance, the classes are ill-separated because of the noise, and thus
-the clustering does not separate the waveforms. For the cityblock
-distance, the separation is good and the waveform classes are recovered.
-Finally, the cosine distance does not separate at all waveform 1 and 2,
-thus the clustering puts them in the same cluster.
+      3. find centroids and clusters using kmeans function.
+  
+        centroids, cluster_assignment = kmeans(
+            X, 
+            k, 
+            initial_centroids, 
+            maxiter=400,
+            record_heterogeneity=heterogeneity, 
+            verbose=True # whether to print logs in console or not.(default=False)
+            )
+  
+  
+  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
+        plot_heterogeneity(
+            heterogeneity, 
+            k
+        )
+  
+  5. Have fun..
+  
 '''
-# Author: Gael Varoquaux
-# License: BSD 3-Clause or CC-0
+from __future__ import print_function
+from sklearn.metrics import pairwise_distances
+import numpy as np
     
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
+    if __name__ == '__main__':
+    python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
     
-            def __init__(self, method=SSL.SSLv23_METHOD):
-            self.method = method
+    	# The current char when an error occurred. For lexers.
+        self.c = None
     
-        def handleResponse(self, response):
-        if self.factory.method.upper() == b'HEAD':
-            self.factory.page(b'')
-        elif self.length is not None and self.length > 0:
-            self.factory.noPage(self._connection_lost_reason)
-        else:
-            self.factory.page(response)
-        self.transport.loseConnection()
+            try:
+            return self.strdata[self.p+i-1]
+        except IndexError:
+            return EOF
     
-    from acme import test_util
+            You don't have to implement but it's nice to know where a Token
+        comes from if you have include files etc... on the input.'''
     
-    REWRITE_HTTPS_ARGS_WITH_END = [
-    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,NE,R=permanent]']
-'''Apache version >= 2.3.9 rewrite rule arguments used for redirections to
-    https vhost'''
+        def test_encode_override(self):
+        self.assertEqual('y', self.field.encode('y'))
     
-       # CloudXNS API credentials used by Certbot
-   dns_cloudxns_api_key = 1234567890abcdef1234567890abcdef
-   dns_cloudxns_secret_key = 1122334455667788
+        # TODO: decoder should check that nonce is in the protected header
+    
+    .. code-block:: ini
+   :name: credentials.ini
+   :caption: Example credentials file:
+    
+       certbot certonly \\
+     --dns-cloudxns \\
+     --dns-cloudxns-credentials ~/.secrets/certbot/cloudxns.ini \\
+     --dns-cloudxns-propagation-seconds 60 \\
+     -d example.com
+    
+    from django.db import models, router, connections
+from django.utils import timezone
+    
+    from sentry.utils.safe import safe_execute
+from sentry.tasks.base import instrumented_task
+    
+    win1251BulgarianCharToOrderMap = (
+255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
+255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
+253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
+252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
+253, 77, 90, 99,100, 72,109,107,101, 79,185, 81,102, 76, 94, 82,  # 40
+110,186,108, 91, 74,119, 84, 96,111,187,115,253,253,253,253,253,  # 50
+253, 65, 69, 70, 66, 63, 68,112,103, 92,194,104, 95, 86, 87, 71,  # 60
+116,195, 85, 93, 97,113,196,197,198,199,200,253,253,253,253,253,  # 70
+206,207,208,209,210,211,212,213,120,214,215,216,217,218,219,220,  # 80
+221, 78, 64, 83,121, 98,117,105,222,223,224,225,226,227,228,229,  # 90
+ 88,230,231,232,233,122, 89,106,234,235,236,237,238, 45,239,240,  # a0
+ 73, 80,118,114,241,242,243,244,245, 62, 58,246,247,248,249,250,  # b0
+ 31, 32, 35, 43, 37, 44, 55, 47, 40, 59, 33, 46, 38, 36, 41, 30,  # c0
+ 39, 28, 34, 51, 48, 49, 53, 50, 54, 57, 61,251, 67,252, 60, 56,  # d0
+  1, 18,  9, 20, 11,  3, 23, 15,  2, 26, 12, 10, 14,  6,  4, 13,  # e0
+  7,  8,  5, 19, 29, 25, 22, 21, 27, 24, 17, 75, 52,253, 42, 16,  # f0
+)
+    
+    win1250HungarianCharToOrderMap = (
+255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
+255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
+253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
+252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
+253, 28, 40, 54, 45, 32, 50, 49, 38, 39, 53, 36, 41, 34, 35, 47,
+ 46, 72, 43, 33, 37, 57, 48, 64, 68, 55, 52,253,253,253,253,253,
+253,  2, 18, 26, 17,  1, 27, 12, 20,  9, 22,  7,  6, 13,  4,  8,
+ 23, 67, 10,  5,  3, 21, 19, 65, 62, 16, 11,253,253,253,253,253,
+161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,
+177,178,179,180, 78,181, 69,182,183,184,185,186,187,188,189,190,
+191,192,193,194,195,196,197, 76,198,199,200,201,202,203,204,205,
+ 81,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,
+221, 51, 83,222, 80,223,224,225,226, 44,227,228,229, 61,230,231,
+232,233,234, 58,235, 66, 59,236,237,238, 60, 70, 63,239,240,241,
+ 84, 14, 75,242, 71, 82,243, 73,244, 15, 85, 79, 86, 30, 77, 87,
+245,246,247, 25, 74, 42, 24,248,249,250, 31, 56, 29,251,252,253,
+)
+    
+    FREQ_CAT_NUM = 4
+    
+    # Shift_JIS
+    
+        @property
+    def charset_name(self):
+        return self.context_analyzer.charset_name
+    
+    
+class SJISProber(MultiByteCharSetProber):
+    def __init__(self):
+        super(SJISProber, self).__init__()
+        self.coding_sm = CodingStateMachine(SJIS_SM_MODEL)
+        self.distribution_analyzer = SJISDistributionAnalysis()
+        self.context_analyzer = SJISContextAnalysis()
+        self.reset()
