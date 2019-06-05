@@ -1,85 +1,125 @@
 
         
-          def passthru
-    render status: 404, plain: 'Not found. Authentication passthru.'
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
+                  relation.update_all(update)
         end
       end
-    
-        def default_failure_app(options)
-      @failure_app = options[:failure_app] || Devise::FailureApp
-      if @failure_app.is_a?(String)
-        ref = Devise.ref(@failure_app)
-        @failure_app = lambda { |env| ref.get.call(env) }
-      end
-    end
-    
-    When /^I try to sign in manually$/ do
-  manual_login
-end
-    
-    When /^I toggle nsfw posts$/ do
-  find('.toggle_nsfw_state', match: :first).click
-end
-    
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
     end
   end
 end
 
     
-          it 'returns an array of reshares for a post' do
-        bob.reshare!(@post)
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to eq(@post.reshares.map(&:id))
-      end
-    
-    #{stack}
-#{executable_path}
-### Plugins
-    
-            def listen
-          while repl_command = STDIN.gets
-            execute_repl_command(repl_command)
-          end
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
         end
     
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
+          # project - An instance of `Project`.
+      # object - The object to look up or set a database ID for.
+      def initialize(project, object)
+        @project = project
+        @object = object
       end
     
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
+      #
+  # Allow 100 Continues to be ignored by the caller
+  #
+  def check_100
+    # If this was a 100 continue with no data, reset
+    if self.code == 100 and (self.body_bytes_left == -1 or self.body_bytes_left == 0) and self.count_100 < 5
+      self.reset_except_queue
+      self.count_100 += 1
+    end
+  end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
+        class Principal < Element
+          # @!attribute name_type
+          #   @return [Integer]
+          attr_accessor :name_type
+          # @!attribute realm
+          #   @return [String]
+          attr_accessor :realm
+          # @!attribute components
+          #   @return [Array<String>]
+          attr_accessor :components
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_etype(input)
+            input.value[0].value.to_i
+          end
+    
+    # Use this to fill in an entire form with data from a table. Example:
+#
+#   When I fill in the following:
+#     | Account Number | 5002       |
+#     | Expiry date    | 2009-11-01 |
+#     | Note           | Nice guy   |
+#     | Wants Email?   |            |
+#
+# TODO: Add support for checkbox, select og option
+# based on naming conventions.
+#
+When /^(?:|I )fill in the following:$/ do |fields|
+  fields.rows_hash.each do |name, value|
+    When %{I fill in '#{name}' with '#{value}'}
+  end
 end
     
-        def initialize(klass, name, options)
-      @klass = klass
-      @name = name
-      @options = options
+      def framework_major_version
+    framework_version.split('.').first.to_i
+  end
+end
+World(RailsCommandHelpers)
+
+    
+        def self.clear
+      instance.clear
+    end
+    
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
+    end
+    
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
+    end
+    
+        def define_getters
+      define_instance_getter
+      define_class_getter
+    end
+    
+        # Returns a sorted list of all interpolations.
+    def self.all
+      self.instance_methods(false).sort!
     end
