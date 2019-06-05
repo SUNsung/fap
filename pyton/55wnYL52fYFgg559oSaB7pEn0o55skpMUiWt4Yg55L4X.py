@@ -1,153 +1,232 @@
 
         
-            with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+          print(header)
     
-    module_src = '\n'.join(module_contents) + '\n'
+        h = tf.matmul(self.input_vec, self.weights1)
+    self.output = h
     
+      plt.subplot(nrows,2,13+subplot_cidx)
+  plt.imshow(means_nxt, aspect='auto', interpolation='nearest')
+  plt.title(col_title + ' Means')
     
-if __name__ == '__main__':
-    main()
-
+    # save down the network outputs (may be useful later)
+train_outputs_u, valid_outputs_u = split_list_by_inds(outs_e,
+                                                      train_inds,
+                                                      valid_inds)
+train_outputs_u = np.array(train_outputs_u)
+valid_outputs_u = np.array(valid_outputs_u)
     
+      def evaluate(self):
+    '''Evaluate the current ensemble.'''
+    # Attach word probabilities and correctness label to each substitution
+    ensembled_probs = sum(self.all_probs) / len(self.all_probs)
+    scorings = []
+    for i, sentence in enumerate(self.sentences):
+      correctness = self.labels[i]
+      word_probs = ensembled_probs[i, :len(sentence)]
+      joint_prob = np.prod(word_probs, dtype=np.float64)
     
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-    from __future__ import unicode_literals
-    
-        def test_call(self):
-        jsi = JSInterpreter('''
-        function x() { return 2; }
-        function y(a) { return x() + a; }
-        function z() { return y(3); }
-        ''')
-        self.assertEqual(jsi.call_function('z'), 5)
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one.
     
     
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
+def generate_logs(sess, model, log, id_to_word, feed):
+  '''Impute Sequences using the model for a particular feed and send it to
+  logs.
+  '''
+  # Impute Sequences.
+  [p, inputs_eval, sequence_eval] = sess.run(
+      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
     
-        def build_response(self, req, resp):
-        '''Builds a :class:`Response <requests.Response>` object from a urllib3
-        response. This should not be called from user code, and is only exposed
-        for use when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`
+    '''We calculate n-Grams from the training text. We will use this as an
+evaluation metric.'''
     
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    from collections.abc import Callable, Mapping, MutableMapping
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-        By default, the pair of `name` and `value` will be set for the domain ''
-    and sent on every request (this is sometimes called a 'supercookie').
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
+    
+    import io
+import optparse
+import re
+    
+    lazy_extractors_filename = sys.argv[1]
+if os.path.exists(lazy_extractors_filename):
+    os.remove(lazy_extractors_filename)
+    
+    # The master toctree document.
+master_doc = 'index'
+    
+    
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
+    
+        def tearDown(self):
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+    
+                for tc_num, tc in enumerate(test_cases):
+                tc_res_dict = res_dict['entries'][tc_num]
+                # First, check test cases' data against extracted data alone
+                expect_info_dict(self, tc_res_dict, tc.get('info_dict', {}))
+                # Now, check downloaded file consistency
+                tc_filename = get_tc_filename(tc)
+                if not test_case.get('params', {}).get('skip_download', False):
+                    self.assertTrue(os.path.exists(tc_filename), msg='Missing file ' + tc_filename)
+                    self.assertTrue(tc_filename in finished_hook_called)
+                    expected_minsize = tc.get('file_minsize', 10000)
+                    if expected_minsize is not None:
+                        if params.get('test'):
+                            expected_minsize = max(expected_minsize, 10000)
+                        got_fsize = os.path.getsize(tc_filename)
+                        assertGreaterEqual(
+                            self, got_fsize, expected_minsize,
+                            'Expected %s to be at least %s, but it\'s only %s ' %
+                            (tc_filename, format_bytes(expected_minsize),
+                                format_bytes(got_fsize)))
+                    if 'md5' in tc:
+                        md5_for_file = _file_md5(tc_filename)
+                        self.assertEqual(tc['md5'], md5_for_file)
+                # Finally, check test cases' data again but this time against
+                # extracted data from info JSON file written during processing
+                info_json_fn = os.path.splitext(tc_filename)[0] + '.info.json'
+                self.assertTrue(
+                    os.path.exists(info_json_fn),
+                    'Missing info file %s' % info_json_fn)
+                with io.open(info_json_fn, encoding='utf-8') as infof:
+                    info_dict = json.load(infof)
+                expect_info_dict(self, info_dict, tc.get('info_dict', {}))
+        finally:
+            try_rm_tcs_files()
+            if is_playlist and res_dict is not None and res_dict.get('entries'):
+                # Remove all other files that may have been extracted if the
+                # extractor returns full results even with extract_flat
+                res_tcs = [{'info_dict': e} for e in res_dict['entries']]
+                try_rm_tcs_files(res_tcs)
+    
+                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
+                if m is not None:
+                    self.assertTrue(
+                        m is None,
+                        'u present in %s, around %s' % (
+                            fn, code[m.start() - 10:m.end() + 10]))
+    
+        <command> <path>
+    
+        def verify_get_called(self):
+        self.assertTrue(self.handler.get_called)
+    
+            class Foo(unittest.TestCase):
+            def test_2(self): pass
+            def test_3(self): pass
+            def test_1(self): pass
+    
+    PYTHON3_OSERROR_EXCEPTIONS = (
+    'BrokenPipeError',
+    'ChildProcessError',
+    'ConnectionAbortedError',
+    'ConnectionError',
+    'ConnectionRefusedError',
+    'ConnectionResetError',
+    'FileExistsError',
+    'FileNotFoundError',
+    'InterruptedError',
+    'IsADirectoryError',
+    'NotADirectoryError',
+    'PermissionError',
+    'ProcessLookupError',
+    'TimeoutError',
+)
+    
+    
+def test_main():
+    support.run_unittest(
+        BZ2FileTest,
+        BZ2CompressorTest,
+        BZ2DecompressorTest,
+        CompressDecompressTest,
+        OpenTest,
+    )
+    support.reap_children()
+    
+    # Add the html version.  This converts the message into a multipart/alternative
+# container, with the original text message as the first part and the new html
+# message as the second part.
+asparagus_cid = make_msgid()
+msg.add_alternative('''\
+<html>
+  <head></head>
+  <body>
+    <p>Salut!</p>
+    <p>Cela ressemble à un excellent
+        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
+            recipie
+        </a> déjeuner.
+    </p>
+    <img src='cid:{asparagus_cid}' />
+  </body>
+</html>
+'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
+# note that we needed to peel the <> off the msgid for use in the html.
+    
+        @classmethod
+    def _from_sequence(cls, scalars, dtype=None, copy=False):
+        return cls(scalars)
+    
+        quat = np.empty(euler.shape[:-1] + (4,), dtype=np.float64)
+    quat[..., 0] = cj * cc + sj * ss
+    quat[..., 3] = cj * sc - sj * cs
+    quat[..., 2] = -(cj * ss + sj * cc)
+    quat[..., 1] = cj * cs - sj * sc
+    return quat
+    
+        The roulette wheel has 37 spots. If the bet is 0 and a 0 comes up,
+    you win a reward of 35. If the parity of your bet matches the parity
+    of the spin, you win 1. Otherwise you receive a reward of -1.
+    
+        - register() themselves and save the returned ID
+    - unregister() themselves upon close()
+    - include a __del__ method which close()'s the object
     '''
-    result = {
-        'version': 0,
-        'name': name,
-        'value': value,
-        'port': None,
-        'domain': '',
-        'path': '/',
-        'secure': False,
-        'expires': None,
-        'discard': True,
-        'comment': None,
-        'comment_url': None,
-        'rest': {'HttpOnly': None},
-        'rfc2109': False,
-    }
     
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
+    # TODO: don't hardcode sizeof_int here
+def _bigint_from_bytes(bytes):
+    sizeof_int = 4
+    padding = sizeof_int - len(bytes) % sizeof_int
+    bytes += b'\0' * padding
+    int_count = int(len(bytes) / sizeof_int)
+    unpacked = struct.unpack('{}I'.format(int_count), bytes)
+    accum = 0
+    for i, val in enumerate(unpacked):
+        accum += 2 ** (sizeof_int * 8 * i) * val
+    return accum
     
-            return request_content
-    
-            port_def = '1234-1235-1239:4000'
-        with pytest.raises(ConfigurationError):
-            ServicePort.parse(port_def)
-    
-      return (loss, per_example_loss, log_probs)
-    
-    flags.DEFINE_integer(
-    'max_seq_length', 128,
-    'The maximum total input sequence length after WordPiece tokenization. '
-    'Sequences longer than this will be truncated, and sequences shorter '
-    'than this will be padded.')
-    
-        return tf.constant(value=values, dtype=tf.int32, shape=shape, name=name)
-    
-          next_param = param - update_with_lr
-    
-        Args:
-      guid: Unique id for the example.
-      text_a: string. The untokenized text of the first sequence. For single
-        sequence tasks, only this sequence must be specified.
-      text_b: (Optional) string. The untokenized text of the second sequence.
-        Only must be specified for sequence pair tasks.
-      label: (Optional) string. The label of the example. This should be
-        specified for train and dev examples, but not for test examples.
-    '''
-    self.guid = guid
-    self.text_a = text_a
-    self.text_b = text_b
-    self.label = label
-    
-      def _is_chinese_char(self, cp):
-    '''Checks whether CP is the codepoint of a CJK character.'''
-    # This defines a 'chinese character' as anything in the CJK Unicode block:
-    #   https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block)
-    #
-    # Note that the CJK Unicode block is NOT all Japanese and Korean characters,
-    # despite its name. The modern Korean Hangul alphabet is a different block,
-    # as is Japanese Hiragana and Katakana. Those alphabets are used to write
-    # space-separated words, so they are not treated specially and handled
-    # like the all of the other languages.
-    if ((cp >= 0x4E00 and cp <= 0x9FFF) or  #
-        (cp >= 0x3400 and cp <= 0x4DBF) or  #
-        (cp >= 0x20000 and cp <= 0x2A6DF) or  #
-        (cp >= 0x2A700 and cp <= 0x2B73F) or  #
-        (cp >= 0x2B740 and cp <= 0x2B81F) or  #
-        (cp >= 0x2B820 and cp <= 0x2CEAF) or
-        (cp >= 0xF900 and cp <= 0xFAFF) or  #
-        (cp >= 0x2F800 and cp <= 0x2FA1F)):  #
-      return True
-    
-      def test_basic_tokenizer_lower(self):
-    tokenizer = tokenization.BasicTokenizer(do_lower_case=True)
-    
-      return instances
-    
-    
-def setIDvalue(data, gid):
-    id = reIDvalue.search(data)
-    if id:
-        newData = re.sub(id.group(1), 'id='glyph{}''.format(gid), data)
-    else:
-        newData = re.sub('<svg', '<svg id='glyph{}''.format(gid), data)
-    return newData
+    from gym import error
+from gym.utils import atomic_write
+from gym.utils.json_utils import json_encode_np
