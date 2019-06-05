@@ -1,105 +1,207 @@
 
         
-        
-class CreateExtension(Operation):
-    reversible = True
-    
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
-    
-        def delete(self, session_key=None):
-        super().delete(session_key)
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+            plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
     
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
-    # [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-            if isinstance(self.input, TokenStream):
-            return self.token.type
     
-            if self.input is None:
-            return None
-        
-        return self.input.substring(self.start, self.stop)
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-            # <<<<<< OUTPUT  OPTIONS >>>>>> #
-        section = 'writer.gif'
-        self.add_section(title=section,
-                         info='Options for outputting converted frames to an animated gif.')
-        self.add_item(
-            section=section, title='fps', datatype=int, min_max=(1, 60),
-            rounding=1, default=25,
-            info='Frames per Second.')
-        self.add_item(
-            section=section, title='loop', datatype=int, min_max=(0, 100),
-            rounding=1, default=0,
-            info='The number of iterations. Set to 0 to loop indefinitely.')
-        self.add_item(
-            section=section, title='palettesize', datatype=str, default='256',
-            choices=['2', '4', '8', '16', '32', '64', '128', '256'],
-            info='The number of colors to quantize the image to. Is rounded to the nearest power '
-                 'of two.')
-        self.add_item(
-            section=section, title='subrectangles', datatype=bool, default=False,
-            info='If True, will try and optimize the GIF by storing only the rectangular parts of '
-                 'each frame that change with respect to the previous.')
+        session = Session(path)
+    session.load()
     
-    from keras.initializers import RandomNormal
-from keras.layers import add, Conv2D, Dense, Flatten, Input, Reshape
-from keras.models import Model as KerasModel
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        def progress_bar(self):
-        ''' Place progress bar into bottom bar '''
-        progressframe = ttk.Frame(self)
-        progressframe.pack(side=tk.RIGHT, anchor=tk.E, fill=tk.X)
+    import gzip
+import os
+    
+        ```python
+         ..
+         # Not needed to change the device scope for model definition:
+         model = Xception(weights=None, ..)
+    
+    # Stack of Transposed Conv2D blocks
+# Notes:
+# 1) Use Batch Normalization before ReLU on deep networks
+# 2) Use UpSampling2D as alternative to strides>1
+# - faster but not as good as strides>1
+for filters in layer_filters[::-1]:
+    x = Conv2DTranspose(filters=filters,
+                        kernel_size=kernel_size,
+                        strides=2,
+                        activation='relu',
+                        padding='same')(x)
+    
+    import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from keras.layers import SimpleRNN
+from keras import initializers
+from keras.optimizers import RMSprop
+    
+    model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dropout(0.2))
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(num_classes, activation='softmax'))
+    
+    print('Vectorizing sequence data...')
+tokenizer = Tokenizer(num_words=max_words)
+x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
+x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+        def setUp(self):
+        self.privkey = KEY
+        self.pubkey = self.privkey.public_key()
+        self.nonce = jose.b64encode(b'Nonce')
+        self.url = 'hi'
+        self.kid = 'baaaaa'
+    
+        @certbot_util.patch_get_utility()
+    def test_successful_choice(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 3)
+        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
+    
+        # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
+    
+    .. caution::
+   You should protect these API credentials as you would the password to your
+   DigitalOcean account. Users who can read this file can use these credentials
+   to issue arbitrary API calls on your behalf. Users who can cause Certbot to
+   run using these credentials can complete a ``dns-01`` challenge to acquire
+   new certificates or revoke existing certificates for associated domains,
+   even if those domains aren't being managed by this server.
+    
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+#default_role = None
+    
+    import math
+from sklearn import neighbors
+import os
+import os.path
+import pickle
+from PIL import Image, ImageDraw
+import face_recognition
+from face_recognition.face_recognition_cli import image_files_in_folder
+    
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+    
+            if file.filename == '':
+            return redirect(request.url)
+    
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
+    
+            if match[0]:
+            name = 'Barack Obama'
+    
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+    import tensorflow as tf
+    
+    
+# TODO(huay): char_cnn_embedding
+def char_cnn_embedding(x, c_embed_size=8, share_cnn_weights=True, name='char_cnn_embedding', reuse=None):
+    '''
+    In:  [N, max_n_word, max_n_char]
+    Out: [N, max_n_word, c_embed_size]
+    
+    
+# # Test
+# def attention_flow_2(h, u, T=None, J=None, d=None, name=None, reuse=None):
+#     '''Attention Flow Match Layer
+#     Input shape:
+#         h: [N, T, d]  # 原文中的 shape 为 [N, T, 2d], 因为经过了 bi-LSTM, 维度扩了一倍
+#         u: [N, J, d]
+#     Output shape:
+#         [N, T, 4d]
+# 
+#     Args:
+#         h: context encoding     shape: [N, T, d]
+#         u: question encoding    shape: [N, J, d]
+#         T(int): context length
+#         J(int): question length
+#         d(int): features size
+#         name(str):
+#         reuse(bool):
+# 
+#     Returns:
+# 
+#     '''
+#     print('Test')
+#     d = d or int(h.get_shape()[-1])
+#     T = T or int(h.get_shape()[-2])
+#     J = J or int(u.get_shape()[-2])
+# 
+#     with tf.variable_scope(name or 'attention_flow', reuse=reuse):
+#         h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])
+#         u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])
+#         hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
+#         h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
+#         W_s = get_w([3 * d, 1])  # [3d, 1]
+# 
+#         # similarity matrix
+#         # S = tf.reshape(tf.einsum('ntjd,do->ntjo', h_u_hu, W_s), [-1, T, J])
+#         # 以上操作等价于
+#         S = tf.reshape(tf.matmul(tf.reshape(h_u_hu, [-1, 3 * d]), W_s), [-1, T, J])
+# 
+#         # 得到 S 后，下面的操作就与 `attention_flow_self` 一样了
+# 
+#         # u_tilde(u~): context to question attended query vectors
+#         u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
+# 
+#         # h_tilde(h~): question to context attended query vectors
+#         b = tf.reduce_max(S, axis=2)  # [N, T]
+#         b = softmax(b, axis=-1)  # [N, T]
+#         b = tf.expand_dims(b, axis=1)  # [N, 1, T]
+#         h_tilde = tf.matmul(b, h)  # [N, 1, d]
+#         h_tilde = tf.tile(h_tilde, [1, T, 1])  # [N, T, d]
+# 
+#         g = tf.concat([h, u_tilde, h * u_tilde, h * h_tilde], axis=-1)  # [N, T, 4d]
+# 
+#     return g
