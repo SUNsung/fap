@@ -1,124 +1,74 @@
 
         
-        module Gitlab
-  module Ci
-    module Pipeline
-      # Class for preloading data associated with pipelines such as commit
-      # authors.
-      class Preloader
-        def self.preload!(pipelines)
-          ##
-          # This preloads all commits at once, because `Ci::Pipeline#commit` is
-          # using a lazy batch loading, what results in only one batched Gitaly
-          # call.
-          #
-          pipelines.each(&:commit)
+        class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token
     
-          def request_count_counter
-        @request_counter ||= Gitlab::Metrics.counter(
-          :github_importer_request_count,
-          'The number of GitHub API calls performed when importing projects'
-        )
+      def lock_options
+    { redis: Redis.current, key: 'media_download:#{params[:id]}' }
+  end
+    
+    require 'bootstrap/environment'
+    
+            return nil
       end
     end
   end
+end end end
+
+    
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+    module Jekyll
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+    
+module OctopressLiquidFilters
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
+    
+    desc 'Clean up files.'
+task :clean do |t|
+  FileUtils.rm_rf 'doc'
+  FileUtils.rm_rf 'tmp'
+  FileUtils.rm_rf 'pkg'
+  FileUtils.rm_rf 'public'
+  FileUtils.rm 'test/debug.log' rescue nil
+  FileUtils.rm 'test/paperclip.db' rescue nil
+  Dir.glob('paperclip-*.gem').each{|f| FileUtils.rm f }
 end
 
     
-            def sidekiq_worker_class
-          ImportIssueWorker
-        end
-    
-            # Builds a new note using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-        context 'single argument' do
-      before do
-        subject.instance_eval do
-          env :userpaths
-        end
-      end
-    
-          it 'gives dir where zsh completions have been installed' do
-        (path/'share/zsh/site-functions').mkpath
-        expect(caveats).to include(HOMEBREW_PREFIX/'share/zsh/site-functions')
-      end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
+        def calculated_type_matches
+      possible_types.select do |content_type|
+        content_type == type_from_file_contents
       end
     end
-    
-          context 'resharing another user\'s reshare' do
-        before do
-          @root = @post
-          @post = FactoryGirl.create(:reshare, :root => @root, :author => alice.person)
-        end
-    
-        UnitOfWork = Struct.new(:queue, :job) do
-      def acknowledge
-        # nothing to do
-      end
-    
-          def insert_after(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
-        entries.insert(i+1, new_entry)
-      end
-    
-          def process_job(job)
-        worker = new
-        worker.jid = job['jid']
-        worker.bid = job['bid'] if worker.respond_to?(:bid=)
-        Sidekiq::Testing.server_middleware.invoke(worker, job, job['queue']) do
-          execute_job(worker, job['args'])
-        end
-      end
-    
-      # This class is raised if there's something wrong with a setting in the package.
-  class InvalidArgument < StandardError; end
-    
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
-    
-      # Helper for group lookup
-  def gid2group(gid)
-    begin
-      grent = Etc.getgrgid(gid)
-      return grent.name
-    rescue ArgumentError => e
-      # Invalid user id? No user? Return the uid.
-      logger.warn('Failed to find group for gid #{gid}')
-      return gid.to_s
-    end
-  end # def uid2user
-end # class FPM::Target::Puppet
-    
-          # TODO(sissel): preinstall/postinstall
-      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
-      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
-        type, klass, path, mode, user, group = line.split
