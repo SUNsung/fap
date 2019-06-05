@@ -1,48 +1,21 @@
 
         
-        def native_relative
-  DOC_PATH.sub('#{COL_PATH}/', '')
-end
-    
-          #
-    
-    module Jekyll
-  module Filters
-    module GroupingFilters
-      # Group an array of items by a property
-      #
-      # input - the inputted Enumerable
-      # property - the property
-      #
-      # Returns an array of Hashes, each looking something like this:
-      #  {'name'  => 'larry'
-      #   'items' => [...] } # all the items where `property` == 'larry'
-      def group_by(input, property)
-        if groupable?(input)
-          groups = input.group_by { |item| item_property(item, property).to_s }
-          grouped_array(groups)
-        else
-          input
-        end
-      end
-    
-        def mime_type
-      headers['Content-Type'] || 'text/plain'
+            def parse_html(html)
+      warn '#{self.class.name} is re-parsing the document' unless ENV['RACK_ENV'] == 'test'
+      super
     end
     
-          def additional_options
-        if self.class.internal_urls
-          super.merge! \
-            only: self.class.internal_urls.to_set,
-            only_patterns: nil,
-            skip: nil,
-            skip_patterns: nil,
-            skip_links: nil,
-            fixed_internal_urls: true
-        else
-          super
+        def as_json
+      { name: name, path: path, type: type }
+    end
+  end
+end
+
+    
+          module ClassMethods
+        def redirections
+          @redirections
         end
-      end
     
             doc
       end
@@ -51,78 +24,96 @@ end
 end
 
     
-            css('a[id]:empty').each do |node|
-          node.next_element['id'] = node['id'] if node.next_element
-        end
+          # Returns the delta between this element's delimiter and the argument's.
+      #
+      # @note Pairs with different delimiter styles return a delta of 0
+      #
+      # @return [Integer] the delta between the two delimiters
+      def delimiter_delta(other)
+        HashElementDelta.new(self, other).delimiter_delta
+      end
     
-          def root
-        css('.nav-index-group').each do |node|
-          if heading = node.at_css('.nav-index-group-heading')
-            heading.name = 'h2'
+              ignored_end_pos = if ignored_loc.respond_to?(:heredoc_body)
+                              ignored_loc.heredoc_end.end_pos
+                            else
+                              ignored_loc.expression.end_pos
+                            end
+          ignored_end_pos >= node.source_range.end_pos
+        end
+      end
+    
+          def main_sidebar_classes
+        if cookies['sidebar-minimized'] == 'true'
+          'col-3 col-md-2 sidebar'
+        else
+          'p-0 col-3 col-md-2 sidebar'
+        end
+      end
+    
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
+    
+                respond_with(@order, default_template: :show, status: 201)
+          else
+            @order = Spree::Order.create!(user: current_api_user, store: current_store)
+            if Cart::Update.call(order: @order, params: order_params).success?
+              respond_with(@order, default_template: :show, status: 201)
+            else
+              invalid_resource!(@order)
+            end
           end
-          node.parent.before(node.children)
         end
     
-          @command.output_type.tap do |val|
-        next if val.nil?
-        mandatory(FPM::Package.types.include?(val),
-                  'Invalid output package (-t flag) type #{val.inspect}. ' \
-                  'Expected one of: #{types.join(', ')}')
+                result = complete_service.call(order: spree_current_order)
+    
+          @@stock_location_attributes = [
+        :id, :name, :address1, :address2, :city, :state_id, :state_name,
+        :country_id, :zipcode, :phone, :active
+      ]
+    
+    # Create two output packages!
+output_packages = []
+output_packages << pleaserun.convert(FPM::Package::RPM)
+output_packages << pleaserun.convert(FPM::Package::Deb)
+    
+        # Provide any template values as methods on the package.
+    if template_scripts?
+      template_value_list.each do |key, value|
+        (class << output; self; end).send(:define_method, key) { value }
       end
-    
-      option '--package-name-prefix', 'PREFIX', 'Name to prefix the package ' \
-    'name with.', :default => 'node'
-    
-        # Licenses could include more than one.
-    # Speaking of just taking the first entry of the field:
-    # A crude thing to do, but I suppose it's better than nothing.
-    # -- Daniel Haskin, 3/24/2015
-    self.license = control['license'][0] || self.license
-    
-        if attributes[:pear_php_dir]
-      logger.info('Setting php_dir', :php_dir => attributes[:pear_php_dir])
-      safesystem('pear', '-c', config, 'config-set', 'php_dir', '#{staging_path(installroot)}/#{attributes[:pear_php_dir]}')
     end
     
-          File.open(File.join(builddir, 'manifests', manifest), 'w') do |f|
-        logger.info('manifest: #{f.path}')
-        template = template(File.join('puppet', '#{manifest}.erb'))
-        ::Dir.chdir(fileroot) do
-          f.puts template.result(binding)
+        File.expand_path(output_path).tap do |path|
+      ::Dir.chdir(build_path) do
+        safesystem(*([tar_cmd,
+                      compression_option,
+                      '-cf',
+                      path] + data_tar_flags + \
+                      ::Dir.entries('.').reject{|entry| entry =~ /^\.{1,2}$/ }))
+      end
+    end
+  end # def output
+    
+        php_bin = attributes[:pear_php_bin] || '/usr/bin/php'
+    logger.info('Setting php_bin', :php_bin => php_bin)
+    safesystem('pear', '-c', config, 'config-set', 'php_bin', php_bin)
+    
+      def initialize(package_name, opts = {}, &block)
+    @options = OpenStruct.new(:name => package_name.to_s)
+    @source, @target = opts.values_at(:source, :target).map(&:to_s)
+    @directory = File.expand_path(opts[:directory].to_s)
+    
+    module FPM
+  module Issues
+    module TarWriter
+      # See https://github.com/rubygems/rubygems/issues/1608
+      def self.has_issue_1608?
+        name, prefix = nil,nil
+        io = StringIO.new
+        ::Gem::Package::TarWriter.new(io) do |tw|
+          name, prefix = tw.split_name('/123456789'*9 + '/1234567890') # abs name 101 chars long
         end
+        return prefix.empty?
       end
-    end
-  end # def generate_specfile
-    
-      # Generate the proper tar flags based on the path name.
-  def tar_compression_flag(path)
-    case path
-      when /\.tar\.bz2$/
-        return '-j'
-      when /\.tar\.gz$|\.tgz$/
-        return '-z'
-      when /\.tar\.xz$/
-        return '-J'
-      else
-        return nil
-    end
-  end # def tar_compression_flag
-end # class FPM::Package::Tar
-
-    
-          case
-      when value.is_a?(String), value.is_a?(Symbol)
-        %W(--#{opt} #{value})
-      when value.is_a?(Array)
-        value.map { |v| %W(--#{opt} #{v}) }
-      when value.is_a?(TrueClass)
-        '--#{opt}'
-      when value.is_a?(FalseClass)
-        '--no-#{opt}'
-      else
-        fail TypeError, 'Unexpected type: #{value.class}'
-      end
-    end
-  end
-    
-          @io.write header
