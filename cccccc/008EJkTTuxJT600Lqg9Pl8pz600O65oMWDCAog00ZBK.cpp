@@ -1,174 +1,154 @@
 
         
-        #include <string>
-#include <vector>
+        #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-    namespace {
-float sigmoid(const float x) {
-  if (x >= 0) {
-    return 1. / (1. + exp(-x));
-  } else {
-    const float exp_x = exp(x);
-    return exp_x / (1 + exp_x);
-  }
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
+    
+    
+    {  input_for_decode =
+      'longFieldNameIsLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong1000';
+  desired_output_for_decode =
+      'long_field_name_is_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_1000';
+  expected = string('\x04\xA5\xA4\xA2\xBF\x1F\x0E\x84\x0', 9);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
 }
-} // namespace
     
-    // gflags 2.1 issue: namespace google was changed to gflags without warning.
-// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
-// 2.1. If yes, we will add a temporary solution to redirect the namespace.
-// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
-// remove the following hack.
-#ifndef GFLAGS_GFLAGS_H_
-namespace gflags = google;
-#endif  // GFLAGS_GFLAGS_H_
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See data_layer.cpp for an example.
-   */
-  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
-    
-    /**
- * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
- *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
- *        nodes, outgoing nodes, or their average.
- *
- * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
- * accounts for ReLU nonlinearities.
- *
- * Aside: for another perspective on the scaling factor, see the derivation of
- * [Saxe, McClelland, and Ganguli 2013 (v3)].
- *
- * It fills the incoming matrix by randomly sampling Gaussian data with std =
- * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
- * the variance_norm option. You should make sure the input blob has shape (num,
- * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
- * is currently not the case for inner product layers.
- */
-template <typename Dtype>
-class MSRAFiller : public Filler<Dtype> {
- public:
-  explicit MSRAFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    int fan_in = blob->count() / blob->shape(0);
-    // Compatibility with ND blobs
-    int fan_out = blob->num_axes() > 1 ?
-                  blob->count() / blob->shape(1) :
-                  blob->count();
-    Dtype n = fan_in;  // default to fan_in
-    if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
-    } else if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_FAN_OUT) {
-      n = fan_out;
+    namespace google {
+namespace protobuf {
+namespace io {
     }
-    Dtype std = sqrt(Dtype(2) / n);
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
-        blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
+    }
+    }
     
+    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
+    const unittest::TestArenaMapLite& message) {
+  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
+                                           unittest::MAP_ENUM_BAR_LITE,
+                                           unittest::MAP_ENUM_BAZ_LITE>(
+      message);
+}
     
-template <typename Dtype>
-class LayerRegisterer {
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
+    
+    class DataStripper {
  public:
-  LayerRegisterer(const string& type,
-                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
-    // LOG(INFO) << 'Registering layer type: ' << type;
-    LayerRegistry<Dtype>::AddCreator(type, creator);
+  void StripMessage(Message *message) {
+    std::vector<const FieldDescriptor*> set_fields;
+    const Reflection* reflection = message->GetReflection();
+    reflection->ListFields(*message, &set_fields);
+    }
+    }
+    
+    #include <sstream>
+#include <algorithm>
+    
+    void PSOutputDev::doPath(GfxPath *path) {
+  GfxSubpath *subpath;
+  double x0, y0, x1, y1, x2, y2, x3, y3, x4, y4;
+  int n, m, i, j;
+    }
+    
+    int PSTokenizer::lookChar() {
+  if (charBuf < 0) {
+    charBuf = (*getCharFunc)(data);
   }
-};
+  return charBuf;
+}
     
-      virtual inline const char* type() const { return 'BatchNorm'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+      int lookChar();
+  void consumeChar();
+  int getChar();
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #include <config.h>
     
-    #endif  // CAFFE_BIAS_LAYER_HPP_
+      // Attempt to authorize the document, using the supplied
+  // authorization data (which may be NULL).  Returns true if
+  // successful (i.e., if at least the right to open the document was
+  // granted).
+  virtual GBool authorize(void *authData) = 0;
+    
+    
+    {  return newsound;
+}
 
     
-    #endif  // CAFFE_BNLL_LAYER_HPP_
-
+      Object *getObject() { return streamObj; }
+  Stream *getStream();
     
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-      ~DHTRoutingTableDeserializer();
-    
-    namespace aria2 {
-    }
-    
-      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
-    
-    #include 'common.h'
-#include <string>
-    
-    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
-    
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
-    
-        /*! \brief setArg overload taking a pointer type
-     */
-    template<typename T>
-    typename std::enable_if<std::is_pointer<T>::value, cl_int>::type
-        setArg(cl_uint index, const T argPtr)
-    {
-        return detail::errHandler(
-            ::clSetKernelArgSVMPointer(object_, index, argPtr),
-            __SET_KERNEL_ARGS_ERR);
-    }
-#endif // #if CL_HPP_TARGET_OPENCL_VERSION >= 200
-    
-        private:
-        // PIMPL idiom
-        // http://www.cppsamples.com/common-tasks/pimpl.html
-        struct ImplGuiAdam;
-        std::shared_ptr<ImplGuiAdam> spImpl;
+    #include <config.h>
     
     
     {
-    {        DELETE_COPY(PersonIdExtractor);
-    };
+    {                // Reset the window.
+                m_loss.first = m_loss.second;
+                m_metric.first = m_metric.second;
+                m_samples.first = m_samples.second;
+                m_updates.first = m_updates.second;
+            }
+        }
+    
+        template <typename ElementType>
+    /*static*/ void Value::AppendSparseSequenceData(const NDArrayViewPtr& sequenceData, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<char>& nonZeroValues, size_t maxSequenceLengthInCols)
+    {
+        size_t existingNumNonZeroValues = nonZeroValues.size() / sizeof(ElementType);
+        std::vector<SparseIndexType> currentSequencePaddedColStarts(maxSequenceLengthInCols);
+    }
+    
+            int firstLbl = -1;
+        for (int ik = 0; ik < lbls.GetNumRows(); ik++)
+            if (lbls(ik, 0) != 0)
+            {
+                firstLbl = ik;
+                break;
+            }
+    
+    template <class ElemType>
+EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
+    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
+{
+    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
 }
+    
+    
+    {        auto parent = iter->second;
+        auto& aliasInfo = m_aliasGroups[parent];
+        if (aliasInfo.pMatrixPtr == nullptr)
+        {
+            // first allocation for the group
+            aliasInfo.pMatrixPtr = pMatrixPtr;
+            RequestAllocate(deviceId, pMatrixPtr, matrixSize, mbScale, false);
+        }
+        else
+        {
+            auto aliasRootMatrixPtr = (shared_ptr<Matrix<ElemType>>*)aliasInfo.pMatrixPtr;
+            *pMatrixPtr = *aliasRootMatrixPtr;
+            GetMemInfo<ElemType>(aliasRootMatrixPtr)->pMatrixPtrs.push_back(pMatrixPtr);
+        }
+    }
+    
+    template<class ElemType>
+void OptimizedRNNStackNode<ElemType>::Validate(bool isFinalValidationPass)
+{
+    // support an internal legacy version
+    if (m_legacySwapInputsPending)
+    {
+        ::swap(m_inputs[0], m_inputs[1]);
+        m_legacySwapInputsPending = false;
+    }
+    // N.B.: I need both of these lines.
+    Base::Validate(isFinalValidationPass);
+    InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
