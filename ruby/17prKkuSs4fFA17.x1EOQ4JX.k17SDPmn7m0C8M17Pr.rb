@@ -1,81 +1,117 @@
 
         
-              # Returns true if the given value is present in the set.
-      #
-      # raw_key - The key of the set to check.
-      # value - The value to check for.
-      def self.set_includes?(raw_key, value)
-        key = cache_key_for(raw_key)
+        def each_const
+  DEFS.each {|name, default_value|
+    guard = nil
+    if /\A(AF_INET6|PF_INET6|IPV6_.*)\z/ =~ name
+      # IPv6 is not supported although AF_INET6 is defined on mingw
+      guard = 'defined(INET6)'
+    end
+    yield guard, name, default_value
+  }
+end
     
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
-        end
-    
-            def importer_class
-          LfsObjectImporter
-        end
-    
-            expose_attribute :id, :login
-    
-          new_email = resource_params.fetch(:unconfirmed_email)
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
+        if no_leap_seconds?
+      assert_equal(78796800, Time.utc(1972, 7, 1, 0, 0, 0).tv_sec)
+      assert_equal(78796801, Time.utc(1972, 7, 1, 0, 0, 1).tv_sec)
+      assert_equal(946684800, Time.utc(2000, 1, 1, 0, 0, 0).tv_sec)
+      assert_equal(0x7fffffff, Time.utc(2038, 1, 19, 3, 14, 7).tv_sec)
+      assert_equal(0x80000000, Time.utc(2038, 1, 19, 3, 14, 8).tv_sec)
     else
-      head 404
+      assert_equal(2, Time.utc(1972, 7, 1, 0, 0, 0) - Time.utc(1972, 6, 30, 23, 59, 59))
+      assert_equal(78796800, Time.utc(1972, 6, 30, 23, 59, 60).tv_sec)
+      assert_equal(78796801, Time.utc(1972, 7, 1, 0, 0, 0).tv_sec)
+      assert_equal(78796802, Time.utc(1972, 7, 1, 0, 0, 1).tv_sec)
+      assert_equal(946684822, Time.utc(2000, 1, 1, 0, 0, 0).tv_sec)
     end
   end
     
-      def compatible_locale
-    http_accept_language.compatible_language_from(available_locales)
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
+  config.static_cache_control = 'public, max-age=3600'
     
-      def rate_limit_reset
-    (request_time + reset_period_offset).iso8601(6)
-  end
-    
-          attr_reader :page, :diff, :versions, :message, :allow_editing
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
       end
-    
-          def author
-        first = page.last_version
-        return DEFAULT_AUTHOR unless first
-        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
-      end
-    
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
+    end
   end
+end
+
     
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
+            def_node_matcher :erb_new_with_non_keyword_arguments, <<-PATTERN
+          (send
+            (const {nil? cbase} :ERB) :new $...)
+        PATTERN
+    
+      option '--workdir', 'WORKDIR',
+    'The directory you want fpm to do its work in, where 'work' is any file ' \
+    'copying, downloading, etc. Roughly any scratch space fpm needs to build ' \
+    'your package.', :default => Dir.tmpdir
+    
+        temporary_file_name = target_path + '~'
+    
+    class FPM::Package::NPM < FPM::Package
+  class << self
+    include FPM::Util
   end
+  # Flags '--foo' will be accessable  as attributes[:npm_foo]
+  option '--bin', 'NPM_EXECUTABLE',
+    'The path to the npm executable you wish to run.', :default => 'npm'
     
-        def names_for(klass)
-      @attachments[klass].keys
+      def to_s_extension; 'pkg'; end
+    
+        # Evaluate dependencies.
+    if !attributes[:no_auto_depends?]
+	    pkgdepend_gen = safesystemout('pkgdepend', 'generate',  '-md', '#{staging_path}',  manifest_fn)
+      File.write(build_path('#{name}.p5m.3'), pkgdepend_gen)
+    
+      # Download the given package if necessary. If version is given, that version
+  # will be downloaded, otherwise the latest is fetched.
+  def download_if_necessary(package, version=nil)
+    # TODO(sissel): this should just be a 'download' method, the 'if_necessary'
+    # part should go elsewhere.
+    path = package
+    # If it's a path, assume local build.
+    if File.directory?(path) or (File.exist?(path) and File.basename(path) == 'setup.py')
+      return path
     end
     
-        def register_new_attachment
-      Paperclip::AttachmentRegistry.register(@klass, @name, @options)
+        safesystem('tar', *args)
+  end # def output
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
     end
     
-        # Returns the Rails.root constant.
-    def rails_root attachment, style_name
-      Rails.root
-    end
+        args.flatten!.compact!
+    
+    require 'stringio'
