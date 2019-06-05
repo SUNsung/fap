@@ -1,85 +1,66 @@
 
         
-              # Iterates over all of the objects for the given method (e.g. `:labels`).
-      #
-      # method - The method to send to Octokit for querying data.
-      # args - Any arguments to pass to the Octokit method.
-      def each_object(method, *args, &block)
-        return to_enum(__method__, method, *args) unless block_given?
+        describe JobsHelper do
+  let(:job) { Delayed::Job.new }
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-              lfs_objects.each do |object|
-            yield object
-          end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
-        end
-      end
+    describe DefaultScenarioImporter do
+  let(:user) { users(:bob) }
+  describe '.import' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      mock(DefaultScenarioImporter).seed(is_a(User))
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      DefaultScenarioImporter.import(user)
     end
+    
+          @scheduler.schedule_scheduler_agents
+    
+        it 'should generate the correct specific tracking url' do
+      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
+    end
+    
+        def show
+      authorize @user, :change_email?
+    end
+    
+      def self.provides_callback_for(provider)
+    provider_id = provider.to_s.chomp '_oauth2'
+    
+    module ExportControllerConcern
+  extend ActiveSupport::Concern
+    
+      def preferred_locale
+    http_accept_language.preferred_language_from(available_locales)
   end
-end
-
     
-            def importer_class
-          NoteImporter
-        end
+    class MediaProxyController < ApplicationController
+  include RoutingHelper
     
-          # The base cache key to use for tracking already imported objects.
-      ALREADY_IMPORTED_CACHE_KEY =
-        'github-importer/already-imported/%{project}/%{collection}'.freeze
+      # Wraps a string in escaped quotes if it contains whitespace.
+  def quote
+    /\s/ =~ self ? '\'#{self}\'' : '#{self}'
+  end
     
-            # Builds a user using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          new(Representation.symbolize_hash(raw_hash))
-        end
+    class Scene
+  def initialize
+    @spheres = Array.new
+    @spheres[0] = Sphere.new(Vec.new(-2.0, 0.0, -3.5), 0.5)
+    @spheres[1] = Sphere.new(Vec.new(-0.5, 0.0, -3.0), 0.5)
+    @spheres[2] = Sphere.new(Vec.new(1.0, 0.0, -2.2), 0.5)
+    @plane = Plane.new(Vec.new(0.0, -0.5, 0.0), Vec.new(0.0, 1.0, 0.0))
+  end
     
-        def create
-      authorize ReportNote, :create?
+    def to_array(proc)
+  array = []
     
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    def mkboard
+  (0...ROW*COL).each{|i|
+    if i % ROW >= ROW-NP
+      $b[i] = -2
     else
-      ['Unknown mode: #{hub_mode}', 422]
+      $b[i] = -1
     end
-  end
-    
-      def request_locale
-    preferred_locale || compatible_locale
-  end
-    
-      def user_needs_sign_in_update?
-    user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
-  end
+    $b[3*ROW+3]=$b[3*ROW+4]=$b[4*ROW+3]=$b[4*ROW+4]=-2
+  }
 end
-
-    
-          it 'returns an array of reshares for a post' do
-        bob.reshare!(@post)
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to eq(@post.reshares.map(&:id))
-      end
