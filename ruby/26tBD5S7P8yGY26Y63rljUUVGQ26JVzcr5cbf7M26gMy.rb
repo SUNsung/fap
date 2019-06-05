@@ -1,72 +1,131 @@
 
         
-              def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
+              if period_type == :all
+        DB.exec <<~SQL
+          UPDATE user_stats s
+          SET likes_given         = d.likes_given,
+              likes_received      = d.likes_received,
+              topic_count         = d.topic_count,
+              post_count          = d.post_count
     
-        def default_used_route(options)
-      singularizer = lambda { |s| s.to_s.singularize.to_sym }
+        Discourse.plugins.each(&:notify_before_auth)
     
-          # Update password saving the record and clearing token. Returns true if
-      # the passwords are valid and the record was saved, false otherwise.
-      def reset_password(new_password, new_password_confirmation)
-        if new_password.present?
-          self.password = new_password
-          self.password_confirmation = new_password_confirmation
-          save
-        else
-          errors.add(:password, :blank)
-          false
-        end
+      def self.find_draft(user, key)
+    if user.is_a?(User)
+      find_by(user_id: user.id, draft_key: key)
+    else
+      find_by(user_id: user, draft_key: key)
+    end
+  end
+    
+        private
+    
+          limiter10 = RateLimiter.new(
+        nil,
+        'global_ip_limit_10_#{ip}',
+        GlobalSetting.max_reqs_per_ip_per_10_seconds,
+        10,
+        global: true
+      )
+    
+          if SvgSprite.version(theme_ids) != params[:version]
+        return redirect_to path(SvgSprite.path(theme_ids))
       end
     
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
+              if Rails.configuration.try(:lograge).try(:enabled)
+            if timings
+              db_runtime = 0
+              if timings[:sql]
+                db_runtime = timings[:sql][:duration]
+              end
     
-          # Main menu tree menu
-      def main_menu_tree(text, icon: nil, sub_menu: nil, url: '#')
-        content_tag :li, class: 'sidebar-menu-item d-block w-100' do
-          main_menu_item(text, url: url, icon: icon) +
-            render(partial: 'spree/admin/shared/sub_menu/#{sub_menu}')
-        end
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-package-url \'http://docset-package-url.com\' --exit-threshold \'2\' input/dir')
       end
     
-            context 'there is enough stock at the other location' do
-          it 'allows me to make a split' do
-            expect(order.shipments.count).to eq(1)
-            expect(order.shipments.first.inventory_units_for(product.master).sum(&:quantity)).to eq(2)
-    
-              def find_spree_current_order
-            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
-              store: spree_current_store,
-              user: spree_current_user,
-              token: order_token,
-              currency: current_currency
+          it 'sets the platform to (downcase) ios' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              platform: 'ios'
             )
+          end').runner.execute(:test)
+    
+            def representation_class
+          Representation::DiffNote
+        end
+    
+            def collection_method
+          :issues
+        end
+    
+            def execute
+          create_labels
+        end
+    
+    module Gitlab
+  module GithubImport
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
+    
+    module Docs
+  class EntryIndex
+    attr_reader :entries, :types
+    
+        def path
+      @path ||= url.path
+    end
+    
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
           end
+        end
+      end
+    end
+  end
+end
+
     
-            before_action :find_order, except: [:create, :mine, :current, :index, :update, :remove_coupon_code]
+          default_options :authenticity_param => 'authenticity_token',
+                      :allow_if => nil
     
-              def shipping_rates
-            result = shipping_rates_service.call(order: spree_current_order)
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
     
-          @@user_attributes = [:id, :email, :created_at, :updated_at]
+      it 'should allow changing the protection settings' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :default_src => 'none', :script_src => 'https://cdn.mybank.net', :style_src => 'https://cdn.mybank.net', :img_src => 'https://cdn.mybank.net', :connect_src => 'https://api.mybank.com', :frame_src => 'self', :font_src => 'https://cdn.mybank.net', :object_src => 'https://cdn.mybank.net', :media_src => 'https://cdn.mybank.net', :report_uri => '/my_amazing_csp_report_parser', :sandbox => 'allow-scripts'
+    
+      # Configure public file server for tests with Cache-Control for performance.
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, max-age=#{1.hour.to_i}'
+  }
+    
+      def framework_major_version
+    framework_version.split('.').first.to_i
+  end
+end
+World(RailsCommandHelpers)
+
+    
+        def self.each_definition(&block)
+      instance.each_definition(&block)
+    end
