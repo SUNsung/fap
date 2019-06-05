@@ -1,225 +1,415 @@
 
         
-        RequirementEnvironment::RequirementEnvironment(
-                                           DeclContext *conformanceDC,
-                                           GenericSignature *reqSig,
-                                           ProtocolDecl *proto,
-                                           ClassDecl *covariantSelf,
-                                           ProtocolConformance *conformance)
-    : reqSig(reqSig) {
-  ASTContext &ctx = conformanceDC->getASTContext();
-    }
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-    
-    {  OutLines.append(Lines.begin(), Lines.end());
+        void SILLayout::Profile(llvm::FoldingSetNodeID &id,
+                        CanGenericSignature Generics,
+                        ArrayRef<SILField> Fields) {
+  id.AddPointer(Generics.getPointer());
+  for (auto &field : Fields) {
+    id.AddPointer(field.getLoweredType().getPointer());
+    id.AddBoolean(field.isMutable());
+  }
 }
 
     
-    
-    {}%
-    
-    
-    {
-    {/// Determine the imported CF type for the given typedef-name, or the empty
-/// string if this is not an imported CF type name.
-llvm::StringRef getCFTypeName(const clang::TypedefNameDecl *decl);
-}
-}
-    
-    void GeneratePCHJobAction::anchor() {}
-
-    
-    // Initializes the specified startup info struct with the required properties and
-// updates its thread attribute list with the specified ConPTY handle
-HRESULT InitializeStartupInfoAttachedToPseudoConsole(STARTUPINFOEX* pStartupInfo, HPCON hPC)
-{
-    HRESULT hr{ E_UNEXPECTED };
+    %{
     }
     
+      /// Whether to specify a linker -rpath to the Swift runtime library path.
+  /// -rpath is not supported on all platforms, and subclasses may override
+  /// this method to return false on platforms that don't support it. The
+  /// default is to return true (and so specify an -rpath).
+  virtual bool shouldProvideRPathToLinker() const;
     
-bool b2Polygon::IsUsable(){
-	return IsUsable(B2_POLYGON_REPORT_ERRORS);
-}
+      if (FilelistPathArg ? readInputFilesFromFilelist()
+                      : readInputFilesFromCommandLine())
+    return None;
+  Optional<std::set<StringRef>> primaryFiles = readPrimaryFiles();
+  if (!primaryFiles)
+    return None;
     
-    		Block4x4Encoding	*m_pencoding;
+      /// A place to keep alive any buffers that are loaded as part of setting up
+  /// the frontend inputs.
+  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> ConfigurationFileBuffers;
     
-    			float fDX = a_frgbaDecodedColor.fR - a_frgbaSourcePixel.fR;
-			float fDY = a_frgbaDecodedColor.fG - a_frgbaSourcePixel.fG;
-			float fDZ = a_frgbaDecodedColor.fB - a_frgbaSourcePixel.fB;
-			float fDW = a_frgbaDecodedColor.fA - a_frgbaSourcePixel.fA;
-    
-    		virtual bool IsDifferential(void) = 0;
-    
-    #ifndef SILK_MACROS_ARMv4_H
-#define SILK_MACROS_ARMv4_H
-    
-    #ifndef STORAGE_LEVELDB_UTIL_HASH_H_
-#define STORAGE_LEVELDB_UTIL_HASH_H_
-    
-    
-    {  std::string tmp1, tmp2;
-  ASSERT_OK(db_->Put(WriteOptions(), Key(1000, &tmp1), Value(1000, &tmp2)));
-  std::string v;
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
-  dbi->TEST_CompactMemTable();
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
-}
-    
-    #include 'db/dbformat.h'
-#include 'db/skiplist.h'
-#include 'leveldb/db.h'
-#include 'util/arena.h'
+      scoped_ptr<base::Value> value_option(
+      converter->FromV8Value(options, isolate->GetCurrentContext()));
+  if (!value_option.get() ||
+      !value_option->IsType(base::Value::TYPE_DICTIONARY))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'option' passed to AllocateObject')));
     
     
-    {  Env* const env_;
-  const std::string dbname_;
-  const Options& options_;
-  Cache* cache_;
-};
-    
-      // Return non-ok iff some error has been detected.
-  Status status() const;
-    
-    
-    { private:
-  const Options* options_;
-  std::string buffer_;              // Destination buffer
-  std::vector<uint32_t> restarts_;  // Restart points
-  int counter_;                     // Number of entries emitted since restart
-  bool finished_;                   // Has Finish() been called?
-  std::string last_key_;
-};
-    
-    #include 'util/coding.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    
-    {    Rational Sinh(Rational const& rat);
-    Rational Cosh(Rational const& rat);
-    Rational Tanh(Rational const& rat);
-    Rational ASinh(Rational const& rat);
-    Rational ACosh(Rational const& rat);
-    Rational ATanh(Rational const& rat);
-}
-
-    
-    #pragma once
-#include 'ExpressionCommandInterface.h'
-#include 'Header Files/IHistoryDisplay.h'
-    
-    
-    {    AutomationProperties::SetName(m_host, announcement->Announcement);
-    AutomationPeer ^ peer = FrameworkElementAutomationPeer::FromElement(m_host);
-    if (peer != nullptr)
-    {
-        peer->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
-    }
-}
-
-    
-                endOffset[i] = startOffset[i] + ((i < sliceViewShape.Rank()) ? sliceViewShape[i] : 1);
-    
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
-    
-        template <typename ElementType>
-    /*static*/  ValuePtr Value::CreateSequence(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const ElementType* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/)
-    {
-        auto sequenceShape = sampleShape.AppendShape({sequenceLength});
-        auto sequenceData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), sequenceShape, colStarts, rowIndices, nonZeroValues, numNonZeroValues, device, readOnly);
-        return Create(sampleShape, {sequenceData}, {sequenceStartFlag}, device, readOnly, false);
-    }
-    
-        struct QueryUrls
-    {
-        std::vector<Url> m_urls;
-    };
-    
-    template <class ElemType>
-struct MemRequestInfo
-{
-    DEVICEID_TYPE deviceId;                     // which device to allocate data 
-    std::vector<shared_ptr<Matrix<ElemType>>*> pMatrixPtrs;    // memory pointers 
-    size_t matrixSize;                          // memory size 
-    bool mbScale;                               // whether the memory shall be scaled by minibatch size 
-    bool isWorkSpace;                           // workspace memory or not, by workspace we indicate whether a memory space will be released very shortly after allocation 
-    int allocStep;                              // at what step counter memory allocation is requested 
-    int releaseStep;                            // at what step counter memory release is requested  
-    int memoryId;                               // integer indexing the memory buffer ID 
-    MemRequestInfo(DEVICEID_TYPE deviceId, shared_ptr<Matrix<ElemType>>*pMatrixPtr, size_t matrixSize, bool mbScale, bool isWorkSpace, int allocStep)
-        :deviceId(deviceId), matrixSize(matrixSize), mbScale(mbScale), isWorkSpace(isWorkSpace), allocStep(allocStep), releaseStep(INT_MAX), memoryId(-1)
-    {
-        pMatrixPtrs.push_back(pMatrixPtr);
-    }
-    void SetReleaseStep(int step) { releaseStep = step; }
-    void SetMemoryId(int id) { memoryId = id;  }
-};
-    
-    size_t num_threads = 31;
-size_t work_chunk  = 120;
-    
-    namespace HPHP { struct UnitEmitter; }
-namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-      static const APCCollection* fromHandle(const APCHandle* handle) {
-    assertx(handle->checkInvariants());
-    assertx(handle->kind() == APCKind::SharedCollection);
-    static_assert(offsetof(APCCollection, m_handle) == 0, '');
-    return reinterpret_cast<const APCCollection*>(handle);
+    {    block_active_ = false;
+    g_signal_connect(menu_item_, 'activate',
+                     G_CALLBACK(OnClickThunk), this);
   }
     
-    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
-  const char* prefix = 'glob://';
-  const char* path_str = path.data();
-  int path_len = path.length();
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
+      if (data.type == TYPE_PNG &&
+        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
+        error_ = 'Failed to decode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG) {
+        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
+        if (tmp_bitmap == NULL) {
+          error_ = 'Failed to decode as JPEG';
+          return false;
+        }
+        bitmap = std::move(tmp_bitmap);
+      }
+    
+    namespace extensions {
     }
     
+      // get alignment
+  if (dict->lookup('Dm', &obj)->isName()) {
+    const char *dm = obj.getName();
+    
+    if (strcmp('H', dm) == 0)
+      alignment = transitionHorizontal;
+    else if (strcmp('V', dm) == 0)
+      alignment = transitionVertical;
+  }
+  obj.free();
+    
+      // Was the Page Transition created successfully?
+  GBool isOk() { return ok; }
+    
+      if (*keys[0] == key) {
+    return items[0];
+  }
+  for (int i = 1; i <= lastValidCacheIndex; i++) {
+    if (*keys[i] == key) {
+      PopplerCacheKey *keyHit = keys[i];
+      PopplerCacheItem *itemHit = items[i];
+    }
+    }
+    
+    
+    {  if (inlineImg) {
+    str->reset();
+    j = height * ((width * colorMap->getNumPixelComps() *
+		   colorMap->getBits() + 7) / 8);
+    for (i = 0; i < j; ++i)
+      str->getChar();
+    str->close();
+  }
+}
+    
+    void
+ProfileData::addElement (double elapsed) {
+	if (count == 0) {
+		min = elapsed;
+		max = elapsed;
+	} else {
+		if (elapsed < min)
+			min = elapsed;
+		if (elapsed > max)
+			max = elapsed;
+	}
+	total += elapsed;
+	count ++;
+}
+    
+    #ifndef PROFILE_DATA_H
+#define PROFILE_DATA_H
+    
+    
+    {  return newsound;
+}
+
+    
+    #endif
+    
+    //
+//   split, UText mode
+//
+int32_t  RegexPattern::split(UText *input,
+        UText           *dest[],
+        int32_t          destCapacity,
+        UErrorCode      &status) const
+{
+    if (U_FAILURE(status)) {
+        return 0;
+    };
+    }
+    
+    UBool
+SelectFormat::operator==(const Format& other) const {
+    if (this == &other) {
+        return TRUE;
+    }
+    if (!Format::operator==(other)) {
+        return FALSE;
+    }
+    const SelectFormat& o = (const SelectFormat&)other;
+    return msgPattern == o.msgPattern;
+}
+    
+    class UnicodeSet;
+    
+    //----------------------------------------------------------------------
+// Rule representation
+//
+// We represent the following flavors of rules:
+//       5        the fifth of the month
+//       lastSun  the last Sunday in the month
+//       lastMon  the last Monday in the month
+//       Sun>=8   first Sunday on or after the eighth
+//       Sun<=25  last Sunday on or before the 25th
+// This is further complicated by the fact that we need to remain
+// backward compatible with the 1.1 FCS.  Finally, we need to minimize
+// API changes.  In order to satisfy these requirements, we support
+// three representation systems, and we translate between them.
+//
+// INTERNAL REPRESENTATION
+// This is the format SimpleTimeZone objects take after construction or
+// streaming in is complete.  Rules are represented directly, using an
+// unencoded format.  We will discuss the start rule only below; the end
+// rule is analogous.
+//   startMode      Takes on enumerated values DAY_OF_MONTH,
+//                  DOW_IN_MONTH, DOW_AFTER_DOM, or DOW_BEFORE_DOM.
+//   startDay       The day of the month, or for DOW_IN_MONTH mode, a
+//                  value indicating which DOW, such as +1 for first,
+//                  +2 for second, -1 for last, etc.
+//   startDayOfWeek The day of the week.  Ignored for DAY_OF_MONTH.
+//
+// ENCODED REPRESENTATION
+// This is the format accepted by the constructor and by setStartRule()
+// and setEndRule().  It uses various combinations of positive, negative,
+// and zero values to encode the different rules.  This representation
+// allows us to specify all the different rule flavors without altering
+// the API.
+//   MODE              startMonth    startDay    startDayOfWeek
+//   DOW_IN_MONTH_MODE >=0           !=0         >0
+//   DOM_MODE          >=0           >0          ==0
+//   DOW_GE_DOM_MODE   >=0           >0          <0
+//   DOW_LE_DOM_MODE   >=0           <0          <0
+//   (no DST)          don't care    ==0         don't care
+//
+// STREAMED REPRESENTATION
+// We must retain binary compatibility with the 1.1 FCS.  The 1.1 code only
+// handles DOW_IN_MONTH_MODE and non-DST mode, the latter indicated by the
+// flag useDaylight.  When we stream an object out, we translate into an
+// approximate DOW_IN_MONTH_MODE representation so the object can be parsed
+// and used by 1.1 code.  Following that, we write out the full
+// representation separately so that contemporary code can recognize and
+// parse it.  The full representation is written in a 'packed' format,
+// consisting of a version number, a length, and an array of bytes.  Future
+// versions of this class may specify different versions.  If they wish to
+// include additional data, they should do so by storing them after the
+// packed representation below.
+//----------------------------------------------------------------------
+    
+    UnicodeString &
+SmallIntFormatter::format(
+        int32_t smallPositiveValue,
+        const IntDigitCountRange &range,
+        UnicodeString &appendTo) {
+    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
+    }
+    
+        return; // If we reached this point, everything is fine so just exit
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
+    
+    /**
+ * Implement UnicodeMatcher
+ */
+void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
+        ch = pattern.char32At(i);
+        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+        if (matcher == NULL) {
+            toUnionTo.add(ch);
+        } else {
+            matcher->addMatchSetTo(toUnionTo);
+        }
+    }
+}
+    
+            // Copy new text to start, and delete it
+        text.copy(destStart, destLimit, start);
+        text.handleReplaceBetween(tempStart + outLen, destLimit + outLen, UnicodeString());
+    
+    #include <vector>
+#include <memory>
+    
+    
+    {  return out;
+}
+    
+    bool PlainDirectory::isValid() const {
+  return m_dir;
+}
+    
     #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
     
-    #ifndef incl_HPHP_PERF_EVENT_H_
-#define incl_HPHP_PERF_EVENT_H_
     
-    #include 'hphp/util/stack-trace.h'
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    template<typename F>
+void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
+                        int64_t rate, F fillCols) {
+  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
+  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
+  if (!StructuredLog::coinflip(effectiveRate)) return;
+    }
+    
+    
+    {}
+
+    
+      bool addNode(const std::shared_ptr<DHTNode>& node, bool good);
+    
+      std::vector<std::shared_ptr<DHTNode>> nodes_;
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+      DHTTokenTracker(const unsigned char* initialSecret);
+    
+    
+    {  static const std::string UNKNOWN;
+};
+    
+    
+    {  TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
+  server.serve();
+  return 0;
+}
+    
+    
+    {};
+    
+    #include <smartmontools/libsmartctl.h>
+    
+    const std::string kKernelSyscallAddrModifiedPath = '/sys/kernel/camb/syscall_addr_modified';
+const std::string kKernelTextHashPath = '/sys/kernel/camb/text_segment_hash';
+    
+    namespace osquery {
+namespace perf_event_open {
+    }
+    }
+    
+      // Author: @guliashvili
+  // Creation Time: 4/09/2018
+  bool isTotalQueryCounterMonitorEnabled();
+    
+    TEST_F(PerfOutputTests, move_constructor) {
+  auto buf = std::array<char, 4>{};
+  auto from_obj = ebpf::PerfOutput<TestMessage>{};
+  from_obj.size_ = buf.size();
+  from_obj.fd_ = 42;
+  from_obj.data_ptr_ = static_cast<void*>(buf.data());
+    }
+    
+    
+    {  ValidatatioMap row_map = {{'filter_name', NonEmptyString},
+                            {'chain', NormalType},
+                            {'policy', NormalType},
+                            {'target', NormalType},
+                            {'protocol', IntType},
+                            {'src_port', IntMinMaxCheck(0, 65535)},
+                            {'dst_port', IntMinMaxCheck(0, 65535)},
+                            {'src_ip', verifyEmptyStringOrIpAddress},
+                            {'src_mask', verifyEmptyStringOrIpAddress},
+                            {'iniface', NormalType},
+                            {'iniface_mask', verifyEmptyStringOrIpAddress},
+                            {'dst_ip', verifyEmptyStringOrIpAddress},
+                            {'dst_mask', verifyEmptyStringOrIpAddress},
+                            {'outiface', NormalType},
+                            {'outiface_mask', verifyEmptyStringOrIpAddress},
+                            {'match', SpecificValuesCheck{'yes', 'no'}},
+                            {'packets', NonNegativeInt},
+                            {'bytes', NonNegativeInt}};
+  validate_rows(data, row_map);
+}
+    
+    TEST_F(KernelInfo, test_sanity) {
+  QueryData data = execute_query('select * from kernel_info');
+  ValidatatioMap row_map = {{'version', NonEmptyString},
+                            {'arguments', NormalType},
+                            {'path', NormalType},
+                            {'device', NonEmptyString}};
+  validate_rows(data, row_map);
+}
+    
+    namespace osquery {
+namespace table_tests {
+    }
+    }
+    
+    #include <osquery/tests/integration/tables/helper.h>
+    
+    // Sanity check integration test for keychain_items
+// Spec file: specs/darwin/keychain_items.table
+    
+    StopWriteToken::~StopWriteToken() {
+  assert(controller_->total_stopped_ >= 1);
+  --controller_->total_stopped_;
+}
+    
+    
+    {  rocksdb::WriteOptions wopts;
+  db->Merge(wopts, '0', 'bad');  // This is filtered out
+  db->Merge(wopts, '1', 'data1');
+  db->Merge(wopts, '1', 'bad');
+  db->Merge(wopts, '1', 'data2');
+  db->Merge(wopts, '1', 'bad');
+  db->Merge(wopts, '3', 'data3');
+  db->CompactRange(rocksdb::CompactRangeOptions(), nullptr, nullptr);
+  fprintf(stderr, 'filter.count_ = %d\n', filter.count_);
+  assert(filter.count_ == 0);
+  fprintf(stderr, 'filter.merge_count_ = %d\n', filter.merge_count_);
+  assert(filter.merge_count_ == 6);
+}
+
+    
+      std::vector<ColumnFamilyDescriptor> cf_descs;
+  cf_descs.push_back({kDefaultColumnFamilyName, ColumnFamilyOptions()});
+  cf_descs.push_back({'new_cf', ColumnFamilyOptions()});
+    
+    
+    {}  // namespace rocksdb
+
+    
+    // Returns the current memory usage of the specified DB instances.
+class MemoryUtil {
+ public:
+  enum UsageType : int {
+    // Memory usage of all the mem-tables.
+    kMemTableTotal = 0,
+    // Memory usage of those un-flushed mem-tables.
+    kMemTableUnFlushed = 1,
+    // Memory usage of all the table readers.
+    kTableReadersTotal = 2,
+    // Memory usage by Cache.
+    kCacheTotal = 3,
+    kNumUsageTypes = 4
+  };
+    }
