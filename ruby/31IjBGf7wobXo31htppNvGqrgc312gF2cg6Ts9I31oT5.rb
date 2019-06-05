@@ -1,71 +1,79 @@
 
         
-              it 'adds docset_feed_url param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_feed_url: 'http://docset-feed-url.com'
-          )
-        end').runner.execute(:test)
+            if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
     
-        os = 'windows'
-    shelljoin_testcases.each do |testcase|
-      it testcase['it'] + ': ' + testcase['it_result'][os] do
-        array = testcase['input']
-        expect_correct_implementation_to_be_called(array, :shelljoin, os)
-        joined = array.shelljoin
-        expect(joined).to eq(testcase['expect'][os])
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
+        end
+      METHOD
+    end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
       end
-    end
-  end
-    
-      puts '== Installing dependencies =='
-  system! 'gem install bundler --conservative'
-  system('bundle check') || system!('bundle install')
-    
-      # Do not eager load code on boot.
-  config.eager_load = false
-    
-        context 'when user does not have access to report' do
-      let(:report_id) { 3 }
-      
-      it { should be false }
-    end
-  end
-end
-    
-        it { should eq 'foo' }
-  end
-    
-      sub_test_case 'max_per_page' do
-    test 'by default' do
-      assert_nil Kaminari.config.max_per_page
-    end
-    test 'configure via config block' do
-      begin
-        Kaminari.configure {|c| c.max_per_page = 100}
-        assert_equal 100, Kaminari.config.max_per_page
-      ensure
-        Kaminari.configure {|c| c.max_per_page = nil}
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
       end
+      super
     end
+    
+      def new
+    @broadcast = Broadcast.new
   end
     
-        # Public: Filename
-    #
-    # Examples
-    #
-    #   Blob.new('/path/to/linguist/lib/linguist.rb', '').path
-    #   # =>  '/path/to/linguist/lib/linguist.rb'
-    #
-    # Returns a String
-    attr_reader :path
+        wordsize = case @architecture
+    when nil, 'native'
+      %x{getconf LONG_BIT}.chomp # 'native' is current arch
+    when 'amd64'
+      '64'
+    when 'i386'
+      '32'
+    else
+      %x{getconf LONG_BIT}.chomp # default to native, the current arch
+    end
     
-            # If the option-list begins with `set ` or `se `, it indicates an alternative
-        # modeline syntax partly-compatible with older versions of Vi. Here, the colon
-        # serves as a terminator for an option sequence, delimited by whitespace.
-        (?=
-          # So we have to ensure the modeline ends with a colon
-          : (?=[ \t]* set? [ \t] [^\n:]+ :) |
+      # Output a pkgbuild pkg.
+  def output(output_path)
+    output_check(output_path)
+    
+        File.write(build_path('comment'),  self.description + '\n')
+    
+            self.dependencies << '#{name} #{cmp} #{version}'
+      end
+    end # if attributes[:python_dependencies?]
+  end # def load_package_info
+    
+      # Output a zipfile.
+  def output(output_path)
+    output_check(output_path)
+    realpath = Pathname.new(output_path).realdirpath.to_s
+    ::Dir.chdir(staging_path) do
+      safesystem('zip', '-9r', realpath, '.')
+    end
+  end # def output
+end # class FPM::Package::Tar
+
+    
+        if block_given? and opts[:stdin]
+      process.duplex = true
+    end
