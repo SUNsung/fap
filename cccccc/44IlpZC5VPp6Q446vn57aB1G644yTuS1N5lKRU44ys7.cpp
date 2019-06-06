@@ -1,248 +1,302 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-    
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
-    
-    #include 'tensorflow/python/lib/core/safe_ptr.h'
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
+        /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
   }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
 }
     
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
-#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
+    using namespace swift;
+using namespace Demangle;
     
-      // Constructs an or-d together set of device options.
-  explicit DeviceOptions(unsigned flags) : flags_(flags) {
-    CHECK((flags & kMask) == flags);
-  }
+    #include 'ArgsToFrontendOutputsConverter.h'
+#include 'swift/AST/DiagnosticsFrontend.h'
+#include 'swift/Basic/Defer.h'
+#include 'swift/Frontend/FrontendOptions.h'
+#include 'swift/Option/Options.h'
+#include 'swift/Parse/Lexer.h'
+#include 'swift/Strings.h'
+#include 'llvm/Option/Arg.h'
+#include 'llvm/Option/ArgList.h'
+#include 'llvm/Option/Option.h'
+#include 'llvm/Support/ErrorHandling.h'
+#include 'llvm/Support/FileSystem.h'
+#include 'llvm/Support/LineIterator.h'
+#include 'llvm/Support/Path.h'
     
-    namespace stream_executor {
-    }
+    class PAGE_RES_IT;
+class ROW;
+class WERD_RES;
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {
-    {}  // namespace host
-}  // namespace stream_executor
+    #endif  // TESSERACT_CSTRUCT_BOXWORD_H_
 
     
-      // Actually starts (rather than enqueues starting) the timer.
-  void StartNow();
+    STRING ParagraphModel::ToString() const {
+  char buffer[200];
+  const STRING &alignment = ParagraphJustificationToString(justification_);
+  snprintf(buffer, sizeof(buffer),
+           'margin: %d, first_indent: %d, body_indent: %d, alignment: %s',
+           margin_, first_indent_, body_indent_, alignment.string());
+  return STRING(buffer);
+}
+
     
-    // Allows to represent a value that is either a host scalar or a scalar stored
-// on the GPU device.
-template <typename ElemT>
-class HostOrDeviceScalar {
+    // Computes the histogram for the given image rectangle, and the given
+// single channel. Each channel is always one byte per pixel.
+// Histogram is always a kHistogramSize(256) element array to count
+// occurrences of each pixel value.
+void HistogramRect(Pix* src_pix, int channel,
+                   int left, int top, int width, int height,
+                   int* histogram);
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
  public:
-  // Not marked as explicit because when using this constructor, we usually want
-  // to set this to a compile-time constant.
-  HostOrDeviceScalar(ElemT value) : value_(value), is_pointer_(false) {}
-  explicit HostOrDeviceScalar(const DeviceMemory<ElemT>& pointer)
-      : pointer_(pointer), is_pointer_(true) {
-    CHECK_EQ(1, pointer.ElementCount());
+  DoublePtr() : other_end_(nullptr) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
   }
     }
     
-    
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = src0[0] >= src1[0] ? src0[0] - src1[0] : src1[0] - src0[0];
-    }
-};
-    
-    
-    {
-    {        for (; dj < size.width; sj += 3, ++dj)
-        {
-            dst[dj] = src[sj + coi];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)coi;
-#endif
-}
-    
-            for (; sj < roiw8; sj += 8, syj += 16, dj += 32)
-        {
-            uint8x8x2_t v_y = vld2_u8(srcy + syj);
-            uint8x8x4_t v_dst;
-            v_dst.val[0] = vld1_u8(srcu + sj);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1_u8(srcv + sj);
-            v_dst.val[3] = v_y.val[1];
-            vst4_u8(dst + dj, v_dst);
-        }
-    
-    #define CVTS_FUNC1(T1, SIMD_SIZE, CVTSINIT, CVTSROW)                             \
-    void convertScale(const Size2D &,                                            \
-                      const T1 *, ptrdiff_t,                                     \
-                      T1 *, ptrdiff_t,                                           \
-                      f64, f64)                                                  \
-    {                                                                            \
-        internal::assertSupportedConfiguration();                                \
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
     }
     
-            result += (s[0] += s[1]);
-        if (s[0] < 0 || result < 0)//case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
+    /*!
+ * \brief create matrix content from dense matrix
+ * \param data pointer to the data space
+ * \param nrow number of rows
+ * \param ncol number columns
+ * \param missing which value to represent missing value
+ * \param out created dmatrix
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixCreateFromMat(const float *data,
+                                   bst_ulong nrow,
+                                   bst_ulong ncol,
+                                   float missing,
+                                   DMatrixHandle *out);
+/*!
+ * \brief create matrix content from dense matrix
+ * \param data pointer to the data space
+ * \param nrow number of rows
+ * \param ncol number columns
+ * \param missing which value to represent missing value
+ * \param out created dmatrix
+ * \param nthread number of threads (up to maximum cores available, if <=0 use all cores)
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixCreateFromMat_omp(const float *data,  // NOLINT
+                                       bst_ulong nrow, bst_ulong ncol,
+                                       float missing, DMatrixHandle *out,
+                                       int nthread);
+/*!
+ * \brief create matrix content from python data table
+ * \param data pointer to pointer to column data
+ * \param feature_stypes pointer to strings
+ * \param nrow number of rows
+ * \param ncol number columns
+ * \param out created dmatrix
+ * \param nthread number of threads (up to maximum cores available, if <=0 use all cores)
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixCreateFromDT(void** data,
+                                  const char ** feature_stypes,
+                                  bst_ulong nrow,
+                                  bst_ulong ncol,
+                                  DMatrixHandle* out,
+                                  int nthread);
+/*!
+ * \brief create a new dmatrix from sliced content of existing matrix
+ * \param handle instance of data matrix to be sliced
+ * \param idxset index set
+ * \param len length of index set
+ * \param out a sliced new matrix
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSliceDMatrix(DMatrixHandle handle,
+                                  const int *idxset,
+                                  bst_ulong len,
+                                  DMatrixHandle *out);
+/*!
+ * \brief create a new dmatrix from sliced content of existing matrix
+ * \param handle instance of data matrix to be sliced
+ * \param idxset index set
+ * \param len length of index set
+ * \param out a sliced new matrix
+ * \param allow_groups allow slicing of an array with groups
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSliceDMatrixEx(DMatrixHandle handle,
+                                    const int *idxset,
+                                    bst_ulong len,
+                                    DMatrixHandle *out,
+                                    int allow_groups);
+/*!
+ * \brief free space in data matrix
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixFree(DMatrixHandle handle);
+/*!
+ * \brief load a data matrix into binary file
+ * \param handle a instance of data matrix
+ * \param fname file name
+ * \param silent print statistics when saving
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSaveBinary(DMatrixHandle handle,
+                                const char *fname, int silent);
+/*!
+ * \brief set float vector to a content in info
+ * \param handle a instance of data matrix
+ * \param field field name, can be label, weight
+ * \param array pointer to float vector
+ * \param len length of array
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSetFloatInfo(DMatrixHandle handle,
+                                  const char *field,
+                                  const float *array,
+                                  bst_ulong len);
+/*!
+ * \brief set uint32 vector to a content in info
+ * \param handle a instance of data matrix
+ * \param field field name
+ * \param array pointer to unsigned int vector
+ * \param len length of array
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSetUIntInfo(DMatrixHandle handle,
+                                 const char *field,
+                                 const unsigned *array,
+                                 bst_ulong len);
+/*!
+ * \brief set label of the training matrix
+ * \param handle a instance of data matrix
+ * \param group pointer to group size
+ * \param len length of array
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixSetGroup(DMatrixHandle handle,
+                              const unsigned *group,
+                              bst_ulong len);
+/*!
+ * \brief get float info vector from matrix
+ * \param handle a instance of data matrix
+ * \param field field name
+ * \param out_len used to set result length
+ * \param out_dptr pointer to the result
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixGetFloatInfo(const DMatrixHandle handle,
+                                  const char *field,
+                                  bst_ulong* out_len,
+                                  const float **out_dptr);
+/*!
+ * \brief get uint32 info vector from matrix
+ * \param handle a instance of data matrix
+ * \param field field name
+ * \param out_len The length of the field.
+ * \param out_dptr pointer to the result
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixGetUIntInfo(const DMatrixHandle handle,
+                                 const char *field,
+                                 bst_ulong* out_len,
+                                 const unsigned **out_dptr);
+/*!
+ * \brief get number of rows.
+ * \param handle the handle to the DMatrix
+ * \param out The address to hold number of rows.
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixNumRow(DMatrixHandle handle,
+                            bst_ulong *out);
+/*!
+ * \brief get number of columns
+ * \param handle the handle to the DMatrix
+ * \param out The output of number of columns
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGDMatrixNumCol(DMatrixHandle handle,
+                            bst_ulong *out);
+// --- start XGBoost class
+/*!
+ * \brief create xgboost learner
+ * \param dmats matrices that are set to be cached
+ * \param len length of dmats
+ * \param out handle to the result booster
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGBoosterCreate(const DMatrixHandle dmats[],
+                            bst_ulong len,
+                            BoosterHandle *out);
+/*!
+ * \brief free obj in handle
+ * \param handle handle to be freed
+ * \return 0 when success, -1 when failure happens
+ */
+XGB_DLL int XGBoosterFree(BoosterHandle handle);
     
-                    d &= tab[ptr[pixel[1]]] | tab[ptr[pixel[9]]];
-                d &= tab[ptr[pixel[3]]] | tab[ptr[pixel[11]]];
-                d &= tab[ptr[pixel[5]]] | tab[ptr[pixel[13]]];
-                d &= tab[ptr[pixel[7]]] | tab[ptr[pixel[15]]];
+      const char *format = jenv->GetStringUTFChars(jformat, 0);
+  bst_ulong len = 0;
+  char **result;
     
-    void gaussianBlur3x3Margin(const Size2D &size,
-                           const u8 * srcBase, ptrdiff_t srcStride,
-                           u8 * dstBase, ptrdiff_t dstStride,
-                           BORDER_MODE border, u8 borderValue, Margin borderMargin)
-{
-    internal::assertSupportedConfiguration(isGaussianBlur3x3MarginSupported(size, border, borderMargin));
-#ifdef CAROTENE_NEON
-    internal::sepFilter3x3<internal::RowFilter3x3S16_121, internal::ColFilter3x3U8_121>::process(
-                           size, srcBase, srcStride, dstBase, dstStride,
-                           0, 0, border, borderValue, borderMargin);
-#else
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)borderValue;
-#endif
-}
-    
-            int16x8_t tprev = vmovq_n_s16(0x0);
-        int16x8_t tcurr = vmovq_n_s16(0x0);
-        int16x8_t tnext = vmovq_n_s16(0x0);
-        int16x8_t tc = vmovq_n_s16(0x0);
-        int16x8_t t0, t2, tcnext;
-        ptrdiff_t x = 0;
-        const ptrdiff_t bcols = y + 2 < rows ? cols : (cols - 8);
-        for( ; x <= bcols; x += 8 )
-        {
-            internal::prefetch(v0 + x);
-            internal::prefetch(v1 + x);
-            internal::prefetch(v2 + x);
-    }
-    
-    int os_detect(TO_BLOCK_LIST* port_blocks,
-              OSResults* osr,
-              tesseract::Tesseract* tess);
-    
-    #ifndef TESSERACT_CCUTIL_BOXREAD_H_
-#define TESSERACT_CCUTIL_BOXREAD_H_
-    
-    
-    { private:
-  // The collection of images to put in the PDF.
-  Pixa* pixa_;
-  // The fonts used to draw text captions.
-  L_Bmf* fonts_;
-};
-    
-    enum AmbigType {
-  NOT_AMBIG,        // the ngram pair is not ambiguous
-  REPLACE_AMBIG,    // ocred ngram should always be substituted with correct
-  DEFINITE_AMBIG,   // add correct ngram to the classifier results (1-1)
-  SIMILAR_AMBIG,    // use pairwise classifier for ocred/correct pair (1-1)
-  CASE_AMBIG,       // this is a case ambiguity (1-1)
-    }
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the example_glfw_opengl2/ folder**
-// See imgui_impl_glfw.cpp for details.
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
-}
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-    #include 'imgui.h'
-#include 'imgui_impl_sdl.h'
-#include 'imgui_impl_vulkan.h'
-#include <stdio.h>          // printf, fprintf
-#include <stdlib.h>         // abort
-#include <SDL.h>
-#include <SDL_vulkan.h>
-#include <vulkan/vulkan.h>
-    
-        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
-    io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = SDL_SCANCODE_PAGEUP;
-    io.KeyMap[ImGuiKey_PageDown] = SDL_SCANCODE_PAGEDOWN;
-    io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;
-    io.KeyMap[ImGuiKey_End] = SDL_SCANCODE_END;
-    io.KeyMap[ImGuiKey_Insert] = SDL_SCANCODE_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = SDL_SCANCODE_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = SDL_SCANCODE_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = SDL_SCANCODE_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = SDL_SCANCODE_RETURN;
-    io.KeyMap[ImGuiKey_Escape] = SDL_SCANCODE_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = SDL_SCANCODE_A;
-    io.KeyMap[ImGuiKey_C] = SDL_SCANCODE_C;
-    io.KeyMap[ImGuiKey_V] = SDL_SCANCODE_V;
-    io.KeyMap[ImGuiKey_X] = SDL_SCANCODE_X;
-    io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
-    io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2019-04-03: Misc: Renamed imgui_impl_freeglut.cpp/.h to imgui_impl_glut.cpp/.h.
-//  2019-03-25: Misc: Made io.DeltaTime always above zero.
-//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
-//  2018-03-22: Added GLUT Platform binding.
+      void Write(const void* dptr, size_t size) override {
+    LOG(FATAL) << 'Not implemented';
+  }
