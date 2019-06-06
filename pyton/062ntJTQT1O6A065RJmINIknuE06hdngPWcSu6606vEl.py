@@ -1,74 +1,83 @@
 
         
-        
+          Args:
+    model: The currently trained path-based model.
+    session: The current TensorFlow session.
+    instances: The current set instances.
+    labels: The current set labels.
+    set_name: The current set name (train/validation/test).
+    classes: The class label names.
+    
+        distribution = session.run(p_distributions,
+                               feed_dict={
+                                   p_path_embedding: np.reshape(
+                                       curr_path_vector,
+                                       [1, model.lstm_output_dim])})
+    
+        Args:
+      nexamples: The number of examples to batch up.
+      batch_size: The size of the batch.
+    Returns:
+      2-dim tensor as described above.
+    '''
+    bmrem = batch_size - (nexamples % batch_size)
+    bmrem_examples = []
+    if bmrem < batch_size:
+      #bmrem_examples = np.zeros(bmrem, dtype=np.int32)
+      ridxs = np.random.permutation(nexamples)[0:bmrem].astype(np.int32)
+      bmrem_examples = np.sort(ridxs)
+    example_idxs = range(nexamples) + list(bmrem_examples)
+    example_idxs_e_x_edivb = np.reshape(example_idxs, [-1, batch_size])
+    return example_idxs_e_x_edivb, bmrem
+    
+    def plot_time_series(vals_bxtxn, bidx=None, n_to_plot=np.inf, scale=1.0,
+                     color='r', title=None):
+    
+    
+def normalize_rates(data_e, E, S):
+  # Normalization, made more complex because of the P matrices.
+  # Normalize by min and max in each channel.  This normalization will
+  # cause offset differences between identical rnn runs, but different
+  # t hits.
+  for e in range(E):
+    r_sxt = data_e[e]
+    for i in range(S):
+      rmin = np.min(r_sxt[i,:])
+      rmax = np.max(r_sxt[i,:])
+      assert rmax - rmin != 0, 'Something wrong'
+      r_sxt[i,:] = (r_sxt[i,:] - rmin)/(rmax-rmin)
+    data_e[e] = r_sxt
+  return data_e
+    
+        ## Discriminator Variables/Savers.
+    if FLAGS.discriminator_model == 'rnn_nas':
+      dis_variable_maps = variable_mapping.rnn_nas(hparams, model='dis')
+      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
+      init_savers['dis_init_saver'] = dis_init_saver
+    
+    
 @pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
     
-python_3 = ('thefuck/python3-zsh',
-            u'''FROM python:3
-                RUN apt-get update
-                RUN apt-get install -yy zsh''',
-            u'sh')
+@pytest.mark.parametrize('before, after', [
+    ('brew install sshfs',
+     'brew cask install osxfuse && brew install sshfs')])
+def test_get_new_command(before, after):
+    command = Command(before, output)
+    assert get_new_command(command) == after
+
     
-    
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    
-def test_get_new_command():
-    new_command = get_new_command(Command('sudo apt update', match_output))
-    assert new_command == 'sudo apt list --upgradable'
-    
-    no_match_output = '''
-Listing... Done
+            Did you mean `build`?
 '''
     
-    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
-parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
-    ('foo{}', 'foo{}', 'foo{}'),
-    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
+      tokenizer = tokenization.FullTokenizer(
+      vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
     
-    
-        return Server(text_response_handler, **kwargs)
-    
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
-    }
-    
-    import sys
-    
-        def response_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 302 FOUND\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: /get#relevant-section\r\n\r\n'
-        )
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 302 FOUND\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: /final-url/\r\n\r\n'
-        )
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 200 OK\r\n\r\n'
-        )
+        output_tokens = []
+    for token in whitespace_tokenize(text):
+      chars = list(token)
+      if len(chars) > self.max_input_chars_per_word:
+        output_tokens.append(self.unk_token)
+        continue
