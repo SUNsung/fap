@@ -1,132 +1,140 @@
 
         
-            def long_desc(self):
-        '''A long description of the command. Return short description when not
-        available. It cannot contain newlines, since contents will be formatted
-        by optparser which removes newlines and wraps text.
+        secret_msg = b'Secret message goes here'
+    
+    versions_info['versions'][version] = new_version
+versions_info['latest'] = version
+    
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    module_src = '\n'.join(module_contents) + '\n'
+    
+    PREFIX = r'''%YOUTUBE-DL(1)
+    
+    # General information about the project.
+project = u'youtube-dl'
+copyright = u'2014, Ricardo Garcia Gonzalez'
+    
+    
+def _download_restricted(url, filename, age):
+    ''' Returns true if the file has been downloaded '''
+    
+    
+class TestExecution(unittest.TestCase):
+    def test_import(self):
+        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    from test.helper import assertRegexpMatches
+    
+        @classmethod
+    def clear_expired(cls):
+        pass
+
+    
+    from django.contrib.sites.shortcuts import get_current_site
+from django.core.paginator import EmptyPage, PageNotAnInteger
+from django.http import Http404
+from django.template.response import TemplateResponse
+from django.urls import reverse
+from django.utils.http import http_date
+    
+    
+class DjangoTemplates(EngineMixin, BaseRenderer):
+    '''
+    Load Django templates from the built-in widget templates in
+    django/forms/templates and from apps' 'templates' directory.
+    '''
+    backend = DjangoTemplates
+    
+    In both cases, only 10% of the features are informative.
+'''
+import numpy as np
+import gc
+from time import time
+from sklearn.datasets.samples_generator import make_regression
+    
+    from sklearn.utils import check_random_state
+from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics.pairwise import pairwise_kernels
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+        plt.subplots_adjust(hspace=.30)
+    
+    from sklearn.utils import shuffle
+from sklearn.utils import check_random_state
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.cluster import KMeans
+    
+    # #############################################################################
+# Compute clustering with MeanShift
+    
+    # We want to have the same colors for the same cluster from the
+# MiniBatchKMeans and the KMeans algorithm. Let's pair the cluster centers per
+# closest one.
+k_means_cluster_centers = np.sort(k_means.cluster_centers_, axis=0)
+mbk_means_cluster_centers = np.sort(mbk.cluster_centers_, axis=0)
+k_means_labels = pairwise_distances_argmin(X, k_means_cluster_centers)
+mbk_means_labels = pairwise_distances_argmin(X, mbk_means_cluster_centers)
+order = pairwise_distances_argmin(k_means_cluster_centers,
+                                  mbk_means_cluster_centers)
+    
+        if sys.platform == 'win32':
+        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
+        sys.path.append(win32_lib)
+    elif sys.platform.startswith('linux'):
+        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
+        sys.path.append(linux_lib)
+    
+    
+    def nextToken(self):
         '''
-        return self.short_desc()
+        Return a token from this source; i.e., match a token on the char
+        stream.
+        '''
+        
+        while 1:
+            self._state.token = None
+            self._state.channel = DEFAULT_CHANNEL
+            self._state.tokenStartCharIndex = self.input.index()
+            self._state.tokenStartCharPositionInLine = self.input.charPositionInLine
+            self._state.tokenStartLine = self.input.line
+            self._state.text = None
+            if self.input.LA(1) == EOF:
+                return EOF_TOKEN
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-            if not aws_access_key_id:
-            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
-        if not aws_secret_access_key:
-            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
-    
-        def schedule(self, request, spider):
-        self.signals.send_catch_log(signal=signals.request_scheduled,
-                request=request, spider=spider)
-        if not self.slot.scheduler.enqueue_request(request):
-            self.signals.send_catch_log(signal=signals.request_dropped,
-                                        request=request, spider=spider)
-    
-        text = html.remove_tags_with_content(text, ('script', 'noscript'))
-    text = html.replace_entities(text)
-    text = html.remove_comments(text)
-    return _ajax_crawlable_re.search(text) is not None
-
-    
-    logger = logging.getLogger(__name__)
-    
-    '''
-*What is this pattern about?
-This patterns aims to reduce the number of classes required by an
-application. Instead of relying on subclasses it creates objects by
-copying a prototypical instance at run-time.
-    
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
-    
-    '''
-*What is this pattern about?
-The Decorator pattern is used to dynamically add a new feature to an
-object without changing its implementation. It differs from
-inheritance because the new feature is added only to that particular
-object, not to the entire subclass.
-    
-        def show_item_information(self, item_type, item_name, item_info):
-        '''Will look for item information by iterating over key,value pairs
-        yielded by item_info.items()'''
-        raise NotImplementedError
-    
-        def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
+            raise NotImplementedError
     
     
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
-    
-    
-def SendShutdownRequest():
-  request = ShutdownRequest()
-  # This is a blocking call.
-  request.Start()
-
-    
-        nextgroup_at_start = False
-    
-    
-def MockAsyncServerResponseDone( response ):
-  '''Return a fake future object that is complete with the supplied response
-  message. Suitable for mocking a response future within a client request. For
-  example:
-    
-            try:
-            result = self.fn(*self.args, **self.kwargs)
-        except BaseException:
-            e = sys.exc_info()[1]
-            self.future.set_exception(e)
-        else:
-            self.future.set_result(result)
-    
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
-    
-    try:
-    from test import test_support
-except ImportError:
-    from test import support as test_support
+    def getCharPositionInLine(self):
+        '''@brief Get the column of the tokens first character,
+        
+        Columns are numbered 0..n-1
+        
+        Using setter/getter methods is deprecated. Use o.charPositionInLine instead.'''
