@@ -1,76 +1,177 @@
 
         
-                  relation.update_all(update)
-        end
+            def type=(value)
+      @type = value.try :strip
+    end
+    
+        module MultipleBaseUrls
+      def self.included(base)
+        base.extend ClassMethods
       end
+    
+          @terminal_width = if !tty?
+        nil
+      elsif ENV['COLUMNS']
+        ENV['COLUMNS'].to_i
+      else
+        `stty size`.scan(/\d+/).last.to_i
+      end
+    rescue
+      @terminal_width = nil
     end
   end
 end
 
     
-            def preload_pipeline_warnings
-          # This preloads the number of warnings for every pipeline, ensuring
-          # that Ci::Pipeline#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.number_of_warnings
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
         end
     
-          # project - An instance of `Project`.
-      # object - The object to look up or set a database ID for.
-      def initialize(project, object)
-        @project = project
-        @object = object
+        self.listener = Rex::Socket::TcpServer.create(
+      'LocalHost' => self.listen_host,
+      'LocalPort' => self.listen_port,
+      'Context'   => self.context,
+      'SSL'       => self.ssl,
+      'SSLCert'   => self.ssl_cert,
+      'SSLCompression' => self.ssl_compression,
+      'SSLCipher' => self.ssl_cipher,
+      'Comm'      => self.comm
+    )
+    
+          dprint( ['RECV', phdr, stype, info].inspect )
+      case stype
+      when IAX_SUBTYPE_HANGUP
+        self.state = :hangup
+        self.client.send_ack(self)
+      when IAX_SUBTYPE_LAGRQ
+        # Lagrps echo the timestamp
+        self.client.send_lagrp(self, tstamp)
+      when IAX_SUBTYPE_ACK
+        # Nothing to do here
+      when IAX_SUBTYPE_PING
+        # Pongs echo the timestamp
+        self.client.send_pong(self, tstamp)
+      when IAX_SUBTYPE_PONG
+        self.client.send_ack(self)
+      else
+        dprint( ['RECV-QUEUE', phdr, stype, info].inspect )
+        self.queue.push( [phdr, stype, info ] )
       end
     
-      #
-  # Allow 100 Continues to be ignored by the caller
-  #
-  def check_100
-    # If this was a 100 continue with no data, reset
-    if self.code == 100 and (self.body_bytes_left == -1 or self.body_bytes_left == 0) and self.count_100 < 5
-      self.reset_except_queue
-      self.count_100 += 1
-    end
+    
+  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
+    con_sid +
+    bmc_sid +
+    con_rid +
+    bmc_rid +
+    bmc_gid +
+    [ auth_level ].pack('C') +
+    [ username.length ].pack('C') +
+    username
   end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
-        class Principal < Element
-          # @!attribute name_type
-          #   @return [Integer]
-          attr_accessor :name_type
-          # @!attribute realm
-          #   @return [String]
-          attr_accessor :realm
-          # @!attribute components
-          #   @return [Array<String>]
-          attr_accessor :components
-    
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
+              private
     
     module Rex
   module Proto
     module Kerberos
       module Model
-        # This class provides a representation of a principal, an asset (e.g., a
-        # workstation user or a network server) on a network.
-        class Element
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
     
-              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+                res = ''
+            case etype
+            when RC4_HMAC
+              res = decrypt_rc4_hmac(cipher, key, msg_type)
+              raise ::RuntimeError, 'EncryptedData failed to decrypt' if res.length < 8
+              res = res[8, res.length - 1]
+            else
+              raise ::NotImplementedError, 'EncryptedData schema is not supported'
+            end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_etype(input)
-            input.value[0].value.to_i
+          # @return [String]
+          def decode_value(input)
+            input.value[0].value
           end
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
+          end
+    
+              # Rex::Proto::Kerberos::Model::KrbError encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KrbError encoding not supported'
+          end
+    
+    # create and write to opml file
+xml = Builder::XmlMarkup.new(indent: 2)
+xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
+xml.tag!('opml', version: '1.0') do
+  # head
+  xml.tag!('head') do
+    xml.title TITLE
+  end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to eq('block-all_mixed_content; connect-src 'self'; default-src none; disown-opener; img-src 'self'; script-src 'self'; style-src 'self'; upgrade-insecure_requests')
+  end
+    
+        it 'redirects requests with sneaky encoded session cookies' do
+      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/path')
+    end
+  end
     
     # Use this to fill in an entire form with data from a table. Example:
 #
@@ -89,37 +190,32 @@ When /^(?:|I )fill in the following:$/ do |fields|
   end
 end
     
-      def framework_major_version
-    framework_version.split('.').first.to_i
-  end
-end
-World(RailsCommandHelpers)
-
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
     
-        def self.clear
-      instance.clear
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
     end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
-    
-        # Extracts the Geometry from a 'WxH,O' string
-    # Where W is the width, H is the height,
-    # and O is the EXIF orientation
-    def self.parse(string)
-      GeometryParser.new(string).make
-    end
-    
-        def define_getters
-      define_instance_getter
-      define_class_getter
-    end
-    
-        # Returns a sorted list of all interpolations.
-    def self.all
-      self.instance_methods(false).sort!
+        def add_paperclip_callbacks
+      @klass.send(
+        :define_paperclip_callbacks,
+        :post_process, :'#{@name}_post_process')
     end
