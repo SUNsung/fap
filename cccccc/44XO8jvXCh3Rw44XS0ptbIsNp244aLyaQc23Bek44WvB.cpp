@@ -1,135 +1,99 @@
 
         
-          if (_stricmp(info->szDll, 'iojs.exe') != 0 &&
-      _stricmp(info->szDll, 'node.exe') != 0)
-    return NULL;
+        class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
     
-    #include <string>
+    #endif  // GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+
     
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
     }
     
-    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  bool contains_filenames;
-  std::vector<base::string16> types;
-  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
-  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
-    if (base::EqualsASCII(*it, ui::kMimeTypeText)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
-    } else if (base::EqualsASCII(*it, ui::kMimeTypeHTML)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
-    } else if (base::EqualsASCII(*it, ui::kMimeTypeRTF)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
-    } else if (base::EqualsASCII(*it, ui::kMimeTypePNG)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
-    }
+    void SetCreateThreadPool(CreateThreadPoolFunc func) { g_ctp_impl = func; }
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  host_cpu_load_info_data_t cpuinfo;
+  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
+  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
+                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
+    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
+    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
   }
-  return true;
+  return std::make_pair(busy, total);
 }
     
-    REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
     
-    class GetMergeSingleListFeatureTensorsGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    vector<string> input_blob_names{};
-    vector<string> output_blob_names{};
-    }
-    }
+    #include <stdio.h>
+#include <cstdlib>
+#include <set>
+#include <unordered_map>
+#include <vector>
     
-    </details>
+    U_CAPI void U_EXPORT2
+uhash_deleteScriptSet(void *obj) {
+    icu::ScriptSet *s = static_cast<icu::ScriptSet *>(obj);
+    delete s;
+}
+
     
-    // Like ASSERT_DEATH, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_DEATH(statement, regex) \
-    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
-    
-    #if 0
-    
-      // Smart pointer members.
-  void reset(T* ptr = NULL) {
-    depart();
-    capture(ptr);
-  }
-  T* get() const { return value_; }
-  T* operator->() const { return value_; }
-  T& operator*() const { return *value_; }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35>
-struct Templates35 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates34<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35> Tail;
-};
-    
-      virtual bool IsPrime(int n) const {
-    return 0 <= n && n < is_prime_size_ && is_prime_[n];
-  }
-    
-    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
-int Factorial(int n) {
-  int result = 1;
-  for (int i = 1; i <= n; i++) {
-    result *= i;
-  }
+    //-------------------------------------------------------------------------------
+//
+//  ScriptSet - A bit set representing a set of scripts.
+//
+//              This class was originally used exclusively with script sets appearing
+//              as part of the spoof check whole script confusable binary data. Its
+//              use has since become more general, but the continued use to wrap
+//              prebuilt binary data does constrain the design.
+//
+//-------------------------------------------------------------------------------
+class U_I18N_API ScriptSet: public UMemory {
+  public:
+    ScriptSet();
+    ScriptSet(const ScriptSet &other);
+    ~ScriptSet();
     }
     
-    #include 'sample2.h'
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
     
+    class Calendar;
     
-    {  /*!
-   * \brief Create a tree updater given name
-   * \param name Name of the tree updater.
-   */
-  static TreeUpdater* Create(const std::string& name);
-};
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    
-    {    inline size_t Size() const {
-      return end - begin;
-    }
-  };
-  /* \brief specifies how to split a rowset into two */
-  struct Split {
-    std::vector<size_t> left;
-    std::vector<size_t> right;
-  };
-    
-    
-    {
-    {}  // namespace obj
-}  // namespace xgboost
+    U_NAMESPACE_END
