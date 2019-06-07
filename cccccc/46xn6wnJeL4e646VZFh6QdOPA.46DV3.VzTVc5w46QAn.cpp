@@ -1,170 +1,166 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+    #include <string>
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #include <cstdint>  // for int16_t
-    
-    namespace tesseract {
-class Tesseract;
-}
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
     
-      double m() const;  // get gradient
-  double c(double m) const;            // get constant
-  double rms(double m, double c) const;            // get error
-  double pearson() const;  // get correlation coefficient.
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
     
-        void NDMask::Clear()
+     protected:
+  ResponseAction Run() override;
+  ~NwObjCallObjectMethodAsyncFunction() override;
+    
+    
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
+  };
+    
+    
+    {    return result;
+}
+    
+    #include <vector>
+#include 'Ratpack/ratpak.h'
+    
+        Number::Number(PNUMBER p) noexcept
+        : m_sign{ p->sign }
+        , m_exp{ p->exp }
+        , m_mantissa{}
     {
-        // Clear the mask by marking all samples as Valid
-        GetMatrix()->SetValue((char)MaskKind::Valid);
+        m_mantissa.reserve(p->cdigit);
+        copy(p->mant, p->mant + p->cdigit, back_inserter(m_mantissa));
     }
     
-    bool DataReader::SetNetOutput(
-    const std::vector<std::vector<std::pair<wstring, size_t>>>& uttInfo,
-    const MatrixBase& outputs,
-    const MBLayoutPtr pMBLayout)
-{
-    bool ans = false;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        ans = (m_dataReaders[m_ioNames[i]]->SetNetOutput(uttInfo, outputs, pMBLayout) || ans);
-    return ans;
-}
+        // to be changed when pszexp is back
+    tokens->GetString(&generatedExpression);
+    // Prefixing and suffixing the special Unicode markers to ensure that the expression
+    // in the history doesn't get broken for RTL languages
+    spHistoryItem->historyItemVector.expression = L'\u202d' + generatedExpression + L'\u202c';
+    spHistoryItem->historyItemVector.result = wstring(result);
+    addedIndex = AddItem(spHistoryItem);
     
     
-    {        // change to other values so can support multiple sentences in each minibatch
-        ForwardCompute(alpha, backtrace, pos_scores, pair_scores, stt);
-        BackwardCompute(functionValues, backtrace, stp);
+    {
+    {    private:
+        std::vector<std::shared_ptr<HISTORYITEM>> m_historyItems;
+        const size_t m_maxHistorySize;
     };
-    
-    // Copies internal accumulator to the output.
-template <class ElemType>
-void EpochAccumulatorNode<ElemType>::CopyAccumulatorToValue()
-{
-    // Value gets resized in UpdateFunctionValuesSize that is called in BeforeForwardProp. Resize fills matrix with NaN
-    // values, so m_value matrix cannot be used as persistent storage between ForwardProp calls.
-    Value().SetValue(*m_accumulator);
 }
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    int64_t VMTOC::pushElem(int64_t elem, bool elemMayChange) {
-  int64_t offset;
-  if (elemMayChange) {
-    offset = allocTOC(elem);
-  }
-  else {
-    auto& map_elem = m_map[elem];
-    if (map_elem) return map_elem;
-    offset = allocTOC(elem);
-    map_elem = offset;
-  }
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    bool ArrayDirectory::isEof() const {
-  return m_it.end();
-}
-    
-    #endif // incl_HPHP_OUTPUT_FILE_H_
 
     
-    #ifndef incl_HPHP_PERF_EVENT_H_
-#define incl_HPHP_PERF_EVENT_H_
+    #pragma once
+/****************************Module*Header***********************************\
+* Module Name: CalcEngine.h
+*
+* Module Description:
+*       The class definition for the Calculator's engine class CCalcEngine
+*
+* Warnings:
+*
+* Created: 17-Jan-2008
+*
+\****************************************************************************/
     
+    #include <caffe/proto/caffe.pb.h>
+#include <dmlc/parameter.h>
+#include <dmlc/base.h>
+#include <dmlc/json.h>
+#include <dmlc/logging.h>
+#include <dmlc/type_traits.h>
+#include <google/protobuf/message.h>
+#include <google/protobuf/text_format.h>
     
-    {  logAHMSubMapWarning(mapName);
+    template<typename xpu>
+void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                                const float threshold) {
+  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
+  ::Launch(s,
+          inputs[1].Size(),         // original size
+          inputs[1].dptr<float>(),  // out array
+          inputs[0].dptr<float>(),  // compressed array
+          -1 *threshold,            // negative threshold
+          threshold);               // positive threshold
 }
     
+     private:
+  /*!
+   * \brief denotes the type of gradient compression which has been set
+   */
+  CompressionType type_;
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
+      // Check all input and output matrices have the same number
+  // of columns and the output matrix has the right number of rows
+  int ncols = static_cast<int>(out.size(1));
+  int nrows = 1;
+  for (auto & ts : ts_arr) {
+    CHECK_EQ(ncols, static_cast<int>(ts.size(1)))
+      << 'All input and output matrices must have the same number of columns.';
+    nrows *= ts.size(0);
+  }
+  CHECK_EQ(nrows, static_cast<int>(out.size(0)));
     
-    class Env;
-class WriteControllerToken;
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      if (param_.sampler_type == st::kBilinear) {
+        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                          sampler_,
+                                                          dtype_,
+                                                          4,
+                                                          dim));
+      }
+    }
+  }
     
-      // initialize BlockBasedTableOptions
-  auto cache = NewLRUCache(1 * 1024 * 1024 * 1024);
-  BlockBasedTableOptions bbt_opts;
-  bbt_opts.block_size = 32 * 1024;
-  bbt_opts.block_cache = cache;
-    
-      // open DB
-  Status s = DB::Open(options, kDBPath, &db);
-  assert(s.ok());
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-      static Status Open(const DBOptions& db_options, const std::string& dbname,
-                     const std::vector<ColumnFamilyDescriptor>& column_families,
-                     std::vector<ColumnFamilyHandle*>* handles,
-                     OptimisticTransactionDB** dbptr);
+    DMLC_REGISTER_PARAMETER(IdentityAttachKLSparseRegParam);
