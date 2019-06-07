@@ -1,364 +1,271 @@
 
         
-        
-    {    // write one line of each color component
-    for (comp = 0; comp < 4; ++comp) {
-      for (x = 0; x < width; ++x) {
-	digit = lineBuf[4*x + comp] / 16;
-	hexBuf[i++] = digit + ((digit >= 10)? 'a'-10: '0');
-	digit = lineBuf[4*x + comp] % 16;
-	hexBuf[i++] = digit + ((digit >= 10)? 'a'-10: '0');
-	if (i >= 64) {
-	  hexBuf[i++] = '\n';
-	  writePSBuf(hexBuf, i);
-	  i = 0;
-	}
-      }
-    }
-  }
+            /*
+        Convert BGRX image to YCrCb
+    */
+    void bgrx2ycrcb(const Size2D &size,
+                    const u8 * srcBase, ptrdiff_t srcStride,
+                    u8 * dstBase, ptrdiff_t dstStride);
     
-    static void toRoman(int number, GooString *str, GBool uppercase) {
-  static const char uppercaseNumerals[] = 'IVXLCDM';
-  static const char lowercaseNumerals[] = 'ivxlcdm';
-  int divisor;
-  int i, j, k;
-  const char *wh;
+            size_t width;
+        size_t height;
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vadd(v_src0, v_src1);
     }
     
-      // get alignment
-  if (dict->lookup('Dm', &obj)->isName()) {
-    const char *dm = obj.getName();
+        void operator() (const typename VecTraits<T>::vec64 & v_src0,
+                     const typename VecTraits<T>::vec64 & v_src1,
+                     typename VecTraits<T>::vec64 & v_dst) const
+    {
+        typename VecTraits<wtype>::vec128 vr;
+        wideAdd(vmovl(v_src0), vmovl(v_src1), vr);
+    }
     
-    if (strcmp('H', dm) == 0)
-      alignment = transitionHorizontal;
-    else if (strcmp('V', dm) == 0)
-      alignment = transitionVertical;
-  }
-  obj.free();
+    #include 'common.hpp'
+#include 'saturate_cast.hpp'
     
-      // Get type
-  PageTransitionType getType() { return type; }
+                int32x2_t vnz1 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx1), vget_high_u32(vlx1)));
+            int32x2_t vnz2 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx2), vget_high_u32(vlx2)));
     
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006, 2009, 201, 2010 Albert Astals Cid <aacid@kde.org>
-// Copyright (C) 2006 Krzysztof Kowalczyk <kkowalczyk@gmail.com>
-// Copyright (C) 2009 Ilya Gorenbein <igorenbein@finjan.com>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
+            size_t i = 0;
+        while(i + 4 <= size.width)
+        {
+            size_t lim = std::min(i + DOT_FLOAT_BLOCKSIZE, size.width) - 4;
+            float32x4_t v_sum = vdupq_n_f32(0.0f);
+    }
     
-    #ifdef USE_GCC_PRAGMAS
-#pragma interface
-#endif
-    
-    #include 'GooString.h'
-#include 'Object.h'
-#include 'Sound.h'
-#include 'Stream.h'
-#include 'FileSpec.h'
-    
-    
-    {  for (i = 0; i < nT3Fonts; ++i) {
-    delete t3FontCache[i];
-  }
-  if (fontEngine) {
-    delete fontEngine;
-  }
-  if (splash) {
-    delete splash;
-  }
-  if (bitmap) {
-    delete bitmap;
-  }
+    inline float32x2_t vsqrt_f32(float32x2_t val)
+{
+    return vrecp_f32(vrsqrt_f32(val));
 }
     
-        Matrix<char>* NDMask::GetMatrix() const
-    {
-        return m_matrixView.get();
-    }
+      // Print statistics.
+  void print_scores(void) const;
+  void print_scores(int orientation_id) const;
     
-        template <typename ElementType, typename DestType>
-    void DirectCopy(const ElementType *source, const size_t elementCount, std::vector<DestType>& dest)
-    {
-        if (!std::is_same<ElementType, DestType>::value)
-            RuntimeError('Copy: Source and destination must be the same data type.');
-    }
+    #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
     
     
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
-            }
-        }
-    
-    
-    {
-    {
-    {}}}
-
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-    // ===================================================================
-// CloneFunctionConfigLambda -- lambda to produce a clone of a network
-//  - creates a BrainScript function that carbon-copies a subsection of an existing network
-//  - the copy can be shallow or deep, where a deep copy gets its own copy of LearnableParameters
-//     - a shallow copy (parameters='shared') is a copy of all nodes that depend on the specified input(s),
-//       while all other nodes are shared from the original network section
-//     - a deep copy (parameters='lernable' or 'constant') also copies all reachable LearnableParameters and their dependents
-//     - Input() nodes not listed as `inputNodes` are always shared
-//  - the source network may be a different network, e.g. loaded with BS.Network.Load()
-//  - a deep copy can be read-only (parameters='constant')
-//     - Note: multiple uses of the lambda will not share read-only parameters. This is trickier to implement that one might expect.
-//  - example use cases:
-//     - adaptation (KL): a frozen read-only copy of the starting model is used as a KL-regularizer
-//     - adaptation (DLR): an injected input transform is trained while the network is fixed
-//     - image: lower layers of ImageNet networks serve as immutable feature extractors for another image task
-//     - DSSM: applying the same network subsection to two inputs
-// Usage:
-//    f = CloneFunction (inputNodes, outputNodes, parameters='lernable' /*|'constant'|'shared'*/)
-// Parameters:
-//  - inputNodes:  single node or array of nodes that will become parameters of the function.
-//                 Commonly, this list will include all Input()s that the outputNode(s) depend on.
-//  - outputNodes: single node or dictionary of nodes that the function will emit
-// Example:
-//    # create a BS function by copying a piece of network
-//    net = CloneFunction (network.features, network.logP)
-//    # apply the copy to a new input
-//    out = net (myFeatures)
-//    # This will create a copy of the subsection from network.features to network.logP
-//    # where all links to network.features get replaced by links to myFeatures.
-// Example with multiple input and output nodes:
-//    # create a BS function by copying a piece of network
-//    # This specific example converts a network back into a BrainScript function.
-//    # It passes two input nodes --> the BS function will have 2 inputs;
-//    # and it passes a record of output nodes --> the BS function will return a record with the same member names
-//    network = BS.Network.Load ('some.dnn')
-//    net = CloneFunction ((network.features:network.labels), [ ce = network.ce ; errs = network.errs ])
-//    # create a network from the BS function
-//    features = Input (13)
-//    labels = Input (42)
-//    out = net (features, labels)
-//    criterionNodes = (out.ce)
-//    evaluationNodes = (out.errs)
-// A specific example: Adapting a network, while using the original network as a regularizer (KLD)
-//    # load network
-//    network = BS.Network.Load ('some.dnn')
-//    # create a trainable clone and a read-only reference clone
-//    adaptNet = CloneFunction (network.features, [ z = network.z ], readOnly=false)
-//    # create a read-only clone
-//    refNet = CloneFunction (network.features, [ z = network.z ], readOnly=true)
-//    # create the main network
-//    features = Input (42)
-//    labels = Input (9000)
-//    z = adaptNet (features).z
-//    zRef = refNet (features).z
-//    # training criterion
-//    refWeight = 0.9
-//    kldLabels = labels * (1-refWeight) + Softmax (zRef) * refWeight  # interpolate with ref output
-//    ce = CrossEntropyWithSoftmax (z, kldLabels)
-//    errs = ClassificationError (z, labels)
-//    criterionNodes = (ce)
-//    evaluationNodes = (errs)
-// ===================================================================
-    
-    
-    {            // Get the last QueryUrls and add the Url.
-            QueryUrls& qub = m_queryUrls.back();
-            Url u(i, qub.m_urls.size(), preds(0, i), gains(0, i));
-            qub.m_urls.push_back(u);
-        }
-    
-    private:
-    // init parameters for deferred initialization (which happens in Validate())
-    std::wstring m_initString; // if non-empty then deferred initialization is needed. Gets cleared upon completion of deferred init.
-    unsigned long m_randomSeed;
-    ElemType m_initValueScale;
-    size_t m_initFilterRank;
-    int m_initOutputRank;
-    bool m_initOnCPUOnly;
-    ElemType m_initValue;
-    
-    
-template class OptimizedRNNStackNode<float>;
-template class OptimizedRNNStackNode<double>;
-template class OptimizedRNNStackNode<half>;
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
-  }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
+    {  bool rword_indicates_list_item;
+  bool rword_likely_starts_idea;
+  bool rword_likely_ends_idea;
 };
     
+      // Computes and returns the squared evaluation metric for a line fit.
+  double EvaluateLineFit();
     
-/*! \brief handle to DMatrix */
-typedef void *DMatrixHandle;  // NOLINT(*)
-/*! \brief handle to Booster */
-typedef void *BoosterHandle;  // NOLINT(*)
-/*! \brief handle to a data iterator */
-typedef void *DataIterHandle;  // NOLINT(*)
-/*! \brief handle to a internal data holder. */
-typedef void *DataHolderHandle;  // NOLINT(*)
     
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterGetAttr
- * Signature: (JLjava/lang/String;[Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterGetAttr
-  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jkey, jobjectArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  const char* key = jenv->GetStringUTFChars(jkey, 0);
-  const char* result;
-  int success;
-  int ret = XGBoosterGetAttr(handle, key, &result, &success);
-  //release
-  if (key) jenv->ReleaseStringUTFChars(jkey, key);
-    }
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
     
-    // Finally register the objective function.
-// After it succeeds you can try use xgboost with objective=mylogistic
-XGBOOST_REGISTER_OBJECTIVE(MyLogistic, 'mylogistic')
-.describe('User defined logistic regression plugin')
-.set_body([]() { return new MyLogistic(); });
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(page.offset.Size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), page.data.Size());
-    fo->Write(offset_vec);
-    if (page.data.Size() != 0) {
-      fo->Write(dmlc::BeginPtr(data_vec), page.data.Size() * sizeof(Entry));
-    }
+      // Returns a pointer to the vector with all unichar ids that appear in the
+  // 'correct' part of the ambiguity pair when the given unichar id appears
+  // in the 'wrong' part of the ambiguity. E.g. if DangAmbigs file consist of
+  // m->rn,rn->m,m->iii, UnicharAmbigsForAdaption() called with unichar id of
+  // m will return a pointer to a vector with unichar ids of r,n,i.
+  inline const UnicharIdVector *AmbigsForAdaption(
+      UNICHAR_ID unichar_id) const {
+    if (ambigs_for_adaption_.empty()) return nullptr;
+    return ambigs_for_adaption_[unichar_id];
   }
     
-    void SimpleCSRSource::Clear() {
-  page_.Clear();
-  this->info.Clear();
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
+    }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
+    
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
+    }
+    
+      // Streams a pointer value to this object.
+  //
+  // This function is an overload of the previous one.  When you
+  // stream a pointer to a Message, this definition will be used as it
+  // is more specialized.  (The C++ Standard, section
+  // [temp.func.order].)  If you stream a non-pointer, then the
+  // previous definition will be used.
+  //
+  // The reason for this overload is that streaming a NULL pointer to
+  // ostream is undefined behavior.  Depending on the compiler, you
+  // may get '0', '(nil)', '(null)', or an access violation.  To
+  // ensure consistent result across compilers, we always treat NULL
+  // as '(null)'.
+  template <typename T>
+  inline Message& operator <<(T* const& pointer) {  // NOLINT
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
+    return *this;
+  }
+#endif  // GTEST_OS_SYMBIAN
+    
+    // Unary predicate assertion macros.
+#define EXPECT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_FATAL_FAILURE_)
+    
+    #define GTEST_TEST_THROW_(statement, expected_exception, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::ConstCharPtr gtest_msg = '') { \
+    bool gtest_caught_expected = false; \
+    try { \
+      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+    } \
+    catch (expected_exception const&) { \
+      gtest_caught_expected = true; \
+    } \
+    catch (...) { \
+      gtest_msg.value = \
+          'Expected: ' #statement ' throws an exception of type ' \
+          #expected_exception '.\n  Actual: it throws a different type.'; \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__); \
+    } \
+    if (!gtest_caught_expected) { \
+      gtest_msg.value = \
+          'Expected: ' #statement ' throws an exception of type ' \
+          #expected_exception '.\n  Actual: it throws nothing.'; \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__); \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__): \
+      fail(gtest_msg.value)
+    
+      template <GTEST_6_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_6_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    return *this;
+  }
+    
+    #include <string.h>
+    
+    void ClippingRectangleNode::onAfterVisitScissor()
+{
+    if (_clippingEnabled)
+    {
+        glDisable(GL_SCISSOR_TEST);
+    }
 }
     
-    // data
-#include '../src/data/data.cc'
-#include '../src/data/simple_csr_source.cc'
-#include '../src/data/simple_dmatrix.cc'
-#include '../src/data/sparse_page_raw_format.cc'
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
     
     
-    {  double ret = x * OBJECT_ORIENTATION_ANGEL_RES + OBJECT_ORIENTATION_ANGEL_MIN;
+    {    virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const = 0;
+    
+    CC_DEPRECATED_ATTRIBUTE inline int* getHorizontalKerningForTextUTF16(const std::u16string& text, int &outNumLetters) const
+    {
+        std::u32string utf32;
+        StringUtils::UTF16ToUTF32(text, utf32);
+        return getHorizontalKerningForTextUTF32(utf32, outNumLetters);
+    }
+    
+    virtual int getFontMaxHeight() const { return 0; }
+};
+    
+    // ============================================================================
+// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
+// ============================================================================
+// skip_overhead                                               36.37ns   27.49M
+// dev_null_log_overhead                                        2.61us  382.57K
+// ============================================================================
+    
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
   return ret;
 }
     
-    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateThirdOrderDerivative(num_params);
+    #include <folly/GLog.h>
+    
+    #include <glog/logging.h>
+    
+    // Return the state size needed by RNG, expressed as a number of uint32_t
+// integers. Specialized for all templates specified in the C++11 standard.
+// For some (mersenne_twister_engine), this is exported as a state_size static
+// data member; for others, the standard shows formulas.
+    
+    /*
+ * Encode a single unicode code point into a UTF-8 byte sequence.
+ *
+ * Return value is undefined if `cp' is an invalid code point.
+ */
+std::string codePointToUtf8(char32_t cp);
+    
+    #include <folly/io/Cursor.h>
+#include <folly/io/IOBuf.h>
+#include <folly/lang/Bits.h>
+    
+      explicit Options(
+      Format format_ = Format::ZLIB,
+      int windowSize_ = 15,
+      int memLevel_ = 8,
+      int strategy_ = Z_DEFAULT_STRATEGY)
+      : format(format_),
+        windowSize(windowSize_),
+        memLevel(memLevel_),
+        strategy(strategy_) {}
+    
+    struct counted_shared_tag {};
+template <template <typename> class Atom = std::atomic>
+struct intrusive_shared_count {
+  intrusive_shared_count() {
+    counts.store(0);
   }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
-  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
-      .cwiseProduct(term_matrix);
-}
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    // config detail: {'name': 'commanded_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 23,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::commanded_value(const std::uint8_t* bytes,
-                                   int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    void Brakemotorrpt271::Parse(const std::uint8_t* bytes, int32_t length,
-                             ChassisDetail* chassis) const {
-  chassis->mutable_gem()
-      ->mutable_brake_motor_rpt_2_71()
-      ->set_encoder_temperature(encoder_temperature(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_motor_temperature(
-      motor_temperature(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_angular_speed(
-      angular_speed(bytes, length));
-}
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
-    
-    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Brakerpt6c::output_value(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+  void add_ref(uint64_t count = 1) {
+    counts.fetch_add(count);
+  }
     }
