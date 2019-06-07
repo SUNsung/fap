@@ -1,131 +1,104 @@
 
         
-            Args:
-      session: The current TensorFlow session.
-      num_steps: The number of steps in each epoch.
+            def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
+        assert severity in self.SEVERITY_LEVELS
+        self.message = six.text_type(message)
+        self.severity = severity
+        self.url = url
     
-        Returns:
-      A list of lists, the internal list is the return for the ops for each
-      session.run() call.  The outer list collects over the epoch.
+            backlogged, size = None, 0
+        from sentry.monitoring.queues import backend
+        if backend is not None:
+            size = backend.get_size('default')
+            backlogged = size > 0
+    
+    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
+from __future__ import absolute_import
+    
+    
+@instrumented_task(name='sentry.tasks.options.sync_options', queue='options')
+def sync_options(cutoff=ONE_HOUR):
     '''
-    hps = self.hps
-    all_name_example_idx_pairs = \
-        self.shuffle_and_flatten_datasets(datasets, kind)
-    
-      plt.subplot(nrows,2,9+subplot_cidx)
-  plot_time_series(model_vals['gen_states'], bidx, n_to_plot=n_to_plot,
-                   color='g', scale=1.0, title=col_title + ' Generator State')
-    
-    from utils import write_datasets
-from synthetic_data_utils import normalize_rates
-from synthetic_data_utils import get_train_n_valid_inds, nparray_and_transpose
-from synthetic_data_utils import spikify_data, split_list_by_inds
+    Ensures all options that have been updated (within the database) since
+    ``cutoff`` have their correct values stored in the cache.
     
     
-def evaluate_ensemble(test_data_name, number_of_lms):
-  ensemble = EnsembleLM(test_data_name)
-  model_list = ['lm{:02d}'.format(i+1) for i in range(number_of_lms)]
-  for model_name in model_list:
-    ensemble.add_single_model(model_name)
-  accuracy = ensemble.evaluate()
-  print('Accuracy of {} LM(s) on {} = {}'.format(
-      number_of_lms, test_data_name, accuracy))
-    
-    
-def _read_words(filename, use_prefix=True):
-  all_words = []
-  sequence_example = tf.train.SequenceExample()
-  for r in tf.python_io.tf_record_iterator(filename):
-    sequence_example.ParseFromString(r)
-    
-            # init attention
-        attention = _init_attention(encoder_state)
-      else:
-        # construct attention
-        attention = attention_construct_fn(cell_output, attention_keys,
-                                           attention_values)
-        cell_output = attention
-    
-        # Perform keypoint detectionon the transformed image
-    im_ar = image_utils.aspect_ratio_rel(im, aspect_ratio)
-    boxes_ar = box_utils.aspect_ratio(boxes, aspect_ratio)
-    
-    
-def add_bbox_regression_targets(roidb):
-    '''Add information needed to train bounding-box regressors.'''
-    for entry in roidb:
-        entry['bbox_targets'] = compute_bbox_regression_targets(entry)
-    
-    
-def bottleneck_transformation(
-    model,
-    blob_in,
-    dim_in,
-    dim_out,
-    stride,
-    prefix,
-    dim_inner,
-    dilation=1,
-    group=1
-):
-    '''Add a bottleneck transformation to the model.'''
-    # In original resnet, stride=2 is on 1x1.
-    # In fb.torch resnet, stride=2 is on 3x3.
-    (str1x1, str3x3) = (stride, 1) if cfg.RESNETS.STRIDE_1X1 else (1, stride)
-    
-    '''Optimization operator graph construction.'''
-    
-        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
-    # Combine predictions across all levels and retain the top scoring
-    rois = np.concatenate([blob.data for blob in roi_inputs])
-    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
-    inds = np.argsort(-scores)[:post_nms_topN]
-    rois = rois[inds, :]
-    return rois
-    
-    logger = logging.getLogger(__name__)
-    
-    
-# octave and aspect fields are only used on RetinaNet. Octave corresponds to the
-# scale of the anchor and aspect denotes which aspect ratio is used in the range
-# of aspect ratios
-FieldOfAnchors = namedtuple(
-    'FieldOfAnchors', [
-        'field_of_anchors', 'num_cell_anchors', 'stride', 'field_size',
-        'octave', 'aspect'
-    ]
-)
-    
-        Returns:
-        bbox_target_data (ndarray): N x 4K blob of regression targets
-        bbox_inside_weights (ndarray): N x 4K blob of loss weights
+def input(prompt):
     '''
-    num_bbox_reg_classes = cfg.MODEL.NUM_CLASSES
-    if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG:
-        num_bbox_reg_classes = 2  # bg and fg
+    Version of input (raw_input in Python 2) which forces a flush of sys.stdout
+    to avoid problems where the prompt fails to appear due to line buffering
+    '''
+    sys.stdout.write(prompt)
+    sys.stdout.flush()
+    return sys.stdin.readline().rstrip('\n')
     
-        roi_data_loader.register_sigint_handler()
-    roi_data_loader.start(prefill=True)
-    total_time = 0
-    for i in range(opts.num_batches):
-        start_t = time.time()
-        for _ in range(opts.x_factor):
-            workspace.RunNetOnce(net)
-        total_time += (time.time() - start_t) / opts.x_factor
-        logger.info(
-            '{:d}/{:d}: Averge dequeue time: {:.3f}s  [{:d}/{:d}]'.format(
-                i + 1, opts.num_batches, total_time / (i + 1),
-                roi_data_loader._minibatch_queue.qsize(),
-                cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE
-            )
+        @pytest.mark.skipif(six.PY3, reason='Env values in Python 3 are already Unicode')
+    def test_unicode_path_from_env(self):
+        with mock.patch.dict(os.environ):
+            os.environ['COMPOSE_FILE'] = b'\xe5\xb0\xb1\xe5\x90\x83\xe9\xa5\xad/docker-compose.yml'
+            environment = Environment.from_env_file('.')
+            assert get_config_path_from_options(
+                '.', {}, environment
+            ) == ['就吃饭/docker-compose.yml']
+
+    
+        def assert_failure(self, res, code=None):
+        self.assertEqual(res.status, 200)
+        body = res.body
+        body = json.loads(body)
+        self.assertTrue('json' in body)
+        errors = body['json'].get('errors')
+        self.assertTrue(code in [x[0] for x in errors])
+        data = body['json'].get('data')
+        self.assertFalse(bool(data))
+    
+            Will raise an AssertionError if the captcha code is called.
+        '''
+        return contextlib.nested(
+            # ensure that a captcha is not needed
+            patch.object(
+                validator,
+                'need_provider_captcha',
+                return_value=False,
+            ),
+            # ensure that the captcha is unused
+            patch.object(
+                g.captcha_provider,
+                'validate_captcha',
+                side_effect=AssertionError,
+            ),
         )
-        # Sleep to simulate the time taken by running a little network
-        time.sleep(opts.sleep_time)
-        # To inspect:
-        # blobs = workspace.FetchBlobs(all_blobs)
-        # from IPython import embed; embed()
-    logger.info('Shutting down data loader...')
-    roi_data_loader.shutdown()
     
-    from __future__ import print_function
-from socket import timeout
+            # Scenario: call returns duplicate errors
+        _response.response_code = TRANSACTION_ERROR
+        _response.response_reason_code = TRANSACTION_DUPLICATE
+        _request.make_request.return_value = (True, _response)
+        self.assertRaises(DuplicateTransactionError, create_authorization_hold,
+                          self.customer_id, self.payment_profile_id,
+                          self.amount, 12345)
+    
+        def test_nested_url(self):
+        testcase = u'*{background-image:calc(url('http://foobar/'))}'
+        self.assertInvalid(testcase)
+    
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
+    
+        def test_mcreddit_detector(self):
+        user_agent = 'McReddit - Reddit Client for iOS'
+        outs = detect(user_agent)
+        self.assertEqual(outs['browser']['name'], McRedditDetector.name)
+    
+        def test_future_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        self.assert_invalid(
+            body,
+            header='2:awesomefuturespec',
+            error=signing.ERRORS.UNKOWN_GLOBAL_VERSION,
+            global_version=2,
+        )
