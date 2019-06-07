@@ -1,100 +1,107 @@
-        def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
-    
-    require 'action_view/helpers/tags/collection_helpers'
-    
-          def self.delegate_to(klass)
-        self.type_klass = klass
+
+        
+              def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :tag,
+                                       env_name: 'FL_GIT_TAG_TAG',
+                                       description: 'Define your own tag text. This will replace all other parameters',
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :grouping,
+                                       env_name: 'FL_GIT_TAG_GROUPING',
+                                       description: 'Is used to keep your tags organised under one 'folder'',
+                                       default_value: 'builds'),
+          FastlaneCore::ConfigItem.new(key: :prefix,
+                                       env_name: 'FL_GIT_TAG_PREFIX',
+                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :postfix,
+                                       env_name: 'FL_GIT_TAG_POSTFIX',
+                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :build_number,
+                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
+                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
+                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
+                                       default_value_dynamic: true,
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :message,
+                                       env_name: 'FL_GIT_TAG_MESSAGE',
+                                       description: 'The tag message. Defaults to the tag's name',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :commit,
+                                       env_name: 'FL_GIT_TAG_COMMIT',
+                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :force,
+                                       env_name: 'FL_GIT_TAG_FORCE',
+                                       description: 'Force adding the tag',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :sign,
+                                       env_name: 'FL_GIT_TAG_SIGN',
+                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false)
+        ]
       end
     
-          test 'when layout is specified as a proc and the proc returns false, use no layout instead of inherited layout' do
-        controller = WithProcReturningFalse.new
-        controller.process(:index)
-        assert_equal 'Hello false!', controller.response_body
-      end
+          it 'allows you to specify your own message' do
+        tag = '2.0.0'
+        message = 'message'
     
-        def stop!
-      @thread.kill if @thread&.alive?
-      @thread = nil
-      @reactor&.stop
-      @reactor = nil
+          it 'sets the platform to (downcase) ios' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              platform: 'ios'
+            )
+          end').runner.execute(:test)
+    
+          it 'works with exclude regex' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              exclude_regex: /Test/
+            )
+          end').runner.execute(:test)
+    
+          it 'splits correctly' do
+        expected = [
+          'One',
+          'Two',
+          'Three',
+          'Four Token',
+          'Or',
+          'Newlines',
+          'Everywhere'
+        ]
+        expect(generator.split_keywords(keywords)).to eq(expected)
+      end
     end
+  end
+end
+
     
-          script_srcs = parse(builder.build)['script-src']
+        def create
+      authorize :email_domain_block, :create?
     
-      describe 'report-uri' do
-    it 'is enabled by SiteSetting' do
-      SiteSetting.content_security_policy_collect_reports = true
-      report_uri = parse(policy)['report-uri'].first
-      expect(report_uri).to eq('http://test.localhost/csp_reports')
-    
-      def payload
-    @_payload ||= request.body.read
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
   end
     
-      def default_locale
-    if ENV['DEFAULT_LOCALE'].present?
-      I18n.default_locale
-    else
-      request_locale || I18n.default_locale
-    end
+      def update
+    setting.data = params[:data]
+    setting.save!
+    
+      def set_user_activity
+    return unless user_needs_sign_in_update?
+    current_user.update_tracked_fields!(request)
   end
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
-    
-        def default_attributes(&block)
-      return if @options.nil?
-      @options.each do |flag, param, help, options, _block|
-        attr = flag.first.gsub(/^-+/, '').gsub(/-/, '_').gsub('[no_]', '')
-        attr += '?' if param == :flag
-        yield attr.to_sym, options[:default]
-      end
-    end # def default_attributes
-    
-          scripts_path(filename).tap do |pkgscript|
-        logger.info('Writing pkg script', :source => filename, :target => pkgscript)
-        File.write(pkgscript, script(scriptname))
-        # scripts are required to be executable
-        File.chmod(0755, pkgscript)
-      end
-    end
-  end # def write_scripts
-    
-        attributes[:pleaserun_name] ||= File.basename(command.first)
-    attributes[:prefix] ||= '/usr/share/pleaserun/#{attributes[:pleaserun_name]}'
-    
-      option '--group', 'GROUP',
-    'Set the group to GROUP in the prototype file.',
-    :default => 'root'
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for tar.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for zip.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-          def self.has_issues_with_add_symlink?
-        return !::Gem::Package::TarWriter.public_instance_methods.include?(:add_symlink)
-      end
-    end # module TarWriter
-  end # module Issues
-end # module FPM
