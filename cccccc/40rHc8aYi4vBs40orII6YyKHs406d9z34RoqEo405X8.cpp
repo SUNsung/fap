@@ -1,226 +1,207 @@
 
         
-        #endif  // PYTHON_PROTO2_PYTHON_IMPL
-#endif  // PYTHON_PROTO2_CPP_IMPL_V2
-#endif  // PYTHON_PROTO2_CPP_IMPL_V1
+        
+    {private:
+    Ui::OpenURIDialog *ui;
+};
     
     
-    {  // Moving messages on two different arenas should lead to a copy.
-  *message2_on_arena = std::move(*message1_on_arena);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
+};
+    
+    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
+    secp256k1_scalar r, s;
+    int recid;
+    }
+    
+      // Place a table at level last-1 to prevent merging with preceding mutation
+  Put('a', 'begin');
+  Put('z', 'end');
+  dbfull()->TEST_CompactMemTable();
+  ASSERT_EQ(NumTableFilesAtLevel(last), 1);
+  ASSERT_EQ(NumTableFilesAtLevel(last-1), 1);
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
 }
     
-    // Author: kenton@google.com (Kenton Varda)
-// emulates google3/testing/base/public/googletest.cc
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
     
-      while (true) {
-    void* outptr;
-    int outlen;
-    bool ok;
-    do {
-      ok = out.Next(&outptr, &outlen);
-      if (!ok) {
-        break;
-      }
-    } while (outlen <= 0);
-    readlen = read(STDIN_FILENO, outptr, outlen);
-    if (readlen <= 0) {
-      out.BackUp(outlen);
+    bool FaultInjectionTestEnv::IsFileCreatedSinceLastDirSync(
+    const std::string& filename) {
+  MutexLock l(&mutex_);
+  return new_files_since_last_dir_sync_.find(filename) !=
+         new_files_since_last_dir_sync_.end();
+}
+    
+    	FAIL_ON_ERROR(RegSetValueEx(cmderKey, L'Icon', 0, REG_SZ, (BYTE *)icoPath, wcslen(icoPath) * sizeof(wchar_t)));
+    
+    
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    if (readlen < outlen) {
-      out.BackUp(outlen - readlen);
-    }
-  }
-    
-    
-    {    func(size, srcBase, srcStride, dstBase, dstStride);
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)shift;
-#endif
-}
-    
-        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
-                     uint8x8_t & v_dst) const
+    switch (fid)
     {
-        v_dst = veor_u8(v_src0, v_src1);
-    }
-    
-    #define CONTDST2 srcStride == dst0Stride && \
-                 srcStride == dst1Stride &&
-#define CONTDST3 srcStride == dst0Stride && \
-                 srcStride == dst1Stride && \
-                 srcStride == dst2Stride &&
-#define CONTDST4 srcStride == dst0Stride && \
-                 srcStride == dst1Stride && \
-                 srcStride == dst2Stride && \
-                 srcStride == dst3Stride &&
-    
-    
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = v_y.val[0];
-            v_dst.val[1] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[2] = v_y.val[1];
-            v_dst.val[3] = vld1q_u8(srcv + sj + 16);
-            vst4q_u8(dst + dj + 64, v_dst);
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
         }
-#endif
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
     
-    namespace CAROTENE_NS {
+      bool operator == (const ExtensionManager_getQueryColumns_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ExtensionManager_getQueryColumns_result &rhs) const {
+    return !(*this == rhs);
+  }
+    
+    int main(int argc, char **argv) {
+  int port = 9090;
+  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
+  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
+  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
     }
     
-             int32x4_t vline_s32_lo = vmovl_s16(vget_low_s16(vline_s16));
-         int32x4_t vline_s32_hi = vmovl_s16(vget_high_s16(vline_s16));
-         float32x4_t vline_f32_lo = vcvtq_f32_s32(vline_s32_lo);
-         float32x4_t vline_f32_hi = vcvtq_f32_s32(vline_s32_hi);
-    
-      /** Are we positioned at the same location as other? */
-  bool PositionedAtSameWord(const PAGE_RES_IT* other) const;
-    
-      // go through the list again and this time create the menu structure.
-  vc_it.move_to_first();
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
-    }
-    
-    void FullPageBlock(int width, int height, BLOCK_LIST *blocks) {
-  BLOCK_IT block_it(blocks);
-  BLOCK* block = new BLOCK('', TRUE, 0, 0, 0, 0, width, height);
-  block_it.add_to_end(block);
+    TEST_F(PerfOutputTests,
+       impl_consumeWrappedMessagesFromCircularBuffer_simply_wrapped) {
+  using WrappedMessage = ebpf::PerfOutput<TestMessage>::WrappedMessage;
+  auto const test_size = std::size_t{9};
+  auto buf =
+      std::vector<ebpf::impl::ByteType>(sizeof(WrappedMessage) * test_size, 0);
+  auto buf_ptr = &buf[0];
+  for (std::size_t i = 0; i < test_size; ++i) {
+    auto wrapped = WrappedMessage{};
+    wrapped.msg.a_ = i + 1;
+    wrapped.msg.b_ = i * 2 + 2;
+    wrapped.msg.c_ = 'y';
+    wrapped.msg.d_ = 'x';
+    wrapped.size = sizeof(TestMessage);
+    wrapped.header.type = PERF_RECORD_SAMPLE;
+    wrapped.header.size = sizeof(WrappedMessage);
+    auto const wrapped_ptr =
+        reinterpret_cast<ebpf::impl::ByteType const*>(&wrapped);
+    std::copy(wrapped_ptr, wrapped_ptr + sizeof(WrappedMessage), buf_ptr);
+    buf_ptr += sizeof(WrappedMessage);
+  }
+  auto dst = std::vector<TestMessage>{};
+  auto status =
+      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
+          &buf[0],
+          sizeof(WrappedMessage),
+          buf.size() + sizeof(WrappedMessage),
+          buf.size(),
+          dst);
+  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
+  ASSERT_EQ(dst.size(), test_size);
+  for (std::size_t i = 0; i < test_size; ++i) {
+    EXPECT_EQ(dst[i].c_, 'y') << i;
+    EXPECT_EQ(dst[i].d_, 'x');
+  }
+  EXPECT_EQ(dst.back().a_, 1);
+  EXPECT_EQ(dst.back().b_, 2);
+  EXPECT_EQ(dst[0].a_, 2);
+  EXPECT_EQ(dst[0].b_, 4);
 }
-
     
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
-    
-    class WordFeature {
- public:
-  WordFeature();
-  WordFeature(const FCOORD& fcoord, uint8_t dir);
-    }
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H */
-
-    
-      void Add(const std::function<void()>& callback) override;
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
+    TEST_F(iokitDevicetree, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from iokit_devicetree');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'name', NormalType}
+  //      {'class', NormalType}
+  //      {'id', IntType}
+  //      {'parent', IntType}
+  //      {'device_path', NormalType}
+  //      {'service', IntType}
+  //      {'busy_state', IntType}
+  //      {'retain_count', IntType}
+  //      {'depth', IntType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
 }
-}  // namespace data
     
+    TEST_F(kernelPanics, test_sanity) {
+  // 1. Query data
+  auto const data = execute_query('select * from kernel_panics');
+  // 2. Check size before validation
+  // ASSERT_GE(data.size(), 0ul);
+  // ASSERT_EQ(data.size(), 1ul);
+  // ASSERT_EQ(data.size(), 0ul);
+  // 3. Build validation map
+  // See helper.h for avaialbe flags
+  // Or use custom DataCheck object
+  // ValidatatioMap row_map = {
+  //      {'path', NormalType}
+  //      {'time', NormalType}
+  //      {'registers', NormalType}
+  //      {'frame_backtrace', NormalType}
+  //      {'module_backtrace', NormalType}
+  //      {'dependencies', NormalType}
+  //      {'name', NormalType}
+  //      {'os_version', NormalType}
+  //      {'kernel_version', NormalType}
+  //      {'system_model', NormalType}
+  //      {'uptime', IntType}
+  //      {'last_loaded', NormalType}
+  //      {'last_unloaded', NormalType}
+  //}
+  // 4. Perform validation
+  // validate_rows(data, row_map);
+}
     
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
-  }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    
-    {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
-};
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
-
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct GradientBoosterReg
-    : public dmlc::FunctionRegEntryBase<
-  GradientBoosterReg,
-  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
-                                  bst_float base_margin)> > {
-};
-    
-    
-    { private:
-  // default chunk size.
-  static const size_t kChunkSize = 64 << 10UL;
-  // maximum chunk size.
-  static const size_t kMaxChunk = 128;
-  // bool whether use hc
-  bool use_lz4_hc_;
-  // number of threads
-  int nthread_;
-  // number of writing threads
-  int nthread_write_;
-  // raw bytes
-  size_t raw_bytes_, raw_bytes_index_, raw_bytes_value_;
-  // encoded bytes
-  size_t encoded_bytes_index_, encoded_bytes_value_;
-  /*! \brief minimum index value */
-  uint32_t min_index_;
-  /*! \brief external memory column offset */
-  std::vector<size_t> disk_offset_;
-  // internal index
-  CompressArray<StorageIndex> index_;
-  // value set.
-  CompressArray<bst_float> value_;
-};
-    
-    DMLC_REGISTRY_FILE_TAG(rank_obj);
+    #include <osquery/tests/integration/tables/helper.h>
