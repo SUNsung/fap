@@ -1,31 +1,59 @@
-if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
-  end
-end
 
+        
+            if successfully_sent?(resource)
+      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
+    end
+  end
     
-        def prepare_package(explicit_plugins, temp_path)
-      FileUtils.mkdir_p(::File.join(temp_path, LOGSTASH_DIR))
-      FileUtils.mkdir_p(::File.join(temp_path, DEPENDENCIES_DIR))
+      def unknown_action!(msg)
+    logger.debug '[Devise] #{msg}' if logger
+    raise AbstractController::ActionNotFound, msg
+  end
     
-        puts('Packaging plugins for offline usage')
+      def test_returns_success
+    Warden.test_mode!
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
     
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+          if options.has_key?(:only)
+        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
+      elsif options[:skip] == :all
+        @used_routes = []
+      else
+        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+      end
+    end
+    
+    @@ chat
+<pre id='chat'></pre>
+<form>
+  <input id='msg' placeholder='type message here...' />
+</form>
+    
+      # escape unicode
+  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
+    
+          def random_string(secure = defined? SecureRandom)
+        secure ? SecureRandom.hex(16) : '%032x' % rand(2**128-1)
+      rescue NotImplementedError
+        random_string false
+      end
+    
+      it 'sets a new csrf token for the session in env, even after a 'safe' request' do
+    get('/', {}, {})
+    expect(env['rack.session'][:csrf]).not_to be_nil
+  end
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
