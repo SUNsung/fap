@@ -1,249 +1,228 @@
 
         
-          // Create template
-  std::vector<char> tmp(256);
-  auto len = snprintf(tmp.data(), tmp.size(), '%s/testXXXXXX', tmpdir);
-  tmp.resize(len);
+          char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
     
-    X before running op:
-[[ 3.813361   -1.319647    5.2089314  -4.931328    0.6218652 ]
- [ 7.2757645   5.5552588   5.785643   -2.4790506  -0.41400087]
- [ 1.1541046  -6.933266    3.3754056   1.6569928  -1.7670316 ]
- [-3.4932013   4.891472    1.5530115  -3.2443287  -4.605099  ]
- [-4.574543   -7.360948    5.91305    -8.196495   -5.357458  ]]
-X after running op:
-[[ 3. -2.  5. -5.  0.]
- [ 7.  5.  5. -3. -1.]
- [ 1. -7.  3.  1. -2.]
- [-4.  4.  1. -4. -5.]
- [-5. -8.  5. -9. -6.]]
-    
-    class GetIm2ColGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'Col2Im',
-        '',
-        std::vector<string>{GO(0), I(0)},
-        std::vector<string>{GI(0)});
+      /**
+   * @brief Implements common layer setup functionality.
+   *
+   * @param bottom the preshaped input blobs
+   * @param top
+   *     the allocated but unshaped output blobs, to be shaped by Reshape
+   *
+   * Checks that the number of bottom and top blobs is correct.
+   * Calls LayerSetUp to do special layer setup for individual layer types,
+   * followed by Reshape to set up sizes of top blobs and internal buffers.
+   * Sets up the loss weight multiplier blobs for any non-zero loss weights.
+   * This method may not be overridden.
+   */
+  void SetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+    CheckBlobCounts(bottom, top);
+    LayerSetUp(bottom, top);
+    Reshape(bottom, top);
+    SetLossWeights(top);
   }
-};
-REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
-    
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-    enum FileType {
-  kLogFile,
-  kDBLockFile,
-  kTableFile,
-  kDescriptorFile,
-  kCurrentFile,
-  kTempFile,
-  kInfoLogFile  // Either the current one, or an old one
-};
-    
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-null, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-         uint64_t initial_offset);
-    
-    #include 'db/version_edit.h'
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
-    {
-        m_test->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
-            {
-                OnWriteTestUpdate(samples, updates, aggregateMetric);
-            });
-    }
-    
-            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
-        {
-            // failed to acquire
-            int rc = ::CloseHandle(m_handle);
-            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-            {
-                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
-            }
-            m_handle = NULL;
-            return false;
-        }
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        size_t rank = DetermineElementwiseTensorRank();
-        auto output    =           ValueTensorFor(rank, fr);
-        auto input     = InputRef(0).ValueTensorFor(rank, fr);
-        auto mean      = Input(1)->ValueTensorFor(rank, fr.AllowBroadcast());
-        auto invStdDev = Input(2)->ValueTensorFor(rank, fr.AllowBroadcast());
-    }
-    
-        // Overrides
-    virtual CardinalSplineTo *clone() const override;
-    virtual CardinalSplineTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
     
     /**
-     * @param time In seconds.
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+     protected:
+  virtual void InternalThreadEntry();
+  virtual void load_batch(Batch<Dtype>* batch) = 0;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'b2Glue.h'
+    
+    	void EncodeMipmaps(float *a_pafSourceRGBA,
+		unsigned int a_uiSourceWidth,
+		unsigned int a_uiSourceHeight,
+		Image::Format a_format,
+		ErrorMetric a_eErrMetric,
+		float a_fEffort,
+		unsigned int a_uiJobs,
+		unsigned int a_uiMaxJobs,
+		unsigned int a_uiMaxMipmaps,
+		unsigned int a_uiMipFilterFlags,
+		RawImage* a_pMipmaps,
+		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    		inline ColorFloatRGBA * GetSource()
+		{
+			return m_afrgbaSource;
+		}
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    #ifndef SILK_MACROS_ARMv4_H
+#define SILK_MACROS_ARMv4_H
+    
+    
+    {
+    {}}
+    
+    APCCollection::~APCCollection() {
+  // Zero for size is correct, because when this APCCollection was unreferenced
+  // it already included the size of the inner handle.
+  m_arrayHandle->unreferenceRoot(0);
+}
+    
+    namespace HPHP {
+    }
+    
+    #include 'hphp/runtime/base/type-string.h'
+    
+    namespace HPHP {
+    }
+    
+    #include 'hphp/runtime/base/plain-file.h'
+    
+    #endif // incl_HPHP_URL_FILE_H_
+
+    
+        // read-only access
+    
+    static std::string
+getStr(const std::vector<uint8_t>& v, size_t& pos, const size_t len) {
+  CHECK_GE(len, 1);
+  std::string res;
+  res.resize(len - 1);
+  for (size_t i = 0; i < len - 1; i++) {
+    CHECK_NE(v[pos + i], 0);
+    res[i] = char(v[pos + i]);
+  }
+  CHECK_EQ(0, v[pos + len - 1]);
+  pos += len;
+  return res;
+}
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+      /**
+   * Returns a random uint64_t in [0, max). If max == 0, returns 0.
+   */
+  static uint64_t rand64(uint64_t max) {
+    return rand64(0, max, ThreadLocalPRNG());
+  }
+    
+    #include <string>
+    
+    
+    {  /**
+   * The strategy parameter is used to tune the compression algorithm.
+   * Supported values:
+   * - Z_DEFAULT_STRATEGY: normal data
+   * - Z_FILTERED: data produced by a filter (or predictor)
+   * - Z_HUFFMAN_ONLY: force Huffman encoding only (no string match)
+   * - Z_RLE: limit match distances to one
+   * - Z_FIXED: prevents the use of dynamic Huffman codes
+   *
+   * The strategy parameter only affects the compression ratio but not the
+   * correctness of the compressed output.
+   */
+  int strategy;
+};
+    
+      /* Get a reference to the pointer, either from the local batch or
+   * from the global count.
+   *
+   * return is the base ptr, and the previous local count, if it is
+   * needed for compare_and_swap later.
+   */
+  PackedPtr takeOwnedBase(std::memory_order order) const noexcept {
+    PackedPtr local, newlocal;
+    local = ptr_.load(std::memory_order_acquire);
+    while (true) {
+      if (!local.get()) {
+        return local;
+      }
+      newlocal = local;
+      if (get_local_count(newlocal) + 1 > EXTERNAL_OFFSET) {
+        // spinlock in the rare case we have more than
+        // EXTERNAL_OFFSET threads trying to access at once.
+        std::this_thread::yield();
+        // Force DeterministicSchedule to choose a different thread
+        local = ptr_.load(std::memory_order_acquire);
+      } else {
+        newlocal.setExtra(newlocal.extra() + 1);
+        assert(get_local_count(newlocal) > 0);
+        if (ptr_.compare_exchange_weak(local, newlocal, order)) {
+          break;
+        }
+      }
+    }
+    }
+    
+    TEST_F(SparseByteSetTest, each_random) {
+  mt19937 rng;
+  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
+  set<uint8_t> added;
+  while (added.size() <= lims::max()) {
+    auto c = uint8_t(dist(rng));
+    EXPECT_EQ(added.count(c), s.contains(c));
+    EXPECT_EQ(!added.count(c), s.add(c));
+    added.insert(c);
+    EXPECT_TRUE(added.count(c)); // sanity
+    EXPECT_TRUE(s.contains(c));
+  }
+}
+
+    
+        /*! \brief Constructor from cl_mem - takes ownership.
+     *
+     * \param retainObject will cause the constructor to retain its cl object.
+     *                     Defaults to false to maintain compatibility with
+     *                     earlier versions.
+     *  See Memory for further details.
      */
-    virtual void update(float time) override;
+    explicit Image2DGL(const cl_mem& image, bool retainObject = false) : 
+        Image2D(image, retainObject) { }
     
-    //
-// NOTE: Converting these macros into Templates is desirable, but please see
-// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
-//
-#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
-CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
-{ \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, period)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
-    return ease; \
-} \
-CLASSNAME* CLASSNAME::clone() const \
-{ \
-    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
-    return nullptr; \
-} \
-void CLASSNAME::update(float time) { \
-    _inner->update(TWEEN_FUNC(time, _period)); \
-} \
-EaseElastic* CLASSNAME::reverse() const { \
-    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
-}
-    
-    void CallFunc::update(float time)
-{
-    ActionInstant::update(time);
-    this->execute();
-}
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    protected:
-    void calculateMaxItems();
-    void updateBlendFunc();
-    void updateOpacityModifyRGB();
-    
-        stack_ = (char*) sw_malloc(stack_size);
-    swTraceLog(SW_TRACE_COROUTINE, 'alloc stack: size=%lu, ptr=%p', stack_size, stack_);
-    
-        QObject::connect(&example, SIGNAL(finished()), &app, SLOT(quit()));
-    QTimer::singleShot(0, &example, SLOT(run()));
-    
-    
-    {    //1
-    ret = p.read(&p, buf, sizeof(buf));
-    if (ret < 0)
-    {
-        swSysError('read() failed.');
-    }
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world1', buf), 0);
-    //2
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world2', buf), 0);
-    //3
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world3', buf), 0);
-}
-    
-    TEST(hashmap, string)
-{
-    swHashMap *hm = swHashMap_new(16, NULL);
-    swHashMap_add(hm, (char *) SW_STRL('hello'), (void *) 199);
-    swHashMap_add(hm, (char *) SW_STRL('swoole22'), (void *) 8877);
-    swHashMap_add(hm, (char *) SW_STRL('hello2'), (void *) 200);
-    swHashMap_add(hm, (char *) SW_STRL('willdel'), (void *) 888);
-    swHashMap_add(hm, (char *) SW_STRL('willupadte'), (void *) 9999);
-    swHashMap_add(hm, (char *) SW_STRL('hello3'), (void *) 78978);
-    }
-    
-        for (i = 0; i < READ_THREAD_N; i++)
-    {
-        int ret = swPipeUnsock_create(&threads[i].pipe, 1, SOCK_DGRAM);
-        ASSERT_EQ(ret, 0);
-        threads[i].thread = new std::thread(thread_read, i);
-    }
-    
-            pid_t pid = fork();
-        ASSERT_NE(pid, -1);
-    
-    
-    {        SwooleG.main_reactor = (swReactor *) malloc(sizeof(swReactor));
-        if (SwooleG.main_reactor == NULL)
-        {
-            swWarn('malloc failed.');
-        }
-        if (swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS) < 0)
-        {
-            swWarn('create reactor failed.');
-        }
-        //client, swoole_event_exit will set swoole_running = 0
-        SwooleWG.in_client = 1;
-        SwooleWG.reactor_wait_onexit = 1;
-        SwooleWG.reactor_ready = 0;
-    }
-    
-    #include 'api.h'
-#include 'wrapper/base.hpp'
-#include 'server.h'
+    #ifdef USE_3D_ADAM_MODEL
+    #include <adam/totalmodel.h>
+#endif
+#include <openpose/core/common.hpp>
+#include <openpose/gui/enumClasses.hpp>
+#include <openpose/gui/gui.hpp>
