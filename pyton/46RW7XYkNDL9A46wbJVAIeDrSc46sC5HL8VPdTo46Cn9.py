@@ -1,57 +1,75 @@
 
         
-            publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
+        
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
     
-        def __init__(self, size_table, charge_factor=None, lim_charge=None):
-        self.size_table = size_table
-        self.values = [None] * self.size_table
-        self.lim_charge = 0.75 if lim_charge is None else lim_charge
-        self.charge_factor = 1 if charge_factor is None else charge_factor
-        self.__aux_list = []
-        self._keys = {}
     
-        for i in range(1, n+1):
-        dp[i][0] = True
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-        This game presents moves along a linear chain of states, with two actions:
-     0) forward, which moves along the chain but returns no reward
-     1) backward, which returns to the beginning and has a small reward
     
-    def test_text_envs():
-    env = gym.make('FrozenLake-v0')
-    video = VideoRecorder(env)
-    try:
-        env.reset()
-        video.capture_frame()
-        video.close()
-    finally:
-        os.remove(video.path)
+class AbstractBaseSession(models.Model):
+    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
+    session_data = models.TextField(_('session data'))
+    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+    
+    from django.conf import settings
+from django.template.backends.django import DjangoTemplates
+from django.template.loader import get_template
+from django.utils.functional import cached_property
+from django.utils.module_loading import import_string
+    
+        @property
+    def headers(self):
+        '''Return a `str` with the message's headers.'''
+        raise NotImplementedError()
+    
+        def get_auth_plugin(self, auth_type):
+        return self.get_auth_plugin_mapping()[auth_type]
+    
+        if n == 1:
+        return '1 B'
+    
+    
+def test_missing_auth(httpbin):
+    r = http(
+        '--auth-type=basic',
+        'GET',
+        httpbin + '/basic-auth/user/password',
+        error_exit_ok=True
+    )
+    assert HTTP_OK not in r
+    assert '--auth required' in r.stderr
 
     
-        env = gym.make(args.env_id)
     
-    # Top-down car dynamics simulation.
-#
-# Some ideas are taken from this great tutorial http://www.iforce2d.net/b2dtut/top-down-car by Chris Campbell.
-# This simulation is a bit more detailed, with wheels rotation.
-#
-# Created by Oleg Klimov. Licensed on the same terms as the rest of OpenAI Gym.
+class CeleryAliveCheck(StatusCheck):
+    def check(self):
+        # There is no queue, and celery is not running, so never show error
+        if settings.CELERY_ALWAYS_EAGER:
+            return []
+        last_ping = options.get('sentry:last_worker_ping') or 0
+        if last_ping >= time() - 300:
+            return []
     
+        project_id = BoundedBigIntegerField()
+    group_id = BoundedBigIntegerField(null=True)
+    event_id = BoundedBigIntegerField()
+    # We want to keep this model lightweight, so lets use a pointer to
+    # TagKey/TagValue
+    key_id = BoundedBigIntegerField()
+    value_id = BoundedBigIntegerField()
+    # maintain a date column for easy removal
+    date_added = models.DateTimeField(default=timezone.now, db_index=True)
     
-class VerboseProxy(object):
-    '''Proxy all function calls to another class and log method name, arguments
-    and return values for each call.
-    '''
+            # Removing unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
+        db.delete_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
     
-    
-def main(args):
-    logging.basicConfig(format='\033[33m%(levelname)s:\033[37m %(message)s\033[0m\n')
-    
-        def test_path_from_options(self):
-        paths = ['one.yml', 'two.yml']
-        opts = {'--file': paths}
-        environment = Environment.from_env_file('.')
-        assert get_config_path_from_options('.', opts, environment) == paths
+        return results
