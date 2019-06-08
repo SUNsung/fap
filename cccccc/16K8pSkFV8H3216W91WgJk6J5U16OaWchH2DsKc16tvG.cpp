@@ -1,128 +1,222 @@
 
         
-        void CacheImpl::removeAll() {
-  cache_remove_all(static_cast<cache_t*>(Impl));
+        // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    namespace clang {
-  class RecordDecl;
-  class TypedefNameDecl;
-}
+      scoped_ptr<base::Value> value_option(
+      converter->FromV8Value(options, isolate->GetCurrentContext()));
+  if (!value_option.get() ||
+      !value_option->IsType(base::Value::TYPE_DICTIONARY))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'option' passed to AllocateObject')));
+    
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+    namespace extensions {
+    }
+    
+      auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
     
     {
     {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
+    {}  // namespace util
 }  // namespace protobuf
 }  // namespace google
 
     
+      // Yes && Yes == true.
+  value = and_<true_, true_>::value;
+  EXPECT_TRUE(value);
+  // Yes && No == false.
+  value = and_<true_, false_>::value;
+  EXPECT_FALSE(value);
+  // No && Yes == false.
+  value = and_<false_, true_>::value;
+  EXPECT_FALSE(value);
+  // No && No == false.
+  value = and_<false_, false_>::value;
+  EXPECT_FALSE(value);
     
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace strings
-}  // namespace protobuf
-}  // namespace google
-
-    
-        for (int i = 0; i < dataset.payload_size(); i++) {
-      message->ParseFromString(dataset.payload(i));
-      GogoDataStripper stripper;
-      stripper.StripMessage(message);
-      dataset.set_payload(i, message->SerializeAsString());
-    }
-    
-    namespace {
-    }
-    
-    // Prints the fields of a tuple tersely to a string vector, one
-// element for each field.  See the comment before
-// UniversalTersePrint() for how we define 'tersely'.
-template <typename Tuple>
-Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
-  Strings result;
-  TuplePrefixPrinter< ::std::tr1::tuple_size<Tuple>::value>::
-      TersePrintPrefixToStrings(value, &result);
-  return result;
-}
-#endif  // GTEST_HAS_TR1_TUPLE
-    
-      // Returns a pathname for a file that does not currently exist. The pathname
-  // will be directory/base_name.extension or
-  // directory/base_name_<number>.extension if directory/base_name.extension
-  // already exists. The number will be incremented until a pathname is found
-  // that does not already exist.
-  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
-  // There could be a race condition if two or more processes are calling this
-  // function at the same time -- they could both pick the same filename.
-  static FilePath GenerateUniqueFileName(const FilePath& directory,
-                                         const FilePath& base_name,
-                                         const char* extension);
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16>
-struct Templates16 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates15<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16> Tail;
-};
-    
-    
-// Tests IsPrime()
-    
-    // A sample program demonstrating using Google C++ testing framework.
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
 //
-// Author: wan@google.com (Zhanyong Wan)
+// Test program to verify that GzipOutputStream is compatible with command line
+// gzip or java.util.zip.GzipOutputStream
+//
+// Reads data on standard input and writes compressed gzip stream to standard
+// output.
     
-      s.Set(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
     
-    namespace leveldb {
-namespace log {
-    }
-    }
     
-    // Store the snappy compression of 'input[0,input_length-1]' in *output.
-// Returns false if snappy is not supported by this port.
-bool Snappy_Compress(const char* input, size_t input_length,
-                     std::string* output);
-    
-      std::string ManifestFileName() {
-    std::string current;
-    ASSERT_OK(ReadFileToString(env_, CurrentFileName(dbname_), &current));
-    size_t len = current.size();
-    if (len > 0 && current[len - 1] == '\n') {
-      current.resize(len - 1);
-    }
-    return dbname_ + '/' + current;
+    {    return true;
   }
     
-        Key pos = RandomTarget(rnd);
-    SkipList<Key, Comparator>::Iterator iter(&list_);
-    iter.Seek(pos);
-    while (true) {
-      Key current;
-      if (!iter.Valid()) {
-        current = MakeKey(K, 0);
-      } else {
-        current = iter.key();
-        ASSERT_TRUE(IsValidKey(current)) << current;
-      }
-      ASSERT_LE(pos, current) << 'should not go backwards';
+    
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
+}
+    
+      double m() const;  // get gradient
+  double c(double m) const;            // get constant
+  double rms(double m, double c) const;            // get error
+  double pearson() const;  // get correlation coefficient.
+    
+      // Copies UNICHAR_IDs from dst to src. Returns the number of ids copied.
+  // The function assumes that the arrays are terminated by INVALID_UNICHAR_ID
+  // and that dst has enough space for all the elements from src.
+  static inline int copy(const UNICHAR_ID src[], UNICHAR_ID dst[]) {
+    int i = 0;
+    do {
+      dst[i] = src[i];
+    } while (dst[i++] != INVALID_UNICHAR_ID);
+    return i - 1;
+  }
+    
+     private:
+  struct ReferenceCount {
+    STRING id;  // A unique ID to identify the object (think path on disk)
+    T *object;  // A copy of the object in memory.  Can be delete'd.
+    int count;  // A count of the number of active users of this object.
+  };
+    
+    
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6>
+class CartesianProductGenerator6
+    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5,
+        T6> > {
+ public:
+  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> ParamType;
     }
     
-    int main(int argc, char** argv) { return leveldb::test::RunAllTests(); }
-
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+    // The TypeList template makes it possible to use either a single type
+// or a Types<...> list in TYPED_TEST_CASE() and
+// INSTANTIATE_TYPED_TEST_CASE_P().
+    
+        for (int i = 2; i*i <= n; i++) {
+      // n is divisible by an integer other than 1 and itself.
+      if ((n % i) == 0) return false;
+    }
+    
+      ////////////////////////////////////////////////////////////
+  //
+  // C'tors
     
     
-    {}  // namespace leveldb
+    {    return result;
+}
+    
+    #include <vector>
+#include 'Ratpack/ratpak.h'
+    
+    bool CalculatorHistory::RemoveItem(_In_ unsigned int uIdx)
+{
+    if (uIdx > m_historyItems.size() - 1)
+    {
+        return false;
+    }
+    }
+    
+        uint32_t m_radix;
+    int32_t m_precision;
+    int m_cIntDigitsSav;
+    std::vector<uint32_t> m_decGrouping; // Holds the decimal digit grouping number
+    
+    #include 'pch.h'
+#include 'NarratorAnnouncement.h'
+    
+                static void SetAnnouncement(Windows::UI::Xaml::DependencyObject ^ element, NarratorAnnouncement ^ value)
+        {
+            element->SetValue(s_announcementProperty, value);
+        }
+    
+    #include 'rocksdb/slice.h'
+#include 'rocksdb/status.h'
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+    // Options to control the behavior of a database (passed to
+// DB::Open). A LevelDBOptions object can be initialized as though
+// it were a LevelDB Options object, and then it can be converted into
+// a RocksDB Options object.
+struct LevelDBOptions {
+  // -------------------
+  // Parameters that affect behavior
+    }
+    
+    
+    { protected:
+  // To Create an OptimisticTransactionDB, call Open()
+  explicit OptimisticTransactionDB(DB* db) : StackableDB(db) {}
+};
+    
+    // Factory class that can allocate mutexes and condition variables.
+class TransactionDBMutexFactory {
+ public:
+  // Create a TransactionDBMutex object.
+  virtual std::shared_ptr<TransactionDBMutex> AllocateMutex() = 0;
+    }
