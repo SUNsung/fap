@@ -1,353 +1,299 @@
 
         
-                '''
-        raise NotImplementedError()
-    
-    
-class BasicAuthPlugin(BuiltinAuthPlugin):
-    
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
-    
-        def test_implicit_POST_form(self, httpbin):
-        r = http('--form', httpbin.url + '/post', 'foo=bar')
-        assert HTTP_OK in r
-        assert r.json['form'] == {'foo': 'bar'}
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
-    
-    
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
-    
-            :param output_file: The file to store response body in. If not
-                            provided, it will be guessed from the response.
-    
-        x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
-    y_train = np.empty((num_train_samples,), dtype='uint8')
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loss = MSE_MAE_loss(0.3)
-        inputs = keras.layers.Input((2,))
-        outputs = keras.layers.Dense(1, name='model_output')(inputs)
-        model = keras.models.Model(inputs, outputs)
-        model.compile(optimizer='sgd', loss={'model_output': loss})
-        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
-        model.save(model_filename)
-    
-    
-def test_regularization_shared_layer():
-    dense_layer = Dense(num_classes,
-                        kernel_regularizer=regularizers.l1(),
-                        activity_regularizer=regularizers.l1())
-    
-        @property
-    def use_bias(self):
-        return self.cell.use_bias
-    
-    Given a training dataset of corrupted data as input and
-true signal as output, a denoising autoencoder can recover the
-hidden structure to generate clean data.
-    
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
-    
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
-    
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
-        elif _algorithm == 'SHA-256':
-            def sha256_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha256(x).hexdigest()
-            hash_utf8 = sha256_utf8
-        elif _algorithm == 'SHA-512':
-            def sha512_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha512(x).hexdigest()
-            hash_utf8 = sha512_utf8
-    
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
+            :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
 
     
-    import pytest
+        def __getitem__(self, key):
+        return self._store[key.lower()][1]
     
-        @pytest.mark.parametrize(
-        'value, expected', (
-            ([('key', 'val')], [('key', 'val')]),
-            ((('key', 'val'), ), [('key', 'val')]),
-            ({'key': 'val'}, [('key', 'val')]),
-            (None, None)
-        ))
-    def test_valid(self, value, expected):
-        assert to_key_val_list(value) == expected
+                if self.wait_to_close_event:
+                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
+        finally:
+            self.ready_event.set() # just in case of exception
+            self._close_server_sock_ignore_errors()
+            self.stop_event.set()
     
-            return new_proxies
+            return conn
     
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+        def test_basic_waiting_server(self):
+        '''the server waits for the block_server event to be set before closing'''
+        block_server = threading.Event()
     
-    First, we fix a training set and increase the number of
-samples. Then we plot the computation time as function of
-the number of samples.
+        def test_post_with_custom_mapping(self, httpbin):
+        class CustomMapping(MutableMapping):
+            def __init__(self, *args, **kwargs):
+                self.data = dict(*args, **kwargs)
     
-        from sklearn.tree import DecisionTreeClassifier
-    
-        output_file.close()
-
+            setting_name, refid = get_setting_name_and_refid(node)
     
     
-def plot_influence(conf, mse_values, prediction_times, complexities):
-    '''
-    Plot influence of model complexity on both accuracy and latency.
-    '''
-    plt.figure(figsize=(12, 6))
-    host = host_subplot(111, axes_class=Axes)
-    plt.subplots_adjust(right=0.75)
-    par1 = host.twinx()
-    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
-    y1_label = conf['prediction_performance_label']
-    y2_label = 'Time (s)'
-    host.set_ylabel(y1_label)
-    par1.set_ylabel(y2_label)
-    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
-    p2, = par1.plot(complexities, prediction_times, 'r-',
-                    label='latency')
-    host.legend(loc='upper right')
-    host.axis['left'].label.set_color(p1.get_color())
-    par1.axis['right'].label.set_color(p2.get_color())
-    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
-    plt.show()
+class Command(ScrapyCommand):
     
-    # Define 'classifiers' to be used
-classifiers = {
-    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
-                                             contamination=0.261),
-    'Robust Covariance (Minimum Covariance Determinant)':
-    EllipticEnvelope(contamination=0.261),
-    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
-colors = ['m', 'g', 'b']
-legend1 = {}
-legend2 = {}
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--headers', dest='headers', action='store_true', \
+            help='print response HTTP headers instead of body')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
     
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
+                # trustRoot set to platformTrust() will use the platform's root CAs.
+            #
+            # This means that a website like https://www.cacert.org will be rejected
+            # by default, since CAcert.org CA certificate is seldom shipped.
+            return optionsForClientTLS(hostname.decode('ascii'),
+                                       trustRoot=platformTrust(),
+                                       extraCertificateOptions={
+                                            'method': self._ssl_method,
+                                       })
     
-    '''
-print(__doc__)
+        try:
+        # XXX: this try-except is not needed in Twisted 17.0.0+ because
+        # it requires pyOpenSSL 0.16+.
+        from OpenSSL.SSL import SSL_CB_HANDSHAKE_DONE, SSL_CB_HANDSHAKE_START
+    except ImportError:
+        SSL_CB_HANDSHAKE_START = 0x10
+        SSL_CB_HANDSHAKE_DONE = 0x20
     
-    np.random.seed(5)
+            ajax_crawl_request.meta['ajax_crawlable'] = True
+        return ajax_crawl_request
     
-    plt.show()
-
     
-    # #############################################################################
-# Compute clustering with MeanShift
+class GroupTagKeyNotFound(Exception):
+    pass
     
-            if self.state == ProbingState.DETECTING:
-            if (self.distribution_analyzer.got_enough_data() and
-                    (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
-                self._state = ProbingState.FOUND_IT
+    from django.db import models
+from django.utils import timezone
     
-            return self.state
-    
-    UCS2LE_CLS = (
-    0,0,0,0,0,0,0,0,  # 00 - 07
-    0,0,1,0,0,2,0,0,  # 08 - 0f
-    0,0,0,0,0,0,0,0,  # 10 - 17
-    0,0,0,3,0,0,0,0,  # 18 - 1f
-    0,0,0,0,0,0,0,0,  # 20 - 27
-    0,3,3,3,3,3,0,0,  # 28 - 2f
-    0,0,0,0,0,0,0,0,  # 30 - 37
-    0,0,0,0,0,0,0,0,  # 38 - 3f
-    0,0,0,0,0,0,0,0,  # 40 - 47
-    0,0,0,0,0,0,0,0,  # 48 - 4f
-    0,0,0,0,0,0,0,0,  # 50 - 57
-    0,0,0,0,0,0,0,0,  # 58 - 5f
-    0,0,0,0,0,0,0,0,  # 60 - 67
-    0,0,0,0,0,0,0,0,  # 68 - 6f
-    0,0,0,0,0,0,0,0,  # 70 - 77
-    0,0,0,0,0,0,0,0,  # 78 - 7f
-    0,0,0,0,0,0,0,0,  # 80 - 87
-    0,0,0,0,0,0,0,0,  # 88 - 8f
-    0,0,0,0,0,0,0,0,  # 90 - 97
-    0,0,0,0,0,0,0,0,  # 98 - 9f
-    0,0,0,0,0,0,0,0,  # a0 - a7
-    0,0,0,0,0,0,0,0,  # a8 - af
-    0,0,0,0,0,0,0,0,  # b0 - b7
-    0,0,0,0,0,0,0,0,  # b8 - bf
-    0,0,0,0,0,0,0,0,  # c0 - c7
-    0,0,0,0,0,0,0,0,  # c8 - cf
-    0,0,0,0,0,0,0,0,  # d0 - d7
-    0,0,0,0,0,0,0,0,  # d8 - df
-    0,0,0,0,0,0,0,0,  # e0 - e7
-    0,0,0,0,0,0,0,0,  # e8 - ef
-    0,0,0,0,0,0,0,0,  # f0 - f7
-    0,0,0,0,0,0,4,5   # f8 - ff
-)
-    
-    UTF8_CLS = (
-    1,1,1,1,1,1,1,1,  # 00 - 07  #allow 0x00 as a legal value
-    1,1,1,1,1,1,0,0,  # 08 - 0f
-    1,1,1,1,1,1,1,1,  # 10 - 17
-    1,1,1,0,1,1,1,1,  # 18 - 1f
-    1,1,1,1,1,1,1,1,  # 20 - 27
-    1,1,1,1,1,1,1,1,  # 28 - 2f
-    1,1,1,1,1,1,1,1,  # 30 - 37
-    1,1,1,1,1,1,1,1,  # 38 - 3f
-    1,1,1,1,1,1,1,1,  # 40 - 47
-    1,1,1,1,1,1,1,1,  # 48 - 4f
-    1,1,1,1,1,1,1,1,  # 50 - 57
-    1,1,1,1,1,1,1,1,  # 58 - 5f
-    1,1,1,1,1,1,1,1,  # 60 - 67
-    1,1,1,1,1,1,1,1,  # 68 - 6f
-    1,1,1,1,1,1,1,1,  # 70 - 77
-    1,1,1,1,1,1,1,1,  # 78 - 7f
-    2,2,2,2,3,3,3,3,  # 80 - 87
-    4,4,4,4,4,4,4,4,  # 88 - 8f
-    4,4,4,4,4,4,4,4,  # 90 - 97
-    4,4,4,4,4,4,4,4,  # 98 - 9f
-    5,5,5,5,5,5,5,5,  # a0 - a7
-    5,5,5,5,5,5,5,5,  # a8 - af
-    5,5,5,5,5,5,5,5,  # b0 - b7
-    5,5,5,5,5,5,5,5,  # b8 - bf
-    0,0,6,6,6,6,6,6,  # c0 - c7
-    6,6,6,6,6,6,6,6,  # c8 - cf
-    6,6,6,6,6,6,6,6,  # d0 - d7
-    6,6,6,6,6,6,6,6,  # d8 - df
-    7,8,8,8,8,8,8,8,  # e0 - e7
-    8,8,8,8,8,9,8,8,  # e8 - ef
-    10,11,11,11,11,11,11,11,  # f0 - f7
-    12,13,13,13,14,15,0,0    # f8 - ff
-)
-    
-        def feed(self, byte_str):
-        for i in range(len(byte_str)):
-            coding_state = self.coding_sm.next_state(byte_str[i])
-            if coding_state == MachineState.ERROR:
-                self.logger.debug('%s %s prober hit error at byte %s',
-                                  self.charset_name, self.language, i)
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                char_len = self.coding_sm.get_current_charlen()
-                if i == 0:
-                    self._last_char[1] = byte_str[0]
-                    self.context_analyzer.feed(self._last_char[2 - char_len:],
-                                               char_len)
-                    self.distribution_analyzer.feed(self._last_char, char_len)
+    for i, backend in enumerate(backends):
+    for prefix, path in prefix_map.items():
+        if backend.startswith(prefix):
+            models = __import__(path, globals(), locals(), ['models'], level=0).models
+            if i == 0:
+                # If this is the first iteration of the loop, we need to
+                # emulate ``from x import *`` by copying the module contents
+                # into the local (module) scope. This follows the same rules as
+                # the import statement itself, as defined in the refrence docs:
+                # https://docs.python.org/2.7/reference/simple_stmts.html#import
+                if getattr(models, '__all__', None) is not None:
+                    predicate = lambda name: name in models.__all__
                 else:
-                    self.context_analyzer.feed(byte_str[i + 1 - char_len:i + 3
-                                                        - char_len], char_len)
-                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
-                                                    char_len)
+                    predicate = lambda name: not name.startswith('_')
+                locals().update({k: v for k, v in vars(models).items() if predicate(k)})
+            break
+    else:
+        raise ImproperlyConfigured('Found unknown tagstore backend '%s'' % backend)
+
     
-            # If we've seen escape sequences, use the EscCharSetProber, which
-        # uses a simple state machine to check for known escape sequences in
-        # HZ and ISO-2022 encodings, since those are the only encodings that
-        # use such sequences.
-        if self._input_state == InputState.ESC_ASCII:
-            if not self._esc_charset_prober:
-                self._esc_charset_prober = EscCharSetProber(self.lang_filter)
-            if self._esc_charset_prober.feed(byte_str) == ProbingState.FOUND_IT:
-                self.result = {'encoding':
-                               self._esc_charset_prober.charset_name,
-                               'confidence':
-                               self._esc_charset_prober.get_confidence(),
-                               'language':
-                               self._esc_charset_prober.language}
-                self.done = True
-        # If we've seen high bytes (i.e., those with values greater than 127),
-        # we need to do more complicated checks using all our multi-byte and
-        # single-byte probers that are left.  The single-byte probers
-        # use character bigram distributions to determine the encoding, whereas
-        # the multi-byte probers use a combination of character unigram and
-        # bigram distributions.
-        elif self._input_state == InputState.HIGH_BYTE:
-            if not self._charset_probers:
-                self._charset_probers = [MBCSGroupProber(self.lang_filter)]
-                # If we're checking non-CJK encodings, use single-byte prober
-                if self.lang_filter & LanguageFilter.NON_CJK:
-                    self._charset_probers.append(SBCSGroupProber())
-                self._charset_probers.append(Latin1Prober())
-            for prober in self._charset_probers:
-                if prober.feed(byte_str) == ProbingState.FOUND_IT:
-                    self.result = {'encoding': prober.charset_name,
-                                   'confidence': prober.get_confidence(),
-                                   'language': prober.language}
-                    self.done = True
-                    break
-            if self.WIN_BYTE_DETECTOR.search(byte_str):
-                self._has_win_bytes = True
+        complete_apps = ['tagstore']
+
+    
+            # Changing field 'GroupTagValue.project_id'
+        db.alter_column(u'tagstore_grouptagvalue', 'project_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
+    
+    
+@instrumented_task(name='sentry.tasks.options.sync_options', queue='options')
+def sync_options(cutoff=ONE_HOUR):
+    '''
+    Ensures all options that have been updated (within the database) since
+    ``cutoff`` have their correct values stored in the cache.
+    
+        def find_all_path(self, start, end, path=None):
+        path = path or []
+        path.append(start)
+        if start == end:
+            return [path]
+        paths = []
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpaths = self.find_all_path(node, end, path[:])
+                paths.extend(newpaths)
+        return paths
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_provider_shall_update_affected_subscribers_with_published_subscription(cls):
+        pro = Provider()
+        pub = Publisher(pro)
+        sub1 = Subscriber('sub 1 name', pro)
+        sub1.subscribe('sub 1 msg 1')
+        sub1.subscribe('sub 1 msg 2')
+        sub2 = Subscriber('sub 2 name', pro)
+        sub2.subscribe('sub 2 msg 1')
+        sub2.subscribe('sub 2 msg 2')
+        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
+            pro.update()
+            cls.assertEqual(mock_subscriber1_run.call_count, 0)
+            cls.assertEqual(mock_subscriber2_run.call_count, 0)
+        pub.publish('sub 1 msg 1')
+        pub.publish('sub 1 msg 2')
+        pub.publish('sub 2 msg 1')
+        pub.publish('sub 2 msg 2')
+        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
+            pro.update()
+            expected_sub1_calls = [call('sub 1 msg 1'), call('sub 1 msg 2')]
+            mock_subscriber1_run.assert_has_calls(expected_sub1_calls)
+            expected_sub2_calls = [call('sub 2 msg 1'), call('sub 2 msg 2')]
+            mock_subscriber2_run.assert_has_calls(expected_sub2_calls)
+
+    
+        def test_extended_properties(self):
+        print(u'John's relatives: {0}'.format(self.John.relatives))
+        self.assertDictEqual(
+            {'name': 'John', 'occupation': 'Coder', 'relatives': 'Many relatives.', 'call_count2': 0},
+            self.John.__dict__,
+        )
+    
+        def test_cloning_propperty_innate_values(self):
+        sample_object_1 = self.prototype.clone()
+        sample_object_2 = self.prototype.clone()
+        self.assertEqual(sample_object_1.value, sample_object_2.value)
+    
+        def test_human_adapter_shall_make_noise(self):
+        human = Human()
+        human_adapter = Adapter(human, make_noise=human.speak)
+        noise = human_adapter.make_noise()
+        expected_noise = ''hello''
+        self.assertEqual(noise, expected_noise)
+    
+    
+class Provider:
+    def __init__(self):
+        self.msg_queue = []
+        self.subscribers = {}
+    
+    This pattern aims to decouple the senders of a request from its
+receivers by allowing request to move through chained
+receivers until it is handled.
+    
+            Returns:
+        -------
+        Tuple of mean and standard deviations for the L*, a*, and b*
+        channels, respectively
+        '''
+        # compute the mean and standard deviation of each channel
+        (light, col_a, col_b) = cv2.split(image)  # pylint: disable=no-member
+        (l_mean, l_std) = (light.mean(), light.std())
+        (a_mean, a_std) = (col_a.mean(), col_a.std())
+        (b_mean, b_std) = (col_b.mean(), col_b.std())
+    
+        @staticmethod
+    def get_kernel_size(new_face, radius_percent):
+        ''' Return the kernel size and central point for the given radius
+            relative to frame width '''
+        radius = max(1, round(new_face.shape[1] * radius_percent / 100))
+        kernel_size = int((radius * 2) + 1)
+        kernel_size = (kernel_size, kernel_size)
+        logger.trace(kernel_size)
+        return kernel_size, radius
+    
+        def mux_audio(self):
+        ''' Mux audio
+            ImageIO is a useful lib for frames > video as it also packages the ffmpeg binary
+            however muxing audio is non-trivial, so this is done afterwards with ffmpy.
+            A future fix could be implemented to mux audio with the frames '''
+        logger.info('Muxing Audio...')
+        exe = im_ffm.get_ffmpeg_exe()
+        inputs = OrderedDict([(self.video_tmp_file, None), (self.source_video, None)])
+        outputs = {self.video_file: '-map 0:0 -map 1:1 -c: copy'}
+        ffm = FFmpeg(executable=exe,
+                     global_options='-hide_banner -nostats -v 0 -y',
+                     inputs=inputs,
+                     outputs=outputs)
+        logger.debug('Executing: %s', ffm.cmd)
+        ffm.run()
+        logger.debug('Removing temp file')
+        os.remove(self.video_tmp_file)
+
+    
+        def check_transparency_format(self):
+        ''' Make sure that the output format is correct if draw_transparent is selected '''
+        transparent = self.config['draw_transparent']
+        if not transparent or (transparent and self.config['format'] in ('png', 'tif')):
+            return
+        logger.warning('Draw Transparent selected, but the requested format does not support '
+                       'transparency. Changing output format to 'png'')
+        self.config['format'] = 'png'
+    
+        def draw_grey_out_faces(self, live_face):
+        ''' Grey out all faces except target '''
+        if not self.roi:
+            return
+        alpha = 0.6
+        overlay = self.image.copy()
+        for idx, roi in enumerate(self.roi):
+            if idx != int(live_face):
+                logger.trace('Greying out face: (idx: %s, roi: %s)', idx, roi)
+                cv2.fillPoly(overlay, roi, (0, 0, 0))  # pylint: disable=no-member
+        cv2.addWeighted(overlay,  # pylint: disable=no-member
+                        alpha,
+                        self.image,
+                        1 - alpha,
+                        0,
+                        self.image)
+
+    
+        def show(self):
+        ''' Show the tooltip '''
+        def tip_pos_calculator(widget, label,
+                               *,
+                               tip_delta=(10, 5), pad=(5, 3, 5, 3)):
+            ''' Calculate the tooltip position '''
+    
+    
+# Update initializers into Keras custom objects
+for name, obj in inspect.getmembers(sys.modules[__name__]):
+    if inspect.isclass(obj) and obj.__module__ == __name__:
+        get_custom_objects().update({name: obj})
+
+    
+            if self.config.get('mask_type', None):
+            var_y = input_
+            var_y = self.blocks.upscale(var_y, 512)
+            var_y = self.blocks.upscale(var_y, 256)
+            var_y = self.blocks.upscale(var_y, self.input_shape[0])
+            var_y = Conv2D(1, kernel_size=5, padding='same', activation='sigmoid')(var_y)
+            outputs.append(var_y)
+        return KerasModel(input_, outputs=outputs)
+
+    
+            print('Empty input')
+        assert_equal(func([]), [])
+    
+            print('Test: Enqueue after a dequeue')
+        queue.enqueue(5)
+        assert_equal(queue.dequeue(), 5)
+    
+            print('Test: Two or more element stack (general case)')
+        num_items = 10
+        numbers = [randint(0, 10) for x in range(num_items)]
+        sorted_stack = self.get_sorted_stack(stack, numbers)
+        sorted_numbers = []
+        for _ in range(num_items):
+            sorted_numbers.append(sorted_stack.pop())
+        assert_equal(sorted_numbers, sorted(numbers, reverse=True))
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    	def test_delete (self):
+		myTree = BinaryTree()
+		myTree.insert(5)
