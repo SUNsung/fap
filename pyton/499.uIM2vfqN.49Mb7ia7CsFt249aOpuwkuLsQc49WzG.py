@@ -1,311 +1,235 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+        
+@pytest.fixture(autouse=True)
+def shell_config(mocker):
+    path_mock = mocker.patch('thefuck.entrypoints.not_configured.Path',
+                             new_callable=MagicMock)
+    return path_mock.return_value \
+        .expanduser.return_value \
+        .open.return_value \
+        .__enter__.return_value
+    
+    apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+Usage: apt-get [options] command
+       apt-get [options] install|remove pkg1 [pkg2 ...]
+       apt-get [options] source pkg1 [pkg2 ...]
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    **youtube-dl** \[OPTIONS\] URL [URL...]
-    
-        def error(self, msg):
-        pass
-    
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertTrue(len(subtitles.keys()) >= 28)
-        self.assertEqual(md5(subtitles['en']), '4262c1665ff928a2dada178f62cb8d14')
-        self.assertEqual(md5(subtitles['fr']), '66a63f7f42c97a50f8c0e90bc7797bb5')
-        for lang in ['es', 'fr', 'de']:
-            self.assertTrue(subtitles.get(lang) is not None, 'Subtitles for \'%s\' not extracted' % lang)
-    
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
-    
-        def delete(self, session_key=None):
-        '''
-        To delete, clear the session key and the underlying data structure
-        and set the modified flag so that the cookie is set on the client for
-        the current request.
-        '''
-        self._session_key = ''
-        self._session_cache = {}
-        self.modified = True
+def test_get_new_command():
+    new_command = get_new_command(Command('sudo apt update', match_output))
+    assert new_command == 'sudo apt list --upgradable'
     
     
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
-    
-    
-class Conversion(object):
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-    UNICODE = FILE_CONTENT
+@pytest.mark.parametrize('before, after', [
+    ('brew install sshfs',
+     'brew cask install osxfuse && brew install sshfs')])
+def test_get_new_command(before, after):
+    command = Command(before, output)
+    assert get_new_command(command) == after
 
     
     
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    from httpie import ExitStatus
-from httpie.core import main
-    
-        def test_request_body_from_file_by_path(self, httpbin):
-        r = http('--verbose',
-                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG)
-        assert HTTP_OK in r
-        assert FILE_CONTENT in r, r
-        assert ''Content-Type': 'text/plain'' in r
-    
-            Might alter `request_headers`.
-    
-    model.fit(x_train, y_train,
-          batch_size=batch_size,
-          callbacks=[tensorboard],
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_match(brew_no_available_formula, brew_already_installed,
+               brew_install_no_argument):
+    assert match(Command('brew install elsticsearch',
+                         brew_no_available_formula))
+    assert not match(Command('brew install git',
+                             brew_already_installed))
+    assert not match(Command('brew install', brew_install_no_argument))
     
     
-def deserialize(config, custom_objects=None):
-    return deserialize_keras_object(config,
-                                    module_objects=globals(),
-                                    custom_objects=custom_objects,
-                                    printable_module_name='regularizer')
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert match(Command(script.format(filename.format(ext)), ''))
+    
+        def digest_response_handler(sock):
+        # Respond to GET with a 200 containing www-authenticate header.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert request_content.startswith(b'GET / HTTP/1.1')
+        sock.send(text_200_chal)
+    
+                # the (n+1)th request fails
+            with pytest.raises(requests.exceptions.ConnectionError):
+                r = requests.get(server_url)
     
     
-def create_model(kernel_regularizer=None, activity_regularizer=None):
-    model = Sequential()
-    model.add(Dense(num_classes,
-                    kernel_regularizer=kernel_regularizer,
-                    activity_regularizer=activity_regularizer,
-                    input_shape=(data_dim,)))
-    return model
+class TestGuessFilename:
     
-        def _sync_state(self, enabled=True):
-        '''Syncs local rule state with AWS'''
-        remote_state = self._remote_state()
-        if enabled and remote_state != 'ENABLED':
-            self.rule.enable()
-        elif not enabled and remote_state != 'DISABLED':
-            self.rule.disable()
+        def __init__(self):
+        #: HTTP verb to send to the server.
+        self.method = None
+        #: HTTP URL to send the request to.
+        self.url = None
+        #: dictionary of HTTP headers.
+        self.headers = None
+        # The `CookieJar` used to create the Cookie header will be stored here
+        # after prepare_cookies is called
+        self._cookies = None
+        #: request body to send to the server.
+        self.body = None
+        #: dictionary of callback hooks, for internal usage.
+        self.hooks = default_hooks()
+        #: integer denoting starting position of a readable file-like body.
+        self._body_position = None
     
-    ## List all Subscriptions for a Topic in a project
-- gcpubsub_facts:
-    view: subscriptions
-    topic: my-topic
-    state: list
-'''
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
-        def role_add_user(self, name, item):
-        return self.role_add_member(name=name, item={'user': item})
+        i.e. Link: <http:/.../front.jpeg>; rel=front; type='image/jpeg',<http://.../back.jpeg>; rel=back;type='image/jpeg'
     
-        if module.params['repo']:
-        params['deploy[repository]'] = module.params['repo']
+    # The master toctree document.
+master_doc = 'index'
     
-        # Deploy params
-    revision_id = module.params['revision_id']
-    deployed_by = module.params['deployed_by']
-    deployed_to = module.params['deployed_to']
-    repository = module.params['repository']
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-]
-    
-    .. caution::
-   You should protect these API credentials as you would the password to your
-   CloudXNS account. Users who can read this file can use these credentials to
-   issue arbitrary API calls on your behalf. Users who can cause Certbot to run
-   using these credentials can complete a ``dns-01`` challenge to acquire new
-   certificates or revoke existing certificates for associated domains, even if
-   those domains aren't being managed by this server.
-    
-            # builtin classmethod:
-        self.assertEqual(dict.fromkeys.__qualname__, 'dict.fromkeys')
-        self.assertEqual(float.__getformat__.__qualname__,
-                         'float.__getformat__')
-    
-        def address_string(self):
-        '''Return the client address.'''
-    
-        # 'String giving the prefix of method names which will be interpreted as
-    # test methods'
-    #
-    # Implicit in the documentation is that testMethodPrefix is respected by
-    # all loadTestsFrom* methods.
-    def test_testMethodPrefix__loadTestsFromTestCase(self):
-        class Foo(unittest.TestCase):
-            def test_1(self): pass
-            def test_2(self): pass
-            def foo_bar(self): pass
-    
-    # This is a copy of lib2to3.fixes.fix_imports.MAPPING.  We cannot import
-# lib2to3 and use the mapping defined there, because lib2to3 uses pickle.
-# Thus, this could cause the module to be imported recursively.
-IMPORT_MAPPING = {
-    '__builtin__' : 'builtins',
-    'copy_reg': 'copyreg',
-    'Queue': 'queue',
-    'SocketServer': 'socketserver',
-    'ConfigParser': 'configparser',
-    'repr': 'reprlib',
-    'tkFileDialog': 'tkinter.filedialog',
-    'tkSimpleDialog': 'tkinter.simpledialog',
-    'tkColorChooser': 'tkinter.colorchooser',
-    'tkCommonDialog': 'tkinter.commondialog',
-    'Dialog': 'tkinter.dialog',
-    'Tkdnd': 'tkinter.dnd',
-    'tkFont': 'tkinter.font',
-    'tkMessageBox': 'tkinter.messagebox',
-    'ScrolledText': 'tkinter.scrolledtext',
-    'Tkconstants': 'tkinter.constants',
-    'Tix': 'tkinter.tix',
-    'ttk': 'tkinter.ttk',
-    'Tkinter': 'tkinter',
-    'markupbase': '_markupbase',
-    '_winreg': 'winreg',
-    'thread': '_thread',
-    'dummy_thread': '_dummy_thread',
-    'dbhash': 'dbm.bsd',
-    'dumbdbm': 'dbm.dumb',
-    'dbm': 'dbm.ndbm',
-    'gdbm': 'dbm.gnu',
-    'xmlrpclib': 'xmlrpc.client',
-    'SimpleXMLRPCServer': 'xmlrpc.server',
-    'httplib': 'http.client',
-    'htmlentitydefs' : 'html.entities',
-    'HTMLParser' : 'html.parser',
-    'Cookie': 'http.cookies',
-    'cookielib': 'http.cookiejar',
-    'BaseHTTPServer': 'http.server',
-    'test.test_support': 'test.support',
-    'commands': 'subprocess',
-    'urlparse' : 'urllib.parse',
-    'robotparser' : 'urllib.robotparser',
-    'urllib2': 'urllib.request',
-    'anydbm': 'dbm',
-    '_abcoll' : 'collections.abc',
-}
-    
-            self._copy_file_without_generated_symbols(SYMBOL_FILE, output)
-    
-    
-def main():
-    parser = ArgumentParser(description='''\
-Send the contents of a directory as a MIME message.
-Unless the -o option is given, the email is sent by forwarding to your local
-SMTP server, which then does the normal delivery process.  Your local machine
-must be running an SMTP server.
-''')
-    parser.add_argument('-d', '--directory',
-                        help='''Mail the contents of the specified directory,
-                        otherwise use the current directory.  Only the regular
-                        files in the directory are sent, and we don't recurse to
-                        subdirectories.''')
-    parser.add_argument('-o', '--output',
-                        metavar='FILE',
-                        help='''Print the composed message to FILE instead of
-                        sending the message to the SMTP server.''')
-    parser.add_argument('-s', '--sender', required=True,
-                        help='The value of the From: header (required)')
-    parser.add_argument('-r', '--recipient', required=True,
-                        action='append', metavar='RECIPIENT',
-                        default=[], dest='recipients',
-                        help='A To: header value (at least one required)')
-    args = parser.parse_args()
-    directory = args.directory
-    if not directory:
-        directory = '.'
-    # Create the message
-    msg = EmailMessage()
-    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
-    msg['To'] = ', '.join(args.recipients)
-    msg['From'] = args.sender
-    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
-    
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
+            loader = unittest.TestLoader()
+        try:
+            loader.loadTestsFromName('testcase_1', m)
+        except TypeError:
+            pass
         else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+            self.fail('Should have raised TypeError')
+    
+    
+# This follows symbolic links, so both islink() and isdir() can be true
+# for the same path on systems that support symlinks
+def isfile(path):
+    '''Test whether a path is a regular file'''
+    try:
+        st = os.stat(path)
+    except (OSError, ValueError):
+        return False
+    return stat.S_ISREG(st.st_mode)
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+            print('Testing IMapIterator.next() with timeout:', end=' ')
+        it = pool.imap(calculatestar, TASKS)
+        while 1:
+            sys.stdout.flush()
+            try:
+                sys.stdout.write('\n\t%s' % it.next(0.02))
+            except StopIteration:
+                break
+            except multiprocessing.TimeoutError:
+                sys.stdout.write('.')
+        print()
+        print()
+    
+    for face_location in face_locations:
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+    import face_recognition
+import picamera
+import numpy as np
+    
+        # Every 128 frames (the default batch size), batch process the list of frames to find faces
+    if len(frames) == 128:
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
+    
+            self.assertEqual(type(match_results), list)
+        self.assertTrue(match_results[0])
+        self.assertTrue(match_results[1])
+        self.assertFalse(match_results[2])
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_frame = frame[:, :, ::-1]
