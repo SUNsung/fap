@@ -1,110 +1,70 @@
 
         
-                css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-            # This unregisters a plugin so that its components will no longer
-        # be used. Note that this should only be used for testing purposes.
-        def unregister(plugin)
-          if @registered.include?(plugin)
-            @logger.info('Unregistered: #{plugin.name}')
-            @registered.delete(plugin)
-          end
-        end
+              def print_summary(features)
+        @io.puts
+        print_stats(features, @options)
+        print_snippets(@options)
+        print_passing_wip(@options)
       end
     end
   end
 end
-
     
-              # Register a new provisioner class only if a name was given
-          data[:provisioners].register(name.to_sym, &block) if name != UNSET_VALUE
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
     
-                    # This is a regular expression name, so we convert to a regular
-                # expression and allow that sort of matching.
-                regex = Regexp.new(pattern)
-    
-      def hub_callback
-    params['hub.callback']
-  end
-    
-      def update
-    params.require([:id])
-    
-      def after_sign_in_path_for(resource)
-    if resource.email_verified?
-      root_path
-    else
-      finish_signup_path
+        def set_report_note
+      @report_note = ReportNote.find(params[:id])
     end
   end
 end
 
     
+      private
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
+    end
+  end
+    
+      def encoded_challenge
+    HTMLEntities.new.encode(params['hub.challenge'])
+  end
+    
       included do
-    before_action :set_rate_limit_headers, if: :rate_limited_request?
+    before_action :authenticate_user!
+    before_action :load_export
   end
     
-        self.codec = res[2][IAX_IE_DESIRED_CODEC].unpack('N')[0]
-    self.state = :ringing
-    self.ring_start = ::Time.now.to_i
-    self.client.send_ack(self)
-    true
-  end
+      # Configure an appender that will write log events to STDOUT. A colorized
+  # pattern layout is used to format the log events into strings before
+  # writing.
+  Logging.appenders.stdout('stdout',
+                           auto_flushing: true,
+                           layout:        Logging.layouts.pattern(
+                             pattern:      pattern,
+                             color_scheme: 'bright'
+                           )
+                          ) if config.log_to.include? 'stdout'
     
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
     
-              # Encodes the pvno field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_pvno
-            bn = OpenSSL::BN.new(pvno.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Authorization Data decoding not supported'
-          end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos EncryptionKey data
-        # definition
-        class EncryptionKey < Element
-    
-              # Decodes the etype field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Integer>]
-          def decode_etype(input)
-            encs = []
-            input.value[0].value.each do |enc|
-              encs << enc.value.to_i
-            end
-            encs
-          end
-    
-                decode_asn1(asn1)
-          end
-    
-              # @!attribute type
-          #   @return [Integer] The type of value
-          attr_accessor :type
-          # @!attribute value
-          #   @return [Time] the time of the last request
-          attr_accessor :value
+        context 'for a logged out user' do
+      before do
+        sign_out :user
+      end
