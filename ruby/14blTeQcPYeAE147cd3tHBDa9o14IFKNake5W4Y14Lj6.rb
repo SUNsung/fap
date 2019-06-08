@@ -1,45 +1,20 @@
 
         
-          Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
-      end
-    end
-  end
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+            def show
+      authorize @user, :change_email?
     end
     
-        def path
-      @path ||= url.path
-    end
+        def create
+      authorize ReportNote, :create?
     
-          @terminal_width = if !tty?
-        nil
-      elsif ENV['COLUMNS']
-        ENV['COLUMNS'].to_i
-      else
-        `stty size`.scan(/\d+/).last.to_i
-      end
-    rescue
-      @terminal_width = nil
-    end
-  end
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
 end
-
     
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
-          end
-        end
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
