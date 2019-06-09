@@ -1,118 +1,152 @@
 
         
-                if explicit_plugins.any? { |spec| filename =~ /^#{spec.name}/ }
-          FileUtils.mv(gem_file, ::File.join(explicit_path, filename))
-        else
-          FileUtils.mv(gem_file, ::File.join(dependencies_path, filename))
+              case command.method_name
+      when 'sh'
+        error_callback = proc { |string_value| closure_argument_value = string_value }
+        command_param = parameter_map[:command]
+        log_param = parameter_map[:log]
+        action_return = Fastlane::FastFile.sh(command_param, log: log_param, error_callback: error_callback)
+      end
+    
+          it 'adds docset_fallback_url param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_fallback_url: 'http://docset-fallback-url.com'
+          )
+        end').runner.execute(:test)
+    
+          it 'add a cache_builds flag to command if cache_builds is set to true' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              cache_builds: true
+            )
+          end').runner.execute(:test)
+    
+            it 'sets up metadata folder in fastlane folder' do
+          expect(options[:metadata_path]).to eq('./fastlane/metadata')
         end
       end
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
+        end
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+        def log_processed(name)
+      puts green '    #{name}'
     end
     
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
   end
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
+        def tmux_main_command(command)
+      if command
+        _send_target(command.shellescape)
       else
-        '#{quote}<footer>#{author}</footer>'
+        ''
       end
-      '<blockquote>#{blockquote}</blockquote>'
     end
     
-      end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+        def root
+      _yaml_root || _project_root
     end
+    
+        initialize_with { Tmuxinator::Project.new(file) }
   end
     
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
-    else
-      input
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
     end
   end
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
+    end
+  end
+end
+
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+    describe Tmuxinator::Pane do
+  let(:klass) { described_class }
+  let(:instance) { klass.new(index, project, window, *commands) }
+  # let(:index) { 'vim' }
+  # let(:project) { 0 }
+  # let(:tab) { nil }
+  # let(:commands) { nil }
+  let(:index) { 0 }
+  let(:project) { double }
+  let(:window) { double }
+  let(:commands) { ['vim', 'bash'] }
+    
+            expect(project.startup_pane).to eq('sample:0.1')
       end
     end
     
-              # directories have a magic string inserted into their name
-          full_record_path = extension_header[TAR_NAME_OFFSET_START..TAR_NAME_OFFSET_END].delete('\0')
-          full_record_path = add_paxstring(full_record_path)
+      if base_index = options.fetch(:base_index) { 1 }
+    standard_options << 'base-index #{base_index}'
+  end
     
-      # Take a flat package as input
-  def input(input_path)
-    # TODO: Fail if it's a Distribution pkg or old-fashioned
-    expand_dir = File.join(build_path, 'expand')
-    # expand_dir must not already exist for pkgutil --expand
-    safesystem('pkgutil --expand #{input_path} #{expand_dir}')
-    
-        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
-    libs.each do |file|
-      base = staging_path(File.join(attributes[:prefix]))
-      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
-      File.chmod(0755, File.join(base, file))
+        def window(i)
+      '#{name}:#{i}'
     end
     
-        begin
-      safesystem('#{attributes[:python_bin]} -c 'import pkg_resources'')
-    rescue FPM::Util::ProcessFailed => e
-      logger.error('Your python environment is missing a working setuptools module. I tried to find the 'pkg_resources' module but failed.', :python => attributes[:python_bin], :error => e)
-      raise FPM::Util::ProcessFailed, 'Python (#{attributes[:python_bin]}) is missing pkg_resources module.'
-    end
-    
-        safesystem('tar', *args)
-  end # def output
+      s.post_install_message = %q{
+    __________________________________________________________
+    ..........................................................
+    }
