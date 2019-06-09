@@ -1,63 +1,62 @@
 
         
-                class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
-          end
-        end
-    
-    module AbstractController
-  module Testing
-    class ControllerWithHelpers < AbstractController::Base
-      include AbstractController::Helpers
-      include AbstractController::Rendering
-      include ActionView::Rendering
-    
-        def root_url
-      context[:root_url]
-    end
-    
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
-    
-      preflight do
-    processes = system_command '/bin/launchctl', args: ['list']
-    
-    desc 'Deploy website via rsync'
-task :rsync do
-  exclude = ''
-  if File.exists?('./rsync-exclude')
-    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
+        def pr(url)
+  if url.end_with?(FORWARD_SLASH)
+    url
+  else
+    url_dir = File.dirname(url)
+    url_dir.end_with?(FORWARD_SLASH) ? url_dir : '#{url_dir}/'
   end
-  puts '## Deploying website via Rsync'
-  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
 end
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+          def jekyll
+        JekyllDrop.global
       end
-      super
-    end
     
-        def sizes
-      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
-      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
-      attrs
+        private
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
     end
   end
 end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
