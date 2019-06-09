@@ -1,154 +1,191 @@
 
         
-            /** Colorize an icon (given object) with the text color */
-    QIcon TextColorIcon(const QIcon& icon) const;
+        
+    {  return false;
+}
     
-        void showTab_SM(bool fShow);
-    void showTab_VM(bool fShow);
     
-    ; shuffle xBxA -> 00BA
-_SHUF_00BA:              ddq 0xFFFFFFFFFFFFFFFF0b0a090803020100
+    {}  // namespace api
     
-    TEST(DBTest, ManifestWriteError) {
-  // Test for the following problem:
-  // (a) Compaction produces file F
-  // (b) Log record containing F is written to MANIFEST file, but Sync() fails
-  // (c) GC deletes F
-  // (d) After reopening DB, reads fail since deleted F is named in log record
-    }
     
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
+    {}  // namespace api
+    
+      ~TrackableObject() override { RemoveFromWeakMap(); }
+    
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
 
     
-    static const int kBlockSize = 32768;
-    
-    namespace leveldb {
-    }
-    
-    namespace log {
-    }
-    
-    #ifndef STORAGE_LEVELDB_DB_SKIPLIST_H_
-#define STORAGE_LEVELDB_DB_SKIPLIST_H_
-    
-     private:
-  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
-    
-      // Random reads.
-  ASSERT_OK(env_->NewRandomAccessFile('/dir/f', &rand_file));
-  ASSERT_OK(rand_file->Read(6, 5, &result, scratch));  // Read 'world'.
-  ASSERT_EQ(0, result.compare('world'));
-  ASSERT_OK(rand_file->Read(0, 5, &result, scratch));  // Read 'hello'.
-  ASSERT_EQ(0, result.compare('hello'));
-  ASSERT_OK(rand_file->Read(10, 100, &result, scratch));  // Read 'd'.
-  ASSERT_EQ(0, result.compare('d'));
-    
-      // An iterator is either positioned at a key/value pair, or
-  // not valid.  This method returns true iff the iterator is valid.
-  virtual bool Valid() const = 0;
-    
-      // Indicate that the contents of this builder should be abandoned.  Stops
-  // using the file passed to the constructor after this function returns.
-  // If the caller is not going to call Finish(), it must call Abandon()
-  // before destroying this builder.
-  // REQUIRES: Finish(), Abandon() have not been called
-  void Abandon();
-    
-    
-    {  std::string rep_;  // See comment in write_batch.cc for the format of rep_
-};
-    
-      FilterBlockBuilder(const FilterBlockBuilder&) = delete;
-  FilterBlockBuilder& operator=(const FilterBlockBuilder&) = delete;
-    
-      Arena(const Arena&) = delete;
-  Arena& operator=(const Arena&) = delete;
-    
-    TEST(CacheTest, Prune) {
-  Insert(1, 100);
-  Insert(2, 200);
-    }
-    
-    // Modified by EnvWindowsTestHelper::SetReadOnlyMMapLimit().
-int g_mmap_limit = kDefaultMmapLimit;
-    
-    
-    {  return gTrue;
+    namespace base {
+class Time;
 }
     
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-    {  PDFRectangle mediaBox;
-  PDFRectangle cropBox;
-  GBool haveCropBox;
-  PDFRectangle bleedBox;
-  PDFRectangle trimBox;
-  PDFRectangle artBox;
-  int rotate;
-  Object lastModified;
-  Object boxColorInfo;
-  Object group;
-  Object metadata;
-  Object pieceInfo;
-  Object separationInfo;
-  Object resources;
+    
+    {}  // namespace atom
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+    
+    TEST(StatusOr, TestDefaultCtor) {
+  StatusOr<int> thing;
+  EXPECT_FALSE(thing.ok());
+  EXPECT_EQ(Status::UNKNOWN, thing.status());
+}
+    
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
+    
+    
+    {
+  return 0;
+}
+
+    
+    DescriptorPool new_pool_;
+    
+    
+    {  static void ScrubMessage(DescriptorProto *message_type) {
+    message_type->mutable_extension()->Clear();
+    for (int i = 0; i < message_type->mutable_extension()->size(); i++) {
+      message_type->mutable_extension(i)->clear_default_value();
+      if (ShouldClearLabel(message_type->mutable_extension(i))) {
+        message_type->mutable_extension(i)->clear_label();
+      }
+    }
+    for (int i = 0; i < message_type->mutable_field()->size(); i++) {
+      message_type->mutable_field(i)->clear_default_value();
+      if (ShouldClearLabel(message_type->mutable_field(i))) {
+        message_type->mutable_field(i)->clear_label();
+      }
+    }
+    for (int i = 0; i < message_type->mutable_nested_type()->size(); i++) {
+      ScrubMessage(message_type->mutable_nested_type(i));
+    }
+  }
 };
     
-      number = index - base + interval->first;
-  switch (interval->style) {
-  case Interval::Arabic:
-    snprintf (buffer, sizeof(buffer), '%d', number);
-    number_string.append(buffer);
-    break;
-  case Interval::LowercaseRoman:
-    toRoman(number, &number_string, gFalse);
-    break;
-  case Interval::UppercaseRoman:
-    toRoman(number, &number_string, gTrue);
-    break;
-  case Interval::UppercaseLatin:
-  case Interval::LowercaseLatin:
-    number = 0;
-    break;
-  case Interval::None:
-    break;
+        cout << 'Person ID: ' << person.id() << endl;
+    cout << '  Name: ' << person.name() << endl;
+    if (person.email() != '') {
+      cout << '  E-mail address: ' << person.email() << endl;
+    }
+    
+    
+    { private:
+  const EnumDescriptor* descriptor_;
+  std::vector<const EnumValueDescriptor*> base_values_;
+  std::vector<const EnumValueDescriptor*> all_values_;
+  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
+  const string name_;
+};
+    
+    int16_t word_blob_quality(WERD_RES *word, ROW *row);
+void reject_whole_page(PAGE_RES_IT &page_res_it);
+    
+    
+    {}  // namespace
+    
+    struct TWERD;
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+      void set_flag(REJ_FLAGS rej_flag) {
+    if (rej_flag < 16)
+      flags1.turn_on_bit (rej_flag);
+    else
+      flags2.turn_on_bit (rej_flag - 16);
   }
     
-    ProfileData::ProfileData() {
-	count = 0;
-	total = 0.0;
-	min = 0.0;
-	max = 0.0;
+      // Main worker method that retrieves the next number in the sequence.
+  // Returns kInvalidVal if called more than N times after object initialization
+  int GetVal() {
+    const int kInvalidVal = -1;
+    const int kMaxNaturalNumberValue = 1 << num_bits_;
+    if (next_num_ >= kMaxNaturalNumberValue)
+      return kInvalidVal;
+    int n = next_num_;
+    }
+    
+    
+    {}
+
+    
+    #pragma once
+    
+    #endif /* HAVE_ARM_NE10 */
+    
+    #endif /* SILK_MACROS_ARMv4_H */
+
+    
+    #undef silk_SUB_SAT32
+static OPUS_INLINE opus_int32 silk_SUB_SAT32_armv5e(opus_int32 a, opus_int32 b)
+{
+  int res;
+  __asm__(
+      '#silk_SUB_SAT32\n\t'
+      'qsub %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(a), 'r'(b)
+  );
+  return res;
 }
+#define silk_SUB_SAT32(a, b) (silk_SUB_SAT32_armv5e(a, b))
     
-      // Destructor.
-  ~ProfileData() {}
+    // These measure definitions should be kept in sync across opencensus
+// implementations--see
+// https://github.com/census-instrumentation/opencensus-java/blob/master/contrib/grpc_metrics/src/main/java/io/opencensus/contrib/grpc/metrics/RpcMeasureConstants.java.
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
     
     
-    {  //
-  // parse Media Screen Parameters
-  if (obj->dictLookup('SP', &tmp2)->isDict()) { // media screen parameters
-    Object params;
-    if (tmp2.dictLookup('MH', &params)->isDict()) {
-      MH.parseMediaScreenParameters(&params);
-    }
-    params.free();
-    if (tmp2.dictLookup('BE', &params)->isDict()) {
-      BE.parseMediaScreenParameters(&params);
-    }
-    params.free();
+    {  const protobuf::FieldDescriptor* field_desc =
+      descriptor_pool_->FindExtensionByNumber(desc,
+                                              request->extension_number());
+  if (field_desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Extension not found.');
   }
-  tmp2.free();
+  std::unordered_set<grpc::string> seen_files;
+  FillFileDescriptorResponse(field_desc->file(), response, &seen_files);
+  return Status::OK;
 }
     
+    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
     
-    {  Object encryptDict;
-  XpdfSecurityHandler *xsh;
-  void *docData;
-  int permFlags;
-  Guchar fileKey[16];
-  int fileKeyLength;
-  int encVersion;
-  CryptAlgorithm encAlgorithm;
-  GBool ok;
-};
-#endif // ENABLE_PLUGINS
+    #include <grpc/support/log.h>
+    
+    #ifdef GPR_WINDOWS
+    
+    #include 'src/proto/grpc/core/stats.pb.h'
+    
+    #include <grpc/support/time.h>
+#include <grpcpp/support/config.h>
+#include <grpcpp/support/time.h>
