@@ -1,116 +1,126 @@
 
         
-            class Meta:
-        abstract = True
-        verbose_name = _('session')
-        verbose_name_plural = _('sessions')
+            return clean
     
-    from scrapy.spiders import Spider
-from scrapy.http import Request
+            while self.values[new_key] is not None and self.values[new_key] != key:
+            new_key = self.__hash_double_function(key, data, i) if \
+                self.balanced_factor() >= self.lim_charge else None
+            if new_key is None: break 
+            else: i += 1
     
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
+            if isinstance(B,bytes):
+            B = B.decode('ascii')
     
-        def _print_headers(self, headers, prefix):
-        for key, values in headers.items():
-            for value in values:
-                self._print_bytes(prefix + b' ' + key + b': ' + value)
+        for i in range(1, s+1):
+        dp[0][i] = False
     
-        spider = None
-    items = {}
-    requests = {}
+    from matplotlib import pyplot as plt
+def plot_heterogeneity(heterogeneity, k):
+    plt.figure(figsize=(7,4))
+    plt.plot(heterogeneity, linewidth=4)
+    plt.xlabel('# Iterations')
+    plt.ylabel('Heterogeneity')
+    plt.title('Heterogeneity of clustering over time, K={0:d}'.format(k))
+    plt.rcParams.update({'font.size': 16})
+    plt.show()
     
-        def run(self, args, opts):
-        settings = self.crawler_process.settings
-        if opts.get:
-            s = settings.get(opts.get)
-            if isinstance(s, BaseSettings):
-                print(json.dumps(s.copy_to_dict()))
-            else:
-                print(s)
-        elif opts.getbool:
-            print(settings.getbool(opts.getbool))
-        elif opts.getint:
-            print(settings.getint(opts.getint))
-        elif opts.getfloat:
-            print(settings.getfloat(opts.getfloat))
-        elif opts.getlist:
-            print(settings.getlist(opts.getlist))
-
     
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
-
+def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/commit/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
+    return [node], []
     
-        class _v20_S3Connection(S3Connection):
-        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
-        def _mexe(self, http_request, *args, **kwargs):
-            http_request.authorize(connection=self)
-            return http_request.headers
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
     
-        LOG_EMERG     = 0       #  system is unusable
-    LOG_ALERT     = 1       #  action must be taken immediately
-    LOG_CRIT      = 2       #  critical conditions
-    LOG_ERR       = 3       #  error conditions
-    LOG_WARNING   = 4       #  warning conditions
-    LOG_NOTICE    = 5       #  normal but significant condition
-    LOG_INFO      = 6       #  informational
-    LOG_DEBUG     = 7       #  debug-level messages
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
     
-        def compare_files(self, file1, file2):
-        with open(file1) as fp:
-            lines1 = fp.readlines()
-        with open(file2) as fp:
-            lines2 = fp.readlines()
-        self.assertEqual(lines1, lines2)
     
-        return p, p[:0]
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
     
-        def testMultiStreamOrdering(self):
-        # Test the ordering of streams when reading a multi-stream archive.
-        data1 = b'foo' * 1000
-        data2 = b'bar' * 1000
-        with BZ2File(self.filename, 'w') as bz2f:
-            bz2f.write(data1)
-        with BZ2File(self.filename, 'a') as bz2f:
-            bz2f.write(data2)
-        with BZ2File(self.filename) as bz2f:
-            self.assertEqual(bz2f.read(), data1 + data2)
+        def prepare_request(self, spider, request, opts):
+        def callback(response):
+            # memorize first request
+            if not self.first_response:
+                self.first_response = response
     
+        name = 'url'
+    
+                # backward-compatible SSL/TLS method:
             #
-        # Testing timeouts
-        #
+            # * this will respect `method` attribute in often recommended
+            #   `ScrapyClientContextFactory` subclass
+            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
+            #
+            # * getattr() for `_ssl_method` attribute for context factories
+            #   not calling super(..., self).__init__
+            return CertificateOptions(verify=False,
+                        method=getattr(self, 'method',
+                                       getattr(self, '_ssl_method', None)),
+                        fixBrokenPeers=True,
+                        acceptableCiphers=DEFAULT_CIPHERS)
+    
+        if twisted_version < (17, 0, 0):
+        from twisted.internet._sslverify import _maybeSetHostNameIndication
+        set_tlsext_host_name = _maybeSetHostNameIndication
+    else:
+        def set_tlsext_host_name(connection, hostNameBytes):
+            connection.set_tlsext_host_name(hostNameBytes)
     
     
-def _test():
-    ''''''
-    file_path = r'./data.txt'
+class RC4FileObject(object):
+    '''fileobj for rc4'''
+    def __init__(self, stream, key):
+        self.__stream = stream
+        self.__cipher = _Crypto_Cipher_ARC4_new(key) if key else lambda x:x
+    def __getattr__(self, attr):
+        if attr not in ('__stream', '__cipher'):
+            return getattr(self.__stream, attr)
+    def read(self, size=-1):
+        return self.__cipher.encrypt(self.__stream.read(size))
     
-    没有任何优化，只是展示一下什么是“倒排索引”
-'''
+    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
+# by parser.
+HIDDEN_CHANNEL = 99
+    
+            # 更新聚类中心
+        log.info(centers)
+        for i in range(k):
+            data_i = data[ret[:, 0] == i]  # 标签为 i 的样本
+            centers[i, :] = np.mean(data_i, axis=0)  # 按类别过滤样本
     
     
-def crelu(x, axis=-1):
-    '''Concatenated ReLU
+def clip_relu(x, max_value):
+    '''截断 ReLU
+    `o = min(max(0., x), max_value)`
     '''
-    return tf.nn.crelu(x, axis=axis)
+    o = tf.nn.relu(x)
+    o = tf.minimum(o, max_value)
+    return o
     
-        return o
+                with tf.Session() as sess:
+                tf.global_variables_initializer().run()
+                o_val = o.eval()
+            ```
     
-    l2_regularizer = L1L2Regularizer(l2=0.01)
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
+    if word_vec.any():  #
+    word_vec = word_vec / max(1, ngrams_found)
+else:  # 如果一个 ngram 都没找到，gensim 会报错；个人认为把 0 向量传出来也可以
+    raise KeyError('all ngrams for word %s absent from model' % word_unk)
