@@ -1,74 +1,89 @@
 
         
-          char label_i;
-  char label_j;
-  char* pixels = new char[2 * rows * cols];
-  std::string value;
-    
-      /**
-   * @brief Implements common layer setup functionality.
-   *
-   * @param bottom the preshaped input blobs
-   * @param top
-   *     the allocated but unshaped output blobs, to be shaped by Reshape
-   *
-   * Checks that the number of bottom and top blobs is correct.
-   * Calls LayerSetUp to do special layer setup for individual layer types,
-   * followed by Reshape to set up sizes of top blobs and internal buffers.
-   * Sets up the loss weight multiplier blobs for any non-zero loss weights.
-   * This method may not be overridden.
-   */
-  void SetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {
-    CheckBlobCounts(bottom, top);
-    LayerSetUp(bottom, top);
-    Reshape(bottom, top);
-    SetLossWeights(top);
+          // If the conforming type is a class, add a class-constrained 'Self'
+  // parameter.
+  if (covariantSelf) {
+    auto paramTy = GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
+    builder.addGenericParameter(paramTy);
   }
     
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+    #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
+  }
+}
+#endif
     
-     protected:
-  virtual void InternalThreadEntry();
-  virtual void load_batch(Batch<Dtype>* batch) = 0;
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
     
-    #include 'b2Glue.h'
+    void AutolinkExtractJobAction::anchor() {}
+    
+    TEST(MovableMessageTest, SelfMoveAssignment) {
+  // The `self` reference is necessary to defeat -Wself-move.
+  protobuf_unittest::TestAllTypes message, &self = message;
+  TestUtil::SetAllFields(&message);
+  message = std::move(self);
+  TestUtil::ExpectAllFieldsSet(message);
+}
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    // Author: kenton@google.com (Kenton Varda)
+    
+    
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
+    
+    
+    {
+    {
+    {}  // namespace util
+}  // namespace protobuf
+}  // namespace google
+
+    
+    using google::protobuf::Descriptor;
+using google::protobuf::DescriptorProto;
+using google::protobuf::FileDescriptorProto;
+using google::protobuf::FieldDescriptorProto;
+using google::protobuf::Message;
+using google::protobuf::EnumValueDescriptorProto;
     
     	void EncodeMipmaps(float *a_pafSourceRGBA,
 		unsigned int a_uiSourceWidth,
@@ -80,149 +95,201 @@ class ArgMaxLayer : public Layer<Dtype> {
 		unsigned int a_uiMaxJobs,
 		unsigned int a_uiMaxMipmaps,
 		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmaps,
-		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
-    
-    		inline ColorFloatRGBA * GetSource()
+		RawImage* a_pMipmapImages,
+		int *a_piEncodingTime_ms, 
+		bool a_bVerboseOutput)
+	{
+		auto mipWidth = a_uiSourceWidth;
+		auto mipHeight = a_uiSourceHeight;
+		int totalEncodingTime = 0;
+		for(unsigned int mip = 0; mip < a_uiMaxMipmaps && mipWidth >= 1 && mipHeight >= 1; mip++)
 		{
-			return m_afrgbaSource;
-		}
+			float* pImageData = nullptr;
+			float* pMipImage = nullptr;
+    }
+    }
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    				
+					// for RGB8A1, set source alpha to 0.0 or 1.0
+					// set punch through flag
+					if (imageformat == Image::Format::RGB8A1 ||
+						imageformat == Image::Format::SRGB8A1)
+					{
+						if (m_afrgbaSource[uiPixel].fA >= 0.5f)
+						{
+							m_afrgbaSource[uiPixel].fA = 1.0f;
+						}
+						else
+						{
+							m_afrgbaSource[uiPixel].fA = 0.0f;
+							m_boolPunchThroughPixels = true;
+						}
+					}
     
-    #ifndef SILK_MACROS_ARMv4_H
-#define SILK_MACROS_ARMv4_H
+    			float fDotProduct = fSourceX*fDecodedX + fSourceY*fDecodedY + fSourceZ*fDecodedZ;
+			float fNormalizedDotProduct = 1.0f - 0.5f * (fDotProduct + 1.0f);
+			float fDotProductError = fNormalizedDotProduct * fNormalizedDotProduct;
+			
+			float fLength2 = fDecodedX*fDecodedX + fDecodedY*fDecodedY + fDecodedZ*fDecodedZ;
+			float fLength2Error = fabsf(1.0f - fLength2);
     
+    #include <assert.h>
+#include <float.h>
     
+    /* Number of rightshift required to fit the multiplication */
+#define silk_NSHIFT_MUL_32_32(a, b)         ( -(31- (32-silk_CLZ32(silk_abs(a)) + (32-silk_CLZ32(silk_abs(b))))) )
+#define silk_NSHIFT_MUL_16_16(a, b)         ( -(15- (16-silk_CLZ16(silk_abs(a)) + (16-silk_CLZ16(silk_abs(b))))) )
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
+    
+    uint32_t Hash(const char* data, size_t n, uint32_t seed);
+    
+      // Return an iterator that yields the contents of the memtable.
+  //
+  // The caller must ensure that the underlying MemTable remains live
+  // while the returned iterator is live.  The keys returned by this
+  // iterator are internal keys encoded by AppendInternalKey in the
+  // db/format.{h,cc} module.
+  Iterator* NewIterator();
+    
+      TableBuilder(const TableBuilder&) = delete;
+  TableBuilder& operator=(const TableBuilder&) = delete;
+    
+    class LEVELDB_EXPORT WriteBatch {
+ public:
+  class LEVELDB_EXPORT Handler {
+   public:
+    virtual ~Handler();
+    virtual void Put(const Slice& key, const Slice& value) = 0;
+    virtual void Delete(const Slice& key) = 0;
+  };
+    }
+    
+      size_t FilterSize() const { return filter_.size(); }
+    
+    TEST(EnvWindowsTest, TestOpenOnRead) {
+  // Write some test data to a single file that will be opened |n| times.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file = test_dir + '/open_on_read.txt';
+    }
+    
+        bool NDArrayView::IsSliceView()
     {
-    {}}
-    
-    APCCollection::~APCCollection() {
-  // Zero for size is correct, because when this APCCollection was unreferenced
-  // it already included the size of the inner handle.
-  m_arrayHandle->unreferenceRoot(0);
-}
-    
-    namespace HPHP {
-    }
-    
-    #include 'hphp/runtime/base/type-string.h'
-    
-    namespace HPHP {
-    }
-    
-    #include 'hphp/runtime/base/plain-file.h'
-    
-    #endif // incl_HPHP_URL_FILE_H_
-
-    
-        // read-only access
-    
-    static std::string
-getStr(const std::vector<uint8_t>& v, size_t& pos, const size_t len) {
-  CHECK_GE(len, 1);
-  std::string res;
-  res.resize(len - 1);
-  for (size_t i = 0; i < len - 1; i++) {
-    CHECK_NE(v[pos + i], 0);
-    res[i] = char(v[pos + i]);
-  }
-  CHECK_EQ(0, v[pos + len - 1]);
-  pos += len;
-  return res;
-}
-    
-    template <class UIntType, size_t w, size_t s, size_t r>
-struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
-  // [rand.eng.sub]: r * ceil(w / 32)
-  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
-};
-    
-      /**
-   * Returns a random uint64_t in [0, max). If max == 0, returns 0.
-   */
-  static uint64_t rand64(uint64_t max) {
-    return rand64(0, max, ThreadLocalPRNG());
-  }
-    
-    #include <string>
-    
-    
-    {  /**
-   * The strategy parameter is used to tune the compression algorithm.
-   * Supported values:
-   * - Z_DEFAULT_STRATEGY: normal data
-   * - Z_FILTERED: data produced by a filter (or predictor)
-   * - Z_HUFFMAN_ONLY: force Huffman encoding only (no string match)
-   * - Z_RLE: limit match distances to one
-   * - Z_FIXED: prevents the use of dynamic Huffman codes
-   *
-   * The strategy parameter only affects the compression ratio but not the
-   * correctness of the compressed output.
-   */
-  int strategy;
-};
-    
-      /* Get a reference to the pointer, either from the local batch or
-   * from the global count.
-   *
-   * return is the base ptr, and the previous local count, if it is
-   * needed for compare_and_swap later.
-   */
-  PackedPtr takeOwnedBase(std::memory_order order) const noexcept {
-    PackedPtr local, newlocal;
-    local = ptr_.load(std::memory_order_acquire);
-    while (true) {
-      if (!local.get()) {
-        return local;
-      }
-      newlocal = local;
-      if (get_local_count(newlocal) + 1 > EXTERNAL_OFFSET) {
-        // spinlock in the rare case we have more than
-        // EXTERNAL_OFFSET threads trying to access at once.
-        std::this_thread::yield();
-        // Force DeterministicSchedule to choose a different thread
-        local = ptr_.load(std::memory_order_acquire);
-      } else {
-        newlocal.setExtra(newlocal.extra() + 1);
-        assert(get_local_count(newlocal) > 0);
-        if (ptr_.compare_exchange_weak(local, newlocal, order)) {
-          break;
+        switch (m_dataType)
+        {
+        case DataType::Float:
+        {
+            auto currentMatrix = GetMatrix<float>();
+            return currentMatrix->IsView();
         }
-      }
+        case DataType::Double:
+        {
+            auto currentMatrix = GetMatrix<double>();
+            return currentMatrix->IsView();
+        }
+        case DataType::Float16:
+        {
+            auto currentMatrix = GetMatrix<half>();
+            return currentMatrix->IsView();
+        }
+        case DataType::Int8:
+        {
+            auto currentMatrix = GetMatrix<char>();
+            return currentMatrix->IsView();
+        }
+        case DataType::Int16:
+        {
+            auto currentMatrix = GetMatrix<short>();
+            return currentMatrix->IsView();
+        }
+        }
+        return false;
+    }
+    
+            bool alreadySet = false;
+        if (m_dataFields->m_initValueFlag)
+        {
+            // In the case of lazy initialization, try to avoid the redundant call to the initializer. 
+            std::call_once(*m_dataFields->m_initValueFlag, [=, &value, &alreadySet] {
+                // If the variable hasn't been initialized yet, clone the content of the supplied value and delete the initializer.
+                m_dataFields->m_value = value->DeepClone(*m_dataFields->m_valueInitializationDevice, false);
+                m_dataFields->m_valueInitializer = nullptr;
+                m_dataFields->m_valueInitializationDevice = nullptr;
+                alreadySet = true;
+            });
+        }
+    
+            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
+            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
+        {
+            if (value && (type != value->GetDataType()))
+                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
+    }
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
     }
     }
     
-    TEST_F(SparseByteSetTest, each_random) {
-  mt19937 rng;
-  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
-  set<uint8_t> added;
-  while (added.size() <= lims::max()) {
-    auto c = uint8_t(dist(rng));
-    EXPECT_EQ(added.count(c), s.contains(c));
-    EXPECT_EQ(!added.count(c), s.add(c));
-    added.insert(c);
-    EXPECT_TRUE(added.count(c)); // sanity
-    EXPECT_TRUE(s.contains(c));
-  }
+    template <class ElemType>
+class SequenceDecoderNode : public ComputationNodeNonLooping /*ComputationNode*/<ElemType>, public NumInputs<3>
+{
+    typedef ComputationNodeNonLooping<ElemType> Base;
+    UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName()
+    {
+        return L'SequenceDecoderNode';
+    }
+    }
+    
+    template <class ElemType>
+EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(DEVICEID_TYPE deviceId, const wstring& name)
+    : Base(deviceId, name), m_numSamples(0)
+{
+    m_accumulator = make_shared<Matrix<ElemType>>(deviceId);
 }
+    
+    OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+{
+    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
+    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
+    {
+        obitCamera->autorelease();
+        return obitCamera;
+    }
+    
+    delete obitCamera;
+    return nullptr;
+}
+    
+    
+    {                    Action *action = _currentTarget->currentAction;
+                    // Make currentAction nil to prevent removeAction from salvaging it.
+                    _currentTarget->currentAction = nullptr;
+                    removeAction(action);
+                }
+    
+                if ( ! spriteFrame ) {
+                CCLOG('cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the SpriteFrameCache. This frame will not be added to the animation.', anim.first.c_str(), frameName.asString().c_str());
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    /// @endcond
+#endif
 
     
-        /*! \brief Constructor from cl_mem - takes ownership.
-     *
-     * \param retainObject will cause the constructor to retain its cl object.
-     *                     Defaults to false to maintain compatibility with
-     *                     earlier versions.
-     *  See Memory for further details.
-     */
-    explicit Image2DGL(const cl_mem& image, bool retainObject = false) : 
-        Image2D(image, retainObject) { }
-    
-    #ifdef USE_3D_ADAM_MODEL
-    #include <adam/totalmodel.h>
-#endif
-#include <openpose/core/common.hpp>
-#include <openpose/gui/enumClasses.hpp>
-#include <openpose/gui/gui.hpp>
+        /** Release current FNT texture and reload it.
+     CAUTION : All component use this font texture should be reset font name, though the file name is same!
+               otherwise, it will cause program crash!
+    */
+    static void reloadFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset = Vec2::ZERO);
