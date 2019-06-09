@@ -1,40 +1,49 @@
 
         
-              def index
-        render template: ActionView::Template::Text.new('Hello nil!')
-      end
-    end
+          #
+  # Converts the header to a string.
+  #
+  def to_s(prefix = '')
+    str = prefix
     
-      def status_finder
-    StatusFinder.new(params[:url])
-  end
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
     
-        render_empty
-  end
-    
-      def export_data
-    raise 'Override in controller'
-  end
-    
-      def preferred_locale
-    http_accept_language.preferred_language_from(available_locales)
-  end
-    
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
+              # Decodes the start_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_start_time(input)
+            input.value[0].value
           end
-        end
+    
+              # Decodes the rtime field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_rtime(input)
+            input.value[0].value
+          end
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
+          end
+    
+          if @command.inputs
+        mandatory(@command.input_type == 'dir', '--inputs is only valid with -s dir')
       end
+    
+      private
+  # return the identifier by prepending the reverse-domain prefix
+  # to the package name, else return just the name
+  def identifier
+    identifier = name.dup
+    if self.attributes[:osxpkg_identifier_prefix]
+      identifier.insert(0, '#{self.attributes[:osxpkg_identifier_prefix]}.')
     end
-  end
-end
+    identifier
+  end # def identifier
