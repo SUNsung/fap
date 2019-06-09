@@ -1,144 +1,100 @@
 
         
-        def prev_feature
-  source_version.gsub(/^(\d\.)(\d+)\..*$/) { $1 + ($2.to_i - 1).to_s }
-end
+                  current_range = declaration_with_comment(node)
+          previous_range = declaration_with_comment(previous_declaration)
     
-    class Rack::Builder
-  include Sinatra::Delegator
+              ignored_end_pos = if ignored_loc.respond_to?(:heredoc_body)
+                              ignored_loc.heredoc_end.end_pos
+                            else
+                              ignored_loc.expression.end_pos
+                            end
+          ignored_end_pos >= node.source_range.end_pos
+        end
+      end
+    
+            def_node_matcher :erb_new_with_non_keyword_arguments, <<-PATTERN
+          (send
+            (const {nil? cbase} :ERB) :new $...)
+        PATTERN
+    
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+    end
+    
+    context 'Precious::Views::Editing' do
+  include Rack::Test::Methods
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    Precious::App.set(:gollum_path, @path)
+    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+      setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {allow_editing: true})
+  end
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+    context 'Frontend Unicode support' do
+  include Rack::Test::Methods
+    
+    $redis = Redis.new
+    
+      puts '\n== Removing old logs and tempfiles =='
+  system! 'bin/rails log:clear tmp:clear'
+    
+      # Use an evented file watcher to asynchronously detect changes in source code,
+  # routes, locales, etc. This feature depends on the listen gem.
+  #config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
 
     
-            directives.compact.sort.join('; ')
+      # Store uploaded files on the local file system (see config/storage.yml for options)
+  config.active_storage.service = :local
+    
+        # Initializes a new CategoryFeed.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'atom.xml'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_includes/custom'), 'category_feed.xml')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-        def generate_temporary_path
-      Stud::Temporary.pathname
-    end
-    
-      private
-    
-    namespace :qa do
-    
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        def initialize
-      clear
-    end
-    
-        # Returns the smaller of the two dimensions
-    def smaller
-      [height, width].min
-    end
-    
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
-      end
-    end
-    
-        msg = 'Actual pane does not match expected'
-    msg << '\n  Expected #{@commands} but has #{actual.commands}' if @commands
-    msg << '\n  Expected pane to have #{@expected_attrs}' if @expected_attrs
-  end
-    
-          it 'returns false' do
-        expect(described_class.editor?).to be_falsey
-      end
-    end
-  end
-    
-          it 'renders the project if given a valid project config file' do
-        ARGV.replace(['debug', '--project-config=#{project_config}'])
-        expect { cli.start }.to output(/sample_with_project_config/).to_stdout
-      end
-    
-    describe Tmuxinator::WemuxSupport do
-  let(:klass) { Class.new }
-  let(:instance) { klass.new }
-    
-      expansion(:inspection) {
-    {
-      :inspected => o.inspected == 1 ? true : false,
-      :spam => o.spam == 1 ? true : false,
-      :spam_score => o.spam_score.to_f,
-      :threat => o.threat == 1 ? true : false,
-      :threat_details => o.threat_details
-    }
-  }
-    
-      include WithinOrganization
-    
-      def create
-    @http_endpoint = @server.http_endpoints.build(safe_params)
-    if @http_endpoint.save
-      flash[:notice] = params[:return_notice] if params[:return_notice].present?
-      redirect_to_with_json [:return_to, [organization, @server, :http_endpoints]]
-    else
-      render_form_errors 'new', @http_endpoint
-    end
-  end
-    
-      before_action do
-    if params[:server_id]
-      @server = organization.servers.present.find_by_permalink!(params[:server_id])
-      params[:id] && @ip_pool_rule = @server.ip_pool_rules.find_by_uuid!(params[:id])
-    else
-      params[:id] && @ip_pool_rule = organization.ip_pool_rules.find_by_uuid!(params[:id])
-    end
-  end
-    
-      def get_messages(scope)
-    if scope == 'held'
-      options = {:where => {:held => 1}}
-    else
-      options = {:where => {:scope => scope, :spam => false}, :order => :timestamp, :direction => 'desc'}
-    
-      def update
-    @organization_user = organization.user_assignment(@user)
-    if @organization_user.update(params.require(:organization_user).permit(:admin))
-      redirect_to_with_json [organization, :users], :notice => 'Permissions for #{@organization_user.user.name} have been updated successfully.'
-    else
-      render_form_errors 'edit', @organization_user
-    end
-  end
-    
-    require 'rubocop/rake_task'
-RuboCop::RakeTask.new
-    
-            # Specify additional content-types, e.g.:
-        #   content_type :xls, 'application/vnd.ms-excel'
-        def content_type(key, val)
-          namespace_stackable(:content_types, key.to_sym => val)
-        end
