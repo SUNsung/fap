@@ -1,69 +1,19 @@
 
         
-                  def hidden_field
-            hidden_name = @html_options[:name] || hidden_field_name
-            @template_object.hidden_field_tag(hidden_name, '', id: nil)
-          end
+          # :stopdoc:
+  def _dispatch_0() nil end
+  def _dispatch_1(a) a end
+  def _dispatch_2(a, b) a end
+  def _dispatch_3(a, b, c) a end
+  def _dispatch_4(a, b, c, d) a end
+  def _dispatch_5(a, b, c, d, e) a end
+  def _dispatch_6(a, b, c, d, e, f) a end
+  def _dispatch_7(a, b, c, d, e, f, g) a end
+  # :startdoc:
     
-            class << self
-          def field_type
-            @field_type ||= name.split('::').last.sub('Field', '').downcase
-          end
-        end
-    
-      # Add groups and the proper project name to the output.
-  project_name 'Homebrew'
-  add_group 'Cask', %r{^/cask/}
-  add_group 'Commands', [%r{/cmd/}, %r{^/dev-cmd/}]
-  add_group 'Extensions', %r{^/extend/}
-  add_group 'OS', [%r{^/extend/os/}, %r{^/os/}]
-  add_group 'Requirements', %r{^/requirements/}
-  add_group 'Scripts', [
-    %r{^/brew.rb$},
-    %r{^/build.rb$},
-    %r{^/postinstall.rb$},
-    %r{^/test.rb$},
-  ]
-end
-
-    
-      #
-  # Parser Events
-  #
-    
-    tmp = open(while_tmp, 'r')
-test_ok(tmp.kind_of?(File))
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-      describe '#destroy' do
-    let(:post) { FactoryGirl.create(:status_message) }
-    
-          it 'succeeds' do
-        put :update, params: {id: 42, post_id: @status.id}, format: :js
-        expect(response).to be_success
-      end
-    
-    
-    
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml text/xml application/xml]
-      }
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
     
           DIRECTIVES = %i(base_uri child_src connect_src default_src
                       font_src form_action frame_ancestors frame_src
@@ -72,17 +22,24 @@ test_ok(tmp.kind_of?(File))
                       report_uri require_sri_for sandbox script_src
                       style_src worker_src).freeze
     
-          def initialize(*)
-        super
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
     
       it 'accepts post requests with correct X-CSRF-Token header' do
     post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
     expect(last_response).to be_ok
   end
     
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
-end
+      it 'should allow setting CSP3 no arg directives' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :block_all_mixed_content => true, :disown_opener => true, :upgrade_insecure_requests => true
