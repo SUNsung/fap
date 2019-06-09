@@ -1,469 +1,212 @@
 
         
-        #include <QIcon>
-#include <QPixmap>
-#include <QString>
-    
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
+        TEST(MovableMessageTest, MoveToArena) {
+  Arena arena;
     }
     
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
     
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, sigin);
-    secp256k1_ecdsa_signature_save(sig, &r, &s);
-    return 1;
-}
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    // Namespace alias to encourage brevity
-namespace tfm = tinyformat;
-    
-        BOOST_CHECK_EQUAL(arr.empty(), false);
-    BOOST_CHECK_EQUAL(arr.size(), 9);
-    
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
-    
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
-  }
-  return s;
-}
-    
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-extern std::string CurrentFileName(const std::string& dbname);
-    
-    // Generate param traits log methods.
-#include 'ipc/param_traits_log_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-
-    
-    
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
-    
-    
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
-};
-    
-    void PointMenuPositionFunc(GtkMenu* menu,
-                           int* x,
-                           int* y,
-                           gboolean* push_in,
-                           gpointer userdata) {
-  *push_in = TRUE;
-    }
-    
-      protected:
-    ~NwScreenStopMonitorFunction() override {}
-    DECLARE_EXTENSION_FUNCTION('nw.Screen.stopMonitor', UNKNOWN)
-    
-      // Clean up the bounding boxes from the polygonal approximation by
-  // expanding slightly, then clipping to the blobs from the original_word
-  // that overlap. If not null, the block provides the inverse rotation.
-  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
-    
-      // Delete all Added points.
-  void Clear();
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
-    
-    #include 'publictypes.h'
-#include 'elst.h'
-#include 'strngs.h'
-    
-    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
-
-    
-    #endif  // TESSERACT_CCUTIL_KDPAIR_H_
-
-    
-    namespace dmlc {
-namespace data {
-    }
-    }
+      desired_output_for_decode = 'abcdefghIJ';
+  expected = string('\x0A\x0', 2);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
     
     
     {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
+    {
+    {}  // namespace util
+}  // namespace protobuf
+}  // namespace google
+
+    
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
+    
+        std::cerr << 'Generating ' << input_file
+        << ' to ' << output_file << std::endl;
+    benchmarks::BenchmarkDataset dataset;
+    Message* message;
+    std::string dataset_payload = ReadFile(input_file);
+    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
+      << 'Can' t parse data file ' << input_file;
+    
+     private:
+  static bool IsMessageSet(const Descriptor *descriptor) {
+    if (descriptor != nullptr
+        && descriptor->options().message_set_wire_format()) {
+      return true;
+    }
+    return false;
+  }
+    
+    
+  if (mode == psModePS || mode == psModePSOrigPageSizes) {
+    GooString pageLabel;
+    const GBool gotLabel = m_catalog->indexToLabel(pageNum -1, &pageLabel);
+    if (gotLabel) {
+      // See bug13338 for why we try to avoid parentheses...
+      GBool needParens;
+      GooString *filteredString = filterPSLabel(&pageLabel, &needParens);
+      if (needParens) {
+	writePSFmt('%%Page: ({0:t}) {1:d}\n', filteredString, seqPage);
+      } else {
+	writePSFmt('%%Page: {0:t} {1:d}\n', filteredString, seqPage);
+      }
+      delete filteredString;
+    } else {
+      writePSFmt('%%Page: {0:d} {1:d}\n', pageNum, seqPage);
+    }
+    if (mode != psModePSOrigPageSizes)
+      writePS('%%BeginPageSetup\n');
+  }
+    
+    #include <config.h>
+    
+    void Page::display(OutputDev *out, double hDPI, double vDPI,
+		   int rotate, GBool useMediaBox, GBool crop,
+		   GBool printing, Catalog *catalog,
+		   GBool (*abortCheckCbk)(void *data),
+		   void *abortCheckCbkData,
+                   GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
+                   void *annotDisplayDecideCbkData) {
+  displaySlice(out, hDPI, vDPI, rotate, useMediaBox, crop, -1, -1, -1, -1, printing, catalog,
+	       abortCheckCbk, abortCheckCbkData,
+               annotDisplayDecideCbk, annotDisplayDecideCbkData);
+}
+    
+      // Get duration, the maximum length of time, in seconds,
+  // that the page is displayed before the presentation automatically
+  // advances to the next page
+  double getDuration() { return duration; }
+    
+      MediaWindowParameters();
+  ~MediaWindowParameters();
+    
+    
+    {  if (!ok) {
+    return gFalse;
+  }
+  if (authData) {
+    ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
+    userPassword = ((StandardAuthData *)authData)->userPassword;
   } else {
-    CHECK(qrecycle_.Pop(out_page));
+    ownerPassword = NULL;
+    userPassword = NULL;
+  }
+  if (!Decrypt::makeFileKey(encVersion, encRevision, fileKeyLength,
+			    ownerKey, userKey, permFlags, fileID,
+			    ownerPassword, userPassword, fileKey,
+			    encryptMetadata, &ownerPasswordOk)) {
+    return gFalse;
+  }
+  return gTrue;
+}
+    
+            Rational& operator<<=(Rational const& rhs);
+        Rational& operator>>=(Rational const& rhs);
+    
+        auto lastDecGrouping = m_decGrouping;
+    wstring grpStr = m_resourceProvider->GetCEngineString(L'sGrouping');
+    m_decGrouping = DigitGroupingStringToGroupingVector(grpStr.empty() ? DEFAULT_GRP_STR : grpStr);
+    
+    shared_ptr<HISTORYITEM> const& CalculatorHistory::GetHistoryItem(_In_ unsigned int uIdx)
+{
+    assert(uIdx >= 0 && uIdx < m_historyItems.size());
+    return m_historyItems.at(uIdx);
+}
+    
+        CalcEngine::Rational m_currentVal;                               // Currently displayed number used everywhere.
+    CalcEngine::Rational m_lastVal;                                  // Number before operation (left operand).
+    std::array<CalcEngine::Rational, MAXPRECDEPTH> m_parenVals;      // Holding array for parenthesis values.
+    std::array<CalcEngine::Rational, MAXPRECDEPTH> m_precedenceVals; // Holding array for precedence values.
+    bool m_bError;                                                   // Error flag.
+    bool m_bInv;                                                     // Inverse on/off flag.
+    bool m_bNoPrevEqu;                                               /* Flag for previous equals.          */
+    
+                virtual bool MoveCurrentToPosition(int index) = Windows::UI::Xaml::Data::ICollectionView::MoveCurrentToPosition
+            {
+                if (index < 0 || index >= static_cast<int>(m_source->Size))
+                {
+                    return false;
+                }
+    }
+    
+    #pragma once
+#include 'INarratorAnnouncementHost.h'
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+    void SparsePage::Push(const SparsePage &batch) {
+  auto& data_vec = data.HostVector();
+  auto& offset_vec = offset.HostVector();
+  const auto& batch_offset_vec = batch.offset.HostVector();
+  const auto& batch_data_vec = batch.data.HostVector();
+  size_t top = offset_vec.back();
+  data_vec.resize(top + batch.data.Size());
+  std::memcpy(dmlc::BeginPtr(data_vec) + top,
+              dmlc::BeginPtr(batch_data_vec),
+              sizeof(Entry) * batch.data.Size());
+  size_t begin = offset.Size();
+  offset_vec.resize(begin + batch.Size());
+  for (size_t i = 0; i < batch.Size(); ++i) {
+    offset_vec[i + begin] = top + batch_offset_vec[i + 1];
   }
 }
-}  // namespace data
-}  // namespace xgboost
     
+    #include <utility>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
     
-    {
-    {}  // namespace obj
-}  // namespace xgboost
+      std::vector<unsigned> feature_list(nfeature);
+  std::iota(feature_list.begin(), feature_list.end(), 0);
     
-    namespace xgboost {
-/*!
- * \brief Learner class that does training and prediction.
- *  This is the user facing module of xgboost training.
- *  The Load/Save function corresponds to the model used in python/R.
- *  \code
- *
- *  std::unique_ptr<Learner> learner(new Learner::Create(cache_mats));
- *  learner.Configure(configs);
- *
- *  for (int iter = 0; iter < max_iter; ++iter) {
- *    learner->UpdateOneIter(iter, train_mat);
- *    LOG(INFO) << learner->EvalOneIter(iter, data_sets, data_names);
- *  }
- *
- *  \endcode
- */
-class Learner : public rabit::Serializable {
- public:
-  /*! \brief virtual destructor */
-  ~Learner() override = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Set the configuration of gradient boosting.
-   *  User must call configure once before InitModel and Training.
-   *
-   * \param cfg configurations on both training and model parameters.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
-  /*!
-   * \brief Initialize the model using the specified configurations via Configure.
-   *  An model have to be either Loaded or initialized before Update/Predict/Save can be called.
-   */
-  virtual void InitModel() = 0;
-  /*!
-   * \brief load model from stream
-   * \param fi input stream.
-   */
-  void Load(dmlc::Stream* fi) override = 0;
-  /*!
-   * \brief save model to stream.
-   * \param fo output stream
-   */
-  void Save(dmlc::Stream* fo) const override = 0;
-  /*!
-   * \brief update the model for one iteration
-   *  With the specified objective function.
-   * \param iter current iteration number
-   * \param train reference to the data matrix.
-   */
-  virtual void UpdateOneIter(int iter, DMatrix* train) = 0;
-  /*!
-   * \brief Do customized gradient boosting with in_gpair.
-   *  in_gair can be mutated after this call.
-   * \param iter current iteration number
-   * \param train reference to the data matrix.
-   * \param in_gpair The input gradient statistics.
-   */
-  virtual void BoostOneIter(int iter,
-                            DMatrix* train,
-                            HostDeviceVector<GradientPair>* in_gpair) = 0;
-  /*!
-   * \brief evaluate the model for specific iteration using the configured metrics.
-   * \param iter iteration number
-   * \param data_sets datasets to be evaluated.
-   * \param data_names name of each dataset
-   * \return a string corresponding to the evaluation result
-   */
-  virtual std::string EvalOneIter(int iter,
-                                  const std::vector<DMatrix*>& data_sets,
-                                  const std::vector<std::string>& data_names) = 0;
-  /*!
-   * \brief get prediction given the model.
-   * \param data input data
-   * \param output_margin whether to only predict margin value instead of transformed prediction
-   * \param out_preds output vector that stores the prediction
-   * \param ntree_limit limit number of trees used for boosted tree
-   *   predictor, when it equals 0, this means we are using all the trees
-   * \param pred_leaf whether to only predict the leaf index of each tree in a boosted tree predictor
-   * \param pred_contribs whether to only predict the feature contributions
-   * \param approx_contribs whether to approximate the feature contributions for speed
-   * \param pred_interactions whether to compute the feature pair contributions
-   */
-  virtual void Predict(DMatrix* data,
-                       bool output_margin,
-                       HostDeviceVector<bst_float> *out_preds,
-                       unsigned ntree_limit = 0,
-                       bool pred_leaf = false,
-                       bool pred_contribs = false,
-                       bool approx_contribs = false,
-                       bool pred_interactions = false) = 0;
-    }
-    }
-    
-      T* HostPointer() { return HostVector().data(); }
-  const T* ConstHostPointer() const { return ConstHostVector().data(); }
-  const T* HostPointer() const { return ConstHostPointer(); }
-    
-    
-    {
-    {XGBOOST_REGISTER_GBM(GBLinear, 'gblinear')
-    .describe('Linear booster, implement generalized linear model.')
-    .set_body([](const std::vector<std::shared_ptr<DMatrix> > &cache,
-                 bst_float base_margin) {
-      return new GBLinear(cache, base_margin);
-    });
-}  // namespace gbm
-}  // namespace xgboost
-
-    
-    
-    {};
-    
-    
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
-    
-};
-    
-    
-    {#if !UCONFIG_NO_BREAK_ITERATION
-    delete fCapitalizationBrkIter;
-#endif
-}
-    
-    int32_t
-CollationKey::hashCode() const
-{
-    // (Cribbed from UnicodeString)
-    // We cache the hashCode; when it becomes invalid, due to any change to the
-    // string, we note this by setting it to kInvalidHashCode. [LIU]
-    }
-    
-    /**
- * Copy constructor.
- */
-StringReplacer::StringReplacer(const StringReplacer& other) :
-    UnicodeFunctor(other),
-    UnicodeReplacer(other)
-{
-    output = other.output;
-    cursorPos = other.cursorPos;
-    hasCursor = other.hasCursor;
-    data = other.data;
-    isComplex = other.isComplex;
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    #define CONTAINER_CONFIG_BODY(T, METHOD) \
-T Config::Get##METHOD(const IniSetting::Map& ini, const Hdf& config, \
-                      const std::string& name /* = '' */, \
-                      const T& defValue /* = T() */, \
-                      const bool prepend_hhvm /* = true */) { \
-  auto ini_name = IniName(name, prepend_hhvm); \
-  Hdf hdf = name != '' ? config[name] : config; \
-  T ini_ret, hdf_ret; \
-  auto value = ini_iterate(ini, ini_name); \
-  if (value.isArray() || value.isObject()) { \
-    ini_on_update(value.toVariant(), ini_ret); \
-    /** Make sure that even if we have an ini value, that if we also **/ \
-    /** have an hdf value, that it maintains its edge as beating out **/ \
-    /** ini                                                          **/ \
-    if (hdf.exists() && !hdf.isEmpty()) { \
-      hdf.configGet(hdf_ret); \
-      if (hdf_ret != ini_ret) { \
-        ini_ret = hdf_ret; \
-        IniSetting::SetSystem(ini_name, ini_get(ini_ret)); \
-      } \
-    } \
-    return ini_ret; \
-  } \
-  if (hdf.exists() && !hdf.isEmpty()) { \
-    hdf.configGet(hdf_ret); \
-    return hdf_ret; \
-  } \
-  return defValue; \
-} \
-void Config::Bind(T& loc, const IniSetting::Map& ini, const Hdf& config, \
-                  const std::string& name /* = '' */, \
-                  const T& defValue /* = T() */, \
-                  const bool prepend_hhvm /* = true */) { \
-  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
-  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
-                   IniName(name, prepend_hhvm), &loc); \
-}
-    
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    #endif // incl_HPHP_OUTPUT_FILE_H_
-
-    
-    
-    {}
-
-    
-      Time serializedTime_;
-    
-        receiver->setMessageFactory(factory.get());
-    receiver->setRoutingTable(routingTable.get());
+        std::unique_ptr<DHTTaskFactory> taskFactory;
     
     namespace aria2 {
     }
     
-    #include <memory>
+    #include 'common.h'
     
-      DHTTaskExecutor periodicTaskQueue2_;
+    namespace aria2 {
+    }
     
-    public:
-  DHTTokenTracker();
-    
-      // always return false
-  virtual bool isReply() const CXX11_OVERRIDE;
-    
-    
-    {  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, 'ExtensionManager.deregisterExtension', bytes);
-  }
-}
-    
-      bool operator == (const ExtensionManager_registerExtension_args & rhs) const
+      template <typename OutputIterator>
+  void findAll(OutputIterator out, const std::string& hostname,
+               uint16_t port) const
   {
-    if (!(info == rhs.info))
-      return false;
-    if (!(registry == rhs.registry))
-      return false;
-    return true;
-  }
-  bool operator != (const ExtensionManager_registerExtension_args &rhs) const {
-    return !(*this == rhs);
-  }
-    
-    void genNFSShare(const std::string& share_line, QueryData& results) {
-  auto line = osquery::split(share_line);
-  if (line.size() == 0 || boost::starts_with(line[0], '#')) {
-    return;
-  }
+    auto target = std::make_shared<CacheEntry>(hostname, port);
+    auto i = entries_.find(target);
+    if (i != entries_.end()) {
+      (*i)->getAllGoodAddrs(out);
     }
-    
-      hardwareDriver* type = nullptr;
-  if (types.size() == 1) {
-    type = &(types[0]);
   }
-    
-    namespace osquery {
-namespace perf_event_open {
-    }
-    }
-    
-      static Killswitch& get() {
-    static Killswitch killswitch;
-    return killswitch;
-  }
-    
-    TEST_F(PerfOutputTests, load) {
-  auto output_exp = ebpf::PerfOutput<TestMessage>::load(0u, 512u);
-  // permission denied, test runs under non root user
-  ASSERT_TRUE(output_exp.isError());
-}
-    
-    namespace osquery {
-namespace table_tests {
-    }
-    }
-    
-    TEST_F(KernelInfo, test_sanity) {
-  QueryData data = execute_query('select * from kernel_info');
-  ValidatatioMap row_map = {{'version', NonEmptyString},
-                            {'arguments', NormalType},
-                            {'path', NormalType},
-                            {'device', NonEmptyString}};
-  validate_rows(data, row_map);
-}
-    
-    // Sanity check integration test for kernel_panics
-// Spec file: specs/darwin/kernel_panics.table
