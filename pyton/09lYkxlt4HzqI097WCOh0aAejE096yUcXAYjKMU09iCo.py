@@ -1,169 +1,192 @@
 
         
-          with open(embedding_file) as f_in:
-    embeddings = np.load(f_in)
+            HandlerClass.protocol_version = protocol
+    with ServerClass(addr, HandlerClass) as httpd:
+        host, port = httpd.socket.getsockname()[:2]
+        url_host = f'[{host}]' if ':' in host else host
+        print(
+            f'Serving HTTP on {host} port {port} '
+            f'(http://{url_host}:{port}/) ...'
+        )
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print('\nKeyboard interrupt received, exiting.')
+            sys.exit(0)
     
-    flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'itb_rnn',
-                    'Name of data file for input case.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 800, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 5,
-                     'Number of spikifications of the same underlying rates.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('max_firing_rate', 30.0,
-                   'Map 1.0 of RNN to a spikes per second')
-flags.DEFINE_float('u_std', 0.25,
-                   'Std dev of input to integration to bound model')
-flags.DEFINE_string('checkpoint_path', 'SAMPLE_CHECKPOINT',
-                    '''Path to directory with checkpoints of model
-                    trained on integration to bound task. Currently this
-                    is a placeholder which tells the code to grab the
-                    checkpoint that is provided with the code
-                    (in /trained_itb/..). If you have your own checkpoint
-                    you would like to restore, you would point it to
-                    that path.''')
-FLAGS = flags.FLAGS
+        def _generate_symbols(self, grammar_file, target_symbol_py_file):
+        proc = subprocess.Popen([sys.executable,
+                                 GEN_SYMBOL_FILE,
+                                 grammar_file,
+                                 target_symbol_py_file], stderr=subprocess.PIPE)
+        stderr = proc.communicate()[1]
+        return proc.returncode, stderr
     
-      def _score_patches(self, word_patches):
-    '''Score a 2D matrix of word_patches and stitch results together.'''
-    batch_size, num_timesteps = self.shape
-    nrow, ncol = len(word_patches), len(word_patches[0])
-    max_len = num_timesteps * ncol
-    probs = np.zeros([0, max_len])  # accumulate results into this.
+    # Make a local copy of what we are going to send.
+with open('outgoing.msg', 'wb') as f:
+    f.write(bytes(msg))
     
-    '''IMDB data loader and helpers.'''
+    def handleToc(slides):
+    for slide in slides:
+        title = slide.getElementsByTagName('title')[0]
+        print('<p>%s</p>' % getText(title.childNodes))
     
-      Args:
-    gen_logits:  Generator logits.
-    gen_labels:  Labels for the correct token.
-    dis_values:  Discriminator values Tensor of shape [batch_size,
-      sequence_length].
-    is_real_input:  Tensor indicating whether the label is present.
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
     
-      return variable_mapping
+    # Initialize some variables
+face_locations = []
+face_encodings = []
+face_names = []
+frame_number = 0
+    
+            if len(encodings) == 0:
+            click.echo('WARNING: No faces found in {}. Ignoring file.'.format(file))
+        else:
+            known_names.append(basename)
+            known_face_encodings.append(encodings[0])
+    
+    for face_landmarks in face_landmarks_list:
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
 
     
-    # ZoneoutWrapper.
-from regularization import zoneout
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-    # Ignore noisy twisted deprecation warnings
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
-del warnings
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
     
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
+        def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
+        assert severity in self.SEVERITY_LEVELS
+        self.message = six.text_type(message)
+        self.severity = severity
+        self.url = url
+    
+            # Removing unique constraint on 'TagValue', fields ['project_id',
+        # 'environment_id', '_key', 'value']
+        db.delete_unique(u'tagstore_tagvalue', ['project_id', 'environment_id', 'key', 'value'])
+    
+        # Flag to indicate if this migration is too risky
+    # to run online and needs to be coordinated for offline
+    is_dangerous = True
+    
+            # Adding index on 'EventTag', fields ['project_id', 'key', 'value']
+        db.create_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
+    
+    from __future__ import absolute_import, print_function
+    
+    
+def add_fpn_ResNet152_conv5_body(model):
+    return add_fpn_onto_conv_body(
+        model, ResNet.add_ResNet152_conv5_body, fpn_level_info_ResNet152_conv5
+    )
+    
+    
+def add_roi_Xconv1fc_head(model, blob_in, dim_in, spatial_scale):
+    '''Add a X conv + 1fc head, as a reference if not using GroupNorm'''
+    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
+    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
+    roi_feat = model.RoIFeatureTransform(
+        blob_in,
+        'roi_feat',
+        blob_rois='rois',
+        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
+        resolution=roi_size,
+        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    '''Handle mapping from old network building function names to new names.
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
         '''
-        return self.long_desc()
-    
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
-    
-            assertion = (self.min_bound <= occurrences <= self.max_bound)
-    
-    
-logger = logging.getLogger(__name__)
-    
-    from twisted.web.client import HTTPClientFactory
-from twisted.web.http import HTTPClient
-from twisted.internet import defer
-    
-        def _format_cookie(self, cookie):
-        # build cookie string
-        cookie_str = '%s=%s' % (cookie['name'], cookie['value'])
-    
-    if args.quiet:
-    jieba.setLogLevel(60)
-if args.pos:
-    import jieba.posseg
-    posdelim = args.pos
-    def cutfunc(sentence, _, HMM=True):
-        for w, f in jieba.posseg.cut(sentence, HMM):
-            yield w + posdelim + f
-else:
-    cutfunc = jieba.cut
-    
-    from __future__ import absolute_import, unicode_literals
-import sys
-from operator import itemgetter
-from collections import defaultdict
-import jieba.posseg
-from .tfidf import KeywordExtractor
-from .._compat import *
-    
-        def __init__(self):
-        self._total_rel = None
-        self._rel_sample = None
-        self._need_to_skip_char_num = None
-        self._last_char_order = None
-        self._done = None
-        self.reset()
-    
-        @property
-    def charset_name(self):
-        return 'ISO-8859-1'
-    
-    # To be accurate, the length of class 6 can be either 2 or 4.
-# But it is not necessary to discriminate between the two since
-# it is used for frequency analysis only, and we are validating
-# each code range there as well. So it is safe to set it to be
-# 2 here.
-GB2312_CHAR_LEN_TABLE = (0, 1, 1, 1, 1, 1, 2)
-    
-            charset_name = self._model['charset_name']
-        if self.state == ProbingState.DETECTING:
-            if self._total_seqs > self.SB_ENOUGH_REL_THRESHOLD:
-                confidence = self.get_confidence()
-                if confidence > self.POSITIVE_SHORTCUT_THRESHOLD:
-                    self.logger.debug('%s confidence = %s, we have a winner',
-                                      charset_name, confidence)
-                    self._state = ProbingState.FOUND_IT
-                elif confidence < self.NEGATIVE_SHORTCUT_THRESHOLD:
-                    self.logger.debug('%s confidence = %s, below negative '
-                                      'shortcut threshhold %s', charset_name,
-                                      confidence,
-                                      self.NEGATIVE_SHORTCUT_THRESHOLD)
-                    self._state = ProbingState.NOT_ME
-    
-        def reset(self):
-        super(SingleByteCharSetProber, self).reset()
-        # char order of last character
-        self._last_order = 255
-        self._seq_counters = [0] * SequenceLikelihood.get_num_categories()
-        self._total_seqs = 0
-        self._total_char = 0
-        # characters that fall in our sampling range
-        self._freq_char = 0
-    
-        def get_confidence(self):
-        context_conf = self.context_analyzer.get_confidence()
-        distrib_conf = self.distribution_analyzer.get_confidence()
-        return max(context_conf, distrib_conf)
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
 
     
-        def feed(self, byte_str):
-        for c in byte_str:
-            coding_state = self.coding_sm.next_state(c)
-            if coding_state == MachineState.ERROR:
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                if self.coding_sm.get_current_charlen() >= 2:
-                    self._num_mb_chars += 1
+    '''Construct minibatches for Mask R-CNN training. Handles the minibatch blobs
+that are specific to Mask R-CNN. Other blobs that are generic to RPN or
+Fast/er R-CNN are handled by their respecitive roi_data modules.
+'''
+    
+    
+def loader_loop(roi_data_loader):
+    load_timer = Timer()
+    iters = 100
+    for i in range(iters):
+        load_timer.tic()
+        roi_data_loader.get_next_minibatch()
+        load_timer.toc()
+        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
+              i + 1, iters, load_timer.average_time))
