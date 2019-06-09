@@ -1,123 +1,132 @@
 
         
-        # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
+        match_output = '''
+Listing... Done
+heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
+resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
+squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
+unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
+'''
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
+    dynamodb                                 | dynamodbstreams
+ec2                                      | ecr
     
-    for face_location in face_locations:
     
-            file = request.files['file']
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-        :param file: image file name or file object to load
-    :param mode: format to convert the image to. Only 'RGB' (8-bit RGB, 3 channels) and 'L' (black and white) are supported.
-    :return: image contents as numpy array
+    
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
+
+    
+            self.cert_verify(conn, request.url, verify, cert)
+        url = self.request_url(request, proxies)
+        self.add_headers(request, stream=stream, timeout=timeout, verify=verify, cert=cert, proxies=proxies)
+    
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
     '''
-    im = PIL.Image.open(file)
-    if mode:
-        im = im.convert(mode)
-    return np.array(im)
+    implementation = platform.python_implementation()
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
     
-        function_parameters = zip(
-        images_to_check,
-        itertools.repeat(known_names),
-        itertools.repeat(known_face_encodings),
-        itertools.repeat(tolerance),
-        itertools.repeat(show_distance)
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
+    
+    # mapping coco categories to cityscapes (our converted json) id
+# cityscapes
+# INFO roidb.py: 220: 1       bicycle: 7286
+# INFO roidb.py: 220: 2           car: 53684
+# INFO roidb.py: 220: 3        person: 35704
+# INFO roidb.py: 220: 4         train: 336
+# INFO roidb.py: 220: 5         truck: 964
+# INFO roidb.py: 220: 6    motorcycle: 1468
+# INFO roidb.py: 220: 7           bus: 758
+# INFO roidb.py: 220: 8         rider: 3504
+    
+    $ find . -name '*.yaml' -exec sed -i -e \
+   's/head_builder\.add_roi_2mlp_head/fast_rcnn_heads.add_roi_2mlp_head/g' {} \;
+    
+        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
+    # Combine predictions across all levels and retain the top scoring
+    rois = np.concatenate([blob.data for blob in roi_inputs])
+    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
+    inds = np.argsort(-scores)[:post_nms_topN]
+    rois = rois[inds, :]
+    return rois
+    
+        # Generate canonical proposals from shifted anchors
+    # Enumerate all shifted positions on the (H, W) grid
+    fpn_max_size = cfg.FPN.COARSEST_STRIDE * np.ceil(
+        cfg.TRAIN.MAX_SIZE / float(cfg.FPN.COARSEST_STRIDE)
     )
+    field_size = int(np.ceil(fpn_max_size / float(stride)))
+    shifts = np.arange(0, field_size) * stride
+    shift_x, shift_y = np.meshgrid(shifts, shifts)
+    shift_x = shift_x.ravel()
+    shift_y = shift_y.ravel()
+    shifts = np.vstack((shift_x, shift_y, shift_x, shift_y)).transpose()
     
-    # 载入样本图片（奥巴马和拜登）
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    import numpy as np
+import unittest
     
-    import face_recognition
-from flask import Flask, jsonify, request, redirect
+            with self.mock_del_msg(message, False):
+            res = self.do_del_msg(message.name)
     
-      def CanonicalizeAlphabeticalOrder(self, header_path):
-    '''Returns a path canonicalized for alphabetical comparison.
+        def assert_failure(self, res, code=None):
+        self.assertEqual(res.status, 200)
+        body = res.body
+        body = json.loads(body)
+        self.assertTrue('json' in body)
+        errors = body['json'].get('errors')
+        self.assertTrue(code in [x[0] for x in errors])
+        data = body['json'].get('data')
+        self.assertFalse(bool(data))
     
+        def get_loggedin_users(self, num_users):
+        users = []
+        for i in xrange(num_users):
+            users.append(MockAccount(name=str(i), _fullname='t2_%s' % str(i)))
+        return users
     
-def _do_matlab_eval(json_dataset, salt, output_dir='output'):
-    import subprocess
-    logger.info('-----------------------------------------------------')
-    logger.info('Computing results with the official MATLAB eval code.')
-    logger.info('-----------------------------------------------------')
-    info = voc_info(json_dataset)
-    path = os.path.join(
-        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
-    cmd = 'cd {} && '.format(path)
-    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
-    cmd += '-r 'dbstop if error; '
-    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
-       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
-               output_dir)
-    logger.info('Running:\n{}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+        # Control chars break out of quotes in multiple browsers
+    def test_control_chars(self):
+        testcase = u'*{font-family:'foobar\x03;color:red;';}'
+        self.assertInvalid(testcase)
     
-        if cfg.KRCNN.USE_DECONV:
-        # Apply ConvTranspose to the feature representation; results in 2x
-        # upsampling
-        blob_in = model.ConvTranspose(
-            blob_in,
-            'kps_deconv',
-            dim,
-            cfg.KRCNN.DECONV_DIM,
-            kernel=cfg.KRCNN.DECONV_KERNEL,
-            pad=int(cfg.KRCNN.DECONV_KERNEL / 2 - 1),
-            stride=2,
-            weight_init=gauss_fill(0.01),
-            bias_init=const_fill(0.0)
-        )
-        model.Relu('kps_deconv', 'kps_deconv')
-        dim = cfg.KRCNN.DECONV_DIM
+    from r2.lib import js
     
-        ind_kp = gt_inds[roidb['box_to_gt_ind_map']]
-    within_box = _within_box(gt_keypoints[ind_kp, :, :], roidb['boxes'])
-    vis_kp = gt_keypoints[ind_kp, 2, :] > 0
-    is_visible = np.sum(np.logical_and(vis_kp, within_box), axis=1) > 0
-    kp_fg_inds = np.where(
-        np.logical_and(max_overlaps >= cfg.TRAIN.FG_THRESH, is_visible)
-    )[0]
+        def test_simple_self_post(self):
+        post = Link(is_self=True, selftext='''
+Some text here.
+https://example.com
+https://reddit.com''')
+        url = _get_scrape_url(post)
+        self.assertEqual(url, 'https://example.com')
     
-    import logging
-import numpy as np
+        def test_censor(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image, censor_nsfw=True)
+        self.assertEqual(url, 'https://example.com/a.jpg?blur=600&px=32')
+
     
-    
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--num-batches', dest='num_batches',
-        help='Number of minibatches to run',
-        default=200, type=int)
-    parser.add_argument(
-        '--sleep', dest='sleep_time',
-        help='Seconds sleep to emulate a network running',
-        default=0.1, type=float)
-    parser.add_argument(
-        '--cfg', dest='cfg_file', help='optional config file', default=None,
-        type=str)
-    parser.add_argument(
-        '--x-factor', dest='x_factor', help='simulates x-factor more GPUs',
-        default=1, type=int)
-    parser.add_argument(
-        '--profiler', dest='profiler', help='profile minibatch load time',
-        action='store_true')
-    parser.add_argument(
-        'opts', help='See detectron/core/config.py for all options', default=None,
-        nargs=argparse.REMAINDER)
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-    args = parser.parse_args()
-    return args
-    
-    
-if __name__ == '__main__':
+        def test_protocol_relative(self):
+        self.assertIsNotSafeRedditUrl('//foobaz.example.com/aa/baz#quux')
