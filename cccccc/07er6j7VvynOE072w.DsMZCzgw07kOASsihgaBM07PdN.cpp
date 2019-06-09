@@ -1,162 +1,190 @@
 
         
-            QColor TextColor() const { return textColor; }
-    QColor SingleColor() const { return singleColor; }
+            ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
+    }
     
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
     
-    constexpr static inline uint32_t rotl32(uint32_t v, int c) { return (v << c) | (v >> (32 - c)); }
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
+    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
+    secp256k1_scalar_set_b32(&m, msg32, NULL);
+    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
+        secp256k1_pubkey_save(pubkey, &q);
+        return 1;
+    } else {
+        memset(pubkey, 0, sizeof(*pubkey));
+        return 0;
+    }
+}
     
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
+    #include <stdint.h>
+#include <string>
+#include <vector>
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+      Status NewWritableFile(const std::string& f, WritableFile** r) {
+    class DataFile : public WritableFile {
+     private:
+      SpecialEnv* env_;
+      WritableFile* base_;
+    }
+    }
+    
+    // A basic file truncation function suitable for this test.
+Status Truncate(const std::string& filename, uint64_t length) {
+  leveldb::Env* env = leveldb::Env::Default();
+    }
+    
+    
+    {}  // namespace leveldb
+
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
+};
+    
+    
+    {}
+    
+          std::string encoded_image_base64;
+      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
+      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
   }
 }
     
+      while (true) {
+    const void* inptr;
+    int inlen;
+    bool ok;
+    ok = in.Next(&inptr, &inlen);
+    if (!ok) {
+      break;
+    }
+    if (inlen > 0) {
+      int err = write(STDOUT_FILENO, inptr, inlen);
+      if (err != inlen) {
+        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
+        return 1;
+      }
+    }
+  }
     
-    { private:
-  App();
-  DISALLOW_COPY_AND_ASSIGN(App);
-};
     
-    #include 'base/logging.h'
-#include 'base/values.h'
+    {
+    {
+    {}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    #include 'content/nw/src/api/menu/menu_delegate.h'
+    #include <fstream>
+#include <google/protobuf/util/time_util.h>
+#include <iostream>
+#include <string>
     
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-    namespace extensions {
+    	// ----------------------------------------------------------------------------------------------------
+	// initialize the generic encoding for a 4x4 block
+	// a_pblockParent points to the block associated with this encoding
+	// a_errormetric is used to choose the best encoding
+	// init the decoded pixels to -1 to mark them as undefined
+	// init the error to -1 to mark it as undefined
+	//
+	void Block4x4Encoding::Init(Block4x4 *a_pblockParent,
+								ColorFloatRGBA *a_pafrgbaSource,
+								ErrorMetric a_errormetric)
+	{
     }
     
-    class OrientationDetector {
- public:
-  OrientationDetector(const GenericVector<int>* allowed_scripts,
-                      OSResults* results);
-  bool detect_blob(BLOB_CHOICE_LIST* scores);
-  int get_orientation();
- private:
-  OSResults* osr_;
-  const GenericVector<int>* allowed_scripts_;
-};
+    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
+static const tran_high_t sinpi_1_9 = 5283;
+static const tran_high_t sinpi_2_9 = 9929;
+static const tran_high_t sinpi_3_9 = 13377;
+static const tran_high_t sinpi_4_9 = 15212;
     
+    /**
+  Decompress a block of compressed data and returns the size of the
+  decompressed block. If error occurs, e.g. the compressed data is
+  corrupted or the output buffer is not large enough, then 0 (zero)
+  will be returned instead.
     
-    {}  // namespace tesseract.
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
     
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
     
-    { private:
-  // A name for this document.
-  STRING document_name_;
-  // A group of pages that corresponds in some loose way to a document.
-  PointerVector<ImageData> pages_;
-  // Page number of the first index in pages_.
-  int pages_offset_;
-  // Total number of pages in document (may exceed size of pages_.)
-  int total_pages_;
-  // Total of all pix sizes in the document.
-  int64_t memory_used_;
-  // Max memory to use at any time.
-  int64_t max_memory_;
-  // Saved reader from LoadDocument to allow re-caching.
-  FileReader reader_;
-  // Mutex that protects pages_ and pages_offset_ against multiple parallel
-  // loads, and provides a wait for page.
-  SVMutex pages_mutex_;
-  // Mutex that protects other data members that callers want to access without
-  // waiting for a load operation.
-  mutable SVMutex general_mutex_;
-};
+    namespace leveldb {
+    }
     
+      // Get initial measurement of the space we will be reading.
+  const int64_t initial_size = Size(Key(0), Key(n));
+  const int64_t initial_other_size = Size(Key(n), Key(kCount));
     
-#endif  // TESSERACT_CCSTRUCT_LINLSQ_H_
+    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
 
     
-      // Copying a DENORM is allowed.
-  DENORM(const DENORM &);
-  DENORM& operator=(const DENORM&);
-  ~DENORM();
+    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
     
-      // Functions to navigate the tree. Unlike the original implementation, we
-  // store the root at index 0.
-  int ParentNode(int index) const {
-    return (index + 1) / 2 - 1;
-  }
-  int LeftChild(int index) const {
-    return index * 2 + 1;
-  }
-    
-      /**
-   * /brief Customize set method for LayerParameter
-   * /tparam value string of caffe's layer configuration
-   * */
-  virtual void Set(void *head, const std::string &value) const {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
-    }
-    
-    namespace mxnet {
-namespace io {
-// iterator on image recordio
-class PrefetcherIter : public IIterator<DataBatch> {
- public:
-  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
-      : loader_(base), out_(nullptr) {}
-    }
-    }
-    }
-    
-    struct GradientCompressionParam : public dmlc::Parameter<GradientCompressionParam> {
-  std::string type;
-  float threshold;
-  DMLC_DECLARE_PARAMETER(GradientCompressionParam) {
-    DMLC_DECLARE_FIELD(type)
-      .describe('Type of gradient compression to use, like `2bit` for example');
-    DMLC_DECLARE_FIELD(threshold).set_default(0.5)
-      .describe('Threshold to use for 2bit gradient compression');
-  }
-};
+      // Returns true iff some file in the specified level overlaps
+  // some part of [*smallest_user_key,*largest_user_key].
+  // smallest_user_key==nullptr represents a key smaller than all the DB's keys.
+  // largest_user_key==nullptr represents a key largest than all the DB's keys.
+  bool OverlapInLevel(int level, const Slice* smallest_user_key,
+                      const Slice* largest_user_key);
     
     
-    {
-    {
-    {  bool init_cudnn_;
-  cudnnDataType_t dtype_;
-  cudnnSpatialTransformerDescriptor_t st_desc_;
-  cudnnTensorDescriptor_t in_desc_;
-  cudnnTensorDescriptor_t out_desc_;
-  cudnnSamplerType_t sampler_;
-  #if CUDNN_MAJOR >= 5
-  cudnnTensorFormat_t format_;
-  #endif
-  SpatialTransformerParam param_;
-};
-#endif  // __CUDACC__ && CUDNN
-}  // namespace op
-}  // namespace mxnet
+    {  // These are no-ops, but we test they return success.
+  ASSERT_OK(writable_file->Sync());
+  ASSERT_OK(writable_file->Flush());
+  ASSERT_OK(writable_file->Close());
+  delete writable_file;
+}
     
-    template<typename xpu>
-void NDArrayOp<xpu>::Forward(const OpContext &ctx,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<OpReqType> &req,
-                   const std::vector<TBlob> &out_data,
-                   const std::vector<TBlob> &aux_args) {
-  using namespace mshadow;
-  Context ndctx = get_ctx();
-  std::vector<void*> ptrs;
-  std::vector<Engine::VarHandle> ndvar;
-  std::vector<int> tags;
-  for (auto& i : req) CHECK_NE(i, kAddTo);
+     private:
+  enum Code {
+    kOk = 0,
+    kNotFound = 1,
+    kCorruption = 2,
+    kNotSupported = 3,
+    kInvalidArgument = 4,
+    kIOError = 5
+  };
+    
+      Table(const Table&) = delete;
+  Table& operator=(const Table&) = delete;
+    
+      ~BloomTest() { delete policy_; }
+    
+    TEST(EnvWindowsTest, TestOpenOnRead) {
+  // Write some test data to a single file that will be opened |n| times.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file = test_dir + '/open_on_read.txt';
     }
