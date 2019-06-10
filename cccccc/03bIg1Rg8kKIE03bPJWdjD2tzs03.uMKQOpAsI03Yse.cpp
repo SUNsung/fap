@@ -1,110 +1,64 @@
 
         
-        // Get render process host.
-RenderProcessHost* GetRenderProcessHost() {
-  RenderProcessHost* render_process_host = NULL;
-  std::vector<Shell*> windows = Shell::windows();
-  for (size_t i = 0; i < windows.size(); ++i) {
-    if (!windows[i]->is_devtools()) {
-      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
-      break;
+        namespace tensorflow {
     }
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+    
+    string TryFindKernelClass(const string& serialized_node_def) {
+  tensorflow::NodeDef node_def;
+  if (!node_def.ParseFromString(serialized_node_def)) {
+    LOG(WARNING) << 'Error parsing node_def';
+    return '';
   }
     }
     
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+    // This enum represents potential configurations of L1/shared memory when
+// running a particular kernel. These values represent user preference, and
+// the runtime is not required to respect these choices.
+enum class KernelCacheConfig {
+  // Indicates no preference for device L1/shared memory configuration.
+  kNoPreference,
     }
     
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
+    #define TegraGenOp_Invoker(name, func, src_cnt, dst_cnt, scale_cnt, ...) \
+template <typename ST, typename DT> \
+class TegraGenOp_##name##_Invoker : public cv::ParallelLoopBody \
+{ \
+public: \
+    TegraGenOp_##name##_Invoker(SRC_ARG##src_cnt \
+                                DST_ARG##dst_cnt \
+                                int width_, int height_ \
+                                SCALE_ARG##scale_cnt) : \
+        cv::ParallelLoopBody(), SRC_STORE##src_cnt \
+                                DST_STORE##dst_cnt \
+                                width(width_), height(height_) \
+                                SCALE_STORE##scale_cnt {} \
+    virtual void operator()(const cv::Range& range) const \
+    { \
+        CAROTENE_NS::func(CAROTENE_NS::Size2D(width, range.end-range.start), __VA_ARGS__); \
+    } \
+private: \
+    SRC_VAR##src_cnt \
+    DST_VAR##dst_cnt \
+    int width, height; \
+    SCALE_VAR##scale_cnt \
+    const TegraGenOp_##name##_Invoker& operator= (const TegraGenOp_##name##_Invoker&); \
+};
     
-    
-    {}  // namespace nwapi
-    
-    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
-    
-    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-    
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
-    }
-  }
-}
-    
-     protected:
-  ~NwClipboardClearSyncFunction() override;
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-    
-        switch(CV_MAT_DEPTH(kernel_type))
-    {
-    case CV_8U:
-        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), kernel_data, kernel_step) != kernel_width * kernel_height)
-            return CV_HAL_ERROR_NOT_IMPLEMENTED;
-        break;
-    case CV_16U:
-        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (uint16_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
-            return CV_HAL_ERROR_NOT_IMPLEMENTED;
-        break;
-    case CV_32S:
-        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (int32_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
-            return CV_HAL_ERROR_NOT_IMPLEMENTED;
-        break;
-    case CV_32F:
-        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (float*)kernel_data, kernel_step) != kernel_width * kernel_height)
-            return CV_HAL_ERROR_NOT_IMPLEMENTED;
-        break;
-    case CV_64F:
-        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (double*)kernel_data, kernel_step) != kernel_width * kernel_height)
-            return CV_HAL_ERROR_NOT_IMPLEMENTED;
-        break;
-    default:
-        return CV_HAL_ERROR_NOT_IMPLEMENTED;
-    }
+        /*
+        For each point `p` within `size`, do:
+        dst[p] = src0[p] & src1[p]
+    */
+    void bitwiseAnd(const Size2D &size,
+                    const u8 *src0Base, ptrdiff_t src0Stride,
+                    const u8 *src1Base, ptrdiff_t src1Stride,
+                    u8 *dstBase, ptrdiff_t dstStride);
     
         struct Margin {
         Margin() : left(0), right(0), top(0), bottom(0) {}
@@ -112,233 +66,257 @@ RenderProcessHost* GetRenderProcessHost() {
             : left(left_), right(right_), top(top_), bottom(bottom_) {}
     }
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        v_dst = internal::vabdq(v_src0, v_src1);
+                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
+            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst0))),
+                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst0))));
+    
+                int32x4_t va = vaddq_s32(lane0a, lane2a);
+            int32x4_t vb = vaddq_s32(lane0b, lane2b);
+            int32x4_t vc = vaddq_s32(lane0c, lane2c);
+            int32x4_t wa = vaddq_s32(va, lane1a);
+            int32x4_t wb = vaddq_s32(vb, lane1b);
+            int32x4_t wc = vaddq_s32(vc, lane1c);
+    
+        // this ugly contruction is needed to avoid:
+    // /usr/lib/gcc/arm-linux-gnueabihf/4.8/include/arm_neon.h:3581:59: error: argument must be a constant
+    // return (int16x8_t)__builtin_neon_vshl_nv8hi (__a, __b, 1);
+    
+            if (val == maxVal)
+        {
+            if (maxLocCount < maxLocCapacity)
+            {
+                maxLocPtr[maxLocCount] = j;
+                maxLocPtr[maxLocCount + 1] = i;
+            }
+            maxLocCount += 2;
+        }
+    
+    void read_image(std::ifstream* image_file, std::ifstream* label_file,
+        uint32_t index, uint32_t rows, uint32_t cols,
+        char* pixels, char* label) {
+  image_file->seekg(index * rows * cols + 16);
+  image_file->read(pixels, rows * cols);
+  label_file->seekg(index + 8);
+  label_file->read(label, 1);
+}
+    
+     private:
+  // The private constructor to avoid duplicate instantiation.
+  Caffe();
+    
+    
+    {  shared_ptr<boost::thread> thread_;
+};
+    
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
     
-    {} //namespace CAROTENE_NS
+    #include 'caffe/layers/conv_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    // ReadNextBox factors out the code to interpret a line of a box
+// file so that applybox and unicharset_extractor interpret the same way.
+// This function returns the next valid box file utf8 string and coords
+// and returns true, or false on eof (and closes the file).
+// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
+// for valid utf-8 and allows space or tab between fields.
+// utf8_str is set with the unichar string, and bounding box with the box.
+// If there are page numbers in the file, it reads them all.
+bool ReadNextBox(int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+// As ReadNextBox above, but get a specific page number. (0-based)
+// Use -1 to read any page number. Files without page number all
+// read as if they are page 0.
+bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+    
+      // Return whether a given text line could be a first paragraph line according
+  // to this paragraph model.
+  bool ValidFirstLine(int lmargin, int lindent, int rindent, int rmargin) const;
+    
+    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
+ public:
+  DoublePtr() : other_end_(nullptr) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = this;
+      src.other_end_ = nullptr;
+    }
+  }
+    }
+    
+      // Decrement the count for t.
+  // Return whether we knew about the given pointer.
+  bool Free(T *t) {
+    if (t == nullptr) return false;
+    mu_.Lock();
+    for (int i = 0; i < cache_.size(); i++) {
+      if (cache_[i].object == t) {
+        --cache_[i].count;
+        mu_.Unlock();
+        return true;
+      }
+    }
+    mu_.Unlock();
+    return false;
+  }
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    #include <cstdint>
+#include <tuple>
+    
+    namespace php {
+struct Program;
+}
+struct Index;
+    
+    int64_t VMTOC::getValue(int64_t index, bool qword) {
+  HPHP::Address addr = reinterpret_cast<HPHP::Address>(
+      static_cast<intptr_t>(index) + getPtrVector());
+  int64_t ret_val = 0;
+  int max_elem = qword ? 8 : 4;
+  for (int i = max_elem-1; i >= 0; i--) {
+    ret_val = addr[i] + (ret_val << 8);
+  }
+  return ret_val;
+}
+    
+    
+    {      dword(dq_formater.instruction);
+   }
+    
+    void Config::ParseConfigFile(const std::string &filename, IniSettingMap &ini,
+                             Hdf &hdf, const bool is_system /* = true */) {
+  // We don't allow a filename of just '.ini'
+  if (boost::ends_with(filename, '.ini') && filename.length() > 4) {
+    Config::ParseIniFile(filename, ini, false, is_system);
+  } else {
+    // For now, assume anything else is an hdf file
+    // TODO(#5151773): Have a non-invasive warning if HDF file does not end
+    // .hdf
+    Config::ParseHdfFile(filename, hdf);
+  }
+}
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
 
     
-            map = (u8*)(mag_buf[2] + mapstep*cn);
-        memset(map, 1, mapstep);
-        memset(map + mapstep*(size.height + 1), 1, mapstep);
-    }
-    inline void firstRow(const Size2D &size, s32 cn,
-                         const u8 *, ptrdiff_t,
-                         s16* dxBase, ptrdiff_t dxStride,
-                         s16* dyBase, ptrdiff_t dyStride,
-                         s32** mag_buf)
+    #ifndef incl_HPHP_URL_FILE_H_
+#define incl_HPHP_URL_FILE_H_
+    
+        ALLEGRO_LOCKED_REGION *locked_img = al_lock_bitmap(img, al_get_bitmap_format(img), ALLEGRO_LOCK_WRITEONLY);
+    if (!locked_img)
     {
-        s32* _norm = mag_buf[1] + 1;
+        al_destroy_bitmap(img);
+        return false;
+    }
+    memcpy(locked_img->data, pixels, sizeof(int)*width*height);
+    al_unlock_bitmap(img);
     
-             uint8x8_t vline1_u8 = vqmovn_u16(vline1_u16);
-         uint8x8_t vline2_u8 = vqmovn_u16(vline2_u16);
-    
-    
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(u16, u8, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+    #ifdef __FREEGLUT_EXT_H__
+void ImGui_ImplGLUT_MouseWheelFunc(int button, int dir, int x, int y)
 {
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
-            'vmovl.u16 q3, d4                                      \n\t'
-            'vmovl.u16 q4, d5                                      \n\t'
-            'vcvt.f32.u32 q5, q3                                   \n\t'
-            'vcvt.f32.u32 q6, q4                                   \n\t'
-            'vmul.f32 q7, q5, q0                                   \n\t'
-            'vmul.f32 q8, q6, q0                                   \n\t'
-            'vadd.f32 q9, q7, q1                                   \n\t'
-            'vadd.f32 q10, q8, q1                                  \n\t'
-            'vcvt.s32.f32 q11, q9                                  \n\t'
-            'vcvt.s32.f32 q12, q10                                 \n\t'
-            'vqmovn.s32 d26, q11                                   \n\t'
-            'vqmovn.s32 d27, q12                                   \n\t'
-            'vqmovun.s16 d28, q13                                  \n\t'
-             'vst1.8 {d28}, [%[dst]]                               \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-               'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
-        );
-    }
-})
-#else
-CVTS_FUNC(u16, u8, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        uint16x8_t vline = vld1q_u16(_src + i);
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        uint8x8_t vRes = vqmovun_s16(vcombine_s16(vRes1, vRes2));
-        vst1_u8(_dst + i, vRes);
-    }
-})
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    if (dir > 0)
+        io.MouseWheel += 1.0;
+    else if (dir < 0)
+        io.MouseWheel -= 1.0;
+    (void)button; // Unused
+}
 #endif
     
-                uint32x4_t vequ1 = vceqq_u32(vreinterpretq_u32_u64(vm1), vc0);
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
     
-            if( i == 3 )
-            continue;
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
-    inline float32x2_t vrsqrt_f32(float32x2_t val)
-{
-    float32x2_t e = vrsqrte_f32(val);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    return e;
-}
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
     
+        IMGUI_API void          SetCurrentFont(ImFont* font);
+    inline ImFont*          GetDefaultFont() { ImGuiContext& g = *GImGui; return g.IO.FontDefault ? g.IO.FontDefault : g.IO.Fonts->Fonts[0]; }
     
-    {  std::vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'SubGradient',
-        '',
-        std::vector<std::string>{GO(0), I(0), I(1)},
-        std::vector<std::string>{GI(0), GI(1)});
-  }
-};
-    
-    OPERATOR_SCHEMA(Floor)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-Element-wise application of the floor function ($y=floor(x)$) to the input
-tensor `X`. Output tensor shape is the same as the input tensor. This
-operator can be used in an in-place fashion by using the same input blob as the
-output blob.
-    
-            vector<int> res;
-        if( root == NULL )
-            return res;
-    
-            stack<TreeNode*> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-    }
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    using namespace std;
-    
-    using namespace std;
-    
-    using namespace std;
-    
-    
-    {    return 0;
-}
-    
-    
-    {        return const_cast<int16_t*>(DataBuffer<int16_t>());
-    }
-    
-    
-    {            if (std::find(combinedFunctionArgs.begin(), combinedFunctionArgs.end(), m_trainingSampleCountVar) == combinedFunctionArgs.end())
-                combinedFunctionArgs.push_back(m_trainingSampleCountVar);
-        }
-    
-    
-    {        assert(m_fd == -1);
-        for (;;)
-        {
-            // opening a lock file
-            int fd = open(m_fileName.c_str(), O_WRONLY | O_CREAT, 0666);
-            if (fd < 0)
-                RuntimeError('Acquire: Failed to open lock file %s: %s.', m_fileName.c_str(), strerror(errno));
-            // locking it with the fcntl API
-            memset(&m_lock, 0, sizeof(m_lock));
-            m_lock.l_type = F_WRLCK;
-            // BUG: fcntl call with F_SETLKW doesn't always reliably detect when lock is released
-            // As a workaround, using alarm() for interupting fcntl if it waits more than 1 second
-            setupTimeout(1);
-            int r = fcntl(fd, wait ? F_SETLKW : F_SETLK, &m_lock);
-            if (errno == EINTR)
-            {
-                sleep(1);
-                // retrying in the case of signal or timeout
-                close(fd);
-                continue;
-            }
-            if (r != 0)
-            {
-                // acquire failed
-                close(fd);
-                umask(mask);
-                return false;
-            }
-            // we own the exclusive lock on file descriptor, but we need to double-check
-            // that the lock file wasn't deleted and/or re-created;
-            // checking this by comparing inode numbers
-            struct stat before, after;
-            fstat(fd, &before);
-            if (stat(m_fileName.c_str(), &after) != 0 || before.st_ino != after.st_ino)
-            {
-                // we have a race with 'unlink' call in Release()
-                // our lock is held to the previous instance of the file;
-                // this is not a problem, we just need to retry locking the new file
-                close(fd);
-                continue;
-            }
-            else
-            {
-                // lock acquired successfully
-                m_fd = fd;
-                umask(mask);
-                return true;
-            }
-        }
-    }
-    
-    void NetworkManager::OnNetworkStatusChange(_In_ Object^ /*sender*/)
-{
-    NetworkBehaviorChanged(GetNetworkAccessBehavior());
-}
+            // We don't care for comparison result here; the previous value will be stored into value anyway.
+        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            : '=&A' (value)
+            : [storage] 'm' (storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
