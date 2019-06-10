@@ -1,37 +1,32 @@
 
         
-            def short_desc(self):
-        return 'Check spider contracts'
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-        def syntax(self):
-        return '<spider>'
-    
-        def _print_response(self, response, opts):
-        if opts.headers:
-            self._print_headers(response.request.headers, b'>')
-            print('>')
-            self._print_headers(response.headers, b'<')
+            @value.setter
+    def value(self, new_value):
+        if 1 <= new_value <= 13:
+            self._value = new_value
         else:
-            self._print_bytes(response.body)
+            raise ValueError('Invalid card value: {}'.format(new_value))
     
-        def print_requests(self, lvl=None, colour=True):
-        if lvl is None:
-            levels = list(self.requests.keys())
-            if levels:
-                requests = self.requests[max(levels)]
-            else:
-                requests = []
-        else:
-            requests = self.requests.get(lvl, [])
     
-        def long_desc(self):
-        return 'Run the spider defined in the given file'
+class RequestStatus(Enum):
+    
+    from xlog import getLogger
+xlog = getLogger('gae_proxy')
+    
+    
+class CheckNetwork(object):
+    def __init__(self, type='IPv4'):
+        self.type = type
+        self.urls = []
+        self._checking_lock = threading.Lock()
+        self._checking_num = 0
+        self.network_stat = 'unknown'
+        self.last_check_time = 0
+        self.continue_fail_count = 0
+    
+    
+def test_teredo(probe_nat=True, probe_server=True):
+    if pteredor_is_running:
+        return 'Script is running, please retry later.'
+    
+            Using setter/getter methods is deprecated. Use o.line instead.'''
