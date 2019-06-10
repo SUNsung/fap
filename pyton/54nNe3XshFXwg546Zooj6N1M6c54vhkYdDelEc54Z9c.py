@@ -1,163 +1,167 @@
 
         
-            def state_forwards(self, app_label, state):
-        pass
+        
+if __name__ == '__main__':
+    main()
+
     
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
     
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
+            while self.values[new_key] is not None and self.values[new_key] != key:
+            new_key = self.__hash_double_function(key, data, i) if \
+                self.balanced_factor() >= self.lim_charge else None
+            if new_key is None: break 
+            else: i += 1
     
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
+            while self.values[new_key] is not None \
+                and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
+    
+            if isinstance(B,bytes):
+            B = B.decode('ascii')
+    
+    #Some examples
+    
+        def solve_sub_array(self):
+        rear = [int(self.array[0])]*len(self.array)
+        sum_value = [int(self.array[0])]*len(self.array)
+        for i in range(1, len(self.array)):
+            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
+            rear[i] = max(sum_value[i], rear[i-1])
+        return rear[len(self.array)-1]
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
+    
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
         try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-        def __str__(self):
-        return self.session_key
-    
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-        fpath = os.path.join(path, 'train')
-    x_train, y_train = load_batch(fpath, label_key=label_mode + '_labels')
-    
-    
-class L1L2(Regularizer):
-    '''Regularizer for L1 and L2 regularization.
-    
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+        def _print_response(self, response, opts):
+        if opts.headers:
+            self._print_headers(response.request.headers, b'>')
+            print('>')
+            self._print_headers(response.headers, b'<')
+        else:
+            self._print_bytes(response.body)
     
     
-def test_regularization_shared_model():
-    dense_layer = Dense(num_classes,
-                        kernel_regularizer=regularizers.l1(),
-                        activity_regularizer=regularizers.l1())
+class Command(ScrapyCommand):
     
-    To use this with Keras, we make a dataset out of elements
-of the form (input batch, output batch). From there, we
-create a one-shot iterator and a graph node corresponding
-to its get_next() method. Its components are then provided
-to the network's Input layer and the Model.compile() method,
-respectively.
-    
-    Gets to 98.40% test accuracy after 20 epochs
-(there is *a lot* of margin for parameter tuning).
-2 seconds per epoch on a K520 GPU.
-'''
-    
-    
-if __name__ == '__main__':
-    main()
+        def download_request(self, request, spider):
+        p = urlparse_cached(request)
+        scheme = 'https' if request.meta.get('is_secure') else 'http'
+        bucket = p.hostname
+        path = p.path + '?' + p.query if p.query else p.path
+        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
+        if self.anon:
+            request = request.replace(url=url)
+        elif self._signer is not None:
+            import botocore.awsrequest
+            awsrequest = botocore.awsrequest.AWSRequest(
+                method=request.method,
+                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
+                headers=request.headers.to_unicode_dict(),
+                data=request.body)
+            self._signer.add_auth(awsrequest)
+            request = request.replace(
+                url=url, headers=awsrequest.headers.items())
+        else:
+            signed_headers = self.conn.make_request(
+                    method=request.method,
+                    bucket=bucket,
+                    key=unquote(p.path),
+                    query_args=unquote(p.query),
+                    headers=request.headers,
+                    data=request.body)
+            request = request.replace(url=url, headers=signed_headers)
+        return self._download_http(request, spider)
 
     
+        # Stripping scripts and comments is slow (about 20x slower than
+    # just checking if a string is in text); this is a quick fail-fast
+    # path that should work for most pages.
+    if 'fragment' not in text:
+        return False
+    if 'content' not in text:
+        return False
     
-def _detach_monitoring_policy_server(module, oneandone_conn, monitoring_policy_id, server_id):
+    # Non-mutual mappings.
+    
+        If the resulting string contains path separators, an exception is raised.
     '''
-    Detaches a server from a monitoring policy.
-    '''
-    try:
-        if module.check_mode:
-            mp_server = oneandone_conn.get_monitoring_policy_server(
-                monitoring_policy_id=monitoring_policy_id,
-                server_id=server_id)
-            if mp_server:
-                return True
-            return False
+    parent, file_name = os.path.split(path)
+    if parent:
+        raise ValueError('{!r} must be only a file name'.format(path))
+    else:
+        return file_name
     
-        for rule in additions:
-        if not module.check_mode:
-            rule['protocol'] = rule['protocol'].capitalize()
-            gateway.add_fw_rule(**rule)
-        result['changed'] = True
+    # If we want to print a preview of the message content, we can extract whatever
+# the least formatted payload is and print the first three lines.  Of course,
+# if the message has no plain text part printing the first three lines of html
+# is probably useless, but this is just a conceptual example.
+simplest = msg.get_body(preferencelist=('plain', 'html'))
+print()
+print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
     
     
-if __name__ == '__main__':
-    main()
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+    def handlePoint(point):
+    print('<li>%s</li>' % getText(point.childNodes))
+    
+    buffer = ''
+    
+    from sentry.db.models import (Model, BoundedBigIntegerField, sane_repr)
+    
+        complete_apps = ['tagstore']
 
     
-    - bigpanda:
-    component: myapp
-    version: '1.3'
-    token: '{{ bigpanda_token }}'
-    state: finished
+        GroupResolution.objects.filter(id__in=[r.id for r in resolution_list]).update(
+        release=release,
+        type=GroupResolution.Type.in_release,
+        status=GroupResolution.Status.resolved,
+    )
     
     
-if __name__ == '__main__':
-    main()
-
-    
-    
-def get_setting_name_and_refid(node):
-    '''Extract setting name from directive index node'''
-    entry_type, info, refid = node['entries'][0][:3]
-    return info.replace('; setting', ''), refid
-    
-    from twisted import version as _txv
-twisted_version = (_txv.major, _txv.minor, _txv.micro)
-    
-                tested_methods = conman.tested_methods_from_spidercls(spidercls)
-            if opts.list:
-                for method in tested_methods:
-                    contract_reqs[spidercls.name].append(method)
-            elif tested_methods:
-                self.crawler_process.crawl(spidercls)
-    
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
-
-    
-    
-def _parse(url):
-    ''' Return tuple of (scheme, netloc, host, port, path),
-    all in bytes except for port which is int.
-    Assume url is from Request.url, which was passed via safe_url_string
-    and is ascii-only.
-    '''
-    url = url.strip()
-    parsed = urlparse(url)
-    return _parsed_url_args(parsed)
-    
-        def schedule(self, request, spider):
-        self.signals.send_catch_log(signal=signals.request_scheduled,
-                request=request, spider=spider)
-        if not self.slot.scheduler.enqueue_request(request):
-            self.signals.send_catch_log(signal=signals.request_dropped,
-                                        request=request, spider=spider)
-    
-    
-def linear(x):
-    ''''''
-    return x
+@instrumented_task(name='sentry.tasks.enqueue_scheduled_jobs')
+def enqueue_scheduled_jobs(**kwargs):
+    from sentry.celery import app
