@@ -1,78 +1,151 @@
 
         
-        # read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
+            def remaining_cards(self):
+        return len(self.cards) - self.deal_index
     
-        .. versionchanged:: 1.0.3
-    
-            if cls.decorators:
-            view.__name__ = name
-            view.__module__ = cls.__module__
-            for decorator in cls.decorators:
-                view = decorator(view)
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
     
     
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
+class UserGraphService(object):
     
-        def save(self, must_create=False):
-        if self.session_key is None:
-            return self.create()
-        if must_create:
-            func = self._cache.add
-        elif self._cache.get(self.cache_key) is not None:
-            func = self._cache.set
-        else:
-            raise UpdateError
-        result = func(self.cache_key,
-                      self._get_session(no_load=must_create),
-                      self.get_expiry_age())
-        if must_create and not result:
-            raise CreateError
+        def _hash_function(self, key):
+        return key % self.size
     
-        def flush(self):
+      # Print header
+  header = empty_cell + ' '
+  header += ''.join([' %{0}s '.format(columnwidth) % label
+                     for label in short_labels])
+    
+      # Convert from figure to an numpy array width x height x 3 (last for RGB)
+  f.canvas.draw()
+  data = np.fromstring(f.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+  data_wxhx3 = data.reshape(f.canvas.get_width_height()[::-1] + (3,))
+  plt.close()
+    
+      Args:
+    flags: From tf.app.flags
+    
+      def encode_chars(self, sentence):
+    chars_ids = [self.word_to_char_ids(cur_word)
+                 for cur_word in sentence.split()]
+    return np.vstack([self.bos_chars] + chars_ids + [self.eos_chars])
+    
+    
+_SPECIAL_CHAR_MAP = {
+    '\xe2\x80\x98': '\'',
+    '\xe2\x80\x99': '\'',
+    '\xe2\x80\x9c': ''',
+    '\xe2\x80\x9d': ''',
+    '\xe2\x80\x93': '-',
+    '\xe2\x80\x94': '-',
+    '\xe2\x88\x92': '-',
+    '\xce\x84': '\'',
+    '\xc2\xb4': '\'',
+    '`': '\''
+}
+    
+      if model == 'dis':
+    assert FLAGS.discriminator_model == 'rnn_nas'
+    assert hparams.dis_num_layers == 2
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
+    
         '''
-        Remove the current session data from the database and regenerate the
-        key.
-        '''
-        self.clear()
-        self.delete(self.session_key)
-        self._session_key = None
+    
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_timeout(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+        if args.auth_plugin:
+        session.auth = {
+            'type': args.auth_plugin.auth_type,
+            'raw_auth': args.auth_plugin.raw_auth,
+        }
+    elif session.auth:
+        kwargs['auth'] = session.auth
+    
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
+    
+    from ..common import *
+    
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
+
+    
+    site_info = 'FC2Video'
+download = fc2video_download
+download_playlist = playlist_not_supported('fc2video')
 
     
     
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
+    {
+    {pattern_inline_title = r'<title>([^<]*)</title>'
+pattern_inline_api_key = r'api\.site_key\s*=\s*'([^']+)''
+pattern_inline_img_url = r''url':'([^']+)','key':'[^']+'}}'
+pattern_inline_NSID = r''nsid'\s*:\s*'([^']+)''
+pattern_inline_video_mark = r'('mediaType':'video')'
     
-            '''
-        assert with_headers or with_body
-        self.msg = msg
-        self.with_headers = with_headers
-        self.with_body = with_body
-        self.on_body_chunk_downloaded = on_body_chunk_downloaded
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
     
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
+    from ..utils import get_w, get_shape
+from ..initializers import constant
     
-    USERNAME = 'user'
-PASSWORD = 'password'
-# Basic auth encoded `USERNAME` and `PASSWORD`
-# noinspection SpellCheckingInspection
-BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
-BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
-AUTH_OK = {'authenticated': True, 'user': USERNAME}
-    
-    
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+        Args:
+        x:
+        c_embed_size:
+        share_cnn_weights:
+        name:
+        reuse:
