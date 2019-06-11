@@ -1,184 +1,136 @@
 
         
-          context 'every shim script' do
-    it 'has valid bash syntax' do
-      # These have no file extension, but can be identified by their shebang.
-      (HOMEBREW_LIBRARY_PATH/'shims').find do |path|
-        next if path.directory?
-        next if path.symlink?
-        next unless path.executable?
-        next unless path.read(12) == '#!/bin/bash\n'
-    
-      describe '#merge' do
-    it 'returns itself' do
-      expect(env.merge([])).to be env
+              headers['Access-Control-Allow-Origin'] = origin || cors_origins[0]
+      headers['Access-Control-Allow-Headers'] = 'Content-Type, Cache-Control, X-Requested-With, X-CSRF-Token, Discourse-Visible, User-Api-Key, User-Api-Client-Id'
+      headers['Access-Control-Allow-Credentials'] = 'true'
+      headers['Access-Control-Allow-Methods'] = 'POST, PUT, GET, OPTIONS, DELETE'
     end
+    
+        it 'no-ops on invalid values' do
+      previous = builder.build
+    
+        # remove old drafts
+    delete_drafts_older_than_n_days = SiteSetting.delete_drafts_older_than_n_days.days.ago
+    Draft.where('updated_at < ?', delete_drafts_older_than_n_days).destroy_all
   end
     
-        when IAX_TYPE_CONTROL
-      case stype
-      when IAX_CTRL_HANGUP
-        dprint('HANGUP')
-        self.client.send_ack(self)
-        self.state = :hangup
+        def clear_theme_extensions_cache!
+      cache.clear
+    end
     
-    
-IAX2_DEFAULT_PORT = 4569
-    
-    require 'rex/proto/ipmi/utils'
-    
-              sent = 0
-          case protocol
-          when 'tcp'
-            sent = send_request_tcp(req)
-          when 'udp'
-            sent = send_request_udp(req)
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-                encoded
-          end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Decodes the options field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_options(input)
-            input.value[0].value.unpack('N')[0]
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
-            end
-    
-          it 'left-justifies the result if width is negative' do
-        format('%*b', -10, 10).should == '1010      '
-        format('%*B', -10, 10).should == '1010      '
-        format('%*d', -10, 112).should == '112       '
-        format('%*i', -10, 112).should == '112       '
-        format('%*o', -10, 87).should == '127       '
-        format('%*u', -10, 112).should == '112       '
-        format('%*x', -10, 196).should == 'c4        '
-        format('%*X', -10, 196).should == 'C4        '
-    
-    describe 'Kernel#srand' do
-  it 'needs to be reviewed for spec completeness'
-end
-
-    
-      it 'no raises a RuntimeError on symbols' do
-    v = :sym
-    lambda { v.taint }.should_not raise_error(RuntimeError)
-    v.tainted?.should == false
-  end
-    
-      def symlinked?(symlink_path, target_path)
-    '[ #{symlink_path} -ef #{target_path} ]'
-  end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-          private
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
+        def html_response?(headers)
+      headers['Content-Type'] && headers['Content-Type'] =~ /html/
     end
   end
 end
 
     
-    module RuboCop
-  module AST
-    # Common functionality for nodes that are parameterized:
-    # `send`, `super`, `zsuper`, `def`, `defs`
-    module ParameterizedNode
-      # Checks whether this node's arguments are wrapped in parentheses.
-      #
-      # @return [Boolean] whether this node's arguments are
-      #                   wrapped in parentheses
-      def parenthesized?
-        loc.end && loc.end.is?(')')
-      end
-    
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
-    
-        def handle_switch(cop_names, names, disabled, extras, comment)
-      cop_names.each do |name|
-        names[name] ||= 0
-        if disabled
-          names[name] += 1
-        elsif names[name] > 0
-          names[name] -= 1
-        else
-          extras << [comment, name]
-        end
-      end
+      describe 'worker-src' do
+    it 'always has self and blob' do
+      worker_srcs = parse(policy)['worker-src']
+      expect(worker_srcs).to eq(%w[
+        'self'
+        blob:
+      ])
     end
   end
-end
-
     
-        it 'is able to search orders using only completed at input' do
-      fill_in 'q_created_at_gt', with: Date.current
-      click_on 'Filter Results'
+      def self.update_first_unread(last_seen, limit: 10_000)
+    DB.exec(<<~SQL, min_date: last_seen, limit: limit, now: 10.minutes.ago)
+      UPDATE user_stats us
+      SET first_unread_at = COALESCE(Y.min_date, :now)
+      FROM (
+        SELECT u1.id user_id,
+           X.min min_date
+        FROM users u1
+        LEFT JOIN
+          (SELECT u.id AS user_id,
+                  min(topics.updated_at) min
+           FROM users u
+           LEFT JOIN topic_users tu ON tu.user_id = u.id
+           LEFT JOIN topics ON tu.topic_id = topics.id
+           JOIN user_stats AS us ON us.user_id = u.id
+           JOIN user_options AS uo ON uo.user_id = u.id
+           JOIN categories c ON c.id = topics.category_id
+           WHERE u.id IN (
+               SELECT id
+               FROM users
+               WHERE last_seen_at IS NOT NULL
+                AND last_seen_at > :min_date
+                ORDER BY last_seen_at DESC
+                LIMIT :limit
+              )
+             AND topics.archetype <> 'private_message'
+             AND (('topics'.'deleted_at' IS NULL
+                   AND tu.last_read_post_number < CASE
+                                                      WHEN u.admin
+                                                           OR u.moderator THEN topics.highest_staff_post_number
+                                                      ELSE topics.highest_post_number
+                                                  END
+                   AND COALESCE(tu.notification_level, 1) >= 2)
+                  OR (1=0))
+             AND (topics.visible
+                  OR u.admin
+                  OR u.moderator)
+             AND topics.deleted_at IS NULL
+             AND (NOT c.read_restricted
+                  OR u.admin
+                  OR category_id IN
+                    (SELECT c2.id
+                     FROM categories c2
+                     JOIN category_groups cg ON cg.category_id = c2.id
+                     JOIN group_users gu ON gu.user_id = u.id
+                     AND cg.group_id = gu.group_id
+                     WHERE c2.read_restricted ))
+             AND NOT EXISTS
+               (SELECT 1
+                FROM category_users cu
+                WHERE last_read_post_number IS NULL
+                  AND cu.user_id = u.id
+                  AND cu.category_id = topics.category_id
+                  AND cu.notification_level = 0)
+           GROUP BY u.id,
+                    u.username) AS X ON X.user_id = u1.id
+        WHERE u1.id IN
+            (
+             SELECT id
+             FROM users
+             WHERE last_seen_at IS NOT NULL
+              AND last_seen_at > :min_date
+              ORDER BY last_seen_at DESC
+              LIMIT :limit
+            )
+      ) Y
+      WHERE Y.user_id = us.user_id
+    SQL
+  end
     
-              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-            if current_api_user.has_spree_role?('admin') && user_id.present?
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
+            # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
     
-            private
+    group :development do
+  cp_gem 'claide',                'CLAide'
+  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
+  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
+  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
+  cp_gem 'cocoapods-search',      'cocoapods-search'
+  cp_gem 'cocoapods-stats',       'cocoapods-stats'
+  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
+  cp_gem 'cocoapods-try',         'cocoapods-try'
+  cp_gem 'molinillo',             'Molinillo'
+  cp_gem 'nanaimo',               'Nanaimo'
+  cp_gem 'xcodeproj',             'Xcodeproj'
