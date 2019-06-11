@@ -1,28 +1,61 @@
 
         
-              def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
+            def order_by_category_sql(dir)
+      -'CASE WHEN categories.id = #{SiteSetting.uncategorized_category_id.to_i} THEN '' ELSE categories.name END #{dir}'
+    end
     
-            def collection_method
-          :issues_comments
+    describe ContentSecurityPolicy::Builder do
+  let(:builder) { described_class.new }
+    
+        # remove old drafts
+    delete_drafts_older_than_n_days = SiteSetting.delete_drafts_older_than_n_days.days.ago
+    Draft.where('updated_at < ?', delete_drafts_older_than_n_days).destroy_all
+  end
+    
+        def script_assets(base = base_url, s3_cdn = GlobalSetting.s3_cdn_url, cdn = GlobalSetting.cdn_url)
+      SCRIPT_ASSET_DIRECTORIES.map do |dir, can_use_s3_cdn, can_use_cdn|
+        if can_use_s3_cdn && s3_cdn
+          s3_cdn + dir
+        elsif can_use_cdn && cdn
+          cdn + dir
+        else
+          base + dir
         end
+      end
+    end
     
-          # Imports all the objects in sequence in the current thread.
-      def sequential_import
-        each_object_to_import do |object|
-          repr = representation_class.from_api_response(object)
+        langs.sort
+  end
     
-            attr_reader :attributes
+        Extension.theme_extensions(theme_ids).each { |extension| builder << extension }
+    Extension.plugin_extensions.each { |extension| builder << extension }
+    builder << Extension.site_setting_extension
     
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
+        def site_setting_extension
+      { script_src: SiteSetting.content_security_policy_script_src.split('|') }
+    end
+    
+      def show
+    raise Discourse::NotFound unless last_modified.present?
+    return render body: nil, status: 304 if not_modified?
+    
+      def update_time_read!
+    UserStat.update_time_read!(id)
+  end
+    
+          @env[USER_API_KEY_ENV] = true
+    end
+    
+          def cache_key_iid
+        if object.respond_to?(:noteable_id)
+          object.noteable_id
+        elsif object.respond_to?(:iid)
+          object.iid
+        else
+          raise(
+            TypeError,
+            'Instances of #{object.class} are not supported'
+          )
         end
       end
     end
@@ -30,89 +63,62 @@
 end
 
     
-          if @email_domain_block.save
-        log_action :create, @email_domain_block
-        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
-      else
-        render :new
-      end
-    end
+          def action_for_grape(env)
+        endpoint = env[ENDPOINT_KEY]
+        route = endpoint.route rescue nil
     
-      def hub_callback
-    params['hub.callback']
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
   end
     
-      private
+    end
+
     
-            expect(path).to have_valid_bash_syntax
-      end
+        it 'strips punctuation' do
+      expect(AgentsExporter.new(:name => 'foo,bar').filename).to eq('foo-bar.json')
+    end
+    
+          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent1])
     end
   end
 end
 
     
-      describe '#userpaths?' do
-    it 'returns true if the environment contains :userpaths' do
-      env << :userpaths
-      expect(env).to use_userpaths
+        it 'should revert extract and template options for an updated WebsiteAgent' do
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+      ConvertWebsiteAgentTemplateForMerge.new.down
+      agent.reload
+      expect(agent.options).to include('extract' => reverted_extract,
+                                       'template' => reverted_template)
     end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+  end
+end
 
     
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
+            @user.send_confirmation_instructions
+      end
     
-      def organization
-    @organization ||= current_user.organizations_scope.find_by_permalink!(params[:org_permalink])
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
   end
+end
+
     
-      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
-  before_action { params[:id] && @http_endpoint = @server.http_endpoints.find_by_uuid!(params[:id]) }
-    
-      def destroy
-    @ip_pool_rule.destroy
-    redirect_to_with_json [organization, @server, :ip_pool_rules]
-  end
-    
-      def update
-    if @smtp_endpoint.update(safe_params)
-      redirect_to_with_json [organization, @server, :smtp_endpoints]
-    else
-      render_form_errors 'edit', @smtp_endpoint
-    end
-  end
-    
-      def verify
-    if request.post?
-      if params[:code].to_s.strip == current_user.email_verification_token.to_s || (Rails.env.development? && params[:code].to_s.strip == '123456')
-        current_user.verify!
-        redirect_to_with_json [:return_to, root_path], :notice => 'Thanks - your e-mail address has been verified successfully.'
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
       else
-        flash_now :alert, 'The code you've entered isn't correct. Please check and try again.'
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
+  end
+    
+      def set_locale
+    I18n.locale = default_locale
+    I18n.locale = current_user.locale if user_signed_in?
+  rescue I18n::InvalidLocale
+    I18n.locale = default_locale
   end
