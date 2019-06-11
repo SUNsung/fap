@@ -1,115 +1,98 @@
 
         
-          # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
-    
-          def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
-      end
-    end
-  end
-end
-
-    
-          def extract_path_from_location(location)
-        uri = parse_uri(location)
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
+            def initial_page?
+      root_page? || context[:initial_paths].include?(subpath)
     end
     
-          selected_modules = modules.map(&:to_sym).uniq.sort_by do |s|
-        Devise::ALL.index(s) || -1  # follow Devise::ALL order
-      end
+        def initialize
+      @pages = {}
+    end
     
-          module ClassMethods
-        # Create the cookie key using the record id and remember_token
-        def serialize_into_cookie(record)
-          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+            # Yields a VM for each target VM for the command.
+        #
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
+        #
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Boolean] single_target If true, then an exception will be
+        #   raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          # Using VMs requires a Vagrant environment to be properly setup
+          raise Errors::NoEnvironmentError if !@env.root_path
+    
+            # Mounts a shared folder.
+        #
+        # This method should create, mount, and properly set permissions
+        # on the shared folder. This method should also properly
+        # adhere to any configuration values such as `shared_folder_uid`
+        # on `config.vm`.
+        #
+        # @param [String] name The name of the shared folder.
+        # @param [String] guestpath The path on the machine which the user
+        #   wants the folder mounted.
+        # @param [Hash] options Additional options for the shared folder
+        #   which can be honored.
+        def mount_shared_folder(name, guestpath, options)
+          raise BaseError, _key: :unsupported_shared_folder
         end
     
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
+            # This contains all the registered host capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :host_capabilities
     
-      private
-    
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
-    
-    end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 0
-                self.key = decode_key(val)
-              when 1
-                self.last_req = decode_last_req(val)
-              when 2
-                self.nonce = decode_nonce(val)
-              when 3
-                self.key_expiration = decode_key_expiration(val)
-              when 4
-                self.flags = decode_flags(val)
-              when 5
-                self.auth_time = decode_auth_time(val)
-              when 6
-                self.start_time = decode_start_time(val)
-              when 7
-                self.end_time = decode_end_time(val)
-              when 8
-                self.renew_till = decode_renew_till(val)
-              when 9
-                self.srealm = decode_srealm(val)
-              when 10
-                self.sname = decode_sname(val)
-              else
-                raise ::RuntimeError, 'Failed to decode ENC-KDC-RESPONSE SEQUENCE'
-              end
+            # This returns all the registered guests.
+        #
+        # @return [Hash]
+        def guests
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.guests)
             end
           end
+        end
     
-              # Decodes the kvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_kvno(input)
-            input.value[0].value.to_i
-          end
+            # Defines a capability for the given host. The block should return
+        # a class/module that has a method with the capability name, ready
+        # to be executed. This means that if it is an instance method,
+        # the block should return an instance of the class.
+        #
+        # @param [String] host The name of the host
+        # @param [String] cap The name of the capability
+        def self.host_capability(host, cap, &block)
+          components.host_capabilities[host.to_sym].register(cap.to_sym, &block)
+          nil
+        end
+    
+            # Initialize the provider to represent the given machine.
+        #
+        # @param [Vagrant::Machine] machine The machine that this provider
+        #   is responsible for.
+        def initialize(machine)
+        end
+    
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
+      end
+    end
+    
+        def display_error_message(ex)
+      unless options.backtrace
+        Rake.application.options.suppress_backtrace_pattern = backtrace_pattern if backtrace_pattern
+        trace '(Backtrace restricted to imported tasks)'
+      end
+    
+        if path.nil?
+      return @scripts_path
+    else
+      return File.join(@scripts_path, path)
+    end
+  end # def scripts_path
