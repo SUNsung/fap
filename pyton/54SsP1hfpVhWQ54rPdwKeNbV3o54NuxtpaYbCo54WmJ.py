@@ -1,109 +1,149 @@
 
         
-            @property
-    def body(self):
-        body = self._orig.body
-        if isinstance(body, str):
-            # Happens with JSON/form request data parsed from the command line.
-            body = body.encode('utf8')
-        return body or b''
-
+        # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
     
+                if 'playlist_mincount' in test_case:
+                assertGreaterEqual(
+                    self,
+                    len(res_dict['entries']),
+                    test_case['playlist_mincount'],
+                    'Expected at least %d in playlist %s, but got only %d' % (
+                        test_case['playlist_mincount'], test_case['url'],
+                        len(res_dict['entries'])))
+            if 'playlist_count' in test_case:
+                self.assertEqual(
+                    len(res_dict['entries']),
+                    test_case['playlist_count'],
+                    'Expected %d entries in playlist %s, but got %d.' % (
+                        test_case['playlist_count'],
+                        test_case['url'],
+                        len(res_dict['entries']),
+                    ))
+            if 'playlist_duration_sum' in test_case:
+                got_duration = sum(e['duration'] for e in res_dict['entries'])
+                self.assertEqual(
+                    test_case['playlist_duration_sum'], got_duration)
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+                    if ''' not in code and ''' not in code:
+                    continue
+                assertRegexpMatches(
+                    self,
+                    code,
+                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
+                    'unicode_literals import  missing in %s' % fn)
     
+            spider_loader = self.crawler_process.spider_loader
     
-def test_unicode_raw_json_item_verbose(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+            return True
     
-    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
-# limit dataset to 5000 people (don't care who they are!)
-X = faces.data[:5000]
-n_samples, h, w = faces.images.shape
-n_features = X.shape[1]
+    import josepy as jose
+import pyrfc3339
     
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
-
+        @certbot_util.patch_get_utility()
+    def test_noninteractive(self, mock_util):
+        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
+        try:
+            self._call(self.vhosts)
+        except errors.MissingCommandlineFlag as e:
+            self.assertTrue('vhost ambiguity' in str(e))
     
-    from sklearn.cluster import AgglomerativeClustering
-    
-    input data sparsity: 0.050000
-true coef sparsity: 0.000100
-test data sparsity: 0.027400
-model sparsity: 0.000024
-r^2 on test data (dense model) : 0.233651
-r^2 on test data (sparse model) : 0.233651
-Wrote profile results to sparsity_benchmark.py.lprof
-Timer unit: 1e-06 s
-    
-    Second example
---------------
-The second example shows the ability of the Minimum Covariance Determinant
-robust estimator of covariance to concentrate on the main mode of the data
-distribution: the location seems to be well estimated, although the covariance
-is hard to estimate due to the banana-shaped distribution. Anyway, we can
-get rid of some outlying observations.
-The One-Class SVM is able to capture the real data structure, but the
-difficulty is to adjust its kernel bandwidth parameter so as to obtain
-a good compromise between the shape of the data scatter matrix and the
-risk of over-fitting the data.
-    
-    This example demonstrates how to generate a checkerboard dataset and
-bicluster it using the Spectral Biclustering algorithm.
-    
-    for name, label in [('Setosa', 0),
-                    ('Versicolour', 1),
-                    ('Virginica', 2)]:
-    ax.text3D(X[y == label, 3].mean(),
-              X[y == label, 0].mean(),
-              X[y == label, 2].mean() + 2, name,
-              horizontalalignment='center',
-              bbox=dict(alpha=.2, edgecolor='w', facecolor='w'))
-# Reorder the labels to have colors matching the cluster results
-y = np.choose(y, [1, 2, 0]).astype(np.float)
-ax.scatter(X[:, 3], X[:, 0], X[:, 2], c=y, edgecolor='k')
+    .. code-block:: ini
+   :name: credentials.ini
+   :caption: Example credentials file:
     
     '''
-=========================================================
-Vector Quantization Example
-=========================================================
-    
-        def test_parents(self):
-        for _ in range(2):
-            self.assertEqual(self.John.parents, 'Father and mother')
-        self.assertEqual(self.John.call_count2, 1)
 
     
-        def test_pool_behavior_with_single_object_inside(self):
-        sample_queue = queue.Queue()
-        sample_queue.put('yam')
-        with ObjectPool(sample_queue) as obj:
-            # print('Inside with: {}'.format(obj))
-            self.assertEqual(obj, 'yam')
-        self.assertFalse(sample_queue.empty())
-        self.assertTrue(sample_queue.get() == 'yam')
-        self.assertTrue(sample_queue.empty())
+        # Additional stuff for the LaTeX preamble.
+    #
+    # 'preamble': '',
     
-        blackboard.add_expert(Student(blackboard))
-    blackboard.add_expert(Scientist(blackboard))
-    blackboard.add_expert(Professor(blackboard))
+        def test_weak_etag_not_match(self):
+        computed_etag = ''xyzzy2''
+        etags = 'W/'xyzzy1''
+        self.check_url(
+            '/cache/' + computed_etag, method='GET',
+            headers=[('If-None-Match', etags)],
+            expected_status=200)
     
-    In Blackboard pattern several specialised sub-systems (knowledge sources)
-assemble their knowledge to build a possibly partial or approximate solution.
-In this way, the sub-systems work together to solve the problem,
-where the solution is the sum of its parts.
+    from tornado.options import options, define, parse_command_line
+from tornado.template import Template
+    
+        .. versionchanged:: 5.0
+       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
+    '''
+    io_loop = ioloop.IOLoop.current()
+    if io_loop in _io_loops:
+        return
+    _io_loops[io_loop] = True
+    if len(_io_loops) > 1:
+        gen_log.warning('tornado.autoreload started more than once in the same process')
+    modify_times = {}  # type: Dict[str, float]
+    callback = functools.partial(_reload_on_update, modify_times)
+    scheduler = ioloop.PeriodicCallback(callback, check_time)
+    scheduler.start()
+    
+    if typing.TYPE_CHECKING:
+    from typing import Generator, Any, List, Tuple, Dict  # noqa: F401
+    
+    print('Starting')
+sys.stdout.flush()
+if 'TESTAPP_STARTED' not in os.environ:
+    os.environ['TESTAPP_STARTED'] = '1'
+    # Simulate an internal autoreload (one not caused
+    # by the wrapper).
+    tornado.autoreload._reload()
+else:
+    # Exit directly so autoreload doesn't catch it.
+    os._exit(0)
+'''
+    
+        def parse(self, argv):
+        command_help = getdoc(self.command_class)
+        options = docopt_full_help(command_help, argv, **self.options)
+        command = options['COMMAND']
     
     
-class Card2(metaclass=FlyweightMeta):
-    def __init__(self, *args, **kwargs):
-        # print('Init {}: {}'.format(self.__class__, (args, kwargs)))
-        pass
+class ConsoleWarningFormatter(logging.Formatter):
+    '''A logging.Formatter which prints WARNING and ERROR messages with
+    a prefix of the log level colored appropriate for the log level.
+    '''
+    
+        def download_all(self, version):
+        files = {
+            'docker-compose-Darwin-x86_64': None,
+            'docker-compose-Linux-x86_64': None,
+            'docker-compose-Windows-x86_64.exe': None,
+        }
+    
+            assert net.ensure() is None
+
+    
+        @no_cluster('remove volume by name defect on Swarm Classic')
+    def test_remove_volume(self):
+        vol = Volume(self.client, 'composetest', 'volume01')
+        vol.create()
+        vol.remove()
+        volumes = self.client.volumes()['Volumes']
+        assert len([v for v in volumes if v['Name'] == vol.full_name]) == 0
+    
+        def test_sort_service_dicts_7(self):
+        services = [
+            {
+                'network_mode': 'service:three',
+                'name': 'four'
+            },
+            {
+                'links': ['two'],
+                'name': 'three'
+            },
+            {
+                'name': 'two',
+                'volumes_from': [VolumeFromSpec('one', 'rw', 'service')]
+            },
+            {
+                'name': 'one'
+            }
+        ]
