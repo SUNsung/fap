@@ -1,78 +1,113 @@
 
         
-                  def render_collection
-            @collection.map do |item|
-              value = value_for_collection(item, @value_method)
-              text  = value_for_collection(item, @text_method)
-              default_html_options = default_html_options_for_collection(item, value)
-              additional_html_options = option_html_attributes(item)
+        lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'capistrano/version'
     
-                DateTimeSelector.new(datetime, options, html_options)
-          end
-    
-          def test_declare_missing_helper
-        e = assert_raise AbstractController::Helpers::MissingHelperError do
-          AbstractHelpers.helper :missing
-        end
-        assert_equal 'helpers/missing_helper.rb', e.path
-      end
-    
-          def labels(*args)
-        each_object(:labels, *args)
-      end
-    
-            def id_for_already_imported_cache(note)
-          note.id
-        end
-      end
+          super
     end
-  end
-end
-
     
-          # Returns the identifier to use for cache keys.
-      #
-      # For issues and pull requests this will be 'Issue' or 'MergeRequest'
-      # respectively. For diff notes this will return 'MergeRequest', for
-      # regular notes it will either return 'Issue' or 'MergeRequest' depending
-      # on what type of object the note belongs to.
-      def cache_key_type
-        if object.respond_to?(:issuable_type)
-          object.issuable_type
-        elsif object.respond_to?(:noteable_type)
-          object.noteable_type
+          def value_or_default
+        if response.empty?
+          default
         else
-          raise(
-            TypeError,
-            'Instances of #{object.class} are not supported'
-          )
+          response
         end
       end
     
-        SCHEME_RGX = /\A[^:\/?#]+:/
+          def scm_name
+        fetch(:scm)
+      end
     
-        def initialize
-      @pages = {}
+    # This example uses the API to create a package from local files
+# it also creates necessary init-scripts and systemd files so our executable can be used as a service
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
     end
-    
-          def fetch_redirections
-        result = {}
-        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
-          build_pages do |page|
-            next if page[:response_effective_path] == page[:response_path]
-            result[page[:response_path].downcase] = page[:response_effective_path]
-          end
-        end
-        result
-      end
-    
-      def hub_topic_params
-    @_hub_topic_params ||= Rails.application.routes.recognize_path(hub_topic_uri.path)
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
   end
     
-      private
+    # This provides PHP PEAR package support.
+#
+# This provides input support, but not output support.
+class FPM::Package::PEAR < FPM::Package
+  option '--package-name-prefix', 'PREFIX',
+    'Name prefix for pear package', :default => 'php-pear'
     
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
+    # Support for python packages.
+#
+# This supports input, but not output.
+#
+# Example:
+#
+#     # Download the django python package:
+#     pkg = FPM::Package::Python.new
+#     pkg.input('Django')
+#
+class FPM::Package::Python < FPM::Package
+  # Flags '--foo' will be accessable  as attributes[:python_foo]
+  option '--bin', 'PYTHON_EXECUTABLE',
+    'The path to the python executable you wish to run.', :default => 'python'
+  option '--easyinstall', 'EASYINSTALL_EXECUTABLE',
+    'The path to the easy_install executable tool', :default => 'easy_install'
+  option '--pip', 'PIP_EXECUTABLE',
+    'The path to the pip executable tool. If not specified, easy_install ' \
+    'is used instead', :default => nil
+  option '--pypi', 'PYPI_URL',
+    'PyPi Server uri for retrieving packages.',
+    :default => 'https://pypi.python.org/simple'
+  option '--package-prefix', 'NAMEPREFIX',
+    '(DEPRECATED, use --package-name-prefix) Name to prefix the package ' \
+    'name with.' do |value|
+    logger.warn('Using deprecated flag: --package-prefix. Please use ' \
+                 '--package-name-prefix')
+    value
+  end
+  option '--package-name-prefix', 'PREFIX', 'Name to prefix the package ' \
+    'name with.', :default => 'python'
+  option '--fix-name', :flag, 'Should the target package name be prefixed?',
+    :default => true
+  option '--fix-dependencies', :flag, 'Should the package dependencies be ' \
+    'prefixed?', :default => true
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for tar.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
+    end
+    
+    module FPM; module Util; end; end
+    
+        def tmux_select_first_pane
+      '#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}'
+    end
+    
+      subject { instance }
+    
+    formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
+SimpleCov.start do
+  add_filter 'vendor/cache'
 end
+    
+            it 'returns two panes in an Array' do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands('vim'),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
+        end
+      end
+    end
+  end
