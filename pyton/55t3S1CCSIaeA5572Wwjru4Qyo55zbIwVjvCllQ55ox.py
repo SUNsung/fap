@@ -1,250 +1,134 @@
 
         
-            def register(self, *plugins):
-        for plugin in plugins:
-            self._plugins.append(plugin)
+            strings = []
+    with open(filepath, 'r') as f:
     
-    
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
-    
-        def delete(self):
-        try:
-            os.unlink(self.path)
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(required=True, type='str'),
-            state=dict(required=True, type='str', choices=['present', 'absent', 'copy']),
-            replication_id=dict(type='str'),
-            cluster_id=dict(type='str'),
-            target=dict(type='str'),
-            bucket=dict(type='str'),
-        )
-    )
-    
-    EXAMPLES = '''
-# Add or change a subnet group
-- elasticache_subnet_group:
-    state: present
-    name: norwegian-blue
-    description: My Fancy Ex Parrot Subnet Group
-    subnets:
-      - subnet-aaaaaaaa
-      - subnet-bbbbbbbb
-    
-    - oneandone_moitoring_policy:
-    auth_token: oneandone_private_api_key
-    state: absent
-    name: ansible monitoring policy
-    
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
+        def set_appid_not_exist(self, appid):
+        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
+        with self.lock:
+            if appid not in self.not_exist_appids:
+                self.not_exist_appids.append(appid)
+            try:
+                self.config.GAE_APPIDS.remove(appid)
+            except:
                 pass
+    
+            # Check cert keyfile exists
+        if hasattr(OpenSSL.crypto, 'load_publickey'):
+            if os.path.exists(CertUtil.cert_keyfile):
+                with open(CertUtil.cert_keyfile, 'rb') as fp:
+                    CertUtil.cert_publickey = OpenSSL.crypto.load_publickey(OpenSSL.crypto.FILETYPE_PEM, fp.read())
             else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
-    
-            if privilege is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('memberof_privilege', []), privilege,
-                                            client.role_add_privilege,
-                                            client.role_remove_privilege) or changed
-        if service is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('member_service', []), service,
-                                            client.role_add_service,
-                                            client.role_remove_service) or changed
-        if user is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('member_user', []), user,
-                                            client.role_add_user,
-                                            client.role_remove_user) or changed
-    
-        def is_version_higher_than_5_18():
-        return (MONIT_MAJOR_VERSION, MONIT_MINOR_VERSION) > (5, 18)
-    
-    # A regex that matches standard linkcheck output lines
-line_re = re.compile(u'(.*)\:\d+\:\s\[(.*)\]\s(?:(.*)\sto\s(.*)|(.*))')
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+                CertUtil.generate_cert_keyfile()
         else:
-            request.meta['handle_httpstatus_all'] = True
+            CertUtil.cert_keyfile = None
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
-    
-            # set Content-Length based len of body
-        if self.body is not None:
-            self.headers['Content-Length'] = len(self.body)
-            # just in case a broken http/1.1 decides to keep connection alive
-            self.headers.setdefault('Connection', 'close')
-        # Content-Length must be specified in POST method even with no body
-        elif self.method == b'POST':
-            self.headers['Content-Length'] = 0
-    
-        By default this will get the strings from the blns.txt file
-    
-        def makeSocket(self):
-        '''
-        The factory method of SocketHandler is here overridden to create
-        a UDP socket (SOCK_DGRAM).
-        '''
-        if self.port is None:
-            family = socket.AF_UNIX
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
         else:
-            family = socket.AF_INET
-        s = socket.socket(family, socket.SOCK_DGRAM)
-        return s
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
     
-        If the resource does not already exist on its own on the file system,
-    a temporary file will be created. If the file was created, the file
-    will be deleted upon exiting the context manager (no exception is
-    raised if the file was deleted prior to the context manager
-    exiting).
-    '''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        try:
-            yield Path(reader.resource_path(resource))
-            return
-        except FileNotFoundError:
-            pass
+        if prober.nat_type in ('cone', 'restricted'):
+        usable = 'usable'
+    elif prober.nat_type == 'offline':
+        usable = 'unusable'
     else:
-        _check_location(package)
-    # Fall-through for both the lack of resource_path() *and* if
-    # resource_path() raises FileNotFoundError.
-    package_directory = Path(package.__spec__.origin).parent
-    file_path = package_directory / resource
-    if file_path.exists():
-        yield file_path
-    else:
-        with open_binary(package, resource) as fp:
-            data = fp.read()
-        # Not using tempfile.NamedTemporaryFile as it leads to deeper 'try'
-        # blocks due to the need to close the temporary file to work on
-        # Windows properly.
-        fd, raw_path = tempfile.mkstemp()
-        try:
-            os.write(fd, data)
-            os.close(fd)
-            yield Path(raw_path)
-        finally:
-            try:
-                os.remove(raw_path)
-            except FileNotFoundError:
-                pass
+        usable = 'unknown'
     
-        def testContextProtocol(self):
-        f = None
-        with BZ2File(self.filename, 'wb') as f:
-            f.write(b'xxx')
-        f = BZ2File(self.filename, 'rb')
-        f.close()
-        try:
-            with f:
-                pass
-        except ValueError:
-            pass
-        else:
-            self.fail('__enter__ on a closed file didn't raise an exception')
-        try:
-            with BZ2File(self.filename, 'wb') as f:
-                1/0
-        except ZeroDivisionError:
-            pass
-        else:
-            self.fail('1/0 didn't raise an exception')
-    
-    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
-    
-    # Now the header items can be accessed as a dictionary, and any non-ASCII will
-# be converted to unicode:
-print('To:', msg['to'])
-print('From:', msg['from'])
-print('Subject:', msg['subject'])
-    
-            try:
-            print(list(pool.imap(f, list(range(10)))))
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from list(pool.imap())')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
-    
-    con.close()
-
-    
-    cur.execute('insert into test(p) values (?)', (p,))
-cur.execute('select p as 'p [point]' from test')
-print('with column names:', cur.fetchone()[0])
-cur.close()
-con.close()
-
-    
-    DB_FILE = 'mydb'
-    
-        if unit_1 == LENGTH_MILES:
-        meters = __miles_to_meters(value)
-    elif unit_1 == LENGTH_FEET:
-        meters = __feet_to_meters(value)
-    elif unit_1 == LENGTH_KILOMETERS:
-        meters = __kilometers_to_meters(value)
+        if netloc.startswith(('127.0.0.', '::1', 'localhost')):
+        start_response('400 Bad Request', [('Content-Type', 'text/html')])
+        html = ''.join('<a href='https://%s/'>%s</a><br/>' % (x, x) for x in ('google.com', 'mail.google.com'))
+        yield message_html('GoAgent %s is Running' % __version__, 'Now you can visit some websites', html)
+        raise StopIteration
     
     
-def bump_version(version, bump_type):
-    '''Return a new version given a current version and action.'''
-    to_change = {}
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
     
-    def clean_pdf_link(link):
-    if 'arxiv' in link:
-        link = link.replace('abs', 'pdf')   
-        if not(link.endswith('.pdf')):
-            link = '.'.join((link, 'pdf'))
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    self._response = self.PostDataToHandler( request_data,
+                                             'debug_info',
+                                             display_message = False )
+    
+    
+  def Start( self ):
+    self._keepalive_thread.start()
+    
+    
+@YouCompleteMeInstance()
+@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
+def SendCompletionRequest_ResponseContainingError_test( ycm, post_vim_message ):
+  current_buffer = VimBuffer( 'buffer' )
+    
+    
+  def done( self ):
+    return self._done
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+            _threads_queues[t] = self._work_queue
+    
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
+    
+    # 0 : illegal
+# 1 : very unlikely
+# 2 : normal
+# 3 : very likely
+Latin1ClassModel = (
+# UDF OTH ASC ASS ACV ACO ASV ASO
+    0,  0,  0,  0,  0,  0,  0,  0,  # UDF
+    0,  3,  3,  3,  3,  3,  3,  3,  # OTH
+    0,  3,  3,  3,  3,  3,  3,  3,  # ASC
+    0,  3,  3,  3,  1,  1,  3,  3,  # ASS
+    0,  3,  3,  3,  1,  2,  1,  2,  # ACV
+    0,  3,  3,  3,  3,  3,  3,  3,  # ACO
+    0,  3,  1,  3,  1,  1,  1,  3,  # ASV
+    0,  3,  1,  3,  1,  1,  3,  3,  # ASO
+)
+    
+    CP949_SM_MODEL = {'class_table': CP949_CLS,
+                  'class_factor': 10,
+                  'state_table': CP949_ST,
+                  'char_len_table': CP949_CHAR_LEN_TABLE,
+                  'name': 'CP949'}
+    
+    from .mbcharsetprober import MultiByteCharSetProber
+from .codingstatemachine import CodingStateMachine
+from .chardistribution import SJISDistributionAnalysis
+from .jpcntx import SJISContextAnalysis
+from .mbcssm import SJIS_SM_MODEL
+from .enums import ProbingState, MachineState
+    
+            if self.state == ProbingState.DETECTING:
+            if self.get_confidence() > self.SHORTCUT_THRESHOLD:
+                self._state = ProbingState.FOUND_IT
