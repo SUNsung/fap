@@ -1,13 +1,221 @@
 
         
-          ExtensionManager_registerExtension_args(const ExtensionManager_registerExtension_args&);
-  ExtensionManager_registerExtension_args& operator=(const ExtensionManager_registerExtension_args&);
-  ExtensionManager_registerExtension_args() {
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
+        }
+      }
+    }
+  }
+}
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    // Actually dereferences cached numpy arrays. REQUIRES being called while
+// holding the GIL.
+void ClearDecrefCache();
+    
+    // A wrapper around io::RecordReader that is more easily SWIG wrapped for
+// Python.  An instance of this class is not safe for concurrent access
+// by multiple threads.
+class PyRecordReader {
+ public:
+  // TODO(vrv): make this take a shared proto to configure
+  // the compression options.
+  static PyRecordReader* New(const string& filename, uint64 start_offset,
+                             const string& compression_type_string,
+                             TF_Status* out_status);
+    }
+    
+    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
+
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    template<typename Dtype>
+void DelCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    delete v->at(i);
+}
+    
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
   }
     
-    class osqueryConstants {
- public:
-  osqueryConstants();
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
+    
+      // Change the layout of matrices to column-major
+  Tensor<cpu, 2, DType> out_t(Shape2(out.size(1), out.size(0)));
+  AllocSpace(&out_t);
+  flip<cpu, DType>(out.size(0), out.size(1), out_t.dptr_, out_t.stride_,
+    out.dptr_, out.stride_);
+    
+    
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
+    
+    struct LambdaRankParam : public dmlc::Parameter<LambdaRankParam> {
+  int num_pairsample;
+  float fix_list_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(LambdaRankParam) {
+    DMLC_DECLARE_FIELD(num_pairsample).set_lower_bound(1).set_default(1)
+        .describe('Number of pair generated for each instance.');
+    DMLC_DECLARE_FIELD(fix_list_weight).set_lower_bound(0.0f).set_default(0.0f)
+        .describe('Normalize the weight of each list by this value,'
+                  ' if equals 0, no effect will happen');
+  }
+};
+    
+      const xgboost::MetaInfo& info = dmat->Info();
+  const std::vector<uint64_t> expected_qids{1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3};
+  const std::vector<xgboost::bst_uint> expected_group_ptr{0, 4, 8, 12};
+  CHECK(info.qids_ == expected_qids);
+  CHECK(info.group_ptr_ == expected_group_ptr);
+  CHECK_GE(info.kVersion, info.kVersionQidAdded);
+    
+    // prediction
+#include '../src/predictor/predictor.cc'
+#include '../src/predictor/cpu_predictor.cc'
+    
+      const HostDeviceVector<bst_float> in_vec{h_in, TRANSFORM_GPU_DIST};
+  HostDeviceVector<bst_float> out_vec{h_out, TRANSFORM_GPU_DIST};
+  out_vec.Fill(0);
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+    
+    {  static const std::string R;
+};
+    
+      // localnode
+  // 8bytes reserved
+  readBytes(fp, buf, buf.size(), 8);
+  // localnode ID
+  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+  auto localNode = std::make_shared<DHTNode>(buf);
+  // 4bytes reserved
+  readBytes(fp, buf, buf.size(), 4);
+    
+      void setRoutingTable(DHTRoutingTable* routingTable);
+    
+      DHTTaskExecutor immediateTaskQueue_;
+    
+    namespace aria2 {
+    }
+    
+    std::string DHTUnknownMessage::toString() const
+{
+  size_t sampleLength = 8;
+  if (length_ < sampleLength) {
+    sampleLength = length_;
+  }
+  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
+             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
+             util::toHex(data_, sampleLength).c_str());
+}
+    
+    class DHTUnknownMessage : public DHTMessage {
+private:
+  unsigned char* data_;
+  size_t length_;
+  std::string ipaddr_;
+  uint16_t port_;
+    }
+    
+    DNSCache::CacheEntry& DNSCache::CacheEntry::operator=(const CacheEntry& c)
+{
+  if (this != &c) {
+    hostname_ = c.hostname_;
+    port_ = c.port_;
+    addrEntries_ = c.addrEntries_;
+  }
+  return *this;
+}
+    
+    void ExtensionProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext('Extension.ping', callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, 'Extension.ping');
     }
     
     namespace osquery {
@@ -15,198 +223,27 @@ namespace tables {
     }
     }
     
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
-}
-    
-    /*
-** If a field contains any character identified by a 1 in the following
-** array, then the string must be quoted for CSV.
-*/
-static const char needCsvQuote[] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-};
-    
     #pragma once
     
-    TEST_F(iokitDevicetree, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from iokit_devicetree');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'name', NormalType}
-  //      {'class', NormalType}
-  //      {'id', IntType}
-  //      {'parent', IntType}
-  //      {'device_path', NormalType}
-  //      {'service', IntType}
-  //      {'busy_state', IntType}
-  //      {'retain_count', IntType}
-  //      {'depth', IntType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
     
-      x <<= 3;
-  x |= t;
-    
-    int ObjectQualityInfo60C::lateral_dist_rms(const std::uint8_t* bytes,
-                                           int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
+    TEST_F(iptables, test_sanity) {
+  auto const data = execute_query('select * from iptables');
     }
     
     
-    {  int ret = x + -40;
-  return ret;
-}
+    {
+    {} // namespace table_tests
+} // namespace osquery
+
     
-    // config detail: {'name': 'torque_input', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': True, 'physical_range':
-// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
-// 'motorola', 'physical_unit': 'N-m'}
-double Brakemotorrpt372::torque_input(const std::uint8_t* bytes,
-                                      int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+    namespace osquery {
+namespace table_tests {
+    }
     }
     
-    void Globalrpt6a::Parse(const std::uint8_t* bytes, int32_t length,
-                        ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_pacmod_status(
-      pacmod_status(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_override_status(
-      override_status(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_veh_can_timeout(
-      veh_can_timeout(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_str_can_timeout(
-      str_can_timeout(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_brk_can_timeout(
-      brk_can_timeout(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_usr_can_timeout(
-      usr_can_timeout(bytes, length));
-  chassis->mutable_gem()->mutable_global_rpt_6a()->set_usr_can_read_errors(
-      usr_can_read_errors(bytes, length));
-}
-    
-      // Start and end of allocatable memory on this chunk.
-  Address area_start_;
-  Address area_end_;
-    
-      // During GC, entries are directly added to the remembered set without
-  // going through the store buffer. This is signaled by a special
-  // IN_GC mode.
-  StoreBufferMode mode_;
-    
-     private:
-  Heap& heap_;
-  int limit_percentage_;
-  bool has_requested_gc_;
-    
-      void movdqa(XMMRegister dst, Operand src);
-  void movdqa(Operand dst, XMMRegister src);
-  void movdqu(XMMRegister dst, Operand src);
-  void movdqu(Operand dst, XMMRegister src);
-  void movdq(bool aligned, XMMRegister dst, Operand src) {
-    if (aligned) {
-      movdqa(dst, src);
-    } else {
-      movdqu(dst, src);
-    }
-  }
-    
-    void FrameDescription::SetCallerPc(unsigned offset, intptr_t value) {
-  SetFrameSlot(offset, value);
-}
-    
-      if (smi_check == INLINE_SMI_CHECK) {
-    // Skip barrier if writing a smi.
-    JumpIfSmi(value, &done, Label::kNear);
-  }
-    
-    #define SSE2_INSTRUCTION_LIST(V) \
-  V(packsswb, 66, 0F, 63)        \
-  V(packssdw, 66, 0F, 6B)        \
-  V(packuswb, 66, 0F, 67)        \
-  V(paddb, 66, 0F, FC)           \
-  V(paddw, 66, 0F, FD)           \
-  V(paddd, 66, 0F, FE)           \
-  V(paddsb, 66, 0F, EC)          \
-  V(paddsw, 66, 0F, ED)          \
-  V(paddusb, 66, 0F, DC)         \
-  V(paddusw, 66, 0F, DD)         \
-  V(pand, 66, 0F, DB)            \
-  V(pcmpeqb, 66, 0F, 74)         \
-  V(pcmpeqw, 66, 0F, 75)         \
-  V(pcmpeqd, 66, 0F, 76)         \
-  V(pcmpgtb, 66, 0F, 64)         \
-  V(pcmpgtw, 66, 0F, 65)         \
-  V(pcmpgtd, 66, 0F, 66)         \
-  V(pmaxsw, 66, 0F, EE)          \
-  V(pmaxub, 66, 0F, DE)          \
-  V(pminsw, 66, 0F, EA)          \
-  V(pminub, 66, 0F, DA)          \
-  V(pmullw, 66, 0F, D5)          \
-  V(por, 66, 0F, EB)             \
-  V(psllw, 66, 0F, F1)           \
-  V(pslld, 66, 0F, F2)           \
-  V(psraw, 66, 0F, E1)           \
-  V(psrad, 66, 0F, E2)           \
-  V(psrlw, 66, 0F, D1)           \
-  V(psrld, 66, 0F, D2)           \
-  V(psubb, 66, 0F, F8)           \
-  V(psubw, 66, 0F, F9)           \
-  V(psubd, 66, 0F, FA)           \
-  V(psubsb, 66, 0F, E8)          \
-  V(psubsw, 66, 0F, E9)          \
-  V(psubusb, 66, 0F, D8)         \
-  V(psubusw, 66, 0F, D9)         \
-  V(punpcklbw, 66, 0F, 60)       \
-  V(punpcklwd, 66, 0F, 61)       \
-  V(punpckldq, 66, 0F, 62)       \
-  V(punpcklqdq, 66, 0F, 6C)      \
-  V(punpckhbw, 66, 0F, 68)       \
-  V(punpckhwd, 66, 0F, 69)       \
-  V(punpckhdq, 66, 0F, 6A)       \
-  V(punpckhqdq, 66, 0F, 6D)      \
-  V(pxor, 66, 0F, EF)
+    #include <osquery/tests/integration/tables/helper.h>
