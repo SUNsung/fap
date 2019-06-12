@@ -1,79 +1,42 @@
 
         
-                def collection_method
-          :pull_requests_comments
-        end
+              it 'adds docset_feed_url param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_feed_url: 'http://docset-feed-url.com'
+          )
+        end').runner.execute(:test)
     
-            waiter
-      end
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def mailer_reply_to(mapping)
-        mailer_sender(mapping, :reply_to)
-      end
-    
-              include mod
-        end
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-        def silence_log
-      @silence = true
-      yield
-    ensure
-      @silence = false
-    end
+    class Array
+  def shelljoin
+    CrossplatformShellwords.shelljoin(self)
   end
 end
-
     
-      # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  # config.assets.precompile += %w( search.js )
+            it 'sets up screenshots folder in current folder' do
+          expect(options[:screenshots_path]).to eq('./screenshots')
+        end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
+      # if rss_url already in existing opml file, use that; otherwise, do a lookup
+  rss_url = nil
+  if File.exist?(OUTPUT_FILENAME)
+    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
+    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
+    if existing_blog
+      rss_url = existing_blog.attr('xmlUrl')
+      puts '#{name}: ALREADY HAVE'
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
   end
-end
-
+    
+        def log_processed(name)
+      puts green '    #{name}'
+    end
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
     
       # Setup a color scheme called 'bright' than can be used to add color codes
   # to the pattern layout. Color schemes should only be used with appenders
@@ -91,63 +54,44 @@ end
                        message: :magenta
                       )
     
-      class SendPublic < Base
+    module Workers
+  class PublishToHub < Base
     def perform(*_args)
-      # don't federate in cucumber
+      # don't publish to pubsubhubbub in cucumber
     end
   end
     
-      def safely_remove_file(_path)
-    run_vagrant_command('rm #{test_file}')
-  rescue
-    VagrantHelpers::VagrantSSHCommandError
-  end
-end
+        it 'should redirect back in the mobile version if it has 0 notifications' do
+      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
+      get :read_all, params: {type: 'started_sharing'}, format: :mobile
+      expect(response).to redirect_to(stream_path)
+    end
     
-      class VagrantSSHCommandError < RuntimeError; end
-    
-    MESSAGE
-      end
+        it 'redirects to /stream for a mobile user' do
+      request.headers['X_MOBILE_DEVICE'] = true
+      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
+      expect(response).to be_redirect
+      expect(response.location).to match /^#{stream_url}\??$/
     end
   end
-end
+    
+    group :debugging do
+  gem 'cocoapods_debug'
+    
+    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
     
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
+              ignored_end_pos = if ignored_loc.respond_to?(:heredoc_body)
+                              ignored_loc.heredoc_end.end_pos
+                            else
+                              ignored_loc.expression.end_pos
+                            end
+          ignored_end_pos >= node.source_range.end_pos
         end
       end
     
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
-      end
-    end
-  end
-    
-            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
-    end
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
-    end
+              augmentation = if scope.node.lambda?
+                           message_for_lambda(variable, all_arguments)
+                         else
+                           message_for_normal_block(variable, all_arguments)
+                         end
