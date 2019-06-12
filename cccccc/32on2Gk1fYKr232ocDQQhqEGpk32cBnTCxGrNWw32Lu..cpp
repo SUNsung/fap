@@ -1,248 +1,331 @@
 
         
-        namespace testing {
-namespace internal {
+        #define SPLIT_QUAD(sgn, bits, n) { \
+                                     internal::prefetch(src + sj); \
+                                     vec128 v_src = vld##n##q_##sgn##bits(src + sj); \
+                                     FILL_LINES##n(VST1Q, sgn##bits) \
+                                 }
+    
+    /*!
+ *  Aligns pointer by the certain number of bytes
+ *
+ *  This small inline function aligns the pointer by the certain number of bytes by shifting
+ *  it forward by 0 or a positive offset.
+ */
+template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
+{
+    return (T*)(((size_t)ptr + n-1) & -n);
+}
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(f32, u16, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vmul.f32 q4, q2, q0                                     \n\t'
+            'vmul.f32 q5, q3, q0                                     \n\t'
+            'vadd.f32 q6, q4, q1                                     \n\t'
+            'vadd.f32 q7, q5, q1                                     \n\t'
+            'vcvt.u32.f32 q8, q6                                     \n\t'
+            'vcvt.u32.f32 q9, q7                                     \n\t'
+            'vqmovn.u32 d8, q8                                       \n\t'
+            'vqmovn.u32 d9, q9                                       \n\t'
+            'vst1.16 {d8-d9}, [%[dst]]                               \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w' (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
+        );
     }
+})
+#else
+CVTS_FUNC(f32, u16, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
+        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        uint32x4_t vline1_u32 = vcvtq_u32_f32(vline1_f32);
+        uint32x4_t vline2_u32 = vcvtq_u32_f32(vline2_f32);
+        uint16x4_t vRes1 = vqmovn_u32(vline1_u32);
+        uint16x4_t vRes2 = vqmovn_u32(vline2_u32);
+        vst1q_u16(_dst + i, vcombine_u16(vRes1, vRes2));
+    }
+})
+#endif
+    
+            int s[2];
+        vst1_s32(s, vs2);
+    
+            //left&right borders
+        if (borderType != BORDER_MODE_CONSTANT)
+            for (s32 k = 0; k < cn; ++k)
+            {
+                lane[-cn+k] = lane[idx_l1 + k];
+                lane[-cn-cn+k] = lane[idx_l2 + k];
     }
     
     
-    {    linked_ptr_internal const* p = ptr;
-    while (p->next_ != ptr) p = p->next_;
-    p->next_ = this;
-    next_ = ptr;
-  }
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
     
-        void ComputeCurrentValue() {
-      if (!AtEnd())
-        current_value_ = ParamType(*current1_, *current2_);
-    }
-    bool AtEnd() const {
-      // We must report iterator past the end of the range when either of the
-      // component iterators has reached the end of its range.
-      return
-          current1_ == end1_ ||
-          current2_ == end2_;
-    }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
-    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
-    GTEST_TEMPLATE_ T40>
-struct Templates40 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates39<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40> Tail;
+    // Verify that ByteSink is subclassable and Flush() overridable.
+class FlushingByteSink : public StringByteSink {
+ public:
+  explicit FlushingByteSink(string* dest) : StringByteSink(dest) {}
+  virtual void Flush() { Append('z', 1); }
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(FlushingByteSink);
 };
+    
+    int main(int argc, const char** argv) {
+  FileOutputStream fout(STDOUT_FILENO);
+  GzipOutputStream out(&fout);
+  int readlen;
+    }
     
     
     {
-    {    // Adds the leak checker to the end of the test event listener list,
-    // after the default text output printer and the default XML report
-    // generator.
-    //
-    // The order is important - it ensures that failures generated in the
-    // leak checker's OnTestEnd() method are processed by the text and XML
-    // printers *before* their OnTestEnd() methods are called, such that
-    // they are attributed to the right test. Remember that a listener
-    // receives an OnXyzStart event *after* listeners preceding it in the
-    // list received that event, and receives an OnXyzEnd event *before*
-    // listeners preceding it.
-    //
-    // We don't need to worry about deleting the new listener later, as
-    // Google Test will do it.
-    listeners.Append(new LeakChecker);
+    {    return true;
   }
-  return RUN_ALL_TESTS();
+};
+    
+     public:
+  EnumScrubber()
+      : total_added_(0) {
+  }
+    
+    // Main function:  Reads the entire address book from a file,
+//   adds one person based on user input, then writes it back out to the same
+//   file.
+int main(int argc, char* argv[]) {
+  // Verify that the version of the library that we linked against is
+  // compatible with the version of the headers we compiled against.
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+    }
+    
+      ListPeople(address_book);
+    
+    // gflags 2.1 issue: namespace google was changed to gflags without warning.
+// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
+// 2.1. If yes, we will add a temporary solution to redirect the namespace.
+// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
+// remove the following hack.
+#ifndef GFLAGS_GFLAGS_H_
+namespace gflags = google;
+#endif  // GFLAGS_GFLAGS_H_
+    
+      /** Will not return until the internal thread has exited. */
+  void StopInternalThread();
+    
+    #include <vector>
+    
+    namespace caffe {
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    	// ----------------------------------------------------------------------------------------------------
+	// return a name for the encoding mode
+	//
+	const char * Block4x4::GetEncodingModeName(void)
+	{
+    }
+    
+    											ErrorMetric a_errormetric) = 0;
+    
+    		DifferentialTrys trys(frgbaColor1, frgbaColor2, pauiPixelMapping1, pauiPixelMapping2, 
+								a_uiRadius, a_iGrayOffset1, a_iGrayOffset2);
+    
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
+    
+    /* a32 + (b32 * (c32 >> 16)) >> 16 */
+#undef silk_SMLAWT
+static OPUS_INLINE opus_int32 silk_SMLAWT_armv5e(opus_int32 a, opus_int32 b,
+ opus_int32 c)
+{
+  int res;
+  __asm__(
+      '#silk_SMLAWT\n\t'
+      'smlawt %0, %1, %2, %3\n\t'
+      : '=r'(res)
+      : 'r'(b), 'r'(c), 'r'(a)
+  );
+  return res;
+}
+#define silk_SMLAWT(a, b, c) (silk_SMLAWT_armv5e(a, b, c))
+    
+    
+    {}  // namespace leveldb
+    
+      // Returns true iff an entry that compares equal to key is in the list.
+  bool Contains(const Key& key) const;
+    
+      // Clients are allowed to register function/arg1/arg2 triples that
+  // will be invoked when this iterator is destroyed.
+  //
+  // Note that unlike all of the preceding methods, this method is
+  // not abstract and therefore clients should not override it.
+  using CleanupFunction = void (*)(void* arg1, void* arg2);
+  void RegisterCleanup(CleanupFunction function, void* arg1, void* arg2);
+    
+      WriteBatch();
+    
+    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_H_
+
+    
+      if (r->pending_index_entry) {
+    assert(r->data_block.empty());
+    r->options.comparator->FindShortestSeparator(&r->last_key, key);
+    std::string handle_encoding;
+    r->pending_handle.EncodeTo(&handle_encoding);
+    r->index_block.Add(r->last_key, Slice(handle_encoding));
+    r->pending_index_entry = false;
+  }
+    
+    TEST(EnvTest, ReopenWritableFile) {
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file_name = test_dir + '/reopen_writable_file.txt';
+  env_->DeleteFile(test_file_name);
+    }
+    
+    int main(int argc, char** argv) {
+  // All tests currently run with the same read-only file limits.
+  leveldb::EnvWindowsTest::SetFileLimits(leveldb::kMMapLimit);
+  return leveldb::test::RunAllTests();
 }
 
     
-    
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
-    
-      // Constructs a MyString by cloning a 0-terminated C string.
-  explicit MyString(const char* a_c_string) : c_string_(NULL) {
-    Set(a_c_string);
-  }
-    
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
+      fontIDs = NULL;
+  fontFileIDs = NULL;
+  fontFileNames = NULL;
+  font8Info = NULL;
+  font16Enc = NULL;
+  imgIDs = NULL;
+  formIDs = NULL;
+  xobjStack = NULL;
+  embFontList = NULL;
+  customColors = NULL;
+  haveTextClip = gFalse;
+  haveCSPattern = gFalse;
+  t3String = NULL;
     
     
-    {
-    {    CHECK_EQ(net_param.layer_size(), 1) << 'Protoxt ' << value <<' is more than one layer';
-    default_value_ = caffe::LayerParameter(net_param.layer(0));
-    has_default_ = true;
-    // return self to allow chaining
-    return this->self();
-  }
+    {  int (*getCharFunc)(void *);
+  void *data;
+  int charBuf;
 };
     
-    #if MXNET_USE_OPENCV
-#include <opencv2/opencv.hpp>
-#include <vector>  // NOLINT(*)
-#include <utility> // NOLINT(*)
-#include <string> // NOLINT(*)
+      // Accessors.
+  PDFRectangle *getMediaBox() { return &mediaBox; }
+  PDFRectangle *getCropBox() { return &cropBox; }
+  GBool isCropped() { return haveCropBox; }
+  PDFRectangle *getBleedBox() { return &bleedBox; }
+  PDFRectangle *getTrimBox() { return &trimBox; }
+  PDFRectangle *getArtBox() { return &artBox; }
+  int getRotate() { return rotate; }
+  GooString *getLastModified()
+    { return lastModified.isString()
+	? lastModified.getString() : (GooString *)NULL; }
+  Dict *getBoxColorInfo()
+    { return boxColorInfo.isDict() ? boxColorInfo.getDict() : (Dict *)NULL; }
+  Dict *getGroup()
+    { return group.isDict() ? group.getDict() : (Dict *)NULL; }
+  Stream *getMetadata()
+    { return metadata.isStream() ? metadata.getStream() : (Stream *)NULL; }
+  Dict *getPieceInfo()
+    { return pieceInfo.isDict() ? pieceInfo.getDict() : (Dict *)NULL; }
+  Dict *getSeparationInfo()
+    { return separationInfo.isDict()
+	? separationInfo.getDict() : (Dict *)NULL; }
+  Dict *getResourceDict()
+    { return resources.isDict() ? resources.getDict() : (Dict *)NULL; }
     
-      virtual void BeforeFirst(void) {
-    base_->BeforeFirst();
-  }
+      //----- image drawing
+  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+			     int width, int height, GBool invert,
+			     GBool interpolate, GBool inlineImg);
+  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+			 int width, int height, GfxImageColorMap *colorMap,
+			 GBool interpolate, int *maskColors, GBool inlineImg);
+  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+			       int width, int height,
+			       GfxImageColorMap *colorMap,
+			       GBool interpolate,
+			       Stream *maskStr, int maskWidth, int maskHeight,
+			       GBool maskInvert, GBool maskInterpolate);
+  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
+				   int width, int height,
+				   GfxImageColorMap *colorMap,
+				   GBool interpolate,
+				   Stream *maskStr,
+				   int maskWidth, int maskHeight,
+				   GfxImageColorMap *maskColorMap,
+				   GBool maskInterpolate);
     
-    /*!
- * \file gradient_compression.h
- * \brief Gradient compression for kvstore
- * \author Rahul Huilgol
- */
+    void
+ProfileData::addElement (double elapsed) {
+	if (count == 0) {
+		min = elapsed;
+		max = elapsed;
+	} else {
+		if (elapsed < min)
+			min = elapsed;
+		if (elapsed > max)
+			max = elapsed;
+	}
+	total += elapsed;
+	count ++;
+}
     
-       out = data / sqrt(data.shape[-1])
+      //----- path painting
+  virtual void stroke(GfxState *state);
+  virtual void fill(GfxState *state);
+  virtual void eoFill(GfxState *state);
+  virtual GBool axialShadedFill(GfxState *state, GfxAxialShading *shading, double tMin, double tMax);
+  virtual GBool gouraudTriangleShadedFill(GfxState *state, GfxGouraudTriangleShading *shading);
     
-    
-    {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
-}  // namespace mxnet
-
-    
-    
-    {
-    {
-    { private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    CHECK_EQ(in_data.size(), 1U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
-      unsigned lrn_n = param_.nsize;
-      double alpha = param_.alpha;
-      double beta = param_.beta;
-      double lrn_k = param_.knorm;
-      CHECK_EQ(data.shape_, out.shape_);
-      CUDNN_CALL(cudnnCreateLRNDescriptor(&lrn_desc_));
-      CUDNN_CALL(cudnnSetLRNDescriptor(lrn_desc_,
-                                       lrn_n,
-                                       alpha,
-                                       beta,
-                                       lrn_k));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&shape_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(shape_desc_,
-                                            CUDNN_TENSOR_NCHW,
-                                            dtype_,
-                                            data.shape_[0],
-                                            data.shape_[1],
-                                            data.shape_[2],
-                                            data.shape_[3]));
-    }
-  }
-  bool init_cudnn_;
-  LRNParam param_;
-  cudnnDataType_t dtype_;
-  cudnnLRNDescriptor_t lrn_desc_;
-  cudnnTensorDescriptor_t shape_desc_;
-};  // class CuDNNLocalResponseNormOp
-}  // namespace op
-}  // namespace mxnet
-#endif  // MXNET_OPERATOR_CUDNN_LRN_INL_H_
-
-    
-    #include <algorithm>
-#include <vector>
-#include './spatial_transformer-inl.h'
-namespace mxnet {
-namespace op {
-#if defined(__CUDACC__) && MXNET_USE_CUDNN == 1 && CUDNN_MAJOR >= 5
-template<typename DType>
-class CuDNNSpatialTransformerOp : public Operator {
- public:
-  explicit CuDNNSpatialTransformerOp(SpatialTransformerParam param) {
-    this->param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-    if (param_.sampler_type == st::kBilinear) {
-      sampler_ = CUDNN_SAMPLER_BILINEAR;
-    }
-  }
-    }
-    }
-    }
-    
-    
-    {
-    {}  // namespace op
-}  // namespace mxnet
-
-    
-    DMLC_REGISTER_PARAMETER(IdentityAttachKLSparseRegParam);
-    
-    
-    {};
-    
-      xfer += iprot->readStructBegin(fname);
-    
-      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
-  }
-    
-    class keychainItems : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
+    int StdinCacheLoader::load(const std::vector<ByteRange> &ranges, CachedFileWriter *writer)
+{
+  return 0;
+}
