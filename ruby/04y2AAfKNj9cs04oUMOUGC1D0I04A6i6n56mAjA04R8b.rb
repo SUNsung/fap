@@ -1,95 +1,96 @@
 
         
-                # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
-    
-            def initialize(argv, env)
-          @argv = argv
-          @env  = env
-          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
-        end
-    
-            # Capture all bad configuration calls and save them for an error
-        # message later during validation.
-        def method_missing(name, *args, &block)
-          return super if @__finalized
-    
-        def URIAddEncodedOctetToBuffer(octet, result, index)
-      result[index] = 37; # Char code of '%'.
-      index         += 1
-      result[index] = @@hexCharCodeArray[octet >> 4];
-      index         += 1
-      result[index] = @@hexCharCodeArray[octet & 0x0F];
-      index += 1
-      return index;
+              def self.is_supported?(platform)
+        true
+      end
     end
-    
-    def normal(text)
-  text.gsub!(' ', '')
-  text.gsub!('\n', '')
-  text
-end
-    
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
   end
+end
+
     
-        def not_found(msg = nil)
-      @message = msg || 'The requested page does not exist.'
-      status 404
-      return mustache :error
-    end
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            grouping: 'grouping',
+            build_number: 'build_number',
+            prefix: 'prefix',
+          })
+        end').runner.execute(:test)
     
-          # renders hidden field and link to remove record using nested_attributes
-      def link_to_icon_remove_fields(form)
-        url = form.object.persisted? ? [:admin, form.object] : '#'
-        link_to_with_icon('delete', '', url,
-                          class: 'spree_remove_fields btn btn-sm btn-danger',
-                          data: {
-                            action: 'remove'
-                          },
-                          title: Spree.t(:remove),
-                          no_text: true
-                         ) + form.hidden_field(:_destroy)
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --ignore \'ignored/path\' --exit-threshold \'2\' input/dir')
       end
     
-          before do
-        product.master.stock_items.first.update_column(:backorderable, true)
-        product.master.stock_items.first.update_column(:count_on_hand, 100)
-        product.master.stock_items.last.update_column(:count_on_hand, 100)
-      end
+          it 'sets the configuration to Release' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              configuration: 'Release'
+            )
+          end').runner.execute(:test)
     
-              def render_order(result)
-            if result.success?
-              render_serialized_payload { serialized_current_order }
-            else
-              render_error_payload(result.error)
-            end
-          end
-    
-            def find_line_item
-          id = params[:id].to_i
-          order.line_items.detect { |line_item| line_item.id == id } or
-            raise ActiveRecord::RecordNotFound
+        context 'with a postfix block' do
+      it 'yields the status, result and command' do
+        expect_command('ls', '-la')
+        Fastlane::Actions.sh('ls', '-la') do |status, result, command|
+          expect(status.exitstatus).to eq(0)
+          expect(result).to be_empty
+          expect(command).to eq('ls -la')
         end
+      end
+    
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
+    
+    def expect_correct_implementation_to_be_called(obj, method, os)
+  if method == :shellescape
+    # String.shellescape => CrossplatformShellwords.shellescape => ...
+    expect(obj).to receive(:shellescape).and_call_original
+    expect(CrossplatformShellwords).to receive(:shellescape).with(obj).and_call_original
+    if os == 'windows'
+      # WindowsShellwords.shellescape
+      expect(WindowsShellwords).to receive(:shellescape).with(obj).and_call_original
+      expect(Shellwords).not_to(receive(:escape))
+    else
+      # Shellswords.escape
+      expect(Shellwords).to receive(:escape).with(obj).and_call_original
+      expect(WindowsShellwords).not_to(receive(:shellescape))
+    end
+  elsif method == :shelljoin
+    # Array.shelljoin => CrossplatformShellwords.shelljoin => CrossplatformShellwords.shellescape ...
+    expect(obj).to receive(:shelljoin).and_call_original
+    expect(CrossplatformShellwords).to receive(:shelljoin).with(obj).and_call_original
+    expect(CrossplatformShellwords).to receive(:shellescape).at_least(:once).and_call_original
+  end
+end
+
+    
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
+      end
+    end
+  end
+end
+
+    
+          def verify_ssl
+        github_omniauth_provider.fetch('verify_ssl', true)
+      end
+    
+            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
+        # project - An instance of `Project`
+        # client - An instance of `Gitlab::GithubImport::Client`
+        def initialize(issue, project, client)
+          @issue = issue
+          @project = project
+          @client = client
+          @label_finder = LabelFinder.new(project)
+        end
+    
+          def action_for_rails(env)
+        controller = env[CONTROLLER_KEY]
+        action = '#{controller.class.name}##{controller.action_name}'
