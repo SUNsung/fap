@@ -1,124 +1,96 @@
 
         
-            let!(:bob_weather_agent) {
-      agents(:bob_weather_agent)
-    }
-    
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
+          # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
   end
     
-            end
-        it 'restarts dead workers' do
-          stub.instance_of(HuginnScheduler).thread { OpenStruct.new(alive?: false) }
-          mock.instance_of(HuginnScheduler).run!
-          @agent_runner.send(:restart_dead_workers)
+              path
         end
-      end
-    end
-  end
-    
-      describe 'migrating a hash' do
-    it 'should convert every attribute' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'})).to eq(
-                                  {'a' => '$.data', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should work with leading_dollarsign_is_jsonpath' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'}, leading_dollarsign_is_jsonpath: true)).to eq(
-                                  {'a' => '{{data}}', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should use the corresponding *_path attributes when using merge_path_attributes'do
-      expect(LiquidMigrator.convert_hash({'a' => 'default', 'a_path' => '$.data'}, {leading_dollarsign_is_jsonpath: true, merge_path_attributes: true})).to eq(
-                                  {'a' => '{{data}}'}
-      )
-    end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_hash({'b' => 'This is <$.complex[2]>'}) }.
-        to raise_error('JSONPath '$.complex[2]' is too complex, please check your migration.')
-    end
-  end
-    
-      describe '#check' do
-    it 'should not emit events on its first run' do
-      expect { @checker.check }.to change { Event.count }.by(0)
-      expect(@checker.memory[:last_event]).to eq '2014-04-17T10:25:31.000+02:00'
-    end
-    it 'should check that initial run creates an event' do
-      @checker.memory[:last_event] = '2014-04-17T10:25:31.000+02:00'
-      expect { @checker.check }.to change { Event.count }.by(1)
-    end
-  end
-    
-        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
-    
-    module Docs
-  class Filter < ::HTML::Pipeline::Filter
-    def css(*args)
-      doc.css(*args)
-    end
-    
-        def root?
-      path == 'index'
-    end
-    
-              node.remove_attribute('path')
-          node.remove_attribute('region')
-          node.remove_attribute('linenums')
-          node.remove_attribute('title')
-          node.remove_attribute('language')
-          node.remove_attribute('hidecopy')
-          node.remove_attribute('class')
-        end
-    
-          def include_default_entry?
-        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
-      end
-    
-      def app
-    Rails.application
-  end
-end
-
-    
-            warden.logout
-        expire_data_after_sign_out!
-        warden.clear_strategies_cache!
-        warden.lock! if lock
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
       end
     
     module Devise
-  module Mailers
-    module Helpers
-      extend ActiveSupport::Concern
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
     
-    module Jekyll
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
     
-        def poster
-      'poster='#{@poster}'' if @poster
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
+      # adds one not mutual contact
+      bob.share_with(FactoryGirl.create(:person), @aspect)
+    
+          it 'doesn't post' do
+        expect(alice).not_to receive(:like!)
+        post :create, params: like_hash
+        expect(response.code).to eq('422')
+      end
     end
     
-      # Convenience method for 'write_control_scripts' to register control scripts
-  # if they exist.
-  def register_script(key, value, hash)
+        it 'marks all notifications in the current filter as read' do
+      request.env['HTTP_REFERER'] = 'I wish I were spelled right'
+      FactoryGirl.create(:notification, recipient: alice, target: post)
+      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
+      expect(Notification.where(unread: true).count).to eq(2)
+      get :read_all, params: {type: 'started_sharing'}
+      expect(Notification.where(unread: true).count).to eq(1)
+    end
+    
+          it 'returns an empty array for a post with no reshares' do
+        get :index, params: {post_id: @post.id}, format: :json
+        expect(JSON.parse(response.body)).to eq([])
+      end
+    
+          context 'getting started' do
+        it 'add the inviter to gon' do
+          user = FactoryGirl.create(:user, getting_started: true, invited_by: alice)
+          sign_in user
+    
+      def build_path(path=nil)
+    @build_path ||= Stud::Temporary.directory('package-#{type}-build')
     
         # Publish the package.
     repo_path = build_path('#{name}_repo')
@@ -129,6 +101,38 @@ end
     safesystem('pkgrecv', '-s', repo_path, '-a',
       '-d', build_path('#{name}.p5p'), name)
     
+      def generate_mtree
+    ::Dir.chdir(build_path) do
+      cmd = 'LANG=C bsdtar '
+      cmd += '-czf .MTREE '
+      cmd += '--format=mtree '
+      cmd += '--options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' '
+      cmd += ::Dir.entries('.').reject{|entry| entry =~ /^\.{1,2}$/ }.join(' ')
+      safesystem(cmd)
+    end
+  end # def generate_mtree
+    
+      # Sanitize package name.
+  # Some PyPI packages can be named 'python-foo', so we don't want to end up
+  # with a package named 'python-python-foo'.
+  # But we want packages named like 'pythonweb' to be suffixed
+  # 'python-pythonweb'.
+  def fix_name(name)
+    if name.start_with?('python')
+      # If the python package is called 'python-foo' strip the 'python-' part while
+      # prepending the package name prefix.
+      return [attributes[:python_package_name_prefix], name.gsub(/^python-/, '')].join('-')
+    else
+      return [attributes[:python_package_name_prefix], name].join('-')
+    end
+  end # def fix_name
+    
+      def create_scripts
+    if script?(:after_install)
+      File.write(File.join(fpm_meta_path, 'after_install'), script(:after_install))
+    end
+  end
+    
       def architecture
     case @architecture
     when nil, 'native'
@@ -136,3 +140,13 @@ end
     end
     # 'all' is a valid arch according to
     # http://www.bolthole.com/solaris/makeapackage.html
+    
+        # Add the tar compression flag if necessary
+    tar_compression_flag(input_path).tap do |flag|
+      args << flag unless flag.nil?
+    end
+    
+        realpath = Pathname.new(input_path).realpath.to_s
+    ::Dir.chdir(build_path) do
+      safesystem('unzip', realpath)
+    end
