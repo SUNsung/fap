@@ -1,196 +1,194 @@
 
         
-            for idx, (loader, srcobj, triple) in enumerate(attempts):
-        if isinstance(srcobj, Flask):
-            src_info = 'application '%s'' % srcobj.import_name
-        elif isinstance(srcobj, Blueprint):
-            src_info = 'blueprint '%s' (%s)' % (srcobj.name, srcobj.import_name)
+        
+def delete(module, connection, name):
+    ''' Delete an Elasticache backup. '''
+    try:
+        response = connection.delete_snapshot(SnapshotName=name)
+        changed = True
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == 'SnapshotNotFoundFault':
+            response = {}
+            changed = False
+        elif e.response['Error']['Code'] == 'InvalidSnapshotState':
+            module.fail_json(msg='Error: InvalidSnapshotState. The snapshot is not in an available state or failed state to allow deletion.'
+                             'You may need to wait a few minutes.')
         else:
-            src_info = repr(srcobj)
+            module.fail_json(msg='Unable to delete the snapshot.', exception=traceback.format_exc())
+    return response, changed
     
-        def get(self):
-        if len(self.config.GAE_APPIDS):
-            if len(self.working_appid_list) == 0:
-                time_to_reset = 600 - (time.time() - self.last_reset_time)
-                if time_to_reset > 0:
-                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
-                    time.sleep(time_to_reset)
-                    return None
-                else:
-                    self.logger.warn('reset appid')
-                    self.reset_appid()
+            try:
+            lambda_facts.update(function_list=client.list_functions(**params)['Functions'])
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                lambda_facts.update(function_list=[])
+            else:
+                module.fail_json_aws(e, msg='Trying to get function list')
     
-    MIN_TOKEN_TYPE = UP+1
-	
-INVALID_TOKEN_TYPE = 0
-    
-            The recognizer attempts to recover from single missing
-        symbols. But, actions might refer to that missing symbol.
-        For example, x=ID {f($x);}. The action clearly assumes
-        that there has been an identifier matched previously and that
-        $x points at that token. If that token is missing, but
-        the next token in the stream is what we want we assume that
-        this token is missing and we keep going. Because we
-        have to return some token to replace the missing token,
-        we have to conjure one up. This method gives the user control
-        over the tokens returned for missing tokens. Mostly,
-        you will want to create something special for identifier
-        tokens. For literals such as '{' and ',', the default
-        action in the parser or tree parser works. It simply creates
-        a CommonToken of the appropriate type. The text will be the token.
-        If you change what tokens must be created by the lexer,
-        override this method to create the appropriate tokens.
-        '''
-    }
-    
-        Since the operations are done lazily at toString-time, operations do not
-    screw up the token index values.  That is, an insert operation at token
-    index i does not change the index values for tokens i+1..n-1.
-    
-            # Adding unique constraint on 'GroupTagValue', fields ['project_id',
-        # 'group_id', 'environment_id', '_key', '_value']
-        db.create_unique(
-            u'tagstore_grouptagvalue', [
-                'project_id', 'group_id', 'environment_id', 'key', 'value'])
-    
-            # Changing field 'TagKey.environment_id'
-        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(default=0))
-    
-    from sentry.utils.safe import safe_execute
-from sentry.tasks.base import instrumented_task
-    
-    from datetime import timedelta
-from django.utils import timezone
-    
-    # coco (val5k)
-# INFO roidb.py: 220: 1        person: 21296
-# INFO roidb.py: 220: 2       bicycle: 628
-# INFO roidb.py: 220: 3           car: 3818
-# INFO roidb.py: 220: 4    motorcycle: 732
-# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
-# INFO roidb.py: 220: 6           bus: 564
-# INFO roidb.py: 220: 7         train: 380
-# INFO roidb.py: 220: 8         truck: 828
+    import traceback
     
     
-def _write_voc_results_files(json_dataset, all_boxes, salt):
-    filenames = []
-    image_set_path = voc_info(json_dataset)['image_set_path']
-    assert os.path.exists(image_set_path), \
-        'Image set path does not exist: {}'.format(image_set_path)
-    with open(image_set_path, 'r') as f:
-        image_index = [x.strip() for x in f.readlines()]
-    # Sanity check that order of images in json dataset matches order in the
-    # image set
-    roidb = json_dataset.get_roidb()
-    for i, entry in enumerate(roidb):
-        index = os.path.splitext(os.path.split(entry['image'])[1])[0]
-        assert index == image_index[i]
-    for cls_ind, cls in enumerate(json_dataset.classes):
-        if cls == '__background__':
-            continue
-        logger.info('Writing VOC results for: {}'.format(cls))
-        filename = _get_voc_results_file_template(json_dataset,
-                                                  salt).format(cls)
-        filenames.append(filename)
-        assert len(all_boxes[cls_ind]) == len(image_index)
-        with open(filename, 'wt') as f:
-            for im_ind, index in enumerate(image_index):
-                dets = all_boxes[cls_ind][im_ind]
-                if type(dets) == list:
-                    assert len(dets) == 0, \
-                        'dets should be numpy.ndarray or empty list'
-                    continue
-                # the VOCdevkit expects 1-based indices
-                for k in range(dets.shape[0]):
-                    f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
-                            format(index, dets[k, -1],
-                                   dets[k, 0] + 1, dets[k, 1] + 1,
-                                   dets[k, 2] + 1, dets[k, 3] + 1))
-    return filenames
+DOCUMENTATION = '''
+---
+module: ipa_role
+author: Thomas Krahn (@Nosmoht)
+short_description: Manage FreeIPA role
+description:
+- Add, modify and delete a role within FreeIPA server using FreeIPA API
+options:
+  cn:
+    description:
+    - Role name.
+    - Can not be changed as it is the unique identifier.
+    required: true
+    aliases: ['name']
+  description:
+    description:
+    - A description of this role-group.
+  group:
+    description:
+    - List of group names assign to this role.
+    - If an empty list is passed all assigned groups will be unassigned from the role.
+    - If option is omitted groups will not be checked or changed.
+    - If option is passed all assigned groups that are not passed will be unassigned from the role.
+  host:
+    description:
+    - List of host names to assign.
+    - If an empty list is passed all assigned hosts will be unassigned from the role.
+    - If option is omitted hosts will not be checked or changed.
+    - If option is passed all assigned hosts that are not passed will be unassigned from the role.
+  hostgroup:
+    description:
+    - List of host group names to assign.
+    - If an empty list is passed all assigned host groups will be removed from the role.
+    - If option is omitted host groups will not be checked or changed.
+    - If option is passed all assigned hostgroups that are not passed will be unassigned from the role.
+  privilege:
+    description:
+    - List of privileges granted to the role.
+    - If an empty list is passed all assigned privileges will be removed.
+    - If option is omitted privileges will not be checked or changed.
+    - If option is passed all assigned privileges that are not passed will be removed.
+    version_added: '2.4'
+  service:
+    description:
+    - List of service names to assign.
+    - If an empty list is passed all assigned services will be removed from the role.
+    - If option is omitted services will not be checked or changed.
+    - If option is passed all assigned services that are not passed will be removed from the role.
+  state:
+    description: State to ensure
+    default: 'present'
+    choices: ['present', 'absent']
+  user:
+    description:
+    - List of user names to assign.
+    - If an empty list is passed all assigned users will be removed from the role.
+    - If option is omitted users will not be checked or changed.
+extends_documentation_fragment: ipa.documentation
+version_added: '2.3'
+'''
     
-        # For other levels add top-down and lateral connections
-    for i in range(num_backbone_stages - 1):
-        add_topdown_lateral_module(
-            model,
-            output_blobs[i],             # top-down blob
-            lateral_input_blobs[i + 1],  # lateral blob
-            output_blobs[i + 1],         # next output blob
-            fpn_dim,                     # output dimension
-            fpn_dim_lateral[i + 1]       # lateral input dimension
-        )
+        return device
     
-    default_encoding = sys.getfilesystemencoding()
-    
-        def set_new_path(self, new_idf_path):
-        if self.path != new_idf_path:
-            self.path = new_idf_path
-            content = open(new_idf_path, 'rb').read().decode('utf-8')
-            self.idf_freq = {}
-            for line in content.splitlines():
-                word, freq = line.strip().split(' ')
-                self.idf_freq[word] = float(freq)
-            self.median_idf = sorted(
-                self.idf_freq.values())[len(self.idf_freq) // 2]
-    
-    if sys.platform.startswith('java'):
-    start_P, trans_P, emit_P = load_model()
-else:
-    from .prob_start import P as start_P
-    from .prob_trans import P as trans_P
-    from .prob_emit import P as emit_P
-    
-    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
-    
-    if opt.withWeight is None:
-    withWeight = False
-else:
-    if int(opt.withWeight) is 1:
-        withWeight = True
-    else:
-        withWeight = False
-    
-    count_vect = CountVectorizer()
-docs = []
-    
-    url = sys.argv[1]
-content = open(url,'rb').read()
-t1 = time.time()
-words = '/ '.join(jieba.cut(content))
-    
-            for item_id in items.keys():
-            item = table.get_item(Key={PARTITION_KEY: item_id})['Item']
-            # need to fix up the JSON and convert str to unicode for Python 2
-            item1 = json_safe(item)
-            item2 = json_safe(items[item_id])
-            assert item1 == item2
-    
-        dynamodb = aws_stack.connect_to_resource('dynamodb')
-    # create table with stream forwarding config
-    aws_stack.create_dynamodb_table(TEST_TABLE_NAME, partition_key=PARTITION_KEY)
-    table = dynamodb.Table(TEST_TABLE_NAME)
-    
-        :rtype: str
-    :return: A command that will run the MultiLangDaemon with your
-             properties and custom paths and java.
+        Returns a function to set the real IP.
     '''
-    return '{java} -cp {cp} {daemon} {props}'.format(
-        java=java,
-        cp=get_kcl_classpath(properties, paths),
-        daemon=multi_lang_daemon_class,
-        # Just need the basename becasue the path is added to the classpath
-        props=os.path.basename(properties))
+    ip_to_mock = None
     
-    def dimension_lambda(kwargs):
-    func_name = kwargs.get('func_name')
-    if not func_name:
-        func_name = kwargs.get('func_arn').split(':function:')[1].split(':')[0]
-    return [{
-        'Name': 'FunctionName',
-        'Value': func_name
-    }]
+        def test_human_shall_speak(self):
+        noise = self.human.speak()
+        expected_noise = ''hello''
+        self.assertEqual(noise, expected_noise)
     
-    THIS_FOLDER = os.path.dirname(os.path.realpath(__file__))
-TEST_TEMPLATE_1 = os.path.join(THIS_FOLDER, 'templates', 'template1.yaml')
-TEST_TEMPLATE_2 = os.path.join(THIS_FOLDER, 'templates', 'template2.yaml')
+        pprint(contributions)
+    
+        parameter
+    '''
+    
+    
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('version', type=str, help='Pandas version (0.23.0)')
+    return parser.parse_args(args)
+    
+    ax = fig.add_axes((0.63 + 0.18, 0.1, 0.16, 0.8))
+y = np.row_stack((fnx(), fnx(), fnx()))
+x = np.arange(10)
+y1, y2, y3 = fnx(), fnx(), fnx()
+ax.stackplot(x, y1, y2, y3)
+ax.set_xticks([])
+ax.set_yticks([])
+    
+    
+ABCIndex = create_pandas_abc_type('ABCIndex', '_typ', ('index', ))
+ABCInt64Index = create_pandas_abc_type('ABCInt64Index', '_typ',
+                                       ('int64index', ))
+ABCUInt64Index = create_pandas_abc_type('ABCUInt64Index', '_typ',
+                                        ('uint64index', ))
+ABCRangeIndex = create_pandas_abc_type('ABCRangeIndex', '_typ',
+                                       ('rangeindex', ))
+ABCFloat64Index = create_pandas_abc_type('ABCFloat64Index', '_typ',
+                                         ('float64index', ))
+ABCMultiIndex = create_pandas_abc_type('ABCMultiIndex', '_typ',
+                                       ('multiindex', ))
+ABCDatetimeIndex = create_pandas_abc_type('ABCDatetimeIndex', '_typ',
+                                          ('datetimeindex', ))
+ABCTimedeltaIndex = create_pandas_abc_type('ABCTimedeltaIndex', '_typ',
+                                           ('timedeltaindex', ))
+ABCPeriodIndex = create_pandas_abc_type('ABCPeriodIndex', '_typ',
+                                        ('periodindex', ))
+ABCCategoricalIndex = create_pandas_abc_type('ABCCategoricalIndex', '_typ',
+                                             ('categoricalindex', ))
+ABCIntervalIndex = create_pandas_abc_type('ABCIntervalIndex', '_typ',
+                                          ('intervalindex', ))
+ABCIndexClass = create_pandas_abc_type('ABCIndexClass', '_typ',
+                                       ('index', 'int64index', 'rangeindex',
+                                        'float64index', 'uint64index',
+                                        'multiindex', 'datetimeindex',
+                                        'timedeltaindex', 'periodindex',
+                                        'categoricalindex', 'intervalindex'))
+    
+    Libraries are expected to implement a few pytest fixtures to provide data
+for the tests. The fixtures may be located in either
+    
+        # FILL
+    # - color, fillType
+    ('background-color: red', {'fill': {'fgColor': 'FF0000',
+                                        'patternType': 'solid'}}),
+    ('background-color: #ff0000', {'fill': {'fgColor': 'FF0000',
+                                            'patternType': 'solid'}}),
+    ('background-color: #f0a', {'fill': {'fgColor': 'FF00AA',
+                                         'patternType': 'solid'}}),
+    # BORDER
+    # - style
+    ('border-style: solid',
+     {'border': {'top': {'style': 'medium'},
+                 'bottom': {'style': 'medium'},
+                 'left': {'style': 'medium'},
+                 'right': {'style': 'medium'}}}),
+    ('border-style: solid; border-width: thin',
+     {'border': {'top': {'style': 'thin'},
+                 'bottom': {'style': 'thin'},
+                 'left': {'style': 'thin'},
+                 'right': {'style': 'thin'}}}),
+    
+    
+def test_lines_with_compression(compression):
+    
+        data = b'x' * 65535
+    b = packb(data, use_bin_type=True)
+    assert len(b) == len(data) + 3
+    assert b[0:1] == header
+    assert b[1:3] == b'\xff\xff'
+    assert b[3:] == data
+    assert unpackb(b) == data
+    
+    
+def test_incorrect_type_array():
+    unpacker = Unpacker()
+    unpacker.feed(packb(1))
+    try:
+        unpacker.read_array_header()
+        assert 0, 'should raise exception'
+    except UnexpectedTypeException:
+        assert 1, 'okay'
