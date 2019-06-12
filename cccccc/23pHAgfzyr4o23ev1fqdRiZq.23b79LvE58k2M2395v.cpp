@@ -1,247 +1,296 @@
 
         
-        public:
-    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
-    ~SignVerifyMessageDialog();
+          /**
+   * @brief Return whether 'anonymous' top blobs are created automatically
+   *        by the layer.
+   *
+   * If this method returns true, Net::Init will create enough 'anonymous' top
+   * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
+   * MinTopBlobs().
+   */
+  virtual inline bool AutoTopBlobs() const { return false; }
     
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
-    
-    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
-    secp256k1_scalar r, s;
-    int recid;
+    /**
+ * @brief Computes the classification accuracy for a one-of-many
+ *        classification task.
+ */
+template <typename Dtype>
+class AccuracyLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides AccuracyParameter accuracy_param,
+   *     with AccuracyLayer options:
+   *   - top_k (\b optional, default 1).
+   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
+   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
+   *     correct if the correct label is among the top 5 predicted labels.
+   */
+  explicit AccuracyLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
-    (void) msg32;
-    (void) key32;
-    (void) algo16;
-    (void) data;
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    std::string ParsedInternalKey::DebugString() const {
-  char buf[50];
-  snprintf(buf, sizeof(buf), '' @ %llu : %d',
-           (unsigned long long) sequence,
-           int(type));
-  std::string result = ''';
-  result += EscapeString(user_key.ToString());
-  result += buf;
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of SigmoidLayer.
+ */
+template <typename Dtype>
+class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
+ public:
+  explicit CuDNNSigmoidLayer(const LayerParameter& param)
+      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSigmoidLayer();
+    }
+    
+      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
+                        const unsigned char* key) const;
+    
+      char zero[18];
+  memset(zero, 0, sizeof(zero));
+    
+      virtual void startup() = 0;
+    
+    public:
+  DHTTaskExecutor(int numConcurrent);
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
+    
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
+    
+      // always return false
+  virtual bool isReply() const CXX11_OVERRIDE;
+    
+    TEST(StaticTracepoint, TestSemaphoreExtern) {
+  unsigned v = folly::Random::rand32();
+  CHECK_EQ(v * v, folly::test::staticTracepointTestFunc(v));
+  EXPECT_FALSE(FOLLY_SDT_IS_ENABLED(folly, test_semaphore_extern));
+}
+
+    
+    bool Executor::keepAliveAcquire() {
+  return false;
+}
+    
+    template <typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
   return result;
 }
     
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-    #include <caffe/layer.hpp>
-#include <caffe/blob.hpp>
-#include <caffe/layer_factory.hpp>
-    
-    // these gpu functions are defined in gradient_compression.cu
-void Quantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                      const float threshold);
-void Dequantize2BitImpl(mshadow::Stream<mshadow::gpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                        const float threshold);
-    
-      /*!
-  * \brief Issues quantize operation to be scheduled by the engine
-  * Compresses `from` into `to` and accumulates the quantization error
-  * into 'residual', using the quantization of type `type_`
-  * \param from the ndarray containing original data to be quantized
-  * \param to the target ndarray which contains quantized data
-  * \param residual the ndarray which accumulates quantization error
-  * \param priority Priority of the action.
-  */
-  void Quantize(const mxnet::NDArray &from, mxnet::NDArray *to,
-                mxnet::NDArray *residual, const int priority);
-    
-    
-template<>
-void EvalRandom<DEVICE, ExponentialDistribution>(
-    const real_t &lambda,
-    const real_t &dummy,  // this is to satisfy the SampleOp lambda signature
-    const Resource &resource,
-    TBlob *ret,
-    RunContext ctx) {
-  typedef cpu xpu;  // No support for gpu for this distribution.
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  switch (ret->type_flag_) {
-  case mshadow::kFloat32:
-    {
-      mshadow::Random<xpu, float> *prnd = resource.get_random<xpu, float>(s);
-      mshadow::Tensor<xpu, 2, float> tmp = ret->FlatTo2D<xpu, float>(s);
-      prnd->SampleExponential(&tmp, float(lambda));  // NOLINT(*)
-      break;
-    }
-  case mshadow::kFloat64:
-    {
-      mshadow::Random<xpu, double> *prnd = resource.get_random<xpu, double>(s);
-      mshadow::Tensor<xpu, 2, double> tmp = ret->FlatTo2D<xpu, double>(s);
-      prnd->SampleExponential(&tmp, double(lambda));  // NOLINT(*)
-      break;
-    }
-  default:
-    LOG(FATAL) << 'Random only support float32 and float64';
+    TEST_F(SparseByteSetTest, each_random) {
+  mt19937 rng;
+  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
+  set<uint8_t> added;
+  while (added.size() <= lims::max()) {
+    auto c = uint8_t(dist(rng));
+    EXPECT_EQ(added.count(c), s.contains(c));
+    EXPECT_EQ(!added.count(c), s.add(c));
+    added.insert(c);
+    EXPECT_TRUE(added.count(c)); // sanity
+    EXPECT_TRUE(s.contains(c));
   }
 }
+
     
+    #include <folly/portability/Sockets.h>
     
-    {    size_t const_loc_ptr = 0;
-    for (int i = 0; i < args.size(); ++i) {
-      if (args.type_codes[i] == kTVMNDArrayTypeCode) {
-        const NDArray& nd =
-            static_cast<NDArray*>(args.values[i].v_handle)[0];
-        // We cannot set the value until
-        type_codes_[i] = kArrayHandle;
-        array_data_.push_back(nd);
-        array_loc_.push_back(i);
-        // check if there is read or mutate
-        // by default assume we mutate the array.
-        if (const_loc_ptr < const_loc.size() &&
-            i == const_loc[const_loc_ptr]) {
-          const_vars->push_back(nd.var());
-          ++const_loc_ptr;
-        } else {
-          mutate_vars->push_back(nd.var());
-        }
-      } else {
-        CHECK_LT(args.type_codes[i], kTVMType)
-            << 'Only allow POD type in mxnet async call';
-      }
+    inline size_t fastIpv6ToBufferUnsafe(const in6_addr& in6Addr, char* str) {
+#ifdef _MSC_VER
+  const uint16_t* bytes = reinterpret_cast<const uint16_t*>(&in6Addr.u.Word);
+#else
+  const uint16_t* bytes = reinterpret_cast<const uint16_t*>(&in6Addr.s6_addr16);
+#endif
+  char* buf = str;
     }
-  }
+    
+    TEST(LeakTest, CatchesMultipleLeakedMockObjects) {
+  MockFoo* foo1 = new MockFoo;
+  MockFoo* foo2 = new MockFoo;
+    }
     
     
-    {  Stream<xpu> *stream = ctx.get_stream<xpu>();
-  Tensor<xpu, 2, DType> out = out_data[0].get<xpu, 2, DType>(stream);
-  std::vector<Tensor<xpu, 2, DType> > ts_arr(in_data.size());
-  std::transform(in_data.begin(), in_data.end(), ts_arr.begin(),
-                 [&stream](TBlob blob) -> Tensor<xpu, 2, DType> {
-                   return blob.get<xpu, 2, DType>(stream);
-                 });
-  khatri_rao(out, ts_arr);
+    {  TestCatchesLeakedMocksInAdHocTests();
+  return RUN_ALL_TESTS();
 }
     
-      virtual void Backward(const OpContext &ctx,
-                        const std::vector<TBlob> &out_grad,
-                        const std::vector<TBlob> &in_data,
-                        const std::vector<TBlob> &out_data,
-                        const std::vector<OpReqType> &req,
-                        const std::vector<TBlob> &in_grad,
-                        const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    CHECK_EQ(out_grad.size(), 1U);
-    CHECK_EQ(in_data.size(), 1U);
-    CHECK_EQ(out_data.size(), 2U);
-    CHECK_EQ(req.size(), 1U);
-    CHECK_EQ(in_grad.size(), 1U);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> grad = out_grad[lrn_enum::kOut].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> output_data = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> input_grad = in_grad[lrn_enum::kData].get<gpu, 4, DType>(s);
-    CHECK_EQ(s->dnn_handle_ownership_, mshadow::Stream<gpu>::OwnHandle);
-    CUDNN_CALL(cudnnLRNCrossChannelBackward(s->dnn_handle_,
-                                            lrn_desc_,
-                                            CUDNN_LRN_CROSS_CHANNEL_DIM1,
-                                            &alpha,
-                                            shape_desc_,
-                                            output_data.dptr_,
-                                            shape_desc_,
-                                            grad.dptr_,
-                                            shape_desc_,
-                                            data.dptr_,
-                                            &beta,
-                                            shape_desc_,
-                                            input_grad.dptr_));
-  }
+    // Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
     
-    #include <algorithm>
-#include <vector>
-#include './spatial_transformer-inl.h'
-namespace mxnet {
-namespace op {
-#if defined(__CUDACC__) && MXNET_USE_CUDNN == 1 && CUDNN_MAJOR >= 5
-template<typename DType>
-class CuDNNSpatialTransformerOp : public Operator {
- public:
-  explicit CuDNNSpatialTransformerOp(SpatialTransformerParam param) {
-    this->param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-    if (param_.sampler_type == st::kBilinear) {
-      sampler_ = CUDNN_SAMPLER_BILINEAR;
-    }
-  }
-    }
-    }
-    }
+    #if GTEST_HAS_SEH && !GTEST_OS_WINDOWS_MOBILE
+// On Windows Mobile global exception handlers are not supported.
+LONG WINAPI ExitWithExceptionCode(
+    struct _EXCEPTION_POINTERS* exception_pointers) {
+  exit(exception_pointers->ExceptionRecord->ExceptionCode);
+}
+#endif
     
-    template<typename xpu>
-void NDArrayOp<xpu>::Forward(const OpContext &ctx,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<OpReqType> &req,
-                   const std::vector<TBlob> &out_data,
-                   const std::vector<TBlob> &aux_args) {
-  using namespace mshadow;
-  Context ndctx = get_ctx();
-  std::vector<void*> ptrs;
-  std::vector<Engine::VarHandle> ndvar;
-  std::vector<int> tags;
-  for (auto& i : req) CHECK_NE(i, kAddTo);
-    }
+    using testing::internal::ShouldUseColor;
+    
+    //
+// Unit test for gtest_prod.h.
+    
+      // Returns the current counter value, and increments it.
+  int Increment();
+    
+    ACTION_TEMPLATE(InvokeArgument,
+                HAS_1_TEMPLATE_PARAMS(int, k),
+                AND_10_VALUE_PARAMS(p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)) {
+  using internal::invoke_argument::InvokeArgumentAdl;
+  return InvokeArgumentAdl<return_type>(
+      internal::invoke_argument::AdlTag(),
+      ::std::get<k>(args), p0, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+}
