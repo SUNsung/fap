@@ -1,247 +1,373 @@
 
         
-          // Now, add all generic parameters from the conforming type.
-  if (conformanceSig) {
-    for (auto param : conformanceSig->getGenericParams()) {
-      auto substParam = Type(param).subst(conformanceToSyntheticTypeFn,
-                                          conformanceToSyntheticConformanceFn);
-      builder.addGenericParameter(substParam->castTo<GenericTypeParamType>());
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
+    
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
-  }
     
-    namespace llvm {
-template<> struct DenseMapInfo<DefaultCacheKey> {
-  static inline DefaultCacheKey getEmptyKey() {
-    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
-  }
-  static inline DefaultCacheKey getTombstoneKey() {
-    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
-  }
-  static unsigned getHashValue(const DefaultCacheKey &Val) {
-    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
-    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
-  }
-  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
-    if (LHS.Key == RHS.Key)
-      return true;
-    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
-        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
-      return false;
-    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
-  }
-};
-} // namespace llvm
+    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
+    secp256k1_scalar r, s;
+    secp256k1_scalar sec, non, msg;
+    int recid;
+    int ret = 0;
+    int overflow = 0;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(seckey != NULL);
+    if (noncefp == NULL) {
+        noncefp = secp256k1_nonce_function_default;
+    }
+    }
     
+    done_hash:
+%ifndef LINUX
+    movdqa	xmm6,[rsp + _XMM_SAVE + 0*16]
+    movdqa	xmm7,[rsp + _XMM_SAVE + 1*16]
+    movdqa	xmm8,[rsp + _XMM_SAVE + 2*16]
+    movdqa	xmm9,[rsp + _XMM_SAVE + 3*16]
+    movdqa	xmm10,[rsp + _XMM_SAVE + 4*16]
+    movdqa	xmm11,[rsp + _XMM_SAVE + 5*16]
+    movdqa	xmm12,[rsp + _XMM_SAVE + 6*16]
+%endif
     
-    {  return Begin + oldSize;
-}  
-
-    
-      bool isConst() const { return IsConst; }
-    
-      StringRef presumedFile = presumedLoc.getFilename();
-  SourceLoc startOfLine = loc.getAdvancedLoc(-presumedLoc.getColumn() + 1);
-  bool isNewVirtualFile =
-    swiftSrcMgr.openVirtualFile(startOfLine, presumedFile,
-                                presumedLoc.getLine() - bufferLineNumber);
-  if (isNewVirtualFile) {
-    SourceLoc endOfLine = findEndOfLine(swiftSrcMgr, loc, mirrorID);
-    swiftSrcMgr.closeVirtualFile(endOfLine);
+    bool GuessType(const std::string& fname, FileType* type) {
+  size_t pos = fname.rfind('/');
+  std::string basename;
+  if (pos == std::string::npos) {
+    basename = fname;
+  } else {
+    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
   }
-    
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
+  uint64_t ignored;
+  return ParseFileName(basename, &ignored, type);
 }
     
-    void VerifyDebugInfoJobAction::anchor() {}
+    // A utility routine: write 'data' to the named file and Sync() it.
+extern Status WriteStringToFileSync(Env* env, const Slice& data,
+                                    const std::string& fname);
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #if !UCONFIG_NO_TRANSLITERATION
     
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+        UBool numeric = settings->isNumeric();
+    if(equalPrefixLength > 0) {
+        UBool unsafe = FALSE;
+        if(equalPrefixLength != leftLength) {
+            int32_t i = equalPrefixLength;
+            UChar32 c;
+            U8_NEXT_OR_FFFD(left, i, leftLength, c);
+            unsafe = data->isUnsafeBackward(c, numeric);
+        }
+        if(!unsafe && equalPrefixLength != rightLength) {
+            int32_t i = equalPrefixLength;
+            UChar32 c;
+            U8_NEXT_OR_FFFD(right, i, rightLength, c);
+            unsafe = data->isUnsafeBackward(c, numeric);
+        }
+        if(unsafe) {
+            // Identical prefix: Back up to the start of a contraction or reordering sequence.
+            UChar32 c;
+            do {
+                U8_PREV_OR_FFFD(left, 0, equalPrefixLength, c);
+            } while(equalPrefixLength > 0 && data->isUnsafeBackward(c, numeric));
+        }
+        // See the notes in the UTF-16 version.
+    }
+    
+    #include 'unicode/scientificnumberformatter.h'
+#include 'unicode/dcfmtsym.h'
+#include 'unicode/fpositer.h'
+#include 'unicode/utf16.h'
+#include 'unicode/uniset.h'
+#include 'decfmtst.h'
+#include 'unicode/decimfmt.h'
+    
+    ScriptSet &ScriptSet::intersect(UScriptCode script, UErrorCode &status) {
+    ScriptSet t;
+    t.set(script, status);
+    if (U_SUCCESS(status)) {
+        this->intersect(t);
+    }
+    return *this;
+}
+    
+UBool ScriptSet::intersects(const ScriptSet &other) const {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        if ((bits[i] & other.bits[i]) != 0) {
+            return true;
+        }
+    }
+    return false;
+}
+    
+    U_NAMESPACE_END
+    
+    #endif
+
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
+    
+    U_NAMESPACE_BEGIN
+    
+    
+/**
+ * A formatter for small, positive integers.
+ */
+class U_I18N_API SmallIntFormatter : public UMemory {
+public:
+    /**
+     * Estimates the actual digit count needed to format positiveValue
+     * using the given range of digit counts.
+     * Returns a value that is at least the actual digit count needed.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static int32_t estimateDigitCount(
+            int32_t positiveValue, const IntDigitCountRange &range);
+    }
+    
+    // Create a collation key from a bit array.
+CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
+    : UObject(), fFlagAndLength(count),
+      fHashCode(kInvalidHashCode)
+{
+    if (count < 0 || (newValues == NULL && count != 0) ||
+            (count > getCapacity() && reallocate(count, 0) == NULL)) {
+        setToBogus();
+        return;
+    }
+    }
+    
+    const char *StandardPlural::getKeyword(Form p) {
+    U_ASSERT(ZERO <= p && p < COUNT);
+    return gKeywords[p];
+}
+    
+    void DHTRoutingTable::showBuckets() const
+{
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
+    }
+  */
+}
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+      virtual void startup() = 0;
+    
+    
+    {} // namespace aria2
+
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
+    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+    const std::shared_ptr<PeerStorage>& peerStorage)
+{
+  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
+  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
+  task->setPeerStorage(peerStorage);
+  setCommonProperty(task);
+  return task;
+}
+    
+    void DHTTokenTracker::updateTokenSecret()
+{
+  memcpy(secret_[1], secret_[0], SECRET_SIZE);
+  util::generateRandomData(secret_[0], SECRET_SIZE);
+}
+    
+    
+    {  void remove(const std::string& hostname, uint16_t port);
+};
+    
+    using json = nlohmann::json;
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+    
+    {  return Merge(key_slice, value_slice);
+}
+    
+    
+    {}  //  namespace rocksdb
+
+    
+      // When an actor (column family) requests a stop token, all writes will be
+  // stopped until the stop token is released (deleted)
+  std::unique_ptr<WriteControllerToken> GetStopToken();
+  // When an actor (column family) requests a delay token, total delay for all
+  // writes to the DB will be controlled under the delayed write rate. Every
+  // write needs to call GetDelay() with number of bytes writing to the DB,
+  // which returns number of microseconds to sleep.
+  std::unique_ptr<WriteControllerToken> GetDelayToken(
+      uint64_t delayed_write_rate);
+  // When an actor (column family) requests a moderate token, compaction
+  // threads will be increased
+  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
+    
+    
+    { private:
+  Options options_;
+  CompactionOptions compact_options_;
+};
+    
+    #ifndef ROCKSDB_LITE
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+    
+    {  // Should be set if the DB has a non-default comparator.
+  // See comment in WriteBatchWithIndex constructor.
+  const Comparator* cmp = BytewiseComparator();
+};
+    
+    bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+{
+    if ( ActionInterval::initWithDuration(t) )
+    {
+        _radius = radius;
+        _deltaRadius = deltaRadius;
+        _angleZ = angleZ;
+        _deltaAngleZ = deltaAngleZ;
+        _angleX = angleX;
+        _deltaAngleX = deltaAngleX;
+    }
+    }
+    
+    bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
+{
+    if (Grid3DAction::initWithDuration(duration, gridSize))
+    {
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
+        _horizontal = horizontal;
+        _vertical = vertical;
+    }
+    }
+    
+        if (ret)
+    {
+        ret->autorelease();
+    }
+    
+    void ActionManager::removeActionByTag(int tag, Node *target)
+{
+    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if (target == nullptr)
+    {
+        return;
+    }
+    }
     
     /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    #include 'caffe/layers/deconv_layer.hpp'
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    class OrientationDetector {
- public:
-  OrientationDetector(const GenericVector<int>* allowed_scripts,
-                      OSResults* results);
-  bool detect_blob(BLOB_CHOICE_LIST* scores);
-  int get_orientation();
- private:
-  OSResults* osr_;
-  const GenericVector<int>* allowed_scripts_;
-};
-    
-    
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
-};
-    
-    // Class to hold an array of bounding boxes for an output word and
-// the bounding box of the whole word.
-class BoxWord {
- public:
-  BoxWord();
-  explicit BoxWord(const BoxWord& src);
-  ~BoxWord() = default;
-    }
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
-    
-     private:
-  // Simple struct to hold an ICOORD point and a halfwidth representing half
-  // the 'width' (supposedly approximately parallel to the direction of the
-  // line) of each point, such that distant points can be discarded when they
-  // overlap nearer points. (Think i dot and other diacritics or noise.)
-  struct PointWidth {
-    PointWidth() : pt(ICOORD(0, 0)), halfwidth(0) {}
-    PointWidth(const ICOORD& pt0, int halfwidth0)
-      : pt(pt0), halfwidth(halfwidth0) {}
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
     }
     
     
-    {}  // namespace tesseract.
+    {protected:
+    ClippingRectangleNode()
+    : _clippingEnabled(true)
+    {
+    }
     
-      // The pointed-to Pair has changed its key value, so the location of pair
-  // is reshuffled to maintain the heap invariant.
-  // Must be a valid pointer to an element of the heap_!
-  // Caution! Since GenericHeap is based on GenericVector, reallocs may occur
-  // whenever the vector is extended and elements may get shuffled by any
-  // Push or Pop operation. Therefore use this function only if Data in Pair is
-  // of type DoublePtr, derived (first) from DoublePtr, or has a DoublePtr as
-  // its first element. Reshuffles the heap to maintain the invariant.
-  // Time = O(log n).
-  void Reshuffle(Pair* pair) {
-    int index = pair - &heap_[0];
-    Pair hole_pair = heap_[index];
-    index = SiftDown(index, hole_pair);
-    index = SiftUp(index, hole_pair);
-    heap_[index] = hole_pair;
-  }
+    void onBeforeVisitScissor();
+    void onAfterVisitScissor();
     
-    #include 'pch.h'
-#include 'DateCalculator.xaml.h'
-#include 'CalcViewModel/Common/TraceLogger.h'
-#include 'CalcViewModel/Common/CopyPasteManager.h'
-#include 'CalcViewModel/Common/LocalizationSettings.h'
-#include 'CalcViewModel/DateCalculatorViewModel.h'
+    Rect _clippingRegion;
+    bool _clippingEnabled;
     
-    
-    {        return initializer.viewMode == mode;
-    });
-    
-                void GetCategories(_In_ std::shared_ptr<std::vector<UnitConversionManager::Category>> categoriesList);
-            void GetUnits(_In_ std::unordered_map<CalculatorApp::Common::ViewMode, std::vector<CalculatorApp::ViewModel::OrderedUnit>>& unitMap);
-            void GetConversionData(_In_ std::unordered_map<CalculatorApp::Common::ViewMode, std::unordered_map<int, double>>& categoryToUnitConversionMap);
-            void GetExplicitConversionData(_In_ std::unordered_map<int, std::unordered_map<int, UnitConversionManager::ConversionData>>& unitToUnitConversionList);
-    
-        private:
-        void FromDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void ToDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void AddSubtract_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void OffsetValue_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
-        void OnCopyMenuItemClicked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void OnLoaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void DateCalcOption_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
-        void AddSubtractDateGrid_Loaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void AddSubtractOption_Checked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void ReselectCalendarDate(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ calendarDatePicker, Windows::Foundation::DateTime dateTime);
-        void OffsetDropDownClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
-        void CalendarFlyoutClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
-        void RaiseLiveRegionChangedAutomationEvent(_In_ bool isDateDiffMode);
-    
-            DEPENDENCY_PROPERTY_OWNER(Memory);
-        DEPENDENCY_PROPERTY(Windows::UI::Xaml::GridLength, RowHeight);
-    
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
-    
-    
-    {  rocksdb::CacheBench bench;
-  if (FLAGS_populate_cache) {
-    bench.PopulateCache();
-  }
-  if (bench.Run()) {
-    return 0;
-  } else {
-    return 1;
-  }
-}
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
+    CustomCommand _beforeVisitCmdScissor;
+    CustomCommand _afterVisitCmdScissor;
 };
     
-      // if background compaction is not working, write will stall
-  // because of options.level0_stop_writes_trigger
-  for (int i = 1000; i < 99999; ++i) {
-    db->Put(WriteOptions(), std::to_string(i),
-                            std::string(500, 'a' + (i % 26)));
-  }
+            if (_componentMap.find(componentName) != _componentMap.end())
+        {
+            CCASSERT(false, 'ComponentContainer already have this kind of component');
+            break;
+        }
+        _componentMap[componentName] = com;
+        com->retain();
+        com->setOwner(_owner);
+        com->onAdd();
     
-    
-    {// Factor method to create a new persistent cache
-Status NewPersistentCache(Env* const env, const std::string& path,
-                          const uint64_t size,
-                          const std::shared_ptr<Logger>& log,
-                          const bool optimized_for_nvm,
-                          std::shared_ptr<PersistentCache>* cache);
-}  // namespace rocksdb
-
-    
-    class Cache;
-class Comparator;
-class Env;
-class FilterPolicy;
-class Logger;
-struct Options;
-class Snapshot;
+    #include '2d/CCFont.h'
