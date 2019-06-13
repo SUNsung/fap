@@ -1,195 +1,114 @@
 
         
         
-def check_format(filename):
-    '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        if len(segments) < num_segments:
-            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
-                len(segments), num_segments))
-            continue
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
-    
-        # Define the MLP
-    if self.hparams.hidden_layers == 0:
-      self.weights1 = tf.get_variable(
-          'W1',
-          shape=[network_input, self.hparams.num_classes],
-          dtype=tf.float32)
-      self.bias1 = tf.get_variable(
-          'b1',
-          shape=[self.hparams.num_classes],
-          dtype=tf.float32)
-    
-        Args:
-      data_name: The name of the data dict, to select which in/out matrices
-        to use.
-      data_bxtxd:  Numpy array training data with shape:
-        batch_size x # time steps x # dimensions
-      ext_input_bxtxi: Numpy array training external input with shape:
-        batch_size x # time steps x # external input dims
-      do_eval_cost (optional): If true, the IWAE (Importance Weighted
-         Autoencoder) log likeihood bound, instead of the VAE version.
-      do_average_batch (optional): average over the batch, useful for getting
-      good IWAE costs, and model outputs for a single data point.
-    
-    from utils import write_datasets
-from synthetic_data_utils import add_alignment_projections, generate_data
-from synthetic_data_utils import generate_rnn, get_train_n_valid_inds
-from synthetic_data_utils import nparray_and_transpose
-from synthetic_data_utils import spikify_data, gaussify_data, split_list_by_inds
-import matplotlib
-import matplotlib.pyplot as plt
-import scipy.signal
-    
-      if prefix_words.find('<S>') != 0:
-    prefix_words = '<S> ' + prefix_words
-    
-        self._id_to_word = []
-    self._word_to_id = {}
-    self._unk = -1
-    self._bos = -1
-    self._eos = -1
-    
-      # Averages for real and fake token values.
-  real = tf.mul(values, present)
-  fake = tf.mul(values, missing)
-  real_avg = tf.reduce_sum(real) / real_count
-  fake_avg = tf.reduce_sum(fake) / fake_count
-    
-    # Dependency imports
-    
-          for s in xrange(t, FLAGS.sequence_length):
-        cum_advantage += reward_missing_list[s] * np.power(gamma, (s - t)) * (
-            rewards_list[s] - baselines[s])
-      # Clip advantages.
-      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
-                                       FLAGS.advantage_clipping)
-      advantages.append(reward_missing_list[t] * cum_advantage)
-      final_gen_objective += tf.multiply(
-          log_probability,
-          reward_missing_list[t] * tf.stop_gradient(cum_advantage))
+def test_get_new_command():
+    new_command = get_new_command(Command('sudo apt update', match_output))
+    assert new_command == 'sudo apt list --upgradable'
     
     
-def find_all_ngrams(dataset, n):
-  '''Generate a list of all ngrams.'''
-  return zip(*[dataset[i:] for i in xrange(n)])
+class settingslist_node(nodes.General, nodes.Element):
+    pass
     
-    import optparse
-import os
-from os.path import dirname as dirn
-import sys
+        requires_project = False
     
-    from youtube_dl.utils import intlist_to_bytes
-from youtube_dl.aes import aes_encrypt, key_expansion
+                items, requests = self.run_callback(response, cb)
+            if opts.pipelines:
+                itemproc = self.pcrawler.engine.scraper.itemproc
+                for item in items:
+                    itemproc.process_item(item, spider)
+            self.add_items(depth, items)
+            self.add_requests(depth, requests)
     
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+    from . import Contract
     
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
     
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-        template = template.replace('{{fileopts}}', '|'.join(fileopts))
-    template = template.replace('{{diropts}}', '|'.join(diropts))
-    template = template.replace('{{flags}}', ' '.join(flags))
-    
-    # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
     
     
-def _mkdir(d):
-    if not os.path.exists(d):
-        os.mkdir(d)
-    
-        return test_template
-    
-    
-class CaseInsensitiveDict(MutableMapping):
-    '''A case-insensitive ``dict``-like object.
-    
-        get_item_parameters = pytest.mark.parametrize(
-        'key, value', (
-            ('bad_gateway', 502),
-            ('not_a_key', None)
-        )
-    )
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+site_info = 'huomao.com'
+download = huomaotv_download
+download_playlist = playlist_not_supported('huomao')
 
     
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
     
-class TestExtractZippedPaths:
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
     
-            for field, val in fields:
-            if isinstance(val, basestring) or not hasattr(val, '__iter__'):
-                val = [val]
-            for v in val:
-                if v is not None:
-                    # Don't call str() on bytestrings: in Py3 it all goes wrong.
-                    if not isinstance(v, bytes):
-                        v = str(v)
+        # 'This method searches `module` for classes derived from TestCase's
+    #
+    # What happens if loadTestsFromModule() is given something other
+    # than a module?
+    #
+    # XXX Currently, it succeeds anyway. This flexibility
+    # should either be documented or loadTestsFromModule() should
+    # raise a TypeError
+    #
+    # XXX Certain people are using this behaviour. We'll add a test for it
+    def test_loadTestsFromModule__not_a_module(self):
+        class MyTestCase(unittest.TestCase):
+            def test(self):
+                pass
     
-        return merge_setting(request_hooks, session_hooks, dict_class)
+        def test_file_display(self):
+        for handler in (self.dialog.idle_credits,
+                        self.dialog.idle_readme,
+                        self.dialog.idle_news):
+            self.error.message = ''
+            self.view.called = False
+            with self.subTest(handler=handler):
+                handler()
+                self.assertEqual(self.error.message, '')
+                self.assertEqual(self.view.called, True)
+    
+    
+class TestSymbolGeneration(unittest.TestCase):
+    
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
+    
+            print('Testing IMapIterator.next() with timeout:', end=' ')
+        it = pool.imap(calculatestar, TASKS)
+        while 1:
+            sys.stdout.flush()
+            try:
+                sys.stdout.write('\n\t%s' % it.next(0.02))
+            except StopIteration:
+                break
+            except multiprocessing.TimeoutError:
+                sys.stdout.write('.')
+        print()
+        print()
