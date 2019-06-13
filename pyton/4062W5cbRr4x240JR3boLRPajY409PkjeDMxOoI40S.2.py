@@ -1,180 +1,148 @@
 
         
-        
-class Rank(Enum):
+            ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
-        def park_vehicle(self, vehicle):
-        spot = self._find_available_spot(vehicle)
-        if spot is None:
-            return None
-        else:
-            spot.park_vehicle(vehicle)
-            return spot
+    module_src = '\n'.join(module_contents) + '\n'
     
-        def mapper(self, _, line):
-        yield line, 1
-    
-    
-class QueryApi(object):
-    
-        def __init__(self):
-        self.name = 'btree_gin'
-    
-        def save(self, must_create=False):
-        '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
-        '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
-    
-                appid = random.choice(self.working_appid_list)
-            return str(appid)
-        else:
-            for _ in xrange(0, 10):
-                appid = self.public_appid.get()
-                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
-                    continue
-                else:
-                    return appid
-            return None
-    
-    import os
+    import io
 import sys
-import glob
-import binascii
-import time
-import random
-import base64
-import hashlib
-import threading
-import subprocess
-import datetime
-    
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
-    
-        if prober.nat_type in ('cone', 'restricted'):
-        usable = 'usable'
-    elif prober.nat_type == 'offline':
-        usable = 'unusable'
-    else:
-        usable = 'unknown'
-    
-            c = classmethod(f)
-        self.assertTrue(c.__func__ is f)
-    
-        # #14971: Make sure the dotted name resolution works even if the actual
-    # function doesn't have the same name as is used to find it.
-    def test_loadTestsFromName__function_with_different_name_than_method(self):
-        # lambdas have the name '<lambda>'.
-        m = types.ModuleType('m')
-        class MyTestCase(unittest.TestCase):
-            test = lambda: 1
-        m.testcase_1 = MyTestCase
-    
-    PYTHON2_EXCEPTIONS = (
-    'ArithmeticError',
-    'AssertionError',
-    'AttributeError',
-    'BaseException',
-    'BufferError',
-    'BytesWarning',
-    'DeprecationWarning',
-    'EOFError',
-    'EnvironmentError',
-    'Exception',
-    'FloatingPointError',
-    'FutureWarning',
-    'GeneratorExit',
-    'IOError',
-    'ImportError',
-    'ImportWarning',
-    'IndentationError',
-    'IndexError',
-    'KeyError',
-    'KeyboardInterrupt',
-    'LookupError',
-    'MemoryError',
-    'NameError',
-    'NotImplementedError',
-    'OSError',
-    'OverflowError',
-    'PendingDeprecationWarning',
-    'ReferenceError',
-    'RuntimeError',
-    'RuntimeWarning',
-    # StandardError is gone in Python 3, so we map it to Exception
-    'StopIteration',
-    'SyntaxError',
-    'SyntaxWarning',
-    'SystemError',
-    'SystemExit',
-    'TabError',
-    'TargetScopeError',
-    'TypeError',
-    'UnboundLocalError',
-    'UnicodeDecodeError',
-    'UnicodeEncodeError',
-    'UnicodeError',
-    'UnicodeTranslateError',
-    'UnicodeWarning',
-    'UserWarning',
-    'ValueError',
-    'Warning',
-    'ZeroDivisionError',
-)
-    
-            self.assertEqual(result,
-                         ['    ENCODING   'utf-8'       (0, 0) (0, 0)'] +
-                         expected.rstrip().splitlines())
-    
-        This code is new in Python 3.2, but this class can be copy pasted into
-    user code for use with earlier Python versions.
-    '''
+import re
     
     
-if __name__ == '__main__':
-    multiprocessing.freeze_support()
-    test()
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+    
+    
+defs = gettestcases()
+    
+        def debug(self, msg):
+        pass
+    
+    from youtube_dl.jsinterp import JSInterpreter
+    
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+        # Compute detections at different scales
+    for scale in cfg.TEST.KPS_AUG.SCALES:
+        ds_scl = scale < cfg.TEST.SCALE
+        us_scl = scale > cfg.TEST.SCALE
+        heatmaps_scl = im_detect_keypoints_scale(
+            model, im, scale, cfg.TEST.KPS_AUG.MAX_SIZE, boxes
+        )
+        add_heatmaps_t(heatmaps_scl, ds_scl, us_scl)
+    
+    
+def datasets():
+    '''Retrieve the list of available dataset names.'''
+    return _DATASETS.keys()
+    
+        # conv 1x1 -> GN (no ReLU)
+    cur = model.ConvGN(
+        cur,
+        prefix + '_branch2c',
+        dim_inner,
+        dim_out,
+        kernel=1,
+        group_gn=get_group_gn(dim_out),
+        stride=1,
+        pad=0,
+    )
+    return cur
 
     
-    # Register the converter
-sqlite3.register_converter('point', convert_point)
+        if upsample_heatmap:
+        blob_name = 'kps_score_lowres'
+    else:
+        blob_name = 'kps_score'
     
-    import sys
-import os
-from unittest.mock import MagicMock
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
     
-        :param X_img_path: path to image to be recognized
-    :param knn_clf: (optional) a knn classifier object. if not specified, model_save_path must be specified.
-    :param model_path: (optional) path to a pickled knn classifier. if not specified, model_save_path must be knn_clf.
-    :param distance_threshold: (optional) distance threshold for face classification. the larger it is, the more chance
-           of mis-classifying an unknown person as a known one.
-    :return: a list of names and face locations for the recognized faces in the image: [(name, bounding box), ...].
-        For faces of unrecognized persons, the name 'unknown' will be returned.
+    from detectron.datasets import json_dataset
+from detectron.datasets import roidb as roidb_utils
+from detectron.utils import blob as blob_utils
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+    
+        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
+                               interested in regressing on fg bboxes which are
+                               M in number and the output prediction of the network
+                               is of shape N x (A * 4) x H x W
+                               (in case of non class-specific bbox), so we
+                               store the locations of positive fg boxes in this
+                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
+                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
     '''
-    if not os.path.isfile(X_img_path) or os.path.splitext(X_img_path)[1][1:] not in ALLOWED_EXTENSIONS:
-        raise Exception('Invalid image path: {}'.format(X_img_path))
+    # im_info: (height, width, image scale)
+    blob_names = ['im_info']
+    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
+    # Same format as RPN blobs, but one per FPN level
+    if is_training:
+        blob_names += ['retnet_fg_num', 'retnet_bg_num']
+        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
+            suffix = 'fpn{}'.format(lvl)
+            blob_names += [
+                'retnet_cls_labels_' + suffix,
+                'retnet_roi_bbox_targets_' + suffix,
+                'retnet_roi_fg_bbox_locs_' + suffix,
+            ]
+    return blob_names
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+    
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--num-batches', dest='num_batches',
+        help='Number of minibatches to run',
+        default=200, type=int)
+    parser.add_argument(
+        '--sleep', dest='sleep_time',
+        help='Seconds sleep to emulate a network running',
+        default=0.1, type=float)
+    parser.add_argument(
+        '--cfg', dest='cfg_file', help='optional config file', default=None,
+        type=str)
+    parser.add_argument(
+        '--x-factor', dest='x_factor', help='simulates x-factor more GPUs',
+        default=1, type=int)
+    parser.add_argument(
+        '--profiler', dest='profiler', help='profile minibatch load time',
+        action='store_true')
+    parser.add_argument(
+        'opts', help='See detectron/core/config.py for all options', default=None,
+        nargs=argparse.REMAINDER)
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+    args = parser.parse_args()
+    return args
+    
+    
+if len(args) < 1:
+    print(USAGE)
+    sys.exit(1)
+    
+    for f_name in glob.glob(pattern):
+    with open(f_name) as f:
+        print('read file:', f_name)
+        for line in f: #one line as a document
+            words = ' '.join(jieba.cut(line))
+            docs.append(words)
+    
+    t2 = time.time()
+tm_cost = t2-t1
