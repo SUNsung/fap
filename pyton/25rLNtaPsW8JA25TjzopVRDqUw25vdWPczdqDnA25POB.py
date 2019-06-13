@@ -1,146 +1,135 @@
 
         
-            if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
+            # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
+    
+    
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+    '''Log in a registered user by adding the user id to the session.'''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
+    
+    
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
+    
+    
+@pytest.fixture
+def runner(app):
+    '''A test runner for the app's Click commands.'''
+    return app.test_cli_runner()
+    
+    
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
+    '''
+    oldcls = request.files.__class__
+    
+    import os
+import warnings
+    
+        # If the temperature is not a number this can cause issues
+    # with Polymer components, so bail early there.
+    if not isinstance(temperature, Number):
+        raise TypeError(
+            'Temperature is not a number: {}'.format(temperature))
+    
+    
+def convert(value: float, unit_1: str, unit_2: str) -> float:
+    '''Convert one unit of measurement to another.'''
+    if unit_1 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
+    if unit_2 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
+    
+        assert bump_version(Version('0.56.0'), 'minor') == \
+        Version('0.57.0')
+    assert bump_version(Version('0.56.3'), 'minor') == \
+        Version('0.57.0')
+    assert bump_version(Version('0.56.0.b3'), 'minor') == \
+        Version('0.56.0')
+    assert bump_version(Version('0.56.3.b3'), 'minor') == \
+        Version('0.57.0')
+    assert bump_version(Version('0.56.0.dev0'), 'minor') == \
+        Version('0.56.0')
+    assert bump_version(Version('0.56.2.dev0'), 'minor') == \
+        Version('0.57.0')
+    
+    from django.conf import settings
+    
+    
+class GroupTagKeyNotFound(Exception):
+    pass
+    
+        project_id = BoundedBigIntegerField()
+    group_id = BoundedBigIntegerField(null=True)
+    event_id = BoundedBigIntegerField()
+    # We want to keep this model lightweight, so lets use a pointer to
+    # TagKey/TagValue
+    key_id = BoundedBigIntegerField()
+    value_id = BoundedBigIntegerField()
+    # maintain a date column for easy removal
+    date_added = models.DateTimeField(default=timezone.now, db_index=True)
+    
+    for i, backend in enumerate(backends):
+    for prefix, path in prefix_map.items():
+        if backend.startswith(prefix):
+            models = __import__(path, globals(), locals(), ['models'], level=0).models
+            if i == 0:
+                # If this is the first iteration of the loop, we need to
+                # emulate ``from x import *`` by copying the module contents
+                # into the local (module) scope. This follows the same rules as
+                # the import statement itself, as defined in the refrence docs:
+                # https://docs.python.org/2.7/reference/simple_stmts.html#import
+                if getattr(models, '__all__', None) is not None:
+                    predicate = lambda name: name in models.__all__
+                else:
+                    predicate = lambda name: not name.startswith('_')
+                locals().update({k: v for k, v in vars(models).items() if predicate(k)})
+            break
     else:
-        # load the test config if passed in
-        app.config.update(test_config)
-    
-        def app_context_processor(self, f):
-        '''Like :meth:`Flask.context_processor` but for a blueprint.  Such a
-        function is executed each request, even if outside of the blueprint.
-        '''
-        self.record_once(lambda s: s.app.template_context_processors
-            .setdefault(None, []).append(f))
-        return f
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
-    
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
-    
-    
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
+        raise ImproperlyConfigured('Found unknown tagstore backend '%s'' % backend)
 
     
+            # Removing unique constraint on 'TagValue', fields ['project_id',
+        # 'environment_id', '_key', 'value']
+        db.delete_unique(u'tagstore_tagvalue', ['project_id', 'environment_id', 'key', 'value'])
     
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+        def forwards(self, orm):
+        # Adding model 'TagValue'
+        db.create_table(u'tagstore_tagvalue', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('value', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('data', self.gf('sentry.db.models.fields.gzippeddict.GzippedDictField')(null=True, blank=True)),
+            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+        ))
+        db.send_create_signal('tagstore', ['TagValue'])
     
-        return _set_text
-    
-    
-misspelled_subcommand = '''\
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
-    
-            Did you mean `build`?
-'''
-    
-            assert set(os.listdir('.')) == {filename, 'a', 'b', 'c', 'd'}
-        assert set(os.listdir('./d')) == {'e'}
-    
-        try:
-        citext_oids = get_citext_oids(connection.alias)
-        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
-        psycopg2.extensions.register_type(array_type, None)
-    except ProgrammingError:
-        # citext is not available on the database.
-        #
-        # The same comments in the except block of the above call to
-        # register_hstore() also apply here.
-        pass
-
-    
-        def __call__(self, value):
-        keys = set(value)
-        missing_keys = self.keys - keys
-        if missing_keys:
-            raise ValidationError(
-                self.messages['missing_keys'],
-                code='missing_keys',
-                params={'keys': ', '.join(missing_keys)},
-            )
-        if self.strict:
-            extra_keys = keys - self.keys
-            if extra_keys:
-                raise ValidationError(
-                    self.messages['extra_keys'],
-                    code='extra_keys',
-                    params={'keys': ', '.join(extra_keys)},
-                )
-    
-        def save(self, must_create=False):
-        super().save(must_create)
-        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
-    
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
-        else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
-    
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    from collections.abc import Callable, Mapping, MutableMapping
-    
-    try:
-    from urllib3.contrib import pyopenssl
-except ImportError:
-    pyopenssl = None
-    OpenSSL = None
-    cryptography = None
-else:
-    import OpenSSL
-    import cryptography
-    
-            # Verify we haven't overwritten the location with our previous fragment.
-        assert r.history[1].request.url == 'http://{}:{}/get#relevant-section'.format(host, port)
-        # Verify previous fragment is used and not the original.
-        assert r.url == 'http://{}:{}/final-url/#relevant-section'.format(host, port)
-    
-            #: Final URL location of Response.
-        self.url = None
-    
-        return request('delete', url, **kwargs)
-
-    
-    PROJ_METADATA = '%s.json' % PROJ_NAME
-    
-    import urllib
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
-    
-    def get_gallery_id(url, page):
-    return match1(url, pattern_url_gallery)
-    
-    __all__ = ['huomaotv_download']
-    
-        def extract(self, **kwargs):
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            i = kwargs['stream_id']
-            if 'size' not in self.streams[i]:
-                self.streams[i]['size'] = urls_size(self.streams[i]['src'])
+            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
+        db.create_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
