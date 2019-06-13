@@ -1,111 +1,152 @@
 
         
-            self.listener.start
-  end
+        module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
     
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_msg_type(input)
-            input.value[0].value.to_i
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
+  end
+end
+
+    
+        def as_json
+      { name: name, path: path, type: type }
+    end
+  end
+end
+
+    
+            css('.status-badge').each do |node|
+          node.name = 'code'
+          node.content = node.content.strip
+          node.remove_attribute('class')
+        end
+    
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
           end
+        end
     
-      def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
-    
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-      # Setup the root logger with the Rails log level and the desired set of
-  # appenders. The list of appenders to use should be set in the environment
-  # specific configuration file.
-  #
-  # For example, in a production application you would not want to log to
-  # STDOUT, but you would want to send an email for 'error' and 'fatal'
-  # messages:
-  #
-  # => config/environments/production.rb
-  #
-  #     config.log_to = %w[file email]
-  #
-  # In development you would want to log to STDOUT and possibly to a file:
-  #
-  # => config/environments/development.rb
-  #
-  #     config.log_to = %w[stdout file]
-  #
-  Logging.logger.root.appenders = config.log_to unless config.log_to.empty?
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
+        def extract_to_dir(unpack_dir, basename:, verbose:)
+      system_command! AIR_APPLICATION_INSTALLER,
+                      args:    ['-silent', '-location', unpack_dir, path],
+                      verbose: verbose
     end
   end
 end
 
     
-          get :index, params: {conversation_id: @conv1.id}
-      save_fixture(html_for('body'), 'conversations_read')
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
   end
+end
+
     
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
+        it 'marks a notification as unread if it is told to' do
+      note = FactoryGirl.create(:notification)
+      expect(Notification).to receive(:where).and_return([note])
+      expect(note).to receive(:set_read_state).with(false)
+      get :update, params: {id: note.id, set_unread: 'true'}, format: :json
     end
     
-      describe '#index' do
-    before do
-      @message = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
-    end
+          it 'returns a 404 for a post not visible to the user' do
+        sign_in(eve, scope: :user)
+        expect {
+          get :index, params: {post_id: @post.id}, format: :json
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     
-          it 'returns reshares without login' do
-        bob.reshare!(@post)
-        sign_out :user
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
+          it 'succeeds' do
+        put :update, params: {id: 42, post_id: @status.id}, format: :js
+        expect(response).to be_success
+      end
+    
+        describe 'other streams' do
+      it 'redirects to the login page' do
+        %i[activity followed_tags liked mentioned multi].each do |stream_path|
+          get stream_path
+          expect(response).to be_redirect
+          expect(response).to redirect_to new_user_session_path
+        end
       end
     end
   end
 end
 
     
-      def create
-    @broadcast = Broadcast.new(broadcast_params)
-    redirect_to '/internal/broadcasts'
-  end
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
+      end
     
-      context 'hook value is string' do
-    before { project.yaml[hook_name] = 'echo 'on hook'' }
+      describe '.token' do
+    it 'returns a unique masked version of the authenticity token' do
+      expect(Rack::Protection::AuthenticityToken.token(session)).not_to eq(masked_token)
+    end
     
-      it 'creates an instance' do
-    expect(subject).to be_a(Tmuxinator::Pane)
-  end
-    
-        context 'as number' do
-      it 'will gracefully handle a name given as a number' do
-        rendered = project_with_number_as_name
-        expect(rendered.name.to_i).to_not equal 0
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
       end
     end
     
-      'echo '#{standard_options.join('\n')}''
-end
-
-    
-        before do
-      allow(described_class).to receive(:environment?).and_return false
-      allow(described_class).to receive(:xdg).and_return fixtures_dir
-      allow(described_class).to receive(:home).and_return fixtures_dir
-    end
+    RSpec.describe JSFiddleTag, type: :liquid_template do
+  describe '#link' do
+    let(:jsfiddle_link) { 'http://jsfiddle.net/link2twenty/v2kx9jcd' }
+    let(:jsfiddle_link_with_custom_tabs) { 'http://jsfiddle.net/link2twenty/v2kx9jcd result,html,css' }
