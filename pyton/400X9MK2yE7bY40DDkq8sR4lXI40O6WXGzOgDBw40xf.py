@@ -1,156 +1,152 @@
 
         
-        
-class RangeMinValueValidator(MinValueValidator):
-    def compare(self, a, b):
-        return a.lower is None or a.lower < b
-    message = _('Ensure that this range is completely greater than or equal to %(limit_value)s.')
+            def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
 
     
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
+        def help(self):
+        '''An extensive help for the command. It will be shown when using the
+        'help' command. It can contain newlines, since not post-formatting will
+        be applied to its contents.
+        '''
+        return self.long_desc()
     
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
-        else:
-            s.delete()  # Clear sessions with no data.
-        return s
     
-        for node in doctree.traverse(settingslist_node):
-        settings_list = nodes.bullet_list()
-        settings_list.extend([make_setting_element(d, app, fromdocname)
-                              for d in sorted(env.scrapy_all_settings,
-                                              key=itemgetter('setting_name'))
-                              if fromdocname != d['docname']])
-        node.replace_self(settings_list)
+class _BenchServer(object):
     
-            if opts.logfile:
-            self.settings.set('LOG_ENABLED', True, priority='cmdline')
-            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
     
-        def syntax(self):
-        return '[options] <url>'
+def _import_file(filepath):
+    abspath = os.path.abspath(filepath)
+    dirname, file = os.path.split(abspath)
+    fname, fext = os.path.splitext(file)
+    if fext != '.py':
+        raise ValueError('Not a Python source file: %s' % abspath)
+    if dirname:
+        sys.path = [dirname] + sys.path
+    try:
+        module = import_module(fname)
+    finally:
+        if dirname:
+            sys.path.pop(0)
+    return module
     
-        from twisted.internet.ssl import (optionsForClientTLS,
-                                      CertificateOptions,
-                                      platformTrust)
-    from twisted.web.client import BrowserLikePolicyForHTTPS
-    from twisted.web.iweb import IPolicyForHTTPS
+    from scrapy.exceptions import NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.boto import is_botocore
+from .http import HTTPDownloadHandler
     
-    def _make_skipped_test(methodname, exception, suiteClass):
-    @case.skip(str(exception))
-    def testSkipped(self):
-        pass
-    attrs = {methodname: testSkipped}
-    TestClass = type('ModuleSkipped', (case.TestCase,), attrs)
-    return suiteClass((TestClass(methodname),))
+    import six
+from w3lib import html
     
-            self.assertExactTypeEqual('a**2+b**2==c**2',
-                                  NAME, token.DOUBLESTAR, NUMBER,
-                                  token.PLUS,
-                                  NAME, token.DOUBLESTAR, NUMBER,
-                                  token.EQEQUAL,
-                                  NAME, token.DOUBLESTAR, NUMBER)
-        self.assertExactTypeEqual('{1, 2, 3}',
-                                  token.LBRACE,
-                                  token.NUMBER, token.COMMA,
-                                  token.NUMBER, token.COMMA,
-                                  token.NUMBER,
-                                  token.RBRACE)
-        self.assertExactTypeEqual('^(x & 0x1)',
-                                  token.CIRCUMFLEX,
-                                  token.LPAR,
-                                  token.NAME, token.AMPER, token.NUMBER,
-                                  token.RPAR)
+        @classmethod
+    def from_crawler(cls, crawler):
+        if not crawler.settings.getbool('COOKIES_ENABLED'):
+            raise NotConfigured
+        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
     
-            for button, filename, name in button_sources:
-            with  self.subTest(name=name):
-                button.invoke()
-                fn = findfile(filename, subdir='idlelib')
-                get = dialog._current_textview.viewframe.textframe.text.get
-                with open(fn, encoding='utf-8') as f:
-                    self.assertEqual(f.readline().strip(), get('1.0', '1.end'))
-                    f.readline()
-                    self.assertEqual(f.readline().strip(), get('3.0', '3.end'))
-                dialog._current_textview.destroy()
     
-    def handleSlideTitle(title):
-    print('<h2>%s</h2>' % getText(title.childNodes))
+def write_version(version):
+    '''Update Home Assistant constant file with new version.'''
+    with open('homeassistant/const.py') as fil:
+        content = fil.read()
     
-    # Function to return the operator module
-def get_operator_module():
-    return operator
+    def add_fast_rcnn_outputs(model, blob_in, dim):
+    '''Add RoI classification and bounding box regression output ops.'''
+    # Box classification layer
+    model.FC(
+        blob_in,
+        'cls_score',
+        dim,
+        model.num_classes,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    if not model.train:  # == if test
+        # Only add softmax when testing; during training the softmax is combined
+        # with the label cross entropy loss for numerical stability
+        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
+    # Box regression layer
+    num_bbox_reg_classes = (
+        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
+    )
+    model.FC(
+        blob_in,
+        'bbox_pred',
+        dim,
+        num_bbox_reg_classes * 4,
+        weight_init=gauss_fill(0.001),
+        bias_init=const_fill(0.0)
+    )
     
-        # Tell child processes to stop
-    for i in range(NUMBER_OF_PROCESSES):
-        task_queue.put('STOP')
+        if not model.train or cfg.MODEL.FASTER_RCNN:
+        # Proposals are needed during:
+        #  1) inference (== not model.train) for RPN only and Faster R-CNN
+        #  OR
+        #  2) training for Faster R-CNN
+        # Otherwise (== training for RPN only), proposals are not needed
+        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
+        model.GenerateProposals(
+            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
+            ['rpn_rois', 'rpn_roi_probs'],
+            anchors=anchors,
+            spatial_scale=spatial_scale
+        )
     
-    while True:
-    line = input()
-    if line == '':
-        break
-    buffer += line
-    if sqlite3.complete_statement(buffer):
-        try:
-            buffer = buffer.strip()
-            cur.execute(buffer)
+        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
+    bg_inds = np.where(
+        (max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
+        (max_overlaps >= cfg.TRAIN.BG_THRESH_LO)
+    )[0]
+    # Compute number of background RoIs to take from this image (guarding
+    # against there being fewer than desired)
+    bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
+    bg_rois_per_this_image = np.minimum(bg_rois_per_this_image, bg_inds.size)
+    # Sample foreground regions without replacement
+    if bg_inds.size > 0:
+        bg_inds = npr.choice(
+            bg_inds, size=bg_rois_per_this_image, replace=False
+        )
     
-    #########################
-# 1) Using declared types
-con = sqlite3.connect(':memory:', detect_types=sqlite3.PARSE_DECLTYPES)
-cur = con.cursor()
-cur.execute('create table test(p point)')
+        # Map up to original set of anchors
+    labels = data_utils.unmap(labels, total_anchors, inds_inside, fill=-1)
+    bbox_targets = data_utils.unmap(bbox_targets, total_anchors, inds_inside, fill=0)
     
-    # If extensions (or modules to document with autodoc) are in another
-# directory, add these directories to sys.path here. If the directory is
-# relative to the documentation root, use os.path.abspath to make it
-# absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
     
-        # STEP 2: Using the trained classifier, make predictions for unknown images
-    for image_file in os.listdir('knn_examples/test'):
-        full_file_path = os.path.join('knn_examples/test', image_file)
+if __name__ == '__main__':
+    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
+    c2_utils.import_detectron_ops()
+    assert 'BatchPermutation' in workspace.RegisteredOperators()
+    logging_utils.setup_logging(__name__)
+    unittest.main()
+
     
-    for face_location in face_locations:
     
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+def main(args=None):
+    args = parse_args(args)
+    fetch(args.version)
     
-        def test_cnn_raw_face_locations_32bit_image(self):
-        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', '32bit.png'))
-        detected_faces = api._raw_face_locations(img, model='cnn')
     
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+def test_setitem_other_callable():
+    # GH 13299
+    inc = lambda x: x + 1
     
-        # Used for issues that may cause the system to operate in a degraded (but
-    # still operational) state, as well as configuration options that are set
-    # in unexpected ways or deprecated in future versions.
-    SEVERITY_WARNING = 'warning'
     
-        project_id = BoundedBigIntegerField()
-    group_id = BoundedBigIntegerField(null=True)
-    event_id = BoundedBigIntegerField()
-    # We want to keep this model lightweight, so lets use a pointer to
-    # TagKey/TagValue
-    key_id = BoundedBigIntegerField()
-    value_id = BoundedBigIntegerField()
-    # maintain a date column for easy removal
-    date_added = models.DateTimeField(default=timezone.now, db_index=True)
+# define abstract base classes to enable isinstance type checking on our
+# objects
+def create_pandas_abc_type(name, attr, comp):
+    @classmethod
+    def _check(cls, inst):
+        return getattr(inst, attr, '_typ') in comp
+    
+        data = b'x' * 65535
+    b = packb(data, use_bin_type=True)
+    assert len(b) == len(data) + 3
+    assert b[0:1] == header
+    assert b[1:3] == b'\xff\xff'
+    assert b[3:] == data
+    assert unpackb(b) == data
