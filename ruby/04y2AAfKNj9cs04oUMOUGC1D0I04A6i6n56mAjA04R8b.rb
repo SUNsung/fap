@@ -1,96 +1,107 @@
 
         
-              def self.is_supported?(platform)
-        true
-      end
-    end
-  end
-end
-
-    
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            grouping: 'grouping',
-            build_number: 'build_number',
-            prefix: 'prefix',
-          })
-        end').runner.execute(:test)
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --ignore \'ignored/path\' --exit-threshold \'2\' input/dir')
+                message = '#{tag} (fastlane)'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
     
-          it 'sets the configuration to Release' do
+          it 'handles the extension parameter correctly' do
         result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              configuration: 'Release'
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.rb')
+      end
+    
+          it 'works with single quote in rule name' do
+        rule = 'CoveredSwitchStatementsDon'tNeedDefault'
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              enable_rules: [\'#{rule}\'],
+              disable_rules: [\'#{rule}\']
             )
           end').runner.execute(:test)
     
-        context 'with a postfix block' do
-      it 'yields the status, result and command' do
-        expect_command('ls', '-la')
-        Fastlane::Actions.sh('ls', '-la') do |status, result, command|
-          expect(status.exitstatus).to eq(0)
-          expect(result).to be_empty
-          expect(command).to eq('ls -la')
-        end
+    # test monkey patched method on both (simulated) OSes
+describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+    end
+    
+    MESSAGE
+  end
+    
+            warden.logout(scope)
+        warden.clear_strategies_cache!(scope: scope)
+        instance_variable_set(:'@current_#{scope}', nil)
+    
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
       end
     
-          it 'should not be fooled by 10 local code signing identities available' do
-        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
-        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
-        expect(FastlaneCore::UI).not_to(receive(:error))
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
     
-    def expect_correct_implementation_to_be_called(obj, method, os)
-  if method == :shellescape
-    # String.shellescape => CrossplatformShellwords.shellescape => ...
-    expect(obj).to receive(:shellescape).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).with(obj).and_call_original
-    if os == 'windows'
-      # WindowsShellwords.shellescape
-      expect(WindowsShellwords).to receive(:shellescape).with(obj).and_call_original
-      expect(Shellwords).not_to(receive(:escape))
-    else
-      # Shellswords.escape
-      expect(Shellwords).to receive(:escape).with(obj).and_call_original
-      expect(WindowsShellwords).not_to(receive(:shellescape))
+        def execute
+      temp_path = generate_temporary_path
+      packet_gem = Paquet::Gem.new(temp_path, LogStash::Environment::CACHE_PATH)
+    
+    shared_examples 'logstash list' do |logstash|
+  describe 'logstash-plugin list on #{logstash.hostname}' do
+    before(:all) do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
-  elsif method == :shelljoin
-    # Array.shelljoin => CrossplatformShellwords.shelljoin => CrossplatformShellwords.shellescape ...
-    expect(obj).to receive(:shelljoin).and_call_original
-    expect(CrossplatformShellwords).to receive(:shelljoin).with(obj).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).at_least(:once).and_call_original
-  end
-end
+    
+            it 'successfully processes' do
+          uploader_class.process :convert => 'jpg'
+          uploader.process!
+        end
+    
+    require 'rspec'
+require 'carrierwave'
+require 'webmock/cucumber'
+    
+          private
+      def interpolate_paperclip_path(path)
+        mappings.each_pair.inject(path) do |agg, pair|
+          agg.gsub(':#{pair[0]}') { pair[1].call(self, self.paperclip_style).to_s }
+        end
+      end
+    end # Paperclip
+  end # Compatibility
+end # CarrierWave
 
     
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
-        end
-      end
+      describe '.some_class_method' do
+    it 'does something' do
+      # ...
     end
   end
-end
-
-    
-          def verify_ssl
-        github_omniauth_provider.fetch('verify_ssl', true)
-      end
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-          def action_for_rails(env)
-        controller = env[CONTROLLER_KEY]
-        action = '#{controller.class.name}##{controller.action_name}'
