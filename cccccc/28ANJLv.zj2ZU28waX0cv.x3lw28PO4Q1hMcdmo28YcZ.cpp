@@ -1,396 +1,374 @@
 
         
-        
-    {private:
-    Ui::OpenURIDialog *ui;
+          auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena1);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace internal
+}  // namespace protobuf
+}  // namespace google
+
+    
+    TEST(TemplateUtilTest, TestTemplateTypeEquals) {
+  // Check that the TemplateTypeEquals works correctly.
+  bool value = false;
+    }
+    
+    
+    {    std::ofstream ofs(output_file);
+    ofs << dataset.SerializeAsString();
+    ofs.close();
+  }
+    
+    
+    {
+    {    return true;
+  }
+ private:
+  bool CanGenerate(const FileDescriptor* file) const {
+    if (GetPool()->FindFileByName(file->name()) != nullptr) {
+      return false;
+    }
+    for (int j = 0; j < file->dependency_count(); j++) {
+      if (GetPool()->FindFileByName(file->dependency(j)->name()) == nullptr) {
+        return false;
+      }
+    }
+    for (int j = 0; j < file->public_dependency_count(); j++) {
+      if (GetPool()->FindFileByName(
+          file->public_dependency(j)->name()) == nullptr) {
+        return false;
+      }
+    }
+    for (int j = 0; j < file->weak_dependency_count(); j++) {
+      if (GetPool()->FindFileByName(
+          file->weak_dependency(j)->name()) == nullptr) {
+        return false;
+      }
+    }
+    return true;
+  }
 };
     
-    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+    // Functions producing parameter generators.
+//
+// Google Test uses these generators to produce parameters for value-
+// parameterized tests. When a parameterized test case is instantiated
+// with a particular generator, Google Test creates and runs tests
+// for each element in the sequence produced by the generator.
+//
+// In the following sample, tests from test case FooTest are instantiated
+// each three times with parameter values 3, 5, and 8:
+//
+// class FooTest : public TestWithParam<int> { ... };
+//
+// TEST_P(FooTest, TestThis) {
+// }
+// TEST_P(FooTest, TestThat) {
+// }
+// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
+//
+    
+    // Traps C++ exceptions escaping statement and reports them as test
+// failures. Note that trapping SEH exceptions is not implemented here.
+# if GTEST_HAS_EXCEPTIONS
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  try { \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } catch (const ::std::exception& gtest_exception) { \
+    fprintf(\
+        stderr, \
+        '\n%s: Caught std::exception-derived exception escaping the ' \
+        'death test statement. Exception message: %s\n', \
+        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
+        gtest_exception.what()); \
+    fflush(stderr); \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  } catch (...) { \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  }
+    
+    // If *pstr starts with the given prefix, modifies *pstr to be right
+// past the prefix and returns true; otherwise leaves *pstr unchanged
+// and returns false.  None of pstr, *pstr, and prefix can be NULL.
+GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
     
     
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rbx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+};
+    
+      // Returns true iff the given string ends with the given suffix, ignoring
+  // case. Any string is considered to end with an empty suffix.
+  static bool EndsWithCaseInsensitive(
+      const std::string& str, const std::string& suffix);
+    
+        for (int i = 2; i*i <= n; i++) {
+      // n is divisible by an integer other than 1 and itself.
+      if ((n % i) == 0) return false;
+    }
+    
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
+    
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
 }
     
-    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+    namespace {
+std::exception const* get_std_exception_(std::exception_ptr eptr) noexcept {
+  try {
+    std::rethrow_exception(eptr);
+  } catch (const std::exception& ex) {
+    return &ex;
+  } catch (...) {
+    return nullptr;
+  }
+}
+} // namespace
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+      /**
+   * Returns a random uint64_t in [min, max). If min == max, returns 0.
+   */
+  static uint64_t rand64(uint64_t min, uint64_t max) {
+    return rand64(min, max, ThreadLocalPRNG());
+  }
+    
+    template <
+    typename T,
+    template <typename> class Atom = std::atomic,
+    typename CountedDetail = detail::shared_ptr_internals>
+class atomic_shared_ptr {
+  using SharedPtr = typename CountedDetail::template CountedPtr<T>;
+  using BasePtr = typename CountedDetail::counted_base;
+  using PackedPtr = folly::PackedSyncPtr<BasePtr>;
+    }
+    
+    /// Returns the best real CacheLocality information available
+static CacheLocality getSystemLocalityInfo() {
+  if (kIsLinux) {
+    try {
+      return CacheLocality::readFromSysfs();
+    } catch (...) {
+      // keep trying
+    }
+  }
+    }
+    
+    /**
+ * This class creates core-local caches for a given shared_ptr, to
+ * mitigate contention when acquiring/releasing it.
+ *
+ * All methods are threadsafe.  Hazard pointers are used to avoid
+ * use-after-free for concurrent reset() and get() operations.
+ *
+ * Concurrent reset()s are sequenced with respect to each other: the
+ * sharded shared_ptrs will always all be set to the same value.
+ * get()s will never see a newer pointer on one core, and an older
+ * pointer on another after a subsequent thread migration.
+ */
+template <class T, size_t kNumSlots = 64>
+class AtomicCoreCachedSharedPtr {
+ public:
+  explicit AtomicCoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
+    reset(p);
+  }
+    }
+    
+        // Constant parameters
+    const auto FACE_CCN_DECREASE_FACTOR = 8.f;
+    const std::string FACE_PROTOTXT{'face/pose_deploy.prototxt'};
+    const std::string FACE_TRAINED_MODEL{'face/pose_iter_116000.caffemodel'};
+    
+    #endif // OPENPOSE_HAND_HAND_PARAMETERS_HPP
+
+    
+    namespace op
 {
-    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
-    auto ret = SplitTorReplyLine(input);
-    BOOST_CHECK_EQUAL(ret.first, command);
-    BOOST_CHECK_EQUAL(ret.second, args);
-}
+    struct PersonTrackerEntry
+    {
+        std::vector<cv::Point2f> keypoints;
+        std::vector<cv::Point2f> lastKeypoints;
+        std::vector<char> status;
+        std::vector<cv::Point2f> getPredicted() const
+        {
+            std::vector<cv::Point2f> predictedKeypoints(keypoints);
+            if (!lastKeypoints.size())
+                return predictedKeypoints;
+            for (size_t i=0; i<keypoints.size(); i++)
+            {
+                predictedKeypoints[i] = cv::Point2f{predictedKeypoints[i].x + (keypoints[i].x-lastKeypoints[i].x),
+                                                    predictedKeypoints[i].y + (keypoints[i].y-lastKeypoints[i].y)};
+            }
+            return predictedKeypoints;
+        }
+    };
+    }
     
-    #include <stdint.h>
-#include <string>
-#include <vector>
+        template<typename T>
+    Point<T>& Point<T>::operator+=(const Point<T>& point)
+    {
+        try
+        {
+            x += point.x;
+            y += point.y;
+            // Return
+            return *this;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return *this;
+        }
+    }
     
-    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
-#define BITCOIN_CRYPTO_RIPEMD160_H
+        template<typename T>
+    Rectangle<T>& Rectangle<T>::operator=(const Rectangle<T>& rectangle)
+    {
+        try
+        {
+            x = rectangle.x;
+            y = rectangle.y;
+            width = rectangle.width;
+            height = rectangle.height;
+            // Return
+            return *this;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return *this;
+        }
+    }
     
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+    namespace v8 {
+namespace internal {
+    }
+    }
     
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
+    #ifndef V8_HEAP_STORE_BUFFER_H_
+#define V8_HEAP_STORE_BUFFER_H_
     
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
+    #include 'src/base/utils/random-number-generator.h'
+#include 'src/heap/heap-inl.h'
+#include 'src/heap/spaces.h'
+#include 'src/isolate.h'
+    
+      static int GetSweepSpaceIndex(AllocationSpace space) {
+    DCHECK(IsValidSweepingSpace(space));
+    return space - FIRST_GROWABLE_PAGED_SPACE;
+  }
+    
+    
+// The modes possibly affected by apply must be in kApplyMask.
+void RelocInfo::apply(intptr_t delta) {
+  DCHECK_EQ(kApplyMask, (RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
+                         RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
+                         RelocInfo::ModeMask(RelocInfo::OFF_HEAP_TARGET) |
+                         RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY)));
+  if (IsRuntimeEntry(rmode_) || IsCodeTarget(rmode_) ||
+      IsOffHeapTarget(rmode_)) {
+    int32_t* p = reinterpret_cast<int32_t*>(pc_);
+    *p -= delta;  // Relocate entry.
+  } else if (IsInternalReference(rmode_)) {
+    // absolute code pointer inside code object moves with the code object.
+    int32_t* p = reinterpret_cast<int32_t*>(pc_);
+    *p += delta;  // Relocate entry.
   }
 }
     
+    void CpuFeatures::FlushICache(void* start, size_t size) {
+  // No need to flush the instruction cache on Intel. On Intel instruction
+  // cache flushing is only necessary when multiple cores running the same
+  // code simultaneously. V8 (and JavaScript) is single threaded and when code
+  // is patched on an intel CPU the core performing the patching will have its
+  // own instruction cache updated automatically.
+    }
     
-    {} // namespace
     
-     protected:
-  ~NwClipboardSetListSyncFunction() override;
-    
-          rect = gfx_display.work_area();
-      DisplayGeometry& work_area = displayResult->work_area;
-      work_area.x = rect.x();
-      work_area.y = rect.y();
-      work_area.width = rect.width();
-      work_area.height = rect.height();
-    
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+// Returns number of bytes used, including *data.
+int DisassemblerIA32::JumpConditional(byte* data, const char* comment) {
+  DCHECK_EQ(0x0F, *data);
+  byte cond = *(data+1) & 0x0F;
+  byte* dest = data + *reinterpret_cast<int32_t*>(data+2) + 6;
+  const char* mnem = jump_conditional_mnem[cond];
+  AppendToBuffer('%s %s', mnem, NameOfAddress(dest));
+  if (comment != nullptr) {
+    AppendToBuffer(', %s', comment);
   }
+  return 6;  // includes 0x0F
 }
     
     
     {
-    {}  // namespace data
-}  // namespace xgboost
-#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
-
+    {}  // namespace internal
+}  // namespace v8
     
-    
-    {
-    {
-    {  // base margin
-  bst_float base_margin;
-  // model parameter
-  GBTreeModelParam param;
-  /*! \brief vector of trees stored in the model */
-  std::vector<std::unique_ptr<RegTree> > trees;
-  /*! \brief for the update process, a place to keep the initial trees */
-  std::vector<std::unique_ptr<RegTree> > trees_to_update;
-  /*! \brief some information indicator of the tree, reserved */
-  std::vector<int> tree_info;
-};
-}  // namespace gbm
-}  // namespace xgboost
-
-    
-    
-    {
-    {}  // namespace obj
-}  // namespace xgboost
-    
-      // Resets the SplitEvaluator to the state it was in after the Init was called
-  virtual void Reset();
-    
-    namespace detail {
-inline void SetBit(CompressedByteT *byte, int bit_idx) {
-  *byte |= 1 << bit_idx;
-}
-template <typename T>
-inline T CheckBit(const T &byte, int bit_idx) {
-  return byte & (1 << bit_idx);
-}
-inline void ClearBit(CompressedByteT *byte, int bit_idx) {
-  *byte &= ~(1 << bit_idx);
-}
-static const int kPadding = 4;  // Assign padding so we can read slightly off
-                               // the beginning of the array
-    }
-    
-        // output element with JSON pointer '/number'
-    std::cout << j.at('/number'_json_pointer) << '\n';
-    // output element with JSON pointer '/string'
-    std::cout << j.at('/string'_json_pointer) << '\n';
-    // output element with JSON pointer '/array'
-    std::cout << j.at('/array'_json_pointer) << '\n';
-    // output element with JSON pointer '/array/1'
-    std::cout << j.at('/array/1'_json_pointer) << '\n';
-    
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-      const std::vector<float> distmap() const override { return distmap_; }
-  float distmap_aggregate() const override { return distance_; }
-    
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
-    }
+      // Compare the object in a register to a value and jump if they are not equal.
+  void JumpIfNotRoot(Register with, RootIndex index, Label* if_not_equal,
+                     Label::Distance if_not_equal_distance = Label::kFar) {
+    CompareRoot(with, index);
+    j(not_equal, if_not_equal, if_not_equal_distance);
   }
-}
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
+      // IC dispatcher behavior.
     
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
+      BIND(&call_with_any_feedback);
+  {
+    var_type_feedback.Bind(SmiConstant(BinaryOperationFeedback::kAny));
+    Goto(&call_stub);
   }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-    namespace guetzli {
-    }
-    
-    
-    {}  // namespace guetzli
-
-    
-    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
-
-    
-    #include 'guetzli/fdct.h'
