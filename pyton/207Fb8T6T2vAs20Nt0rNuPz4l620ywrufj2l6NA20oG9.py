@@ -1,27 +1,47 @@
 
         
-        We are going to make an array of: x / 2 - 1 if number is even, else x / 2
-(The -1 with even number it's to exclude the number itself)
-Because we just need numbers [from 3..x if x is odd]
+            if state == 'present':
+        for required in ['name', 'description', 'subnets']:
+            if not module.params.get(required):
+                module.fail_json(msg=str('Parameter %s required for state='present'' % required))
+    else:
+        for not_allowed in ['description', 'subnets']:
+            if module.params.get(not_allowed):
+                module.fail_json(msg=str('Parameter %s not allowed for state='absent'' % not_allowed))
     
-        # size in bits of p and q need to add up to the size of n
-    p_size = k / 2
-    q_size = k - p_size
+    RETURN = ''' # '''
     
-    e = gen_prime(k, seed)  # in many cases, e is also chosen to be a small constant
+        def parse(parts):
+        if is_version_higher_than_5_18():
+            return parse_current(parts)
+        else:
+            return parse_older_versions(parts)
     
-    while True:
-        p = gen_prime(p_size, seed)
-        if p % e != 1:
-            break
+    if __name__ == '__main__':
+    python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
     
-    while True:
-        q = gen_prime(q_size, seed)
-        if q % e != 1:
-            break
+        app.on_startup.append(real_ip_startup)
     
-    n = p * q
-    l = (p - 1) * (q - 1)  # calculate totient function
-    d = modinv(e, l)
+    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
     
-    return int(n), int(e), int(d)
+        # Flag to indicate if this migration is too risky
+    # to run online and needs to be coordinated for offline
+    is_dangerous = True
+    
+    
+class EventTag(Model):
+    __core__ = False
+    
+        This **does not** guarantee that the correct value is written into the cache
+    though it will correct itself in the next update window.
+    '''
+    cutoff_dt = timezone.now() - timedelta(seconds=cutoff)
+    # TODO(dcramer): this doesnt handle deleted options (which shouldn't be allowed)
+    for option in Option.objects.filter(last_updated__gte=cutoff_dt).iterator():
+        try:
+            opt = default_manager.lookup_key(option.key)
+            default_manager.store.set_cache(opt, option.value)
+        except UnknownOption as e:
+            logger.exception(six.text_type(e))
