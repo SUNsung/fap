@@ -1,299 +1,193 @@
 
         
-        
-    {} // namespace CAROTENE_NS
-
+          grpc_error* Init(grpc_call_element* elem,
+                   const grpc_call_element_args* args) override;
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const T * src = getRowPtr((const T *)srcBase, srcStride, i);
-        T * dst = getRowPtr((T *)dstBase, dstStride, (flipMode & FLIP_VERTICAL_MODE) != 0 ? size.height - i - 1 : i);
-        size_t j = 0, js = 0, jd = size.width * 3;
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
+    }
     }
     
-        std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream> output(
-        context->Open(basename + '.proto'));
-    string content = GetPool()->BuildFile(new_file)->DebugString();
-    Printer printer(output.get(), '$');
-    printer.WriteRaw(content.c_str(), content.size());
+    #include <grpc/support/cpu.h>
     
-    #include <ctime>
-#include <fstream>
-#include <google/protobuf/util/time_util.h>
-#include <iostream>
-#include <string>
     
-      TemporaryFile() {
-    path = tmppath();
+    {
+    {}  // namespace load_reporter
+}  // namespace grpc
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  host_cpu_load_info_data_t cpuinfo;
+  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
+  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
+                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
+    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
+    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
   }
-    
-    
-    {    return SingleGradientDef(
-        'MergeMultiListFeatureTensorsGradient',
-        '',
-        input_blob_names,
-        output_blob_names);
-  }
-    
-    
-    {	b2PolyNode(b2Vec2& pos);
-	b2PolyNode();
-	void AddConnection(b2PolyNode& toMe);
-	void RemoveConnection(b2PolyNode& fromMe);
-	void RemoveConnectionByIndex(int32 index);
-	bool IsConnectedTo(b2PolyNode& me);
-	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
-	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
-};
-    
-    
-    {}
-#endif
-
-    
-    		virtual bool GetFlip(void) = 0;
-    
-    	// ################################################################################
-	// Block4x4EncodingBits
-	// Base class for Block4x4EncodingBits_XXXX
-	// ################################################################################
-    
-    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
-static const tran_high_t sinpi_1_9 = 5283;
-static const tran_high_t sinpi_2_9 = 9929;
-static const tran_high_t sinpi_3_9 = 13377;
-static const tran_high_t sinpi_4_9 = 15212;
-    
-      int lookChar();
-  void consumeChar();
-  int getChar();
-    
-    
-    {private:
-  
-  PageTransitionType type;           // transition style
-  int duration;                      // duration of the effect in seconds
-  PageTransitionAlignment alignment; // dimension of the effect
-  PageTransitionDirection direction; // direction of motion
-  int angle;                         // direction in degrees
-  double scale;                      // scale
-  GBool rectangular;                 // is the area to be flown in rectangular?
-  GBool ok;                          // set if created successfully
-};
-    
-    PopplerCacheItem::~PopplerCacheItem()
-{
+  return std::make_pair(busy, total);
 }
     
-        Object *put(const Ref &ref);
-    Object *lookup(const Ref &ref, Object *obj);
+    #ifndef GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+#define GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
     
-    void PreScanOutputDev::drawSoftMaskedImage(GfxState * /*state*/, Object * /*ref*/,
-					   Stream * /*str*/,
-					   int /*width*/, int /*height*/,
-					   GfxImageColorMap *colorMap,
-					   GBool /*interpolate*/,
-					   Stream * /*maskStr*/,
-					   int /*maskWidth*/, int /*maskHeight*/,
-					   GfxImageColorMap * /*maskColorMap*/,
-					   GBool /*maskInterpolate*/) {
-  GfxColorSpace *colorSpace;
-    }
+    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
+  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
+    return system_clock::time_point::max();
+  }
+  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
+  system_clock::time_point tp;
+  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
+  tp +=
+      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
+  return tp;
+}
     
-      // Constructor.
-  ProfileData ();
-    
-      // If the mask is higher resolution than the image, use
-  // drawSoftMaskedImage() instead.
-  if (maskWidth > width || maskHeight > height) {
-    decodeLow.initInt(maskInvert ? 0 : 1);
-    decodeHigh.initInt(maskInvert ? 1 : 0);
-    maskDecode.initArray(xref);
-    maskDecode.arrayAdd(&decodeLow);
-    maskDecode.arrayAdd(&decodeHigh);
-    maskColorMap = new GfxImageColorMap(1, &maskDecode,
-					new GfxDeviceGrayColorSpace());
-    maskDecode.free();
-    drawSoftMaskedImage(state, ref, str, width, height, colorMap, interpolate,
-			maskStr, maskWidth, maskHeight, maskColorMap, maskInterpolate);
-    delete maskColorMap;
-    }
-    
-    
-    {
-    {}  // namespace exec
-}  // namespace mxnet
-
-    
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
- */
-class ImageAugmenter {
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
  public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
+  }
   /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
+   * \brief set input stream
    */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
   /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
+   * \brief allows quick read using get char
    */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
-    }
-    }
-    
-    struct dequantize_2bit {
-  MSHADOW_XINLINE static void Map(int i,
-                                  float *out,
-                                  float *in,
-                                  const float neg_threshold,
-                                  const float pos_threshold) {
-    // get position of dequantized value to fill
-    float *outval = out + i;
-    // gets byte which holds quantized value for this position
-    char *ch_ptr = reinterpret_cast<char *>(in + (i >> 4));
-    ch_ptr += ((i & 15) >> 2);
-    // masks used to quantize data
-    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
-    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
-    // col denotes which two bits of a byte are set for this value
-    // col=0 implies first two bits, col=3 implies last two bits,...
-    const int col = i & 3;
-    const uint8_t mask = posbits[col];
-    const uint8_t negmask = negbits[col];
-    const uint8_t masked = *ch_ptr & mask;
-    if (masked == mask) {
-      *outval = pos_threshold;
-    } else if (masked == negmask) {
-      // use posbits for mask as posbits are both 1s
-      // then compare masked with negbits to see if only negbits were set
-      *outval = neg_threshold;
-    } else {
-      *outval = 0;
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
     }
   }
-};
-    
-    
-    {  if (has('dist')) {
-#if MXNET_USE_DIST_KVSTORE
-    kv = new kvstore::KVStoreDist(use_device_comm);
-    if (!has('_async') && kv->IsWorkerNode() && kv->get_rank() == 0) {
-      // configure the server to be the sync mode
-      kv->SendCommandToServers(static_cast<int>(kvstore::CommandType::kSyncMode), '');
-    }
-#else
-    LOG(FATAL) << 'compile with USE_DIST_KVSTORE=1 to use ' << tname;
-    return nullptr;
-#endif  // MXNET_USE_DIST_KVSTORE
-  } else {
-    if (has('nccl')) {
-#if MXNET_USE_NCCL
-      kv = new kvstore::KVStoreNCCL();
-#else
-      LOG(FATAL) << 'compile with USE_NCCL=1 to use ' << tname;
-      return nullptr;
-#endif
-    } else {
-      kv =  new kvstore::KVStoreLocal(use_device_comm);
-    }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
   }
-  kv->type_ = tname;
-  return kv;
+    }
+    }
+    }
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
 }
     
-      void Run(const RunContext& rctx) {
-    // setup DLTensor
-    for (size_t i = 0; i < array_loc_.size(); ++i) {
-      values_[array_loc_[i]].v_handle =
-          const_cast<DLTensor*>(&(array_data_[i].data().dltensor()));
-    }
-    // run the packed function
-    TVMRetValue rv;
-    TVMArgs args(&values_[0], &type_codes_[0], values_.size());
-    if (ctx().dev_type == Context::kGPU) {
-#if MXNET_USE_CUDA
-      // pass stream via last argument.
-      void* strm = static_cast<void*>(rctx.get_stream<gpu>()->stream_);
-      int dev_type = kDLGPU;
-      fset_stream_(dev_type, rctx.ctx.dev_id, strm);
-      func_.CallPacked(args, &rv);
-      fset_stream_(dev_type, rctx.ctx.dev_id, nullptr);
-#else
-      LOG(FATAL) << 'Please compile with CUDA enabled for cuda features';
-#endif
-    } else {
-      func_.CallPacked(args, &rv);
-    }
+      const T* data() const {
+    return ptr_;
   }
     
-      // Check all input and output matrices have the same number
-  // of columns and the output matrix has the right number of rows
-  int ncols = static_cast<int>(out.size(1));
-  int nrows = 1;
-  for (auto & ts : ts_arr) {
-    CHECK_EQ(ncols, static_cast<int>(ts.size(1)))
-      << 'All input and output matrices must have the same number of columns.';
-    nrows *= ts.size(0);
-  }
-  CHECK_EQ(nrows, static_cast<int>(out.size(0)));
+          const size_t bin = 2 * thread_init_[0] * nbins_;
+      memcpy(hist_data + istart, (data + bin + istart), sizeof(double) * (iend - istart));
     
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                        sampler_,
-                                                        dtype_,
-                                                        4,
-                                                        dim));
-    }
+    TEST(DenseColumnWithMissing, Test) {
+  auto dmat = CreateDMatrix(100, 1, 0.5);
+  GHistIndexMatrix gmat;
+  gmat.Init((*dmat).get(), 256);
+  ColumnMatrix column_matrix;
+  column_matrix.Init(gmat, 0.2);
+  auto col = column_matrix.GetColumn(0);
+  for (auto i = 0ull; i < col.Size(); i++) {
+    if (col.IsMissing(i)) continue;
+    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
+              col.GetGlobalBinIdx(i));
   }
+  delete dmat;
+}
+    
+    
+    {  /*!
+   * \brief Create a tree updater given name
+   * \param name Name of the tree updater.
+   */
+  static TreeUpdater* Create(const std::string& name, LearnerTrainParam const* tparam);
+};
+    
+    GPUSet GPUSet::All(GpuIdType gpu_id, GpuIdType n_gpus, int32_t n_rows) {
+  CHECK_GE(gpu_id, 0) << 'gpu_id must be >= 0.';
+  CHECK_GE(n_gpus, -1) << 'n_gpus must be >= -1.';
+    }
+    
+      friend bool operator==(const GPUSet& lhs, const GPUSet& rhs) {
+    return lhs.devices_ == rhs.devices_;
+  }
+  friend bool operator!=(const GPUSet& lhs, const GPUSet& rhs) {
+    return !(lhs == rhs);
+  }
+    
+    int ClusterQualityInfo702::ambig_state(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    int ObjectQualityInfo60C::probexist(const std::uint8_t* bytes,
+                                    int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(5, 3);
+    }
+    
+    
+    {
+    {
+    {}  // namespace msf
+}  // namespace localization
+}  // namespace apollo
+
+    
+    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
+  PiecewiseLinearConstraint constraint(10, 0.1);
+  std::vector<uint32_t> index_list;
+  std::vector<double> lower_bound;
+  std::vector<double> upper_bound;
+  for (uint32_t i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    lower_bound.push_back(1.0);
+    upper_bound.push_back(100.0);
+  }
+    }
+    
+    #include 'modules/planning/math/smoothing_spline/spline_seg_kernel.h'
+    
+    // config detail: {'name': 'commanded_value', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 23,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::commanded_value(const std::uint8_t* bytes,
+                                   int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    Brakerpt6c::Brakerpt6c() {}
+const int32_t Brakerpt6c::ID = 0x6C;
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
