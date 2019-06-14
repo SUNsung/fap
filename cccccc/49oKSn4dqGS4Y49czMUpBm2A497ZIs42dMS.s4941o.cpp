@@ -1,139 +1,129 @@
 
         
-            // Main loop
-    bool running = true;
-    while (running)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
-        }
+        namespace {
+struct DefaultCacheKey {
+  void *Key = nullptr;
+  CacheImpl::CallBacks *CBs = nullptr;
+    }
     }
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-            // Rendering
-        ImGui::Render();
-        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-    
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-    
-    
-    {    vkDestroyDevice(g_Device, g_Allocator);
-    vkDestroyInstance(g_Instance, g_Allocator);
+    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
+  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
+                                 const_cast<void*>(Key), Value_out);
+  return Ret == 0;
 }
     
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-// If you have multiple SDL events and some of them are not meant to be used by dear imgui, you may need to filter events based on their windowID field.
-bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    switch (event->type)
-    {
-    case SDL_MOUSEWHEEL:
-        {
-            if (event->wheel.x > 0) io.MouseWheelH += 1;
-            if (event->wheel.x < 0) io.MouseWheelH -= 1;
-            if (event->wheel.y > 0) io.MouseWheel += 1;
-            if (event->wheel.y < 0) io.MouseWheel -= 1;
-            return true;
-        }
-    case SDL_MOUSEBUTTONDOWN:
-        {
-            if (event->button.button == SDL_BUTTON_LEFT) g_MousePressed[0] = true;
-            if (event->button.button == SDL_BUTTON_RIGHT) g_MousePressed[1] = true;
-            if (event->button.button == SDL_BUTTON_MIDDLE) g_MousePressed[2] = true;
-            return true;
-        }
-    case SDL_TEXTINPUT:
-        {
-            io.AddInputCharactersUTF8(event->text.text);
-            return true;
-        }
-    case SDL_KEYDOWN:
-    case SDL_KEYUP:
-        {
-            int key = event->key.keysym.scancode;
-            IM_ASSERT(key >= 0 && key < IM_ARRAYSIZE(io.KeysDown));
-            io.KeysDown[key] = (event->type == SDL_KEYDOWN);
-            io.KeyShift = ((SDL_GetModState() & KMOD_SHIFT) != 0);
-            io.KeyCtrl = ((SDL_GetModState() & KMOD_CTRL) != 0);
-            io.KeyAlt = ((SDL_GetModState() & KMOD_ALT) != 0);
-            io.KeySuper = ((SDL_GetModState() & KMOD_GUI) != 0);
-            return true;
-        }
+      if (clangDiag.getID() == clang::diag::err_module_not_built &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    SourceLoc loc = DiagLoc;
+    if (clangDiag.getLocation().isValid())
+      loc = resolveSourceLocation(clangDiag.getSourceManager(),
+                                  clangDiag.getLocation());
     }
-    return false;
+    
+    void InputAction::anchor() {}
+    
+    #include 'swift/AST/DiagnosticConsumer.h'
+#include 'swift/AST/DiagnosticEngine.h'
+#include 'swift/Frontend/FrontendOptions.h'
+#include 'llvm/ADT/SetVector.h'
+#include 'llvm/Option/ArgList.h'
+#include <set>
+    
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
+    
+    // We don't want to require the users to write TypesN<...> directly,
+// as that would require them to count the length.  Types<...> is much
+// easier to write, but generates horrible messages when there is a
+// compiler error, as gcc insists on printing out each template
+// argument, even if it has the default value (this means Types<int>
+// will appear as Types<int, None, None, ..., None> in the compiler
+// errors).
+//
+// Our solution is to combine the best part of the two approaches: a
+// user would write Types<T1, ..., TN>, and Google Test will translate
+// that to TypesN<T1, ..., TN> internally to make error messages
+// readable.  The translation is done by the 'type' member of the
+// Types template.
+    
+    
+// This sample shows how to write a more complex unit test for a class
+// that has multiple member functions.
+//
+// Usually, it's a good idea to have one test for each method in your
+// class.  You don't have to do that exactly, but it helps to keep
+// your tests organized.  You may also throw in additional tests as
+// needed.
+    
+    size_t num_threads = 31;
+size_t work_chunk  = 120;
+    
+    void Assembler::sthx(const Reg64& rt, MemoryRef m) {
+  assertx(!m.r.disp);  // doesn't support immediate displacement
+  EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 407);
 }
     
-        if (!g_DescriptorSetLayout)
-    {
-        VkSampler sampler[1] = {g_FontSampler};
-        VkDescriptorSetLayoutBinding binding[1] = {};
-        binding[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        binding[0].descriptorCount = 1;
-        binding[0].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        binding[0].pImmutableSamplers = sampler;
-        VkDescriptorSetLayoutCreateInfo info = {};
-        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        info.bindingCount = 1;
-        info.pBindings = binding;
-        err = vkCreateDescriptorSetLayout(v->Device, &info, v->Allocator, &g_DescriptorSetLayout);
-        check_vk_result(err);
+    
+    {}
+    
+    
+    {  auto entry = m_it.second();
+  assertx(entry.isString());
+  return HHVM_FN(dirname)(entry.toString());
+}
+    
+    struct FileStreamWrapper final : Stream::Wrapper {
+  static req::ptr<MemFile> openFromCache(const String& filename,
+                                         const String& mode);
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  int access(const String& path, int mode) override {
+    return ::access(File::TranslatePath(path).data(), mode);
+  }
+  int stat(const String& path, struct stat* buf) override {
+    return ::stat(File::TranslatePath(path).data(), buf);
+  }
+  int lstat(const String& path, struct stat* buf) override {
+    return ::lstat(File::TranslatePath(path).data(), buf);
+  }
+  int unlink(const String& path) override;
+  int rename(const String& oldname, const String& newname) override;
+  int mkdir(const String& path, int mode, int options) override;
+  int rmdir(const String& path, int /*options*/) override {
+    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
+    return ret;
+  }
+  bool isNormalFileStream() const override { return true; }
     }
     
-      std::atomic<int> total_stopped_;
-  std::atomic<int> total_delayed_;
-  std::atomic<int> total_compaction_pressure_;
-  uint64_t bytes_left_;
-  uint64_t last_refill_time_;
-  // write rate set when initialization or by `DBImpl::SetDBOptions`
-  uint64_t max_delayed_write_rate_;
-  // current write rate
-  uint64_t delayed_write_rate_;
+    #include 'hphp/runtime/base/directory.h'
+#include 'hphp/runtime/ext/std/ext_std_file.h'
     
-      // Create column family, and rocksdb will persist the options.
-  ColumnFamilyHandle* cf;
-  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
-  assert(s.ok());
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
+    {}
+
     
-    // Simple RAII wrapper class for Snapshot.
-// Constructing this object will create a snapshot.  Destructing will
-// release the snapshot.
-class ManagedSnapshot {
- public:
-  explicit ManagedSnapshot(DB* db);
+    /**
+ * Wrapper around popen/pclose.
+ */
+struct Pipe : PlainFile {
+  DECLARE_RESOURCE_ALLOCATION(Pipe);
     }
+    
+    #include 'hphp/runtime/base/http-client.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/string-buffer.h'
+    
+        // output element at index 2 (third element)
+    std::cout << array.at(2) << '\n';
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
