@@ -1,95 +1,218 @@
 
         
-        # You can now launch tensorboard with `tensorboard --logdir=./logs` on your
-# command line and then go to http://localhost:6006/#projector to view the
-# embeddings
-
+            Args:
+      session: The current TensorFlow session,
+      instances: The instances for which to load the labels.
     
-        paths = []
-    for fname in files:
-        paths.append(get_file(fname,
-                              origin=base + fname,
-                              cache_subdir=dirname))
+      if ext_input_bxtxi is not None:
+    input_title += ' External Input'
+    plot_time_series(ext_input_bxtxi, n_to_plot=n_to_plot, color='b',
+                     scale=scale, title=col_title + input_title)
     
+      rates, x0s, inputs = \
+      generate_data(rnn, T=T, E=E, x0s=x0s, P_sxn=P_sxn,
+                    input_magnitude=input_magnitude,
+                    input_times=input_times)
     
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
+      # Project all the channels data onto the low-D PCA basis, where
+  # low-d is the npcs parameter.
+  all_data_pca_pxtc = np.dot(evecs_nxn[:, 0:npcs].T, all_data_zm_nxtc)
     
-    # input image dimensions
-img_rows, img_cols = 28, 28
-# number of convolutional filters to use
-filters = 32
-# size of pooling area for max pooling
-pool_size = 2
-# convolution kernel size
-kernel_size = 3
+        Returns:
+      list of (id, char_id, global_word_id) tuples.
+    '''
+    tf.logging.info('Loading data from: %s', shard_name)
+    with tf.gfile.Open(shard_name) as f:
+      sentences = f.readlines()
+    chars_ids = [self.vocab.encode_chars(sentence) for sentence in sentences]
+    ids = [self.vocab.encode(sentence) for sentence in sentences]
     
-        `log(cosh(x))` is approximately equal to `(x ** 2) / 2` for small `x` and
-    to `abs(x) - log(2)` for large `x`. This means that 'logcosh' works mostly
-    like the mean squared error, but will not be so strongly affected by the
-    occasional wildly incorrect prediction.
-    
-    from ..config.environment import Environment
-from ..const import HTTP_TIMEOUT
-from ..utils import unquote_path
-from .errors import UserError
-from .utils import generate_user_agent
-    
-    from inspect import getdoc
+              # Randomly mask out tokens.
+          p = model_utils.generate_mask()
     
     
-def get_version_info(scope):
-    versioninfo = 'docker-compose version {}, build {}'.format(
-        compose.__version__,
-        get_build_version())
-    
-        def proxy_callable(self, call_name, *args, **kwargs):
-        self.log.info('%s %s <- %s',
-                      self.obj_name,
-                      call_name,
-                      format_call(args, kwargs))
-    
-        Arguments:
-    - `sval`: the string value to parse
+def create_discriminator(hparams,
+                         sequence,
+                         is_training,
+                         reuse=None,
+                         initial_state=None,
+                         inputs=None,
+                         present=None):
+  '''Create the Discriminator model specified by the FLAGS and hparams.
     
     
-def get_named_volumes(services):
-    volume_specs = [
-        VolumeSpec.parse(volume)
-        for service in services.values()
-        for volume in service.get('volumes', [])
-    ]
-    names = {
-        spec.external
-        for spec in volume_specs
-        if spec.is_named_volume
-    }
-    return {name: {'external': True} for name in names}
+@pytest.fixture(autouse=True)
+def shell(mocker):
+    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
+                         new_callable=MagicMock)
+    shell.get_history.return_value = []
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=True)
+    return shell
+    
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument command: Invalid choice, valid choices are:
     
     
-class BinaryDownloader(requests.Session):
-    base_bintray_url = 'https://dl.bintray.com/{}'.format(BINTRAY_ORG)
-    base_appveyor_url = 'https://ci.appveyor.com/api/projects/{}/artifacts/'.format(NAME)
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
     
-class ScriptError(Exception):
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
+    
+    no_such_subcommand = '''error: no such subcommand
+    
+    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
+parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
+    ('foo{}', 'foo{}', 'foo{}'),
+    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
+    
+        def __init__(self):
+        self.name = 'citext'
+    
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
+    
+    
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
+    
+        def create(self):
+        while True:
+            self._session_key = self._get_new_session_key()
+            try:
+                # Save immediately to ensure we have a unique entry in the
+                # database.
+                self.save(must_create=True)
+            except CreateError:
+                # Key wasn't unique. Try again.
+                continue
+            self.modified = True
+            return
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+        @cached_property
+    def initial(self):
+        data = self.form.get_initial_for_field(self.field, self.name)
+        # If this is an auto-generated default date, nix the microseconds for
+        # standardized handling. See #22502.
+        if (isinstance(data, (datetime.datetime, datetime.time)) and
+                not self.field.widget.supports_microseconds):
+            data = data.replace(microsecond=0)
+        return data
+    
+    setup_face_landmarks = '''
+import face_recognition
+    
+        for face_location in face_locations:
+        print_result(image_to_check, face_location)
+    
+    al_image = face_recognition.load_image_file('alex-lacamoire.png')
+al_face_encoding = face_recognition.face_encodings(al_image)[0]
+    
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+    cnn_face_detection_model = face_recognition_models.cnn_face_detector_model_location()
+cnn_face_detector = dlib.cnn_face_detection_model_v1(cnn_face_detection_model)
+    
+    import six
+    
+    
+class TagKeyNotFound(Exception):
     pass
     
+            # Removing unique constraint on 'TagValue', fields ['project_id',
+        # 'environment_id', '_key', 'value']
+        db.delete_unique(u'tagstore_tagvalue', ['project_id', 'environment_id', 'key', 'value'])
     
-def crash(*args, **kwargs):
-    raise Crash()
+            # Adding model 'EventTag'
+        db.create_table(u'tagstore_eventtag', (
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('event_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(
+                db_index=True)),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagValue'], db_column='value_id')),
+        ))
+        db.send_create_signal('tagstore', ['EventTag'])
+    
+        for resolution in resolution_list:
+        try:
+            activity = Activity.objects.filter(
+                group=resolution.group_id,
+                type=Activity.SET_RESOLVED_IN_RELEASE,
+                ident=resolution.id,
+            ).order_by('-datetime')[0]
+        except IndexError:
+            continue
+    
+    from datetime import timedelta
+from django.db.models import Max
+from django.utils import timezone
+    
+        This **does not** guarantee that the correct value is written into the cache
+    though it will correct itself in the next update window.
+    '''
+    cutoff_dt = timezone.now() - timedelta(seconds=cutoff)
+    # TODO(dcramer): this doesnt handle deleted options (which shouldn't be allowed)
+    for option in Option.objects.filter(last_updated__gte=cutoff_dt).iterator():
+        try:
+            opt = default_manager.lookup_key(option.key)
+            default_manager.store.set_cache(opt, option.value)
+        except UnknownOption as e:
+            logger.exception(six.text_type(e))
 
     
-        def test_format_return(self):
-        expected = repr({'Id': 'ok'})
-        actual = verbose_proxy.format_return({'Id': 'ok'}, 2)
-        assert expected == actual
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
