@@ -1,102 +1,123 @@
 
         
-              if line == '````````````````````````````````\n'
-        md.gsub!('→', '\t')
-        html ||= String.new
-        html.gsub!('→', '\t')
-        html.strip!
+        SUITE.each do |key, text|
+  Benchmark.ips do |x|
+    x.report('regex-check   - #{key}') { check_with_regex(text) }
+    x.report('builtin-check - #{key}') { check_with_builtin(text) }
+    x.compare!
+  end
+end
+# ------------------------------------------------------------------------
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+                  EM.start_server(
+                opts['host'],
+                opts['livereload_port'],
+                HttpAwareConnection,
+                opts
+              ) do |ws|
+                handle_websockets_event(ws)
+              end
+    
+          def site
+        @site_drop ||= SiteDrop.new(@obj)
+      end
+    
+      def self.redis_key(req_type, time = Time.now.utc)
+    'app_req_#{req_type}#{time.strftime('%Y%m%d')}'
+  end
     
         it 'rejects invalid directives and ones that are not allowed to be extended' do
       builder << {
         invalid_src: ['invalid'],
       }
     
-      def call(env)
-    if env['PATH_INFO'].start_with?('/auth')
-      @omniauth.call(env)
-    else
-      @app.call(env)
-    end
+        result
   end
     
-    # == Schema Information
-#
-# Table name: drafts
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer          not null
-#  draft_key  :string           not null
-#  data       :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  sequence   :integer          default(0), not null
-#  revisions  :integer          default(1), not null
-#
-# Indexes
-#
-#  index_drafts_on_user_id_and_draft_key  (user_id,draft_key)
-#
-
-    
-      def query
-    @query ||= JavascriptCache.where(digest: params[:digest]).limit(1)
-  end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
+              extension[directive] ||= []
+          extension[directive] << source
         end
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                # Don't set the value if it is the unset value, either.
-                value = obj.instance_variable_get(key)
-                result.instance_variable_set(key, value) if value != UNSET_VALUE
-              end
-            end
-          end
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
-    
-          dir = if File.directory?(file_or_dir)
-              file_or_dir
-            else
-              File.dirname(file_or_dir)
-            end
-      @path_cache[dir] ||= ConfigLoader.configuration_file_for(dir)
-      path = @path_cache[dir]
-      @object_cache[path] ||= begin
-                                print 'For #{dir}: ' if ConfigLoader.debug?
-                                ConfigLoader.configuration_from_file(path)
-                              end
-    end
-  end
-end
-
-    
-          def ignored_nodes
-        @ignored_nodes ||= []
       end
     end
   end
 end
 
     
-                1.upto(3) do |i|
-              next if !arguments[i] || arguments[i].hash_type?
+          global_setting(:s3_cdn_url, 'https://s3-cdn.com')
+    
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
+    
+          @left_diff_line_number = nil
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+    context 'Frontend Unicode support' do
+  include Rack::Test::Methods
+    
+      if cfg = options[:config]
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+    require cfg
+  end
+    
+    # external
+require 'github/markup'
+require 'sanitize'
