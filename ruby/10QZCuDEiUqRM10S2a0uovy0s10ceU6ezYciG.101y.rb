@@ -1,59 +1,166 @@
 
         
-            begin
-      json = JSON.parse(self.body)
-    rescue JSON::ParserError => e
-      elog('#{e.class} #{e.message}\n#{e.backtrace * '\n'}')
+        describe ApplicationHelper do
+  describe '#icon_tag' do
+    it 'returns a Glyphicon icon element' do
+      icon = icon_tag('glyphicon-help')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
     end
     
+          context '#run_workers' do
+        it 'runs all the workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+        end
     
-# Codecs
-IAX_CODEC_G711_MULAW  = 0x00000004
-IAX_CODEC_G711_ALAW   = 0x00000008
-IAX_CODEC_LINEAR_PCM  = 0x00000040
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
     
-        data =
-      [0x00, 0x00, 0x00, 0x00].pack('C*') +
-      bmc_session_id +
-      console_random_id +
-      [
-        0x14, 0x00, 0x00,
-        username.length
-      ].pack('C*') +
-      username
+    describe Utils do
+  describe '#unindent' do
+    it 'unindents to the level of the greatest consistant indention' do
+      expect(Utils.unindent(<<-MD)).to eq('Hello World')
+        Hello World
+      MD
     
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
+      describe 'path request must exist' do
+    it 'should check that validation added if path does not exist' do
+      opts = @opts.tap { |o| o.delete('path') }
+      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
+      @checker.user = users(:bob)
+      expect(@checker.save).to eq false
+      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
+    end
+  end
+    
+      describe 'helpers' do
+    it 'should generate a correct request options hash' do
+      expect(@checker.send(:request_options)).to eq({headers: {'User-Agent' => 'Huginn - https://github.com/huginn/huginn', 'Authorization' => 'Bearer '1234token''}})
+    end
+    
+        def translation_scope
+      'devise.unlocks'
+    end
+end
+
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
+    
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
+    
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
+    
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+      it 'returns the merged `ConfigPart#config_string`' do
+    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
+  end
+    
+        platforms.types.each do |type|
+      desc 'Run acceptance test in #{type} machines'
+      task type do
+        ENV['LS_TEST_PLATFORM']=type
+        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
+      end
+    end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
+    
+        def options_config=(options_config)
+      loaded_config = ConfigLoader.load_file(options_config)
+      @options_config = ConfigLoader.merge_with_default(loaded_config,
+                                                        options_config)
+    end
+    
+          def part_of_ignored_node?(node)
+        ignored_nodes.map(&:loc).any? do |ignored_loc|
+          if ignored_loc.expression.begin_pos > node.source_range.begin_pos
+            next false
           end
     
-              # Decodes the end_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_end_time(input)
-            input.value[0].value
-          end
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptionKey into an
-          # ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_value], 1, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_asn1_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-    module VagrantHelpers
-  extend self
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
