@@ -1,264 +1,117 @@
 
         
-        class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
-                      public in_app_purchase::TransactionObserver {
- public:
-  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
+        	const float32 inv3 = 1.0f / 3.0f;
+	b2Vec2 pRef(0.0f, 0.0f);
+	for (int32 i = 0; i < count; ++i)
+	{
+		// Triangle vertices.
+		b2Vec2 p1 = pRef;
+		b2Vec2 p2 = vs[i];
+		b2Vec2 p3 = i + 1 < count ? vs[i+1] : vs[0];
     }
     
-    namespace atom {
-    }
+    		inline bool GetFlip(void)
+		{
+			return m_pencoding->GetFlip();
+		}
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
+      The input buffer and the output buffer can not overlap.
     
+    #define  C_ADD( res, a,b)\
+    do {(res).r=ADD32((a).r,(b).r);  (res).i=ADD32((a).i,(b).i); \
+    }while(0)
+#define  C_SUB( res, a,b)\
+    do {(res).r=SUB32((a).r,(b).r);  (res).i=SUB32((a).i,(b).i); \
+    }while(0)
+#define C_ADDTO( res , a)\
+    do {(res).r = ADD32((res).r, (a).r);  (res).i = ADD32((res).i,(a).i);\
+    }while(0)
     
-    {}  // namespace asar
+    #define DB_SHIFT 10
     
-    io::ZeroCopyOutputStream* GeneratorContext::OpenForInsert(
-    const string& filename, const string& insertion_point) {
-  GOOGLE_LOG(FATAL) << 'This GeneratorContext does not support insertion.';
-  return NULL;  // make compiler happy
-}
+    #ifdef OPUS_ARM_INLINE_MEDIA
     
-    ImmutableExtensionLiteGenerator::ImmutableExtensionLiteGenerator(
-    const FieldDescriptor* descriptor, Context* context)
-  : descriptor_(descriptor), context_(context),
-    name_resolver_(context->GetNameResolver()) {
-  if (descriptor_->extension_scope() != NULL) {
-    scope_ = name_resolver_->GetImmutableClassName(
-        descriptor_->extension_scope());
-  } else {
-    scope_ = name_resolver_->GetImmutableClassName(descriptor_->file());
-  }
-}
+    #ifndef FIXED_GENERIC_H
+#define FIXED_GENERIC_H
     
-      printer->Print(
-    'java.lang.String[] descriptorData = {\n');
-  printer->Indent();
-    }
-    
-      // #import any headers for 'public imports' in the proto file.
-  {
-    ImportWriter import_writer(
-        options_.generate_for_named_framework,
-        options_.named_framework_to_proto_path_mappings_path,
-        is_bundled_proto_);
-    const string header_extension(kHeaderExtension);
-    for (int i = 0; i < file_->public_dependency_count(); i++) {
-      import_writer.AddFile(file_->public_dependency(i), header_extension);
-    }
-    import_writer.Print(printer);
-  }
-    
-      EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-    
-    // Returns a string identical to *input except that the character pointed to
-// by radix_pos (which should be '.') is replaced with the locale-specific
-// radix character.
-string LocalizeRadix(const char* input, const char* radix_pos) {
-  // Determine the locale-specific radix character by calling sprintf() to
-  // print the number 1.5, then stripping off the digits.  As far as I can
-  // tell, this is the only portable, thread-safe way to get the C library
-  // to divuldge the locale's radix character.  No, localeconv() is NOT
-  // thread-safe.
-  char temp[16];
-  int size = sprintf(temp, '%.1f', 1.5);
-  GOOGLE_CHECK_EQ(temp[0], '1');
-  GOOGLE_CHECK_EQ(temp[size-1], '5');
-  GOOGLE_CHECK_LE(size, 6);
-    }
-    
-    template <typename T> struct TypeTraits;
-template <> struct TypeTraits< u8> { typedef u16 wide;                     typedef  u8 unsign; typedef  uint8x16_t vec128; };
-template <> struct TypeTraits< s8> { typedef s16 wide;                     typedef  u8 unsign; typedef   int8x16_t vec128; };
-template <> struct TypeTraits<u16> { typedef u32 wide; typedef  u8 narrow; typedef u16 unsign; typedef  uint16x8_t vec128; };
-template <> struct TypeTraits<s16> { typedef s32 wide; typedef  s8 narrow; typedef u16 unsign; typedef   int16x8_t vec128; };
-template <> struct TypeTraits<u32> { typedef u64 wide; typedef u16 narrow; typedef u32 unsign; typedef  uint32x4_t vec128; };
-template <> struct TypeTraits<s32> { typedef s64 wide; typedef s16 narrow; typedef u32 unsign; typedef   int32x4_t vec128; };
-template <> struct TypeTraits<f32> { typedef f64 wide;                                         typedef float32x4_t vec128; };
-    
-    #ifdef CAROTENE_NEON
-    
-    #define CONTSRC2 dstStride == src0Stride && \
-                 dstStride == src1Stride &&
-#define CONTSRC3 dstStride == src0Stride && \
-                 dstStride == src1Stride && \
-                 dstStride == src2Stride &&
-#define CONTSRC4 dstStride == src0Stride && \
-                 dstStride == src1Stride && \
-                 dstStride == src2Stride && \
-                 dstStride == src3Stride &&
-    
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[5]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[4]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[3]);
-    
-    
-    {
-    {            if (s[0] < 0 || s[1] < 0)//saturate in case of overflow ~ 4GB of non-zeros...
-            {
-                return 0x7fFFffFF;
-            }
-            result += (s[0] += s[1]);
-            if (s[0] < 0 || result < 0)
-            {
-                return 0x7fFFffFF;
-            }
-        }
-        for (; i < size.width; i++)
-            result += (src[i] != 0)?1:0;
-        if (result < 0)//saturate in case of overflow ~ 4GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-    }
-    return result;
-#else
-    (void)_size;
-    (void)srcBase;
-    (void)srcStride;
-    
-        Size2D size(_size);
-    if (srcStride == dstStride &&
-        srcStride == rng1Stride &&
-        srcStride == rng2Stride &&
-        srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    const size_t width = size.width & ~( 32/sizeof(T) - 1 );
-    
-      // Now, we have that n is odd and n >= 3.
-    
-    /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
-    
-    
-    { private:
-  friend class NDArray;
-  /*! \brief make constructor protected. */
-  Imperative() {
-    if (dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_TRAIN', 1)) {
-      backward_bulk_size_ =  dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN', 15);
-    }
-  }
-  /*! \brief find the input/output ndarrays that are needed for backward */
-  void GetBackwardDependency(
-      const nnvm::NodePtr& node,
-      uint32_t num_inputs, uint32_t num_outputs,
-      std::vector<bool> *p_save_inputs,
-      std::vector<bool> *p_save_outputs);
-  /*! \brief indicate whether is training. */
-#if DMLC_CXX11_THREAD_LOCAL
-  static thread_local bool is_train_;
-  static thread_local bool is_recording_;
-#else
-  static MX_THREAD_LOCAL bool is_train_;
-  static MX_THREAD_LOCAL bool is_recording_;
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
 #endif
-  /*! \brief node count used for naming */
-  std::atomic<uint64_t> node_count_{0};
-  /*! \brief variable count used for naming */
-  std::atomic<uint64_t> variable_count_{0};
-  /*! \brief default backward bulk size */
-  int backward_bulk_size_{0};
+
+    
+    #if !GTEST_OS_SYMBIAN
+# include <utility>
+#endif
+    
+    // Ternary predicate assertion macros.
+#define EXPECT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_FATAL_FAILURE_)
+    
+      void depart() {
+    if (link_.depart()) delete value_;
+  }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13>
+class ValueArray13 {
+ public:
+  ValueArray13(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13) : v1_(v1), v2_(v2), v3_(v3), v4_(v4),
+      v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10), v11_(v11),
+      v12_(v12), v13_(v13) {}
+    }
+    
+    #include <string.h>
+#include <string>
+    
+      void operator delete(void* block, size_t /* allocation_size */) {
+    allocated_--;
+    free(block);
+  }
+    
+    
+    {  E element_;
+  QueueNode* next_;
 };
     
-    namespace mxnet {
-/*!
- * \brief Operator interface.
- *  Operator defines basic operation unit of optimized computation graph in mxnet.
- *  This interface relies on pre-allocated memory in TBlob, the caller need to set
- *  the memory region in TBlob correctly before calling Forward and Backward.
- *
- *  Operator is generated by OperatorProperty.
- *  To add new operator(aka. layers of neural nets) to mxnet, developer need to create
- *  a new OperatorProperty and its corresponding Operator.
- *
- * \sa TBlob, TShape, OperatorProperty
- */
-class Operator {
- public:
-  /*! \brief destructor */
-  virtual ~Operator() {}
-  /*!
-   * \brief perform a forward operation of Operator, save the output to TBlob.
-   * \param ctx runtime context available to this call
-   * \param in_data array of input data, it is const
-   * \param req the request types of saving operation, can only be kWriteTo or kWriteInplace.
-   * \param out_data array of output data, pointer is used to indicate that this is holder
-   *        the space of TBlob in out_data must be pre-allocated with InferShape
-   * \param aux_states Auxiliary states of operator. Normally operator doesn't
-   *        need, epecial case like Batch Norm requires.
-   * \sa OpReqType, OpContext
-   */
-  virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_states) = 0;
-  /*!
-   * \brief Perform a Backward Operation, write gradient to the in_grad.
-   *
-   * \note
-   * Convention:
-   *   out_grad.size() == OperatorProperty.NumVisibleOutputs()
-   *   out_data.size() == OperatorProperty.NumOutputs()
-   * out_data can contain additional invisible returns that remembers the
-   * state carried from the Forward pass. For example mask in the dropout.
-   * The gradients are passed from visible returns in this function.
-   *
-   * \par
-   * Not all the TBlobs in the arguments will be available
-   * if you override the DeclareBackwardDependency of corresponding OperatorProperty class.
-   * Only the dependencies you declared will be available at corresponding position,
-   * the rest of the parameters are simply dummy where you will get a nullptr.
-   * You will be safe if you use the default DeclareBackwardDependency.
-   * But only declare what you need will give engine more chance for optimization.
-   *
-   * \param ctx runtime context available to this call
-   * \param out_grad the gradient value we get from of the Operator.
-   * \param in_data the array of input data.
-   * \param out_data the array of output data.
-   * \param req request types of the saving operation, can be all types.
-   * \param in_grad the array of gradient we need to write to.
-   * \param aux_states Auxiliary states of operator. Normally operator doesn't need
-   * \sa OperatorProperty, OpReqType, OpContext
-   */
-  virtual void Backward(const OpContext &ctx,
-                        const std::vector<TBlob> &out_grad,
-                        const std::vector<TBlob> &in_data,
-                        const std::vector<TBlob> &out_data,
-                        const std::vector<OpReqType> &req,
-                        const std::vector<TBlob> &in_grad,
-                        const std::vector<TBlob> &aux_states) {
-    LOG(FATAL) << 'Backward is not implemented';
-  }
-  /*! \return [Deprecated] execution type of the operator */
-  virtual ExecType exec_type() const final {  // NOLINT(*) exec_type has been moved to OperatorProperty
-    return ExecType::kSync;
-  }
-};
+        if (install_callbacks)
+    {
+        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
     }
     
     
-    {
-    {}  // namespace rtc
-}  // namespace mxnet
+    {        // Render Hue Bar
+        for (int i = 0; i < 6; ++i)
+            draw_list->AddRectFilledMultiColor(ImVec2(bar0_pos_x, picker_pos.y + i * (sv_picker_size / 6)), ImVec2(bar0_pos_x + bars_width, picker_pos.y + (i + 1) * (sv_picker_size / 6)), hue_colors[i], hue_colors[i], hue_colors[i + 1], hue_colors[i + 1]);
+        float bar0_line_y = (float)(int)(picker_pos.y + H * sv_picker_size + 0.5f);
+        RenderFrameBorder(ImVec2(bar0_pos_x, picker_pos.y), ImVec2(bar0_pos_x + bars_width, picker_pos.y + sv_picker_size), 0.0f);
+        RenderArrowsForVerticalBar(draw_list, ImVec2(bar0_pos_x - 1, bar0_line_y), ImVec2(bars_triangles_half_sz + 1, bars_triangles_half_sz), bars_width + 2.0f);
+    }
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
