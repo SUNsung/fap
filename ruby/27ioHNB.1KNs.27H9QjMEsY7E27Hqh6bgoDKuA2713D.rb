@@ -1,117 +1,88 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
-    
-          # The minimum number of requests we want to keep available.
-      #
-      # We don't use a value of 0 as multiple threads may be using the same
-      # token in parallel. This could result in all of them hitting the GitHub
-      # rate limit at once. The threshold is put in place to not hit the limit
-      # in most cases.
-      RATE_LIMIT_THRESHOLD = 50
-    
-            def find_target_id
-          GithubImport::IssuableFinder.new(project, issue).database_id
-        end
-      end
+              File.write(new_path, '1')
+      false
     end
-  end
+    
+          it 'updates with a single dependency' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              command: 'update',
+              dependencies: ['TestDependency']
+            )
+          end').runner.execute(:test)
+    
+          it 'handles extension and extensions parameters correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
+      end
+    
+            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
+      end
+    
+    # Windows implementation
+module WindowsShellwords
+  def shellescape(str)
+    str = str.to_s
+    
+    # confirms that the escaped string that is generated actually
+# gets turned back into the source string by the actual shell.
+# abuses a `grep` (or `find`) error message because that should be cross platform
+def confirm_shell_unescapes_string_correctly(string, escaped)
+  compare_string = string.to_s.dup
+    
+    describe Deliver::HtmlGenerator do
+  let(:generator) { Deliver::HtmlGenerator.new }
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
 end
 
     
-      if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
-    end
-  end
+    desc 'generate gemspec'
+task 'rack-protection.gemspec' do
+  require 'rack/protection/version'
+  content = File.binread 'rack-protection.gemspec'
     
-        context 'on a public post from a stranger' do
-      before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+          def set_token(session)
+        session[:csrf] ||= self.class.random_token
       end
     
-      it 'prevents ajax requests without a valid token' do
-    expect(post('/', {}, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest')).not_to be_ok
-  end
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
     
-      it 'should not set the Content Security Policy for other content types' do
-    headers = get('/', {}, 'wants' => 'text/foo').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
-  end
-    
-          expected_header = <<-END.chomp
-rack.%2573ession=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.%2573ession=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.%2573ession=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
-rack.session=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
-END
-      expect(last_response.headers['Set-Cookie']).to eq(expected_header)
-    end
-  end
-    
-          options = {:debug => ENV['LS_QA_DEBUG']}
-      puts 'Destroying #{machines}'
-      LogStash::VagrantHelpers.destroy(machines, options)
-      puts 'Bootstrapping #{machines}'
-      LogStash::VagrantHelpers.bootstrap(machines, options)
+      context 'with redirect reaction' do
+    before(:each) do
+      mock_app do
+        use Rack::Protection::CookieTossing, :reaction => :redirect
+        run DummyApp
+      end
     end
     
-              it 'allow to install a specific version' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          def part_of_ignored_node?(node)
+        ignored_nodes.map(&:loc).any? do |ignored_loc|
+          if ignored_loc.expression.begin_pos > node.source_range.begin_pos
+            next false
           end
-        end
-      end
     
-          def show_revert
-        !@message
-      end
-    
-          def default_markup
-        Precious::App.settings.default_markup
-      end
-    end
-  end
-end
-
-    
-          def format
-        @format = (@page.format || false) if @format.nil?
-        @format.to_s.downcase
-      end
-    end
-  end
-end
-
-    
-    $contexts = []
-    
-      s.executables = ['gollum']
+            def message(variable)
+          message = 'Unused #{variable_type(variable)} - `#{variable.name}`.'
