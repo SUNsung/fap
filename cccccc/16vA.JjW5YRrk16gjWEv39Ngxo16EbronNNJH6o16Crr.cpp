@@ -1,11 +1,163 @@
 
         
         
-    {}  // namespace tesseract.
-
-    
-    namespace tesseract {
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
+        }
+      }
     }
+  }
+}
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    int NPyBfloat16_Fill(void* buffer_raw, npy_intp length, void* ignored) {
+  bfloat16* const buffer = reinterpret_cast<bfloat16*>(buffer_raw);
+  const float start(buffer[0]);
+  const float delta = static_cast<float>(buffer[1]) - start;
+  for (npy_intp i = 2; i < length; ++i) {
+    buffer[i] = static_cast<bfloat16>(start + i * delta);
+  }
+  return 0;
+}
+    
+    // Register the bfloat16 numpy type.
+void RegisterNumpyBfloat16();
+    
+    
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
+  }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
+    
+      // Creates a 2d FFT plan.
+  virtual std::unique_ptr<Plan> Create2dPlan(Stream *stream, uint64 num_x,
+                                             uint64 num_y, Type type,
+                                             bool in_place_fft) = 0;
+    
+    namespace stream_executor {
+namespace host {
+    }
+    }
+    
+      // Returns the most recent value recorded for a start/stopcycle, in
+  // microseconds.
+  uint64 Microseconds() const override;
+    
+    namespace llvm {
+template<> struct DenseMapInfo<DefaultCacheKey> {
+  static inline DefaultCacheKey getEmptyKey() {
+    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
+  }
+  static inline DefaultCacheKey getTombstoneKey() {
+    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
+  }
+  static unsigned getHashValue(const DefaultCacheKey &Val) {
+    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
+    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
+  }
+  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
+    if (LHS.Key == RHS.Key)
+      return true;
+    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
+        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
+      return false;
+    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
+  }
+};
+} // namespace llvm
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
+}
+    
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
+  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
+}
+    
+      /// A place to keep alive any buffers that are loaded as part of setting up
+  /// the frontend inputs.
+  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> ConfigurationFileBuffers;
+    
+      // Array holding scores for each orientation id [0,3].
+  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
+  // page respectively, where the values refer to the amount of clockwise
+  // rotation to be applied to the page for the text to be upright and readable.
+  float orientations[4];
+  // Script confidence scores for each of 4 possible orientations.
+  float scripts_na[4][kMaxNumberOfScripts];
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    
+    { private:
+  // The collection of images to put in the PDF.
+  Pixa* pixa_;
+  // The fonts used to draw text captions.
+  L_Bmf* fonts_;
+};
     
       // Returns the direction of the fitted line as a unit vector, using the
   // least mean squared perpendicular distance. The line runs through the
@@ -22,204 +174,177 @@
   // covariance matrix.
   FCOORD vector_fit() const;
     
-    
-    {  // WARNING! Keep data as the first element! KDPairInc and KDPairDec depend
-  // on the order of these elements so they can downcast pointers appropriately
-  // for use by GenericHeap::Reshuffle.
-  Data data;
-  Key key;
-};
-// Specialization of KDPair to provide operator< for sorting in increasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairInc : public KDPair<Key, Data> {
-  KDPairInc() = default;
-  KDPairInc(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in increasing order.
-  int operator<(const KDPairInc<Key, Data>& other) const {
-    return this->key < other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairInc pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairInc* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairInc*>(data_ptr);
-  }
-};
-// Specialization of KDPair to provide operator< for sorting in decreasing order
-// and recasting of data pointers for use with DoublePtr.
-template <typename Key, typename Data>
-struct KDPairDec : public KDPair<Key, Data> {
-  KDPairDec() = default;
-  KDPairDec(Key k, Data d) : KDPair<Key, Data>(k, d) {}
-  // Operator< facilitates sorting in decreasing order by using operator> on
-  // the key values.
-  int operator<(const KDPairDec<Key, Data>& other) const {
-    return this->key > other.key;
-  }
-  // Returns the input Data pointer recast to a KDPairDec pointer.
-  // Just casts a pointer to the first element to a pointer to the whole struct.
-  static KDPairDec* RecastDataPointer(Data* data_ptr) {
-    return reinterpret_cast<KDPairDec*>(data_ptr);
-  }
-};
-    
-    #include 'leveldb/export.h'
-    
-    
-    {}  // namespace leveldb
-    
-      // Drop reference count.  Delete if no more references exist.
-  void Unref() {
-    --refs_;
-    assert(refs_ >= 0);
-    if (refs_ <= 0) {
-      delete this;
+     private:
+  // A hole in the heap exists at hole_index, and we want to fill it with the
+  // given pair. SiftUp sifts the hole upward to the correct position and
+  // returns the destination index without actually putting pair there.
+  int SiftUp(int hole_index, const Pair& pair) {
+    int parent;
+    while (hole_index > 0 && pair < heap_[parent = ParentNode(hole_index)]) {
+      heap_[hole_index] = heap_[parent];
+      hole_index = parent;
     }
+    return hole_index;
   }
     
-    template <typename Key, class Comparator>
-SkipList<Key, Comparator>::SkipList(Comparator cmp, Arena* arena)
-    : compare_(cmp),
-      arena_(arena),
-      head_(NewNode(0 /* any key will do */, kMaxHeight)),
-      max_height_(1),
-      rnd_(0xdeadbeef) {
-  for (int i = 0; i < kMaxHeight; i++) {
-    head_->SetNext(i, nullptr);
-  }
-}
+            friend bool operator==(Rational const& lhs, Rational const& rhs);
+        friend bool operator!=(Rational const& lhs, Rational const& rhs);
+        friend bool operator<(Rational const& lhs, Rational const& rhs);
+        friend bool operator>(Rational const& lhs, Rational const& rhs);
+        friend bool operator<=(Rational const& lhs, Rational const& rhs);
+        friend bool operator>=(Rational const& lhs, Rational const& rhs);
     
-    class TableCache {
+        ChangeConstants(m_radix, precision);
+    
+    #pragma once
+/****************************Module*Header***********************************\
+* Module Name: CalcEngine.h
+*
+* Module Description:
+*       The class definition for the Calculator's engine class CCalcEngine
+*
+* Warnings:
+*
+* Created: 17-Jan-2008
+*
+\****************************************************************************/
+    
+            static Windows::UI::Xaml::DependencyProperty ^ s_announcementProperty;
+    
+    
+    {DMLC_REGISTER_DATA_PARSER(uint32_t, real_t, dense_libsvm,
+  data::CreateDenseLibSVMParser<uint32_t __DMLC_COMMA real_t>);
+}  // namespace dmlc
+
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
  public:
-  TableCache(const std::string& dbname, const Options& options, int entries);
-  ~TableCache();
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
     }
     
-      // Verify that overwriting an open file will result in the new file data
-  // being read from files opened before the write.
-  Slice result;
-  char scratch[kFileDataLen];
-  ASSERT_OK(rand_file->Read(0, kFileDataLen, &result, scratch));
-  ASSERT_EQ(0, result.compare(kWrite2Data));
-    
-    
-    {  // If true, the write will be flushed from the operating system
-  // buffer cache (by calling WritableFile::Sync()) before the write
-  // is considered complete.  If this flag is true, writes will be
-  // slower.
-  //
-  // If this flag is false, and the machine crashes, some recent
-  // writes may be lost.  Note that if it is just the process that
-  // crashes (i.e., the machine does not reboot), no writes will be
-  // lost even if sync==false.
-  //
-  // In other words, a DB write with sync==false has similar
-  // crash semantics as the 'write()' system call.  A DB write
-  // with sync==true has similar crash semantics to a 'write()'
-  // system call followed by 'fsync()'.
-  bool sync = false;
-};
-    
-    #include 'leveldb/slice.h'
-#include 'util/hash.h'
-    
-        void ProgressWriter::UpdateDistributedSync(size_t samples, const ValuePtr& accumulatedMetric)
-    {
-        m_distributedSync->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
-        {
-            OnWriteDistributedSyncUpdate(samples, updates, aggregateMetric);
-        });
-    }
-    
-    void ProgressWriter::WriteTrainingSummary(const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric)
-    {
-        m_training->WriteSummary(
-            accumulatedLoss, accumulatedMetric,
-            [this](size_t samples, size_t updates, size_t summaries, double aggregateLoss, double aggregateMetric,
-                   uint64_t elapsedMs)
-            {
-                OnWriteTrainingSummary(samples, updates, summaries, aggregateLoss, aggregateMetric, elapsedMs);
-            });
-    }
-    
-    // Destroy - cleanup and remove this class
-// NOTE: this destroys the object, and it can't be used past this point
-void DataReader::Destroy()
-{
-    // newer code that explicitly place multiple streams for inputs
-    foreach_index (i, m_ioNames) // inputNames should map to node names
-    {
-        m_dataReaders[m_ioNames[i]]->Destroy();
-    }
+    TEST(SparseColumn, Test) {
+  auto dmat = CreateDMatrix(100, 1, 0.85);
+  GHistIndexMatrix gmat;
+  gmat.Init((*dmat).get(), 256);
+  ColumnMatrix column_matrix;
+  column_matrix.Init(gmat, 0.5);
+  auto col = column_matrix.GetColumn(0);
+  ASSERT_EQ(col.Size(), gmat.index.size());
+  for (auto i = 0ull; i < col.Size(); i++) {
+    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
+              col.GetGlobalBinIdx(i));
+  }
+  delete dmat;
 }
     
-    
-    {
-    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
-                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
-            srand((unsigned int) seed);
-            size_t retries = 0;
-            foreach_index (t, map)
-            {
-                for (int tries = 0; tries < 5; tries++)
-                {
-                    // swap current pos with a random position
-                    // Random positions are limited to t+randomizationrange.
-                    // This ensures some locality suitable for paging with a sliding window.
-                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
-                    const size_t tend = min(t + randomizationrange / 2, map.size());
-                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
-                    const size_t trand = rand(tbegin, tend); // random number within windows
-                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
-                    // if range condition is fulfilled then swap
-                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
-                    {
-                        std::swap(map[t], map[trand]);
-                        break;
-                    }
-                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
-                    // instead, try again with a different random number
-                    retries++;
-                }
-            }
-            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
-            // ensure the window condition
-            foreach_index (t, map)
-                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
-#if 0 // and a live check since I don't trust myself here yet
-            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
-            {
-                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
-                LogicError('RandomOrdering: windowing condition violated');
-            }
-#endif
-#if 0 // test whether it is indeed a unique complete sequence
-            auto map2 = map;
-            ::sort (map2.begin(), map2.end());
-            foreach_index (t, map2) assert (map2[t] == (size_t) t);
-#endif
-            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
-            currentseed = seed;
-        }
-        return map; // caller can now access it through operator[]
+    namespace xgboost {
+namespace metric {
+    }
     }
     
-        // Initialize with bilinear interpolation coefficients (useful for deconvolution layer).
-    void InitBilinear(size_t kernelWidth, size_t kernelHeight)
-    {
-        InitBilinear(Value(), GetSampleLayout(), kernelWidth, kernelHeight, m_deviceId);
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
     }
     
-        // change an array element
-    j.at('/array/1'_json_pointer) = 21;
-    // output the changed array
-    std::cout << j['array'] << '\n';
+    #include 'modules/common/time/time.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
     
-        // create an object from std::unordered_multimap
-    std::unordered_multimap<std::string, bool> c_ummap
-    {
-        {'one', true}, {'two', true}, {'three', false}, {'three', true}
-    };
-    json j_ummap(c_ummap); // only one entry for key 'three' is used
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(6, 2);
+    
+    namespace apollo {
+namespace drivers {
+namespace conti_radar {
+    }
+    }
+    }
+    
+      MatrixXd mat_golden(10, 10);
+  // clang-format off
+  mat_golden <<
+      6, -4,  1,  0,  0,  0,  0,  0,  0,  0,
+     -4,  6, -4,  1,  0,  0,  0,  0,  0,  0,
+      1, -4,  6, -4,  1,  0,  0,  0,  0,  0,
+      0,  1, -4,  6, -4,  1,  0,  0,  0,  0,
+      0,  0,  1, -4,  6, -4,  1,  0,  0,  0,
+      0,  0,  0,  1, -4,  6, -4,  1,  0,  0,
+      0,  0,  0,  0,  1, -4,  6, -4,  1,  0,
+      0,  0,  0,  0,  0,  1, -4,  6, -4,  1,
+      0,  0,  0,  0,  0,  0,  1, -4,  5, -2,
+      0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
