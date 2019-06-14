@@ -1,172 +1,204 @@
 
         
-        void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
-  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
-                                unittest::MAP_ENUM_BAR_LITE,
-                                unittest::MAP_ENUM_BAZ_LITE>(message);
-}
+         protected:
+  explicit AutoUpdater(v8::Isolate* isolate);
+  ~AutoUpdater() override;
     
-    #include <fstream>
+    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
+
+    
+    // All instances of TrackableObject will be kept in a weak map and can be got
+// from its ID.
+template <typename T>
+class TrackableObject : public TrackableObjectBase,
+                        public mate::EventEmitter<T> {
+ public:
+  // Mark the JS object as destroyed.
+  void MarkDestroyed() {
+    v8::Local<v8::Object> wrapper = Wrappable<T>::GetWrapper();
+    if (!wrapper.IsEmpty()) {
+      wrapper->SetAlignedPointerInInternalField(0, nullptr);
+    }
+  }
+    }
+    
+    #endif  // ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+
+    
+    #include 'atom/browser/net/url_request_about_job.h'
+    
+    namespace relauncher {
+    }
+    
+    void DragFileItems(const std::vector<base::FilePath>& files,
+                   const gfx::Image& icon,
+                   gfx::NativeView view);
     
     
+    {
+    {
+    {
+    {
     {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
-    class EnumGenerator {
- public:
-  explicit EnumGenerator(const EnumDescriptor* descriptor);
-  ~EnumGenerator();
-    }
-    
-    // Convert macro to string
-#define STRINGIFY(m) #m
-#define AS_STRING(m) STRINGIFY(m)
-    
-      /**
-   * @brief Return whether to allow force_backward for a given bottom blob
-   *        index.
-   *
-   * If AllowForceBackward(i) == false, we will ignore the force_backward
-   * setting and backpropagate to blob i only if it needs gradient information
-   * (as is done when force_backward == false).
-   */
-  virtual inline bool AllowForceBackward(const int bottom_index) const {
-    return true;
-  }
+      uint8 expected_data[] = {
+      0x5,
+      // All as is (00 op)
+      0x1,  0x0A, 0x0,
+      // Underscore, upper + 9 (10 op)
+      0x3,  0xCA, 0x0,
+      //  Upper + 3 (10 op), underscore, upper + 5 (10 op)
+      0x2,  0x44, 0xC6, 0x0,
+      // All Upper for 4 (11 op), underscore, underscore, upper + 5 (10 op),
+      // underscore, lower + 0 (01 op)
+      0x4,  0x64, 0x80, 0xC5, 0xA1, 0x0,
+      // 2 byte key: as is + 3 (00 op), underscore, lower + 4 (01 op),
+      //   underscore, lower + 3 (01 op), underscore, lower + 1 (01 op),
+      //   underscore, lower + 30 (01 op), as is + 30 (00 op), as is + 13 (00
+      //   op),
+      //   underscore, as is + 3 (00 op)
+      0xE8, 0x07, 0x04, 0xA5, 0xA4, 0xA2, 0xBF, 0x1F, 0x0E, 0x84, 0x0,
+  };
+  string expected((const char*)expected_data, sizeof(expected_data));
     
     
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
+    
+    
+    {
+    {
+    {
+}  // namespace internal
+}  // namespace protobuf
+}  // namespace google
+    
+     public:
+  static void StripFile(const FileDescriptor* old_file,
+                        FileDescriptorProto *file) {
+    for (int i = file->mutable_message_type()->size() - 1; i >= 0; i--) {
+      if (IsMessageSet(old_file->message_type(i))) {
+        file->mutable_message_type()->DeleteSubrange(i, 1);
+        continue;
       }
-      layer_types_str += *iter;
+      StripMessage(old_file->message_type(i), file->mutable_message_type(i));
     }
-    return layer_types_str;
+    for (int i = file->mutable_extension()->size() - 1; i >= 0; i--) {
+      auto field = old_file->extension(i);
+      if (field->type() == FieldDescriptor::TYPE_GROUP ||
+          IsMessageSet(field->message_type()) ||
+          IsMessageSet(field->containing_type())) {
+        file->mutable_extension()->DeleteSubrange(i, 1);
+      }
+    }
   }
-};
     
-      int num_spatial_axes_;
-  int bottom_dim_;
-  int top_dim_;
-    
-      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-    
-    namespace caffe {
+    namespace CalcEngine
+{
+    class Number
+    {
+    public:
+        Number() noexcept;
+        Number(int32_t sign, int32_t exp, std::vector<uint32_t> const& mantissa) noexcept;
+    }
     }
     
     
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-    namespace caffe {
-    }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    AuthPropertyIterator::~AuthPropertyIterator() {}
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-    
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    
-    {  RpcServerStatsEncoding() = delete;
-  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
-  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
-};
-    
-      Status GetFileByName(ServerContext* context, const grpc::string& file_name,
-                       reflection::v1alpha::ServerReflectionResponse* response);
-    
-    
-    {}  // namespace grpc
+    {    Rational Sinh(Rational const& rat);
+    Rational Cosh(Rational const& rat);
+    Rational Tanh(Rational const& rat);
+    Rational ASinh(Rational const& rat);
+    Rational ACosh(Rational const& rat);
+    Rational ATanh(Rational const& rat);
+}
 
     
-    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
-  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
-    return system_clock::time_point::max();
-  }
-  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
-  system_clock::time_point tp;
-  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
-  tp +=
-      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
-  return tp;
+                property bool IsCurrentAfterLast
+            {
+                virtual bool get() = Windows::UI::Xaml::Data::ICollectionView::IsCurrentAfterLast::get
+                {
+                    return m_currentPosition >= static_cast<int>(m_source->Size);
+                }
+            }
+    
+    void NarratorNotifier::OnAnnouncementChanged(_In_ DependencyObject ^ dependencyObject, _In_ DependencyPropertyChangedEventArgs ^ e)
+{
+    auto instance = safe_cast<NarratorNotifier ^>(dependencyObject);
+    if (instance != nullptr)
+    {
+        instance->Announce(safe_cast<NarratorAnnouncement ^>(e->NewValue));
+    }
 }
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-    
-    {class DbUndumpTool {
- public:
-  bool Run(const UndumpOptions& undump_options,
-           rocksdb::Options options = rocksdb::Options());
-};
-}  // namespace rocksdb
-#endif  // ROCKSDB_LITE
 
     
-    namespace rocksdb {
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    namespace apollo {
+namespace drivers {
+namespace conti_radar {
+    }
+    }
     }
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    maxBackgroundOperations
- * Signature: (J)I
- */
-jint Java_org_rocksdb_BackupableDBOptions_maxBackgroundOperations(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return static_cast<jint>(bopt->max_background_operations);
+    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
+    
+    
+    { protected:
+  SpeedLimit speed_limit_;
+};
+    
+    void SplineSegKernel::CalculateSecondOrderDerivative(
+    const uint32_t num_params) {
+  kernel_second_order_derivative_ =
+      Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 2; r < kernel_second_order_derivative_.rows(); ++r) {
+    for (int c = 2; c < kernel_second_order_derivative_.cols(); ++c) {
+      kernel_second_order_derivative_(r, c) =
+          (r * r - r) * (c * c - c) / (r + c - 3.0);
+    }
+  }
 }
     
-        ExampleQt example(argv[argc-1]);
+    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::manual_input(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
     
-        ::testing::InitGoogleTest(&argc, argv);
-    int retval = RUN_ALL_TESTS();
-    kill(server_pid, SIGTERM);
-    int status = 0;
-    wait(&status);
+    
+    {
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    
+    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
+  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
+  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
+  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
+}
+    
+    // config detail: {'name': 'longitude_seconds', 'offset': 0.0, 'precision': 1.0,
+// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 47,
+// 'type': 'int', 'order': 'motorola', 'physical_unit': 'sec'}
+int Latlonheadingrpt82::longitude_seconds(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 5);
+  int32_t x = t0.get_byte(0, 8);
+    }
