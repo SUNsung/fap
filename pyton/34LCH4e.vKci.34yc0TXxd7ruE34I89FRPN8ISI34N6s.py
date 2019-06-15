@@ -1,213 +1,337 @@
 
         
-        
-# OPTIMIZATION
-flags.DEFINE_integer('batch_size', BATCH_SIZE,
-                     'Batch size to use during training.')
-flags.DEFINE_float('learning_rate_init', LEARNING_RATE_INIT,
-                   'Learning rate initial value')
-flags.DEFINE_float('learning_rate_decay_factor', LEARNING_RATE_DECAY_FACTOR,
-                   'Learning rate decay, decay by this fraction every so \
-                   often.')
-flags.DEFINE_float('learning_rate_stop', LEARNING_RATE_STOP,
-                   'The lr is adaptively reduced, stop training at this value.')
-# Rather put the learning rate on an exponentially decreasiong schedule,
-# the current algorithm pays attention to the learning rate, and if it
-# isn't regularly decreasing, it will decrease the learning rate.  So far,
-# it works fine, though it is not perfect.
-flags.DEFINE_integer('learning_rate_n_to_compare', LEARNING_RATE_N_TO_COMPARE,
-                     'Number of previous costs current cost has to be worse \
-                     than, to lower learning rate.')
+            def reducer(self, key, values):
+        '''Sum values for each key.
     
     
-# Initial condition generation, and condition label generation.  This
-# happens outside of the dataset loop, so that all datasets have the
-# same conditions, which is similar to a neurophys setup.
-condition_number = 0
-x0s = []
-condition_labels = []
-for c in range(C):
-  x0 = FLAGS.x0_std * rng.randn(N, 1)
-  x0s.append(np.tile(x0, nreplications)) # replicate x0 nreplications times
-  # replicate the condition label nreplications times
-  for ns in range(nreplications):
-    condition_labels.append(condition_number)
-  condition_number += 1
-x0s = np.concatenate(x0s, axis=1)
+class Transaction(object):
+    
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
+    
+    errors = []
+title_links = []
+previous_links = []
+anchor_re = re.compile(anchor + '\s(.+)')
+section_title_re = re.compile('\*\s\[(.*)\]')
+link_re = re.compile('\[(.+)\]\((http.*)\)')
+    
+            # Deleting model 'EventTag'
+        db.delete_table(u'tagstore_eventtag')
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'EventTag', fields ['project_id',
+        # 'event_id', 'key', 'value']
+        db.delete_unique(u'tagstore_eventtag', ['project_id', 'event_id', 'key_id', 'value_id'])
+    
+        project_id = BoundedBigIntegerField()
+    group_id = BoundedBigIntegerField()
+    event_id = BoundedBigIntegerField()
+    key = FlexibleForeignKey('tagstore.TagKey', db_column='key_id')
+    value = FlexibleForeignKey('tagstore.TagValue', db_column='value_id')
+    date_added = models.DateTimeField(default=timezone.now, db_index=True)
+    
+    from datetime import timedelta
+from django.db.models import Max
+from django.utils import timezone
     
     
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-u_rng = np.random.RandomState(seed=FLAGS.synth_data_seed+1)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N  # must be same N as in trained model (provided example is N = 50)
-nreplications = FLAGS.nreplications
-E = nreplications * C  # total number of trials
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
-batch_size = 1  # gives one example per ntrial
+@instrumented_task(name='sentry.tasks.enqueue_scheduled_jobs')
+def enqueue_scheduled_jobs(**kwargs):
+    from sentry.celery import app
     
-        self.bos_char = free_ids[0]  # <begin sentence>
-    self.eos_char = free_ids[1]  # <end sentence>
-    self.bow_char = free_ids[2]  # <begin word>
-    self.eow_char = free_ids[3]  # <end word>
-    self.pad_char = free_ids[4]  # <padding>
+        # Softmax class probabilities
+    scores = workspace.FetchBlob(core.ScopedName('cls_prob')).squeeze()
+    # In case there is 1 proposal
+    scores = scores.reshape([-1, scores.shape[-1]])
     
-      word_to_id = build_vocab(train_path)
-  train_data = _file_to_word_ids(train_path, word_to_id)
-  valid_data = _file_to_word_ids(valid_path, word_to_id)
-  test_data = _file_to_word_ids(test_path, word_to_id)
-  vocabulary = len(word_to_id)
-  return train_data, valid_data, test_data, vocabulary
+            basename = os.path.splitext(os.path.basename(im_name))[0]
+        txtname = os.path.join(output_dir, basename + 'pred.txt')
+        with open(txtname, 'w') as fid_txt:
+            if i % 10 == 0:
+                logger.info('i: {}: {}'.format(i, basename))
+            for j in range(1, len(all_segms)):
+                clss = json_dataset.classes[j]
+                clss_id = cityscapes_eval.name2label[clss].id
+                segms = all_segms[j][i]
+                boxes = all_boxes[j][i]
+                if segms == []:
+                    continue
+                masks = mask_util.decode(segms)
     
-      if FLAGS.data_set == 'ptb':
-    model_str = 'Model'
-  else:
-    model_str = 'model'
+    # Available datasets
+_DATASETS = {
+    'cityscapes_fine_instanceonly_seg_train': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_train.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_val': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        # use filtered validation as there is an issue converting contours
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_filtered_gtFine_val.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_test': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_test.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_train2014.json'
+    },
+    'coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_val2014.json'
+    },
+    'coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_minival2014.json'
+    },
+    'coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json'
+    },
+    'coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'coco_2017_test': {  # 2017 test uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_2017_test-dev': {  # 2017 test-dev uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_stuff_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_train.json'
+    },
+    'coco_stuff_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_val.json'
+    },
+    'keypoints_coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_train2014.json'
+    },
+    'keypoints_coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_val2014.json'
+    },
+    'keypoints_coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_minival2014.json'
+    },
+    'keypoints_coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_valminusminival2014.json'
+    },
+    'keypoints_coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'keypoints_coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'voc_2007_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_test': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_test.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2012_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    },
+    'voc_2012_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    }
+}
     
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
     
-    from .hash_table import HashTable
+def _do_python_eval(json_dataset, salt, output_dir='output'):
+    info = voc_info(json_dataset)
+    year = info['year']
+    anno_path = info['anno_path']
+    image_set_path = info['image_set_path']
+    devkit_path = info['devkit_path']
+    cachedir = os.path.join(devkit_path, 'annotations_cache')
+    aps = []
+    # The PASCAL VOC metric changed in 2010
+    use_07_metric = True if int(year) < 2010 else False
+    logger.info('VOC07 metric? ' + ('Yes' if use_07_metric else 'No'))
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+    for _, cls in enumerate(json_dataset.classes):
+        if cls == '__background__':
+            continue
+        filename = _get_voc_results_file_template(
+            json_dataset, salt).format(cls)
+        rec, prec, ap = voc_eval(
+            filename, anno_path, image_set_path, cls, cachedir, ovthresh=0.5,
+            use_07_metric=use_07_metric)
+        aps += [ap]
+        logger.info('AP for {} = {:.4f}'.format(cls, ap))
+        res_file = os.path.join(output_dir, cls + '_pr.pkl')
+        save_object({'rec': rec, 'prec': prec, 'ap': ap}, res_file)
+    logger.info('Mean AP = {:.4f}'.format(np.mean(aps)))
+    logger.info('~~~~~~~~')
+    logger.info('Results:')
+    for ap in aps:
+        logger.info('{:.3f}'.format(ap))
+    logger.info('{:.3f}'.format(np.mean(aps)))
+    logger.info('~~~~~~~~')
+    logger.info('')
+    logger.info('----------------------------------------------------------')
+    logger.info('Results computed with the **unofficial** Python eval code.')
+    logger.info('Results should be very close to the official MATLAB code.')
+    logger.info('Use `./tools/reval.py --matlab ...` for your paper.')
+    logger.info('-- Thanks, The Management')
+    logger.info('----------------------------------------------------------')
     
-    '''
-The number of partitions of a number n into at least k parts equals the number of partitions into exactly k parts
-plus the number of partitions into at least k-1 parts. Subtracting 1 from each part of a partition of n into k parts
-gives a partition of n-k into k parts. These two facts together are used for this algorithm.
-'''
-def partition(m):
-	memo = [[0 for _ in xrange(m)] for _ in xrange(m+1)]
-	for i in xrange(m+1):
-		memo[i][0] = 1
     
-    import numpy as np
+def _add_allreduce_graph(model):
+    '''Construct the graph that performs Allreduce on the gradients.'''
+    # Need to all-reduce the per-GPU gradients if training with more than 1 GPU
+    all_params = model.TrainableParams()
+    assert len(all_params) % cfg.NUM_GPUS == 0
+    # The model parameters are replicated on each GPU, get the number
+    # distinct parameter blobs (i.e., the number of parameter blobs on
+    # each GPU)
+    params_per_gpu = int(len(all_params) / cfg.NUM_GPUS)
+    with c2_utils.CudaScope(0):
+        # Iterate over distinct parameter blobs
+        for i in range(params_per_gpu):
+            # Gradients from all GPUs for this parameter blob
+            gradients = [
+                model.param_to_grad[p] for p in all_params[i::params_per_gpu]
+            ]
+            if len(gradients) > 0:
+                if cfg.USE_NCCL:
+                    model.net.NCCLAllreduce(gradients, gradients)
+                else:
+                    muji.Allreduce(model.net, gradients, reduced_affix='')
     
-        Using log and roots can be perceived as tools for penalizing big
-    erors. However, using appropriate metrics depends on the situations,
-    and types of data
-'''
-    
-            a += a
-        b >>= 1
-    
-    handleSlideshow(dom)
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
 
     
-    #
-# Test code
-#
+        _distribute_rois_over_fpn_levels('rois')
+    if cfg.MODEL.MASK_ON:
+        _distribute_rois_over_fpn_levels('mask_rois')
+    if cfg.MODEL.KEYPOINTS_ON:
+        _distribute_rois_over_fpn_levels('keypoint_rois')
+
     
-    p = Point(4.0, -3.2)
-    
-    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
-cur.execute('insert into people (name_last, age) values ('Putin',     51)')
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-  def Start( self ):
-    self._keepalive_thread.start()
-    
-      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
-                        'kind' : 'WARNING' } )
-  _assert_accepts( f, { 'text' : 'This taco will be shown',
-                        'kind' : 'ERROR' } )
-    
-    
-def KeywordsFromSyntaxListOutput_CppSyntax_test():
-  expected_keywords = (
-    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
-    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
-    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
-    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
-    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
-    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
-    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
-    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
-    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
-    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
-    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
-    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
-    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
-    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
-    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
-    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
-    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
-    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
-    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
-    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
-    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
-    'inline' )
-    
-                self._start_queue_management_thread()
-            self._adjust_process_count()
-            return f
-    submit.__doc__ = _base.Executor.submit.__doc__
-    
-                f = _base.Future()
-            w = _WorkItem(f, fn, args, kwargs)
-    
-    def main():
-    for name, fn in [('sequential',
-                      functools.partial(download_urls_sequential, URLS)),
-                     ('processes',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ProcessPoolExecutor(10))),
-                     ('threads',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ThreadPoolExecutor(10)))]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        url_map = fn()
-        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
-                         (time.time() - start, len(url_map), len(URLS)))
-    
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
-    
-            print('None input')
-        assert_raises(TypeError, merge_sort.sort, None)
-    
-            print('Success: test_selection_sort\n')
-    
-            print('Test: Enqueue on empty stack')
-        print('Test: Enqueue on non-empty stack')
-        print('Test: Multiple enqueue in a row')
-        num_items = 3
-        for i in range(0, num_items):
-            queue.enqueue(i)
-    
-        def test_sort_stack(self, stack):
-        print('Test: Empty stack')
-        sorted_stack = self.get_sorted_stack(stack, [])
-        assert_equal(sorted_stack.pop(), None)
-    
-        unreachable_ops = []
-    for op in graph.get_operations():
-      is_unreachable = False
-      all_names = [x.name for x in op.inputs] + [x.name for x in op.outputs]
-      for name in all_names:
-        if name not in seen_tensors:
-          is_unreachable = True
-      if is_unreachable:
-        unreachable_ops.append(op)
-    return unreachable_ops
-    
-        feature = convert_single_example(ex_index, example, label_list,
-                                     max_seq_length, tokenizer)
-    
-      if FLAGS.do_predict:
-    predict_examples = processor.get_test_examples(FLAGS.data_dir)
-    if FLAGS.use_tpu:
-      # Discard batch remainder if running on TPU
-      n = len(predict_examples)
-      predict_examples = predict_examples[:(n - n % FLAGS.predict_batch_size)]
+    from detectron.core.config import cfg
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+import detectron.roi_data.retinanet as retinanet_roi_data
+import detectron.roi_data.rpn as rpn_roi_data
+import detectron.utils.blob as blob_utils
