@@ -1,94 +1,55 @@
 
         
-              def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
-      end
-    
-          it 'adds docset_bundle_id param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_bundle_id: 'com.bundle.id'
-          )
-        end').runner.execute(:test)
-    
-          context 'without error_callback' do
-        it 'raise shell_error' do
-          allow(FastlaneCore::UI).to receive(:shell_error!)
-          expect_command('exit 1', exitstatus: 1)
-          Fastlane::Actions.sh('exit 1')
-    
-            FastlaneCore::CertChecker.wwdr_certificate_installed?
-      end
-    
-    module Cert
-  class CommandsGenerator
-    include Commander::Methods
-    
-        describe 'when folders are specified in options' do
-      let(:options) { { screenshots_path: './screenshots', metadata_path: './metadata' } }
-    
-        def name=(value)
-      @name = value.try :strip
+            it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
     end
     
-        delegate :empty?, :blank?, to: :pages
+          it 'loads only the workers specified in the :only option' do
+        agent_runner = AgentRunner.new(only: HuginnScheduler)
+        workers = agent_runner.send(:load_workers)
+        expect(workers.keys).to eq(['HuginnScheduler'])
+        agent_runner.stop
+      end
     
-        private
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
     
-        def log(msg)
-      puts '\r' + justify(msg)
+        it 'should raise error when response says unauthorized' do
+      stub(HTTParty).post { {'Response' => 'Not authorized'} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
     end
     
-            css('tr[style]').each do |node|
-          node.remove_attribute 'style'
+            return a.casecmp(b) if a_length == 1 && b_length == 1
+        return 1 if a_length == 1
+        return -1 if b_length == 1
+    
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+        def blank?
+      body.blank?
+    end
+    
+        include Instrumentable
+    
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
         end
     
             css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
@@ -104,37 +65,162 @@
 end
 
     
-            css('.toplang', '#quickview', '.top').remove
-    
-          # private
-    
-          def _identicon_code(blob)
-        string_to_code blob + @request.host
+        # Extract each header value pair
+    header.split(/\r\n/mn).each { |str|
+      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
+        if (self[md[1]])
+          self[md[1]] << ', ' + md[2]
+        else
+          self[md[1]] = md[2]
+        end
       end
-    
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+    }
   end
     
-    if options[:irb]
-  require 'irb'
-  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
-  module IRB # :nodoc:
-    def self.start_session(binding)
-      unless @__initialized
-        args = ARGV
-        ARGV.replace(ARGV.dup)
-        IRB.setup(nil)
-        ARGV.replace(args)
-        @__initialized = true
-      end
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
+        class Principal < Element
+          # @!attribute name_type
+          #   @return [Integer]
+          attr_accessor :name_type
+          # @!attribute realm
+          #   @return [String]
+          attr_accessor :realm
+          # @!attribute components
+          #   @return [Array<String>]
+          attr_accessor :components
     
-      s.add_development_dependency 'rack-test', '~> 0.6.2'
-  s.add_development_dependency 'shoulda', '~> 3.5.0'
-  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
-  s.add_development_dependency 'mocha', '~> 1.1.0'
-  s.add_development_dependency 'test-unit', '~> 3.1.0'
-  s.add_development_dependency 'webrick', '~> 1.3.1'
+              # Encodes the start_time field
+          #
+          # @return [String]
+          def encode_start_time
+            [start_time].pack('N')
+          end
+    
+              # Encodes the type
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes the type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos KDC-REQ (response) data
+        # definition
+        class KdcResponse < Element
+          # @!attribute pvno
+          #   @return [Integer] The protocol version number
+          attr_accessor :pvno
+          # @!attribute msg_type
+          #   @return [Integer] The type of a protocol message
+          attr_accessor :msg_type
+          # @!attribute crealm
+          #   @return [String] The realm part of the client's principal identifier
+          attr_accessor :crealm
+          # @!attribute cname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
+          attr_accessor :cname
+          # @!attribute ticket
+          #   @return [Rex::Proto::Kerberos::Model::Ticket] The issued ticket
+          attr_accessor :ticket
+          # @!attribute enc_part
+          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] The encrypted part of the response
+          attr_accessor :enc_part
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KrbError
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 0
+                self.pvno = decode_pvno(val)
+              when 1
+                self.msg_type = decode_msg_type(val)
+              when 2
+                self.ctime = decode_ctime(val)
+              when 3
+                self.cusec = decode_cusec(val)
+              when 4
+                self.stime = decode_stime(val)
+              when 5
+                self.susec = decode_susec(val)
+              when 6
+                self.error_code = decode_error_code(val)
+              when 7
+                self.crealm = decode_crealm(val)
+              when 8
+                self.cname = decode_cname(val)
+              when 9
+                self.realm = decode_realm(val)
+              when 10
+                self.sname = decode_sname(val)
+              when 12
+                self.e_data = decode_e_data(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
+              end
+            end
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::PreAuthData
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
+          end
+    
+            self.line_item_options = []
+    
+      # Map of what scripts are named.
+  SCRIPT_MAP = {
+    :before_install     => 'preinstall',
+    :after_install      => 'postinstall',
+  } unless defined?(SCRIPT_MAP)
+    
+        # Generate a package manifest.
+    pkg_generate = safesystemout('pkgsend', 'generate', '#{staging_path}')
+    File.write(build_path('#{name}.p5m.1'), pkg_generate)
+    
+          # Capture the output, which will be JSON metadata describing this python
+      # package. See fpm/lib/fpm/package/pyfpm/get_metadata.py for more
+      # details.
+      logger.info('fetching package metadata', :setup_cmd => setup_cmd)
+    
+        safesystem('tar', *args)
+    
+    require 'fpm/util/tar_writer'
