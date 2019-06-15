@@ -1,260 +1,153 @@
 
         
         
-class CITextExtension(CreateExtension):
+rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+u_rng = np.random.RandomState(seed=FLAGS.synth_data_seed+1)
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N  # must be same N as in trained model (provided example is N = 50)
+nreplications = FLAGS.nreplications
+E = nreplications * C  # total number of trials
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
+batch_size = 1  # gives one example per ntrial
+    
+    # generate trials for both RNNs
+rates_a, x0s_a, _ = generate_data(rnn_a, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
+                                  input_magnitude=0.0, input_times=None)
+spikes_a = spikify_data(rates_a, rng, rnn_a['dt'], rnn_a['max_firing_rate'])
     
     
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
     
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+def linear(x, out_size, do_bias=True, alpha=1.0, identity_if_possible=False,
+           normalized=False, name=None, collections=None):
+  '''Linear (affine) transformation, y = x W + b, for a variety of
+  configurations.
+    
+      def encode_chars(self, sentence):
+    chars_ids = [self.word_to_char_ids(cur_word)
+                 for cur_word in sentence.split()]
+    return np.vstack([self.bos_chars] + chars_ids + [self.eos_chars])
+    
+    FLAGS = tf.flags.FLAGS
+    
+      batch_of_indices_predictions = []
+    
+      Returns:
+    gen_train_op: Generator training op.
+  '''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
+    else:
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('\nOptimizing Generator vars:')
+    for v in gen_vars:
+      print(v)
+    
+      ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    init_saver = tf.train.Saver(var_list=gen_vars)
+    init_savers['init_saver'] = init_saver
     
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+def construct_ngrams_dict(ngrams_list):
+  '''Construct a ngram dictionary which maps an ngram tuple to the number
+  of times it appears in the text.'''
+  counts = {}
+    
+          emit output: If `output_fn is None` the supplied `cell_output` is
+      returned, else the `output_fn` is used to update the `cell_output`
+      before calculating `next_input` and returning `cell_output`.
+    
+            if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+    
+        if blueprint is not None and seems_fishy:
+        info.append(
+            '  The template was looked up from an endpoint that '
+            'belongs to the blueprint '%s'.' % blueprint
+        )
+        info.append('  Maybe you did not place a template in the right folder?')
+        info.append('  See http://flask.pocoo.org/docs/blueprints/#templates')
+    
+        def to_json(self, value):
+        return b64encode(value).decode('ascii')
     
     
-def test_auth_plugin_parse_auth_false(httpbin):
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-        def test_upload_multiple_fields_with_the_same_name(self, httpbin):
-        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
-                 'test-file@%s' % FILE_PATH_ARG,
-                 'test-file@%s' % FILE_PATH_ARG)
-        assert HTTP_OK in r
-        assert r.count('Content-Disposition: form-data; name='test-file';'
-                       ' filename='%s'' % os.path.basename(FILE_PATH)) == 2
-        # Should be 4, but is 3 because httpbin
-        # doesn't seem to support filed field lists
-        assert r.count(FILE_CONTENT) in [3, 4]
-        assert r.count('Content-Type: text/plain') == 2
-    
-    model.compile(loss=keras.losses.categorical_crossentropy,
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
-    
-        return (x_train, y_train), (x_test, y_test)
-
-    
-        def get_config(self):
-        return {'mse_fraction': self.mse_fraction}
-    
-        def compute_output_shape(self, input_shape):
-        if isinstance(input_shape, list):
-            input_shape = input_shape[0]
-    
-    x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-    
-    train_model.compile(optimizer=keras.optimizers.RMSprop(lr=2e-3, decay=1e-5),
-                    loss='categorical_crossentropy',
-                    metrics=['accuracy'],
-                    target_tensors=[targets])
-train_model.summary()
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-import keras
-from keras.layers import Activation, Dense, Input
-from keras.layers import Conv2D, Flatten
-from keras.layers import Reshape, Conv2DTranspose
-from keras.models import Model
-from keras import backend as K
-from keras.datasets import mnist
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-    
-    print('Evaluate IRNN...')
-model = Sequential()
-model.add(SimpleRNN(hidden_units,
-                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
-                    recurrent_initializer=initializers.Identity(gain=1.0),
-                    activation='relu',
-                    input_shape=x_train.shape[1:]))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-rmsprop = RMSprop(lr=learning_rate)
-model.compile(loss='categorical_crossentropy',
-              optimizer=rmsprop,
-              metrics=['accuracy'])
-    
-    
-def serialize(loss):
-    return serialize_keras_object(loss)
-    
-            self.host = host
-        self.port = port
-        self.requests_to_handle = requests_to_handle
-    
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-    try:
-    import threading
-except ImportError:
-    import dummy_threading as threading
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-    '''
-requests.api
-~~~~~~~~~~~~
-    
-            return (changed, {
-            'id': monitoring_policy['id'],
-            'name': monitoring_policy['name']
-        })
-    except Exception as ex:
-        module.fail_json(msg=str(ex))
-    
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
-    
-    DOCUMENTATION = '''
----
-module: vca_nat
-short_description: add remove nat rules in a gateway  in a vca
-description:
-  - Adds or removes nat rules from a gateway in a vca environment
-version_added: '2.0'
-author: Peter Sprygada (@privateip)
-options:
-    purge_rules:
-      description:
-        - If set to true, it will delete all rules in the gateway that are not given as parameter to this module.
-      type: bool
-      default: false
-    nat_rules:
-      description:
-        - A list of rules to be added to the gateway, Please see examples on valid entries
-      required: True
-      default: false
-extends_documentation_fragment: vca.documentation
+    - heroku_collaborator:
+    api_key: YOUR_API_KEY
+    user: '{{ item.user }}'
+    apps: '{{ item.apps | default(apps) }}'
+    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
+    state: '{{ item.state | default('present') }}'
+  with_items:
+    - { user: 'a.b@example.com' }
+    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
+    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
 '''
-    
-    
-def get_hbacrule_dict(description=None, hostcategory=None, ipaenabledflag=None, servicecategory=None,
-                      sourcehostcategory=None,
-                      usercategory=None):
-    data = {}
-    if description is not None:
-        data['description'] = description
-    if hostcategory is not None:
-        data['hostcategory'] = hostcategory
-    if ipaenabledflag is not None:
-        data['ipaenabledflag'] = ipaenabledflag
-    if servicecategory is not None:
-        data['servicecategory'] = servicecategory
-    if sourcehostcategory is not None:
-        data['sourcehostcategory'] = sourcehostcategory
-    if usercategory is not None:
-        data['usercategory'] = usercategory
-    return data
-    
-        # build list of params
-    params = {}
-    
-        if module.params['user']:
-        params['deploy[local_username]'] = module.params['user']
     
     
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            path=dict(required=True),
-            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
-            name=dict(required=False, default=None, type='str'),
-            logtype=dict(required=False, default=None, type='str', aliases=['type'])
+            auth_token=dict(
+                type='str',
+                default=os.environ.get('ONEANDONE_AUTH_TOKEN')),
+            api_url=dict(
+                type='str',
+                default=os.environ.get('ONEANDONE_API_URL')),
+            name=dict(type='str'),
+            firewall_policy=dict(type='str'),
+            description=dict(type='str'),
+            rules=dict(type='list', default=[]),
+            add_server_ips=dict(type='list', default=[]),
+            remove_server_ips=dict(type='list', default=[]),
+            add_rules=dict(type='list', default=[]),
+            remove_rules=dict(type='list', default=[]),
+            wait=dict(type='bool', default=True),
+            wait_timeout=dict(type='int', default=600),
+            wait_interval=dict(type='int', default=5),
+            state=dict(type='str', default='present', choices=['present', 'absent', 'update']),
         ),
         supports_check_mode=True
     )
     
-        if root.get('error') != 'Success':
-        module.fail_json(msg=root.get('error-message'))
+        result['rules_updated'] = len(updates)
+    result['rules_added'] = len(additions)
+    result['rules_deleted'] = len(deletions)
     
-            :raises .errors.PluginError: If unable to recover the configuration
+            if usergroup is not None:
+            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberuser_group', []), usergroup,
+                                            client.hbacrule_add_user,
+                                            client.hbacrule_remove_user, 'group') or changed
+    else:
+        if ipa_hbacrule:
+            changed = True
+            if not module.check_mode:
+                client.hbacrule_del(name=name)
     
-    The path to this file can be provided interactively or using the
-``--dns-cloudxns-credentials`` command-line argument. Certbot records the path
-to this file for use during renewal, but does not store the file's contents.
-    
-    
-    def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            # Extract the stream
-            stream_id = kwargs['stream_id']
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
-    
-        type, ext, size = url_info(url[0], True)
-    size = urls_size(url)
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
+            cmd = [le_path, 'follow', log]
+        if name:
+            cmd.extend(['--name', name])
+        if logtype:
+            cmd.extend(['--type', logtype])
+        rc, out, err = module.run_command(' '.join(cmd))
