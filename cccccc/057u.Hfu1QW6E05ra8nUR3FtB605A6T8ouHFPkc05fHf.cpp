@@ -1,268 +1,333 @@
 
         
-          DCache.CBs.valueRetainCB(Value, nullptr);
-  DCache.Entries[CKey] = Value;
+            void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
+        v_dst = internal::vqsubq(v_max, v_min);
+    }
     
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
+    #ifdef CAROTENE_NEON
+    // this ugly contruction is needed to avoid:
+    // /usr/lib/gcc/arm-linux-gnueabihf/4.8/include/arm_neon.h:3581:59: error: argument must be a constant
+    // return (int16x8_t)__builtin_neon_vshr_nv8hi (__a, __b, 1);
+    
+        void operator() (const typename VecTraits<s32>::vec128 & v_src0,
+                     const typename VecTraits<s32>::vec128 & v_src1,
+                     typename VecTraits<s32>::vec128 & v_dst) const
+    {
+        float32x4_t vs1 = vcvtq_f32_s32(v_src0);
+        float32x4_t vs2 = vcvtq_f32_s32(v_src1);
+    }
+    
+    #define VROW_LINE(type, n) type * dst##n = internal::getRowPtr(dst##n##Base, dst##n##Stride, i);
+#define VST1Q_LINE(type, n) vst1q_##type(dst##n + dj, v_src.val[n]);
+#define VST1_LINE(type, n) vst1_##type(dst##n + dj, v_src.val[n]);
+#define SST_LINE(type, n) dst##n[dj] = src[sj + n];
+    
+    #define MERGE_QUAD(sgn, bits, n) { \
+                                     FILL_LINES##n(PREF, sgn##bits) \
+                                     MERGE_ASM##n(sgn, bits) \
+                                 }
+    
+    namespace CAROTENE_NS {
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s8, f32, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
+             'vmovl.s8 q1, d0                                       \n\t'
+             'vmovl.s8 q2, d1                                       \n\t'
+             'vmovl.s16 q3, d2                                      \n\t'
+             'vmovl.s16 q4, d3                                      \n\t'
+             'vmovl.s16 q5, d4                                      \n\t'
+             'vmovl.s16 q6, d5                                      \n\t'
+             'vcvt.f32.s32 q7, q3                                   \n\t'
+             'vcvt.f32.s32 q8, q4                                   \n\t'
+             'vcvt.f32.s32 q9, q5                                   \n\t'
+             'vcvt.f32.s32 q10, q6                                  \n\t'
+             'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
+             'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
+             'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
+             'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst1] 'r' (_dst + i + 0),
+               [dst2] 'r' (_dst + i + 4),
+               [dst3] 'r' (_dst + i + 8),
+               [dst4] 'r' (_dst + i + 12)
+             : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
+         );
+     }
+})
+#else
+CVT_FUNC(s8, f32, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         int8x16_t vline_s8 = vld1q_s8(_src + i);
+    }
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(u16, s8, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
+            'vmovl.u16 q3, d4                                      \n\t'
+            'vmovl.u16 q4, d5                                      \n\t'
+            'vcvt.f32.u32 q5, q3                                   \n\t'
+            'vcvt.f32.u32 q6, q4                                   \n\t'
+            'vmul.f32 q7, q5, q0                                   \n\t'
+            'vmul.f32 q8, q6, q0                                   \n\t'
+            'vadd.f32 q9, q7, q1                                   \n\t'
+            'vadd.f32 q10, q8, q1                                  \n\t'
+            'vcvt.s32.f32 q11, q9                                  \n\t'
+            'vcvt.s32.f32 q12, q10                                 \n\t'
+            'vqmovn.s32 d26, q11                                   \n\t'
+            'vqmovn.s32 d27, q12                                   \n\t'
+            'vqmovn.s16 d28, q13                                   \n\t'
+            'vst1.8 {d28}, [%[dst]]                                \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i),
+              [dst] 'r' (_dst + i + 0),
+               'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
+        );
+    }
+})
+#else
+CVTS_FUNC(u16, s8, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        uint16x8_t vline = vld1q_u16(_src + i);
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
+        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
+        int8x8_t vRes = vqmovn_s16(vcombine_s16(vRes1, vRes2));
+        vst1_s8(_dst + i, vRes);
+    }
+})
+#endif
+    
+                // make extrapolation for the first elements
+            if (!x)
+            {
+                // make border
+                if (border == BORDER_MODE_CONSTANT)
+                    tcurr = v_border_x4;
+                else if (border == BORDER_MODE_REPLICATE)
+                    tcurr = vdupq_n_u16(vgetq_lane_u16(tnext, 0));
+    }
+    
+    
+    {                // make border
+                    if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT)
+                    {
+                        tcurr = vsetq_lane_s16(vgetq_lane_s16(tcurr, 0),tcurr, 7);
+                    }
+                    else if (border == BORDER_MODE_CONSTANT)
+                    {
+                        tcurr = vsetq_lane_s16(borderValue, tcurr, 7);
+                    }
+                    else if (border == BORDER_MODE_REFLECT101)
+                    {
+                        tcurr = vsetq_lane_s16(vgetq_lane_s16(tcurr, 1),tcurr, 7);
+                    }
+                continue;
+            }
+    
+    
+    {
+    {    return SingleGradientDef(
+        'MergeSingleListFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
   }
+};
+    
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
+    
+    namespace caffe2 {
     }
     
-    namespace tesseract {
-    }
+    #include <caffe/layer.hpp>
+#include <caffe/blob.hpp>
+#include <caffe/layer_factory.hpp>
     
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
-    
-    #include 'allheaders.h'
-    
-      // Computes and returns the squared evaluation metric for a line fit.
-  double EvaluateLineFit();
-    
-    bool ParagraphModel::Comparable(const ParagraphModel &other) const {
-  if (justification_ != other.justification_)
-    return false;
-  if (justification_ == JUSTIFICATION_CENTER ||
-      justification_ == JUSTIFICATION_UNKNOWN)
-    return true;
-  int tolerance = (tolerance_ + other.tolerance_) / 4;
-  return NearlyEqual(margin_ + first_indent_,
-                     other.margin_ + other.first_indent_, tolerance) &&
-         NearlyEqual(margin_ + body_indent_,
-                     other.margin_ + other.body_indent_, tolerance);
-}
-    
-    // A geometric model of paragraph indentation and alignment.
-//
-// Measurements are in pixels. The meaning of the integer arguments changes
-// depending upon the value of justification.  Distances less than or equal
-// to tolerance apart we take as 'equivalent' for the purpose of model
-// matching, and in the examples below, we assume tolerance is zero.
-//
-// justification = LEFT:
-//   margin       the 'ignored' margin to the left block edge.
-//   first_indent indent from the left margin to a typical first text line.
-//   body_indent  indent from the left margin of a typical body text line.
-//
-// justification = RIGHT:
-//   margin       the 'ignored' margin to the right block edge.
-//   first_indent indent from the right margin to a typical first text line.
-//   body_indent  indent from the right margin of a typical body text line.
-//
-// justification = CENTER:
-//   margin       ignored
-//   first_indent ignored
-//   body_indent  ignored
-//
-//  ====== Extended example, assuming each letter is ten pixels wide: =======
-//
-// +--------------------------------+
-// |      Awesome                   | ParagraphModel(CENTER, 0, 0, 0)
-// |   Centered Title               |
-// | Paragraph Detection            |
-// |      OCR TEAM                  |
-// |  10 November 2010              |
-// |                                |
-// |  Look here, I have a paragraph.| ParagraphModel(LEFT, 0, 20, 0)
-// |This paragraph starts at the top|
-// |of the page and takes 3 lines.  |
-// |  Here I have a second paragraph| ParagraphModel(LEFT, 0, 20, 0)
-// |which indicates that the first  |
-// |paragraph is not a continuation |
-// |from a previous page, as it is  |
-// |indented just like this second  |
-// |paragraph.                      |
-// |   Here is a block quote. It    | ParagraphModel(LEFT, 30, 0, 0)
-// |   looks like the prior text    |
-// |   but it  is indented  more    |
-// |   and is fully justified.      |
-// |  So how does one deal with     | ParagraphModel(LEFT, 0, 20, 0)
-// |centered text, block quotes,    |
-// |normal paragraphs, and lists    |
-// |like what follows?              |
-// |1. Make a plan.                 | ParagraphModel(LEFT, 0, 0, 30)
-// |2. Use a heuristic, for example,| ParagraphModel(LEFT, 0, 0, 30)
-// |   looking for lines where the  |
-// |   first word of the next line  |
-// |   would fit on the previous    |
-// |   line.                        |
-// |8. Try to implement the plan in | ParagraphModel(LEFT, 0, 0, 30)
-// |   Python and try it out.       |
-// |4. Determine how to fix the     | ParagraphModel(LEFT, 0, 0, 30)
-// |   mistakes.                    |
-// |5. Repeat.                      | ParagraphModel(LEFT, 0, 0, 30)
-// |  For extra painful penalty work| ParagraphModel(LEFT, 0, 20, 0)
-// |you can try to identify source  |
-// |code.  Ouch!                    |
-// +--------------------------------+
-class ParagraphModel {
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
  public:
-  ParagraphModel(tesseract::ParagraphJustification justification,
-                 int margin,
-                 int first_indent,
-                 int body_indent,
-                 int tolerance)
-      : justification_(justification),
-        margin_(margin),
-        first_indent_(first_indent),
-        body_indent_(body_indent),
-        tolerance_(tolerance) {
-    // Make one of {first_indent, body_indent} is 0.
-    int added_margin = first_indent;
-    if (body_indent < added_margin)
-      added_margin = body_indent;
-    margin_ += added_margin;
-    first_indent_ -= added_margin;
-    body_indent_ -= added_margin;
-  }
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
     }
     
-    /* REJECT MAP VALUES */
     
-    // A useful base struct to facilitate the common operation of sorting a vector
-// of simple or smart-pointer data using a separate key. Similar to STL pair.
-template <typename Key, typename Data>
-struct KDPair {
-  KDPair() = default;
-  KDPair(Key k, Data d) : data(d), key(k) {}
-    }
+    {
+    {inline void Dequantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
+                               const std::vector<mxnet::TBlob> &inputs,
+                               const float threshold) {
+  Dequantize2BitKernelLaunch(s, inputs, threshold);
+}
+}  // namespace kvstore
+}  // namespace mxnet
     
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
-    }
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-    
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-            // Rendering
-        ImGui::Render();
-        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-        // Our state (make them static = more or less global) as a convenience to keep the example terse.
-    static bool show_demo_window = true;
-    static bool show_another_window = false;
-    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-        // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!),
-    // you may need to backup/reset/restore current shader using the lines below. DO NOT MODIFY THIS FILE! Add the code in your calling function:
-    //  GLint last_program;
-    //  glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-    //  glUseProgram(0);
-    //  ImGui_ImplOpenGL2_RenderDrawData(...);
-    //  glUseProgram(last_program)
-    
-    namespace ImGuiFreeType
-{
-    // Hinting greatly impacts visuals (and glyph sizes).
-    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
-    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
-    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
-    }
-    
-      static Data data_;
-  static Data data6_;
-    
-    namespace aria2 {
-    }
-    
-    std::string DHTResponseMessage::toString() const
-{
-  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
-             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
-             getRemoteNode()->getIPAddress().c_str(),
-             getRemoteNode()->getPort(),
-             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
-             util::torrentPercentEncode(getVersion()).c_str(),
-             toStringOptional().c_str());
+    template <>
+void EvalBroadcast<DEVICE>(TBlob const& src, TBlob* ret, int size, RunContext ctx) {
+  typedef DEVICE xpu;
+  mshadow::Stream<xpu>* s = ctx.get_stream<xpu>();
+  mshadow::Tensor<xpu, 3> out = ret->get<xpu, 3, real_t>(s);
+  mshadow::Tensor<xpu, 2> in = src.get<xpu, 2, real_t>(s);
+  out = mshadow::expr::broadcast_with_axis(in, 0, size);
 }
     
-        DHTRoutingTableDeserializer deserializer(family);
-    const std::string& dhtFile = e->getOption()->get(
-        family == AF_INET ? PREF_DHT_FILE_PATH : PREF_DHT_FILE_PATH6);
-    try {
-      deserializer.deserialize(dhtFile);
-      localNode = deserializer.getLocalNode();
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      if (param_.sampler_type == st::kBilinear) {
+        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                          sampler_,
+                                                          dtype_,
+                                                          4,
+                                                          dim));
+      }
     }
-    catch (RecoverableException& e) {
-      A2_LOG_ERROR_EX(
-          fmt('Exception caught while loading DHT routing table from %s',
-              dhtFile.c_str()),
-          e);
-    }
-    if (!localNode) {
-      localNode = std::make_shared<DHTNode>();
+  }
+    
+      void onTimeout(const std::shared_ptr<DHTNode>& node);
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    namespace aria2 {
     }
     
     namespace aria2 {
     }
     
-    class DHTUnknownMessage : public DHTMessage {
-private:
-  unsigned char* data_;
-  size_t length_;
-  std::string ipaddr_;
-  uint16_t port_;
-    }
+      virtual ~DHTTaskQueueImpl();
     
-    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    Eigen::MatrixXd SplineSegKernel::Kernel(const uint32_t num_params,
-                                        const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateFx(num_params);
+    void DHTTokenUpdateCommand::process()
+{
+  try {
+    tokenTracker_->updateTokenSecret();
   }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'fx', &term_matrix);
-  return kernel_fx_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
+  catch (RecoverableException& e) {
+    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
+  }
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include <memory>
     
-    #include 'glog/logging.h'
+      // always return false
+  virtual bool isReply() const CXX11_OVERRIDE;
     
-    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
-// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
-    }
+        // create values of different integer types
+    short n_short = 42;
+    int n_int = -23;
+    long n_long = 1024;
+    int_least32_t n_int_least32_t = -17;
+    uint8_t n_uint8_t = 8;
