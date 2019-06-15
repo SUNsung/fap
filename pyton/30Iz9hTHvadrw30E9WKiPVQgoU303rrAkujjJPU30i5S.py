@@ -1,144 +1,138 @@
 
         
-            The response code line has the form
+                if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
+    
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
     
     
-# Is a path a directory?
-# This follows symbolic links, so both islink() and isdir()
-# can be true for the same path on systems that support symlinks
-def isdir(s):
-    '''Return true if the pathname refers to an existing directory.'''
-    try:
-        st = os.stat(s)
-    except (OSError, ValueError):
-        return False
-    return stat.S_ISDIR(st.st_mode)
+class Command(ScrapyCommand):
     
-        Directories are *not* resources.
+    
+def _parsed_url_args(parsed):
+    # Assume parsed is urlparse-d from Request.url,
+    # which was passed via safe_url_string and is ascii-only.
+    b = lambda s: to_bytes(s, encoding='ascii')
+    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))
+    path = b(path)
+    host = b(parsed.hostname)
+    port = parsed.port
+    scheme = b(parsed.scheme)
+    netloc = b(parsed.netloc)
+    if port is None:
+        port = 443 if scheme == b'https' else 80
+    return scheme, netloc, host, port, path
+    
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
     '''
-    package = _get_package(package)
-    _normalize_path(name)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return reader.is_resource(name)
-    try:
-        package_contents = set(contents(package))
-    except (NotADirectoryError, FileNotFoundError):
-        return False
-    if name not in package_contents:
-        return False
-    # Just because the given file_name lives as an entry in the package's
-    # contents doesn't necessarily mean it's a resource.  Directories are not
-    # resources, so let's try to find out if it's a directory or not.
-    path = Path(package.__spec__.origin).parent / name
-    return path.is_file()
     
-    dom = xml.dom.minidom.parseString(document)
+            if not model.train or cfg.MODEL.FASTER_RCNN:
+            # Proposals are needed during:
+            #  1) inference (== not model.train) for RPN only and Faster R-CNN
+            #  OR
+            #  2) training for Faster R-CNN
+            # Otherwise (== training for RPN only), proposals are not needed
+            lvl_anchors = generate_anchors(
+                stride=2.**lvl,
+                sizes=(cfg.FPN.RPN_ANCHOR_START_SIZE * 2.**(lvl - k_min), ),
+                aspect_ratios=cfg.FPN.RPN_ASPECT_RATIOS
+            )
+            rpn_cls_probs_fpn = model.net.Sigmoid(
+                rpn_cls_logits_fpn, 'rpn_cls_probs_fpn' + slvl
+            )
+            model.GenerateProposals(
+                [rpn_cls_probs_fpn, rpn_bbox_pred_fpn, 'im_info'],
+                ['rpn_rois_fpn' + slvl, 'rpn_roi_probs_fpn' + slvl],
+                anchors=lvl_anchors,
+                spatial_scale=sc
+            )
     
-            print('Testing IMapIterator.next() with timeout:', end=' ')
-        it = pool.imap(calculatestar, TASKS)
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % it.next(0.02))
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
-    
-    print('Enter your SQL commands to execute in sqlite3.')
-print('Enter a blank line to exit.')
-    
-    
-if __name__ == '__main__':
-    main()
-    
-        # TODO: It would be better if we had unit tests for each
-    # method in addition to the following end-to-end test
-    def test_end_to_end(self):
-        print('Test: Empty stack')
-        stack = Stack()
-        assert_equal(stack.peek(), None)
-        assert_equal(stack.pop(), None)
-    
-    		elif current.rightChild is None:
-			if current is self.root:
-				self.root = current.leftChild
-			elif isLeft:
-				parent.leftChild = current.leftChild
-			else:
-				parent.rightChild = current.leftChild
-    
-    	def test_insert_traversals (self):
-		myTree = BinaryTree()
-		myTree2 = BinaryTree()
-		for num in [50, 30, 70, 10, 40, 60, 80, 7, 25, 38]:
-			myTree.insert(num)
-		[myTree2.insert(num) for num in range (1, 100, 10)]
-    
-        def extract_min(self):
-        if not self.array:
-            return None
-        minimum = sys.maxsize
-        for index, node in enumerate(self.array):
-            if node.key < minimum:
-                minimum = node.key
-                minimum_index = index
-        return self.array.pop(minimum_index)
-    
-        def configure(self, updated):
-        # We're already streaming - stop the previous stream and restart
-        if 'save_stream_filter' in updated:
-            if ctx.options.save_stream_filter:
-                self.filt = flowfilter.parse(ctx.options.save_stream_filter)
-                if not self.filt:
-                    raise exceptions.OptionsError(
-                        'Invalid filter specification: %s' % ctx.options.save_stream_filter
-                    )
-            else:
-                self.filt = None
-        if 'save_stream_file' in updated or 'save_stream_filter' in updated:
-            if self.stream:
-                self.done()
-            if ctx.options.save_stream_file:
-                self.start_stream_to_path(ctx.options.save_stream_file, self.filt)
-    
-    from mitmproxy.net.http import http1
-from mitmproxy import exceptions
-from mitmproxy import ctx
-from mitmproxy.utils import human
-    
-        def configure(self, updated):
-        # FIXME: We're doing this because our proxy core is terminally confused
-        # at the moment. Ideally, we should be able to check if we're in
-        # reverse proxy mode at the HTTP layer, so that scripts can put the
-        # proxy in reverse proxy mode for specific requests.
-        if 'upstream_auth' in updated:
-            if ctx.options.upstream_auth is None:
-                self.auth = None
-            else:
-                self.auth = parse_upstream_auth(ctx.options.upstream_auth)
-    
-        def add(self, path: str, func: typing.Callable):
-        self.commands[path] = Command(self, path, func)
-    
-    from mitmproxy import certs
-from mitmproxy import exceptions
-from mitmproxy import stateobject
-from mitmproxy.net import tcp
-from mitmproxy.net import tls
-from mitmproxy.utils import human
-from mitmproxy.utils import strutils
+    def add_fast_rcnn_outputs(model, blob_in, dim):
+    '''Add RoI classification and bounding box regression output ops.'''
+    # Box classification layer
+    model.FC(
+        blob_in,
+        'cls_score',
+        dim,
+        model.num_classes,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    if not model.train:  # == if test
+        # Only add softmax when testing; during training the softmax is combined
+        # with the label cross entropy loss for numerical stability
+        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
+    # Box regression layer
+    num_bbox_reg_classes = (
+        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
+    )
+    model.FC(
+        blob_in,
+        'bbox_pred',
+        dim,
+        num_bbox_reg_classes * 4,
+        weight_init=gauss_fill(0.001),
+        bias_init=const_fill(0.0)
+    )
     
     
-class Reply:
+def _generate_anchors(base_size, scales, aspect_ratios):
+    '''Generate anchor (reference) windows by enumerating aspect ratios X
+    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
     '''
-    Messages sent through a channel are decorated with a 'reply' attribute. This
-    object is used to respond to the message through the return channel.
-    '''
-    def __init__(self, obj):
-        self.obj = obj
-        # Spawn an event loop in the current thread
-        self.q = queue.Queue()
+    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
+    anchors = _ratio_enum(anchor, aspect_ratios)
+    anchors = np.vstack(
+        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
+    )
+    return anchors
+    
+        if upsample_heatmap:
+        # Increase heatmap output size via bilinear upsampling
+        blob_out = model.BilinearInterpolation(
+            blob_out, 'kps_score', cfg.KRCNN.NUM_KEYPOINTS,
+            cfg.KRCNN.NUM_KEYPOINTS, cfg.KRCNN.UP_SCALE
+        )
+    
+    
+def _build_forward_graph(model, single_gpu_build_func):
+    '''Construct the forward graph on each GPU.'''
+    all_loss_gradients = {}  # Will include loss gradients from all GPUs
+    # Build the model on each GPU with correct name and device scoping
+    for gpu_id in range(cfg.NUM_GPUS):
+        with c2_utils.NamedCudaScope(gpu_id):
+            all_loss_gradients.update(single_gpu_build_func(model))
+    return all_loss_gradients
+    
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
+    
+        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
+    
+    __all__ = ['set_close_exec']
+
+    
+        def find(self, needle: str, start: int = 0, end: int = None) -> int:
+        assert start >= 0, start
+        pos = self.pos
+        start += pos
+        if end is None:
+            index = self.text.find(needle, start)
+        else:
+            end += pos
+            assert end >= start
+            index = self.text.find(needle, start, end)
+        if index != -1:
+            index -= pos
+        return index
