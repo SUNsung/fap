@@ -1,173 +1,134 @@
 
         
-          end
+            private
     
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
+      def test_font_helper_with_suffix_sharp
+    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
+  end
     
-            staff.topic_id = post.topic.id
-        unless staff.save
-          puts staff.errors.full_messages
-          puts 'Failed to set the Staff category description topic!'
-        end
+      def package(gem, ext='')
+    'pkg/#{gem}-#{source_version}' + ext
+  end
     
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
-    
-    module Gitlab
-  module Ci
-    module Pipeline
-      # Class for preloading data associated with pipelines such as commit
-      # authors.
-      class Preloader
-        def self.preload!(pipelines)
-          ##
-          # This preloads all commits at once, because `Ci::Pipeline#commit` is
-          # using a lazy batch loading, what results in only one batched Gitaly
-          # call.
-          #
-          pipelines.each(&:commit)
-    
-            value
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
       end
     
-          # The minimum number of requests we want to keep available.
-      #
-      # We don't use a value of 0 as multiple threads may be using the same
-      # token in parallel. This could result in all of them hitting the GitHub
-      # rate limit at once. The threshold is put in place to not hit the limit
-      # in most cases.
-      RATE_LIMIT_THRESHOLD = 50
+            reaction
+      end
     
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
     
-            def id_for_already_imported_cache(issue)
-          issue.number
-        end
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
     
-            # We inject the page number here to make sure that all importers always
-        # start where they left off. Simply starting over wouldn't work for
-        # repositories with a lot of data (e.g. tens of thousands of comments).
-        options = collection_options.merge(page: page_counter.current)
-    
-            # Builds a lfs_object
-        def self.from_api_response(lfs_object)
-          new({ oid: lfs_object[0], download_link: lfs_object[1] })
-        end
-    
-              hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-        def resource_params
-      params.require(:report_note).permit(
-        :content,
-        :report_id
-      )
-    end
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
     else
-      ['Unknown mode: #{hub_mode}', 422]
+      input
     end
   end
     
-      def future_expires
-    Time.now.utc + lease_seconds_or_default
-  end
+    Capybara.register_driver :named_test do |app|
+  Capybara::RackTest::Driver.new(app)
+end
+
     
-      def setting
-    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
+        it 'can disable use of gumbo' do
+      skip 'Test doesn't make sense unlesss nokogumbo is loaded' unless Nokogiri.respond_to?(:HTML5)
+      Capybara.allow_gumbo = false
+      expect(Capybara.string('<td>1</td>')).to have_css('td')
+    end
+    
+        it 'should allow to adjust the delay' do
+      @session.accept_alert wait: 10 do
+        @session.click_link('Open slow alert')
+      end
+      expect(@session).to have_xpath('//a[@id='open-slow-alert' and @opened='true']')
+    end
   end
 end
 
     
-          format('%20e', 109.52).should == '        1.095200e+02'
-      format('%20E', 109.52).should == '        1.095200E+02'
-      format('%20f', 10.952).should == '           10.952000'
-      format('%20g', 12.1234).should == '             12.1234'
-      format('%20G', 12.1234).should == '             12.1234'
-      format('%20a', 196).should == '           0x1.88p+7'
-      format('%20A', 196).should == '           0X1.88P+7'
-    
-          ruby_bug '#14846', '2.5'...'2.6' do
-        it 'does not prepend caller information if line number is too big' do
-          w = KernelSpecs::WarnInNestedCall.new
-          -> { w.f4('foo', 100) }.should output(nil, 'warning: foo\n')
-        end
-      end
-    
-          start_offset = offset
-      offset += scanner.matched.length
-      val = Sass::Script::Value::String.value(scanner[1] || scanner[2])
-      scanned = scanner.scan(/\s*/)
-      if !scanner.match?(/[,;]|$/)
-        offset += scanned.length if scanned
-        media_parser = Sass::SCSS::Parser.new(scanner,
-          @options[:filename], @options[:importer], @line, offset)
-        media = media_parser.parse_media_query_list
-        node = Tree::CssImportNode.new(quoted_val, media.to_a)
-        node.source_range = Sass::Source::Range.new(
-          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
-          Sass::Source::Position.new(@line, media_parser.offset),
-          @options[:filename], @options[:importer])
-      elsif val =~ %r{^(https?:)?//}
-        node = Tree::CssImportNode.new(quoted_val)
-        node.source_range = Sass::Source::Range.new(
-          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
-          Sass::Source::Position.new(@line, to_parser_offset(offset)),
-          @options[:filename], @options[:importer])
-      else
-        node = Tree::ImportNode.new(val)
-        node.source_range = Sass::Source::Range.new(
-          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
-          Sass::Source::Position.new(@line, to_parser_offset(offset)),
-          @options[:filename], @options[:importer])
-      end
-      node
+      it 'should accept the prompt with no message' do
+    @session.accept_prompt do
+      @session.click_link('Open prompt')
     end
-    # @comment
-    #   rubocop:enable MethodLength
-    
-        desc 'Build all examples'
-    task :build do
-      Bundler.require 'xcodeproj', :development
-      Dir['examples/*'].sort.each do |dir|
-        Dir.chdir(dir) do
-          puts 'Example: #{dir}'
-    
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
+    expect(@session).to have_xpath('//a[@id='open-prompt' and @response='']')
   end
     
-    Given /^I add this snippet to the User model:$/ do |snippet|
-  file_name = 'app/models/user.rb'
-  cd('.') do
-    content = File.read(file_name)
-    File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, '#{snippet}\nend') }
+      it 'should raise ElementNotFound with a useful default message if nothing was found' do
+    el = @session.find(:css, '#child')
+    expect do
+      el.ancestor(:xpath, '//div[@id='nosuchthing']')
+    end.to raise_error(Capybara::ElementNotFound, 'Unable to find xpath '//div[@id=\\'nosuchthing\\']' that is an ancestor of visible css '#child'')
+  end
+    
+    $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+begin
+  require 'redis-namespace'
+rescue LoadError
+  require 'rubygems'
+  require 'redis-namespace'
+end
+require 'resque'
+require 'optparse'
+    
+      def self.perform(repo_id, branch = 'master')
+    repo = Repository.find(repo_id)
+    repo.create_archive(branch)
   end
 end
     
-    ENV['RAILS_ENV'] = 'test'
+          case ENV['FAILURE_BACKEND']
+      when 'redis_multi_queue'
+        require 'resque/failure/redis_multi_queue'
+        @backend = Failure::RedisMultiQueue
+      when 'redis', nil
+        require 'resque/failure/redis'
+        @backend = Failure::Redis
+      else
+        raise ArgumentError, 'invalid failure backend: #{FAILURE_BACKEND}'
+      end
+    end
     
-        def empty_file?
-      File.exist?(@filepath) && File.size(@filepath) == 0
+          def poll
+        if defined?(@polling) && @polling
+          text = 'Last Updated: #{Time.now.strftime('%H:%M:%S')}'
+        else
+          text = '<a href='#{u(request.path_info)}.poll' rel='poll'>Live Poll</a>'
+        end
+        '<p class='poll'>#{text}</p>'
+      end
+    
+        # Kill the child and shutdown immediately.
+    # If not forking, abort this process.
+    def shutdown!
+      shutdown
+      if term_child
+        if fork_per_job?
+          new_kill_child
+        else
+          # Raise TermException in the same process
+          trap('TERM') do
+            # ignore subsequent terms
+          end
+          raise TermException.new('SIGTERM')
+        end
+      else
+        kill_child
+      end
     end
