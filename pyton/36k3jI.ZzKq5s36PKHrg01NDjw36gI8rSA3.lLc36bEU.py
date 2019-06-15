@@ -1,220 +1,223 @@
 
         
-            def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
+                (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
+    
+        def _hash_function(self, key):
+        return key % self.size
+    
+        def move_to_front(self, node):
+        ...
+    
+      # Predict the labels
+  pred = model.predict(session, instances)
     
     
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+def gen_encoder_seq2seq_nas(hparams):
+  '''Returns the NAS Variable name to MaskGAN Variable
+  dictionary mapping.  This is a highly restrictive function just for testing.
+  This is for the *unidirecitional* seq2seq_nas encoder.
     
     
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
+def filter_options(readme):
+    ret = ''
+    in_options = False
+    for line in readme.split('\n'):
+        if line.startswith('# '):
+            if line[2:].startswith('OPTIONS'):
+                in_options = True
+            else:
+                in_options = False
     
-        def test_default_decoder_raises_deserialization_error(self):
-        from acme.fields import RFC3339Field
-        self.assertRaises(
-            jose.DeserializationError, RFC3339Field.default_decoder, '')
+        def test_precedence(self):
+        jsi = JSInterpreter('''
+        function x() {
+            var a = [10, 20, 30, 40, 50];
+            var b = 6;
+            a[0]=a[b%a.length];
+            return a;
+        }''')
+        self.assertEqual(jsi.call_function('x'), [20, 20, 30, 40, 50])
     
-        def test_kid_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url, kid=self.kid)
-        self.assertEqual(jws.signature.combined.nonce, self.nonce)
-        self.assertEqual(jws.signature.combined.url, self.url)
-        self.assertEqual(jws.signature.combined.kid, self.kid)
-        self.assertEqual(jws.signature.combined.jwk, None)
-        # TODO: check that nonce is in protected header
+        def prepare(self, **kwargs):
     
-            self.vhosts.append(
-            obj.VirtualHost(
-                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
-                False, False,
-                'wildcard.com', set(['*.wildcard.com'])))
-    
-    PROJ_METADATA = '%s.json' % PROJ_NAME
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-    
-    def download_by_id(self, vid = '', title = None, output_dir='.', merge=True, info_only=False,**kwargs):
-        '''self, str->None
-        
-        Keyword arguments:
-        self: self
-        vid: The video ID for BokeCC cloud, something like
-        FE3BB999594978049C33DC5901307461
-        
-        Calls the prepare() to download the video.
-        
-        If no title is provided, this method shall try to find a proper title
-        with the information providin within the
-        returned content of the API.'''
+    class BokeCC(VideoExtractor):
+    name = 'BokeCC'
     
         if '_text' in dictified['video'][0]['size'][0]:  #size exists for 1 piece
         video_dict['size'] = sum([int(i['size'][0]['_text']) for i in dictified['video']])
     
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
+    # (api_key, method, ext, page)
+tmpl_api_call = (
+    'https://api.flickr.com/services/rest?'
+    '&format=json&nojsoncallback=1'
+    # UNCOMMENT FOR TESTING
+    #'&per_page=5'
+    '&per_page=500'
+    # this parameter CANNOT take control of 'flickr.galleries.getPhotos'
+    # though the doc said it should.
+    # it's always considered to be 500
+    '&api_key=%s'
+    '&method=flickr.%s'
+    '&extras=url_sq,url_q,url_t,url_s,url_n,url_m,url_z,url_c,url_l,url_h,url_k,url_o,media'
+    '%s&page=%d'
+)
+    
+    site_info = 'Giphy.com'
+download = giphy_download
+download_playlist = playlist_not_supported('giphy')
+
+    
+    site_info = 'ifeng.com'
+download = ifeng_download
+download_playlist = playlist_not_supported('ifeng')
+
+    
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
+    
+        return masks_c
+    
+                    for k in range(boxes.shape[0]):
+                    score = boxes[k, -1]
+                    mask = masks[:, :, k]
+                    pngname = os.path.join(
+                        'results',
+                        basename + '_' + clss + '_{}.png'.format(k))
+                    # write txt
+                    fid_txt.write('{} {} {}\n'.format(pngname, clss_id, score))
+                    # save mask
+                    cv2.imwrite(os.path.join(output_dir, pngname), mask * 255)
+    logger.info('Evaluating...')
+    cityscapes_eval.main([])
+    return None
+
     
     
-class Funshion(VideoExtractor):
-    name = 'funshion'
-    stream_types = [
-        {'id': 'sdvd'},
-        {'id': 'sdvd_h265'},
-        {'id': 'hd'},
-        {'id': 'hd_h265'},
-        {'id': 'dvd'},
-        {'id': 'dvd_h265'},
-        {'id': 'tv'},
-        {'id': 'tv_h265'}
-    ]
-    a_mobile_url = 'http://m.fun.tv/implay/?mid=302555'
-    video_ep = 'http://pv.funshion.com/v7/video/play/?id={}&cl=mweb&uc=111'
-    media_ep = 'http://pm.funshion.com/v7/media/play/?id={}&cl=mweb&uc=111'
-    coeff = None
+def get_raw_dir(name):
+    '''Retrieve the raw dir for the dataset.'''
+    return _DATASETS[name][_RAW_DIR]
+
     
-    
-def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    room_id_pattern = r'huomao.com/(\d+)'
-    room_id = match1(url, room_id_pattern)
-    html = get_content(get_mobile_room_url(room_id))
-    
-        filename = '%s.%s' % (title, ext)
-    filepath = os.path.join(output_dir, filename)
-    if not force and os.path.exists(filepath):
-        print('Skipping {}: file already exists\n'.format(filepath))
-        return
-    bar = SimpleProgressBar(total_size, 1)
-    print('Downloading %s ...' % tr(filename))
-    url_save_icourses(url, filepath, bar, total_size, headers=headers, **kwargs)
-    bar.done()
-    
-    __all__ = ['ifeng_download', 'ifeng_download_by_id']
-    
-    REVERSE_NAME_MAPPING.update({
-    ('_functools', 'reduce'): ('__builtin__', 'reduce'),
-    ('tkinter.filedialog', 'FileDialog'): ('FileDialog', 'FileDialog'),
-    ('tkinter.filedialog', 'LoadFileDialog'): ('FileDialog', 'LoadFileDialog'),
-    ('tkinter.filedialog', 'SaveFileDialog'): ('FileDialog', 'SaveFileDialog'),
-    ('tkinter.simpledialog', 'SimpleDialog'): ('SimpleDialog', 'SimpleDialog'),
-    ('xmlrpc.server', 'ServerHTMLDoc'): ('DocXMLRPCServer', 'ServerHTMLDoc'),
-    ('xmlrpc.server', 'XMLRPCDocGenerator'):
-        ('DocXMLRPCServer', 'XMLRPCDocGenerator'),
-    ('xmlrpc.server', 'DocXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocXMLRPCRequestHandler'),
-    ('xmlrpc.server', 'DocXMLRPCServer'):
-        ('DocXMLRPCServer', 'DocXMLRPCServer'),
-    ('xmlrpc.server', 'DocCGIXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocCGIXMLRPCRequestHandler'),
-    ('http.server', 'SimpleHTTPRequestHandler'):
-        ('SimpleHTTPServer', 'SimpleHTTPRequestHandler'),
-    ('http.server', 'CGIHTTPRequestHandler'):
-        ('CGIHTTPServer', 'CGIHTTPRequestHandler'),
-    ('_socket', 'socket'): ('socket', '_socketobject'),
-})
-    
-    class GenerateTokensTest(TokenizeTest):
-    def check_tokenize(self, s, expected):
-        # Format the tokens in s in a table format.
-        # The ENDMARKER and final NEWLINE are omitted.
-        f = StringIO(s)
-        result = stringify_tokens_from_source(generate_tokens(f.readline), s)
-        self.assertEqual(result, expected.rstrip().splitlines())
-    
-        If the resource does not already exist on its own on the file system,
-    a temporary file will be created. If the file was created, the file
-    will be deleted upon exiting the context manager (no exception is
-    raised if the file was deleted prior to the context manager
-    exiting).
-    '''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        try:
-            yield Path(reader.resource_path(resource))
-            return
-        except FileNotFoundError:
-            pass
-    else:
-        _check_location(package)
-    # Fall-through for both the lack of resource_path() *and* if
-    # resource_path() raises FileNotFoundError.
-    package_directory = Path(package.__spec__.origin).parent
-    file_path = package_directory / resource
-    if file_path.exists():
-        yield file_path
-    else:
-        with open_binary(package, resource) as fp:
-            data = fp.read()
-        # Not using tempfile.NamedTemporaryFile as it leads to deeper 'try'
-        # blocks due to the need to close the temporary file to work on
-        # Windows properly.
-        fd, raw_path = tempfile.mkstemp()
-        try:
-            os.write(fd, data)
-            os.close(fd)
-            yield Path(raw_path)
-        finally:
-            try:
-                os.remove(raw_path)
-            except FileNotFoundError:
-                pass
-    
-        # Initialize and populate our database.
-    conn = sqlite3.connect(':memory:')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
-    tasks = (
-        'give food to fish',
-        'prepare group meeting',
-        'fight with a zebra',
+        def _distribute_rois_over_fpn_levels(rois_blob_name):
+        '''Distribute rois over the different FPN levels.'''
+        # Get target level for each roi
+        # Recall blob rois are in (batch_idx, x1, y1, x2, y2) format, hence take
+        # the box coordinates from columns 1:5
+        target_lvls = fpn.map_rois_to_fpn_levels(
+            blobs[rois_blob_name][:, 1:5], lvl_min, lvl_max
         )
-    for task in tasks:
-        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
+        # Add per FPN level roi blobs named like: <rois_blob_name>_fpn<lvl>
+        fpn.add_multilevel_roi_blobs(
+            blobs, rois_blob_name, blobs[rois_blob_name], target_lvls, lvl_min,
+            lvl_max
+        )
     
-    ans = input('View full message?')
-if ans.lower()[0] == 'n':
-    sys.exit()
+    from lxml import html
     
-        try:
-        os.mkdir(args.directory)
-    except FileExistsError:
-        pass
+        ('smaller', None, '10pt'),
+    ('smaller', '18pt', '15pt'),
+    ('larger', None, '{pt:f}pt'.format(pt=14.4)),
+    ('larger', '15pt', '18pt'),
+])
+def test_css_relative_font_size(size, relative_to, resolved):
+    if relative_to is None:
+        inherited = None
+    else:
+        inherited = {'font-size': relative_to}
+    assert_resolves('font-size: {size}'.format(size=size),
+                    {'font-size': resolved}, inherited=inherited)
+
     
-    # A simple generator function
-def baz():
-    for i in range(10):
-        yield i*i
     
-    # If false, no module index is generated.
-#
-# html_domain_indices = True
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
     
-        elif bump_type == 'dev':
-        # Convert 0.67.3 to 0.67.4.dev0
-        # Convert 0.67.3.b5 to 0.67.4.dev0
-        # Convert 0.67.3.dev0 to 0.67.3.dev1
-        if version.is_devrelease:
-            to_change['dev'] = ('dev', version.dev + 1)
-        else:
-            to_change['pre'] = ('dev', 0)
-            to_change['release'] = _bump_release(version.release, 'minor')
+    
+def _HandlePollResponse( response, diagnostics_handler ):
+  if isinstance( response, list ):
+    for notification in response:
+      if 'message' in notification:
+        PostVimMessage( notification[ 'message' ],
+                        warning = False,
+                        truncate = True )
+      elif 'diagnostics' in notification:
+        diagnostics_handler.UpdateWithNewDiagnosticsForFile(
+          notification[ 'filepath' ],
+          notification[ 'diagnostics' ] )
+  elif response is False:
+    # Don't keep polling for this file
+    return False
+  # else any truthy response means 'nothing to see here; poll again in a
+  # while'
+    
+    
+def HandlePollResponse_NoMessages_test():
+  assert_that( _HandlePollResponse( True, None ), equal_to( True ) )
+    
+    accepted_chars = re.compile(r'[\u4E00-\u9FD5]+')
+    
+    
+def viterbi(obs, states, start_p, trans_p, emit_p):
+    V = [{}]  # tabular
+    path = {}
+    for y in states:  # init
+        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
+        path[y] = [y]
+    for t in xrange(1, len(obs)):
+        V.append({})
+        newpath = {}
+        for y in states:
+            em_p = emit_p[y].get(obs[t], MIN_FLOAT)
+            (prob, state) = max(
+                [(V[t - 1][y0] + trans_p[y0].get(y, MIN_FLOAT) + em_p, y0) for y0 in PrevStatus[y]])
+            V[t][y] = prob
+            newpath[y] = path[state] + [y]
+        path = newpath
+    
+    file_name = args[0]
+    
+            print('Test: Multiple dequeue in a row')
+        assert_equal(queue.dequeue(), 1)
+        assert_equal(queue.dequeue(), 2)
+    
+    		PostOrder(self.root)
+		return postOrder
+    
+    		print('Test: insert checking with post order traversal')
+		expectVal = [7, 25, 10, 38, 40, 30, 60, 80, 70, 50]
+		assert_equal(myTree.printPostOrder(), expectVal)
+		expectVal = [91, 81, 71, 61, 51, 41, 31, 21, 11, 1]
+		assert_equal(myTree2.printPostOrder(), expectVal)
+    
+            print('Test: set on an empty hash table index')
+        hash_table.set(0, 'foo')
+        assert_equal(hash_table.get(0), 'foo')
+        hash_table.set(1, 'bar')
+        assert_equal(hash_table.get(1), 'bar')
