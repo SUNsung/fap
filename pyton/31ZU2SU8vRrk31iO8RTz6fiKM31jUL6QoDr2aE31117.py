@@ -1,238 +1,161 @@
 
         
-            def __init__(self, operators, supervisors, directors):
-        self.operators = operators
-        self.supervisors = supervisors
-        self.directors = directors
-        self.queued_calls = deque()
-    
-        def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
+            def _hash_function(self, key):
+        return key % self.size
     
     
-class Categorizer(object):
+class Cache(object):
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+            self.assertTrue(refund_transaction.called)
+        self.assertTrue(promotion_log_add.called)
+        queries_unset.assert_called_once_with(self.campaign)
+        emailer_refunded_promo.assert_called_once_with(self.link)
+        self.assertTrue(success)
     
-    
-class PersonServer(object):
-    
-        def __init__(self, key, value):
-        self.key = key
-        self.value = value
-    
-        def remove_from_tail(self):
-        ...
-    
-    
-class Page(object):
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
-'''
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
+            for width in (108, 216, 320, 640, 960, 1080):
+            url = self.provider.resize_image(image, width)
+            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
+                width*2))
 
     
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
+        def test_different_queries(self):
+        u = UrlParser('http://example.com/')
+        u2 = UrlParser('http://example.com/?foo')
+        u3 = UrlParser('http://example.com/?foo=bar')
+        self.assertNotEquals(u, u2)
+        self.assertNotEquals(u2, u3)
+    
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue('non_field_errors' in response.data)
+    
+        def __str__(self):
+        global str_called
+        str_called = True
+        return 'An example'
+    
+        def test_prefetch_related_excluding_instance_from_original_queryset(self):
+        '''
+        Regression test for https://github.com/encode/django-rest-framework/issues/4661
+        '''
+        view = UserUpdate.as_view()
+        pk = self.user.pk
+        groups_pk = self.groups[0].pk
+        request = factory.put('/', {'username': 'exclude', 'groups': [groups_pk]}, format='json')
+        response = view(request, pk=pk)
+        assert User.objects.get(pk=pk).groups.count() == 1
+        expected = {
+            'id': pk,
+            'username': 'exclude',
+            'groups': [1],
+            'email': 'tom@example.com'
+        }
+        assert response.data == expected
 
     
-        good_nonce = jose.encode_b64jose(b'foo')
-    wrong_nonce = u'F'
-    # Following just makes sure wrong_nonce is wrong
-    try:
-        jose.b64decode(wrong_nonce)
-    except (ValueError, TypeError):
-        assert True
-    else:
-        assert False  # pragma: no cover
-    
-    # If true, keep warnings as 'system message' paragraphs in the built documents.
-#keep_warnings = False
-    
-            :raises .errors.PluginError: If there has been an error in parsing with
-            the specified lens.
-    
-            self.assertFalse(self.addr1.conflicts(self.addr))
-        self.assertTrue(self.addr1.conflicts(self.addr_defined))
-        self.assertFalse(self.addr1.conflicts(self.addr_default))
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
+            # data_1
+        serializer = Serializer(instance, data=input_data_1, partial=True)
+        assert serializer.is_valid()
+        assert len(serializer.validated_data) == 1
+        assert serializer.validated_data['extra_field'] == 2
+        assert serializer.errors == {}
     
     
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
-    'certbot': ('https://certbot.eff.org/docs/', None),
-}
+class FileUploadParser(BaseParser):
+    '''
+    Parser for file upload data.
+    '''
+    media_type = '*/*'
+    errors = {
+        'unhandled': 'FileUpload parse error - none of upload handlers can handle the stream',
+        'no_filename': 'Missing filename. Request should include a Content-Disposition header with a filename parameter.',
+    }
+    
+        def __init__(self, detail=None, code=None, available_renderers=None):
+        self.available_renderers = available_renderers
+        super().__init__(detail, code)
+    
+    
+class EUCTWDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self):
+        CharDistributionAnalysis.__init__(self)
+        self._mCharToFreqOrder = EUCTWCharToFreqOrder
+        self._mTableSize = EUCTW_TABLE_SIZE
+        self._mTypicalDistributionRatio = EUCTW_TYPICAL_DISTRIBUTION_RATIO
+    
+        def get_confidence(self):
+        st = self.get_state()
+        if st == constants.eFoundIt:
+            return 0.99
+        elif st == constants.eNotMe:
+            return 0.01
+        bestConf = 0.0
+        self._mBestGuessProber = None
+        for prober in self._mProbers:
+            if not prober:
+                continue
+            if not prober.active:
+                if constants._debug:
+                    sys.stderr.write(prober.get_charset_name()
+                                     + ' not active\n')
+                continue
+            cf = prober.get_confidence()
+            if constants._debug:
+                sys.stderr.write('%s confidence = %s\n' %
+                                 (prober.get_charset_name(), cf))
+            if bestConf < cf:
+                bestConf = cf
+                self._mBestGuessProber = prober
+        if not self._mBestGuessProber:
+            return 0.0
+        return bestConf
+#        else:
+#            self._mBestGuessProber = self._mProbers[0]
+#            return self._mBestGuessProber.get_confidence()
 
     
-    REVERSE_NAME_MAPPING.update({
-    ('_functools', 'reduce'): ('__builtin__', 'reduce'),
-    ('tkinter.filedialog', 'FileDialog'): ('FileDialog', 'FileDialog'),
-    ('tkinter.filedialog', 'LoadFileDialog'): ('FileDialog', 'LoadFileDialog'),
-    ('tkinter.filedialog', 'SaveFileDialog'): ('FileDialog', 'SaveFileDialog'),
-    ('tkinter.simpledialog', 'SimpleDialog'): ('SimpleDialog', 'SimpleDialog'),
-    ('xmlrpc.server', 'ServerHTMLDoc'): ('DocXMLRPCServer', 'ServerHTMLDoc'),
-    ('xmlrpc.server', 'XMLRPCDocGenerator'):
-        ('DocXMLRPCServer', 'XMLRPCDocGenerator'),
-    ('xmlrpc.server', 'DocXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocXMLRPCRequestHandler'),
-    ('xmlrpc.server', 'DocXMLRPCServer'):
-        ('DocXMLRPCServer', 'DocXMLRPCServer'),
-    ('xmlrpc.server', 'DocCGIXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocCGIXMLRPCRequestHandler'),
-    ('http.server', 'SimpleHTTPRequestHandler'):
-        ('SimpleHTTPServer', 'SimpleHTTPRequestHandler'),
-    ('http.server', 'CGIHTTPRequestHandler'):
-        ('CGIHTTPServer', 'CGIHTTPRequestHandler'),
-    ('_socket', 'socket'): ('socket', '_socketobject'),
-})
+        def get_charset_name(self):
+        return None
     
-        def test_string(self):
-        # String literals
-        self.check_tokenize('x = ''; y = \'\'', '''\
-    NAME       'x'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     ''''          (1, 4) (1, 6)
-    OP         ';'           (1, 6) (1, 7)
-    NAME       'y'           (1, 8) (1, 9)
-    OP         '='           (1, 10) (1, 11)
-    STRING     ''''          (1, 12) (1, 14)
-    ''')
-        self.check_tokenize('x = '\''; y = \''\'', '''\
-    NAME       'x'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     '\\''\\''       (1, 4) (1, 7)
-    OP         ';'           (1, 7) (1, 8)
-    NAME       'y'           (1, 9) (1, 10)
-    OP         '='           (1, 11) (1, 12)
-    STRING     ''\\'''        (1, 13) (1, 16)
-    ''')
-        self.check_tokenize('x = \'doesn't \'shrink\', does it\'', '''\
-    NAME       'x'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     ''doesn\\'t '' (1, 4) (1, 14)
-    NAME       'shrink'      (1, 14) (1, 20)
-    STRING     '', does it'' (1, 20) (1, 31)
-    ''')
-        self.check_tokenize('x = 'abc' + 'ABC'', '''\
-    NAME       'x'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     ''abc''       (1, 4) (1, 9)
-    OP         '+'           (1, 10) (1, 11)
-    STRING     ''ABC''       (1, 12) (1, 17)
-    ''')
-        self.check_tokenize('y = 'ABC' + 'ABC'', '''\
-    NAME       'y'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     ''ABC''       (1, 4) (1, 9)
-    OP         '+'           (1, 10) (1, 11)
-    STRING     ''ABC''       (1, 12) (1, 17)
-    ''')
-        self.check_tokenize('x = r'abc' + r'ABC' + R'ABC' + R'ABC'', '''\
-    NAME       'x'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     'r'abc''      (1, 4) (1, 10)
-    OP         '+'           (1, 11) (1, 12)
-    STRING     'r'ABC''      (1, 13) (1, 19)
-    OP         '+'           (1, 20) (1, 21)
-    STRING     'R'ABC''      (1, 22) (1, 28)
-    OP         '+'           (1, 29) (1, 30)
-    STRING     'R'ABC''      (1, 31) (1, 37)
-    ''')
-        self.check_tokenize('y = r'abc' + r'ABC' + R'ABC' + R'ABC'', '''\
-    NAME       'y'           (1, 0) (1, 1)
-    OP         '='           (1, 2) (1, 3)
-    STRING     'r'abc''      (1, 4) (1, 10)
-    OP         '+'           (1, 11) (1, 12)
-    STRING     'r'ABC''      (1, 13) (1, 19)
-    OP         '+'           (1, 20) (1, 21)
-    STRING     'R'ABC''      (1, 22) (1, 28)
-    OP         '+'           (1, 29) (1, 30)
-    STRING     'R'ABC''      (1, 31) (1, 37)
-    ''')
+        def next_state(self, c):
+        # for each byte we get its class
+        # if it is first byte, we also get byte length
+        # PY3K: aBuf is a byte stream, so c is an int, not a byte
+        byteCls = self._mModel['classTable'][wrap_ord(c)]
+        if self._mCurrentState == eStart:
+            self._mCurrentBytePos = 0
+            self._mCurrentCharLen = self._mModel['charLenTable'][byteCls]
+        # from byte's class and stateTable, we get its next state
+        curr_state = (self._mCurrentState * self._mModel['classFactor']
+                      + byteCls)
+        self._mCurrentState = self._mModel['stateTable'][curr_state]
+        self._mCurrentBytePos += 1
+        return self._mCurrentState
     
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
-        else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
-
+    # 128  --> 0.79
+# 256  --> 0.92
+# 512  --> 0.986
+# 1024 --> 0.99944
+# 2048 --> 0.99999
+#
+# Idea Distribution Ratio = 0.98653 / (1-0.98653) = 73.24
+# Random Distribution Ration = 512 / (2350-512) = 0.279.
+# 
+# Typical Distribution Ratio  
     
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+    GB2312_TABLE_SIZE = 3760
     
-        with open(args.msgfile, 'rb') as fp:
-        msg = email.message_from_binary_file(fp, policy=default)
-    
-    DB_FILE = 'mydb'
-    
-    
-def __feet_to_meters(feet: float) -> float:
-    '''Convert feet to meters.'''
-    return feet * 0.3048
+    # 0 : illegal
+# 1 : very unlikely
+# 2 : normal
+# 3 : very likely
+Latin1ClassModel = (
+    # UDF OTH ASC ASS ACV ACO ASV ASO
+    0,  0,  0,  0,  0,  0,  0,  0,  # UDF
+    0,  3,  3,  3,  3,  3,  3,  3,  # OTH
+    0,  3,  3,  3,  3,  3,  3,  3,  # ASC
+    0,  3,  3,  3,  1,  1,  3,  3,  # ASS
+    0,  3,  3,  3,  1,  2,  1,  2,  # ACV
+    0,  3,  3,  3,  3,  3,  3,  3,  # ACO
+    0,  3,  1,  3,  1,  1,  1,  3,  # ASV
+    0,  3,  1,  3,  1,  1,  3,  3,  # ASO
+)
