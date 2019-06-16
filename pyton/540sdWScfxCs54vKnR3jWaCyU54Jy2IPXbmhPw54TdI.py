@@ -1,125 +1,111 @@
 
         
-            # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
-    
-    import six
-from . import backend as K
-from .utils.generic_utils import serialize_keras_object
-from .utils.generic_utils import deserialize_keras_object
-    
-    # Stack of Transposed Conv2D blocks
-# Notes:
-# 1) Use Batch Normalization before ReLU on deep networks
-# 2) Use UpSampling2D as alternative to strides>1
-# - faster but not as good as strides>1
-for filters in layer_filters[::-1]:
-    x = Conv2DTranspose(filters=filters,
-                        kernel_size=kernel_size,
-                        strides=2,
-                        activation='relu',
-                        padding='same')(x)
-    
-    Reaches 0.93 train/test accuracy after 900 epochs
-(which roughly corresponds to 1687500 steps in the original paper.)
-'''
-    
-    model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
-model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(num_classes, activation='softmax'))
-    
-    print('Convert class vector to binary class matrix '
-      '(for use with categorical_crossentropy)')
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-print('y_train shape:', y_train.shape)
-print('y_test shape:', y_test.shape)
-    
-        # skip j = 0, because it's the background class
-    for j in range(1, num_classes):
-        segms = []
-        for _ in range(cls_boxes[j].shape[0]):
-            if cfg.MRCNN.CLS_SPECIFIC_MASK:
-                padded_mask[1:-1, 1:-1] = masks[mask_ind, j, :, :]
-            else:
-                padded_mask[1:-1, 1:-1] = masks[mask_ind, 0, :, :]
-    
-    
-def evaluate_masks(
-    json_dataset,
-    all_boxes,
-    all_segms,
-    output_dir,
-    use_salt=True,
-    cleanup=False
-):
-    if cfg.CLUSTER.ON_CLUSTER:
-        # On the cluster avoid saving these files in the job directory
-        output_dir = '/tmp'
-    res_file = os.path.join(
-        output_dir, 'segmentations_' + json_dataset.name + '_results')
-    if use_salt:
-        res_file += '_{}'.format(str(uuid.uuid4()))
-    res_file += '.json'
-    
-    
-def add_fpn_ResNet101_conv5_P2only_body(model):
-    return add_fpn_onto_conv_body(
-        model,
-        ResNet.add_ResNet101_conv5_body,
-        fpn_level_info_ResNet101_conv5,
-        P2only=True
-    )
-    
-    Flexible network configuration is achieved by specifying the function name that
-builds a network module (e.g., the name of the conv backbone or the mask roi
-head). However we may wish to change names over time without breaking previous
-config files. This module provides backwards naming compatibility by providing
-a mapping from the old name to the new name.
-    
-    
-# octave and aspect fields are only used on RetinaNet. Octave corresponds to the
-# scale of the anchor and aspect denotes which aspect ratio is used in the range
-# of aspect ratios
-FieldOfAnchors = namedtuple(
-    'FieldOfAnchors', [
-        'field_of_anchors', 'num_cell_anchors', 'stride', 'field_size',
-        'octave', 'aspect'
-    ]
-)
-    
-        points: Nx2xK
-    boxes: Nx4
-    output: NxK
-    '''
-    x_within = np.logical_and(
-        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
-        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
-    )
-    y_within = np.logical_and(
-        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
-        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
-    )
-    return np.logical_and(x_within, y_within)
+            yield (x, y, w)
 
     
-        for i in range(masks.shape[0]):
-        cls = int(mask_class_labels[i])
-        start = M**2 * cls
-        end = start + M**2
-        # Ignore background instance
-        # (only happens when there is no fg samples in an image)
-        if cls > 0:
-            mask_targets[i, start:end] = masks[i, :]
+    import tensorflow as tf
+from models import bidirectional
+from models import bidirectional_vd
     
-            A = np.random.randn(10, 3, 5, 7).astype(np.float32)
-        I = np.array(np.random.permutation(10), dtype=np.int32)
-        self._run_op_test(A, I, check_grad=True)
+        # Critic loss calculated from the estimated value function \hat{V}(s)
+    # versus the true value function V*(s).
+    critic_loss = create_critic_loss(cumulative_rewards, estimated_values,
+                                     present)
+    
+    
+def assign_percent_real(session, percent_real_update, new_rate, current_rate):
+  '''Run assign operation where the we load the current_rate of percent
+  real into a Tensorflow variable.
+    
+            # attn_fun
+        scores = _attn_add_fun(score_v, keys, query)
+      elif attention_option == 'luong':
+        # reshape query: [batch_size, 1, num_units]
+        query = tf.reshape(query, [-1, 1, num_units])
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      post_vim_message.assert_has_exact_calls( [
+    call( 'On the first day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'A test file in a Command-T', warning=False, truncate=True ),
+    call( 'On the second day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'Two popup menus, and a test file in a Command-T',
+          warning=False,
+          truncate=True ),
+  ] )
+
+    
+    
+  def raise_for_status( self ):
+    if self._exception:
+      raise self._exception
+    
+    
+def _worker( executor_reference, work_queue ):
+  try:
+    while True:
+      work_item = work_queue.get( block=True )
+      if work_item is not None:
+        work_item.run()
+        continue
+      executor = executor_reference()
+      # Exit if:
+      #   - The executor that owns the worker has been collected OR
+      #   - The executor that owns the worker has been shutdown.
+      if executor is None or executor._shutdown:
+        # Notice other workers
+        work_queue.put( None )
+        return
+      del executor
+  except BaseException:
+    _base.LOGGER.critical( 'Exception in worker', exc_info=True )
+    
+        Args:
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids: A queue.Queue of work ids e.g. Queue([5, 6, ...]). Work ids
+            are consumed and the corresponding _WorkItems from
+            pending_work_items are transformed into _CallItems and put in
+            call_queue.
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems.
+    '''
+    while True:
+        if call_queue.full():
+            return
+        try:
+            work_id = work_ids.get(block=False)
+        except queue.Empty:
+            return
+        else:
+            work_item = pending_work_items[work_id]
+    
+      with open(csvfile, 'rb') as f:
+      reader = csv.reader(f)
+      comments = {rows[0]:rows[1] for rows in reader}
+  
+  for kind in ['Daemons', 'Agents']:
+    for filename in glob.glob(location % kind):
+      if not filename.endswith('com.apple.jetsamproperties.Mac.plist'):
+        p = LoadPlist(filename)
+        if p:
+          e = (filename, GetLabel(p), ''%s',%s' % GetProgram(p), GetStatus(p), ''%s'' % GetComment(p))
+          print('%s,%s,%s,%s,%s' % e)
+        else:
+          print('Could not load %s' % filename)
