@@ -1,122 +1,200 @@
 
         
-        	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+            void addWeighted(const Size2D &size,
+                     const s16 * src0Base, ptrdiff_t src0Stride,
+                     const s16 * src1Base, ptrdiff_t src1Stride,
+                     s16 * dstBase, ptrdiff_t dstStride,
+                     f32 alpha, f32 beta, f32 gamma);
     
-    			for (unsigned int uiPixelOrder = 0; uiPixelOrder < PIXELS / 2; uiPixelOrder++)
-			{
-				unsigned int uiPixel1 = pauiPixelMapping1[uiPixelOrder];
-				unsigned int uiPixel2 = pauiPixelMapping2[uiPixelOrder];
+    #include <cstdlib>
+#include <iostream>
+    
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+}
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src1]]                              \n\t'
+             'vld1.32 {d2-d3}, [%[src2]]                              \n\t'
+             'vqmovn.s32 d4, q0                                       \n\t'
+             'vqmovn.s32 d5, q1                                       \n\t'
+             'vqmovn.s16  d6, q2                                      \n\t'
+             'vst1.8 {d6}, [%[dst]]                                   \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i + 0),
+               [src2] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3','d4','d5','d6'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline1_s32 = vld1q_s32(_src + i);
+         int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+    }
     }
     
-    #endif  // VPX_DSP_TXFM_COMMON_H_
+            while(i + 16 <= size.width)
+        {
+            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
+    }
+    
+    // If the max-min top of a unicharset char is bigger than kMaxCharTopRange
+// then the char top cannot be used to judge misfits or suggest a new top.
+const int kMaxCharTopRange = 48;
+    
+      // Computes all the cross product distances of the points perpendicular to
+  // the given direction, ignoring distances outside of the give distance range,
+  // storing the actual (signed) cross products in distances_.
+  void ComputeConstrainedDistances(const FCOORD& direction,
+                                   double min_dist, double max_dist);
+    
+    class LLSQ {
+ public:
+  LLSQ() {  // constructor
+    clear();  // set to zeros
+  }
+  void clear();  // initialize
+    }
+    
+    
+    { private:
+  tesseract::ParagraphJustification justification_;
+  int margin_;
+  int first_indent_;
+  int body_indent_;
+  int tolerance_;
+};
+    
+    
+    { private:
+  CensusContext context_;
+  // Metadata elements for tracing and census stats data.
+  grpc_linked_mdelem stats_bin_;
+  grpc_linked_mdelem tracing_bin_;
+  // Client method.
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // The recv trailing metadata callbacks.
+  grpc_metadata_batch* recv_trailing_metadata_;
+  grpc_closure* initial_on_done_recv_trailing_metadata_;
+  grpc_closure on_done_recv_trailing_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  // Start time (for measuring latency).
+  absl::Time start_time_;
+  // Server elapsed time in nanoseconds.
+  uint64_t elapsed_time_;
+  // The received message--may be null.
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  // Number of messages in this RPC.
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference when adding trace context
+  // metatdata to outgoing message.
+  char tracing_buf_[kMaxTraceContextLen];
+};
+    
+    // Server
+MeasureDouble RpcServerSentBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerSentBytesPerRpcMeasureName,
+      'Total bytes sent across all messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
 
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    CreateThreadPoolFunc g_ctp_impl = CreateDefaultThreadPoolImpl;
     
-    #define DIV32(a, b) DIV32_(a, b, __FILE__, __LINE__)
-static OPUS_INLINE int DIV32_(opus_int64 a, opus_int64 b, char *file, int line)
-{
-   opus_int64 res;
-   if (b==0)
-   {
-      fprintf(stderr, 'DIV32: divide by zero: %d/%d in %s: line %d\n', (int)a, (int)b, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-      return 0;
-   }
+    namespace grpc {
+namespace load_reporter {
+    }
     }
     
-        // output element at index 2 (third element)
-    std::cout << array.at(2) << '\n';
+    #include 'src/proto/grpc/core/stats.pb.h'
     
-        // out_of_range.402
-    try
-    {
-        // try to use the array index '-'
-        json::const_reference ref = j.at('/array/-'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+      std::string Key(int i) {
+    char buf[100];
+    snprintf(buf, sizeof(buf), 'key%06d', i);
+    return std::string(buf);
+  }
     
-        // create values of different integer types
-    short n_short = 42;
-    int n_int = -23;
-    long n_long = 1024;
-    int_least32_t n_int_least32_t = -17;
-    uint8_t n_uint8_t = 8;
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(uint64_t bytes, const char* reason);
+  void ReportDrop(uint64_t bytes, const Status& reason);
     
-    int main()
-{
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
+    namespace leveldb {
     }
     
-      // drop column family
-  s = db->DropColumnFamily(handles[1]);
-  assert(s.ok());
+    #include 'db/db_impl.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'util/testharness.h'
     
-      // Load the options file.
-  DBOptions loaded_db_opt;
-  std::vector<ColumnFamilyDescriptor> loaded_cf_descs;
-  s = LoadLatestOptions(kDBPath, Env::Default(), &loaded_db_opt,
-                        &loaded_cf_descs);
-  assert(s.ok());
-  assert(loaded_db_opt.create_if_missing == db_opt.create_if_missing);
+      Status(const Status& rhs);
+  Status& operator=(const Status& rhs);
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    // Abstract handle to particular state of a DB.
-// A Snapshot is an immutable object and can therefore be safely
-// accessed from multiple threads without any external synchronization.
-//
-// To Create a Snapshot, call DB::GetSnapshot().
-// To Destroy a Snapshot, call DB::ReleaseSnapshot(snapshot).
-class Snapshot {
+    // A Table is a sorted map from strings to strings.  Tables are
+// immutable and persistent.  A Table may be safely accessed from
+// multiple threads without external synchronization.
+class LEVELDB_EXPORT Table {
  public:
-  // returns Snapshot's sequence number
-  virtual SequenceNumber GetSequenceNumber() const = 0;
+  // Attempt to open the table that is stored in bytes [0..file_size)
+  // of 'file', and read the metadata entries necessary to allow
+  // retrieving data from the table.
+  //
+  // If successful, returns ok and sets '*table' to the newly opened
+  // table.  The client should delete '*table' when no longer needed.
+  // If there was an error while initializing the table, sets '*table'
+  // to nullptr and returns a non-ok status.  Does not take ownership of
+  // '*source', but the client must ensure that 'source' remains live
+  // for the duration of the returned table's lifetime.
+  //
+  // *file must remain live while this Table is in use.
+  static Status Open(const Options& options, RandomAccessFile* file,
+                     uint64_t file_size, Table** table);
     }
     
-        QCoreApplication app(argc, argv);
+      // The size of the database changes caused by this batch.
+  //
+  // This number is tied to implementation details, and may change across
+  // releases. It is intended for LevelDB usage metrics.
+  size_t ApproximateSize() const;
     
-        inline void consumer_remove(Coroutine *co)
-    {
-        consumer_queue.remove(co);
-    }
     
-        SwooleG.use_signalfd = 1;
+    {}  // namespace leveldb
     
-        swServer_add_port(&serv, SW_SOCK_UDP, '0.0.0.0', 9502);
-    swServer_add_port(&serv, SW_SOCK_TCP6, '::', 9503);
-    swServer_add_port(&serv, SW_SOCK_UDP6, '::', 9504);
+      // We do not emit the index entry for a block until we have seen the
+  // first key for the next data block.  This allows us to use shorter
+  // keys in the index block.  For example, consider a block boundary
+  // between the keys 'the quick brown fox' and 'the who'.  We can use
+  // 'the r' as the key for the index block entry since it is >= all
+  // entries in the first block and < all entries in subsequent
+  // blocks.
+  //
+  // Invariant: r->pending_index_entry is true only if data_block is empty.
+  bool pending_index_entry;
+  BlockHandle pending_handle;  // Handle to add to index block
+    
+    static const int kBlockSize = 4096;
