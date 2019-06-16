@@ -1,121 +1,44 @@
 
         
-        def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
+              # Iterates over all of the objects for the given method (e.g. `:labels`).
+      #
+      # method - The method to send to Octokit for querying data.
+      # args - Any arguments to pass to the Octokit method.
+      def each_object(method, *args, &block)
+        return to_enum(__method__, method, *args) unless block_given?
     
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
     
-              @websockets << websocket
+            def collection_method
+          :issues
         end
     
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
     
-IAX2_DEFAULT_PORT = 4569
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-                data_encrypt = Rex::Text::rand_text(8) + data
-    
-                OpenSSL::ASN1::Sequence.new(elems)
+            def message_for_normal_block(variable, all_arguments)
+          if all_arguments.none?(&:referenced?) &&
+             !define_method_call?(variable)
+            if all_arguments.count > 1
+              'You can omit all the arguments if you don't care about them.'
+            else
+              'You can omit the argument if you don't care about it.'
+            end
+          else
+            message_for_underscore_prefix(variable)
           end
+        end
     
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
+      # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
     
-              # Decodes the cusec field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_cusec(input)
-            input.value[0].value
-          end
-    
-              # Encodes a Rex::Proto::Kerberos::Model::PreAuthData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type], 1, :CONTEXT_SPECIFIC)
-            value_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_value], 2, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([type_asn1, value_asn1])
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
-
-    
-          # @object_cache maps configuration file paths to
-      # configuration objects so we only need to load them once.
-      @object_cache = {}
-    end
-    
-          def ignored_nodes
-        @ignored_nodes ||= []
-      end
-    end
-  end
-end
-
-    
-            data = ''
-        record_length = determine_record_length(record_length)
-    
-        # Execute the transmogrification on the manifest
-    pkg_mogrify = safesystemout('pkgmogrify', manifest_fn)
-    File.write(build_path('#{name}.p5m.2'), pkg_mogrify)
-    safesystem('cp', build_path('#{name}.p5m.2'), manifest_fn)
-    
-        self.dependencies = control['depend'] || self.dependencies
-    
-        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
-    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
-    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
-    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
-    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
-    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
-    logger.debug('Package info', :name => self.name, :version => self.version,
-                  :description => self.description)
-    
-      require 'pleaserun/platform/systemd'
-  require 'pleaserun/platform/upstart'
-  require 'pleaserun/platform/launchd'
-  require 'pleaserun/platform/sysv'
-    
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
+      config.action_mailer.perform_caching = false
