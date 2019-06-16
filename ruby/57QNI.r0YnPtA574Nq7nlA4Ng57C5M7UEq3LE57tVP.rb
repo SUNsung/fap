@@ -1,51 +1,74 @@
 
         
-            ShareVisibility.joins('INNER JOIN photos ON photos.id = share_visibilities.shareable_id')
-                   .where(shareable_type: 'Photo', photos: {public: true}).delete_all
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
-    
-          sign_in alice, scope: :user
+              def self.symbols
+        type_klass::SET.symbols
+      end
     end
-    
-        before do
-      @post = FactoryGirl.create(:status_message, :public => true)
-      @post_guid = @post.guid
-    end
-    
-      before do
-    @request.env['devise.mapping'] = Devise.mappings[:user]
-    @user = alice
-    @user.password = 'evankorth'
-    @user.password_confirmation = 'evankorth'
-    @user.save
   end
+end
+
     
-          it 'raises an error' do
-        expect {
-          put :update, params: {id: 42, post_id: @status.id}, format: :js
-        }.to raise_error ActiveRecord::RecordNotFound
+              # Register a new provisioner class only if a name was given
+          data[:provisioners].register(name.to_sym, &block) if name != UNSET_VALUE
+    
+            # This contains all the registered provider capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :provider_capabilities
+    
+              # The plugin should be registered if we're setting a real name on it
+          Plugin.manager.register(self) if name != UNSET_VALUE
+    
+            # Initialize the provider to represent the given machine.
+        #
+        # @param [Vagrant::Machine] machine The machine that this provider
+        #   is responsible for.
+        def initialize(machine)
+        end
+    
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+    Then(/^directories referenced in :linked_files are created in shared$/) do
+  dirs = TestApp.linked_files.map { |path| TestApp.shared_path.join(path).dirname }
+  dirs.each do |dir|
+    run_vagrant_command(test_dir_exists(dir))
+  end
+end
+    
+    Given(/config stage file has line '(.*?)'/) do |line|
+  TestApp.append_to_deploy_file(line)
+end
+    
+          servers.add_role(name, hosts, options)
+    end
+    
+            @response = (gets || '').chomp
       end
     
-      context 'with a logged in user' do
-    before do
-      sign_in alice
+    set_if_empty :local_user, -> { ENV['USER'] || ENV['LOGNAME'] || ENV['USERNAME'] }
+
+    
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
+    
+        desc 'Generate a valid ssh-config'
+    task :ssh_config do
+      require 'json'
+      # Loop until the Vagrant box finishes SSH bootstrap
+      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
+          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
+      end
+      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
+      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+    end
+    
+    default_vagrant_boxes = ( platform == 'all' ? config.platforms : config.filter_type(platform, {'experimental' => experimental}) )
+    
+        def options_config=(options_config)
+      loaded_config = ConfigLoader.load_file(options_config)
+      @options_config = ConfigLoader.merge_with_default(loaded_config,
+                                                        options_config)
     end
