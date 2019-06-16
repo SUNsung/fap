@@ -1,184 +1,249 @@
 
         
-        anchor = '###'
-min_entries_per_section = 3
-auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
-punctuation = ['.', '?', '!']
-https_keys = ['Yes', 'No']
-cors_keys = ['Yes', 'No', 'Unknown']
+            # Cumulative Discounted Returns.  The true value function V*(s).
+    cumulative_rewards = []
+    for t in xrange(FLAGS.sequence_length):
+      cum_value = tf.zeros(shape=[FLAGS.batch_size / 2])
+      for s in xrange(t, FLAGS.sequence_length):
+        cum_value += reward_missing_list[s] * np.power(gamma, (
+            s - t)) * rewards_list[s]
+      cumulative_rewards.append(cum_value)
+    cumulative_rewards = tf.stack(cumulative_rewards, axis=1)
     
-        'Flipping' an entry means that that image and associated metadata (e.g.,
-    ground truth boxes and object proposals) are horizontally flipped.
-    '''
-    flipped_roidb = []
-    for entry in roidb:
-        width = entry['width']
-        boxes = entry['boxes'].copy()
-        oldx1 = boxes[:, 0].copy()
-        oldx2 = boxes[:, 2].copy()
-        boxes[:, 0] = width - oldx2 - 1
-        boxes[:, 2] = width - oldx1 - 1
-        assert (boxes[:, 2] >= boxes[:, 0]).all()
-        flipped_entry = {}
-        dont_copy = ('boxes', 'segms', 'gt_keypoints', 'flipped')
-        for k, v in entry.items():
-            if k not in dont_copy:
-                flipped_entry[k] = v
-        flipped_entry['boxes'] = boxes
-        flipped_entry['segms'] = segm_utils.flip_segms(
-            entry['segms'], entry['height'], entry['width']
+      return init_savers
+    
+    
+def dis_bwd_bidirectional(hparams):
+  '''Returns the *backward* PTB Variable name to MaskGAN Variable dictionary
+  mapping.  This is a highly restrictive function just for testing. This is for
+  the bidirectional_zaremba discriminator.
+    
+    
+@functools.lru_cache()
+def get_hstore_oids(connection_alias):
+    '''Return hstore and hstore array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute(
+            'SELECT t.oid, typarray '
+            'FROM pg_type t '
+            'JOIN pg_namespace ns ON typnamespace = ns.oid '
+            'WHERE typname = 'hstore''
         )
-        if dataset.keypoints is not None:
-            flipped_entry['gt_keypoints'] = keypoint_utils.flip_keypoints(
-                dataset.keypoints, dataset.keypoint_flip_map,
-                entry['gt_keypoints'], entry['width']
-            )
-        flipped_entry['flipped'] = True
-        flipped_roidb.append(flipped_entry)
-    roidb.extend(flipped_roidb)
+        oids = []
+        array_oids = []
+        for row in cursor:
+            oids.append(row[0])
+            array_oids.append(row[1])
+        return tuple(oids), tuple(array_oids)
     
     
-def VGG16_rpn_frozen_features(model):
-    return build_generic_detection_model(
-        model, VGG16.add_VGG16_conv5_body, freeze_conv_body=True
-    )
-    
-    Flexible network configuration is achieved by specifying the function name that
-builds a network module (e.g., the name of the conv backbone or the mask roi
-head). However we may wish to change names over time without breaking previous
-config files. This module provides backwards naming compatibility by providing
-a mapping from the old name to the new name.
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
     
-def _add_allreduce_graph(model):
-    '''Construct the graph that performs Allreduce on the gradients.'''
-    # Need to all-reduce the per-GPU gradients if training with more than 1 GPU
-    all_params = model.TrainableParams()
-    assert len(all_params) % cfg.NUM_GPUS == 0
-    # The model parameters are replicated on each GPU, get the number
-    # distinct parameter blobs (i.e., the number of parameter blobs on
-    # each GPU)
-    params_per_gpu = int(len(all_params) / cfg.NUM_GPUS)
-    with c2_utils.CudaScope(0):
-        # Iterate over distinct parameter blobs
-        for i in range(params_per_gpu):
-            # Gradients from all GPUs for this parameter blob
-            gradients = [
-                model.param_to_grad[p] for p in all_params[i::params_per_gpu]
-            ]
-            if len(gradients) > 0:
-                if cfg.USE_NCCL:
-                    model.net.NCCLAllreduce(gradients, gradients)
-                else:
-                    muji.Allreduce(model.net, gradients, reduced_affix='')
+@x_robots_tag
+def index(request, sitemaps,
+          template_name='sitemap_index.xml', content_type='application/xml',
+          sitemap_url_name='django.contrib.sitemaps.views.sitemap'):
     
     
-def collect(inputs, is_training):
-    cfg_key = 'TRAIN' if is_training else 'TEST'
-    post_nms_topN = cfg[cfg_key].RPN_POST_NMS_TOP_N
-    k_max = cfg.FPN.RPN_MAX_LEVEL
-    k_min = cfg.FPN.RPN_MIN_LEVEL
-    num_lvls = k_max - k_min + 1
-    roi_inputs = inputs[:num_lvls]
-    score_inputs = inputs[num_lvls:]
-    if is_training:
-        score_inputs = score_inputs[:-2]
+class TemplatesSetting(BaseRenderer):
+    '''
+    Load templates using template.loader.get_template() which is configured
+    based on settings.TEMPLATES.
+    '''
+    def get_template(self, template_name):
+        return get_template(template_name)
+
+    
+    from os import makedirs
+from os.path import exists, join
+    
+        with gzip.open(paths[2], 'rb') as lbpath:
+        y_test = np.frombuffer(lbpath.read(), np.uint8, offset=8)
+    
+        def __call__(self, x):
+        regularization = 0.
+        if self.l1:
+            regularization += K.sum(self.l1 * K.abs(x))
+        if self.l2:
+            regularization += K.sum(self.l2 * K.square(x))
+        return regularization
     
     
-def loader_loop(roi_data_loader):
-    load_timer = Timer()
-    iters = 100
-    for i in range(iters):
-        load_timer.tic()
-        roi_data_loader.get_next_minibatch()
-        load_timer.toc()
-        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
-              i + 1, iters, load_timer.average_time))
+def test_cce_one_hot():
+    y_a = K.variable(np.random.randint(0, 7, (5, 6)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    objective_output = losses.sparse_categorical_crossentropy(y_a, y_b)
+    assert K.eval(objective_output).shape == (5, 6)
     
-    EMACS_FT_NAME = {
-    'asm-mode'             : 'asm',
-    'awk-mode'             : 'awk',
-    'sh-mode'              : 'bash',
-    # basic
-    'brainfuck-mode'       : 'bf',
-    # chapel
-    'clojure-mode'         : 'clojure',
-    'coffee-mode'          : 'coffee',
-    'c++-mode'             : 'cpp',
-    'c-mode'               : 'c',
-    'csharp-mode'          : 'csharp',
-    'd-mode'               : 'd',
-    'dart-mode'            : 'dart',
-    'dylan-mode'           : 'dylan',
-    'delphi-mode'          : 'delphi',
-    'emacs-lisp-mode'      : 'elisp',
-    # elixir
-    'elm-mode'             : 'elm',
-    'erlang-mode'          : 'erlang',
-    # factor
-    'forth-mode'           : 'forth',
-    'fortran-mode'         : 'fortran',
-    'fsharp-mode'          : 'fsharp',
-    'go-mode'              : 'go',
-    'groovy-mode'          : 'groovy',
-    'haskell-mode'         : 'haskell',
-    # 'hy-mode'
-    'java-mode'            : 'java',
-    'js-jsx-mode'          : 'js',
-    'js-mode'              : 'js',
-    'js2-jsx-mode'         : 'js',
-    'js2-mode'             : 'js',
-    'julia-mode'           : 'julia',
-    'kotlin-mode'          : 'kotlin',
-    'lisp-interaction-mode': 'lisp',
-    'lisp-mode'            : 'lisp',
-    'lua-mode'             : 'lua',
-    # mathematica
-    'matlab-mode'          : 'matlab',
-    # mongo
-    'objc-mode'            : 'objective-c',
-    # ocaml
-    'perl-mode'            : 'perl',
-    'perl6-mode'           : 'perl6',
-    'php-mode'             : 'php',
-    # psql
-    'python-mode'          : 'python',
-    # python3
-    # r -- ess looks it, but I don't know the mode name off hand
-    'racket-mode'          : 'racket',
-    'ruby-mode'            : 'ruby',
-    'rust-mode'            : 'rust',
-    'solidity-mode'        : 'solidity',
-    'scala-mode'           : 'scala',
-    'scheme-mode'          : 'scheme',
-    'sql-mode'             : 'sql',
-    'swift-mode'           : 'swift',
-    'tcl-mode'             : 'tcl',
-    # tcsh
-    'visual-basic-mode'    : 'vb',
-    # vbnet
-    # vim
-}
+    # Display the 1st 8 corrupted and denoised images
+rows, cols = 10, 30
+num = rows * cols
+imgs = np.concatenate([x_test[:num], x_test_noisy[:num], x_decoded[:num]])
+imgs = imgs.reshape((rows * 3, cols, image_size, image_size))
+imgs = np.vstack(np.split(imgs, rows, axis=1))
+imgs = imgs.reshape((rows * 3, -1, image_size, image_size))
+imgs = np.vstack([np.hstack(i) for i in imgs])
+imgs = (imgs * 255).astype(np.uint8)
+plt.figure()
+plt.axis('off')
+plt.title('Original images: top rows, '
+          'Corrupted Input: middle rows, '
+          'Denoised Input:  third rows')
+plt.imshow(imgs, interpolation='none', cmap='gray')
+Image.fromarray(imgs).save('corrupted_and_denoised.png')
+plt.show()
+
     
-            self._list[prefix] = set(self._get_list(prefix=prefix))
-        return self._list[prefix]
+        def format_body(self, content, mime):
+        if is_valid_mime(mime):
+            for p in self.enabled_plugins:
+                content = p.format_body(content, mime)
+        return content
+
     
-            # if there is a language name in the section name,
-        # cut it off (de:python => python)
-        if '/' in topic:
-            section_name, topic = topic.split('/', 1)
-            if ':' in section_name:
-                _, section_name = section_name.split(':', 1)
-            section_name = SO_NAME.get(section_name, section_name)
-            topic = '%s/%s' % (section_name, topic)
+        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', httpbin.url + '/get', env=env)
+        assert 'HTTP/' not in r
     
-    import re
-import json
     
-    MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
-sys.path.append('%s/lib/' % MYDIR)
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
-        answers_found = []
-    for topic in get_topics_list(skip_internal=True, skip_dirs=True):
     
-    def _visualize(answers, request_options, search_mode=False):
+def get_filename_max_length(directory):
+    max_len = 255
+    try:
+        pathconf = os.pathconf
+    except AttributeError:
+        pass  # non-posix
+    else:
+        try:
+            max_len = pathconf(directory, 'PC_NAME_MAX')
+        except OSError as e:
+            if e.errno != errno.EINVAL:
+                raise
+    return max_len
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
+    
+    import mock
+    
+    The path to this file can be provided interactively or using the
+``--dns-cloudflare-credentials`` command-line argument. Certbot records the path
+to this file for use during renewal, but does not store the file's contents.
+    
+       certbot certonly \\
+     --dns-digitalocean \\
+     --dns-digitalocean-credentials ~/.secrets/certbot/digitalocean.ini \\
+     --dns-digitalocean-propagation-seconds 60 \\
+     -d example.com
+    
+            loader = unittest.TestLoader()
+        try:
+            loader.loadTestsFromName('testcase_1', m)
+        except TypeError:
+            pass
+        else:
+            self.fail('Should have raised TypeError')
+    
+    About = help_about.AboutDialog
+    
+        def persistent_id(self, obj):
+        # Instead of pickling MemoRecord as a regular class instance, we emit a
+        # persistent ID.
+        if isinstance(obj, MemoRecord):
+            # Here, our persistent ID is simply a tuple, containing a tag and a
+            # key, which refers to a specific record in the database.
+            return ('MemoRecord', obj.key)
+        else:
+            # If obj does not have a persistent ID, return None. This means obj
+            # needs to be pickled as usual.
+            return None
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+    # If we want to print a preview of the message content, we can extract whatever
+# the least formatted payload is and print the first three lines.  Of course,
+# if the message has no plain text part printing the first three lines of html
+# is probably useless, but this is just a conceptual example.
+simplest = msg.get_body(preferencelist=('plain', 'html'))
+print()
+print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+    
+    def plus(a, b):
+    time.sleep(0.5 * random.random())
+    return a + b
+    
+    
+class TestData(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
+    
+        def test_subscriber_shall_be_detachable_from_subscriptions(cls):
+        subscription = 'sub msg'
+        pro = Provider()
+        sub = Subscriber('sub name', pro)
+        sub.subscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 1)
+        sub.unsubscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 0)
+    
+        def test_innate_properties(self):
+        self.assertDictEqual({'name': 'John', 'occupation': 'Coder', 'call_count2': 0}, self.John.__dict__)
+    
+    
+def midnight_time_provider():
+    '''Hard-coded stub'''
+    return '24:01'
+    
+    
+class Blackboard(object):
+    def __init__(self):
+        self.experts = []
+        self.common_state = {
+            'problems': 0,
+            'suggestions': 0,
+            'contributions': [],
+            'progress': 0,  # percentage, if 100 -> task is finished
+        }
