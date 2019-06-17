@@ -1,420 +1,246 @@
 
         
         
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
-};
-    
-    class AssertHelper;
-class DefaultGlobalTestPartResultReporter;
-class ExecDeathTest;
-class NoExecDeathTest;
-class FinalSuccessChecker;
-class GTestFlagSaver;
-class StreamingListenerTest;
-class TestResultAccessor;
-class TestEventListenersAccessor;
-class TestEventRepeater;
-class UnitTestRecordPropertyTestHelper;
-class WindowsDeathTest;
-class UnitTestImpl* GetUnitTestImpl();
-void ReportFailureInUnknownLocation(TestPartResult::Type result_type,
-                                    const std::string& message);
-    
-    // GetTypeName<T>() returns a human-readable name of type T.
-// NB: This function is also used in Google Mock, so don't move it inside of
-// the typed-test-only section below.
-template <typename T>
-std::string GetTypeName() {
-# if GTEST_HAS_RTTI
-    }
-    
-    #include 'sample1.h'
-    
-    
-    {  return clone;
+    {    struct KeypointStore {
+        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
+        virtual ~KeypointStore() {};
+    };
 }
     
-      // Gets the number of elements.
-  size_t Size() const { return size_; }
-    
-    #pragma once
-    
-    			if (fDecodedLength < 0.5f)
-			{
-				return 1.0f;
-			}
-			else if (fDecodedLength == 0.0f)
-			{
-				fDecodedX = 1.0f;
-				fDecodedY = 0.0f;
-				fDecodedZ = 0.0f;
-			}
-			else
-			{
-				fDecodedX /= fDecodedLength;
-				fDecodedY /= fDecodedLength;
-				fDecodedZ /= fDecodedLength;
-			}
-    
-    	// abstract base class for specific encodings
-	class Block4x4Encoding
-	{
-	public:
-    }
-    
-    		case 8:
-			TryDegenerates4();
-			m_boolDone = true;
-			break;
-    
-      /* At the bottommost level, we define strings for finding blue zones. */
-    
-    
-  /* constants are given with units_per_em == 2048 in mind */
-#define AF_LATIN_CONSTANT( metrics, c )                                      \
-  ( ( (c) * (FT_Long)( (AF_LatinMetrics)(metrics) )->units_per_em ) / 2048 )
-    
-    #define MULT32_32_Q31(a,b)     ((a)*(b))
-    
-    #define opus_fft_alloc_arch(_st, arch) \
-   ((void)(arch), opus_fft_alloc_arm_neon(_st))
-    
-    #ifndef FIXED_ARMv5E_H
-#define FIXED_ARMv5E_H
-    
-    void deleteLinkedList(ListNode* head){
-    }
-    
-        vector<int> nums1 = {1, 1, 2};
-    cout << Solution().removeDuplicates(nums1) << endl;
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-    
-    #include <iostream>
-#include <vector>
-#include <stack>
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    }
-    
-    
-    {    return 0;
-}
-
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    public:
-    vector<int> postorderTraversal(TreeNode* root) {
-    }
-    
-    int main() {
-    }
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    
-    {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
-};
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
-
-    
-    // beta version: NDCG lambda rank
-class LambdaRankObjNDCG : public LambdaRankObj {
- protected:
-  void GetLambdaWeight(const std::vector<ListEntry> &sorted_list,
-                       std::vector<LambdaPair> *io_pairs) override {
-    std::vector<LambdaPair> &pairs = *io_pairs;
-    float IDCG;  // NOLINT
-    {
-      std::vector<bst_float> labels(sorted_list.size());
-      for (size_t i = 0; i < sorted_list.size(); ++i) {
-        labels[i] = sorted_list[i].label;
-      }
-      std::sort(labels.begin(), labels.end(), std::greater<bst_float>());
-      IDCG = CalcDCG(labels);
-    }
-    if (IDCG == 0.0) {
-      for (auto & pair : pairs) {
-        pair.weight = 0.0f;
-      }
-    } else {
-      IDCG = 1.0f / IDCG;
-      for (auto & pair : pairs) {
-        unsigned pos_idx = pair.pos_index;
-        unsigned neg_idx = pair.neg_index;
-        float pos_loginv = 1.0f / std::log2(pos_idx + 2.0f);
-        float neg_loginv = 1.0f / std::log2(neg_idx + 2.0f);
-        auto pos_label = static_cast<int>(sorted_list[pos_idx].label);
-        auto neg_label = static_cast<int>(sorted_list[neg_idx].label);
-        bst_float original =
-            ((1 << pos_label) - 1) * pos_loginv + ((1 << neg_label) - 1) * neg_loginv;
-        float changed  =
-            ((1 << neg_label) - 1) * pos_loginv + ((1 << pos_label) - 1) * neg_loginv;
-        bst_float delta = (original - changed) * IDCG;
-        if (delta < 0.0f) delta = - delta;
-        pair.weight *= delta;
-      }
-    }
-  }
-  inline static bst_float CalcDCG(const std::vector<bst_float> &labels) {
-    double sumdcg = 0.0;
-    for (size_t i = 0; i < labels.size(); ++i) {
-      const auto rel = static_cast<unsigned>(labels[i]);
-      if (rel != 0) {
-        sumdcg += ((1 << rel) - 1) / std::log2(static_cast<bst_float>(i + 2));
-      }
-    }
-    return static_cast<bst_float>(sumdcg);
-  }
-};
-    
-      for (const auto &batch : (*dmat)->GetRowBatches()) {
-    ASSERT_EQ(batch[0][0].fvalue, 0.0f);
-    ASSERT_EQ(batch[0][1].fvalue, -4.0f);
-    ASSERT_EQ(batch[2][0].fvalue, 3.0f);
-    ASSERT_EQ(batch[2][1].fvalue, 0.0f);
-  }
-    
-    #include 'imgui.h'
-#include 'imgui_impl_opengl2.h'
-#if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
-#include <stddef.h>     // intptr_t
-#else
-#include <stdint.h>     // intptr_t
-#endif
-    
-    // About GLSL version:
-// The 'glsl_version' initialization parameter defaults to '#version 150' if NULL.
-// Only override if your GL version doesn't handle this GLSL version. Keep NULL if unsure!
-    
-    
-    {    // Update mouse position
-    const ImVec2 mouse_pos_backup = io.MousePos;
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-#ifdef __EMSCRIPTEN__
-    const bool focused = true; // Emscripten
-#else
-    const bool focused = glfwGetWindowAttrib(g_Window, GLFW_FOCUSED) != 0;
-#endif
-    if (focused)
-    {
-        if (io.WantSetMousePos)
-        {
-            glfwSetCursorPos(g_Window, (double)mouse_pos_backup.x, (double)mouse_pos_backup.y);
-        }
-        else
-        {
-            double mouse_x, mouse_y;
-            glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-            io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
-        }
-    }
-}
-    
-    void CleanupRenderTarget()
+    void absDiff(const Size2D &size,
+             const f32 * src0Base, ptrdiff_t src0Stride,
+             const f32 * src1Base, ptrdiff_t src1Stride,
+             f32 * dstBase, ptrdiff_t dstStride)
 {
-    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<f32>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+                ploc = internal::borderInterpolate(px-1, size.width, borderType);
+            prevx[k]  = ploc < 0 ? 5*borderValue :
+                                   srow4[ploc*cn+k] + srow3[ploc*cn+k] + srow2[ploc*cn+k] + srow1[ploc*cn+k] + srow0[ploc*cn+k];
     
-    using namespace ::apache::thrift;
-using namespace ::apache::thrift::protocol;
-using namespace ::apache::thrift::transport;
-using namespace ::apache::thrift::server;
-    
-    extern const osqueryConstants g_osquery_constants;
-    
-    
-    {  FRIEND_TEST(KillswitchTests, test_killswitch_plugin);
-};
-    
-    namespace osquery {
-namespace table_tests {
-    }
+    #define CVTS_FUNC1(T1, SIMD_SIZE, CVTSINIT, CVTSROW)                             \
+    void convertScale(const Size2D &,                                            \
+                      const T1 *, ptrdiff_t,                                     \
+                      T1 *, ptrdiff_t,                                           \
+                      f64, f64)                                                  \
+    {                                                                            \
+        internal::assertSupportedConfiguration();                                \
     }
     
-        // output element at index 2 (third element)
-    std::cout << array.at(2) << '\n';
+    typedef int32x4_t (* vshrq_s32_func)(int32x4_t value);
     
-        // create values of different floating-point types
-    float n_float = 42.23;
-    float n_float_nan = 1.0f / 0.0f;
-    double n_double = 23.42;
+        //fin
+    int16x8_t q = vmaxq_s16(q0, vsubq_s16(vmovq_n_s16(0), q1));
+    int16x4_t q2 = vmax_s16(vget_low_s16(q), vget_high_s16(q));
+    int32x4_t q2w = vmovl_s16(q2);
+    int32x2_t q4 = vmax_s32(vget_low_s32(q2w), vget_high_s32(q2w));
+    int32x2_t q8 = vmax_s32(q4, vreinterpret_s32_s64(vshr_n_s64(vreinterpret_s64_s32(q4), 32)));
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+    }
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
+    }
+  }
+}
+    
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+        Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
+    
+        Rational result{ prat };
+    destroyrat(prat);
+    
+    static constexpr wchar_t DEFAULT_DEC_SEPARATOR = L'.';
+static constexpr wchar_t DEFAULT_GRP_SEPARATOR = L',';
+static constexpr wstring_view DEFAULT_GRP_STR = L'3;0';
+static constexpr wstring_view DEFAULT_NUMBER_STR = L'0';
+    
+            CalcInput(wchar_t decSymbol)
+            : m_hasExponent(false)
+            , m_hasDecimal(false)
+            , m_decPtIndex(0)
+            , m_decSymbol(decSymbol)
+            , m_base()
+            , m_exponent()
+        {
+        }
+    
+    
+    {
+    {
+    {            virtual Platform::Object
+                ^ ConvertBack(
+                    Platform::Object ^ /*value*/,
+                    Windows::UI::Xaml::Interop::TypeName /*targetType*/,
+                    Platform::Object ^ /*parameter*/,
+                    Platform::String ^ /*language*/) = Windows::UI::Xaml::Data::IValueConverter::ConvertBack
+            {
+                return Windows::UI::Xaml::DependencyProperty::UnsetValue;
+            }
+        };
+    }
+}
+
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetDisplayCopiedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::DisplayCopied, AutomationNotificationKind::ActionCompleted, AutomationNotificationProcessing::ImportantMostRecent);
+}
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Platform;
+using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+    
+    std::string kDBPath = '/tmp/rocksdb_column_families_example';
+    
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
+ public:
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
+  }
+    }
+    
+    #include 'rocksdb/cache.h'
+#include 'rocksdb/compaction_filter.h'
+#include 'rocksdb/db.h'
+#include 'rocksdb/options.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/table.h'
+#include 'rocksdb/utilities/options_util.h'
+    
+    class Transaction;
+    
+    namespace rocksdb {
+    }
+    
+    /*
+ * Class:     org_rocksdb_Checkpoint
+ * Method:    createCheckpoint
+ * Signature: (JLjava/lang/String;)V
+ */
+void Java_org_rocksdb_Checkpoint_createCheckpoint(JNIEnv* env, jobject /*jobj*/,
+                                                  jlong jcheckpoint_handle,
+                                                  jstring jcheckpoint_path) {
+  const char* checkpoint_path = env->GetStringUTFChars(jcheckpoint_path, 0);
+  if (checkpoint_path == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return;
+  }
+    }
+    
+      // We now have a FlatBuffer that can be stored on disk or sent over a network.
+    
+      // Use the `CreateWeapon` shortcut to create Weapons with all fields set.
+  auto sword = CreateWeapon(builder, weapon_one_name, weapon_one_damage);
+  auto axe = CreateWeapon(builder, weapon_two_name, weapon_two_damage);
+    
+    
+    {  return EXIT_SUCCESS;
+}
+
+    
+    void FlatBufferBuilderTest() {
+  using flatbuffers::FlatBufferBuilder;
+    }
+    
+    // Get the inline-address of a vector element. Useful for Structs (pass Struct
+// as template arg), or being able to address a range of scalars in-line.
+// Get elem_size from GetTypeSizeInline().
+// Note: little-endian data on all platforms, use EndianScalar() instead of
+// raw pointer access with scalars).
+template<typename T>
+T *GetAnyVectorElemAddressOf(const VectorOfAny *vec, size_t i,
+                             size_t elem_size) {
+  return reinterpret_cast<T *>(vec->Data() + elem_size * i);
+}
+    
+    	if (genSend) {
+		printer->Print(vars, 'func (x *$StreamType$) Send(m *$Response$) error {\n');
+		printer->Indent();
+		printer->Print('return x.ServerStream.SendMsg(m)\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
+	}
+	if (genRecv) {
+		printer->Print(vars, 'func (x *$StreamType$) Recv() (*$Request$, error) {\n');
+		printer->Indent();
+		printer->Print(vars, 'm := new($Request$)\n');
+		printer->Print('if err := x.ServerStream.RecvMsg(m); err != nil { return nil, err }\n');
+		printer->Print('return m, nil\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
+	}
+	if (genSendAndClose) {
+		printer->Print(vars, 'func (x *$StreamType$) SendAndClose(m *$Response$) error {\n');
+		printer->Indent();
+		printer->Print('return x.ServerStream.SendMsg(m)\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
+	}
