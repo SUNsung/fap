@@ -1,246 +1,376 @@
 
         
-        namespace Ui {
-    class SignVerifyMessageDialog;
-}
+          // Build a substitution map to replace the protocol's \c Self and the type
+  // parameters of the requirement into a combined context that provides the
+  // type parameters of the conformance context and the parameters of the
+  // requirement.
+  auto selfType = cast<GenericTypeParamType>(
+      proto->getSelfInterfaceType()->getCanonicalType());
     
-        Round(a, b, c, d, e, f, g, h, 0xe49b69c1, w0 += sigma1(w14) + w9 + sigma0(w1));
-    Round(h, a, b, c, d, e, f, g, 0xefbe4786, w1 += sigma1(w15) + w10 + sigma0(w2));
-    Round(g, h, a, b, c, d, e, f, 0x0fc19dc6, w2 += sigma1(w0) + w11 + sigma0(w3));
-    Round(f, g, h, a, b, c, d, e, 0x240ca1cc, w3 += sigma1(w1) + w12 + sigma0(w4));
-    Round(e, f, g, h, a, b, c, d, 0x2de92c6f, w4 += sigma1(w2) + w13 + sigma0(w5));
-    Round(d, e, f, g, h, a, b, c, 0x4a7484aa, w5 += sigma1(w3) + w14 + sigma0(w6));
-    Round(c, d, e, f, g, h, a, b, 0x5cb0a9dc, w6 += sigma1(w4) + w15 + sigma0(w7));
-    Round(b, c, d, e, f, g, h, a, 0x76f988da, w7 += sigma1(w5) + w0 + sigma0(w8));
-    Round(a, b, c, d, e, f, g, h, 0x983e5152, w8 += sigma1(w6) + w1 + sigma0(w9));
-    Round(h, a, b, c, d, e, f, g, 0xa831c66d, w9 += sigma1(w7) + w2 + sigma0(w10));
-    Round(g, h, a, b, c, d, e, f, 0xb00327c8, w10 += sigma1(w8) + w3 + sigma0(w11));
-    Round(f, g, h, a, b, c, d, e, 0xbf597fc7, w11 += sigma1(w9) + w4 + sigma0(w12));
-    Round(e, f, g, h, a, b, c, d, 0xc6e00bf3, w12 += sigma1(w10) + w5 + sigma0(w13));
-    Round(d, e, f, g, h, a, b, c, 0xd5a79147, w13 += sigma1(w11) + w6 + sigma0(w14));
-    Round(c, d, e, f, g, h, a, b, 0x06ca6351, w14 += sigma1(w12) + w7 + sigma0(w15));
-    Round(b, c, d, e, f, g, h, a, 0x14292967, w15 += sigma1(w13) + w8 + sigma0(w0));
-    
-    
-    {
-    {        /* compute using ECDH function */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
-        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
-        /* compute 'explicitly' */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
-        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
-        CHECK(point_ser_len == sizeof(point_ser));
-        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
-        secp256k1_sha256_finalize(&sha, output_ser);
-        /* compare */
-        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
-    }
-}
-    
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
-    }
-    
-    bool ParseInt32(const std::string& str, int32_t *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    char *endp = NULL;
-    errno = 0; // strtol will not set errno if valid
-    long int n = strtol(str.c_str(), &endp, 10);
-    if(out) *out = (int32_t)n;
-    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
-    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
-    // platforms the size of these types may be different.
-    return endp && *endp == 0 && !errno &&
-        n >= std::numeric_limits<int32_t>::min() &&
-        n <= std::numeric_limits<int32_t>::max();
-}
-    
-    #include <stdint.h>
-#include <stdlib.h>
-    
-    // Multiply-included file, no traditional include guard.
-#include <string>
-    
-    
-    {
-    {    rph->Send(new ShellViewMsg_Open(path));
+    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
+                        CanGenericSignature Generics,
+                        ArrayRef<SILField> Fields) {
+  id.AddPointer(Generics.getPointer());
+  for (auto &field : Fields) {
+    id.AddPointer(field.getLoweredType().getPointer());
+    id.AddBoolean(field.isMutable());
   }
 }
-    
-    
-    {}  // namespace nw
 
     
-    #include 'content/nw/src/api/menu/menu.h'
-    
-      GdkRectangle screen_rect;
-  gdk_screen_get_monitor_geometry(screen, monitor, &screen_rect);
-    
-    
-    {#endif
-}  // namespace nwapi
-    
-    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
-      Profile::FromBrowserContext(context_));
+    %{
     }
     
-    using namespace extensions::nwapi::nw__clipboard;
+        /// Returns true if \p loc is inside one of Swift's synthetic buffers.
+    static bool isInSwiftBuffers(clang::FullSourceLoc loc) {
+      StringRef bufName = StringRef(loc.getManager().getBufferName(loc));
+      return bufName == ClangImporter::Implementation::moduleImportBufferName ||
+             bufName == ClangImporter::Implementation::bridgingHeaderBufferName;
+    }
     
-      /**
-   * @brief Returns the scalar loss associated with a top blob at a given index.
-   */
-  inline Dtype loss(const int top_index) const {
-    return (loss_.size() > top_index) ? loss_[top_index] : Dtype(0);
+    #include 'swift/Demangling/ManglingUtils.h'
+    
+    void GeneratePCHJobAction::anchor() {}
+
+    
+    bool ArgsToFrontendInputsConverter::readInputFilesFromCommandLine() {
+  bool hadDuplicates = false;
+  for (const Arg *A :
+       Args.filtered(options::OPT_INPUT, options::OPT_primary_file)) {
+    hadDuplicates = addFile(A->getValue()) || hadDuplicates;
   }
+  return false; // FIXME: Don't bail out for duplicates, too many tests depend
+  // on it.
+}
     
-    #ifndef CAFFE_LAYER_FACTORY_H_
-#define CAFFE_LAYER_FACTORY_H_
-    
-      int num_kernels_im2col_;
-  int num_kernels_col2im_;
-  int conv_out_channels_;
-  int conv_in_channels_;
-  int conv_out_spatial_dim_;
-  int kernel_dim_;
-  int col_offset_;
-  int output_offset_;
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-                           const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-                            const vector<bool>& propagate_down,
-                            const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #undef cv_hal_split8u
+#define cv_hal_split8u TEGRA_SPLIT
+#undef cv_hal_split16u
+#define cv_hal_split16u TEGRA_SPLIT
+#undef cv_hal_split32s
+#define cv_hal_split32s TEGRA_SPLIT
+#undef cv_hal_split64s
+#define cv_hal_split64s(src, dst, len, cn) TEGRA_SPLIT64S(CAROTENE_NS::s64, src, dst, len, cn)
     
     
-    {}  // namespace caffe
+    {    struct KeypointStore {
+        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
+        virtual ~KeypointStore() {};
+    };
+}
     
-      // Computes the absolute values of the precomputed distances_,
-  // and returns the squared upper-quartile error distance.
-  double ComputeUpperQuartileError();
+    
+    {    void operator() (const T * src0, const T * src1, T * dst) const
+    {
+        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
+    }
+};
+    
+        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
+                     uint8x16_t & v_dst) const
+    {
+        v_dst = vorrq_u8(v_src0, v_src1);
+    }
+    
+    void assertSupportedConfiguration(bool parametersSupported)
+{
+    if (!isSupportedConfiguration()) {
+        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
+        std::abort();
+    }
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s16, s8, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
+            'vmovl.s16 q3, d4                                      \n\t'
+            'vmovl.s16 q4, d5                                      \n\t'
+            'vcvt.f32.s32 q5, q3                                   \n\t'
+            'vcvt.f32.s32 q6, q4                                   \n\t'
+            'vmul.f32 q7, q5, q0                                   \n\t'
+            'vmul.f32 q8, q6, q0                                   \n\t'
+            'vadd.f32 q9, q7, q1                                   \n\t'
+            'vadd.f32 q10, q8, q1                                  \n\t'
+            'vcvt.s32.f32 q11, q9                                  \n\t'
+            'vcvt.s32.f32 q12, q10                                 \n\t'
+            'vqmovn.s32 d26, q11                                   \n\t'
+            'vqmovn.s32 d27, q12                                   \n\t'
+            'vqmovn.s16 d28, q13                                   \n\t'
+            'vst1.8 {d28}, [%[dst]]                                \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i),
+              [dst] 'r' (_dst + i + 0),
+               'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
+        );
+    }
+})
+#else
+CVTS_FUNC(s16, s8, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int16x8_t vline = vld1q_s16(_src + i);
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
+        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
+        int8x8_t vRes = vqmovn_s16(vcombine_s16(vRes1, vRes2));
+        vst1_s8(_dst + i, vRes);
+    }
+})
+#endif
+    
+                vec128 v_src = vld3q(src + js), v_dst;
+            v_src.val[0] = vrev64q(v_src.val[0]);
+            v_src.val[1] = vrev64q(v_src.val[1]);
+            v_src.val[2] = vrev64q(v_src.val[2]);
+    
+    // 'Joins' the blames from bundle1 and bundle2 into *this.
+void BlamerBundle::JoinBlames(const BlamerBundle& bundle1,
+                              const BlamerBundle& bundle2, bool debug) {
+  STRING debug_str;
+  IncorrectResultReason irr = incorrect_result_reason_;
+  if (irr != IRR_NO_TRUTH_SPLIT) debug_str = '';
+  if (bundle1.incorrect_result_reason_ != IRR_CORRECT &&
+      bundle1.incorrect_result_reason_ != IRR_NO_TRUTH &&
+      bundle1.incorrect_result_reason_ != IRR_NO_TRUTH_SPLIT) {
+    debug_str += 'Blame from part 1: ';
+    debug_str += bundle1.debug_;
+    irr = bundle1.incorrect_result_reason_;
+  }
+  if (bundle2.incorrect_result_reason_ != IRR_CORRECT &&
+      bundle2.incorrect_result_reason_ != IRR_NO_TRUTH &&
+      bundle2.incorrect_result_reason_ != IRR_NO_TRUTH_SPLIT) {
+    debug_str += 'Blame from part 2: ';
+    debug_str += bundle2.debug_;
+    if (irr == IRR_CORRECT) {
+      irr = bundle2.incorrect_result_reason_;
+    } else if (irr != bundle2.incorrect_result_reason_) {
+      irr = IRR_UNKNOWN;
+    }
+  }
+  incorrect_result_reason_ = irr;
+  if (irr != IRR_CORRECT && irr != IRR_NO_TRUTH) {
+    SetBlame(irr, debug_str, nullptr, debug);
+  }
+}
+    
+    
+    {}  // namespace tesseract.
+
     
       // Returns the average sum of squared perpendicular error from a line
   // through mean_point() in the direction dir.
   double rms_orth(const FCOORD &dir) const;
     
-    STRING ParagraphModel::ToString() const {
-  char buffer[200];
-  const STRING &alignment = ParagraphJustificationToString(justification_);
-  snprintf(buffer, sizeof(buffer),
-           'margin: %d, first_indent: %d, body_indent: %d, alignment: %s',
-           margin_, first_indent_, body_indent_, alignment.string());
-  return STRING(buffer);
-}
-
-    
-    namespace tesseract {
-    }
-    
-    #ifndef TESSERACT_CCUTIL_QRSEQUENCE_H_
-#define TESSERACT_CCUTIL_QRSEQUENCE_H_
-    
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
-  } else {
-    return index_ == rhs.index_;
+    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
+                                   int rindent, int rmargin) const {
+  switch (justification_) {
+    case JUSTIFICATION_LEFT:
+      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
+                         tolerance_);
+    case JUSTIFICATION_RIGHT:
+      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
+                         tolerance_);
+    case JUSTIFICATION_CENTER:
+      return NearlyEqual(lindent, rindent, tolerance_ * 2);
+    default:
+      // shouldn't happen
+      return false;
   }
 }
     
-    MeasureInt64 RpcClientSentMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientSentMessagesPerRpcMeasureName,
-                             'Number of messages sent per RPC', kCount);
-  return measure;
+      // Add entry to the heap, keeping the smallest item at the top, by operator<.
+  // Note that *entry is used as the source of operator=, but it is non-const
+  // to allow for a smart pointer to be contained within.
+  // Time = O(log n).
+  void Push(Pair* entry) {
+    int hole_index = heap_.size();
+    // Make a hole in the end of heap_ and sift it up to be the correct
+    // location for the new *entry. To avoid needing a default constructor
+    // for primitive types, and to allow for use of DoublePtr in the Pair
+    // somewhere, we have to incur a double copy here.
+    heap_.push_back(*entry);
+    *entry = heap_.back();
+    hole_index = SiftUp(hole_index, *entry);
+    heap_[hole_index] = *entry;
+  }
+    
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4>
+internal::CartesianProductHolder4<Generator1, Generator2, Generator3,
+    Generator4> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4) {
+  return internal::CartesianProductHolder4<Generator1, Generator2, Generator3,
+      Generator4>(
+      g1, g2, g3, g4);
 }
     
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetString(name_, value_);
-    }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    #include 'src/cpp/server/dynamic_thread_pool.h'
+    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
+// for this type-parameterized test case as you want.
+TYPED_TEST_P(FooTest, DoesBlah) {
+  // Inside a test, refer to TypeParam to get the type parameter.
+  TypeParam n = 0;
+  ...
+}
+    
+    // The friend relationship of some of these classes is cyclic.
+// If we don't forward declare them the compiler might confuse the classes
+// in friendship clauses with same named classes on the scope.
+class Test;
+class TestCase;
+class TestInfo;
+class UnitTest;
+    
+    #define GTEST_ASSERT_(expression, on_failure) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (const ::testing::AssertionResult gtest_ar = (expression)) \
+    ; \
+  else \
+    on_failure(gtest_ar.failure_message())
+    
+      // An enumeration of the three reasons that a test might be aborted.
+  enum AbortReason {
+    TEST_ENCOUNTERED_RETURN_STATEMENT,
+    TEST_THREW_EXCEPTION,
+    TEST_DID_NOT_DIE
+  };
+    
+      // Returns true if FilePath ends with a path separator, which indicates that
+  // it is intended to represent a directory. Returns false otherwise.
+  // This does NOT check that a directory (or file) actually exists.
+  bool IsDirectory() const;
+    
+    // Implementation #2 pre-calculates the primes and stores the result
+// in an array.
+class PreCalculatedPrimeTable : public PrimeTable {
+ public:
+  // 'max' specifies the maximum number the prime table holds.
+  explicit PreCalculatedPrimeTable(int max)
+      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
+    CalculatePrimesUpTo(max);
+  }
+  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
+    }
+    
+    
+    {
+    {    // Adds the leak checker to the end of the test event listener list,
+    // after the default text output printer and the default XML report
+    // generator.
+    //
+    // The order is important - it ensures that failures generated in the
+    // leak checker's OnTestEnd() method are processed by the text and XML
+    // printers *before* their OnTestEnd() methods are called, such that
+    // they are attributed to the right test. Remember that a listener
+    // receives an OnXyzStart event *after* listeners preceding it in the
+    // list received that event, and receives an OnXyzEnd event *before*
+    // listeners preceding it.
+    //
+    // We don't need to worry about deleting the new listener later, as
+    // Google Test will do it.
+    listeners.Append(new LeakChecker);
+  }
+  return RUN_ALL_TESTS();
+}
+
+    
+     public:
+  // Gets the element in this node.
+  const E& element() const { return element_; }
+    
+    AuthPropertyIterator::~AuthPropertyIterator() {}
+    
+      CensusClientCallData()
+      : recv_trailing_metadata_(nullptr),
+        initial_on_done_recv_trailing_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        elapsed_time_(0),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&stats_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&tracing_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_trailing_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    #include <grpc/support/port_platform.h>
+    
+    // A thread pool interface for running callbacks.
+class ThreadPoolInterface {
+ public:
+  virtual ~ThreadPoolInterface() {}
+    }
     
     using grpc::core::Bucket;
 using grpc::core::Histogram;
 using grpc::core::Metric;
 using grpc::core::Stats;
-    
-    int main()
-{
-    // create JSON object
-    json object =
-    {
-        {'the good', 'il buono'},
-        {'the bad', 'il cattivo'},
-        {'the ugly', 'il brutto'}
-    };
-    }
-    
-        // out_of_range.401
-    try
-    {
-        // try to use a an invalid array index
-        json::const_reference ref = j.at('/array/4'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-        // print values
-    std::cout << object << '\n';
-    std::cout << null << '\n';
-    
-        for (i = 1; i < 20000; i++)
-    {
-        uint32_t key = i * 37;
-        swRbtree_insert(tree, key, (void *) (long) (i * 8));
-    }
-    
-        Q_OBJECT
-    
-    struct defer_task
-{
-    swCallback callback;
-    void *data;
-};
-    
-    static void signal_handler(int signo)
-{
-    if (signo == SIGCHLD)
-    {
-        int __stat_loc;
-    }
-    }
