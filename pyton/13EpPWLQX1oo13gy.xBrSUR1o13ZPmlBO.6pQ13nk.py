@@ -1,95 +1,96 @@
 
         
-            # Define the loss function and the optimization algorithm
-    self.cross_entropies = tf.nn.sparse_softmax_cross_entropy_with_logits(
-        logits=self.scores, labels=tf.reduce_mean(self.batch_labels))
-    self.cost = tf.reduce_sum(self.cross_entropies, name='cost')
-    self.global_step = tf.Variable(0, name='global_step', trainable=False)
-    self.optimizer = tf.train.AdamOptimizer()
-    self.train_op = self.optimizer.minimize(self.cost,
-                                            global_step=self.global_step)
-    
-        Args:
-      data_dict: The dictionary of data (training and validation) used for
-        training and evaluation of the model, respectively.
-    
-      keys = ['train_truth', 'train_ext_input', 'valid_data',
-          'valid_truth', 'valid_ext_input', 'valid_train']
-  for k in keys:
-    if k not in data_dict:
-      data_dict[k] = None
+        PROJECT_NAME = 'Home Assistant'
+PROJECT_PACKAGE_NAME = 'homeassistant'
+PROJECT_AUTHOR = 'The Home Assistant Authors'
+PROJECT_COPYRIGHT = ' 2013-2018, {}'.format(PROJECT_AUTHOR)
+PROJECT_LONG_DESCRIPTION = ('Home Assistant is an open-source '
+                            'home automation platform running on Python 3. '
+                            'Track and control all devices at home and '
+                            'automate control. '
+                            'Installation in less than a minute.')
+PROJECT_GITHUB_USERNAME = 'home-assistant'
+PROJECT_GITHUB_REPOSITORY = 'home-assistant'
     
     
-def _LoadModel(gd_file, ckpt_file):
-  '''Load the model from GraphDef and Checkpoint.
+def search_tokens(tokens, inverse_index, word_freq=None):
+    ''''''
+    ret = dict()
+    for term in tokens:
+        if term in inverse_index:
+            ret[frozenset([term])] = inverse_index[term]
+        else:
+            ret[frozenset([term])] = set()
+    return ret
     
-      for batch in range(num_batches):
-    x = np.zeros([batch_size, num_steps], dtype=np.int32)
-    y = np.zeros([batch_size, num_steps], dtype=np.int32)
-    w = np.zeros([batch_size, num_steps], dtype=np.float)
+        References:
+        K.repeat()
+        tf.tile()
+    '''
+    assert x.get_shape().ndims == 2
+    x = tf.expand_dims(x, axis=1)  # -> [batch_size, 1, n_input]
+    return tf.tile(x, [1, n, 1])  # -> [batch_size, n, n_input]
     
-      if epoch_size == 0:
-    raise ValueError('epoch_size == 0, decrease batch_size or num_steps')
+    define('port', default=8888)
+define('num_chunks', default=1000)
+define('chunk_size', default=2048)
     
-      if FLAGS.data_set == 'ptb':
-    model_str = 'Model'
-  else:
-    model_str = 'model'
-    
-    
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
-    
-    
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-@YouCompleteMeInstance()
-@patch( 'ycm.client.base_request._logger', autospec = True )
-@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
-def SendCompletionRequest_ErrorFromServer_test( ycm,
-                                                post_vim_message,
-                                                logger ):
-  current_buffer = VimBuffer( 'buffer' )
-  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-    with MockCompletionRequest( ServerError( 'Server error' ) ):
-      ycm.SendCompletionRequest()
-      ok_( ycm.CompletionRequestReady() )
-      response = ycm.GetCompletionResponse()
-      logger.exception.assert_called_with( 'Error while handling server '
-                                           'response' )
-      post_vim_message.assert_has_exact_calls( [
-        call( 'Server error', truncate = True )
-      ] )
-      assert_that(
-        response,
-        has_entries( {
-          'completions': empty(),
-          'completion_start_column': -1
-        } )
-      )
+        def finish_tree(self, tree, filename):
+        if self.found_future_import:
+            return
+        if not isinstance(tree, pytree.Node):
+            # Empty files (usually __init__.py) show up as a single Leaf
+            # instead of a Node, so leave them alone
+            return
+        first_stmt = tree.children[0]
+        if is_docstring(first_stmt):
+            # Skip a line and add the import after the docstring
+            tree.insert_child(1, Newline())
+            pos = 2
+        elif first_stmt.prefix:
+            # No docstring, but an initial comment (perhaps a #! line).
+            # Transfer the initial comment to a new blank line.
+            newline = Newline()
+            newline.prefix = first_stmt.prefix
+            first_stmt.prefix = ''
+            tree.insert_child(0, newline)
+            pos = 1
+        else:
+            # No comments or docstring, just insert at the start
+            pos = 0
+        tree.insert_child(pos, self.new_future_import(None))
+        tree.insert_child(pos + 1, Newline())  # terminates the import stmt
 
     
+        for i in range(1, num_tests + 1):
+        logging.info('running test case %d', i)
+        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
+        test_ws = yield websocket_connect(url, None, compression_options={})
+        while True:
+            message = yield test_ws.read_message()
+            if message is None:
+                break
+            test_ws.write_message(message, binary=isinstance(message, bytes))
     
-def MockAsyncServerResponseException( exception ):
-  '''Return a fake future object that is complete, but raises an exception.
-  Suitable for mocking a response future within a client request. For example:
+        Running a script with this wrapper is similar to calling
+    `tornado.autoreload.wait` at the end of the script, but this wrapper
+    can catch import-time problems like syntax errors that would otherwise
+    prevent the script from reaching its call to `wait`.
+    '''
+    # Remember that we were launched with autoreload as main.
+    # The main module can be tricky; set the variables both in our globals
+    # (which may be __main__) and the real importable version.
+    import tornado.autoreload
     
-    # If false, no module index is generated.
-#html_use_modindex = True
+    import os
     
-    
-if __name__ == '__main__':
-    main()
-    
-        def insert(self, node):
-        self.array.append(node)
-        return self.array[-1]
+        def test_google_login(self):
+        response = self.fetch('/client/login')
+        self.assertDictEqual(
+            {
+                u'name': u'Foo',
+                u'email': u'foo@example.com',
+                u'access_token': u'fake-access-token',
+            },
+            json_decode(response.body),
+        )
