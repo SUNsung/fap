@@ -1,38 +1,47 @@
 
         
-                MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
+            begin
+      group = OpenSSL::PKey::EC::Group.new(:GFp, 17, 2, 2)
+      group.point_conversion_form = :uncompressed
+      generator = OpenSSL::PKey::EC::Point.new(group, B(%w{ 04 05 01 }))
+      group.set_generator(generator, 19, 1)
+      point = OpenSSL::PKey::EC::Point.new(group, B(%w{ 04 06 03 }))
+    rescue OpenSSL::PKey::EC::Group::Error
+      pend 'Patched OpenSSL rejected curve' if /unsupported field/ =~ $!.message
+      raise
+    end
     
-            def preload_commit_authors
-          # This also preloads the author of every commit. We're using 'lazy_author'
-          # here since 'author' immediately loads the data on the first call.
-          @pipeline.commit.try(:lazy_author)
-        end
+      it 'initializes a new UDPSocket using a Symbol' do
+    @socket = UDPSocket.new(:INET)
+    @socket.should be_an_instance_of(UDPSocket)
+  end
     
-            Redis::Cache.with do |redis|
-          redis.set(key, value, ex: timeout)
-        end
+          def self.invoke_call_x_on(foo)
+        return foo.call_x
+      end
     
-            def sidekiq_worker_class
-          ImportIssueWorker
-        end
+      def test_pipe
+    r, w = IO.pipe
+    assert_instance_of(IO, r)
+    assert_instance_of(IO, w)
+    [
+      Thread.start{
+        w.print 'abc'
+        w.close
+      },
+      Thread.start{
+        assert_equal('abc', r.read)
+        r.close
+      }
+    ].each{|thr| thr.join}
+  end
     
-            def sidekiq_worker_class
-          ImportLfsObjectWorker
-        end
+        initialize_with { Tmuxinator::Project.new(file) }
+  end
     
-            # We inject the page number here to make sure that all importers always
-        # start where they left off. Simply starting over wouldn't work for
-        # repositories with a lot of data (e.g. tens of thousands of comments).
-        options = collection_options.merge(page: page_counter.current)
-    
-      private
-    
-            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
-    
-              it 'fails when installing a non logstash plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
-            expect(command).not_to install_successfully
-          end
+      describe '#send_pane_command' do
+    context 'no command for pane' do
+      it 'returns empty string' do
+        expect(project.send_pane_command('', 0, 0)).to be_empty
+      end
+    end
