@@ -1,209 +1,118 @@
 
         
-            def start_thread
-      @mutex.synchronize do
-        if !@reactor
-          @reactor = MessageBus::TimerThread.new
-        end
-        if !@thread&.alive?
-          @thread = Thread.new { do_work while true }
-        end
-      end
+            def order_nocategory_basic_bumped
+      'CASE WHEN topics.pinned_globally AND (topics.pinned_at IS NOT NULL) THEN 0 ELSE 1 END, topics.bumped_at DESC'
     end
     
-        since =
-      case period_type
-      when :daily then 1.day.ago
-      when :weekly then 1.week.ago
-      when :monthly then 1.month.ago
-      when :quarterly then 3.months.ago
-      when :yearly then 1.year.ago
-      else 1000.years.ago
-      end
+      def self.redis_key(req_type, time = Time.now.utc)
+    'app_req_#{req_type}#{time.strftime('%Y%m%d')}'
+  end
     
-          @directives[directive] ||= []
+          # Calculate new values and update records
+      #
+      #
+      # TODO
+      # WARNING: post_count is a wrong name, it should be reply_count (excluding topic post)
+      #
+      DB.exec 'WITH x AS (SELECT
+                    u.id user_id,
+                    SUM(CASE WHEN p.id IS NOT NULL AND t.id IS NOT NULL AND ua.action_type = :was_liked_type THEN 1 ELSE 0 END) likes_received,
+                    SUM(CASE WHEN p.id IS NOT NULL AND t.id IS NOT NULL AND ua.action_type = :like_type THEN 1 ELSE 0 END) likes_given,
+                    COALESCE((SELECT COUNT(topic_id) FROM topic_views AS v WHERE v.user_id = u.id AND v.viewed_at > :since), 0) topics_entered,
+                    COALESCE((SELECT COUNT(id) FROM user_visits AS uv WHERE uv.user_id = u.id AND uv.visited_at > :since), 0) days_visited,
+                    COALESCE((SELECT SUM(posts_read) FROM user_visits AS uv2 WHERE uv2.user_id = u.id AND uv2.visited_at > :since), 0) posts_read,
+                    SUM(CASE WHEN t2.id IS NOT NULL AND ua.action_type = :new_topic_type THEN 1 ELSE 0 END) topic_count,
+                    SUM(CASE WHEN p.id IS NOT NULL AND t.id IS NOT NULL AND ua.action_type = :reply_type THEN 1 ELSE 0 END) post_count
+                  FROM users AS u
+                  LEFT OUTER JOIN user_actions AS ua ON ua.user_id = u.id AND COALESCE(ua.created_at, :since) > :since
+                  LEFT OUTER JOIN posts AS p ON ua.target_post_id = p.id AND p.deleted_at IS NULL AND p.post_type = :regular_post_type AND NOT p.hidden
+                  LEFT OUTER JOIN topics AS t ON p.topic_id = t.id AND t.archetype = 'regular' AND t.deleted_at IS NULL AND t.visible
+                  LEFT OUTER JOIN topics AS t2 ON t2.id = ua.target_topic_id AND t2.archetype = 'regular' AND t2.deleted_at IS NULL AND t2.visible
+                  LEFT OUTER JOIN categories AS c ON t.category_id = c.id
+                  WHERE u.active
+                    AND u.silenced_till IS NULL
+                    AND u.id > 0
+                  GROUP BY u.id)
+      UPDATE directory_items di SET
+               likes_received = x.likes_received,
+               likes_given = x.likes_given,
+               topics_entered = x.topics_entered,
+               days_visited = x.days_visited,
+               posts_read = x.posts_read,
+               topic_count = x.topic_count,
+               post_count = x.post_count
+      FROM x
+      WHERE
+        x.user_id = di.user_id AND
+        di.period_type = :period_type AND (
+        di.likes_received <> x.likes_received OR
+        di.likes_given <> x.likes_given OR
+        di.topics_entered <> x.topics_entered OR
+        di.days_visited <> x.days_visited OR
+        di.posts_read <> x.posts_read OR
+        di.topic_count <> x.topic_count OR
+        di.post_count <> x.post_count )
+    
+        private
     
           return response unless html_response?(headers)
       ContentSecurityPolicy.base_url = request.host_with_port if Rails.env.development?
     
-        if track_view
-      if data[:is_crawler]
-        ApplicationRequest.increment!(:page_view_crawler)
-        WebCrawlerRequest.increment!(data[:user_agent])
-      elsif data[:has_auth_cookie]
-        ApplicationRequest.increment!(:page_view_logged_in)
-        ApplicationRequest.increment!(:page_view_logged_in_mobile) if data[:is_mobile]
-      else
-        ApplicationRequest.increment!(:page_view_anon)
-        ApplicationRequest.increment!(:page_view_anon_mobile) if data[:is_mobile]
-      end
-    end
+          io = hijack.call
     
-    # == Schema Information
-#
-# Table name: user_stats
-#
-#  user_id                  :integer          not null, primary key
-#  topics_entered           :integer          default(0), not null
-#  time_read                :integer          default(0), not null
-#  days_visited             :integer          default(0), not null
-#  posts_read_count         :integer          default(0), not null
-#  likes_given              :integer          default(0), not null
-#  likes_received           :integer          default(0), not null
-#  topic_reply_count        :integer          default(0), not null
-#  new_since                :datetime         not null
-#  read_faq                 :datetime
-#  first_post_created_at    :datetime
-#  post_count               :integer          default(0), not null
-#  topic_count              :integer          default(0), not null
-#  bounce_score             :float            default(0.0), not null
-#  reset_bounce_score_after :datetime
-#  flags_agreed             :integer          default(0), not null
-#  flags_disagreed          :integer          default(0), not null
-#  flags_ignored            :integer          default(0), not null
-#  first_unread_at          :datetime         not null
-#
-
+    require 'open-uri'
+require 'json'
+require 'strscan'
+require 'forwardable'
+require 'term/ansicolor'
+require 'fileutils'
     
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
-    end
-    
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
-    
-      describe :find_folders do
-    describe 'when folders are not specified in options' do
-      let(:options) { { screenshots_path: nil, metadata_path: nil } }
-    
-        context 'mixed' do
-      let(:keywords) { 'One,Two, Three, Four Token,Or\nNewlines\r\nEverywhere' }
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-    begin
-  require 'bundler/inline'
-rescue LoadError => e
-  $stderr.puts 'Bundler version 1.10 or later is required. Please update your Bundler'
-  raise e
-end
-    
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
-    
-      expansion(:details) {
-    {
-      :rcpt_to => o.rcpt_to,
-      :mail_from => o.mail_from,
-      :subject => o.subject,
-      :message_id => o.message_id,
-      :timestamp => o.timestamp.to_f,
-      :direction => o.scope,
-      :size => o.size,
-      :bounce => o.bounce,
-      :bounce_for_id => o.bounce_for_id,
-      :tag => o.tag,
-      :received_with_ssl => o.received_with_ssl
-    }
-  }
-    
-      def create
-    @address_endpoint = @server.address_endpoints.build(safe_params)
-    if @address_endpoint.save
-      flash[:notice] = params[:return_notice] if params[:return_notice].present?
-      redirect_to_with_json [:return_to, [organization, @server, :address_endpoints]]
-    else
-      render_form_errors 'new', @address_endpoint
-    end
-  end
-    
-      def add_organization_to_page_title
-    page_title << organization.name
-  end
-    
-      def update
-    if @ip_address.update(safe_params)
-      redirect_to_with_json [:edit, @ip_pool]
-    else
-      render_form_errors 'edit', @ip_address
-    end
-  end
-    
-      def create
-    scope = @server ? @server.ip_pool_rules : organization.ip_pool_rules
-    @ip_pool_rule = scope.build(safe_params)
-    if @ip_pool_rule.save
-      redirect_to_with_json [organization, @server, :ip_pool_rules]
-    else
-      render_form_errors 'new', @ip_pool_rule
-    end
-  end
-    
-      def index
-    @users = organization.organization_users.where(:user_type => 'User').includes(:user).to_a.sort_by { |u| '#{u.user.first_name}#{u.user.last_name}'.upcase }
-    @pending_users = organization.organization_users.where(:user_type => 'UserInvite').includes(:user).to_a.sort_by { |u| u.user.email_address.upcase }
-  end
-    
-            # Specify a default error formatter.
-        def default_error_formatter(new_formatter_name = nil)
-          if new_formatter_name
-            new_formatter = Grape::ErrorFormatter.formatter_for(new_formatter_name, {})
-            namespace_inheritable(:default_error_formatter, new_formatter)
-          else
-            namespace_inheritable(:default_error_formatter)
+            fields = object.preferences.keys.map do |key|
+          if object.has_preference?(key)
+            form.label('preferred_#{key}', Spree.t(key) + ': ') +
+              preference_field_for(form, 'preferred_#{key}', type: object.preference_type(key))
           end
         end
+        safe_join(fields, '<br />'.html_safe)
+      end
     
-          module ClassMethods
-        # Clears all defined parameters and validations.
-        def reset_validations!
-          unset_namespace_stackable :declared_params
-          unset_namespace_stackable :validations
-          unset_namespace_stackable :params
-          unset_description_field :params
-        end
+          def configurations_sidebar_menu_item(link_text, url, options = {})
+        is_selected = url.ends_with?(controller.controller_name) ||
+          url.ends_with?('#{controller.controller_name}/edit') ||
+          url.ends_with?('#{controller.controller_name.singularize}/edit')
     
-    # Here's our ActiveRecord class
-class Repository < ActiveRecord::Base
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
+    desc 'Creates a sandbox application for simulating the Spree code in a deployed Rails app'
+task :sandbox do
+  Bundler.with_clean_env do
+    exec('lib/sandbox.sh')
   end
+end
+
+    
+              def shipping_rates
+            result = shipping_rates_service.call(order: spree_current_order)
+    
+        def _yaml_root
+      File.expand_path(yaml['root']).shellescape if yaml['root']
+    end
+    
+      chain :with_commands do |*expected|
+    @commands = expected
+  end
+  alias_method :and_commands, :with_commands
+    
+    # Custom Matchers
+require_relative 'matchers/pane_matcher'
+    
+          it 'should load and validate the project' do
+        expect(described_class).to receive_messages(directory: fixtures_dir)
+        expect(described_class.validate(name: 'sample')).to \
+          be_a Tmuxinator::Project
+      end
+    end
+    
+      describe '.shell?' do
+    context '$SHELL is set' do
+      before do
+        allow(ENV).to receive(:[]).with('SHELL') { 'vim' }
+      end
