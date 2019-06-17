@@ -1,50 +1,240 @@
 
         
-        from youtube_dl.utils import intlist_to_bytes
-from youtube_dl.aes import aes_encrypt, key_expansion
+            def iter_body(self):
+        # Read the whole body before prettifying it,
+        # but bail out immediately if the body is binary.
+        converter = None
+        body = bytearray()
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME + SEP_CREDENTIALS + PASSWORD,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
-    from test.helper import try_rm
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+        def is_new(self):
+        return not os.path.exists(self._get_path())
+    
+    '''
     
     
-def test_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
     
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+        def short_desc(self):
+        return 'Generate new spider using pre-defined templates'
+    
+    
+def _import_file(filepath):
+    abspath = os.path.abspath(filepath)
+    dirname, file = os.path.split(abspath)
+    fname, fext = os.path.splitext(file)
+    if fext != '.py':
+        raise ValueError('Not a Python source file: %s' % abspath)
+    if dirname:
+        sys.path = [dirname] + sys.path
+    try:
+        module = import_module(fname)
+    finally:
+        if dirname:
+            sys.path.pop(0)
+    return module
+    
+            Default OpenSSL method is TLS_METHOD (also called SSLv23_METHOD)
+        which allows TLS protocol negotiation.
+        '''
+        def creatorForNetloc(self, hostname, port):
+    
+            If it has already been started, stop it. In all cases, close all spiders
+        and the downloader.
+        '''
+        if self.running:
+            # Will also close spiders and downloader
+            return self.stop()
+        elif self.open_spiders:
+            # Will also close downloader
+            return self._close_all_spiders()
+        else:
+            return defer.succeed(self.downloader.close())
     
         @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
+    def from_crawler(cls, crawler):
+        if not crawler.settings.getbool('COOKIES_ENABLED'):
+            raise NotConfigured
+        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
+    
+        repository=path
+      The top level directory of the repository, used to derive the header
+      guard CPP variable. By default, this is determined by searching for a
+      path that contains .git, .hg, or .svn. When this flag is specified, the
+      given path is used instead. This option allows the header guard CPP
+      variable to remain consistent even if members of a team have different
+      repository root directories (such as when checking out a subdirectory
+      with SVN). In addition, users of non-mainstream version control systems
+      can use this flag to ensure readable header guard CPP variables.
+    
+    
+def SendShutdownRequest():
+  request = ShutdownRequest()
+  # This is a blocking call.
+  request.Start()
 
     
     
-class JWSTest(unittest.TestCase):
-    '''Tests for acme.jws.JWS.'''
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
     
-        def test_revert_challenge_config_error(self):
-        self.config.reverter.revert_temporary_config = mock.Mock(
-            side_effect=errors.ReverterError)
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
     
-            with mock.patch('certbot.util.get_os_info') as mock_info:
-            for distro in entrypoint.OVERRIDE_CLASSES.keys():
-                mock_info.return_value = (distro, 'whatever')
-                self.assertEqual(entrypoint.get_configurator(),
-                                 entrypoint.OVERRIDE_CLASSES[distro])
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
+    
+    # A list of ignored prefixes for module index sorting.
+#modindex_common_prefix = []
+    
+    def _filter_by_keyword(answer, keyword, options):
+    
+            if not cls._repository_url.startswith('https://github.com/'):
+            # in this case `fetch` has to be implemented
+            # in the distinct adapter subclass
+            raise RuntimeError(
+                'Do not known how to handle this repository: %s' % cls._repository_url)
+    
+    _INTERNAL_TOPICS = [
+    ':cht.sh',
+    ':bash_completion',
+    ':emacs',
+    ':emacs-ivy',
+    ':firstpage',
+    ':firstpage-v1',
+    ':firstpage-v2',
+    ':fish',
+    ':help',
+    ':intro',
+    ':list',
+    ':post',
+    ':styles',
+    ':styles-demo',
+    ':vim',
+    ':zsh',
+    ]
+    
+            cmd = [CONFIG['path.internal.bin.upstream']] + topic
+        proc = Popen(cmd, stdin=open(os.devnull, 'r'), stdout=PIPE, stderr=PIPE)
+        answer = proc.communicate()[0].decode('utf-8')
+        return answer
+    
+            # this part should be generalized
+        # currently we just remove the name of the adapter from the path
+        if topic == self.__section_name:
+            return self._starting_page(topic)
+    
+    Cheatsheets are located in `pages/*/`
+Each cheat sheet is a separate file with extension .md
+    
+        '''
+    Connect to the upstream server `CONFIG['upstream.url']` and fetch
+    response from it. The response is supposed to have the 'ansi' format.
+    If the server does not respond within `CONFIG['upstream.timeout']` seconds,
+    or if a connection error occurs, the 'are you offline' banner is displayed.
+    
+    _REDIS = None
+if CONFIG['cache.type'] == 'redis':
+    import redis
+    _REDIS = redis.StrictRedis(
+        host=CONFIG['cache.redis.host'],
+        port=CONFIG['cache.redis.port'],
+        db=CONFIG['cache.redis.db'])
+    
+        adptr.save_state(state)
+    return True
+    
+    flags.DEFINE_float('learning_rate', 5e-5, 'The initial learning rate for Adam.')
+    
+            for token in tokens_b:
+          tokens.append(token)
+          segment_ids.append(1)
+        tokens.append('[SEP]')
+        segment_ids.append(1)
+    
+            if log.log_tier(ctx.options.termlog_verbosity) >= log.log_tier(e.level):
+            click.secho(
+                e.msg,
+                file=outfile,
+                fg=dict(error='red', warn='yellow',
+                        alert='magenta').get(e.level),
+                dim=(e.level == 'debug'),
+                err=(e.level == 'error')
+            )
+
+    
+    
+class Reply:
+    '''
+    Messages sent through a channel are decorated with a 'reply' attribute. This
+    object is used to respond to the message through the return channel.
+    '''
+    def __init__(self, obj):
+        self.obj = obj
+        # Spawn an event loop in the current thread
+        self.q = queue.Queue()
