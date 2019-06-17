@@ -1,117 +1,179 @@
 
         
-            # Extract each header value pair
-    header.split(/\r\n/mn).each { |str|
-      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
-        if (self[md[1]])
-          self[md[1]] << ', ' + md[2]
-        else
-          self[md[1]] = md[2]
-        end
+            open_dry_run_modal(agent)
+    click_on('Dry Run')
+    expect(page).to have_text('Dry Run started')
+    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
+  end
+end
+
+    
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+        it 'returns a label 'Yes' if a given agent is working' do
+      stub(@agent).working? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Yes'
+    end
+    
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
+    
+          it 'loads all workers' do
+        workers = @agent_runner.send(:load_workers)
+        expect(workers).to be_a(Hash)
+        expect(workers.keys).to eq(['HuginnScheduler', 'DelayedJobWorker'])
       end
+    
+          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
+    end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
     }
   end
     
-      # Returns a parsed json document.
-  # Instead of using regexes to parse the JSON body, you should use this.
-  #
-  # @return [Hash]
-  def get_json_document
-    json = {}
-    
-          # If the handler class requires a relative resource...
-      if (handler.relative_resource_required?)
-        # Substituted the mount point root in the request to make things
-        # relative to the mount point.
-        request.relative_resource = request.resource.gsub(/^#{root}/, '')
-        request.relative_resource = '/' + request.relative_resource if (request.relative_resource !~ /^\//)
-      end
-    
-              res
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
+    
+          module ClassMethods
+        # Create the cookie key using the record id and remember_token
+        def serialize_into_cookie(record)
+          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
+        end
+    
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
+  end
+    
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
   end
+    
+      private
+    
+      included do
+    before_action :set_user_activity
+  end
+    
+    def await_condition &condition
+  start_time = Time.zone.now
+  until condition.call
+    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
+    sleep 0.05
+  end
+  true
 end
 
     
-                components.each do |c|
-              encoded << [c.length].pack('N')
-              encoded << c
-            end
-    
-                res = ''
-            case etype
-            when RC4_HMAC
-              res = encrypt_rc4_hmac(data, key, 5)
-            else
-              raise ::NotImplementedError, 'EncryptedData schema is not supported'
-            end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
-            end
-    
-              # Decodes the enc_part
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
-          def decode_enc_part(input)
-            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
-          end
-        end
-      end
+        it 'generates the aspects_manage fixture', :fixture => true do
+      get :index, params: {a_id: @aspect.id}
+      save_fixture(html_for('body'), 'aspects_manage')
     end
-  end
-end
     
-      gem.required_ruby_version = '>= 2.0'
-  gem.add_dependency 'airbrussh', '>= 1.0.0'
-  gem.add_dependency 'i18n'
-  gem.add_dependency 'rake', '>= 10.0.0'
-  gem.add_dependency 'sshkit', '>= 1.9.0'
-    
-    Given(/^the configuration is in a custom location$/) do
-  TestApp.move_configuration_to_custom_location('app')
-end
-    
-        def add_filter(filter=nil, &block)
-      if block
-        raise ArgumentError, 'Both a block and an object were given' if filter
-    
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
-    
-          def third_party_scm_name?
-        !built_in_scm_name?
-      end
-    
-            def lvalue(key)
-          key.to_s.chomp('=').to_sym
-        end
-      end
+        it 'returns an array of likes for a post' do
+      bob.like!(@message)
+      get :index, params: {post_id: @message.id}
+      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@message.likes.map(&:id))
     end
+    
+      # In the development environment your application's code is reloaded on
+  # every request. This slows down response time but is perfect for development
+  # since you don't have to restart the web server when you make code changes.
+  config.cache_classes = false
+    
+        pkginfo << '# Generated by fpm\n'
+    pkginfo << 'pkgname = #{@name}\n'
+    pkginfo << 'pkgver = #{to_s('FULLVERSION')}\n'
+    pkginfo << 'arch = #{architecture()}\n'
+    pkginfo << 'pkgdesc = #{description()}\n'
+    pkginfo << 'url = #{url()}\n'
+    pkginfo << 'size = 102400\n' # totally magic, not sure what it's used for.
+    
+        temp_info = pkginfo_template_path
+    
+      def compression_option
+    case self.attributes[:pacman_compression]
+      when nil, 'xz'
+        return '--xz'
+      when 'none'
+        return ''
+      when 'gz'
+        return '-z'
+      when 'bzip2'
+        return '-j'
+      else
+        return '--xz'
+      end
   end
-end
+    
+      def output(output_path)
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+          safesystem('cp', path, './preinstall')
+          File.chmod(0755, './preinstall')
+        when 'post-install'
+          safesystem('cp', path, './postinstall')
+          File.chmod(0755, './postinstall')
+        when 'pre-uninstall'
+          raise FPM::InvalidPackageConfiguration.new(
+            'pre-uninstall is not supported by Solaris packages'
+          )
+        when 'post-uninstall'
+          raise FPM::InvalidPackageConfiguration.new(
+            'post-uninstall is not supported by Solaris packages'
+          )
+      end # case name
+    end # self.scripts.each
+    
+      # Generate the proper tar flags based on the path name.
+  def tar_compression_flag(path)
+    case path
+      when /\.tar\.bz2$/
+        return '-j'
+      when /\.tar\.gz$|\.tgz$/
+        return '-z'
+      when /\.tar\.xz$/
+        return '-J'
+      else
+        return nil
+    end
+  end # def tar_compression_flag
+end # class FPM::Package::Tar
 
     
-      # Install JavaScript dependencies if using Yarn
-  # system('bin/yarn')
+      def run_cli
+    require 'fpm'
+    require 'fpm/command'
+    
+          one_to_increment = portion_to_work_with[0].to_i
+      incremented = one_to_increment + 1
