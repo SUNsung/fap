@@ -1,280 +1,248 @@
 
         
-          // Finally, add the generic parameters from the requirement.
-  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
-    // The only depth that makes sense is depth == 1, the generic parameters
-    // of the requirement itself. Anything else is from invalid code.
-    if (genericParam->getDepth() != 1) {
-      return;
-    }
+        bool CacheImpl::remove(const void *Key) {
+  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
+  return Ret == 0;
+}
+    
+      Begin -= needed;
+    
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
+}
+    
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+
+    
+    
+    {}
+    
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
     }
     
-    class SubstitutionMap::Storage final
-  : public llvm::FoldingSetNode,
-    llvm::TrailingObjects<Storage, Type, ProtocolConformanceRef>
-{
-  friend TrailingObjects;
-    }
     
-      static CFPointeeInfo forConstVoid() {
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = true;
-    info.Decl = nullptr;
-    return info;
+    {}
+    
+    
+    {  gfx::Image originImage;
+  nw::Package* package = nw::InitNWPackage();
+  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
+    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
+    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
+                                                                                   skia::ImageOperations::RESIZE_GOOD,
+                                                                                   gfx::Size(kIconWidth, kIconHeight));
+    icon_ = gfx::Image(resizedImageSkia);
   }
-    
-    #include 'swift/Driver/Action.h'
-    
-    Optional<std::set<StringRef>>
-ArgsToFrontendInputsConverter::readPrimaryFiles() {
-  std::set<StringRef> primaryFiles;
-  for (const Arg *A : Args.filtered(options::OPT_primary_file))
-    primaryFiles.insert(A->getValue());
-  if (forAllFilesInFilelist(
-          PrimaryFilelistPathArg,
-          [&](StringRef file) -> void { primaryFiles.insert(file); }))
-    return None;
-  return primaryFiles;
 }
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+      GURL manifest_url(manifest);
+  scoped_refptr<CannedBrowsingDataAppCacheHelper> helper(
+                                                         new CannedBrowsingDataAppCacheHelper(content::BrowserContext::GetDefaultStoragePartition(context_)
+                                                                                              ->GetAppCacheService()));
     
-    void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
-  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
-                                unittest::MAP_ENUM_BAR_LITE,
-                                unittest::MAP_ENUM_BAZ_LITE>(message);
-}
+    #include 'src/cpp/ext/filters/census/context.h'
     
-    const Status Status::OK = Status();
-const Status Status::CANCELLED = Status(error::CANCELLED, '');
-const Status Status::UNKNOWN = Status(error::UNKNOWN, '');
     
-    #include <google/protobuf/stubs/common.h>
-#include <gtest/gtest.h>
+    {}  // namespace grpc
     
-    // integral_constant, defined in tr1, is a wrapper for an integer
-// value. We don't really need this generality; we could get away
-// with hardcoding the integer type to bool. We use the fully
-// general integer_constant for compatibility with tr1.
     
-    // Iterates though all people in the AddressBook and prints info about them.
-void ListPeople(const tutorial::AddressBook& address_book) {
-  for (int i = 0; i < address_book.people_size(); i++) {
-    const tutorial::Person& person = address_book.people(i);
+    {}  // namespace grpc
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetString(name_, value_);
     }
-    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    #include <grpc/impl/codegen/port_platform.h>
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  FILETIME idle, kernel, user;
+  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
+    total = FiletimeToInt(kernel) + FiletimeToInt(user);
+    busy = total - FiletimeToInt(idle);
+  }
+  return std::make_pair(busy, total);
+}
+    
+    #include 'src/proto/grpc/core/stats.pb.h'
+    
+    
+    {}  // namespace grpc
+
     
     
     { private:
-  const EnumDescriptor* descriptor_;
-  std::vector<const EnumValueDescriptor*> base_values_;
-  std::vector<const EnumValueDescriptor*> all_values_;
-  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
-  const string name_;
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
+    
+      ASSERT_EQ(page.offset.HostVector().size(), offset.size());
+  ASSERT_EQ(page.data.HostVector().size(), data.size());
+  for (size_t i = 0; i < offset.size(); ++i) {
+    ASSERT_EQ(page.offset.HostVector()[i], offset[i]);
+  }
+  for (size_t i = 0; i < data.size(); ++i) {
+    ASSERT_EQ(page.data.HostVector()[i].index, data[i].index);
+  }
+    
+      // take apart small, sparse groups, as it won't help speed
+  {
+    std::vector<std::vector<unsigned>> ret;
+    for (const auto& group : groups) {
+      if (group.size() <= 1 || group.size() >= 5) {
+        ret.push_back(group);  // keep singleton groups and large (5+) groups
+      } else {
+        size_t nnz = 0;
+        for (auto fid : group) {
+          nnz += feature_nnz[fid];
+        }
+        double nnz_rate = static_cast<double>(nnz) / nrow;
+        // take apart small sparse group, due it will not gain on speed
+        if (nnz_rate <= param.sparse_threshold) {
+          for (auto fid : group) {
+            ret.emplace_back();
+            ret.back().push_back(fid);
+          }
+        } else {
+          ret.push_back(group);
+        }
+      }
+    }
+    groups = std::move(ret);
+  }
+    
+      virtual void PredictBatch(DMatrix* dmat, HostDeviceVector<bst_float>* out_preds,
+                            const gbm::GBTreeModel& model, int tree_begin,
+                            unsigned ntree_limit = 0) = 0;
+    
+    namespace xgboost {
+/*!
+ * \brief interface of tree update module, that performs update of a tree.
+ */
+class TreeUpdater {
+ protected:
+  LearnerTrainParam const* tparam_;
+    }
+    }
+    
+      size_t Size() const {
+    GpuIdType size = *devices_.end() - *devices_.begin();
+    GpuIdType res = size < 0 ? 0 : size;
+    return static_cast<size_t>(res);
+  }
+    
+    /**
+ * \brief A random (with replacement) coordinate selector.
+ * \note Its randomness is controllable by setting a random seed.
+ */
+class RandomFeatureSelector : public FeatureSelector {
+ public:
+  int NextFeature(int iteration, const gbm::GBLinearModel &model,
+                  int group_idx, const std::vector<GradientPair> &gpair,
+                  DMatrix *p_fmat, float alpha, float lambda) override {
+    return common::GlobalRandom()() % model.param.num_feature;
+  }
 };
     
     
-    {  int (*getCharFunc)(void *);
-  void *data;
-  int charBuf;
+    {
+    {// List of files that will be force linked in static links.
+DMLC_REGISTRY_LINK_TAG(updater_shotgun);
+DMLC_REGISTRY_LINK_TAG(updater_coordinate);
+#ifdef XGBOOST_USE_CUDA
+DMLC_REGISTRY_LINK_TAG(updater_gpu_coordinate);
+#endif  // XGBOOST_USE_CUDA
+}  // namespace linear
+}  // namespace xgboost
+
+    
+        UBool      test(UScriptCode script, UErrorCode &status) const;
+    ScriptSet &Union(const ScriptSet &other);
+    ScriptSet &set(UScriptCode script, UErrorCode &status);
+    ScriptSet &reset(UScriptCode script, UErrorCode &status);
+    ScriptSet &intersect(const ScriptSet &other);
+    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
+    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
+    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
+    
+    static void U_CALLCONV smpdtfmt_initSets(UErrorCode &status) {
+    ucln_i18n_registerCleanup(UCLN_I18N_SMPDTFMT, smpdtfmt_cleanup);
+    U_ASSERT(gStaticSets == NULL);
+    gStaticSets = new SimpleDateFormatStaticSets(status);
+    if (gStaticSets == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+}
+    
+    
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
 };
     
-    private:
-  struct Interval {
-    Interval(Object *dict, int baseA);
-    ~Interval();
-    GooString *prefix;
-    enum NumberStyle {
-      None,
-      Arabic,
-      LowercaseRoman,
-      UppercaseRoman,
-      UppercaseLatin,
-      LowercaseLatin
-    } style;
-    int first, base, length;
-  };
-    
-      // get length
-  dict->dictLookup('Length', &obj, fetchOriginatorNums);
-  if (obj.isInt()) {
-    length = (Guint)obj.getInt();
-    obj.free();
-  } else {
-    error(getPos(), 'Bad 'Length' attribute in stream');
-    obj.free();
-    length = 0;
-  }
-    
-    
-    {  if (inlineImg) {
-    str->reset();
-    j = height * ((width * colorMap->getNumPixelComps() *
-		   colorMap->getBits() + 7) / 8);
-    for (i = 0; i < j; ++i)
-      str->getChar();
-    str->close();
-  }
-}
-    
-    
-    {  if (!ok) {
-    return gFalse;
-  }
-  if (authData) {
-    ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
-    userPassword = ((StandardAuthData *)authData)->userPassword;
-  } else {
-    ownerPassword = NULL;
-    userPassword = NULL;
-  }
-  if (!Decrypt::makeFileKey(encVersion, encRevision, fileKeyLength,
-			    ownerKey, userKey, permFlags, fileID,
-			    ownerPassword, userPassword, fileKey,
-			    encryptMetadata, &ownerPasswordOk)) {
-    return gFalse;
-  }
-  return gTrue;
-}
-    
-    void SplashOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
-				int width, int height,
-				GfxImageColorMap *colorMap,
-				GBool interpolate,
-				int *maskColors, GBool inlineImg) {
-  double *ctm;
-  SplashCoord mat[6];
-  SplashOutImageData imgData;
-  SplashColorMode srcMode;
-  SplashImageSource src;
-  GfxGray gray;
-  GfxRGB rgb;
-#if SPLASH_CMYK
-  GfxCMYK cmyk;
-#endif
-  Guchar pix;
-  int n, i;
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the plural form corresponding to the keyword
+     */
+    static Form fromString(const char *keyword, UErrorCode &errorCode) {
+        return static_cast<Form>(indexFromString(keyword, errorCode));
     }
     
-      GBool isReverseVideo() { return reverseVideo; }
-  void setReverseVideo(GBool reverseVideoA) { reverseVideo = reverseVideoA; }
-    
-    RemoveTransliterator::~RemoveTransliterator() {}
-    
-    U_NAMESPACE_BEGIN
-    
-        case UDAT_FLEXIBLE_DAY_PERIOD_FIELD:
-    {
-        // TODO: Maybe fetch the DayperiodRules during initialization (instead of at the first
-        // loading of an instance) if a relevant pattern character (b or B) is used.
-        const DayPeriodRules *ruleSet = DayPeriodRules::getInstance(this->getSmpFmtLocale(), status);
-        if (U_FAILURE(status)) {
-            // Data doesn't conform to spec, therefore loading failed.
-            break;
-        }
-        if (ruleSet == NULL) {
-            // Data doesn't exist for the locale we're looking for.
-            // Falling back to am/pm.
-            subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
-                      handler, cal, mutableNFs, status);
-            break;
-        }
-    }
-    
-    
-SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    /**
+ * Union the set of all characters that may output by this object
+ * into the given set.
+ * @param toUnionTo the set into which to union the output characters
+ */
+void StringMatcher::addReplacementSetTo(UnicodeSet& /*toUnionTo*/) const {
+    // The output of this replacer varies; it is the source text between
+    // matchStart and matchLimit.  Since this varies depending on the
+    // input text, we can't compute it here.  We can either do nothing
+    // or we can add ALL characters to the set.  It's probably more useful
+    // to do nothing.
 }
-    
-    U_NAMESPACE_BEGIN
-    
-    U_NAMESPACE_BEGIN
-    
-      explicit Assembler(HPHP::CodeBlock& cb) : codeBlock(cb) {}
-  ~Assembler(){}
-    
-    #ifndef incl_HPHP_OUTPUT_FILE_H_
-#define incl_HPHP_OUTPUT_FILE_H_
-    
-    #endif // incl_HPHP_URL_FILE_H_
-
-    
-    using apollo::common::ErrorCode;
-    
-    TEST(ByteTest, SetBit) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  value.set_bit_0(1);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_bit_0(7);
-  EXPECT_EQ(0x7D, value.get_byte());
-  value.set_bit_1(7);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_value(0x77);
-  value.set_bit_1(0);
-  EXPECT_EQ(0x77, value.get_byte());
-    }
-    
-    
-    {  // Report Messages
-  AddRecvProtocolData<Accelrpt68, true>();
-  AddRecvProtocolData<Brakemotorrpt170, true>();
-  AddRecvProtocolData<Brakemotorrpt271, true>();
-  AddRecvProtocolData<Brakemotorrpt372, true>();
-  AddRecvProtocolData<Brakerpt6c, true>();
-  AddRecvProtocolData<Datetimerpt83, true>();
-  AddRecvProtocolData<Globalrpt6a, true>();
-  AddRecvProtocolData<Headlightrpt77, true>();
-  AddRecvProtocolData<Hornrpt79, true>();
-  AddRecvProtocolData<Latlonheadingrpt82, true>();
-  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
-  AddRecvProtocolData<Shiftrpt66, true>();
-  AddRecvProtocolData<Steeringmotorrpt173, true>();
-  AddRecvProtocolData<Steeringmotorrpt274, true>();
-  AddRecvProtocolData<Steeringmotorrpt375, true>();
-  AddRecvProtocolData<Steeringrpt16e, true>();
-  AddRecvProtocolData<Turnrpt64, true>();
-  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
-  AddRecvProtocolData<Wheelspeedrpt7a, true>();
-  AddRecvProtocolData<Wiperrpt91, true>();
-  AddRecvProtocolData<Yawraterpt81, true>();
-}
-    
-    
-    {
-    {
-    {
-    {  Brake_rpt_6c::Brake_on_offType ret =
-      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
-    
-    
-    {  Global_rpt_6a::Pacmod_statusType ret =
-      static_cast<Global_rpt_6a::Pacmod_statusType>(x);
-  return ret;
-}
-    
-    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
-// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
-    }
