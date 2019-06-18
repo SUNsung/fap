@@ -1,93 +1,94 @@
 
         
-            def create
-      authorize :email_domain_block, :create?
+            it 'does not send previously configured control targets when the current agent does not support them' do
+      select_agent_type('Commander Agent')
+      select2('SF Weather', from: 'Control targets')
+      select_agent_type('Webhook Agent')
+      fill_in(:agent_name, with: 'No control targets')
+      click_on 'Save'
+      expect(page).to have_content('No control targets')
+      agent = Agent.find_by(name: 'No control targets')
+      expect(agent.control_targets).to eq([])
+    end
     
-        def set_report_note
-      @report_note = ReportNote.find(params[:id])
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
+    
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
+    end
+    
+            context 'when the schema_version is less than 1' do
+          before do
+            valid_parsed_weather_agent_data[:keep_events_for] = 2
+            valid_parsed_data.delete(:schema_version)
+          end
+    
+        Thread.abort_on_exception = @taoe
+    $stdout, $stderr = @oso, @ose
+  end
+    
+      describe 'path request must exist' do
+    it 'should check that validation added if path does not exist' do
+      opts = @opts.tap { |o| o.delete('path') }
+      @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => opts)
+      @checker.user = users(:bob)
+      expect(@checker.save).to eq false
+      expect(@checker.errors.full_messages.first).to eq('You need to specify a path request')
     end
   end
-end
-
     
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-      respond_to :json
-    
-        @web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data_params,
-      user_id: current_user.id,
-      access_token_id: doorkeeper_token.id
-    )
-    
-        # default chunk sizes (if chunked is used)
-    self.chunk_min_size = 1
-    self.chunk_max_size = 10
-    
-      def timestamp
-    (( ::Time.now - self.itime) * 1000.0 ).to_i & 0xffffffff
+      config.vm.define 'debian6' do |debian6|
+    debian6.vm.box = 'puppetlabs/debian-6.0.10-64-puppet'
   end
     
+      # Execute this command. See Clamp::Command#execute and Clamp's documentation
+  def execute
+    logger.level = :warn
+    logger.level = :info if verbose? # --verbose
+    logger.level = :debug if debug? # --debug
+    if log_level
+      logger.level = log_level.to_sym
+    end
     
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
+      public(:input, :output, :identifier, :to_s)
     
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+      # Sanitize package name.
+  # Some PyPI packages can be named 'python-foo', so we don't want to end up
+  # with a package named 'python-python-foo'.
+  # But we want packages named like 'pythonweb' to be suffixed
+  # 'python-pythonweb'.
+  def fix_name(name)
+    if name.start_with?('python')
+      # If the python package is called 'python-foo' strip the 'python-' part while
+      # prepending the package name prefix.
+      return [attributes[:python_package_name_prefix], name.gsub(/^python-/, '')].join('-')
+    else
+      return [attributes[:python_package_name_prefix], name].join('-')
+    end
+  end # def fix_name
     
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            seq_values = input.value
+        # Make one file. The installscript can unpack itself.
+    `cat #{install_script} #{payload} > #{output_path}`
+    FileUtils.chmod('+x', output_path)
+  end
     
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
+        # Write the scripts, too.
+    write_scripts
     
-    When /^I submit forgot password form$/ do
-  submit_forgot_password_form
-end
-    
-    World(NavigationHelpers)
-
-    
-        context 'on my own post' do
-      before do
-        aspect_to_post = alice.aspects.where(:name => 'generic').first
-        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
-      end
-    
-              state = @states.last
-          respond_with(@states) if stale?(state)
-        end
+      # Output a zipfile.
+  def output(output_path)
+    output_check(output_path)
+    realpath = Pathname.new(output_path).realdirpath.to_s
+    ::Dir.chdir(staging_path) do
+      safesystem('zip', '-9r', realpath, '.')
+    end
+  end # def output
+end # class FPM::Package::Tar
