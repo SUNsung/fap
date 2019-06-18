@@ -1,85 +1,110 @@
 
         
-                def to_s
-          @symbol.to_s
-        end
-        alias to_str to_s
+        class ContentSecurityPolicy
+  class Builder
+    EXTENDABLE_DIRECTIVES = %i[
+      base_uri
+      object_src
+      script_src
+      worker_src
+    ].freeze
     
-                    entry.author do |author|
-                  author.name('DHH')
-                end
-              end
-            end
+              headers.each do |name, val|
+            io.write '#{name}: #{val}\r\n'
           end
-    EOT
-  def index
-    @scrolls = [
-      Scroll.new(1, '1', 'Hello One', 'Something <i>COOL!</i>', Time.utc(2007, 12, 12, 15), Time.utc(2007, 12, 12, 15)),
-      Scroll.new(2, '2', 'Hello Two', 'Something Boring', Time.utc(2007, 12, 12, 15)),
-    ]
     
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-      config.on_event :test_case_finished do |event|
-    f.after_feature_element(event.test_case)
-  end
+    Then(/^(\d+) valid releases are kept/) do |num|
+  test = %Q([ $(ls -g #{TestApp.releases_path} | grep -E '[0-9]{14}' | wc -l) == '#{num}' ])
+  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
+  expect(status).to be_success
+end
     
-          def jekyll
-        JekyllDrop.global
+            filter = Object.new
+        def filter.filter(servers)
+          block.call(servers)
+        end
+      elsif !filter.respond_to? :filter
+        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
+                         'not have a public 'filter' method'
       end
-    
-        # See {CapabilityHost#capability}
-    def capability(*args)
-      super
-    rescue Errors::CapabilityNotFound => e
-      raise Errors::GuestCapabilityNotFound,
-        cap: e.extra_data[:cap],
-        guest: name
-    rescue Errors::CapabilityInvalid => e
-      raise Errors::GuestCapabilityInvalid,
-        cap: e.extra_data[:cap],
-        guest: name
+      @custom_filters ||= []
+      @custom_filters << filter
     end
     
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
+          def value_or_default
+        if response.empty?
+          default
+        else
+          response
+        end
+      end
     
-      #
-  # Move these into an IPMI stack or mixin at some point
-  #
+          def initialize(variables)
+        super(variables)
+        @validators = {}
+      end
     
-              # Encodes the start_time field
-          #
-          # @return [String]
-          def encode_start_time
-            [start_time].pack('N')
-          end
+          if prefers_plain_text?(env)
+        content_type = 'text/plain'
+        body = dump_exception(e)
+      else
+        content_type = 'text/html'
+        body = pretty(env, e)
+      end
     
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+      # insert data
+  fields.each do |field, values|
+    updated = '  s.#{field} = ['
+    updated << values.map { |v| '\n    %p' % v }.join(',')
+    updated << '\n  ]'
+    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+  end
     
-              # Decodes the key_expiration field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_key_expiration(input)
-            input.value[0].value
-          end
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
+      end
     
-              private
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
     
-              # Decodes the stime field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_stime(input)
-            input.value[0].value
-          end
+      context 'with default reaction' do
+    before(:each) do
+      mock_app do
+        use Rack::Protection::CookieTossing
+        run DummyApp
+      end
+    end
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+        if local_gems.size > 0
+      if update_all?
+        plugins_with_path = local_gems
+      else
+        plugins_with_path = plugins_arg & local_gems
+      end
