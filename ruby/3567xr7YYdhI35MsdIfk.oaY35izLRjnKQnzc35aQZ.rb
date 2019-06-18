@@ -1,98 +1,98 @@
 
         
-            def initial_page?
-      root_page? || context[:initial_paths].include?(subpath)
+          # This method is called when weak warning is produced by the parser.
+  # +fmt+ and +args+ is printf style.
+  def warn(fmt, *args)
+  end
+    
+          # Only uses first 29 characters of salt
+      'mypassword'.crypt('$2a$04$0WVaz0pV3jzfZ5G5tpmHWuB').should == '$2a$04$0WVaz0pV3jzfZ5G5tpmHWuBQGbkjzgtSc3gJbmdy0GAGMa45MFM2.'
     end
     
-        def initialize
-      @pages = {}
+          Thread.pass until port
+    
+      it 'initializes a new UDPSocket using an Integer' do
+    @socket = UDPSocket.new(Socket::AF_INET)
+    @socket.should be_an_instance_of(UDPSocket)
+  end
+    
+        def on_comma(tok, data)
+      @lex_state = EXPR_BEG | EXPR_LABEL if (EXPR_ARG_ANY & @lex_state) != 0
+      data << Token.new(lineno, column, __method__, tok, @lex_state)
     end
     
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+          open('iso-2022-jp.txt', 'wb:iso-2022-jp', xml: :attr) {|f| f.print '&<>'\''; f.puts '\u4E02\u3042' }
+      content = File.read('iso-2022-jp.txt', :mode=>'rb:ascii-8bit')
+      assert_equal('\'&amp;&lt;&gt;&quot;'&#x4E02;\e$B$\'\e(B\n\''.force_encoding('ascii-8bit'), content)
     
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Boolean] single_target If true, then an exception will be
-        #   raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          # Using VMs requires a Vagrant environment to be properly setup
-          raise Errors::NoEnvironmentError if !@env.root_path
+      def test_new_method_on_subclass
+    sub = FooSub.new
+    assert_raise(NoMethodError) { sub.z }
+    assert_equal('FooExt#z', FooExtClient.invoke_z_on(sub))
+    assert_raise(NoMethodError) { sub.z }
+  end
     
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
+      def test_ungetc2
+    f = false
+    pipe(proc do |w|
+      Thread.pass until f
+      w.write('1' * 10000)
+      w.close
+    end, proc do |r|
+      r.ungetc('0' * 10000)
+      f = true
+      assert_equal('0' * 10000 + '1' * 10000, r.read)
+    end)
+  end
+    
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
         end
     
-            # This contains all the registered host capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
-    
-            # This returns all the registered guests.
-        #
-        # @return [Hash]
-        def guests
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.guests)
-            end
-          end
-        end
-    
-            # Defines a capability for the given host. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] host The name of the host
-        # @param [String] cap The name of the capability
-        def self.host_capability(host, cap, &block)
-          components.host_capabilities[host.to_sym].register(cap.to_sym, &block)
-          nil
-        end
-    
-            # Initialize the provider to represent the given machine.
-        #
-        # @param [Vagrant::Machine] machine The machine that this provider
-        #   is responsible for.
-        def initialize(machine)
-        end
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
-    end
-    
-        def display_error_message(ex)
-      unless options.backtrace
-        Rake.application.options.suppress_backtrace_pattern = backtrace_pattern if backtrace_pattern
-        trace '(Backtrace restricted to imported tasks)'
+        # regression tests for https://github.com/spree/spree/issues/6888
+    context 'per page dropdown', js: true do
+      before do
+        select '45', from: 'per_page'
+        wait_for_ajax
+        expect(page).to have_select('per_page', selected: '45')
+        expect(page).to have_selector(:css, 'select.per-page-selected-45')
       end
     
-        if path.nil?
-      return @scripts_path
-    else
-      return File.join(@scripts_path, path)
+          @@stock_location_attributes = [
+        :id, :name, :address1, :address2, :city, :state_id, :state_name,
+        :country_id, :zipcode, :phone, :active
+      ]
+    
+        # Returns the scaling and cropping geometries (in string-based ImageMagick format)
+    # neccessary to transform this Geometry into the Geometry given. If crop is true,
+    # then it is assumed the destination Geometry will be the exact final resolution.
+    # In this case, the source Geometry is scaled so that an image containing the
+    # destination Geometry would be completely filled by the source image, and any
+    # overhanging image would be cropped. Useful for square thumbnail images. The cropping
+    # is weighted at the center of the Geometry.
+    def transformation_to dst, crop = false
+      if crop
+        ratio = Geometry.new( dst.width / self.width, dst.height / self.height )
+        scale_geometry, scale = scaling(dst, ratio)
+        crop_geometry         = cropping(dst, ratio, scale)
+      else
+        scale_geometry        = dst.to_s
+      end
+    
+        def raise_because_imagemagick_missing
+      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
     end
-  end # def scripts_path
+  end
+end
+
+    
+        # Returns the timestamp as defined by the <attachment>_updated_at field
+    # in the server default time zone unless :use_global_time_zone is set
+    # to false.  Note that a Rails.config.time_zone change will still
+    # invalidate any path or URL that uses :timestamp.  For a
+    # time_zone-agnostic timestamp, use #updated_at.
+    def timestamp attachment, style_name
+      attachment.instance_read(:updated_at).in_time_zone(attachment.time_zone).to_s
+    end
