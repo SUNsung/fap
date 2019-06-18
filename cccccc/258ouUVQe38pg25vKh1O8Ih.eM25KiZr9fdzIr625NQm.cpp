@@ -1,135 +1,115 @@
 
         
-        // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-    {  int result = 0;
-  RenderThread::Get()->Send(new ShellViewHostMsg_AllocateId(
-      routing_id,
-      &result));
-  return scope.Escape(v8::Integer::New(isolate, result));
+        // Splits *this into two pieces in bundle1 and bundle2 (preallocated, empty
+// bundles) where the right edge/ of the left-hand word is word1_right,
+// and the left edge of the right-hand word is word2_left.
+void BlamerBundle::SplitBundle(int word1_right, int word2_left, bool debug,
+                               BlamerBundle* bundle1,
+                               BlamerBundle* bundle2) const {
+  STRING debug_str;
+  // Find truth boxes that correspond to the split in the blobs.
+  int b;
+  int begin2_truth_index = -1;
+  if (incorrect_result_reason_ != IRR_NO_TRUTH &&
+      truth_has_char_boxes_) {
+    debug_str = 'Looking for truth split at';
+    debug_str.add_str_int(' end1_x ', word1_right);
+    debug_str.add_str_int(' begin2_x ', word2_left);
+    debug_str += '\nnorm_truth_word boxes:\n';
+    if (norm_truth_word_.length() > 1) {
+      norm_truth_word_.BlobBox(0).print_to_str(&debug_str);
+      for (b = 1; b < norm_truth_word_.length(); ++b) {
+        norm_truth_word_.BlobBox(b).print_to_str(&debug_str);
+        if ((abs(word1_right - norm_truth_word_.BlobBox(b - 1).right()) <
+            norm_box_tolerance_) &&
+            (abs(word2_left - norm_truth_word_.BlobBox(b).left()) <
+            norm_box_tolerance_)) {
+          begin2_truth_index = b;
+          debug_str += 'Split found';
+          break;
+        }
+      }
+      debug_str += '\n';
+    }
+  }
+  // Populate truth information in word and word2 with the first and second
+  // part of the original truth.
+  if (begin2_truth_index > 0) {
+    bundle1->truth_has_char_boxes_ = true;
+    bundle1->norm_box_tolerance_ = norm_box_tolerance_;
+    bundle2->truth_has_char_boxes_ = true;
+    bundle2->norm_box_tolerance_ = norm_box_tolerance_;
+    BlamerBundle *curr_bb = bundle1;
+    for (b = 0; b < norm_truth_word_.length(); ++b) {
+      if (b == begin2_truth_index) curr_bb = bundle2;
+      curr_bb->norm_truth_word_.InsertBox(b, norm_truth_word_.BlobBox(b));
+      curr_bb->truth_word_.InsertBox(b, truth_word_.BlobBox(b));
+      curr_bb->truth_text_.push_back(truth_text_[b]);
+    }
+  } else if (incorrect_result_reason_ == IRR_NO_TRUTH) {
+    bundle1->incorrect_result_reason_ = IRR_NO_TRUTH;
+    bundle2->incorrect_result_reason_ = IRR_NO_TRUTH;
+  } else {
+    debug_str += 'Truth split not found';
+    debug_str += truth_has_char_boxes_ ?
+        '\n' : ' (no truth char boxes)\n';
+    bundle1->SetBlame(IRR_NO_TRUTH_SPLIT, debug_str, nullptr, debug);
+    bundle2->SetBlame(IRR_NO_TRUTH_SPLIT, debug_str, nullptr, debug);
+  }
 }
     
-    void Clipboard::Clear() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-}
-    
-      option.GetString('type', &type_);
-  option.GetString('label', &label_);
-  option.GetString('tooltip', &tooltip_);
-  option.GetBoolean('checked', &is_checked_);
-  option.GetBoolean('enabled', &is_enabled_);
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
-};
-    
-    class b2Triangle{
-public:
-	float* x;
-    float* y;
-	b2Triangle();
-	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
-	~b2Triangle();
-	bool IsInside(float32 _x, float32 _y);
-	void Set(const b2Triangle& toMe);
+    namespace tesseract {
     }
     
-    				
-					// for RGB8A1, set source alpha to 0.0 or 1.0
-					// set punch through flag
-					if (imageformat == Image::Format::RGB8A1 ||
-						imageformat == Image::Format::SRGB8A1)
-					{
-						if (m_afrgbaSource[uiPixel].fA >= 0.5f)
-						{
-							m_afrgbaSource[uiPixel].fA = 1.0f;
-						}
-						else
-						{
-							m_afrgbaSource[uiPixel].fA = 0.0f;
-							m_boolPunchThroughPixels = true;
-						}
-					}
+    #ifndef TESSERACT_CSTRUCT_BOXWORD_H_
+#define TESSERACT_CSTRUCT_BOXWORD_H_
     
+      // Returns the covariance.
+  double covariance() const {
+    if (total_weight > 0.0)
+      return (sigxy - sigx * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double x_variance() const {
+    if (total_weight > 0.0)
+      return (sigxx - sigx * sigx / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double y_variance() const {
+    if (total_weight > 0.0)
+      return (sigyy - sigy * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
     
-    {	};
+     private:
+  // Free allocated memory and clear pointers.
+  void Clear();
+  // Setup default values.
+  void Init();
     
-      THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+      REJMAP &operator=(const REJMAP &source);
     
-    #   define C_FIXDIV(c,div) \
-        do {    DIVSCALAR( (c).r , div);  \
-                DIVSCALAR( (c).i  , div); }while (0)
+    #ifndef TESSERACT_CCUTIL_GENERICHEAP_H_
+#define TESSERACT_CCUTIL_GENERICHEAP_H_
     
-    #define SHR16(a, shift) SHR16_(a, shift, __FILE__, __LINE__)
-static OPUS_INLINE short SHR16_(int a, int shift, char *file, int line)
-{
-   int res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(shift))
-   {
-      fprintf (stderr, 'SHR16: inputs are not short: %d >> %d in %s: line %d\n', a, shift, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a>>shift;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'SHR16: output is not short: %d in %s: line %d\n', res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips++;
-   return res;
-}
-#define SHL16(a, shift) SHL16_(a, shift, __FILE__, __LINE__)
-static OPUS_INLINE short SHL16_(int a, int shift, char *file, int line)
-{
-   int res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(shift))
-   {
-      fprintf (stderr, 'SHL16: inputs are not short: %d %d in %s: line %d\n', a, shift, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a<<shift;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'SHL16: output is not short: %d in %s: line %d\n', res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips++;
-   return res;
+    template <typename Key, class Comparator>
+typename SkipList<Key, Comparator>::Node* SkipList<Key, Comparator>::NewNode(
+    const Key& key, int height) {
+  char* const node_memory = arena_->AllocateAligned(
+      sizeof(Node) + sizeof(std::atomic<Node*>) * (height - 1));
+  return new (node_memory) Node(key);
 }
     
-    /* (a32 * b32) >> 16 */
-#undef silk_SMULWW
-static OPUS_INLINE opus_int32 silk_SMULWW_armv4(opus_int32 a, opus_int32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    '#silk_SMULWW\n\t'
-    'smull %0, %1, %2, %3\n\t'
-    : '=&r'(rd_lo), '=&r'(rd_hi)
-    : '%r'(a), 'r'(b)
-  );
-  return (rd_hi<<16)+(rd_lo>>16);
-}
-#define silk_SMULWW(a, b) (silk_SMULWW_armv4(a, b))
+     private:
+  bool ok() const { return status().ok(); }
+  void WriteBlock(BlockBuilder* block, BlockHandle* handle);
+  void WriteRawBlock(const Slice& data, CompressionType, BlockHandle* handle);
+    
+    class Histogram {
+ public:
+  Histogram() {}
+  ~Histogram() {}
+    }
