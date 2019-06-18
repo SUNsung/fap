@@ -1,52 +1,52 @@
 
         
-            Args:
-      data_name: The name of the data dict, to select which in/out matrices
-        to use.
-      data_extxd:  Numpy array training data with shape:
-        # examples x # time steps x # dimensions
-      ext_input_extxi (optional): Numpy array training external input with
-        shape: # examples x # time steps x # external input dims
-    
-        states_t_bxn, outputs_t_bxn = sess.run([states_t, outputs_t],
-                                           feed_dict=feed_dict)
-    states_nxt = np.transpose(np.squeeze(np.asarray(states_t_bxn)))
-    outputs_t_bxn = np.squeeze(np.asarray(outputs_t_bxn))
-    r_sxt = np.dot(P_nxn, states_nxt)
+            # test that the user was inserted into the database
+    with app.app_context():
+        assert (
+            get_db().execute('select * from user where username = 'a'').fetchone()
+            is not None
+        )
     
     
-def discriminator_loss(predictions, labels, missing_tokens):
-  '''Discriminator loss based on predictions and labels.
+@pytest.mark.parametrize('path', ('/2/update', '/2/delete'))
+def test_exists_required(client, auth, path):
+    auth.login()
+    assert client.post(path).status_code == 404
     
     
-def print_and_log(log, id_to_word, sequence_eval, max_num_to_print=5):
-  '''Helper function for printing and logging evaluated sequences.'''
-  indices_eval = convert_to_indices(sequence_eval)
-  indices_arr = np.asarray(indices_eval)
-  samples = convert_to_human_readable(id_to_word, indices_arr, max_num_to_print)
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+    from fire import testutils
     
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
+        Args:
+      arg1: arg1_description
+      arg2: arg2_description
+    '''
+    docstring_info = docstrings.parse(docstring)
+    expected_docstring_info = DocstringInfo(
+        summary='One line description.',
+        args=[
+            ArgInfo(name='arg1', description='arg1_description'),
+            ArgInfo(name='arg2', description='arg2_description'),
+        ]
+    )
+    self.assertEqual(docstring_info, expected_docstring_info)
     
-            outputs_train, state_train = seq2seq.dynamic_rnn_decoder(...)
-        logits_train = output_fn(outputs_train)
+    import difflib
+import os
+import time
     
-    setup_end_to_end = '''
-import face_recognition
+    from fire.console import encoding
     
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    frame = frame[:, :, ::-1]
-    
-        # Display the resulting image
-    cv2.imshow('Video', frame)
+        for option in options_map[command].union(global_options):
+      check_needed = command != name
+      fish_source += flag_template.format(
+          name=name,
+          command=command,
+          prev_global_check=prev_global_check if check_needed else '',
+          option=option.lstrip('--'),
+      )
