@@ -1,394 +1,255 @@
 
         
-          // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
-    }
-    
-    
-    {  for (auto Entry : DCache.Entries) {
-    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
-  }
-  DCache.Entries.clear();
-}
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-    
-    {  // Lowercase the first letter, append the rest.
-  scratch.clear();
-  scratch.push_back(clang::toLowercase(string[0]));
-  scratch.append(string.begin() + 1, string.end());
-  return StringRef(scratch.data(), scratch.size());
-}
-    
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
-    
-        void emitDiagnosticMessage(clang::FullSourceLoc Loc,
-                               clang::PresumedLoc PLoc,
-                               clang::DiagnosticsEngine::Level Level,
-                               StringRef Message,
-                               ArrayRef<clang::CharSourceRange> Ranges,
-                               clang::DiagOrStoredDiag Info) override {
-      if (isInSwiftBuffers(Loc)) {
-        // FIXME: Ideally, we'd report non-suppressed diagnostics on synthetic
-        // buffers, printing their names (eg. <swift-imported-modules>:...) but
-        // this risks printing _excerpts_ of those buffers to stderr too; at
-        // present the synthetic buffers are 'large blocks of null bytes' which
-        // we definitely don't want to print out. So until we have some clever
-        // way to print the name but suppress printing excerpts, we just replace
-        // the Loc with an invalid one here, which suppresses both.
-        Loc = clang::FullSourceLoc();
-        if (shouldSuppressDiagInSwiftBuffers(Info))
-          return;
-      }
-      callback(Loc, Level, Message);
-    }
-    
-    
-    {  // -- Build the decoded string as UTF32 first because we need random access.
-  uint32_t n = initial_n;
-  int i = 0;
-  int bias = initial_bias;
-  /// let output = an empty string indexed from 0
-  // consume all code points before the last delimiter (if there is one)
-  //  and copy them to output,
-  size_t lastDelimiter = InputPunycode.find_last_of(delimiter);
-  if (lastDelimiter != StringRef::npos) {
-    for (char c : InputPunycode.slice(0, lastDelimiter)) {
-      // fail on any non-basic code point
-      if (static_cast<unsigned char>(c) > 0x7f)
-        return true;
-      OutCodePoints.push_back(c);
-    }
-    // if more than zero code points were consumed then consume one more
-    //  (which will be the last delimiter)
-    InputPunycode =
-        InputPunycode.slice(lastDelimiter + 1, InputPunycode.size());
-  }
-  
-  while (!InputPunycode.empty()) {
-    int oldi = i;
-    int w = 1;
-    for (int k = base; ; k += base) {
-      // consume a code point, or fail if there was none to consume
-      if (InputPunycode.empty())
-        return true;
-      char codePoint = InputPunycode.front();
-      InputPunycode = InputPunycode.slice(1, InputPunycode.size());
-      // let digit = the code point's digit-value, fail if it has none
-      int digit = digit_index(codePoint);
-      if (digit < 0)
-        return true;
-      
-      i = i + digit * w;
-      int t = k <= bias ? tmin
-            : k >= bias + tmax ? tmax
-            : k - bias;
-      if (digit < t)
-        break;
-      w = w * (base - t);
-    }
-    bias = adapt(i - oldi, OutCodePoints.size() + 1, oldi == 0);
-    n = n + i / (OutCodePoints.size() + 1);
-    i = i % (OutCodePoints.size() + 1);
-    // if n is a basic code point then fail
-    if (n < 0x80)
-      return true;
-    // insert n into output at position i
-    OutCodePoints.insert(OutCodePoints.begin() + i, n);
-    i++;
-  }
-  
-  return true;
-}
-    
-    void BackendJobAction::anchor() {}
-    
-      bool shouldProvideRPathToLinker() const override;
-    
-    
-    {}  // namespace nwapi
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/nw_shell.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'ui/gfx/point.h'
-#include 'vector'
-#include 'gtk/gtk.h'
-    
-    NwClipboardGetListSyncFunction::~NwClipboardGetListSyncFunction() {
-}
-    
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
-    
-    namespace extensions {
-    }
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-    const int kMaxBlobAxes = 32;
-    
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
-    }
-    return layer_types;
-  }
-    
-    #include <vector>
-    
-    #endif  // CAFFE_BASE_CONVOLUTION_LAYER_HPP_
-
-    
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
+        /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
  */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
+    
+    /*!
+ * \brief Iterator that normalize a image.
+ *  It also applies a few augmention before normalization.
+ */
+class ImageDetNormalizeIter : public IIterator<DataInst> {
  public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-    int orientation_and_script_detection(STRING& filename,
-                                     OSResults*,
-                                     tesseract::Tesseract*);
-    
-    
-    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
-                                          iter != vcMap.end();
-                                          ++iter) {
-    ParamContent* cur = iter->second;
-    if (!changes_only || cur->HasChanged()) {
-      fprintf(fp, '%-25s   %-12s   # %s\n',
-              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
-    }
+  explicit ImageDetNormalizeIter(IIterator<DataInst> *base)
+      : base_(base), meanfile_ready_(false) {
   }
-  fclose(fp);
-}
-#endif // GRAPHICS_DISABLED
+    }
+    
+      /*!
+  * \brief Issues dequantize operation to be scheduled by the engine
+  * Decompresses `from` into `to` using current parameters of `type` and `threshold`
+  * \param from the ndarray containing quantized data
+  * \param to the target ndarray which contains final dequantized data
+  * \param priority Priority of the action.
+  */
+  void Dequantize(const mxnet::NDArray &from, mxnet::NDArray *to, const int priority);
+    
+    )code' ADD_FILELINE)
+.set_attr<FCompute>('FCompute<cpu>', DivSqrtDimForward_<cpu>)
+.set_attr<nnvm::FGradient>('FGradient', ElemwiseGradUseNone{'_contrib_div_sqrt_dim'});
+    
+    
+    {
+    {}  // namespace op
+}  // namespace mxnet
 
     
-      int GetId() { return my_id_; }
-  bool HasChanged() { return changed_; }
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
+  return new IdentityAttachKLSparseRegOp<cpu>(param);
+}
+    }
+    }
     
-      // blow away the copied chopped_word, as we want to work with
-  // the blobs from the input chopped_word so seam_arrays can be merged.
-  TWERD *chopped = word->chopped_word;
-  TWERD *chopped2 = new TWERD;
-  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
-  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
-    chopped2->blobs.push_back(chopped->blobs[i]);
+    /*!
+ * \brief concat CSRNDArray on the first dimension.
+ */
+struct concat_csr_first_dim {
+  /*!
+   * \param i              the i-th row of the input ndarray
+   * \param out_idx        output csr ndarray column indices
+   * \param out_data       output csr ndarray data
+   * \param out_indptr     output csr ndarray row index pointer
+   * \param in_idx         input csr ndarray column indices
+   * \param in_data        input csr ndarray data
+   * \param in_indptr      input csr ndarray row index pointer
+   * \param indptr_offset  offset for ouput ndarray row index pointer
+   * \param idx_offset     offset for ouput ndarray column indices
+   */
+  template<typename DType, typename RType, typename IType>
+  MSHADOW_XINLINE static void Map(int i, const OpReqType req,
+                                  DType* out_data, const DType* in_data,
+                                  RType* out_indptr, const RType* in_indptr,
+                                  IType* out_idx, const IType* in_idx,
+                                  const nnvm::dim_t indptr_offset,
+                                  const nnvm::dim_t idx_offset) {
+    if (i == 0) out_indptr[0] = 0;
+    out_indptr[i+1+indptr_offset] = in_indptr[i+1] + idx_offset;
+    for (nnvm::dim_t j = in_indptr[i]; j < in_indptr[i+1]; ++j) {
+      KERNEL_ASSIGN(out_idx[j+idx_offset], req, in_idx[j]);
+      KERNEL_ASSIGN(out_data[j+idx_offset], req, in_data[j]);
+    }
   }
-  chopped->blobs.truncate(split_pt);
-  word->chopped_word = nullptr;
-  delete word2->chopped_word;
-  word2->chopped_word = nullptr;
+};
     
-    #define UNLV_EXT  '.uzn'  // unlv zone file
     
-    // Merges the boxes from start to end, not including end, and deletes
-// the boxes between start and end.
-void BoxWord::MergeBoxes(int start, int end) {
-  start = ClipToRange(start, 0, length_);
-  end = ClipToRange(end, 0, length_);
-  if (end <= start + 1)
-    return;
-  for (int i = start + 1; i < end; ++i) {
-    boxes_[start] += boxes_[i];
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
+    }
   }
-  int shrinkage = end - 1 - start;
-  length_ -= shrinkage;
-  for (int i = start + 1; i < length_; ++i)
-    boxes_[i] = boxes_[i + shrinkage];
-  boxes_.truncate(length_);
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+    IMPLEMENT_RESOURCE_ALLOCATION(PlainDirectory)
+    
+    #endif // HPHP_FILE_STREAM_WRAPPER_H
+
+    
+    #include 'hphp/runtime/base/glob-stream-wrapper.h'
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+    
+    {}
+
+    
+    using json = nlohmann::json;
+    
+    
+    // ============
+    // string types
+    // ============
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+    #include 'glog/logging.h'
+    
+    
+    {  double ret = x * OBJECT_RCS_RES + OBJECT_RCS_MIN;
+  return ret;
 }
     
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return nullptr;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
-      int64_t new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
-  }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
 }
     
-      // Update the other members if the cost is lower.
-  void UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                      int32_t n, int32_t sig_x, int64_t sig_xsq);
+    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
     
-        DIR128 & operator= (         //assign of int16_t
-    int16_t value) {               //value to assign
-      value %= MODULUS;          //modulo arithmetic
-      if (value < 0)
-        value += MODULUS;        //done properly
-      dir = (int8_t) value;
-      return *this;
+      MatrixXd mat_golden = MatrixXd::Identity(10, 10) * 10.0;
+  EXPECT_EQ(mat, mat_golden);
+    
+    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateSecondOrderDerivative(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
+  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
+    
+    // config detail: {'name': 'angular_speed', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
+// 'bit': 39, 'type': 'double', 'order': 'motorola', 'physical_unit': 'rev/s'}
+double Brakemotorrpt271::angular_speed(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
     }
-    int8_t operator- (             //subtraction
-      const DIR128 & minus) const//for signed result
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    
     {
-                                 //result
-      int16_t result = dir - minus.dir;
+    {
+    {
+    {  Horn_rpt_79::Manual_inputType ret =
+      static_cast<Horn_rpt_79::Manual_inputType>(x);
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+{
+    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
+    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
+    {
+        obitCamera->autorelease();
+        return obitCamera;
     }
     
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-      const protobuf::Descriptor* desc =
-      descriptor_pool_->FindMessageTypeByName(request->containing_type());
-  if (desc == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Type not found.');
-  }
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  host_cpu_load_info_data_t cpuinfo;
-  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
-  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
-                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
-    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
-    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
-  }
-  return std::make_pair(busy, total);
+    delete obitCamera;
+    return nullptr;
 }
     
-    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+        /** Gets an action given its tag an a target.
+     *
+     * @param tag       The action's tag.
+     * @param target    A certain target.
+     * @return  The Action the with the given tag.
+     */
+    virtual Action* getActionByTag(int tag, const Node *target) const;
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
+};
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    /// @endcond
+#endif  // __CC_FRAMEWORK_COMPONENT_H__
+
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    #include <string>
+#include 'base/ccTypes.h'
+#include 'base/ccUTF8.h'
