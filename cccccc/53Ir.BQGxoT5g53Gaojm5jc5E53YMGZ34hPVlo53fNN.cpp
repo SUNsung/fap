@@ -1,290 +1,189 @@
 
         
-        #endif  // ATOM_APP_UV_TASK_RUNNER_H_
-
-    
-    
-    {}  // namespace api
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    
-    {}  // namespace atom
-
-    
-    #endif  // ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
-
-    
-    void URLRequestAboutJob::Start() {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
-                                weak_ptr_factory_.GetWeakPtr()));
+        void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
-    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
-  gfx::Rect rect = damage_rect;
-  if (!pending_damage_rect_.IsEmpty()) {
-    rect.Union(pending_damage_rect_);
-    pending_damage_rect_.SetRect(0, 0, 0, 0);
-  }
+      if (clangDiag.getID() == clang::diag::err_module_not_built &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    SourceLoc loc = DiagLoc;
+    if (clangDiag.getLocation().isValid())
+      loc = resolveSourceLocation(clangDiag.getSourceManager(),
+                                  clangDiag.getLocation());
     }
     
-    class RootViewMac : public views::View {
+    // Section 6.2: Decoding procedure
+    
+    AuthPropertyIterator& AuthPropertyIterator::operator++() {
+  grpc_auth_property_iterator iter = {ctx_, index_, name_};
+  property_ = grpc_auth_property_iterator_next(&iter);
+  ctx_ = iter.ctx;
+  index_ = iter.index;
+  name_ = iter.name;
+  return *this;
+}
+    
+    #include 'src/cpp/ext/filters/census/client_filter.h'
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
  public:
-  explicit RootViewMac(NativeWindow* window);
-  ~RootViewMac() override;
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
     }
     
-    
-    {}  // namespace atom
-    
-    #ifndef BITCOIN_QT_OPENURIDIALOG_H
-#define BITCOIN_QT_OPENURIDIALOG_H
-    
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
-    
-    void test_ecdsa_recovery_api(void) {
-    /* Setup contexts that just count errors */
-    secp256k1_context *none = secp256k1_context_create(SECP256K1_CONTEXT_NONE);
-    secp256k1_context *sign = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
-    secp256k1_context *vrfy = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY);
-    secp256k1_context *both = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
-    secp256k1_pubkey pubkey;
-    secp256k1_pubkey recpubkey;
-    secp256k1_ecdsa_signature normal_sig;
-    secp256k1_ecdsa_recoverable_signature recsig;
-    unsigned char privkey[32] = { 1 };
-    unsigned char message[32] = { 2 };
-    int32_t ecount = 0;
-    int recid = 0;
-    unsigned char sig[74];
-    unsigned char zero_privkey[32] = { 0 };
-    unsigned char over_privkey[32] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                       0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-    }
-    
-    BOOST_AUTO_TEST_SUITE_END()
-
-    
-    #include <boost/test/unit_test.hpp>
-    
-    #endif // TINYFORMAT_H_INCLUDED
-
-    
-        std::map<std::string, UniValue::VType> objTypes;
-    objTypes['age'] = UniValue::VNUM;
-    objTypes['first'] = UniValue::VSTR;
-    objTypes['last'] = UniValue::VSTR;
-    objTypes['distance'] = UniValue::VNUM;
-    objTypes['time'] = UniValue::VNUM;
-    objTypes['calories'] = UniValue::VNUM;
-    objTypes['temperature'] = UniValue::VNUM;
-    objTypes['moon'] = UniValue::VBOOL;
-    objTypes['spoon'] = UniValue::VBOOL;
-    objTypes['cat1'] = UniValue::VNUM;
-    objTypes['cat2'] = UniValue::VNUM;
-    BOOST_CHECK(obj.checkObject(objTypes));
-    
-    REGISTER_CPU_OPERATOR(
-    MergeMultiScalarFeatureTensorsGradient,
-    MergeMultiScalarFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiScalarFeatureTensorsGradient)
-    .SetDoc(
-        'Explode given multi-feature tensors with scalar features into many.' +
-        doc)
-    .NumInputs([](int n) { return n >= 2; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'out_values_grad', '.values_grad')
-    .Output(0, 'in1_values_grad', '.values_grad');
-REGISTER_GRADIENT(
-    MergeMultiScalarFeatureTensors,
-    GetMergeMultiScalarFeatureTensorsGradient);
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
-  }
+    MeasureDouble RpcServerReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all messages per RPC', kUnitBytes);
+  return measure;
 }
     
-    #include <cstdint>  // for int16_t
+    #include <grpc/support/port_platform.h>
     
-    struct OSBestResult {
-  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
-                   oconfidence(0.0) {}
-  int orientation_id;
-  int script_id;
-  float sconfidence;
-  float oconfidence;
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/clock.h'
+#include 'absl/time/time.h'
+#include 'include/grpc/grpc_security.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
+    
+    #include <grpc/support/port_platform.h>
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  FILETIME idle, kernel, user;
+  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
+    total = FiletimeToInt(kernel) + FiletimeToInt(user);
+    busy = total - FiletimeToInt(idle);
+  }
+  return std::make_pair(busy, total);
+}
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [x] Renderer: Desktop GL only: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    
+    {    // Rendering
+    ImGui::Render();
+    SDL_GL_MakeCurrent(g_Window, g_GLContext);
+    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    SDL_GL_SwapWindow(g_Window);
+}
+
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX10 sample code but remove this dependency you can:
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
+    
+    static void ImGui_ImplDX11_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
+    
+        // Upload vertex/index data into a single contiguous GPU buffer
+    void* vtx_resource, *idx_resource;
+    D3D12_RANGE range;
+    memset(&range, 0, sizeof(D3D12_RANGE));
+    if (fr->VertexBuffer->Map(0, &range, &vtx_resource) != S_OK)
+        return;
+    if (fr->IndexBuffer->Map(0, &range, &idx_resource) != S_OK)
+        return;
+    ImDrawVert* vtx_dst = (ImDrawVert*)vtx_resource;
+    ImDrawIdx* idx_dst = (ImDrawIdx*)idx_resource;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    fr->VertexBuffer->Unmap(0, &range);
+    fr->IndexBuffer->Unmap(0, &range);
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    
+    {    inline ImDrawListSplitter() { Clear(); }
+    inline void                 Clear() { _Current = 0; _Count = 1; } // Do not clear Channels[] so our allocations are reused next frame
+    IMGUI_API void              ClearFreeMemory();
+    IMGUI_API void              Split(ImDrawList* draw_list, int count);
+    IMGUI_API void              Merge(ImDrawList* draw_list);
+    IMGUI_API void              SetCurrentChannel(ImDrawList* draw_list, int channel_idx);
 };
     
-     private:
-  // Sets the value of total_pages_ behind a mutex.
-  void set_total_pages(int total) {
-    SVAutoLock lock(&general_mutex_);
-    total_pages_ = total;
-  }
-  void set_memory_used(int64_t memory_used) {
-    SVAutoLock lock(&general_mutex_);
-    memory_used_ = memory_used;
-  }
-  // Locks the pages_mutex_ and Loads as many pages can fit in max_memory_
-  // starting at index pages_offset_.
-  bool ReCachePages();
-    
-    namespace HPHP { namespace HHBBC {
-    }
+    int main()
+{
+    // create JSON array
+    json array = {'first', '2nd', 'third', 'fourth'};
     }
     
-    #endif
-
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::const_reference ref = j.at('/array/one'_json_pointer);
     }
-    
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
-    
-    #include 'hphp/runtime/base/perf-warning.h'
-    
-      // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
-    
-    
-//--------------------------------------------------------------------------
-//
-//   Clone
-//
-//--------------------------------------------------------------------------
-RegexPattern  *RegexPattern::clone() const {
-    RegexPattern  *copy = new RegexPattern(*this);
-    return copy;
-}
-    
-        UBool numeric = settings->isNumeric();
-    if(equalPrefixLength > 0) {
-        UBool unsafe = FALSE;
-        if(equalPrefixLength != leftLength) {
-            int32_t i = equalPrefixLength;
-            UChar32 c;
-            U8_NEXT_OR_FFFD(left, i, leftLength, c);
-            unsafe = data->isUnsafeBackward(c, numeric);
-        }
-        if(!unsafe && equalPrefixLength != rightLength) {
-            int32_t i = equalPrefixLength;
-            UChar32 c;
-            U8_NEXT_OR_FFFD(right, i, rightLength, c);
-            unsafe = data->isUnsafeBackward(c, numeric);
-        }
-        if(unsafe) {
-            // Identical prefix: Back up to the start of a contraction or reordering sequence.
-            UChar32 c;
-            do {
-                U8_PREV_OR_FFFD(left, 0, equalPrefixLength, c);
-            } while(equalPrefixLength > 0 && data->isUnsafeBackward(c, numeric));
-        }
-        // See the notes in the UTF-16 version.
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
-    
-        UBool operator == (const ScriptSet &other) const;
-    ScriptSet & operator = (const ScriptSet &other);
-    
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
-    
-    U_NAMESPACE_END
-    
-    #ifndef __SHARED_PLURALRULES_H__
-#define __SHARED_PLURALRULES_H__
-    
-    
-SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
-}
-    
-    U_NAMESPACE_BEGIN
