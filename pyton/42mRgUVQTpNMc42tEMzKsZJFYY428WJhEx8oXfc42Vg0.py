@@ -1,163 +1,190 @@
 
         
-                webpage = webpage.decode('utf8', 'replace')
+        
+if __name__ == '__main__':
+    SalesRanker.run()
+
     
-    password = key
-new_key = aes_encrypt(password, key_expansion(password))
-r = openssl_encode('aes-128-ctr', new_key, iv)
-print('aes_decrypt_text 16')
-print(repr(r))
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'UNEXPECTED_PROMPT_RESPONSE')
+def test_auth_plugin_prompt_password_false(httpbin):
+    
+        def test_POST_no_data_no_auto_headers(self, httpbin):
+        # JSON headers shouldn't be automatically set for POST with no data.
+        r = http('POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Accept': '*/*'' in r
+        assert ''Content-Type': 'application/json' not in r
+    
+    
+def has_docutils():
     try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        ie_htmls = []
-    for ie in youtube_dl.list_extractors(age_limit=None):
-        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
-        ie_desc = getattr(ie, 'IE_DESC', None)
-        if ie_desc is False:
-            continue
-        elif ie_desc is not None:
-            ie_html += ': {}'.format(ie.IE_DESC)
-        if not ie.working():
-            ie_html += ' (Currently broken)'
-        ie_htmls.append('<li>{}</li>'.format(ie_html))
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+@mock.patch('httpie.core.get_response')
+def test_error(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
     
-    from youtube_dl.extractor import _ALL_CLASSES
-from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
+    import pytest
+from requests.compat import urljoin
     
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
+                self.handler_results.append(handler_result)
     
     
-import hashlib
-import io
-import json
-import socket
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-        def warning(self, msg):
-        self.messages.append(msg)
+    def test_fragment_update_on_redirect():
+    '''Verify we only append previous fragment if one doesn't exist on new
+    location. If a new fragment is encountered in a Location header, it should
+    be added to all subsequent requests.
+    '''
     
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['en']))
-        self.assertEqual(md5(subtitles['en']), '97e7670cbae3c4d26ae8bcc7fdd78d4b')
     
-            label_suffix overrides the form's label_suffix.
+@pytest.mark.parametrize(
+    'value, expected', (
+        (
+            CaseInsensitiveDict(),
+            None
+        ),
+        (
+            CaseInsensitiveDict({'content-type': 'application/json; charset=utf-8'}),
+            'utf-8'
+        ),
+        (
+            CaseInsensitiveDict({'content-type': 'text/plain'}),
+            'ISO-8859-1'
+        ),
+    ))
+def test_get_encoding_from_headers(value, expected):
+    assert get_encoding_from_headers(value) == expected
+    
+            :rtype: requests.Response
         '''
-        contents = contents or self.label
-        if label_suffix is None:
-            label_suffix = (self.field.label_suffix if self.field.label_suffix is not None
-                            else self.form.label_suffix)
-        # Only add the suffix if the label does not end in punctuation.
-        # Translators: If found as last label character, these punctuation
-        # characters will prevent the default label_suffix to be appended to the label
-        if label_suffix and contents and contents[-1] not in _(':?.!'):
-            contents = format_html('{}{}', contents, label_suffix)
-        widget = self.field.widget
-        id_ = widget.attrs.get('id') or self.auto_id
-        if id_:
-            id_for_label = widget.id_for_label(id_)
-            if id_for_label:
-                attrs = {**(attrs or {}), 'for': id_for_label}
-            if self.field.required and hasattr(self.form, 'required_css_class'):
-                attrs = attrs or {}
-                if 'class' in attrs:
-                    attrs['class'] += ' ' + self.form.required_css_class
-                else:
-                    attrs['class'] = self.form.required_css_class
-            attrs = flatatt(attrs) if attrs else ''
-            contents = format_html('<label{}>{}</label>', attrs, contents)
-        else:
-            contents = conditional_escape(contents)
-        return mark_safe(contents)
+        # Set defaults that the hooks can utilize to ensure they always have
+        # the correct parameters to reproduce the previous request.
+        kwargs.setdefault('stream', self.stream)
+        kwargs.setdefault('verify', self.verify)
+        kwargs.setdefault('cert', self.cert)
+        kwargs.setdefault('proxies', self.proxies)
     
-        for node in doctree.traverse(settingslist_node):
-        settings_list = nodes.bullet_list()
-        settings_list.extend([make_setting_element(d, app, fromdocname)
-                              for d in sorted(env.scrapy_all_settings,
-                                              key=itemgetter('setting_name'))
-                              if fromdocname != d['docname']])
-        node.replace_self(settings_list)
+            self.concurrent -= 1
+        return ''
     
-        if match:
-        newfilename = match.group(1)
-        errortype = match.group(2)
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
     
-            idx = 0
-        while True:
-            url = urls[idx % len(urls)]
-            yield Request(url, dont_filter=True)
-            idx += 1
+            Quoting https://twistedmatrix.com/documents/current/api/twisted.web.client.Agent.html:
+        'The default is to use a BrowserLikePolicyForHTTPS,
+        so unless you have special requirements you can leave this as-is.'
     
-            if opts.pdb:
-            failure.startDebugMode()
+    import bz2
+import gzip
+import zipfile
+import tarfile
+import logging
+from tempfile import mktemp
     
-        def syntax(self):
-        return '[options] <spider>'
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
-                /patt/regex/replacement
+            LA(1) is not what we are looking for.  If LA(2) has the right token,
+        however, then assume LA(1) is some extra spurious token.  Delete it
+        and LA(2) as if we were doing a normal match(), which advances the
+        input.
     
-        def response(self, flow):
-        if self.stream:
-            self.stream.add(flow)
-            self.active_flows.discard(flow)
+        return blob_out
     
     
-def domain_match(a: str, b: str) -> bool:
-    if cookiejar.domain_match(a, b):  # type: ignore
-        return True
-    elif cookiejar.domain_match(a, b.strip('.')):  # type: ignore
-        return True
-    return False
+def get_field_of_anchors(
+    stride, anchor_sizes, anchor_aspect_ratios, octave=None, aspect=None
+):
+    global _threadlocal_foa
+    if not hasattr(_threadlocal_foa, 'cache'):
+        _threadlocal_foa.cache = {}
     
-        @classmethod
-    def make_dummy(cls, address):
-        return cls.from_state(dict(
-            id=str(uuid.uuid4()),
-            address=address,
-            ip_address=address,
-            cert=None,
-            sni=address[0],
-            alpn_proto_negotiated=None,
-            tls_version=None,
-            source_address=('', 0),
-            tls_established=False,
-            timestamp_start=None,
-            timestamp_tcp_setup=None,
-            timestamp_tls_setup=None,
-            timestamp_end=None,
-            via=None
-        ))
+    
+def _get_retinanet_blobs(
+        foas, all_anchors, gt_boxes, gt_classes, im_width, im_height):
+    total_anchors = all_anchors.shape[0]
+    logger.debug('Getting mad blobs: im_height {} im_width: {}'.format(
+        im_height, im_width))
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    
+def main(path):
+    
+            errors = []
+        warnings = []
+        for msg in red.response.notes:
+            if msg.level == 'bad':
+                logger = logging.error
+                if not isinstance(msg, tuple(allowed_errors)):
+                    errors.append(msg)
+            elif msg.level == 'warning':
+                logger = logging.warning
+                if not isinstance(msg, tuple(allowed_warnings)):
+                    warnings.append(msg)
+            elif msg.level in ('good', 'info', 'uri'):
+                logger = logging.info
+            else:
+                raise Exception('unknown level' + msg.level)
+            logger('%s: %s (%s)', msg.category, msg.show_summary('en'),
+                   msg.__class__.__name__)
+            logger(msg.show_text('en'))
+    
+    
+@gen.coroutine
+def c1():
+    for i in range(10):
+        yield c2()
+    
+    # os.execv is broken on Windows and can't properly parse command line
+# arguments and executable name if they contain whitespaces. subprocess
+# fixes that behavior.
+_has_execv = sys.platform != 'win32'
+    
+                Returns the (closed) event loop. This is a silly thing
+            to do and leaves the thread in a broken state, but it's
+            enough for this test. Closing the loop avoids resource
+            leak warnings.
+            '''
+            loop = asyncio.get_event_loop()
+            loop.close()
+            return loop
