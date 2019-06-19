@@ -1,186 +1,125 @@
 
         
-                  content = if block_given?
-            @template_object.capture(builder, &block)
-          elsif @content.present?
-            @content.to_s
-          else
-            render_component(builder)
-          end
+              def self.[](type)
+        type_klass[type]
+      end
     
-    Dir.glob('rake/**.rake').each { |f| import f }
+    module AbstractController
+  module Testing
+    class ControllerWithHelpers < AbstractController::Base
+      include AbstractController::Helpers
+      include AbstractController::Rendering
+      include ActionView::Rendering
     
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
+      attr_reader :id
+  attr_reader :post_id
+  def initialize(id = nil, post_id = nil); @id, @post_id = id, post_id end
+  def to_key; id ? [id] : nil end
+  def save; @id = 1; @post_id = 1 end
+  def persisted?; @id.present? end
+  def to_param; @id && @id.to_s; end
+  def value
+    @id.nil? ? 'new #{self.class.name.downcase}' : '#{self.class.name.downcase} ##{@id}'
+  end
+    
+      def persisted?
+    false
+  end
 end
-
     
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
+        def types_as_json
+      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+    end
     
-          # Fetches data from the GitHub API and yields a Page object for every page
-      # of data, without loading all of them into memory.
-      #
-      # method - The Octokit method to use for getting the data.
-      # args - Arguments to pass to the Octokit method.
-      #
-      # rubocop: disable GitlabSecurity/PublicSend
-      def each_page(method, *args, &block)
-        return to_enum(__method__, method, *args) unless block_given?
+        def version
+      context[:version]
+    end
     
-          def execute
-        retval =
-          if parallel?
-            parallel_import
-          else
-            sequential_import
-          end
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
     
-            # Builds a new issue using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
     
-            a_split <=> b_split
+        def handle_response(response)
+      if process_response?(response)
+        instrument 'process_response.scraper', response: response do
+          process_response(response)
+        end
       else
-        a.casecmp(b)
+        instrument 'ignore_response.scraper', response: response
+      end
+    rescue => e
+      if Docs.rescue_errors
+        instrument 'error.doc', exception: e, url: response.url
+        nil
+      else
+        raise e
+      end
+    end
+    
+        module MultipleBaseUrls
+      def self.included(base)
+        base.extend ClassMethods
+      end
+    
+          def mod
+        return @mod if defined?(@mod)
+        @mod = slug[/api\/([\w\-\.]+)\//, 1]
+        @mod.remove! 'angular2.' if @mod
+        @mod
       end
     end
   end
 end
 
     
-        alias_method :insert_before, :insert
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
+      describe '#system?' do
+    context 'when the pipeline is a system pipeline' do
+      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+    
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
       end
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-        private
-    
-            css('div.badges').each do |node|
-          node.name = 'p'
-        end
-    
-            css('.api-profile-header-structure > li').each do |node|
-          node.inner_html = node.inner_html.remove('- ')
-        end
-    
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-    When /^I (?:sign|log) in as '([^']*)'( on the mobile website)?$/ do |email, mobile|
-  @me = User.find_by_email(email)
-  @me.password ||= 'password'
-  automatic_login
-  confirm_login mobile
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
-    end
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-        it 'does not redirect if there is a valid invite token' do
-      code = InvitationCode.create(user: bob)
-      get :new, params: {invite: {token: code.token}}
-      expect(response).not_to be_redirect
+    shared_examples 'logstash update' do |logstash|
+  describe 'logstash-plugin update on #{logstash.hostname}' do
+    before :each do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
     
-    describe ResharesController, :type => :controller do
-  describe '#create' do
-    let(:post_request!) {
-      post :create, params: {root_guid: @post_guid}, format: :json
-    }
+          def bar_side
+        @bar_side.to_s
+      end
     
-      def framework_version
-    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
-  end
+    task :default => :test
     
-    require 'erb'
-require 'digest'
-require 'tempfile'
-require 'paperclip/version'
-require 'paperclip/geometry_parser_factory'
-require 'paperclip/geometry_detector_factory'
-require 'paperclip/geometry'
-require 'paperclip/processor'
-require 'paperclip/processor_helpers'
-require 'paperclip/tempfile'
-require 'paperclip/thumbnail'
-require 'paperclip/interpolations/plural_cache'
-require 'paperclip/interpolations'
-require 'paperclip/tempfile_factory'
-require 'paperclip/style'
-require 'paperclip/attachment'
-require 'paperclip/storage'
-require 'paperclip/callbacks'
-require 'paperclip/file_command_content_type_detector'
-require 'paperclip/media_type_spoof_detector'
-require 'paperclip/content_type_detector'
-require 'paperclip/glue'
-require 'paperclip/errors'
-require 'paperclip/missing_attachment_styles'
-require 'paperclip/validators'
-require 'paperclip/logger'
-require 'paperclip/helpers'
-require 'paperclip/has_attached_file'
-require 'paperclip/attachment_registry'
-require 'paperclip/filename_cleaner'
-require 'paperclip/rails_environment'
-    
-            if args.length > 0
-          attachment.to_s(args.first)
-        else
-          attachment
+        class MapGollum
+      def initialize(base_path)
+        @mg = Rack::Builder.new do
+          
+          map '/#{base_path}' do
+            run Precious::App
+          end
+          map '/' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          map '/*' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          
         end
       end
-    end
