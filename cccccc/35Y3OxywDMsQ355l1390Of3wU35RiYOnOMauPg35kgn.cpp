@@ -1,367 +1,392 @@
 
         
-        // Class to hold an array of bounding boxes for an output word and
-// the bounding box of the whole word.
-class BoxWord {
- public:
-  BoxWord();
-  explicit BoxWord(const BoxWord& src);
-  ~BoxWord() = default;
+        void CacheImpl::setAndRetain(void *Key, void *Value, size_t Cost) {
+  cache_set_and_retain(static_cast<cache_t*>(Impl), Key, Value, Cost);
+}
+    
+        if (node->Further || node->Right) {
+      IndentScope ms(this, (childKind == ChildKind::Right ||
+                            childKind == ChildKind::Further ||
+                            childKind == ChildKind::Root) ? '  ' : '| ');
+    }
+    
+    % for start_code_point, end_code_point, value in break_table.property_value_ranges:
+%   if start_code_point == 0:
+  if (C <= ${end_code_point})
+%   else:
+  if (C >= ${start_code_point} && C <= ${end_code_point})
+%   end
+    return GraphemeClusterBreakProperty::${value};
+% end
+    
+    const char *Demangle::getNodeKindString(swift::Demangle::Node::Kind k) {
+  switch (k) {
+#define NODE(ID)                                                               \
+  case Node::Kind::ID:                                                         \
+    return #ID;
+#include 'swift/Demangling/DemangleNodes.def'
+  }
+  return 'Demangle::Node::Kind::???';
+}
+    
+      InvocationInfo constructInvocation(const LinkJobAction &job,
+                                     const JobContext &context) const override;
+    
+      llvm::SetVector<StringRef> Files;
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
     }
     
     
-    {  // Stores all the source points in the order they were given and their
-  // halfwidths, if any.
-  GenericVector<PointWidth> pts_;
-  // Stores the computed perpendicular distances of (some of) the pts_ from a
-  // given vector (assuming it goes through the origin, making it a line).
-  // Since the distances may be a subset of the input points, and get
-  // re-ordered by the nth_item function, the original point is stored
-  // along side the distance.
-  GenericVector<DistPointPair> distances_;  // Distances of points.
-  // The squared length of the vector used to compute distances_.
-  double square_length_;
+    {} // namespace caffe2
+
+    
+        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 4));
+    }
+    input_blob_names.push_back(GO(4));
+    
+    workspace.ResetWorkspace()
+    
+    
+    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
+} // namespace caffe2
+
+    
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+    REGISTER_CUDA_OPERATOR(LC, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LCGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Expands to the name of the variable used to remember the names of
+// the defined tests in the given test case.
+# define GTEST_TYPED_TEST_CASE_P_STATE_(TestCaseName) \
+  gtest_typed_test_case_p_state_##TestCaseName##_
+    
+    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4,
+          typename T5>
+AssertionResult AssertPred5Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  const char* e5,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4,
+                                  const T5& v5) {
+  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+    }
+    
+    // Factory interface for death tests.  May be mocked out for testing.
+class DeathTestFactory {
+ public:
+  virtual ~DeathTestFactory() { }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test) = 0;
 };
     
+    // A handy wrapper around RemoveReference that works when the argument
+// T depends on template parameters.
+#define GTEST_REMOVE_REFERENCE_(T) \
+    typename ::testing::internal::RemoveReference<T>::type
     
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9>
+struct Templates9 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates8<T2, T3, T4, T5, T6, T7, T8, T9> Tail;
+};
+    
+    #include <string.h>
+    
+        E* element = new E(old_head->element());
+    delete old_head;
+    
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
 }
     
-    // Computes the Otsu threshold(s) for the given image rectangle, making one
-// for each channel. Each channel is always one byte per pixel.
-// Returns an array of threshold values and an array of hi_values, such
-// that a pixel value >threshold[channel] is considered foreground if
-// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
-// that there is no apparent foreground. At least one hi_value will not be -1.
-// Delete thresholds and hi_values with delete [] after use.
-// The return value is the number of channels in the input image, being
-// the size of the output thresholds and hi_values arrays.
-int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
-                  int** thresholds, int** hi_values);
+    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
+#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
     
-        int16_t accept_count();  //How many accepted?
-    
-    
-    {}  // namespace tesseract.
-    
-      void DeleteUnusedObjects() {
-    mu_.Lock();
-    for (int i = cache_.size() - 1; i >= 0; i--) {
-      if (cache_[i].count <= 0) {
-        delete cache_[i].object;
-        cache_.remove(i);
-      }
-    }
-    mu_.Unlock();
-  }
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-      virtual bool Next(void) {
-    // MxNet iterator is expected to return CPU-accessible memory
-    if (::caffe::Caffe::mode() != ::caffe::Caffe::CPU) {
-      ::caffe::Caffe::set_mode(::caffe::Caffe::CPU);
-      CHECK_EQ(::caffe::Caffe::mode(), ::caffe::Caffe::CPU);
-    }
-    caffe_data_layer_->Forward(bottom_, top_);
-    CHECK_GT(batch_size_, 0) << 'batch size must be greater than zero';
-    CHECK_EQ(out_.batch_size, batch_size_) << 'Internal Error: batch size mismatch';
-    }
-    
-     private:
-  /*!
-   * \brief Wait for all started threads to signal that they're ready
-   */
-  void WaitForReady() {
-    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
-      ptr->wait();
-    }
-  }
-    
-    /*!
- * \brief Iterator that normalize a image.
- *  It also applies a few augmention before normalization.
- */
-class ImageNormalizeIter : public IIterator<DataInst> {
+    // A thread pool interface for running callbacks.
+class ThreadPoolInterface {
  public:
-  explicit ImageNormalizeIter(IIterator<DataInst> *base)
-      : base_(base), meanfile_ready_(false) {
-  }
+  virtual ~ThreadPoolInterface() {}
     }
     
-      virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    InitParams(kwargs);
-    // use the kwarg to init batch loader
-    loader_->Init(kwargs);
-    iter.Init([this](DataBatch **dptr) {
-        if (!loader_->Next()) return false;
-        const TBlobBatch& batch = loader_->Value();
-        if (*dptr == nullptr) {
-          // allocate databatch
-          *dptr = new DataBatch();
-          (*dptr)->num_batch_padd = batch.num_batch_padd;
-          (*dptr)->data.resize(batch.data.size());
-          (*dptr)->index.resize(batch.batch_size);
-          for (size_t i = 0; i < batch.data.size(); ++i) {
-            auto dtype = param_.dtype
-                             ? param_.dtype.value()
-                             : batch.data[i].type_flag_;
-            (*dptr)->data.at(i) = NDArray(batch.data[i].shape_,
-                                          Context::CPU(), false,
-                                          dtype);
-          }
-        }
-        CHECK(batch.data.size() == (*dptr)->data.size());
-        // copy data over
-        for (size_t i = 0; i < batch.data.size(); ++i) {
-          CHECK_EQ((*dptr)->data.at(i).shape(), batch.data[i].shape_);
-          MSHADOW_TYPE_SWITCH(batch.data[i].type_flag_, DType, {
-              mshadow::Copy(((*dptr)->data)[i].data().FlatTo2D<cpu, DType>(),
-                        batch.data[i].FlatTo2D<cpu, DType>());
-          });
-          (*dptr)->num_batch_padd = batch.num_batch_padd;
-        }
-        if (batch.inst_index) {
-          std::copy(batch.inst_index,
-                    batch.inst_index + batch.batch_size,
-                    (*dptr)->index.begin());
-        }
-       return true;
-      },
-      [this]() { loader_->BeforeFirst(); });
-  }
-    
-    template<typename xpu, typename OP>
-void EvalOneHot_(const TBlob &index, const TBlob &rhs,
-                 TBlob *ret, RunContext ctx) {
-  LOG(INFO) << 'The operator onehot_encode is deprecated; use one_hot instead.';
-  using namespace mshadow::expr;
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  // TODO(eric): support mixed type encoding, i.e. int index and float rhs.
-  CHECK_EQ(ret->type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  CHECK_EQ(rhs.type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  CHECK_EQ(index.type_flag_, mshadow::default_type_flag)
-    << 'one_hot_encode only support float32 as input/output';
-  ret->get<xpu, 2, real_t>(s) =
-    one_hot_encode(index.get<xpu, 1, real_t>(s),
-                   rhs.shape_[1]);
-}
-    
-    template<>
-Operator* CreateOp<gpu>(NDArrayOpParam param) {
-  return new NDArrayOp<gpu>(param);
-}
-#endif  // MXNET_USE_CUDA
-    
-    template<typename xpu>
-void ConcatCSRImpl(const nnvm::NodeAttrs& attrs,
-                   const OpContext& ctx,
-                   const std::vector<NDArray>& inputs,
-                   const std::vector<OpReqType>& req,
-                   const std::vector<NDArray>& outputs) {
-  using namespace mshadow;
-  using namespace mxnet_op;
-  using namespace csr;
-  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
-  int num_args = param.num_args;
-  int concat_dim = param.dim;
-  CHECK_EQ(inputs.size(), num_args);
-  CHECK_EQ(outputs.size(), 1);
-  int axis = CheckAxis(concat_dim, inputs[0].shape().ndim());
-  CHECK_EQ(axis, 0) << 'concat of csr ndarrays on axis 1 is not supported.';
-  if (req[0] == kNullOp) return;
-  Stream<xpu>* s = ctx.get_stream<xpu>();
-  nnvm::dim_t nnz = 0;
-  for (int i=0; i < num_args; i++) {
-    nnz += inputs[i].aux_shape(kIdx)[0];
-  }
-  const NDArray& out = outputs[0];
-  if (nnz == 0) {
-    FillZerosCsrImpl(s, out);
+    void Timepoint2Timespec(const system_clock::time_point& from,
+                        gpr_timespec* to) {
+  system_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == system_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
     return;
   }
-  const nnvm::dim_t num_rows = out.shape()[0];
-  out.CheckAndAllocAuxData(kIndPtr, Shape1(num_rows+1));
-    }
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
-      }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
-    }
-  }
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
 }
     
     
-    {
-    {  // declare parameters
-  DMLC_DECLARE_PARAMETER(LearnerTrainParam) {
-    DMLC_DECLARE_FIELD(seed).set_default(0).describe(
-        'Random number seed during training.');
-    DMLC_DECLARE_FIELD(seed_per_iteration)
-        .set_default(false)
-        .describe(
-            'Seed PRNG determnisticly via iterator number, '
-            'this option will be switched on automatically on distributed '
-            'mode.');
-    DMLC_DECLARE_FIELD(dsplit)
-        .set_default(DataSplitMode::kAuto)
-        .add_enum('auto', DataSplitMode::kAuto)
-        .add_enum('col', DataSplitMode::kCol)
-        .add_enum('row', DataSplitMode::kRow)
-        .describe('Data split mode for distributed training.');
-    DMLC_DECLARE_FIELD(tree_method)
-        .set_default(TreeMethod::kAuto)
-        .add_enum('auto', TreeMethod::kAuto)
-        .add_enum('approx', TreeMethod::kApprox)
-        .add_enum('exact', TreeMethod::kExact)
-        .add_enum('hist', TreeMethod::kHist)
-        .add_enum('gpu_exact', TreeMethod::kGPUExact)
-        .add_enum('gpu_hist', TreeMethod::kGPUHist)
-        .describe('Choice of tree construction method.');
-    DMLC_DECLARE_FIELD(nthread).set_default(0).describe(
-        'Number of threads to use.');
-    DMLC_DECLARE_FIELD(disable_default_eval_metric)
-        .set_default(0)
-        .describe('flag to disable default metric. Set to >0 to disable');
-    DMLC_DECLARE_FIELD(gpu_id)
-        .set_default(0)
-        .describe('The primary GPU device ordinal.');
-    DMLC_DECLARE_FIELD(n_gpus)
-        .set_default(0)
-        .set_lower_bound(-1)
-        .describe('Number of GPUs to use for multi-gpu algorithms.');
+    {  base = baseA;
+}
+    
+    private:
+  void parse(Object *tree);
+    
+      // Get alignment
+  PageTransitionAlignment getAlignment() { return alignment; }
+    
+      // indirect reference or integer
+  } else if (buf1.isInt()) {
+    num = buf1.getInt();
+    shift();
+    if (buf1.isInt() && buf2.isCmd('R')) {
+      obj->initRef(num, buf1.getInt());
+      shift();
+      shift();
+    } else {
+      obj->initInt(num);
+    }
+    
+    
+    {  font = state->getFont();
+  state->getFontTransMat(&m11, &m12, &m21, &m22);
+  simpleTTF = fabs(m11 + m22) < 0.01 &&
+              m11 > 0 &&
+              fabs(m12) < 0.01 &&
+              fabs(m21) < 0.01 &&
+              fabs(state->getHorizScaling() - 1) < 0.001 &&
+              (font->getType() == fontTrueType ||
+	       font->getType() == fontTrueTypeOT) &&
+              (font->getEmbeddedFontID(&embRef) ||
+	       font->getExtFontFile() ||
+	       (font->getName() &&
+		(dfp = globalParams->getDisplayFont(font)) &&
+		dfp->kind == displayFontTT));
+  if (simpleTTF) {
+    //~ need to create a FoFiTrueType object, and check for a Unicode cmap
   }
-};
-}  // namespace xgboost
+  if (state->getRender() != 0 || !simpleTTF) {
+    gdi = gFalse;
+  }
+}
     
-      /**
-   * \fn  virtual void Predictor::Init(const std::vector<std::pair<std::string,
-   * std::string> >&cfg ,const std::vector<std::shared_ptr<DMatrix> > &cache);
-   *
-   * \brief Configure and register input matrices in prediction cache.
-   *
-   * \param cfg   The configuration.
-   * \param cache Vector of DMatrix's to be used in prediction.
-   */
+      //----- text drawing
+  virtual void beginStringOp(GfxState *state);
+  virtual void endStringOp(GfxState *state);
+  virtual GBool beginType3Char(GfxState *state, double x, double y,
+			       double dx, double dy,
+			       CharCode code, Unicode *u, int uLen);
+  virtual void endType3Char(GfxState *state);
     
-    static void ImGui_ImplGlfw_UpdateGamepads()
+    
+    
+    MediaParameters::~MediaParameters() {
+}
+    
+      enum MediaWindowRelativeTo {
+    windowRelativeToDocument = 0,
+    windowRelativeToApplication,
+    windowRelativeToDesktop
+  };
+    
+    void SplashOutputDev::type3D1(GfxState *state, double wx, double wy,
+			      double llx, double lly, double urx, double ury) {
+  double *ctm;
+  T3FontCache *t3Font;
+  SplashColor color;
+  double xt, yt, xMin, xMax, yMin, yMax, x1, y1;
+  int i, j;
+    }
+    
+      SplashGouraudPattern(GBool bDirectColorTranslation, GfxState *state, GfxGouraudTriangleShading *shading);
+    
+    PDFDoc *
+StdinPDFDocBuilder::buildPDFDoc(const GooString &uri, GooString *ownerPassword,
+                                    GooString *userPassword, void *guiDataA)
 {
-    ImGuiIO& io = ImGui::GetIO();
-    memset(io.NavInputs, 0, sizeof(io.NavInputs));
-    if ((io.ConfigFlags & ImGuiConfigFlags_NavEnableGamepad) == 0)
-        return;
+  Object obj;
     }
     
-            // Start the Dear ImGui frame
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-        if (g_pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, g_frameContext[0].CommandAllocator, NULL, IID_PPV_ARGS(&g_pd3dCommandList)) != S_OK ||
-        g_pd3dCommandList->Close() != S_OK)
-        return false;
+    DMLC_REGISTER_PARAMETER(MyLogisticParam);
     
     
-    {        ImGui::Render();
+    {    if (learner->AllowLazyCheckPoint()) {
+      rabit::LazyCheckPoint(learner.get());
+    } else {
+      rabit::CheckPoint(learner.get());
     }
-    
-        // Create Window Surface
-    VkSurfaceKHR surface;
-    VkResult err;
-    if (SDL_Vulkan_CreateSurface(window, g_Instance, &surface) == 0)
-    {
-        printf('Failed to create Vulkan surface.\n');
-        return 1;
+    version += 1;
+    CHECK_EQ(version, rabit::VersionNumber());
+  }
+  // always save final round
+  if ((param.save_period == 0 || param.num_round % param.save_period != 0) &&
+      param.model_out != 'NONE' &&
+      rabit::GetRank() == 0) {
+    std::ostringstream os;
+    if (param.model_out == 'NULL') {
+      os << param.model_dir << '/'
+         << std::setfill('0') << std::setw(4)
+         << param.num_round << '.model';
+    } else {
+      os << param.model_out;
     }
+    std::unique_ptr<dmlc::Stream> fo(
+        dmlc::Stream::Create(os.str().c_str(), 'w'));
+    learner->Save(fo.get());
+  }
     
+        std::unique_ptr<DHTPeerAnnounceStorage> peerAnnounceStorage;
     
-    {    // Destroy SDL mouse cursors
-    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
-        SDL_FreeCursor(g_MouseCursors[cursor_n]);
-    memset(g_MouseCursors, 0, sizeof(g_MouseCursors));
-}
+    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
     
-      static Data data_;
-  static Data data6_;
-    
-    #include 'DHTNode.h'
-#include 'DHTBucket.h'
-#include 'DHTBucketTree.h'
-#include 'DHTTaskQueue.h'
-#include 'DHTTaskFactory.h'
-#include 'DHTTask.h'
-#include 'util.h'
-#include 'LogFactory.h'
-#include 'Logger.h'
-#include 'fmt.h'
-    
-    
-    {} // namespace aria2
+    #include 'common.h'
     
     DHTTaskExecutor::~DHTTaskExecutor() = default;
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
+    #endif // D_DHT_TASK_EXECUTOR_H
+
+    
+    bool DHTTokenTracker::validateToken(const std::string& token,
+                                    const unsigned char* infoHash,
+                                    const std::string& ipaddr,
+                                    uint16_t port) const
 {
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
+  for (auto& elem : secret_) {
+    if (generateToken(infoHash, ipaddr, port, elem) == token) {
+      return true;
+    }
+  }
+  return false;
 }
-    
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
-    
-    
-    {  void updateTokenSecret();
-};
     
     namespace aria2 {
     }
+    
+      // returns 'unknown'
+  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
+    
+    DNSCache::CacheEntry& DNSCache::CacheEntry::operator=(const CacheEntry& c)
+{
+  if (this != &c) {
+    hostname_ = c.hostname_;
+    port_ = c.port_;
+    addrEntries_ = c.addrEntries_;
+  }
+  return *this;
+}
+    
+    
+    {  return Merge(column_family, key_slice, value_slice);
+}
+    
+     protected:
+  WriteController* controller_;
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+      // Set a snapshot at start of transaction
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
+    
+      // Initialize pointer options for each column family
+  for (size_t i = 0; i < loaded_cf_descs.size(); ++i) {
+    auto* loaded_bbt_opt = reinterpret_cast<BlockBasedTableOptions*>(
+        loaded_cf_descs[0].options.table_factory->GetOptions());
+    // Expect the same as BlockBasedTableOptions will be loaded form file.
+    assert(loaded_bbt_opt->block_size == bbt_opts.block_size);
+    // However, block_cache needs to be manually initialized as documented
+    // in rocksdb/utilities/options_util.h.
+    loaded_bbt_opt->block_cache = cache;
+  }
+  // In addition, as pointer options are initialized with default value,
+  // we need to properly initialized all the pointer options if non-defalut
+  // values are used before calling DB::Open().
+  assert(loaded_cf_descs[0].options.compaction_filter == nullptr);
+  loaded_cf_descs[0].options.compaction_filter = compaction_filter.get();
+    
+      // Put key-value
+  s = db->Put(WriteOptions(), 'key1', 'value');
+  assert(s.ok());
+  std::string value;
+  // get value
+  s = db->Get(ReadOptions(), 'key1', &value);
+  assert(s.ok());
+  assert(value == 'value');
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+      // Insert to page cache
+  //
+  // page_key   Identifier to identify a page uniquely across restarts
+  // data       Page data
+  // size       Size of the page
+  virtual Status Insert(const Slice& key, const char* data,
+                        const size_t size) = 0;
+    
+    #pragma once
+    
+    
+    {  virtual ~Checkpoint() {}
+};
+    
+    
+    {}  // namespace rocksdb
+
+    
+    
+    {  if (!s.ok()) {
+    rocksdb::RocksDBExceptionJni::ThrowNew(env, s);
+  }
+}
