@@ -1,144 +1,166 @@
 
         
-        DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
+        int16_t word_blob_quality(WERD_RES *word, ROW *row);
+void reject_whole_page(PAGE_RES_IT &page_res_it);
     
-    void AutolinkExtractJobAction::anchor() {}
-    
-    
-    {public:
-  Windows(const Driver &D, const llvm::Triple &Triple) : ToolChain(D, Triple) {}
-  ~Windows() = default;
-  std::string sanitizerRuntimeLibName(StringRef Sanitizer,
-                                      bool shared = true) const override;
+    class OrientationDetector {
+ public:
+  OrientationDetector(const GenericVector<int>* allowed_scripts,
+                      OSResults* results);
+  bool detect_blob(BLOB_CHOICE_LIST* scores);
+  int get_orientation();
+ private:
+  OSResults* osr_;
+  const GenericVector<int>* allowed_scripts_;
 };
     
+    // Creates a box file string from a unichar string, TBOX and page number.
+void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
+                    STRING* box_str);
     
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
+    
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
+    
+    STRING ParagraphModel::ToString() const {
+  char buffer[200];
+  const STRING &alignment = ParagraphJustificationToString(justification_);
+  snprintf(buffer, sizeof(buffer),
+           'margin: %d, first_indent: %d, body_indent: %d, alignment: %s',
+           margin_, first_indent_, body_indent_, alignment.string());
+  return STRING(buffer);
 }
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace strings
-}  // namespace protobuf
-}  // namespace google
 
     
-    #include <ostream>
-#include <stdio.h>
-#include <string>
-#include <utility>
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
     
-    TEST(StatusOr, TestPointerDefaultCtor) {
-  StatusOr<int*> thing;
-  EXPECT_FALSE(thing.ok());
-  EXPECT_EQ(Status::UNKNOWN, thing.status());
+    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
+  if (b->idx.named.grpc_server_stats_bin != nullptr) {
+    ServerStatsDeserialize(
+        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
+            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
+        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
+        elapsed_time);
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
+  }
 }
     
-    #include <google/protobuf/io/gzip_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
+    namespace grpc {
+    }
     
-    class DataStripper {
+    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
+// The units of the stats should be the same.
+std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+    
+    // A thread pool interface for running callbacks.
+class ThreadPoolInterface {
  public:
-  void StripMessage(Message *message) {
-    std::vector<const FieldDescriptor*> set_fields;
-    const Reflection* reflection = message->GetReflection();
-    reflection->ListFields(*message, &set_fields);
-    }
+  virtual ~ThreadPoolInterface() {}
     }
     
-    
-    {
-    {
-    {}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    
-    {}  // namespace leveldb
-    
-    #include 'db/filename.h'
-#include 'leveldb/env.h'
-#include 'leveldb/table.h'
-#include 'util/coding.h'
-    
-      static size_t ByteSize(const WriteBatch* batch) { return batch->rep_.size(); }
-    
-    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
-    
-    
-    {  Byte t1(bytes + 2);
-  uint32_t t = t1.get_byte(3, 5);
-  x <<= 5;
-  x |= t;
-  double ret = x * CLUSTER_DIST_RES + CLUSTER_DIST_LONG_MIN;
-  return ret;
+    TEST(DenseColumnWithMissing, Test) {
+  auto dmat = CreateDMatrix(100, 1, 0.5);
+  GHistIndexMatrix gmat;
+  gmat.Init((*dmat).get(), 256);
+  ColumnMatrix column_matrix;
+  column_matrix.Init(gmat, 0.2);
+  auto col = column_matrix.GetColumn(0);
+  for (auto i = 0ull; i < col.Size(); i++) {
+    if (col.IsMissing(i)) continue;
+    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
+              col.GetGlobalBinIdx(i));
+  }
+  delete dmat;
 }
     
-      x <<= 4;
-  x |= t;
+    namespace xgboost {
+/*!
+ * \brief interface of evaluation metric used to evaluate model performance.
+ *  This has nothing to do with training, but merely act as evaluation purpose.
+ */
+class Metric {
+ protected:
+  LearnerTrainParam const* tparam_;
+    }
+    }
     
-    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
     
-    
-    {
-    {}  // namespace planning
-}  // namespace apollo
+    {#define XGBOOST_REGISTER_PREDICTOR(UniqueId, Name)      \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::PredictorReg& \
+      __make_##PredictorReg##_##UniqueId##__ =          \
+          ::dmlc::Registry<::xgboost::PredictorReg>::Get()->__REGISTER__(Name)
+}  // namespace xgboost
 
     
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+    UBool ScriptSet::contains(const ScriptSet &other) const {
+    ScriptSet t(*this);
+    t.intersect(other);
+    return (t == other);
+}
     
-    // config detail: {'name': 'latitude_seconds', 'offset': 0.0, 'precision': 1.0,
-// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 23,
-// 'type': 'int', 'order': 'motorola', 'physical_unit': 'sec'}
-int Latlonheadingrpt82::latitude_seconds(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+    U_NAMESPACE_BEGIN
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
+    
+    #endif
+
+    
+    U_NAMESPACE_END
+    
+        // We don't need to check that the row count is >= 1, since all 2d arrays have at
+    // least one row
+    fNumberFormat = NumberFormat::createInstance(locale, status);
+    if (fNumberFormat != NULL && U_SUCCESS(status))
+    {
+        fixNumberFormatForDates(*fNumberFormat);
+        //fNumberFormat->setLenient(TRUE); // Java uses a custom DateNumberFormat to format/parse
     }
+    
+    /**
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
+ * and return the pointer.
+ */
+UnicodeReplacer* StringMatcher::toReplacer() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
+  
+  return nonconst_base;
+}
+    
+        IMGUI_API bool BuildFontAtlas(ImFontAtlas* atlas, unsigned int extra_flags = 0);
+    
+        {
+        D3D12_COMMAND_QUEUE_DESC desc = {};
+        desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+        desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+        desc.NodeMask = 1;
+        if (g_pd3dDevice->CreateCommandQueue(&desc, IID_PPV_ARGS(&g_pd3dCommandQueue)) != S_OK)
+            return false;
+    }
+    
+            ID3D12GraphicsCommandList* cmdList = NULL;
+        hr = g_pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAlloc, NULL, IID_PPV_ARGS(&cmdList));
+        IM_ASSERT(SUCCEEDED(hr));
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
