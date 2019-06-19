@@ -1,152 +1,89 @@
 
         
-            def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-
+        
+class GroupChat(Chat):
     
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
-        '''
-        return self.long_desc()
+        def get_people(self, ids):
+        results = []
+        for id in ids:
+            if id in self.people:
+                results.append(self.people[id])
+        return results
     
+        def __init__(self):
+        self.head = None
+        self.tail = None
     
-class _BenchServer(object):
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
     
+        requires_project = False
+    crawler_process = None
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
     
-    from scrapy.exceptions import NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.boto import is_botocore
-from .http import HTTPDownloadHandler
+    from importlib import import_module
+from os.path import join, dirname, abspath, exists, splitext
     
-    import six
-from w3lib import html
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        if not crawler.settings.getbool('COOKIES_ENABLED'):
-            raise NotConfigured
-        return cls(crawler.settings.getbool('COOKIES_DEBUG'))
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
     
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-def write_version(version):
-    '''Update Home Assistant constant file with new version.'''
-    with open('homeassistant/const.py') as fil:
-        content = fil.read()
+        # Round in the units appropriate
+    if precision == PRECISION_HALVES:
+        temperature = round(temperature * 2) / 2.0
+    elif precision == PRECISION_TENTHS:
+        temperature = round(temperature, 1)
+    # Integer as a fall back (PRECISION_WHOLE)
+    else:
+        temperature = round(temperature)
     
-    def add_fast_rcnn_outputs(model, blob_in, dim):
-    '''Add RoI classification and bounding box regression output ops.'''
-    # Box classification layer
-    model.FC(
-        blob_in,
-        'cls_score',
-        dim,
-        model.num_classes,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    if not model.train:  # == if test
-        # Only add softmax when testing; during training the softmax is combined
-        # with the label cross entropy loss for numerical stability
-        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
-    # Box regression layer
-    num_bbox_reg_classes = (
-        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
-    )
-    model.FC(
-        blob_in,
-        'bbox_pred',
-        dim,
-        num_bbox_reg_classes * 4,
-        weight_init=gauss_fill(0.001),
-        bias_init=const_fill(0.0)
-    )
-    
-        if not model.train or cfg.MODEL.FASTER_RCNN:
-        # Proposals are needed during:
-        #  1) inference (== not model.train) for RPN only and Faster R-CNN
-        #  OR
-        #  2) training for Faster R-CNN
-        # Otherwise (== training for RPN only), proposals are not needed
-        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
-        model.GenerateProposals(
-            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
-            ['rpn_rois', 'rpn_roi_probs'],
-            anchors=anchors,
-            spatial_scale=spatial_scale
-        )
-    
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-    bg_inds = np.where(
-        (max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
-        (max_overlaps >= cfg.TRAIN.BG_THRESH_LO)
-    )[0]
-    # Compute number of background RoIs to take from this image (guarding
-    # against there being fewer than desired)
-    bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
-    bg_rois_per_this_image = np.minimum(bg_rois_per_this_image, bg_inds.size)
-    # Sample foreground regions without replacement
-    if bg_inds.size > 0:
-        bg_inds = npr.choice(
-            bg_inds, size=bg_rois_per_this_image, replace=False
-        )
-    
-        # Map up to original set of anchors
-    labels = data_utils.unmap(labels, total_anchors, inds_inside, fill=-1)
-    bbox_targets = data_utils.unmap(bbox_targets, total_anchors, inds_inside, fill=0)
+        elif bump_type == 'dev':
+        # Convert 0.67.3 to 0.67.4.dev0
+        # Convert 0.67.3.b5 to 0.67.4.dev0
+        # Convert 0.67.3.dev0 to 0.67.3.dev1
+        if version.is_devrelease:
+            to_change['dev'] = ('dev', version.dev + 1)
+        else:
+            to_change['pre'] = ('dev', 0)
+            to_change['release'] = _bump_release(version.release, 'minor')
     
     
-if __name__ == '__main__':
-    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
-    c2_utils.import_detectron_ops()
-    assert 'BatchPermutation' in workspace.RegisteredOperators()
-    logging_utils.setup_logging(__name__)
-    unittest.main()
-
+def test_setitem_callable():
+    # GH 12533
+    s = pd.Series([1, 2, 3, 4], index=list('ABCD'))
+    s[lambda x: 'A'] = -1
+    tm.assert_series_equal(s, pd.Series([-1, 2, 3, 4], index=list('ABCD')))
     
+    from pandas import DataFrame, MultiIndex, Series, date_range
+from pandas.util import testing as tm
     
-def main(args=None):
-    args = parse_args(args)
-    fetch(args.version)
+    		return current.data
     
-    
-def test_setitem_other_callable():
-    # GH 13299
-    inc = lambda x: x + 1
-    
-    
-# define abstract base classes to enable isinstance type checking on our
-# objects
-def create_pandas_abc_type(name, attr, comp):
-    @classmethod
-    def _check(cls, inst):
-        return getattr(inst, attr, '_typ') in comp
-    
-        data = b'x' * 65535
-    b = packb(data, use_bin_type=True)
-    assert len(b) == len(data) + 3
-    assert b[0:1] == header
-    assert b[1:3] == b'\xff\xff'
-    assert b[3:] == data
-    assert unpackb(b) == data
+    from setuptools import setup, find_packages
+from codecs import open
+from os import path
+import itchat
