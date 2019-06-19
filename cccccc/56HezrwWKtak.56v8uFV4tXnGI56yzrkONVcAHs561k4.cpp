@@ -1,220 +1,162 @@
 
         
-        
-    {
-    {    output() = 'A(m, 0) == A(m-1, 1)';
-  }
-};
+        REGISTER_GRADIENT(Sub, GetSubGradient);
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-
+    ```
     
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
-    
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
-    
-    class RandomAccessFile;
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
-}
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    Writer::Writer(WritableFile* dest, uint64_t dest_length)
-    : dest_(dest), block_offset_(dest_length % kBlockSize) {
-  InitTypeCrc(type_crc_);
-}
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size / 5 - 1048576);
-}
-    
-    
-    {  // crc32c values for all supported record types.  These are
-  // pre-computed to reduce the overhead of computing the crc of the
-  // record type stored in the header.
-  uint32_t type_crc_[kMaxRecordType + 1];
-};
-    
-    
-    {  Env* const env_;
-  const std::string dbname_;
-  const Options& options_;
-  Cache* cache_;
-};
-    
-      // Given a key, return an approximate byte offset in the file where
-  // the data for that key begins (or would begin if the key were
-  // present in the file).  The returned value is in terms of file
-  // bytes, and so includes effects like compression of the underlying data.
-  // E.g., the approximate offset of the last key in the table will
-  // be close to the file length.
-  uint64_t ApproximateOffsetOf(const Slice& key) const;
-    
-      // Add key,value to the table being constructed.
-  // REQUIRES: key is after any previously added key according to comparator.
-  // REQUIRES: Finish(), Abandon() have not been called
-  void Add(const Slice& key, const Slice& value);
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-      for (auto& e : idx.outputs()) {
-    ++ref_count[idx.entry_id(e)];
-  }
-  for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    for (auto &e : idx[nid].inputs) {
-      ++ref_count[idx.entry_id(e)];
-    }
-  }
-    
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+    #endif // CAFFE2_OPERATORS_JSD_OP_H_
 
     
     
-    {  // creat mean image.
-  inline void CreateMeanImg(void) {
-    if (param_.verbose) {
-      LOG(INFO) << 'Cannot find ' << param_.mean_img
-                << ': create mean image, this will take some time...';
+    {} // namespace caffe2
+
+    
+    // Like ASSERT_EXIT, but continues on to successive tests in the
+// test case, if any:
+# define EXPECT_EXIT(statement, predicate, regex) \
+    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_NONFATAL_FAILURE_)
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25>
+internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25> Values(T1 v1,
+    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11,
+    T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19,
+    T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25) {
+  return internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>(v1,
+      v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17,
+      v18, v19, v20, v21, v22, v23, v24, v25);
+}
+    
+    // Makes sure this header is not included before gtest.h.
+#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
+# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
+#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
+    
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    
+    template <GTEST_3_TYPENAMES_(T)>
+inline GTEST_3_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2) {
+  return GTEST_3_TUPLE_(T)(f0, f1, f2);
+}
+    
+    
+// This sample shows how to write a more complex unit test for a class
+// that has multiple member functions.
+//
+// Usually, it's a good idea to have one test for each method in your
+// class.  You don't have to do that exactly, but it helps to keep
+// your tests organized.  You may also throw in additional tests as
+// needed.
+    
+    namespace grpc {
     }
-    double start = dmlc::GetTime();
-    size_t imcnt = 1;  // NOLINT(*)
-    CHECK(this->Next_()) << 'input iterator failed.';
-    meanimg_.Resize(outimg_.shape_);
-    mshadow::Copy(meanimg_, outimg_);
-    while (this->Next_()) {
-      meanimg_ += outimg_;
-      imcnt += 1;
-      double elapsed = dmlc::GetTime() - start;
-      if (imcnt % 10000L == 0 && param_.verbose) {
-        LOG(INFO) << imcnt << ' images processed, ' << elapsed << ' sec elapsed';
-      }
+    
+    #include 'absl/strings/str_cat.h'
+#include 'absl/strings/string_view.h'
+#include 'opencensus/stats/stats.h'
+#include 'src/core/lib/surface/call.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+#include 'src/cpp/ext/filters/census/measures.h'
+    
+      static void OnDoneSendInitialMetadataCb(void* user_data, grpc_error* error);
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetString(name_, value_);
     }
-    meanimg_ *= (1.0f / imcnt);
-    // save as mxnet python compatible format.
-    TBlob tmp = meanimg_;
-    {
-      std::unique_ptr<dmlc::Stream> fo(dmlc::Stream::Create(param_.mean_img.c_str(), 'w'));
-      NDArray::Save(fo.get(),
-                    {NDArray(tmp, 0)},
-                    {'mean_img'});
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    namespace grpc {
+namespace load_reporter {
     }
-    if (param_.verbose) {
-      LOG(INFO) << 'Save mean image to ' << param_.mean_img << '..';
     }
-    meanfile_ready_ = true;
-    this->BeforeFirst();
-  }
+    
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+    
+    {  // Schedule the given callback for execution.
+  virtual void Add(const std::function<void()>& callback) = 0;
 };
     
-    #ifndef MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-#define MXNET_KVSTORE_GRADIENT_COMPRESSION_H_
-#include <dmlc/parameter.h>
+    using json = nlohmann::json;
+    
+    using json = nlohmann::json;
+    
+    #endif  // !defined(ROCKSDB_LITE) && !defined(OS_WIN)
+
+    
+    #include <cstdio>
 #include <string>
-#include <utility>
-#include <vector>
-#include 'mxnet/ndarray.h'
     
-    // C callback that can be used by TVM to extract
-// the WrapAsyncCall function.
-extern 'C' MXNET_DLL int MXTVMBridge(TVMFunctionHandle pregister) {
-  using tvm::runtime::PackedFunc;
-  const PackedFunc& fregister =
-      *static_cast<PackedFunc*>(pregister);
-  fregister('WrapAsyncCall', PackedFunc(mxnet::WrapAsyncCall));
-  return 0;
+    
+    {
+    {}  // namespace experimental
+}  // namespace rocksdb
+
+    
+    #ifndef ROCKSDB_LITE
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    setCallbackTriggerIntervalSize
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_BackupableDBOptions_setCallbackTriggerIntervalSize(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle,
+    jlong jcallback_trigger_interval_size) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  bopt->callback_trigger_interval_size =
+      static_cast<uint64_t>(jcallback_trigger_interval_size);
+}
+    
+    /*
+ * Class:     org_rocksdb_Checkpoint
+ * Method:    dispose
+ * Signature: (J)V
+ */
+void Java_org_rocksdb_Checkpoint_disposeInternal(JNIEnv* /*env*/,
+                                                 jobject /*jobj*/,
+                                                 jlong jhandle) {
+  auto* checkpoint = reinterpret_cast<rocksdb::Checkpoint*>(jhandle);
+  assert(checkpoint != nullptr);
+  delete checkpoint;
+}
+    
+    
+    {    return app.exec();
 }
 
     
-      ~DHTRoutingTable();
+    #include <unordered_map>
+#include <list>
+#include <utility>
+#include <memory>
+#include <time.h>
     
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+            ASSERT_NE(ptr, nullptr);
     
-    class DHTTaskExecutor {
-private:
-  int numConcurrent_;
-  std::vector<std::shared_ptr<DHTTask>> execTasks_;
-  std::deque<std::shared_ptr<DHTTask>> queue_;
-    }
     
-    #include 'common.h'
-    
-      _InternalExtensionInfo__isset __isset;
-    
-      std::string content;
-  auto status = readFile('/etc/exports', content);
-  if (!status.ok()) {
-    VLOG(1) << 'Error reading /etc/exports: ' << status.toString();
-    return {};
-  }
-    
-    // A global char* and an SQL function to access its current value
-// from within an SQL statement. This program used to use the
-// sqlite_exec_printf() API to substitute a string into an SQL statement.
-// The correct way to do this with sqlite3 is to use the bind API, but
-// since the shell is built around the callback paradigm it would be a lot
-// of work. Instead just use this hack, which is quite harmless.
-static const char* zShellStatic = nullptr;
-void shellstaticFunc(sqlite3_context* context,
-                     int argc,
-                     sqlite3_value** /* argv */) {
-  (void)argc;
-  assert(0 == argc);
-  assert(zShellStatic);
-  sqlite3_result_text(context, zShellStatic, -1, SQLITE_STATIC);
+    {
+    {        ASSERT_EQ(WEXITSTATUS(status), 0);
+    });
 }
+
     
-    #include <osquery/utils/expected/expected.h>
-#include <osquery/utils/system/posix/errno.h>
+    #include 'swoole.h'
+#include <string>
+    
+        ret = p.write(&p, (void*) SW_STRS('hello world1'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world2'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world3'));
+    ASSERT_GT(ret, 0);
