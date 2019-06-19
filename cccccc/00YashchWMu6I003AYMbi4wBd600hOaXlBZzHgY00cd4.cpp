@@ -1,224 +1,177 @@
 
         
-            void cmpNE(const Size2D &size,
-               const u32 *src0Base, ptrdiff_t src0Stride,
-               const u32 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride);
+        
+    {
+    {
+    {
+    {}  // namespace cpp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
-    void absDiff(const Size2D &size,
-             const u8 *src0Base, ptrdiff_t src0Stride,
-             const u8 *src1Base, ptrdiff_t src1Stride,
-             u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u8>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    
-    {    void operator() (const u8 * src0, const u8 * src1, u8 * dst) const
-    {
-        dst[0] = src0[0] ^ src1[0];
-    }
-};
-    
-    bool isBlurF32Supported(const Size2D &size, s32 cn, BORDER_MODE border)
-{
-    return isSupportedConfiguration() &&
-           cn > 0 && cn <= 4 &&
-           size.width*cn >= 4 && size.height >= 2 &&
-           (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REFLECT101 ||
-            border == BORDER_MODE_REFLECT ||
-            border == BORDER_MODE_REPLICATE ||
-            border == BORDER_MODE_WRAP);
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
 }
     
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * srcy = internal::getRowPtr(srcyBase, srcyStride, i);
-        const u8 * srcu = internal::getRowPtr(srcuBase, srcuStride, i);
-        const u8 * srcv = internal::getRowPtr(srcvBase, srcvStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t syj = 0u, sj = 0u, dj = 0u;
-    }
-    
-        rshiftConstFunc funcs[16] =
-    {
-        rshiftConst<0>,
-        rshiftConst<1>,
-        rshiftConst<2>,
-        rshiftConst<3>,
-        rshiftConst<4>,
-        rshiftConst<5>,
-        rshiftConst<6>,
-        rshiftConst<7>,
-        rshiftConst<8>,
-        rshiftConst<9>,
-        rshiftConst<10>,
-        rshiftConst<11>,
-        rshiftConst<12>,
-        rshiftConst<13>,
-        rshiftConst<14>,
-        rshiftConst<15>
-    }, func = funcs[shift];
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        //vertical convolution
-        ptrdiff_t idx_rm2 = internal::borderInterpolate(i - 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-    }
-    
-    inline float32x4_t vrecpq_f32(float32x4_t val)
-{
-    float32x4_t reciprocal = vrecpeq_f32(val);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    return reciprocal;
+    bool Status::operator==(const Status& x) const {
+  return error_code_ == x.error_code_ &&
+      error_message_ == x.error_message_;
 }
     
-            for ( ; x < width; ++x)
-        {
-            // make extrapolation for the last elements
-            if (x + 1 >= width)
-            {
-                if (border == BORDER_MODE_CONSTANT)
-                    nextx = borderValue * 3;
-                else if (border == BORDER_MODE_REPLICATE)
-                    nextx = srow2[x] + srow1[x] + srow0[x];
-            }
-            else
-            {
-                nextx = (srow2 ? srow2[x + 1] : borderValue) +
-                                 srow1[x + 1] +
-                        (srow0 ? srow0[x + 1] : borderValue);
-            }
+    #include <fstream>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+    }
+    }
     }
     
-    namespace caffe {
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+    ELISTIZE(PARA)
+    
+      // Return whether this model is likely to agree with the other model on most
+  // paragraphs they are marked.
+  bool Comparable(const ParagraphModel &other) const;
+    
+    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    
+    #include <grpc/support/port_platform.h>
+    
+    namespace grpc {
     }
     
-    /**
- Forward declare boost::thread instead of including boost/thread.hpp
- to avoid a boost/NVCC issues (#1009, #1010) on OSX.
- */
-namespace boost { class thread; }
+      // Fixed size offsets for field ID start positions during encoding.  Field
+  // data immediately follows.
+  enum FieldIdOffset {
+    kTraceIdOffset = kVersionIdSize,
+    kSpanIdOffset = kTraceIdOffset + kFieldIdSize + kTraceIdSize,
+    kTraceOptionsOffset = kSpanIdOffset + kFieldIdSize + kSpanIdSize,
+  };
     
-    template <typename Dtype>
-inline void Layer<Dtype>::Backward(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down,
-    const vector<Blob<Dtype>*>& bottom) {
-  switch (Caffe::mode()) {
-  case Caffe::CPU:
-    Backward_cpu(top, propagate_down, bottom);
-    break;
-  case Caffe::GPU:
-    Backward_gpu(top, propagate_down, bottom);
-    break;
-  default:
-    LOG(FATAL) << 'Unknown caffe mode.';
+    Status ProtoServerReflection::GetFileContainingExtension(
+    ServerContext* context, const ExtensionRequest* request,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
   }
-}
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-    #define SIZE    100
-    
-        ::testing::InitGoogleTest(&argc, argv);
-    int retval = RUN_ALL_TESTS();
-    kill(server_pid, SIGTERM);
-    int status = 0;
-    wait(&status);
-    
-        ret = swSocket_unix_sendto(fd1,sock2_path,test_data,strlen(test_data));
-    ASSERT_GT(ret, 0);
-    
-        for (long i = 0; i < N; i++)
-    {
-        ASSERT_EQ(swThreadPool_dispatch(&pool, (void*) &result, sizeof(result)), SW_OK);
     }
     
-        sigemptyset(&curset);
-    sigprocmask(SIG_BLOCK, NULL, &curset);
-    ret = sigismember(&curset,SIGUSR1);
-    ASSERT_EQ(ret, 0);
+    #endif  // GPR_APPLE
+
+    
+    namespace grpc {
+namespace load_reporter {
+    }
+    }
+    
+    bool CallFuncN::initWithFunction(const std::function<void (Node *)> &func)
+{
+    _functionN = func;
+    return true;
+}
+    
+    NS_CC_BEGIN
+//
+// singleton stuff
+//
+typedef struct _hashElement
+{
+    struct _ccArray     *actions;
+    Node                *target;
+    int                 actionIndex;
+    Action              *currentAction;
+    bool                currentActionSalvaged;
+    bool                paused;
+    UT_hash_handle      hh;
+} tHashElement;
+    
+        /** The alpha threshold.
+     * The content is drawn only where the stencil have pixel with alpha greater than the alphaThreshold.
+     * Should be a float between 0 and 1.
+     * This default to 1 (so alpha test is disabled).
+     *
+     * @return The alpha threshold value,Should be a float between 0 and 1.
+     */
+    GLfloat getAlphaThreshold() const;
+    
+    /** Set the alpha threshold. 
+     * 
+     * @param alphaThreshold The alpha threshold.
+     */
+    void setAlphaThreshold(GLfloat alphaThreshold);
+    
+    /** Inverted. If this is set to true,
+     * the stencil is inverted, so the content is drawn where the stencil is NOT drawn.
+     * This default to false.
+     *
+     * @return If the clippingNode is Inverted, it will be return true.
+     */
+    bool isInverted() const;
+    
+    /** Set the ClippingNode whether or not invert.
+     *
+     * @param inverted A bool Type,to set the ClippingNode whether or not invert.
+     */
+    void setInverted(bool inverted);
+    
+    // Define size_type appropriately to allow backward-compatibility
+// use of the old size_t interface class
+#if defined(CL_HPP_ENABLE_SIZE_T_COMPATIBILITY)
+namespace cl {
+    namespace compatibility {
+        /*! \brief class used to interface between C++ and
+        *  OpenCL C calls that require arrays of size_t values, whose
+        *  size is known statically.
+        */
+        template <int N>
+        class size_t
+        {
+        private:
+            size_type data_[N];
+    }
+    }
+    }
+    
+        public:
+        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
+                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
