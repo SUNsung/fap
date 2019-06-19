@@ -1,154 +1,76 @@
 
         
-        #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+            Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
     
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
     
-    
-    {  input_for_decode =
-      'longFieldNameIsLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong1000';
-  desired_output_for_decode =
-      'long_field_name_is_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_1000';
-  expected = string('\x04\xA5\xA4\xA2\xBF\x1F\x0E\x84\x0', 9);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
+    {    return result;
 }
     
-    namespace google {
-namespace protobuf {
-namespace io {
-    }
-    }
-    }
-    
-    void MapLiteTestUtil::ExpectArenaMapFieldsSet(
-    const unittest::TestArenaMapLite& message) {
-  MapTestUtilImpl::ExpectArenaMapFieldsSet<unittest::MapEnumLite,
-                                           unittest::MAP_ENUM_BAR_LITE,
-                                           unittest::MAP_ENUM_BAZ_LITE>(
-      message);
-}
-    
-    // Author: brianolson@google.com (Brian Olson)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Test program to verify that GzipInputStream is compatible with command line
-// gunzip or java.util.zip.GzipInputStream
-//
-// Reads gzip stream on standard input and writes decompressed data to standard
-// output.
-    
-    class DataStripper {
- public:
-  void StripMessage(Message *message) {
-    std::vector<const FieldDescriptor*> set_fields;
-    const Reflection* reflection = message->GetReflection();
-    reflection->ListFields(*message, &set_fields);
-    }
+        if (radixtype >= HEX_RADIX && radixtype <= BIN_RADIX)
+    {
+        m_radix = NRadixFromRadixType(radixtype);
+        // radixtype is not even saved
     }
     
-    #include <sstream>
-#include <algorithm>
+    class IUnaryCommand : public IOperatorCommand
+{
+public:
+    virtual const std::shared_ptr<CalculatorVector<int>>& GetCommands() const = 0;
+    virtual void SetCommands(int command1, int command2) = 0;
+};
     
-    void PSOutputDev::doPath(GfxPath *path) {
-  GfxSubpath *subpath;
-  double x0, y0, x1, y1, x2, y2, x3, y3, x4, y4;
-  int n, m, i, j;
-    }
-    
-    int PSTokenizer::lookChar() {
-  if (charBuf < 0) {
-    charBuf = (*getCharFunc)(data);
+    TEST(SparsePage, PushCSCAfterTranspose) {
+  const int n_entries = 9;
+  std::unique_ptr<DMatrix> dmat = CreateSparsePageDMatrix(n_entries, 64UL);
+  const int ncols = dmat->Info().num_col_;
+  SparsePage page; // Consolidated sparse page
+  for (const auto &batch : dmat->GetRowBatches()) {
+    // Transpose each batch and push
+    SparsePage tmp = batch.GetTranspose(ncols);
+    page.PushCSC(tmp);
   }
-  return charBuf;
-}
+    }
     
-      int lookChar();
-  void consumeChar();
-  int getChar();
+    /*!
+ * \brief builder for histograms of gradient statistics
+ */
+class GHistBuilder {
+ public:
+  // initialize builder
+  inline void Init(size_t nthread, uint32_t nbins) {
+    nthread_ = nthread;
+    nbins_ = nbins;
+    thread_init_.resize(nthread_);
+  }
+    }
     
-    #include <config.h>
+      std::vector<std::vector<unsigned>> groups;
+  std::vector<std::vector<bool>> conflict_marks;
+  std::vector<size_t> group_nnz;
+  std::vector<size_t> group_conflict_cnt;
+  const auto max_conflict_cnt
+    = static_cast<size_t>(param.max_conflict_rate * nrow);
     
-      // Attempt to authorize the document, using the supplied
-  // authorization data (which may be NULL).  Returns true if
-  // successful (i.e., if at least the right to open the document was
-  // granted).
-  virtual GBool authorize(void *authData) = 0;
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <xgboost/generic_parameters.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
     
     
-    {  return newsound;
-}
+    {}  // namespace xgboost
+#endif  // XGBOOST_TREE_UPDATER_H_
 
     
-      Object *getObject() { return streamObj; }
-  Stream *getStream();
-    
-    #include <config.h>
-    
-    
-    {
-    {                // Reset the window.
-                m_loss.first = m_loss.second;
-                m_metric.first = m_metric.second;
-                m_samples.first = m_samples.second;
-                m_updates.first = m_updates.second;
-            }
-        }
-    
-        template <typename ElementType>
-    /*static*/ void Value::AppendSparseSequenceData(const NDArrayViewPtr& sequenceData, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<char>& nonZeroValues, size_t maxSequenceLengthInCols)
-    {
-        size_t existingNumNonZeroValues = nonZeroValues.size() / sizeof(ElementType);
-        std::vector<SparseIndexType> currentSequencePaddedColStarts(maxSequenceLengthInCols);
-    }
-    
-            int firstLbl = -1;
-        for (int ik = 0; ik < lbls.GetNumRows(); ik++)
-            if (lbls(ik, 0) != 0)
-            {
-                firstLbl = ik;
-                break;
-            }
-    
-    template <class ElemType>
-EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
-    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
-{
-    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
-}
-    
-    
-    {        auto parent = iter->second;
-        auto& aliasInfo = m_aliasGroups[parent];
-        if (aliasInfo.pMatrixPtr == nullptr)
-        {
-            // first allocation for the group
-            aliasInfo.pMatrixPtr = pMatrixPtr;
-            RequestAllocate(deviceId, pMatrixPtr, matrixSize, mbScale, false);
-        }
-        else
-        {
-            auto aliasRootMatrixPtr = (shared_ptr<Matrix<ElemType>>*)aliasInfo.pMatrixPtr;
-            *pMatrixPtr = *aliasRootMatrixPtr;
-            GetMemInfo<ElemType>(aliasRootMatrixPtr)->pMatrixPtrs.push_back(pMatrixPtr);
-        }
-    }
-    
-    template<class ElemType>
-void OptimizedRNNStackNode<ElemType>::Validate(bool isFinalValidationPass)
-{
-    // support an internal legacy version
-    if (m_legacySwapInputsPending)
-    {
-        ::swap(m_inputs[0], m_inputs[1]);
-        m_legacySwapInputsPending = false;
-    }
-    // N.B.: I need both of these lines.
-    Base::Validate(isFinalValidationPass);
-    InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
-    }
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
