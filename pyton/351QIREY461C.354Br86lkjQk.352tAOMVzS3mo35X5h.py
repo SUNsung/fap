@@ -1,5 +1,8 @@
 
         
-        #A Python script to generate a single PDF document with all the tldr pages. It works by generating 
-#intermediate HTML files from existing md files using Python-markdown, applying desired formatting 
-#through CSS, and finally rendering them as PDF. There is no LaTeX dependency for generating the PDF.
+            elif bump_type == 'patch':
+        # Convert 0.67.3 to 0.67.4
+        # Convert 0.67.3.b5 to 0.67.3
+        # Convert 0.67.3.dev0 to 0.67.3
+        to_change['dev'] = None
+        to_change['pre'] = None
