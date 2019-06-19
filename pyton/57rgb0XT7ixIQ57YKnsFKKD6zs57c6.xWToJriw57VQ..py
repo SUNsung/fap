@@ -1,143 +1,146 @@
 
         
-        
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+          Args:
+    hps: The dictionary of hyperparameters.
+    output_fname: The prefix of the file in which to save the generated
+      samples.
+    datasets: A dictionary of data dictionaries.  The dataset dict is simply a
+      name(string)-> data dictionary mapping (See top of lfads.py).
+  '''
+  if not output_fname:
+    output_fname = 'model_params'
+  else:
+    output_fname = output_fname + '_model_params'
+  fname = os.path.join(hps.lfads_save_dir, output_fname)
+  print('Writing model parameters to: ', fname)
+  # save the optimizer params as well
+  model = build_model(hps, kind='write_model_params', datasets=datasets)
+  model_params = model.eval_model_parameters(use_nested=False,
+                                             include_strs='LFADS')
+  utils.write_data(fname, model_params, compression=None)
+  print('Done.')
+    
+    flags = tf.app.flags
+flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
+                    'Directory for saving data.')
+flags.DEFINE_string('datafile_name', 'thits_data',
+                    'Name of data file for input case.')
+flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
+flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
+flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
+flags.DEFINE_integer('C', 100, 'Number of conditions')
+flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
+flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
+flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
+flags.DEFINE_float('train_percentage', 4.0/5.0,
+                   'Percentage of train vs validation trials')
+flags.DEFINE_integer('nreplications', 40,
+                     'Number of noise replications of the same underlying rates.')
+flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
+flags.DEFINE_float('x0_std', 1.0,
+                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
+flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
+flags.DEFINE_float('dt', 0.010, 'Time bin')
+flags.DEFINE_float('input_magnitude', 20.0,
+                   'For the input case, what is the value of the input?')
+flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
+FLAGS = flags.FLAGS
+    
+    # write out the dataset
+write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
+print ('Saved to ', os.path.join(FLAGS.save_dir,
+                                 FLAGS.datafile_name + '_' + dataset_name))
 
     
-    import pytest
     
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
+def split_list_by_inds(data, inds1, inds2):
+  '''Take the data, a list, and split it up based on the indices in inds1 and
+  inds2.
+  Args:
+    data: the list of data to split
+    inds1, the first list of indices
+    inds2, the second list of indices
+  Returns: a 2-tuple of two lists.
+  '''
+  if data is None or len(data) == 0:
+    return [], []
+  else:
+    dout1 = [data[i] for i in inds1]
+    dout2 = [data[i] for i in inds2]
+    return dout1, dout2
     
-    # TODO: ensure that history changes.
-
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+def write_unmasked_log(log, id_to_word, sequence_eval):
+  '''Helper function for logging evaluated sequences without mask.'''
+  indices_arr = np.asarray(sequence_eval)
+  samples = helper.convert_to_human_readable(id_to_word, indices_arr,
+                                             FLAGS.batch_size)
+  for sample in samples:
+    log.write(sample + '\n')
+  log.flush()
+  return samples
     
-            def reset(path):
-            os.mkdir('d')
-            with tarfile.TarFile(path, 'w') as archive:
-                for file in ('a', 'b', 'c', 'd/e'):
-                    with open(file, 'w') as f:
-                        f.write('*')
     
-        '''
-    is_windows = is_windows
-    config_dir = DEFAULT_CONFIG_DIR
-    stdin = sys.stdin
-    stdin_isatty = stdin.isatty()
-    stdin_encoding = None
-    stdout = sys.stdout
-    stdout_isatty = stdout.isatty()
-    stdout_encoding = None
-    stderr = sys.stderr
-    stderr_isatty = stderr.isatty()
-    colors = 256
-    if not is_windows:
-        if curses:
-            try:
-                curses.setupterm()
-                colors = curses.tigetnum('colors')
-            except curses.error:
-                pass
+def create_critic_train_op(hparams, critic_loss, global_step):
+  '''Create Discriminator train op.'''
+  with tf.name_scope('train_critic'):
+    critic_optimizer = tf.train.AdamOptimizer(hparams.critic_learning_rate)
+    output_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('critic')
+    ]
+    
+    
+def dis_fwd_bidirectional(hparams):
+  '''Returns the *forward* PTB Variable name to MaskGAN Variable dictionary
+  mapping.  This is a highly restrictive function just for testing. This is for
+  the bidirectional_zaremba discriminator.
+    
+    
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
+    
     else:
-        # noinspection PyUnresolvedReferences
-        import colorama.initialise
-        stdout = colorama.initialise.wrap_stream(
-            stdout, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        stderr = colorama.initialise.wrap_stream(
-            stderr, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        del colorama
+    text_type = str
+    string_types = (str,)
+    xrange = range
     
     
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
+def add_force_split(word):
+    global Force_Split_Words
+    Force_Split_Words.add(word)
     
+        def __cut_detail(self, sentence):
+        blocks = re_han_detail.split(sentence)
+        for blk in blocks:
+            if re_han_detail.match(blk):
+                for word in self.__cut(blk):
+                    yield word
+            else:
+                tmp = re_skip_detail.split(blk)
+                for x in tmp:
+                    if x:
+                        if re_num.match(x):
+                            yield pair(x, 'm')
+                        elif re_eng.match(x):
+                            yield pair(x, 'eng')
+                        else:
+                            yield pair(x, 'x')
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    file_name = args[0]
     
-        def test_print_overridable_when_stdout_redirected(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
-        assert HTTP_OK in r
-
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
     
+            print('Two or more elements')
+        data = [5, 1, 7, 2, 6, -3, 5, 7, -1]
+        assert_equal(merge_sort.sort(data), sorted(data))
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
+            print('Two or more elements')
+        data = [5, 1, 7, 2, 6, -3, 5, 7, -10]
+        assert_equal(func(data), sorted(data))
     
-            self.cert_verify(conn, request.url, verify, cert)
-        url = self.request_url(request, proxies)
-        self.add_headers(request, stream=stream, timeout=timeout, verify=verify, cert=cert, proxies=proxies)
+            print('Test: Multiple dequeue in a row')
+        assert_equal(queue.dequeue(), 1)
+        assert_equal(queue.dequeue(), 2)
     
-        def _find(self, name, domain=None, path=None):
-        '''Requests uses this method internally to get cookie values.
-    
-            # Carefully reconstruct the network location
-        netloc = auth or ''
-        if netloc:
-            netloc += '@'
-        netloc += host
-        if port:
-            netloc += ':' + str(port)
-    
-            #: SSL Verification default.
-        self.verify = True
-    
-    '''
-requests.api
-~~~~~~~~~~~~
-    
-        @classmethod
-    def setUpClass(cls):
-        requires('gui')
-        cls.root = Tk()
-        cls.root.withdraw()
-        cls.dialog = About(cls.root, _utest=True)
-    
-    Cela ressemble à un excellent recipie[1] déjeuner.
-    
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
-    
-    # register get_operator_module(); make public functions accessible via proxy
-MyManager.register('operator', get_operator_module)
+            print('Success: test_sort_stack')
