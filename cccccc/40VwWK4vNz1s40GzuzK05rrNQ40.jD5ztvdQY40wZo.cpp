@@ -1,168 +1,125 @@
 
         
-        namespace tensorflow {
+        
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
+  }
+};
+    
+    namespace caffe2 {
     }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
     
-    namespace tensorflow {
-    }
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
     
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
     
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        // Initialize OpenGL loader
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-    bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-    bool err = glewInit() != GLEW_OK;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-    bool err = gladLoadGL() == 0;
-#else
-    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
-    if (err)
-    {
-        fprintf(stderr, 'Failed to initialize OpenGL loader!\n');
-        return 1;
-    }
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+    {}  // namespace grpc
 
     
+      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
+               grpc_closure* then_call_closure) override;
     
-    {        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                // FIXME: Not honoring ClipRect fields.
-                CIwMaterial* pCurrentMaterial = IW_GX_ALLOC_MATERIAL();
-                pCurrentMaterial->SetShadeMode(CIwMaterial::SHADE_FLAT);
-                pCurrentMaterial->SetCullMode(CIwMaterial::CULL_NONE);
-                pCurrentMaterial->SetFiltering(false);
-                pCurrentMaterial->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
-                pCurrentMaterial->SetDepthWriteMode(CIwMaterial::DEPTH_WRITE_NORMAL);
-                pCurrentMaterial->SetAlphaTestMode(CIwMaterial::ALPHATEST_DISABLED);
-                pCurrentMaterial->SetTexture((CIwTexture*)pcmd->TextureId);
-                IwGxSetMaterial(pCurrentMaterial);
-                IwGxDrawPrims(IW_GX_TRI_LIST, (uint16*)idx_buffer, pcmd->ElemCount);
-            }
-            idx_buffer += pcmd->ElemCount;
-        }
-        IwGxFlush();
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
+}
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
     }
     
-        // Setup time step (we don't use SDL_GetTicks() because it is using millisecond resolution)
-    static Uint64 frequency = SDL_GetPerformanceFrequency();
-    Uint64 current_time = SDL_GetPerformanceCounter();
-    io.DeltaTime = g_Time > 0 ? (float)((double)(current_time - g_Time) / frequency) : (float)(1.0f / 60.0f);
-    g_Time = current_time;
-    
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
-}
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-    void ExtensionConcurrentClient::call(ExtensionResponse& _return, const std::string& registry, const std::string& item, const ExtensionPluginRequest& request)
-{
-  int32_t seqid = send_call(registry, item, request);
-  recv_call(_return, seqid);
-}
-    
-      _Extension_ping_presult__isset __isset;
-    
-    int32_t ExtensionManagerConcurrentClient::send_deregisterExtension(const ExtensionRouteUUID uuid)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin('deregisterExtension', ::apache::thrift::protocol::T_CALL, cseqid);
-    }
+    void CoreStatsToProto(const grpc_stats_data& core, grpc::core::Stats* proto);
+void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core);
     
     
-    {};
-    
-    void ExtensionException::__set_uuid(const ExtensionRouteUUID val) {
-  this->uuid = val;
-}
-std::ostream& operator<<(std::ostream& out, const ExtensionException& obj)
-{
-  obj.printTo(out);
-  return out;
-}
-    
-    #include <osquery/core.h>
-#include <osquery/utils/expected/expected.h>
-#include <osquery/utils/status/status.h>
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    TEST(ByteTest, CopyConstructor) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  Byte another_value(value);
-  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
-  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
-}
-    
-    double ObjectExtendedInfo60D::longitude_accel(const std::uint8_t* bytes,
-                                              int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    #include 'modules/drivers/radar/conti_radar/protocol/object_quality_info_60c.h'
-#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
-    
-    
-    {  double ret = x * 0.001000;
+    {  Byte t1(bytes + 5);
+  uint32_t t = t1.get_byte(6, 2);
+  x <<= 2;
+  x |= t;
+  double ret = x * CLUSTER_VREL_RES + CLUSTER_VREL_LONG_MIN;
   return ret;
 }
     
-    class Accelrpt68Test : public ::testing::Test {
- public:
-  virtual void SetUp() {}
-};
+      Byte t1(bytes + 2);
+  int32_t t = t1.get_byte(5, 3);
     
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
+}
+    
+    void Brakemotorrpt170::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_motor_current(
+      motor_current(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_shaft_position(
+      shaft_position(bytes, length));
+}
+    
+    TEST(Brake61Test, General) {
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
     }
     
-    #include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+      x <<= 24;
+  x >>= 24;
