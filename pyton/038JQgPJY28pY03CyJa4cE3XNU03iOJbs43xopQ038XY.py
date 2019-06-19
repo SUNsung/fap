@@ -1,176 +1,65 @@
 
         
-            possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
+    
+        config['implicit_content_type'] = 'form'
+    config.save()
+    config.load()
+    assert 'implicit_content_type' not in config
+    assert config['default_options'] == ['--form']
     
     
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
+    
+        def _get_path(self):
+        '''Return the config file path without side-effects.'''
+        raise NotImplementedError()
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
+    
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
+    
+        def test_fd_command_line_interface(self):
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    # Show the picture
+pil_image.show()
 
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
-    from collections import Callable, Mapping, MutableMapping, OrderedDict
-    
-    EXAMPLES = '''
-- cloudwatchevent_rule:
-    name: MyCronTask
-    schedule_expression: 'cron(0 20 * * ? *)'
-    description: Run my scheduled task
-    targets:
-      - id: MyTargetId
-        arn: arn:aws:lambda:us-east-1:123456789012:function:MyFunction
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
     
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-    try:
-    from ast import literal_eval
-    HAS_PYTHON26 = True
-except ImportError:
-    HAS_PYTHON26 = False
-    
-            if module.check_mode:
-            firewall_policy_id = get_firewall_policy(oneandone_conn, firewall_id)
-            if (firewall_rules and firewall_policy_id):
-                return True
-            return False
-    
-        def role_remove_privilege(self, name, item):
-        return self._post_json(method='role_remove_privilege', name=name, item={'privilege': item})
-    
-    
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        # Handle multiple log files
-    logs = p['path'].split(',')
-    logs = filter(None, logs)
-    
-        with patch.object(hass.loop, 'stop'):
-        yield from hass.async_stop()
-    assert len(calls) == 1
-    
-        num = len(roidb)
-    filtered_roidb = [entry for entry in roidb if is_valid(entry)]
-    num_after = len(filtered_roidb)
-    logger.info('Filtered {} roidb entries: {} -> {}'.
-                format(num - num_after, num, num_after))
-    return filtered_roidb
-    
-    
-# ---------------------------------------------------------------------------- #
-# FPN level info for stages 5, 4, 3, 2 for select models (more can be added)
-# ---------------------------------------------------------------------------- #
-    
-        # output name is prefix + '_branch1_gn'
-    return model.ConvGN(
-        blob_in,
-        prefix + '_branch1',
-        dim_in,
-        dim_out,
-        kernel=1,
-        group_gn=get_group_gn(dim_out),
-        stride=stride,
-        pad=0,
-        group=1,
-    )
-    
-    
-def add_single_scale_rpn_losses(model):
-    '''Add losses for a single scale RPN model (i.e., no FPN).'''
-    # Spatially narrow the full-sized RPN label arrays to match the feature map
-    # shape
-    model.net.SpatialNarrowAs(
-        ['rpn_labels_int32_wide', 'rpn_cls_logits'], 'rpn_labels_int32'
-    )
-    for key in ('targets', 'inside_weights', 'outside_weights'):
-        model.net.SpatialNarrowAs(
-            ['rpn_bbox_' + key + '_wide', 'rpn_bbox_pred'], 'rpn_bbox_' + key
-        )
-    loss_rpn_cls = model.net.SigmoidCrossEntropyLoss(
-        ['rpn_cls_logits', 'rpn_labels_int32'],
-        'loss_rpn_cls',
-        scale=model.GetLossScale()
-    )
-    loss_rpn_bbox = model.net.SmoothL1Loss(
-        [
-            'rpn_bbox_pred', 'rpn_bbox_targets', 'rpn_bbox_inside_weights',
-            'rpn_bbox_outside_weights'
-        ],
-        'loss_rpn_bbox',
-        beta=1. / 9.,
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(
-        model, [loss_rpn_cls, loss_rpn_bbox]
-    )
-    model.AddLosses(['loss_rpn_cls', 'loss_rpn_bbox'])
-    return loss_gradients
-
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-                if k.find('retnet_cls_labels') >= 0:
-                tmp = []
-                # concat anchors within an image
-                for i in range(0, len(v), A):
-                    tmp.append(np.concatenate(v[i: i + A], axis=1))
-                # concat images
-                blobs[k] = np.concatenate(tmp, axis=0)
-            else:
-                # for the bbox branch elements [per FPN level],
-                #  we have the targets and the fg boxes locations
-                # in the shape: M x 4 where M is the number of fg locations in a
-                # given image at the current FPN level. For the given level,
-                # the bbox predictions will be. The elements in the list are in
-                # order [[a0, ..., a9], [a0, ..., a9]]
-                # Concatenate them to form M x 4
-                blobs[k] = np.concatenate(v, axis=0)
-    return True
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
