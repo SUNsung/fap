@@ -1,67 +1,96 @@
 
         
-          def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
+        def docs_name
+  '#{name}-docs'
 end
     
-          OptionParser.new do |opts|
-        opts.banner = 'See full documentation at http://capistranorb.com/.'
-        opts.separator ''
-        opts.separator 'Install capistrano in a project:'
-        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
-        opts.separator ''
-        opts.separator 'Show available tasks:'
-        opts.separator '    bundle exec cap -T'
-        opts.separator ''
-        opts.separator 'Invoke (or simulate invoking) a task:'
-        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
-        opts.separator ''
-        opts.separator 'Advanced options:'
+    # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
+# ------------------------------------------------------------------------
+def check_with_regex(content)
+  !content.to_s.match?(%r!{[{%]!)
+end
+    }
+    }
     
-          def add_roles(roles)
-        Array(roles).each { |role| add_role(role) }
-        self
-      end
-      alias roles= add_roles
+    def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
+end
     
-          def roles_for(names)
-        options = extract_options(names)
-        s = Filter.new(:role, names).filter(servers_by_key.values)
-        s.select { |server| server.select?(options) }
-      end
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-          def header
-        if @header.nil?
-          if page = @page.header
-            @header = page.text_data
-          else
-            @header = false
-          end
-        end
-        @header
-      end
-    
-          def next_link
-      end
-    end
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
 end
 
     
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
+    Mercenary.program(:jekyll) do |p|
+  p.version Jekyll::VERSION
+  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
+  p.syntax 'jekyll <subcommand> [options]'
     
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
+    
+          # Sets multiple keys to a given value.
+      #
+      # mapping - A Hash mapping the cache keys to their values.
+      # timeout - The time after which the cache key should expire.
+      def self.write_multiple(mapping, timeout: TIMEOUT)
+        Redis::Cache.with do |redis|
+          redis.multi do |multi|
+            mapping.each do |raw_key, value|
+              multi.set(cache_key_for(raw_key), value, ex: timeout)
+            end
+          end
+        end
+      end
+    
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
+        end
+    
+            each_object_to_import do |object|
+          repr = representation_class.from_api_response(object)
+    
+          def matches?(other)
+        # This matching logic must stay in sync with `Servers#add_host`.
+        hostname == other.hostname && port == other.port
+      end
+    
+    set_if_empty :default_env, {}
+set_if_empty :keep_releases, 5
+    
+    $redis = Redis.new
+    
+      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
+    
+      def permitted_attributes_for_update
+    %i[body_markdown receive_notifications]
   end
