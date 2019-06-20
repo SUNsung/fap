@@ -1,113 +1,106 @@
 
         
-        lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/version'
-    
-          super
+              path = File.expand_path('../../fixtures/helpers_missing', __dir__)
+      $:.unshift(path)
+      self.helpers_path = path
     end
     
-          def value_or_default
-        if response.empty?
-          default
-        else
-          response
+      def self.bundle(langs)
+    result = File.read(HIGHLIGHTJS_DIR + 'highlight.min.js')
+    langs.each do |lang|
+      begin
+        result << '\n' << File.read(HIGHLIGHTJS_DIR + 'languages/#{lang}.min.js')
+      rescue Errno::ENOENT
+        # no file, don't care
+      end
+    end
+    
+        def find_theme_extensions(theme_ids)
+      extensions = []
+    
+        auth_token = request.cookies[TOKEN_COOKIE] unless user_api_key || api_key
+    
+              body = response.body
+    
+            MergeRequest
+          .where(id: start_id..stop_id)
+          .where(latest_merge_request_diff_id: nil)
+          .each_batch(of: BATCH_SIZE) do |relation|
+    
+          def initialize(app)
+        @app = app
+      end
+    
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
+    
+          if options.has_key?(:only)
+        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
+      elsif options[:skip] == :all
+        @used_routes = []
+      else
+        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+      end
+    end
+    
+        # Recoverable takes care of resetting the user password and send reset instructions.
+    #
+    # ==Options
+    #
+    # Recoverable adds the following options to devise_for:
+    #
+    #   * +reset_password_keys+: the keys you want to use when recovering the password for an account
+    #   * +reset_password_within+: the time period within which the password must be reset or the token expires.
+    #   * +sign_in_after_reset_password+: whether or not to sign in the user automatically after a password reset.
+    #
+    # == Examples
+    #
+    #   # resets the user password and save the record, true if valid passwords are given, otherwise false
+    #   User.find(1).reset_password('password123', 'password123')
+    #
+    #   # creates a new token and send it with instructions about how to reset the password
+    #   User.find(1).send_reset_password_instructions
+    #
+    module Recoverable
+      extend ActiveSupport::Concern
+    
+                  <ol start='<%= frame.lineno %>' class='context' id='<%= id %>'
+                  onclick='toggle(<%= id %>);'>
+                <li class='context-line' id='context-<%= id %>'><code><%=
+                  h frame.context_line %></code></li>
+              </ol>
+    
+          def remove_bad_cookies(request, response)
+        return if bad_cookies.empty?
+        paths = cookie_paths(request.path)
+        bad_cookies.each do |name|
+          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
         end
       end
     
-          def scm_name
-        fetch(:scm)
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
       end
-    
-    # This example uses the API to create a package from local files
-# it also creates necessary init-scripts and systemd files so our executable can be used as a service
-    
-      def self.default_prefix
-    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
-    if npm_prefix.count('\n') > 0
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
-    elsif !File.directory?(npm_prefix)
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
-    end
-    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
-    npm_prefix
-  end
-    
-    # This provides PHP PEAR package support.
-#
-# This provides input support, but not output support.
-class FPM::Package::PEAR < FPM::Package
-  option '--package-name-prefix', 'PREFIX',
-    'Name prefix for pear package', :default => 'php-pear'
-    
-    # Support for python packages.
-#
-# This supports input, but not output.
-#
-# Example:
-#
-#     # Download the django python package:
-#     pkg = FPM::Package::Python.new
-#     pkg.input('Django')
-#
-class FPM::Package::Python < FPM::Package
-  # Flags '--foo' will be accessable  as attributes[:python_foo]
-  option '--bin', 'PYTHON_EXECUTABLE',
-    'The path to the python executable you wish to run.', :default => 'python'
-  option '--easyinstall', 'EASYINSTALL_EXECUTABLE',
-    'The path to the easy_install executable tool', :default => 'easy_install'
-  option '--pip', 'PIP_EXECUTABLE',
-    'The path to the pip executable tool. If not specified, easy_install ' \
-    'is used instead', :default => nil
-  option '--pypi', 'PYPI_URL',
-    'PyPi Server uri for retrieving packages.',
-    :default => 'https://pypi.python.org/simple'
-  option '--package-prefix', 'NAMEPREFIX',
-    '(DEPRECATED, use --package-name-prefix) Name to prefix the package ' \
-    'name with.' do |value|
-    logger.warn('Using deprecated flag: --package-prefix. Please use ' \
-                 '--package-name-prefix')
-    value
-  end
-  option '--package-name-prefix', 'PREFIX', 'Name to prefix the package ' \
-    'name with.', :default => 'python'
-  option '--fix-name', :flag, 'Should the target package name be prefixed?',
-    :default => true
-  option '--fix-dependencies', :flag, 'Should the package dependencies be ' \
-    'prefixed?', :default => true
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for tar.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-    module FPM; module Util; end; end
-    
-        def tmux_select_first_pane
-      '#{project.tmux} select-pane -t #{tmux_window_target}.#{panes.first.index + project.pane_base_index}'
-    end
-    
-      subject { instance }
-    
-    formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
-SimpleCov.start do
-  add_filter 'vendor/cache'
-end
-    
-            it 'returns two panes in an Array' do
-          expect(window.panes).to match [
-            a_pane.with(index: 0).and_commands('vim'),
-            a_pane.with(index: 1).and_commands(command1, command2)
-          ]
-        end
-      end
-    end
-  end
