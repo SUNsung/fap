@@ -1,228 +1,268 @@
 
         
-        
-    {    return;
-  }
-    
-      /// Retrieve the array of protocol conformances, which line up with the
-  /// requirements of the generic signature.
-  ArrayRef<ProtocolConformanceRef> getConformances() const {
-    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-  MutableArrayRef<ProtocolConformanceRef> getConformances() {
-    return MutableArrayRef<ProtocolConformanceRef>(
-                              getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-    
-      DefaultCacheKey CKey(Key, &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    if (Entry->second == Value)
-      return;
-    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
-    DCache.Entries.erase(Entry);
-  }
-    
-      if (*BufferPtr == '\n')
-    return 1;
-    
-      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = decl;
-    return info;
-  }
-    
-    
-    
-    void ModuleWrapJobAction::anchor() {}
-    
-    #ifndef SWIFT_DRIVER_TOOLCHAINS_H
-#define SWIFT_DRIVER_TOOLCHAINS_H
-    
-      /// Emits an error for each file in \p unusedPrimaryFiles.
-  ///
-  /// \returns true if \p unusedPrimaryFiles is non-empty.
-  bool diagnoseUnusedPrimaryFiles(std::set<StringRef> unusedPrimaryFiles);
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    #include <gtest/gtest.h>
-    
-    void MapLiteTestUtil::ExpectMapFieldsModified(
-    const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
-                                           unittest::MAP_ENUM_BAR_LITE,
-                                           unittest::MAP_ENUM_FOO_LITE>(
-      message);
-}
-    
-    template<typename A>
-struct type_equals_<A, A> : public true_ {
-};
-    
-    
-    {  // Yes || Yes == true.
-  value = or_<true_, true_>::value;
-  EXPECT_TRUE(value);
-  // Yes || No == true.
-  value = or_<true_, false_>::value;
-  EXPECT_TRUE(value);
-  // No || Yes == true.
-  value = or_<false_, true_>::value;
-  EXPECT_TRUE(value);
-  // No || No == false.
-  value = or_<false_, false_>::value;
-  EXPECT_FALSE(value);
-}
-    
-    
-    {
-    {    reflection->MutableUnknownFields(message)->Clear();
-  }
- private:
-  virtual bool ShouldBeClear(const FieldDescriptor *field) = 0;
-};
-    
-    std::string ReadFile(const std::string& name) {
-  std::ifstream file(name.c_str());
-  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
-      << name
-      << '', please make sure you are running this command from the benchmarks'
-      << ' directory.\n';
-  return std::string((std::istreambuf_iterator<char>(file)),
-                     std::istreambuf_iterator<char>());
-}
-    
-    #include <string>
-#include <set>
-#include <vector>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/io/printer.h>
-    
-    #include <dmlc/registry.h>
-#include <xgboost/base.h>
-#include <xgboost/data.h>
-#include <functional>
-#include <string>
-#include <utility>
-#include <vector>
-#include '../../src/gbm/gblinear_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    SEXP XGBoosterEvalOneIter_R(SEXP handle, SEXP iter, SEXP dmats, SEXP evnames) {
-  const char *ret;
-  R_API_BEGIN();
-  CHECK_EQ(length(dmats), length(evnames))
-      << 'dmats and evnams must have same length';
-  int len = length(dmats);
-  std::vector<void*> vec_dmats;
-  std::vector<std::string> vec_names;
-  std::vector<const char*> vec_sptr;
-  for (int i = 0; i < len; ++i) {
-    vec_dmats.push_back(R_ExternalPtrAddr(VECTOR_ELT(dmats, i)));
-    vec_names.push_back(std::string(CHAR(asChar(VECTOR_ELT(evnames, i)))));
-  }
-  for (int i = 0; i < len; ++i) {
-    vec_sptr.push_back(vec_names[i].c_str());
-  }
-  CHECK_CALL(XGBoosterEvalOneIter(R_ExternalPtrAddr(handle),
-                                asInteger(iter),
-                                BeginPtr(vec_dmats),
-                                BeginPtr(vec_sptr),
-                                len, &ret));
-  R_API_END();
-  return mkString(ret);
-}
-    
-      inline static void LimitSizeLevel
-    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
-    size_t& nlevel = *out_nlevel;
-    size_t& limit_size = *out_limit_size;
-    nlevel = 1;
-    while (true) {
-      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
-      size_t n = (1ULL << nlevel);
-      if (n * limit_size >= maxn) break;
-      ++nlevel;
-    }
-    // check invariant
-    size_t n = (1ULL << nlevel);
-    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
-    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
-  }
-    
-    XGBOOST_REGISTER_OBJECTIVE(PairwiseRankObj, 'rank:pairwise')
-.describe('Pairwise rank objective.')
-.set_body([]() { return new PairwiseRankObj(); });
-    
-    
-    // exception type_error.304
-    try
-    {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-    int main()
+        void accumulate(const Size2D &size,
+                const u8 *srcBase, ptrdiff_t srcStride,
+                s16 *dstBase, ptrdiff_t dstStride)
 {
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    #include 'gtest/gtest.h'
     
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+    {
+    {
+    {            for (; j < size.width; j++)
+                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
+        }
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
     
-    /**
- * @file
- **/
-#include 'modules/planning/math/smoothing_spline/piecewise_linear_constraint.h'
+    struct BitwiseAnd
+{
+    typedef u8 type;
+    }
     
-    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
-  spline_func_ = spline_func;
-  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
-  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
-  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
+            int16x8_t dya = vabsq_s16(dy);
+        int16x8_t dxa = vabsq_s16(dx);
+        int16x8_t norm = vaddq_s16(dya, dxa);
+    
+    #ifndef CAROTENE_SRC_COMMON_HPP
+#define CAROTENE_SRC_COMMON_HPP
+    
+    bool isGaussianBlur5x5Supported(const Size2D &size, s32 cn, BORDER_MODE border)
+{
+    return isSupportedConfiguration() &&
+           cn > 0 && cn <= 4 &&
+           size.width >= 8 && size.height >= 2 &&
+           (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REFLECT101 ||
+            border == BORDER_MODE_REFLECT ||
+            border == BORDER_MODE_REPLICATE ||
+            border == BORDER_MODE_WRAP);
 }
     
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+      scoped_ptr<base::Value> value_option(
+      converter->FromV8Value(options, isolate->GetCurrentContext()));
+  if (!value_option.get() ||
+      !value_option->IsType(base::Value::TYPE_DICTIONARY))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'option' passed to AllocateObject')));
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+}
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    void MenuDelegate::ExecuteCommand(int command_id, int event_flags) {
+  if (command_id < 0)
+    return;
+    }
+    
+    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
+ public:
+  MenuDelegate(ObjectManager* object_manager);
+  ~MenuDelegate() override;
+    }
+    
+    void PointMenuPositionFunc(GtkMenu* menu,
+                           int* x,
+                           int* y,
+                           gboolean* push_in,
+                           gpointer userdata) {
+  *push_in = TRUE;
+    }
+    
+    void Menu::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    for(auto* item : menu_items_) {
+      item->UpdateKeys(focus_manager);
+    }
+  }
+}
+    
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+    
+    {}  // namespace nwapi
+    
+    void MenuItem::SetTooltip(const std::string& tooltip) {
+  is_modified_ = true;
+  tooltip_ = base::UTF8ToUTF16(tooltip);
+  if (menu_)
+    menu_->UpdateStates();
+}
+    
+    NwAppClearAppCacheFunction::~NwAppClearAppCacheFunction() {
+}
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+      //----- update text state
+  virtual void updateFont(GfxState *state);
+  virtual void updateTextMat(GfxState *state);
+  virtual void updateCharSpace(GfxState *state);
+  virtual void updateRender(GfxState *state);
+  virtual void updateRise(GfxState *state);
+  virtual void updateWordSpace(GfxState *state);
+  virtual void updateHorizScaling(GfxState *state);
+  virtual void updateTextPos(GfxState *state);
+  virtual void updateTextShift(GfxState *state, double shift);
+    
+    
+    {  links = new Links(getAnnots(&obj), catalog->getBaseURI());
+  obj.free();
+  return links;
+}
+    
+    #include <limits.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <assert.h>
+    
+      // Constructor.
+  Parser(XRef *xrefA, Lexer *lexerA, GBool allowStreamsA);
+    
+        Object *put(const Ref &ref);
+    Object *lookup(const Ref &ref, Object *obj);
+    
+    // TODO: SelectorRendition
+
+    
+      GBool getIsEmbedded() { return isEmbedded; }
+  Stream* getEmbbededStream() { return embeddedStream; }
+  // write embedded stream to file
+  void outputToFile(FILE*);
+    
+    #endif // ENABLE_PLUGINS
+
+    
+      // Attempt to authorize the document, using the supplied
+  // authorization data (which may be NULL).  Returns true if
+  // successful (i.e., if at least the right to open the document was
+  // granted).
+  virtual GBool authorize(void *authData) = 0;
+    
+    private:
+  // Create a sound. The Object obj is ensured to be a Stream with a Dict
+  Sound(Object *obj, bool readAttrs = true);
+    
+    
+    {    return g_ClipboardText;
+}
+    
+    #include 'imgui.h'      // IMGUI_API, ImFontAtlas
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+    
+    {        // see if our best match qualifies
+        if (best < 3) { // fast path literals
+            ++q;
+        } else if (best > 2  &&  best <= 0x80    &&  dist <= 0x100) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out(0x80 + best-1);
+            stb_out(dist-1);
+        } else if (best > 5  &&  best <= 0x100   &&  dist <= 0x4000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out2(0x4000 + dist-1);
+            stb_out(best-1);
+        } else if (best > 7  &&  best <= 0x100   &&  dist <= 0x80000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out3(0x180000 + dist-1);
+            stb_out(best-1);
+        } else if (best > 8  &&  best <= 0x10000 &&  dist <= 0x80000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out3(0x100000 + dist-1);
+            stb_out2(best-1);
+        } else if (best > 9                      &&  dist <= 0x1000000) {
+            if (best > 65536) best = 65536;
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            if (best <= 0x100) {
+                stb_out(0x06);
+                stb_out3(dist-1);
+                stb_out(best-1);
+            } else {
+                stb_out(0x04);
+                stb_out3(dist-1);
+                stb_out2(best-1);
+            }
+        } else {  // fallback literals if no match was a balanced tradeoff
+            ++q;
+        }
+    }
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    // Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void ResetDevice();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    
+    // Render function
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized
+    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
+        return;
+    }
+    
+        // Backup GL state
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
