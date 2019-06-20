@@ -1,138 +1,69 @@
 
         
-                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
+                      next env.machine(entry.name.to_sym, entry.provider.to_sym)
+            end
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
     
-              def render_component(builder)
-            builder.radio_button + builder.label
+            # This returns all the config classes for the various pushes.
+        #
+        # @return [Registry]
+        def push_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:push])
+            end
           end
-      end
-    end
-  end
-end
-
-    
-        str = str.dup
-    
-          it 'should not be fooled by 10 local code signing identities available' do
-        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
-        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
-        expect(FastlaneCore::UI).not_to(receive(:error))
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-    group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
-  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
-  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
-  cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
-  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
-  cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'nanaimo',               'Nanaimo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-        def exit_because_of_exception(ex)
-      if respond_to?(:deploying?) && deploying?
-        exit_deploy_because_of_exception(ex)
-      else
-        super
-      end
-    end
-    
-            if Rake::Task.task_defined?('deploy:check')
-          before 'deploy:check', '#{scm_name}:check'
         end
     
-          def ignored_node?(node)
-        # Same object found in array?
-        ignored_nodes.any? { |n| n.equal?(node) }
-      end
+            # This should return an action callable for the given name.
+        #
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
+        end
     
-    module RuboCop
-  module Cop
-    module Lint
-      # This cop checks for unused block arguments.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   do_something do |used, unused|
-      #     puts used
-      #   end
-      #
-      #   do_something do |bar|
-      #     puts :foo
-      #   end
-      #
-      #   define_method(:foo) do |bar|
-      #     puts :baz
-      #   end
-      #
-      # @example
-      #
-      #   #good
-      #
-      #   do_something do |used, _unused|
-      #     puts used
-      #   end
-      #
-      #   do_something do
-      #     puts :foo
-      #   end
-      #
-      #   define_method(:foo) do |_bar|
-      #     puts :baz
-      #   end
-      class UnusedBlockArgument < Cop
-        include UnusedArgument
+      # Configure an appender that will write log events to STDOUT. A colorized
+  # pattern layout is used to format the log events into strings before
+  # writing.
+  Logging.appenders.stdout('stdout',
+                           auto_flushing: true,
+                           layout:        Logging.layouts.pattern(
+                             pattern:      pattern,
+                             color_scheme: 'bright'
+                           )
+                          ) if config.log_to.include? 'stdout'
     
-      context 'hook value is Array' do
-    before do
-      project.yaml[hook_name] = [
-        'echo 'on hook'',
-        'echo 'another command here''
-      ]
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+        reversible(&method(:up_down))
+  end
+    
+      describe '#update' do
+    it 'marks a notification as read if it gets no other information' do
+      note = FactoryGirl.create(:notification)
+      expect(Notification).to receive(:where).and_return([note])
+      expect(note).to receive(:set_read_state).with(true)
+      get :update, params: {id: note.id}, format: :json
     end
-    
-      return captured_stdout.string, captured_stderr.string
-ensure
-  $stdout = orig_stdout
-  $stderr = orig_stderr
-end
