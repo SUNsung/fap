@@ -1,80 +1,65 @@
 
         
-                # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
+        require 'em-websocket'
     
-          # Imports all the objects in sequence in the current thread.
-      def sequential_import
-        each_object_to_import do |object|
-          repr = representation_class.from_api_response(object)
+    module Jekyll
+  module Drops
+    class UnifiedPayloadDrop < Drop
+      mutable true
     
-      # The default layout used by the appenders.
-  pattern = '[%d] %-5l PID-%p TID-%t %c: %m\n'
-  layout = Logging.layouts.pattern(pattern: pattern)
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
 end
 
     
-          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
-      save_fixture(response.body, 'aspects_manage_contacts_json')
+        delegate :empty?, :blank?, to: :pages
+    
+    module Docs
+  class Scraper < Doc
+    class << self
+      attr_accessor :base_url, :root_path, :initial_paths, :options, :html_filters, :text_filters, :stubs
+    
+        def justify(str)
+      return str unless terminal_width
+      str = str.dup
+    
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
     end
     
-          def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+          def before
+        @versions[0][0..6]
       end
     
-        get '/pages'
+    context 'Precious::Helpers' do
+  include Precious::Helpers
     
-      test 'displays_latest_changes' do
-    get('/latest_changes')
-    body = last_response.body
-    
-      def app
-    Precious::App
-  end
+    def rubyforge_project
+  name
 end
     
-          def stop_template
-        asset_path 'template-stop.erb'
-      end
-    
-          it 'should load and validate the project' do
-        project_config = File.join(fixtures_dir, 'sample.yml')
-        expect(described_class.validate(project_config: project_config)).to \
-          be_a Tmuxinator::Project
-      end
-    
-      describe '.shell?' do
-    context '$SHELL is set' do
-      before do
-        allow(ENV).to receive(:[]).with('SHELL') { 'vim' }
-      end
-    
-        def list
-      say 'tmuxinator projects:'
-      if options[:newline]
-        say Tmuxinator::Config.configs.join('\n')
-      else
-        print_in_columns Tmuxinator::Config.configs
-      end
+          # File.basename is too eager to please and will return the last
+      # component of the path even if it ends with a directory separator.
+      ::File.basename(file_path)
     end
+    
+            if obj && obj.errors[method].present?
+          errors = safe_join(obj.errors[method], '<br />'.html_safe)
+          content_tag(:span, errors, class: 'formError')
+        else
+          ''
+        end
+      end
+    
+        sh 'gem build spree.gemspec'
+    mv 'spree-#{version}.gem', pkgdir
+  end
