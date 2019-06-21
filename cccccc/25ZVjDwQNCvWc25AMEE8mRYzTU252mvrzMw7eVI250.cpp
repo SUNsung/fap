@@ -1,202 +1,122 @@
 
         
-        ```
+        // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/utils/math.h'
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
     
-    #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
-  template void classname<float>::Forward_gpu( \
-      const std::vector<Blob<float>*>& bottom, \
-      const std::vector<Blob<float>*>& top); \
-  template void classname<double>::Forward_gpu( \
-      const std::vector<Blob<double>*>& bottom, \
-      const std::vector<Blob<double>*>& top);
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
     
-    #include <vector>
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
-    
-      WritableFile* dest_;
-  int block_offset_;  // Current offset in block
-    
-    #endif  // STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-
+      // implement nw.Screen.stopMonitor()
+  class NwScreenStopMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStopMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
     
-    {  // OK status has a null state_.  Otherwise, state_ is a new[] array
-  // of the following form:
-  //    state_[0..3] == length of message
-  //    state_[4]    == code
-  //    state_[5..]  == message
-  const char* state_;
+    {}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    #include 'hphp/runtime/base/directory.h'
+#include 'hphp/runtime/ext/std/ext_std_file.h'
+    
+      bool valid() const { return !isClosed(); }
+    
+    #ifndef incl_HPHP_PERF_EVENT_H_
+#define incl_HPHP_PERF_EVENT_H_
+    
+    #include 'hphp/util/stack-trace.h'
+    
+      void setProxy(const String& proxy_host, int proxy_port,
+                const String& proxy_user, const String& proxy_pass);
+  bool open(const String& filename, const String& mode) override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seekable() override { return false; }
+  bool flush() override;
+  Variant getWrapperMetaData() override { return Variant(m_responseHeaders); }
+  String getLastError();
+    
+        std::unique_ptr<DHTMessageFactory> messageFactory;
+    
+      virtual std::string toString() const CXX11_OVERRIDE;
+    
+    #include <string>
+#include <vector>
+#include <memory>
+    
+        factory->setRoutingTable(routingTable.get());
+    factory->setConnection(connection.get());
+    factory->setMessageDispatcher(dispatcher.get());
+    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
+    factory->setTokenTracker(tokenTracker.get());
+    factory->setLocalNode(localNode);
+    factory->setBtRegistry(e->getBtRegistry().get());
+    
+    
+    {  virtual bool finished() = 0;
 };
     
+      std::chrono::seconds timeout_;
     
-    {  // Read all data using a sequence of randomly sized reads.
-  SequentialFile* sequential_file;
-  ASSERT_OK(env_->NewSequentialFile(test_file_name, &sequential_file));
-  std::string read_result;
-  std::string scratch;
-  while (read_result.size() < data.size()) {
-    int len = std::min<int>(rnd.Skewed(18), data.size() - read_result.size());
-    scratch.resize(std::max(len, 1));  // at least 1 so &scratch[0] is legal
-    Slice read;
-    ASSERT_OK(sequential_file->Read(len, &read, &scratch[0]));
-    if (len > 0) {
-      ASSERT_GT(read.size(), 0);
-    }
-    ASSERT_LE(read.size(), len);
-    read_result.append(read.data(), read.size());
-  }
-  ASSERT_EQ(read_result, data);
-  delete sequential_file;
+      virtual void executeTask() CXX11_OVERRIDE;
+    
+    #include <memory>
+    
+      typedef std::set<std::shared_ptr<CacheEntry>,
+                   DerefLess<std::shared_ptr<CacheEntry>>>
+      CacheEntrySet;
+  CacheEntrySet entries_;
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+    
+    #include 'modules/common/time/time.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    
+    {  int ret = x;
+  return ret;
 }
     
-        ScopedHandle handle =
-        ::CreateFileA(fname.c_str(), desired_access, share_mode, nullptr,
-                      OPEN_EXISTING, file_flags, nullptr);
-    if (!handle.is_valid()) {
-      return WindowsError(fname, ::GetLastError());
-    }
-    if (!mmap_limiter_.Acquire()) {
-      *result = new WindowsRandomAccessFile(fname, std::move(handle));
-      return Status::OK();
-    }
+      kernel.AddRegularization(0.2);
     
-        // Setup display size (every frame to accommodate for window resizing)
-    int w, h;
-    w = al_get_display_width(g_Display);
-    h = al_get_display_height(g_Display);
-    io.DisplaySize = ImVec2((float)w, (float)h);
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
     
-    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
-{
-    // Update buttons
-    ImGuiIO& io = ImGui::GetIO();
-    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-    {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
-    }
+    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::manual_input(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-    int32 ImGui_Marmalade_CharCallback(void* system_data, void* user_data)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)system_data;
-    io.AddInputCharacter((unsigned int)e->m_Char);
-    }
-    
-    // Current memory allocators
-static void* (*GImFreeTypeAllocFunc)(size_t size, void* user_data) = ImFreeTypeDefaultAllocFunc;
-static void  (*GImFreeTypeFreeFunc)(void* ptr, void* user_data) = ImFreeTypeDefaultFreeFunc;
-static void* GImFreeTypeAllocatorUserData = NULL;
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-    }
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-            if (ImGui::Button('Button'))                                  // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
-    
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-    #include <folly/GLog.h>
-    
-    
-    {} // namespace folly
-    
-    /**
- * VirtualExecutor implements a light-weight view onto existing Executor.
- *
- * Multiple VirtualExecutors can be backed by a single Executor.
- *
- * VirtualExecutor's destructor blocks until all tasks scheduled through it are
- * complete. Executor's destructor also blocks until all VirtualExecutors
- * backed by it are released.
- */
-class VirtualExecutor : public DefaultKeepAliveExecutor {
-  auto wrapFunc(Func f) {
-    class FuncAndKeepAlive {
-     public:
-      FuncAndKeepAlive(Func&& f, VirtualExecutor* executor)
-          : keepAlive_(getKeepAliveToken(executor)), f_(std::move(f)) {}
-    }
-    }
-    }
-    
-    /**
- * This class creates core-local caches for a given shared_ptr, to
- * mitigate contention when acquiring/releasing it.
- *
- * All methods are threadsafe.  Hazard pointers are used to avoid
- * use-after-free for concurrent reset() and get() operations.
- *
- * Concurrent reset()s are sequenced with respect to each other: the
- * sharded shared_ptrs will always all be set to the same value.
- * get()s will never see a newer pointer on one core, and an older
- * pointer on another after a subsequent thread migration.
- */
-template <class T, size_t kNumSlots = 64>
-class AtomicCoreCachedSharedPtr {
- public:
-  explicit AtomicCoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
-    reset(p);
-  }
-    }
-    
-    TEST_F(SparseByteSetTest, each_random) {
-  mt19937 rng;
-  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
-  set<uint8_t> added;
-  while (added.size() <= lims::max()) {
-    auto c = uint8_t(dist(rng));
-    EXPECT_EQ(added.count(c), s.contains(c));
-    EXPECT_EQ(!added.count(c), s.add(c));
-    added.insert(c);
-    EXPECT_TRUE(added.count(c)); // sanity
-    EXPECT_TRUE(s.contains(c));
-  }
-}
-
-    
-    #include <folly/portability/Sockets.h>
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
