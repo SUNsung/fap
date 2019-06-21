@@ -1,34 +1,63 @@
 
         
-                if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
+          Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
+    cmd = g.split('-').last
+    p.command(cmd.to_sym) do |c|
+      c.syntax cmd
+      c.action do
+        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
+          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
+      end
+    end
+  end
     
-    module Docs
-  class Filter < ::HTML::Pipeline::Filter
-    def css(*args)
-      doc.css(*args)
+          headers['Access-Control-Allow-Origin'] = origin || cors_origins[0]
+      headers['Access-Control-Allow-Headers'] = 'Content-Type, Cache-Control, X-Requested-With, X-CSRF-Token, Discourse-Visible, User-Api-Key, User-Api-Client-Id'
+      headers['Access-Control-Allow-Credentials'] = 'true'
+      headers['Access-Control-Allow-Methods'] = 'POST, PUT, GET, OPTIONS, DELETE'
     end
     
-        def as_json
-      @pages
-    end
-    
-            css('header').each do |node|
-          node.before(node.children).remove
+          @directives.each do |directive, sources|
+        if sources.is_a?(Array)
+          policy.public_send(directive, *sources)
+        else
+          policy.public_send(directive, sources)
         end
+      end
     
-            css('.toplang', '#quickview', '.top').remove
+        delegate :base_url, to: :ContentSecurityPolicy
     
-            # Executes a command and returns true if the command succeeded,
-        # and false otherwise. By default, this executes as a normal user,
-        # and it is up to the communicator implementation if they expose an
-        # option for running tests as an administrator.
-        #
-        # @see #execute
-        def test(command, opts=nil)
+        private
+    
+          if SvgSprite.version(theme_ids) != params[:version]
+        return redirect_to path(SvgSprite.path(theme_ids))
+      end
+    
+        # NOTE: we only update the counts for users we have seen in the last hour
+    #  this avoids a very expensive query that may run on the entire user base
+    #  we also ensure we only touch the table if data changes
+    
+      def enable_bootstrap_mode(user)
+    return if SiteSetting.bootstrap_mode_enabled
+    
+        log(action: 'generate',
+        user_auth_token_id: user_auth_token.id,
+        user_id: user_id,
+        user_agent: user_agent,
+        client_ip: client_ip,
+        path: path,
+        auth_token: hashed_token)
+    
+      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
+    head = [
+      0x06, 0x00, 0xff, 0x07,  # RMCP Header
+      0x06,                    # RMCP+ Authentication Type
+      PAYLOAD_RAKP1,           # Payload Type
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+    ].pack('C*')
+    
+              res
         end
       end
     end
@@ -36,26 +65,12 @@
 end
 
     
-            # The VM which this system is tied to.
-        attr_reader :vm
+              # Encodes the etype
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_etype
+            bn = OpenSSL::BN.new(etype.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-            # This returns all registered host classes.
-        #
-        # @return [Hash]
-        def hosts
-          hosts = {}
-    
-            # The configuration for this provisioner. This will be an instance of
-        # the `Config` class which is part of the provisioner.
-        attr_reader :config
-    
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
-    
-        # Like #{merge} but merges into self.
-    def merge!(other)
-      @items.merge!(other.__internal_state[:items])
-      self
-    end
+                self
+          end
