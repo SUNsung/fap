@@ -1,278 +1,238 @@
 
         
-            def complete_call(self):
-        self.call.state = CallState.COMPLETE
-        self.call_center.notify_call_completed(self.call)
+        
+if __name__ == '__main__':
+    unittest.main()
+
     
-        def park_vehicle(self, vehicle):
-        spot = self._find_available_spot(vehicle)
-        if spot is None:
-            return None
-        else:
-            spot.park_vehicle(vehicle)
-            return spot
+            if 'skip' in test_case:
+            print_skipping(test_case['skip'])
+            return
+        for other_ie in other_ies:
+            if not other_ie.working():
+                print_skipping('test depends on %sIE, marked as not WORKING' % other_ie.ie_key())
+                return
     
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+            ydl = FakeYDL({
+            'proxy': '%s://127.0.0.1:%d' % (protocol, self.port),
+        })
+        return ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8')
     
     
-class UserGraphService(object):
+class Formatting(object):
+    '''A delegate class that invokes the actual processors.'''
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
+        def inner(r):
+        r.headers['Authorization'] = header
+        return r
+    
+        if args.auth_plugin:
+        session.auth = {
+            'type': args.auth_plugin.auth_type,
+            'raw_auth': args.auth_plugin.raw_auth,
+        }
+    elif session.auth:
+        kwargs['auth'] = session.auth
+    
+            :type status: Status
+        :type output: file
         '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+        super(ProgressReporterThread, self).__init__()
+        self.status = status
+        self.output = output
+        self._tick = tick
+        self._update_interval = update_interval
+        self._spinner_pos = 0
+        self._status_line = ''
+        self._prev_bytes = 0
+        self._prev_time = time()
+        self._should_stop = threading.Event()
     
-    master_doc = 'index'
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinxcontrib.log_cabinet',
-    'pallets_sphinx_themes',
-    'sphinx_issues',
-]
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'werkzeug': ('http://werkzeug.pocoo.org/docs/', None),
-    'click': ('https://click.palletsprojects.com/', None),
-    'jinja': ('http://jinja.pocoo.org/docs/', None),
-    'itsdangerous': ('https://itsdangerous.palletsprojects.com/', None),
-    'sqlalchemy': ('https://docs.sqlalchemy.org/', None),
-    'wtforms': ('https://wtforms.readthedocs.io/en/stable/', None),
-    'blinker': ('https://pythonhosted.org/blinker/', None),
-}
-issues_github_path = 'pallets/flask'
+    from .compat import is_py2, builtin_str, str
     
-    import click
-from flask import current_app
-from flask import g
-from flask.cli import with_appcontext
-    
-        class newcls(oldcls):
-        def __getitem__(self, key):
-            try:
-                return oldcls.__getitem__(self, key)
-            except KeyError:
-                if key not in request.form:
-                    raise
-                raise DebugFilesKeyError(request, key)
-    
-    
-    .. versionchanged:: 0.11
-       Added support for serializing top-level arrays. This introduces a
-       security risk in ancient browsers. See :ref:`json-security` for details.
-    
-        def check(self, value):
-        return isinstance(value, tuple)
-    
-            r = None
+        def _close_server_sock_ignore_errors(self):
         try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
+            self.server_sock.close()
+        except IOError:
             pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
     
-        req_protocol = request.scheme
-    req_site = get_current_site(request)
-    
-    import gzip
-import os
-    
-    
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        deserialized = losses.deserialize(serialized)
-    assert isinstance(deserialized, MSE_MAE_loss)
-    assert deserialized.mse_fraction == 0.3
-    
-    
-def test_regularization_shared_model():
-    dense_layer = Dense(num_classes,
-                        kernel_regularizer=regularizers.l1(),
-                        activity_regularizer=regularizers.l1())
-    
-        while True:
-        more_to_read = select.select([sock], [], [], timeout)[0]
-        if not more_to_read:
-            break
-    
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
-    
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
-    
-                sock1.connect(address)
-            sock1.sendall(first_request)
-            sock1.close()
-    
-        def get(self, url, **kwargs):
-        r'''Sends a GET request. Returns :class:`Response` object.
-    
-    # The encoding of source files.
-# source_encoding = 'utf-8-sig'
-    
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
-    
-    For each class of models we make the model complexity vary through the choice
-of relevant model parameters and measure the influence on both computational
-performance (latency) and predictive power (MSE or Hamming Loss).
+    ``response``:
+    The response generated from a Request.
 '''
+HOOKS = ['response']
     
-    from sklearn.datasets import make_checkerboard
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralBiclustering
-from sklearn.metrics import consensus_score
+            with pytest.raises(socket.error):
+            new_sock = socket.socket()
+            new_sock.connect((host, port))
     
-    plt.figure(figsize=(12, 12))
+        def close(self):
+        '''Releases the connection back to the pool. Once this method has been
+        called the underlying ``raw`` object must not be accessed again.
     
-    # #############################################################################
-# Generate data (swiss roll dataset)
-n_samples = 1500
-noise = 0.05
-X, _ = make_swiss_roll(n_samples, noise)
-# Make it thinner
-X[:, 1] *= .5
+        def test_HTTP_200_OK_HEAD(self, httpbin):
+        r = requests.head(httpbin('get'))
+        assert r.status_code == 200
     
-    
-class Fixed(jose.Field):
-    '''Fixed field.'''
-    
-    
-class Signature(jose.Signature):
-    '''ACME-specific Signature. Uses ACME-specific Header for customer fields.'''
-    __slots__ = jose.Signature._orig_slots  # pylint: disable=no-member
-    
-        def setUp(self):
-        from certbot_apache.obj import Addr
-        from certbot_apache.obj import VirtualHost
+        # Compute detections for the original image (identity transform) last to
+    # ensure that the Caffe2 workspace is populated with blobs corresponding
+    # to the original image on return (postcondition of im_detect_bbox)
+    scores_i, boxes_i, im_scale_i = im_detect_bbox(
+        model, im, cfg.TEST.SCALE, cfg.TEST.MAX_SIZE, boxes=box_proposals
+    )
+    add_preds_t(scores_i, boxes_i)
     
     
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
-    'certbot': ('https://certbot.eff.org/docs/', None),
-    'certbot-apache': (
-        'https://letsencrypt-apache.readthedocs.org/en/latest/', None),
-    'certbot-nginx': (
-        'https://letsencrypt-nginx.readthedocs.org/en/latest/', None),
-}
+def cityscapes_to_coco_without_person_rider(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: -1,  # person (ignore)
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (ignore)
+    }
+    return lookup[cityscapes_id]
+    
+        # Indices of examples for which we try to make predictions
+    ex_inds = np.where(overlaps >= cfg.TRAIN.BBOX_THRESH)[0]
+    
+    
+def generate_anchors(
+    stride=16, sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.5, 1, 2)
+):
+    '''Generates a matrix of anchor boxes in (x1, y1, x2, y2) format. Anchors
+    are centered on stride / 2, have (approximate) sqrt areas of the specified
+    sizes, and aspect ratios as given.
+    '''
+    return _generate_anchors(
+        stride,
+        np.array(sizes, dtype=np.float) / stride,
+        np.array(aspect_ratios, dtype=np.float)
+    )
+    
+    
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
+    # Combine predictions across all levels and retain the top scoring
+    rois = np.concatenate([blob.data for blob in roi_inputs])
+    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
+    inds = np.argsort(-scores)[:post_nms_topN]
+    rois = rois[inds, :]
+    return rois
+    
+        kp_fg_rois_per_this_image = np.minimum(fg_rois_per_image, kp_fg_inds.size)
+    if kp_fg_inds.size > kp_fg_rois_per_this_image:
+        kp_fg_inds = np.random.choice(
+            kp_fg_inds, size=kp_fg_rois_per_this_image, replace=False
+        )
+    
+            # add fg targets
+        for i in range(rois_fg.shape[0]):
+            fg_polys_ind = fg_polys_inds[i]
+            poly_gt = polys_gt[fg_polys_ind]
+            roi_fg = rois_fg[i]
+            # Rasterize the portion of the polygon mask within the given fg roi
+            # to an M x M binary image
+            mask = segm_utils.polys_to_mask_wrt_box(poly_gt, roi_fg, M)
+            mask = np.array(mask > 0, dtype=np.int32)  # Ensure it's binary
+            masks[i, :] = np.reshape(mask, M**2)
+    else:  # If there are no fg masks (it does happen)
+        # The network cannot handle empty blobs, so we must provide a mask
+        # We simply take the first bg roi, given it an all -1's mask (ignore
+        # label), and label it with class zero (bg).
+        bg_inds = np.where(blobs['labels_int32'] == 0)[0]
+        # rois_fg is actually one background roi, but that's ok because ...
+        rois_fg = sampled_boxes[bg_inds[0]].reshape((1, -1))
+        # We give it an -1's blob (ignore label)
+        masks = -blob_utils.ones((1, M**2), int32=True)
+        # We label it with class = 0 (background)
+        mask_class_labels = blob_utils.zeros((1, ))
+        # Mark that the first roi has a mask
+        roi_has_mask[0] = 1
+    
+        return blob, im_scales
 
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode']
+    
+def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
+    '''Add RetinaNet blobs.'''
+    # RetinaNet is applied to many feature levels, as in the FPN paper
+    k_max, k_min = cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.RPN_MIN_LEVEL
+    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
+    num_aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
+    aspect_ratios = cfg.RETINANET.ASPECT_RATIOS
+    anchor_scale = cfg.RETINANET.ANCHOR_SCALE
+    
+    from caffe2.proto import caffe2_pb2
+from caffe2.python import core
+from caffe2.python import gradient_checker
+from caffe2.python import workspace
     
     
-class FunctionDictsTest(FuncAttrsTest):
-    def test_setting_dict_to_invalid(self):
-        self.cannot_set_attr(self.b, '__dict__', None, TypeError)
-        from collections import UserDict
-        d = UserDict({'known_attr': 7})
-        self.cannot_set_attr(self.fi.a.__func__, '__dict__', d, TypeError)
+def test_3():
+    for o in [1 << 8, (1 << 16) - 1, -((1 << 7) + 1), -(1 << 15)]:
+        check(3, o)
     
-            for button, filename, name in button_sources:
-            with  self.subTest(name=name):
-                button.invoke()
-                fn = findfile(filename, subdir='idlelib')
-                get = dialog._current_textview.viewframe.textframe.text.get
-                with open(fn, encoding='utf-8') as f:
-                    self.assertEqual(f.readline().strip(), get('1.0', '1.end'))
-                    f.readline()
-                    self.assertEqual(f.readline().strip(), get('3.0', '3.end'))
-                dialog._current_textview.destroy()
+    plt.figtext(0.05, 0.5, 'pandas', size=40)
     
-    # Add the html version.  This converts the message into a multipart/alternative
-# container, with the original text message as the first part and the new html
-# message as the second part.
-asparagus_cid = make_msgid()
-msg.add_alternative('''\
-<html>
-  <head></head>
-  <body>
-    <p>Salut!</p>
-    <p>Cela ressemble à un excellent
-        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
-            recipie
-        </a> déjeuner.
-    </p>
-    <img src='cid:{asparagus_cid}' />
-  </body>
-</html>
-'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
-# note that we needed to peel the <> off the msgid for use in the html.
+        expected = [piece.value.rank()
+                for key, piece in df.groupby(['key1', 'key2'])]
+    expected = concat(expected, axis=0)
+    expected = expected.reindex(result.index)
+    tm.assert_series_equal(result, expected)
     
-            print('Ordered results using pool.map() --- will block till complete:')
-        for x in pool.map(calculatestar, TASKS):
-            print('\t', x)
-        print()
     
-    #########################
-# 1) Using declared types
-con = sqlite3.connect(':memory:', detect_types=sqlite3.PARSE_DECLTYPES)
-cur = con.cursor()
-cur.execute('create table test(p point)')
+@pytest.mark.parametrize('style,inherited,equiv', [
+    ('margin: 1px; margin: 2px', '',
+     'margin: 2px'),
+    ('margin: 1px', 'margin: 2px',
+     'margin: 1px'),
+    ('margin: 1px; margin: inherit', 'margin: 2px',
+     'margin: 2px'),
+    ('margin: 1px; margin-top: 2px', '',
+     'margin-left: 1px; margin-right: 1px; ' +
+     'margin-bottom: 1px; margin-top: 2px'),
+    ('margin-top: 2px', 'margin: 1px',
+     'margin: 1px; margin-top: 2px'),
+    ('margin: 1px', 'margin-top: 2px',
+     'margin: 1px'),
+    ('margin: 1px; margin-top: inherit', 'margin: 2px',
+     'margin: 1px; margin-top: 2px'),
+])
+def test_css_precedence(style, inherited, equiv):
+    resolve = CSSResolver()
+    inherited_props = resolve(inherited)
+    style_props = resolve(style, inherited=inherited_props)
+    equiv_props = resolve(equiv)
+    assert style_props == equiv_props
     
-      ifndef = ''
-  ifndef_linenum = 0
-  define = ''
-  endif = ''
-  endif_linenum = 0
-  for linenum, line in enumerate(raw_lines):
-    linesplit = line.split()
-    if len(linesplit) >= 2:
-      # find the first occurrence of #ifndef and #define, save arg
-      if not ifndef and linesplit[0] == '#ifndef':
-        # set ifndef to the header guard presented on the #ifndef line.
-        ifndef = linesplit[1]
-        ifndef_linenum = linenum
-      if not define and linesplit[0] == '#define':
-        define = linesplit[1]
-    # find the last occurrence of #endif, save entire line
-    if line.startswith('#endif'):
-      endif = line
-      endif_linenum = linenum
+        f = io.BytesIO(dumpf.getvalue())
+    dumpf.close()
+    
+    
+MyNamedTuple = namedtuple('MyNamedTuple', 'x y')
+    
+    
+class ChineseTokenizer(Tokenizer):
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+    if opt.withWeight is None:
+    withWeight = False
+else:
+    if int(opt.withWeight) is 1:
+        withWeight = True
+    else:
+        withWeight = False
