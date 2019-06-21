@@ -1,183 +1,209 @@
 
         
-        def global_require
-  JSON.pretty_generate(DATA)
-end
+                context 'when command is archive' do
+          it 'adds one framework' do
+            result = Fastlane::FastFile.new.parse('lane :test do
+                carthage(command: '#{command}', frameworks: ['myframework'])
+              end').runner.execute(:test)
+            expect(result).to eq('carthage archive myframework')
+          end
     
-    
-def pathutil_relative
-  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
-end
-    
-    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-    
-      #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
-    
-      #
-  # Updates the various parts of the HTTP response command string.
-  #
-  def update_cmd_parts(str)
-    if (md = str.match(/HTTP\/(.+?)\s+(\d+)\s?(.+?)\r?\n?$/))
-      self.message = md[3].gsub(/\r/, '')
-      self.code    = md[2].to_i
-      self.proto   = md[1]
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
     else
-      raise RuntimeError, 'Invalid response command string', caller
+      return str
     end
+  end
+  module_function :shellescape
+end
+
     
-        if res[2][IAX_IE_APPARENT_ADDR]
-      r_fam, r_port, r_addr = res[2][IAX_IE_APPARENT_ADDR].unpack('nnA4')
-      r_addr = r_addr.unpack('C*').map{|x| x.to_s }.join('.')
-      dprint('REGACK: Registered from address #{r_addr}:#{r_port}')
-    end
-    
-    
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
-            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
-            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
-            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
-            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
-            seq_asn1.to_der
-          end
-    
-              # Decodes the enc_auth_data field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
-          def decode_enc_auth_data(input)
-            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
-          end
-        end
+            a_split <=> b_split
+      else
+        a.casecmp(b)
       end
     end
   end
 end
 
     
-              # Decodes the crealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
+    module Docs
+  class Filter < ::HTML::Pipeline::Filter
+    def css(*args)
+      doc.css(*args)
+    end
     
-    def prev_version
-  return prev_feature + '.0' if source_version.end_with? '.0'
-  source_version.gsub(/\d+$/) { |s| s.to_i - 1 }
-end
-    
-          default_options :escape => :html,
-        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
-    
-          def title
-        'Comparison of #{@page.title}'
-      end
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
-        end
-      end
-    
-          def escaped_name
-        CGI.escape(@name)
-      end
-    
-          # Finds header node inside Nokogiri::HTML document.
-      #
-      def find_header_node(doc)
-        case @page.format
-          when :asciidoc
-            doc.css('div#gollum-root > h1:first-child')
-          when :org
-            doc.css('div#gollum-root > p.title:first-child')
-          when :pod
-            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
-          when :rest
-            doc.css('div#gollum-root > div > div > h1:first-child')
-          else
-            doc.css('div#gollum-root > h1:first-child')
-        end
-      end
-    
-        assert_no_match /New/, last_response.body, ''New' link not blocked in pages template'
-    
-    def gemspec_file
-  '#{name}.gemspec'
-end
-    
-      s.authors  = ['Tom Preston-Werner', 'Rick Olson']
-  s.email    = 'tom@github.com'
-  s.homepage = 'http://github.com/gollum/gollum'
-    
-      def self.assets_path
-    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
+        def to_json
+      JSON.generate(as_json)
+    end
   end
+end
+
+    
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
+    end
+    
+        def html?
+      mime_type.include? 'html'
+    end
+    
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
+      end
+    end
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+    module Devise
+  module Mailers
+    module Helpers
+      extend ActiveSupport::Concern
+    
+        # Include the chosen devise modules in your model:
+    #
+    #   devise :database_authenticatable, :confirmable, :recoverable
+    #
+    # You can also give any of the devise configuration values in form of a hash,
+    # with specific values for this model. Please check your Devise initializer
+    # for a complete description on those values.
+    #
+    def devise(*modules)
+      options = modules.extract_options!.dup
+    
+          def timeout_in
+        self.class.timeout_in
+      end
+    
+      puts '* [Sinatra](#sinatra)'
+  title = Regexp.new('(?<=\* )(.*)') # so Ruby 1.8 doesn't complain
+  File.binread(a.readme).scan(/^##.*/) do |line|
+    puts line.gsub(/#(?=#)/, '    ').gsub('#', '*').gsub(title) { '[#{$1}](##{link($1)})' }
+  end
+end
+    
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+          env['rack.errors'] = errors
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
+  end
+end
+
+    
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
+    
+        it 'accepts jsfiddle link with a / at the end' do
+      jsfiddle_link = 'http://jsfiddle.net/link2twenty/v2kx9jcd/'
+      expect do
+        generate_new_liquid(jsfiddle_link)
+      end.not_to raise_error
+    end
+    
+      def permitted_attributes_for_create
+    %i[body_markdown commentable_id commentable_type parent_id]
+  end
+    
+      def new
+    @broadcast = Broadcast.new
+  end
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+        def get_cached_gist(gist, file)
+      return nil if @cache_disabled
+      cache_file = get_cache_file_for gist, file
+      File.read cache_file if File.exist? cache_file
+    end
+    
+    require './plugins/pygments_code'
+require './plugins/raw'
+require 'pathname'
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+          it 'accepts additional arguments' do
+        ARGV.replace(['start', 'foo', 'bar', 'three=four'])
+    
+      describe '#tmux' do
+    it { expect(instance.tmux).to eq 'wemux' }
+  end
+end
