@@ -1,115 +1,100 @@
 
         
-              xcode_outdated = false
-      begin
-        unless FastlaneCore::Helper.xcode_at_least?(Fastlane::MINIMUM_XCODE_RELEASE)
-          xcode_outdated = true
-        end
-      rescue
-        # We don't care about exceptions here
-        # We'll land here if the user doesn't have Xcode at all for example
-        # which is fine for someone who uses fastlane just for Android project
-        # What we *do* care about is when someone links an old version of Xcode
-      end
+                if Devise.activerecord51?
+          def clear_reset_password_token?
+            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
+            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
+              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
+            end
     
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-atom-filename \'DocSet atom feed filename\' --exit-threshold \'2\' input/dir')
-      end
+    module Devise
+  module Models
+    # Rememberable manages generating and clearing token for remembering the user
+    # from a saved cookie. Rememberable also has utility methods for dealing
+    # with serializing the user into the cookie and back from the cookie, trying
+    # to lookup the record based on the saved information.
+    # You probably wouldn't use rememberable methods directly, they are used
+    # mostly internally for handling the remember token.
+    #
+    # == Options
+    #
+    # Rememberable adds the following options in devise_for:
+    #
+    #   * +remember_for+: the time you want the user will be remembered without
+    #     asking for credentials. After this time the user will be blocked and
+    #     will have to enter their credentials again. This configuration is also
+    #     used to calculate the expires time for the cookie created to remember
+    #     the user. By default remember_for is 2.weeks.
+    #
+    #   * +extend_remember_period+: if true, extends the user's remember period
+    #     when remembered via cookie. False by default.
+    #
+    #   * +rememberable_options+: configuration options passed to the created cookie.
+    #
+    # == Examples
+    #
+    #   User.find(1).remember_me!  # regenerating the token
+    #   User.find(1).forget_me!    # clearing the token
+    #
+    #   # generating info to put into cookies
+    #   User.serialize_into_cookie(user)
+    #
+    #   # lookup the user based on the incoming cookie information
+    #   User.serialize_from_cookie(cookie_string)
+    module Rememberable
+      extend ActiveSupport::Concern
     
-            expect(result).to eq('carthage bootstrap --platform Mac')
-      end
-    
-          it 'works given the path to compile_commands.json' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
-            )
-          end').runner.execute(:test)
-    
-                result = Fastlane::FastFile.new.parse('lane :test do
-              swiftlint(ignore_exit_status: true)
-            end').runner.execute(:test)
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
           end
         end
-    
-          # We need to explicity test against Fastlane::Boolean, TrueClass/FalseClass
-      if value.class != FalseClass && value.class != TrueClass
-        UI.user_error!(''#{self.key}' value must be either `true` or `false`! Found #{value.class} instead.')
       end
     end
-    
-        str = str.dup
-    
-    # remove all double quotes completely
-def simulate_normal_shell_unwrapping(string)
-  string.gsub!(''', '')
-  regex = /^(')(\S*)(')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
   end
-  return string
 end
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
 
     
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
+            def run
+          query = @use_regex ? @query : Regexp.escape(@query)
+          filepath = if @show_all
+                       specs = get_path_of_spec(query, @show_all).split(/\n/)
+                       index = UI.choose_from_array(specs, 'Which spec would you like to print [1-#{specs.count}]? ')
+                       specs[index]
+                     else
+                       get_path_of_spec(query)
+                     end
+    
+        initialize_with { Tmuxinator::Project.new(file) }
   end
     
-    require 'rack/test'
-require 'action_controller/railtie'
-require 'active_record'
-require 'devise/rails/routes'
-require 'devise/rails/warden_compat'
-    
-          # Sign in a user bypassing the warden callbacks and stores the user
-      # straight in session. This option is useful in cases the user is already
-      # signed in, but we want to refresh the credentials in session.
-      #
-      # Examples:
-      #
-      #   bypass_sign_in @user, scope: :user
-      #   bypass_sign_in @user
-      def bypass_sign_in(resource, scope: nil)
-        scope ||= Devise::Mapping.find_scope!(resource)
-        expire_data_after_sign_in!
-        warden.session_serializer.store(resource, scope)
+          it 'gets the custom tmux command' do
+        expect(project.tmux_command).to eq 'byobu'
       end
+    end
     
-          # Resets reset password token and send reset password instructions by email.
-      # Returns the token sent in the e-mail.
-      def send_reset_password_instructions
-        token = set_reset_password_token
-        send_reset_password_instructions_notification(token)
+          it 'should load and validate the project' do
+        expect(described_class).to receive_messages(directory: fixtures_dir)
+        expect(described_class.validate(name: 'sample')).to \
+          be_a Tmuxinator::Project
+      end
+    end
     
-          resources :taxons, only: [:index]
-    
-            def find_payment
-          @payment = @order.payments.find_by!(number: params[:id])
-        end
-    
-    module Sidekiq
-  module Generators # :nodoc:
-    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
-      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
-    
-        def match(request_method, path)
-      case matcher
-      when String
-        {} if path == matcher
-      else
-        if path_match = path.match(matcher)
-          Hash[path_match.names.map(&:to_sym).zip(path_match.captures)]
-        end
+          it 'returns false' do
+        expect(described_class.shell?).to be_falsey
       end
     end
   end
 end
+
+    
+            content = Erubis::Eruby.new(raw_content).result(binding)
+        YAML.safe_load(content, [], [], true)
+      rescue SyntaxError, StandardError => error
+        raise 'Failed to parse config file: #{error.message}'
+      end
