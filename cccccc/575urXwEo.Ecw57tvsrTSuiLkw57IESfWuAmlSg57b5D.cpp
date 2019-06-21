@@ -1,214 +1,248 @@
 
         
-        #include <QDialog>
-    
-    int secp256k1_ecdsa_recoverable_signature_serialize_compact(const secp256k1_context* ctx, unsigned char *output64, int *recid, const secp256k1_ecdsa_recoverable_signature* sig) {
-    secp256k1_scalar r, s;
-    }
-    
-    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
-std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
-    
-      // Return an internal key (suitable for passing to an internal iterator)
-  Slice internal_key() const { return Slice(kstart_, end_ - kstart_); }
-    
-    std::string DescriptorFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/MANIFEST-%06llu',
-           static_cast<unsigned long long>(number));
-  return dbname + buf;
-}
-    
-    #include 'base/basictypes.h'
-#include '../dispatcher_host.h'
-    
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-    
-      ui::KeyboardCode keyval = ui::VKEY_UNKNOWN;
-    
-    ExtensionFunction::ResponseAction
-NwAppCloseAllWindowsFunction::Run() {
-  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
-  if (!registry)
-    return RespondNow(Error(''));
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
-    }
-    
-      static void DoJob(extensions::ExtensionService* service, std::string extension_id);
- protected:
-  ~NwAppQuitFunction() override;
-    
-    
-    {
-} // namespace extensions
-
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenStartMonitorFunction);
-  };
-    
-    
-TegraRowOp_Invoker(phase, phase, 2, 1, 1, RANGE_DATA(ST, src1_data, sizeof(CAROTENE_NS::f32)), range.end-range.start,
-                                          RANGE_DATA(ST, src2_data, sizeof(CAROTENE_NS::f32)), range.end-range.start,
-                                          RANGE_DATA(DT, dst1_data, sizeof(CAROTENE_NS::f32)), range.end-range.start, val)
-#define TEGRA_FASTATAN(y, x, dst, len, angleInDegrees) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    parallel_for_(Range(0, len), \
-    TegraRowOp_phase_Invoker<const CAROTENE_NS::f32, CAROTENE_NS::f32>(x, y, dst, angleInDegrees ? 1.0f : M_PI/180), \
-    (len) / static_cast<double>(1<<16)), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    void absDiff(const Size2D &size,
-             const s32 *src0Base, ptrdiff_t src0Stride,
-             const s32 *src1Base, ptrdiff_t src1Stride,
-             s32 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-            const f32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const f32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
-        const f32* ln2 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
-    
-    #include 'common.hpp'
-#include 'vtransform.hpp'
-    
-    f64 dotProduct(const Size2D &_size,
-               const u8 * src0Base, ptrdiff_t src0Stride,
-               const u8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-        for( ptrdiff_t y = 0; y < rows; y++ )
-    {
-        const u8* v0 = 0;
-        const u8* v1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8* v2 = 0;
-        // make border
-        if (border == BORDER_MODE_REFLECT101) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : y+1);
-            v2 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 1 ? rows-2 : 0);
-        } else  if (border == BORDER_MODE_CONSTANT) {
-            v0 = y > 0 ? internal::getRowPtr(srcBase, srcStride, y-1) : tmp;
-            v2 = y < rows-1 ? internal::getRowPtr(srcBase, srcStride, y+1) : tmp;
-        } else {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
-            v2 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 0 ? rows-1 : 0);
-        }
-        s16* drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
-    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
-                                       const grpc_call_element_args* args) {
-  path_ = grpc_slice_ref_internal(args->path);
-  start_time_ = absl::Now();
-  method_ = GetMethod(&path_);
-  qualified_method_ = absl::StrCat('Sent.', method_);
-  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
-                    OnDoneRecvTrailingMetadataCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  return GRPC_ERROR_NONE;
-}
-    
-    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
-}
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
-    }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  FILETIME idle, kernel, user;
-  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
-    total = FiletimeToInt(kernel) + FiletimeToInt(user);
-    busy = total - FiletimeToInt(idle);
+          for (const auto& node : item_.MainOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
   }
-  return std::make_pair(busy, total);
-}
+  for (const auto& node : item_.EnqueueOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
+  }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+        nullptr,  // nb_inplace_add
+    nullptr,  // nb_inplace_subtract
+    nullptr,  // nb_inplace_multiply
+#if PY_MAJOR_VERSION < 3
+    nullptr,  // nb_inplace_divide
+#endif
+    nullptr,  // nb_inplace_remainder
+    nullptr,  // nb_inplace_power
+    nullptr,  // nb_inplace_lshift
+    nullptr,  // nb_inplace_rshift
+    nullptr,  // nb_inplace_and
+    nullptr,  // nb_inplace_xor
+    nullptr,  // nb_inplace_or
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
+    // Creates a tensor in 'ret' from the input Ndarray.
+Status NdarrayToTensor(PyObject* obj, Tensor* ret);
+    
+    struct PyDecrefDeleter {
+  void operator()(PyObject* p) const { Py_DECREF(p); }
+};
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // Opaque and unique identifier for the host platform.
+// This is needed so that plugins can refer to/identify this platform without
+// instantiating a HostPlatform object.
+// This is broken out here to avoid a circular dependency between HostPlatform
+// and HostStreamExecutor.
+extern const Platform::Id kHostPlatformId;
+    
+    // Allows to represent a value that is either a host scalar or a scalar stored
+// on the GPU device.
+template <typename ElemT>
+class HostOrDeviceScalar {
+ public:
+  // Not marked as explicit because when using this constructor, we usually want
+  // to set this to a compile-time constant.
+  HostOrDeviceScalar(ElemT value) : value_(value), is_pointer_(false) {}
+  explicit HostOrDeviceScalar(const DeviceMemory<ElemT>& pointer)
+      : pointer_(pointer), is_pointer_(true) {
+    CHECK_EQ(1, pointer.ElementCount());
+  }
+    }
+    
+    namespace stream_executor {
+namespace port {
+    }
+    }
+    
+    
+    {}  // namespace mate
 
     
-    // About Desktop OpenGL function loaders:
-//  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
-//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
-//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+      template <typename T>
+  bool SetMethod(const base::StringPiece& key, const T& callback) {
+    return GetHandle()
+        ->Set(isolate_->GetCurrentContext(), StringToV8(isolate_, key),
+              CallbackTraits<T>::CreateTemplate(isolate_, callback)
+                  ->GetFunction(isolate_->GetCurrentContext())
+                  .ToLocalChecked())
+        .ToChecked();
+  }
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
+    namespace mate {
+    }
     
-        // Setup Platform/Renderer bindings
-    ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    template <typename T>
+struct Converter<ScopedPersistent<T>> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
+                                   const ScopedPersistent<T>& val) {
+    return val.NewHandle(isolate);
+  }
+    }
     
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+    
+    {  DISALLOW_COPY_AND_ASSIGN(WrappableBase);
+};
+    
+    int CertificateManagerModel::ImportFromPKCS12(
+    PK11SlotInfo* slot_info,
+    const std::string& data,
+    const base::string16& password,
+    bool is_extractable,
+    net::ScopedCERTCertificateList* imported_certs) {
+  return cert_db_->ImportFromPKCS12(slot_info, data, password, is_extractable,
+                                    imported_certs);
 }
     
+    ObjectTemplateBuilder& ObjectTemplateBuilder::MakeDestroyable() {
+  SetMethod('destroy', base::Bind(internal::Destroyable::Destroy));
+  SetMethod('isDestroyed', base::Bind(internal::Destroyable::IsDestroyed));
+  return *this;
+}
+    
+      // Notify another process, if available. Otherwise sets ourselves as the
+  // singleton instance. Returns PROCESS_NONE if we became the singleton
+  // instance. Callers are guaranteed to either have notified an existing
+  // process or have grabbed the singleton (unless the profile is locked by an
+  // unreachable process).
+  // TODO(brettw): Make the implementation of this method non-platform-specific
+  // by making Linux re-use the Windows implementation.
+  NotifyResult NotifyOtherProcessOrCreate();
+  void StartListeningOnSocket();
+  void OnBrowserReady();
+    
+    namespace caffe2 {
+namespace {
+REGISTER_CPU_OPERATOR(
+    FindDuplicateElements,
+    FindDuplicateElementsOp<CPUContext>);
+    }
+    }
+    
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
     
     
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
+};
     
-    // Constant parameters
-    const auto HAND_CCN_DECREASE_FACTOR = 8.f;
-    const std::string HAND_PROTOTXT{'hand/pose_deploy.prototxt'};
-    const std::string HAND_TRAINED_MODEL{'hand/pose_iter_102000.caffemodel'};
+    			image.m_bVerboseOutput = a_bVerboseOutput;
+			image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
+    
+    #   define C_MULC(m,a,b) \
+      do{ (m).r = ADD32(S_MUL((a).r,(b).r) , S_MUL((a).i,(b).i)); \
+          (m).i = SUB32(S_MUL((a).i,(b).r) , S_MUL((a).r,(b).i)); }while(0)
+    
+    #define MULT32_32_Q31(a,b)     ((a)*(b))
+    
+    #include 'config.h'
+#include 'kiss_fft.h'
+    
+    #endif
+
+    
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
+    
+    #ifndef PSTOKENIZER_H
+#define PSTOKENIZER_H
+    
+      Object *getObj(Object *obj, std::set<int> *fetchOriginatorNums);
+    
+    
+    {}
+    
+    class GooString;
+class PDFDoc;
+struct XpdfSecurityHandler;
+    
+    void SplashOutputDev::eoClip(GfxState *state) {
+  SplashPath *path;
+    }
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-array type
+        json str = 'I am a string';
+        str.at(0) = 'Another string';
+    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
+    
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
+    }
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    #ifndef ROCKSDB_LITE
+    
+    
+    {}  // namespace rocksdb
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    setShareFilesWithChecksum
+ * Signature: (JZ)V
+ */
+void Java_org_rocksdb_BackupableDBOptions_setShareFilesWithChecksum(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle, jboolean flag) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  bopt->share_files_with_checksum = flag;
+}
