@@ -1,47 +1,55 @@
 
         
-        # -- Options for LaTeX output ---------------------------------------------
+            def test_nonce_decoder(self):
+        from acme.jws import Header
+        nonce_field = Header._fields['nonce']
     
-        def test_eq(self):
-        self.assertTrue(self.vhost1b == self.vhost1)
-        self.assertFalse(self.vhost1 == self.vhost2)
-        self.assertEqual(str(self.vhost1b), str(self.vhost1))
-        self.assertFalse(self.vhost1b == 1234)
+            '''
+        error_files = self.aug.match('/augeas//error')
     
-    ==========================================  ===================================
-``--dns-digitalocean-credentials``          DigitalOcean credentials_ INI file.
-                                            (Required)
-``--dns-digitalocean-propagation-seconds``  The number of seconds to wait for
-                                            DNS to propagate before asking the
-                                            ACME server to verify the DNS
-                                            record.
-                                            (Default: 10)
-==========================================  ===================================
+        @mock.patch('certbot_apache.display_ops.display_util')
+    @certbot_util.patch_get_utility()
+    @mock.patch('certbot_apache.display_ops.logger')
+    def test_small_display(self, mock_logger, mock_util, mock_display_util):
+        mock_display_util.WIDTH = 20
+        mock_util().menu.return_value = (display_util.OK, 0)
+        self._call(self.vhosts)
     
-    
-if __name__ == '__main__':
-    ''''''
-    # _test()
-    
-        def __init__(self, n_unit, act_fn=relu, name=None):
-        ''''''
-        self.n_unit = n_unit
-        self.act_fn = act_fn
-        self.name = name
+            self.assertTrue(self.vhost1.conflicts([self.addr2]))
+        self.assertFalse(self.vhost1.conflicts([self.addr_default]))
     
     
+Examples
+--------
     
-        References:
-        K.repeat()
-        tf.tile()
-    '''
-    assert x.get_shape().ndims == 2
-    x = tf.expand_dims(x, axis=1)  # -> [batch_size, 1, n_input]
-    return tf.tile(x, [1, n, 1])  # -> [batch_size, n, n_input]
+    .. code-block:: ini
+   :name: credentials.ini
+   :caption: Example credentials file:
     
-    print(word_vec)
-print(model.wv['aam'])
-'''
-[ 0.02210762 -0.10488641  0.05512805  0.09150169  0.00725085]
-[ 0.02210762 -0.10488641  0.05512805  0.09150169  0.00725085]
-'''
+            # Deleting model 'GroupTagKey'
+        db.delete_table(u'tagstore_grouptagkey')
+    
+    
+@instrumented_task(
+    name='sentry.tagstore.tasks.delete_tag_key',
+    queue='cleanup',
+    default_retry_delay=60 * 5,
+    max_retries=MAX_RETRIES
+)
+@retry(exclude=(DeleteAborted, ))
+def delete_tag_key(object_id, model, transaction_id=None, **kwargs):
+    from sentry import deletions
+    
+        resolution_list = list(
+        GroupResolution.objects.filter(
+            Q(type=GroupResolution.Type.in_next_release) | Q(type__isnull=True),
+            release__projects=release.projects.all(),
+            release__date_added__lt=release.date_added,
+            status=GroupResolution.Status.pending,
+        ).exclude(
+            release=release,
+        )
+    )
+    
+    from sentry import options
+from sentry.tasks.base import instrumented_task
