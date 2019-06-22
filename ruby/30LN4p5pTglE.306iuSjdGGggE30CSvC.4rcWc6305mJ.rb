@@ -1,178 +1,88 @@
 
         
-            expect(failed).to eq(0)
+          def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
+  end
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+      # Get message for given
+  def find_message(kind, options = {})
+    options[:scope] ||= translation_scope
+    options[:default] = Array(options[:default]).unshift(kind.to_sym)
+    options[:resource_name] = resource_name
+    options = devise_i18n_options(options)
+    I18n.t('#{options[:resource_name]}.#{kind}', options)
+  end
+    
+    require 'rack/test'
+require 'action_controller/railtie'
+require 'active_record'
+require 'devise/rails/routes'
+require 'devise/rails/warden_compat'
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+          def add_fragment_back_to_path(uri, path)
+        [path, uri.fragment].compact.join('#')
+      end
+    end
   end
 end
 
     
-          # Create new records for users who don't have one yet
-      DB.exec 'INSERT INTO directory_items(period_type, user_id, likes_received, likes_given, topics_entered, days_visited, posts_read, topic_count, post_count)
-                SELECT
-                    :period_type,
-                    u.id,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-                FROM users u
-                LEFT JOIN directory_items di ON di.user_id = u.id AND di.period_type = :period_type
-                WHERE di.id IS NULL AND u.id > 0 AND u.silenced_till IS NULL and u.active
-      ', period_type: period_types[period_type]
+          generate_helpers!(Devise::URL_HELPERS)
     
-        it 'rejects invalid directives and ones that are not allowed to be extended' do
-      builder << {
-        invalid_src: ['invalid'],
-      }
+          def devise_mapping
+        @devise_mapping ||= Devise.mappings[scope_name]
+      end
     
-              headers = response.headers
-          # add cors if needed
-          if cors_origins = env[Discourse::Cors::ORIGINS_ENV]
-            Discourse::Cors.apply_headers(cors_origins, env, headers)
-          end
+        # Include the chosen devise modules in your model:
+    #
+    #   devise :database_authenticatable, :confirmable, :recoverable
+    #
+    # You can also give any of the devise configuration values in form of a hash,
+    # with specific values for this model. Please check your Devise initializer
+    # for a complete description on those values.
+    #
+    def devise(*modules)
+      options = modules.extract_options!.dup
     
-          UserAuthToken.log(
-        action: 'rotate',
-        user_auth_token_id: id,
-        user_id: user_id,
-        auth_token: auth_token,
-        user_agent: user_agent,
-        client_ip: client_ip,
-        path: info && info[:path]
-      )
-    
-        it 'does not send previously configured sources when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      select2('SF Weather', from: 'Sources')
-      select_agent_type('Webhook Agent')
-      fill_in(:agent_name, with: 'No sources')
-      click_on 'Save'
-      expect(page).to have_content('No sources')
-      agent = Agent.find_by(name: 'No sources')
-      expect(agent.sources).to eq([])
-    end
-    
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
-  end
-end
-
-    
-        it 'understands hl=8-' do
-      stub(params).[](:hl) { '8-' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [8, 9, 10]
-    end
-    
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
-    end
-    
-            log_action :change_email, @user
-    
-      def hub_topic_domain
-    hub_topic_uri.host + (hub_topic_uri.port ? ':#{hub_topic_uri.port}' : '')
-  end
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
-    else
-      head 400
-    end
-  end
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
-  end
-    
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
-    
-          refine C2.singleton_class do
-        def ===(obj)
-          obj.kind_of?(C1)
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
         end
-      end
-    end
     
-        class Error < ::StandardError # :nodoc:
-    end
-    class CompileError < Error # :nodoc:
-    end
-    class MatchError < Error # :nodoc:
-    end
-    
-    test_check 'marshal'
-$x = [1,2,3,[4,5,'foo'],{1=>'bar'},2.5,fact(30)]
-$y = Marshal.dump($x)
-test_ok($x == Marshal.load($y))
-    
-      def vlength
-    Math.sqrt(@x * @x + @y * @y + @z * @z)
-  end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        describe 'special case for start sharing notifications' do
-      it 'should not provide a contacts menu for standard notifications' do
-        FactoryGirl.create(:notification, :recipient => alice, :target => @post)
-        get :index, params: {per_page: 5}
-        expect(Nokogiri(response.body).css('.aspect_membership')).to be_empty
-      end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-    
-    
-          def session_key
-        @session_key ||= options[:session_key]
-      end
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    else
+      ['Unknown mode: #{hub_mode}', 422]
     end
   end
-end
+    
+      def body
+    @_body ||= request.body.read
+  end
+    
+      UPDATE_SIGN_IN_HOURS = 24
