@@ -1,159 +1,224 @@
 
         
-        template <> struct wAdd<s32>
-{
-    typedef s32 type;
-    }
+            UniValue v3;
+    BOOST_CHECK(v3.setNumStr('32482348723847471234'));
+    BOOST_CHECK_THROW(v3.get_int64(), std::runtime_error);
+    BOOST_CHECK(v3.setNumStr('1000'));
+    BOOST_CHECK_EQUAL(v3.get_int64(), 1000);
     
-        inline _normEstimator(const Size2D &size, s32 cn, Margin,
-                          ptrdiff_t &mapstep, s32** mag_buf, u8* &map)
-    {
-        mapstep = size.width + 2;
-        buffer.resize( (size.width+2)*(size.height+2) + cn*mapstep*3*sizeof(s32) );
-        mag_buf[0] = (s32*)&buffer[0];
-        mag_buf[1] = mag_buf[0] + mapstep*cn;
-        mag_buf[2] = mag_buf[1] + mapstep*cn;
-        memset(mag_buf[0], 0, /* cn* */mapstep * sizeof(s32));
-    }
     
-             vline_f32 = vaddq_f32(vline_f32, vhalf);
-         uint32x4_t vline_u32 = vcvtq_u32_f32(vline_f32);
-         uint16x4_t vline_u16 = vqmovn_u32(vline_u32);
-    
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
-    
-            for (; j < roiw_tail; j += step_tail, js += step_tail3, jd -= step_tail3)
-        {
-            vec64 v_src = vld3(src + js), v_dst;
-            v_dst.val[0] = vrev64(v_src.val[0]);
-            v_dst.val[1] = vrev64(v_src.val[1]);
-            v_dst.val[2] = vrev64(v_src.val[2]);
-    }
-    
-      auto* message1_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena1);
-  TestUtil::SetAllFields(message1_on_arena);
-  const auto* nested = &message1_on_arena->optional_nested_message();
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+    {  Close();
+  ASSERT_TRUE(DeleteAnSSTFile());
+  Options options = CurrentOptions();
+  options.paranoid_checks = true;
+  Status s = TryReopen(&options);
+  ASSERT_TRUE(!s.ok());
+  ASSERT_TRUE(s.ToString().find('issing') != std::string::npos)
+      << s.ToString();
 }
     
-    #include <google/protobuf/io/zero_copy_stream.h>
     
-        std::cerr << 'Generating ' << input_file
-        << ' to ' << output_file << std::endl;
-    benchmarks::BenchmarkDataset dataset;
-    Message* message;
-    std::string dataset_payload = ReadFile(input_file);
-    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
-      << 'Can' t parse data file ' << input_file;
-    
-    class GoGoProtoGenerator : public CodeGenerator {
- public:
-  virtual bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        bool can_generate =
-            (new_pool_.FindFileByName(file->name()) == nullptr);
-        for (int j = 0; j < file->dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->public_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->public_dependency(j)->name()) != nullptr);
-        }
-        for (int j = 0; j < file->weak_dependency_count(); j++) {
-          can_generate &= (new_pool_.FindFileByName(
-              file->weak_dependency(j)->name()) != nullptr);
-        }
-        if (can_generate) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
-    
-        for (int j = 0; j < person.phones_size(); j++) {
-      const tutorial::Person::PhoneNumber& phone_number = person.phones(j);
-    }
-    
-    const int32 MAX_CONNECTED = 32;
-const float32 COLLAPSE_DIST_SQR = CMP_EPSILON*CMP_EPSILON;//0.1f;//1000*CMP_EPSILON*1000*CMP_EPSILON;
-	
-class b2PolyNode{
-public:
-	b2Vec2 position;
-	b2PolyNode* connected[MAX_CONNECTED];
-	int32 nConnected;
-	bool visited;
-    }
-    
-    #include 'EtcBlock4x4EncodingBits.h'
-#include 'EtcBlock4x4.h'
-    
-    		void CalcBlockError(void);
-    
-    namespace Etc
-{
-    }
-    
-    
+    {}  // namespace leveldb
 
     
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
+    #include 'db/dbformat.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+    
+    
+    {  fname = TempFileName('tmp', 999);
+  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(999, number);
+  ASSERT_EQ(kTempFile, type);
+}
+    
+    
+    {		}
+    
+    #define  C_ADD( res, a,b)\
+    do {(res).r=ADD32((a).r,(b).r);  (res).i=ADD32((a).i,(b).i); \
+    }while(0)
+#define  C_SUB( res, a,b)\
+    do {(res).r=SUB32((a).r,(b).r);  (res).i=SUB32((a).i,(b).i); \
+    }while(0)
+#define C_ADDTO( res , a)\
+    do {(res).r = ADD32((res).r, (a).r);  (res).i = ADD32((res).i,(a).i);\
+    }while(0)
+    
+    #endif
+
+    
+    #include 'fixed_armv4.h'
+    
+    /** Change a 32-bit value into a 16-bit value. The value is assumed to fit in 16-bit, otherwise the result is undefined */
+#define EXTRACT16(x) ((opus_val16)(x))
+/** Change a 16-bit value into a 32-bit value */
+#define EXTEND32(x) ((opus_val32)(x))
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    #define silk_RSHIFT8(a, shift)              ((a)>>(shift))                                  /* shift >= 0, shift < 8  */
+#define silk_RSHIFT16(a, shift)             ((a)>>(shift))                                  /* shift >= 0, shift < 16 */
+#define silk_RSHIFT32(a, shift)             ((a)>>(shift))                                  /* shift >= 0, shift < 32 */
+#define silk_RSHIFT64(a, shift)             ((a)>>(shift))                                  /* shift >= 0, shift < 64 */
+#define silk_RSHIFT(a, shift)               silk_RSHIFT32(a, shift)                         /* shift >= 0, shift < 32 */
+    
+    /* a32 + (b32 * (c32 >> 16)) >> 16 */
+#undef silk_SMLAWT
+static OPUS_INLINE opus_int32 silk_SMLAWT_armv5e(opus_int32 a, opus_int32 b,
+ opus_int32 c)
 {
-  unsigned rd_lo;
-  int rd_hi;
+  int res;
   __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b),'r'(a<<16)
+      '#silk_SMLAWT\n\t'
+      'smlawt %0, %1, %2, %3\n\t'
+      : '=r'(res)
+      : 'r'(b), 'r'(c), 'r'(a)
   );
-  return rd_hi;
+  return res;
 }
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
+#define silk_SMLAWT(a, b, c) (silk_SMLAWT_armv5e(a, b, c))
     
-    /** 32-bit arithmetic shift right with rounding-to-nearest instead of rounding down */
-#define PSHR32(a,shift) (SHR32((a)+((EXTEND32(1)<<((shift))>>1)),shift))
-/** 32-bit arithmetic shift right where the argument can be negative */
-#define VSHR32(a, shift) (((shift)>0) ? SHR32(a, shift) : SHL32(a, -(shift)))
+    TEST(Transform, DeclareUnifiedTest(Basic)) {
+  const size_t size {256};
+  std::vector<bst_float> h_in(size);
+  std::vector<bst_float> h_out(size);
+  InitializeRange(h_in.begin(), h_in.end());
+  std::vector<bst_float> h_sol(size);
+  InitializeRange(h_sol.begin(), h_sol.end());
+    }
     
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
+      devices = GPUSet::Range(1, 0);
+  EXPECT_EQ(devices.Size(), 0);
+  EXPECT_TRUE(devices.IsEmpty());
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    TEST(Metric, DeclareUnifiedTest(Error)) {
+  auto lparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
+  xgboost::Metric * metric = xgboost::Metric::Create('error', &lparam);
+  metric->Configure({});
+  ASSERT_STREQ(metric->Name(), 'error');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.5f, 0.001f);
+    }
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
 
     
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H */
-
+    int ClusterQualityInfo702::pdh0(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 3);
+  int32_t x = t0.get_byte(0, 3);
+    }
     
-    void CoreStatsToProto(const grpc_stats_data& core, grpc::core::Stats* proto);
-void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core);
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    double Spline1dSeg::SecondOrderDerivative(const double x) const {
+  return second_order_derivative_(x);
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
+#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
+#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
+#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
+#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
+#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
+    
+    void Hornrpt79::Parse(const std::uint8_t* bytes, int32_t length,
+                      ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_horn_rpt_79()->set_manual_input(
+      manual_input(bytes, length));
+}
+    
+    void Speed::step(float dt)
+{
+    _innerAction->step(dt * _speed);
+}
+    
+    void ActionCamera::setEye(float x, float y, float z)
+{
+    _eye.set(x, y, z);
+    updateTransform();
+}
+    
+        // Overrides
+    virtual void startWithTarget(Node *target) override;
+    virtual ActionCamera * reverse() const override;
+    virtual ActionCamera *clone() const override;
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    NS_CC_END
