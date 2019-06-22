@@ -1,162 +1,93 @@
 
         
-                def preload_pipeline_warnings
-          # This preloads the number of warnings for every pipeline, ensuring
-          # that Ci::Pipeline#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.number_of_warnings
-        end
+        Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-            def collection_options
-          { state: 'all', sort: 'created', direction: 'asc' }
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
         end
       end
-    end
-  end
-end
-
     
-            def importer_class
-          NoteImporter
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
         end
-    
-    module Gitlab
-  module GithubImport
-    # IssuableFinder can be used for caching and retrieving database IDs for
-    # issuable objects such as issues and pull requests. By caching these IDs we
-    # remove the need for running a lot of database queries when importing
-    # GitHub projects.
-    class IssuableFinder
-      attr_reader :project, :object
-    
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-                  # Break so we don't find the next non flag and shift our
-              # main args.
-              break
-            end
-          end
-    
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-              # First determine the proper array of VMs.
-          machines = []
-          if names.length > 0
-            names.each do |name|
-              if pattern = name[/^\/(.+?)\/$/, 1]
-                @logger.debug('Finding machines that match regex: #{pattern}')
-    
-        # Like #{merge} but merges into self.
-    def merge!(other)
-      @items.merge!(other.__internal_state[:items])
-      self
-    end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
       end
-    end
     
-    Rake::TestTask.new(:'test:core') do |t|
-  core_tests = %w[base delegator encoding extensions filter
-     helpers mapped_error middleware radius rdoc
-     readme request response result route_added_hook
-     routing server settings sinatra static templates]
-  t.test_files = core_tests.map {|n| 'test/#{n}_test.rb'}
-  t.ruby_opts = ['-r rubygems'] if defined? Gem
-  t.ruby_opts << '-I.'
-  t.warning = true
-end
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
     
-    desc 'run specs'
-task(:spec) { ruby '-S rspec spec' }
-    
-          def react_and_close(env, body)
-        reaction = react(env)
-    
-      it 'should set the Content Security Policy' do
-    expect(
-      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
-    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
-  end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-        def options_config=(options_config)
-      loaded_config = ConfigLoader.load_file(options_config)
-      @options_config = ConfigLoader.merge_with_default(loaded_config,
-                                                        options_config)
-    end
-    
-            def declaration_with_comment(node)
-          buffer = processed_source.buffer
-          begin_pos = get_source_range(node, comments_as_separators).begin_pos
-          end_line = buffer.line_for_position(node.loc.expression.end_pos)
-          end_pos = buffer.line_range(end_line).end_pos
-          Parser::Source::Range.new(buffer, begin_pos, end_pos)
+              body.nil?
         end
     
-    #############################################################################
-#
-# Packaging tasks
-#
-#############################################################################
+    # Now, add our init-scripts, systemd services, and so on:
+pleaserun = package.convert(FPM::Package::PleaseRun)
+pleaserun.input ['/usr/bin/my-executable', '--foo-from', 'bar']
     
-        def messages
-      return @messages
-    end # def messages
+      option '--source-date-epoch-default', 'SOURCE_DATE_EPOCH_DEFAULT',
+    'If no release date otherwise specified, use this value as timestamp on generated files to reduce nondeterminism. ' \
+    'Reproducible build environments such as dpkg-dev and rpmbuild set this via envionment variable SOURCE_DATE_EPOCH ' \
+    'variable to the integer unix timestamp to use in generated archives, ' \
+    'and expect tools like fpm to use it as a hint to avoid nondeterministic output. ' \
+    'This is a Unix timestamp, i.e. number of seconds since 1 Jan 1970 UTC. ' \
+    'See https://reproducible-builds.org/specs/source-date-epoch ',
+    :environment_variable => 'SOURCE_DATE_EPOCH'
     
-        @name = nil
-    @architecture = 'native'
-    @description = 'no description given'
-    @version = nil
-    @epoch = nil
-    @iteration = nil
-    @url = nil
-    @category = 'default'
-    @license = 'unknown'
-    @vendor = 'none'
+        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
+    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
+    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
+    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
+    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
+    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
+    logger.debug('Package info', :name => self.name, :version => self.version,
+                  :description => self.description)
     
-        if info.include?('repository')
-      self.url = info['repository']['url']
+      option '--name', 'SERVICE_NAME', 'The name of the service you are creating'
+  option '--chdir', 'CHDIR', 'The working directory used by the service'
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for tar.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
     else
-      self.url = 'https://npmjs.org/package/#{self.name}'
+      dir.attributes[:chdir] = build_path
     end
     
-      def to_s(format=nil)
-    # Default format if nil
-    # git_1.7.9.3-1-amd64.pkg.tar.xz
-    return super(format.nil? ? 'NAME-FULLVERSION-ARCH.EXTENSION' : format)
-  end # def to_s
+        cleanup_staging
+    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
+    # rest.
+    dir.input('.')
+    @staging_path = dir.staging_path
+    dir.cleanup_build
+  end # def input
     
-        args = %W(-t #{@target} -s #{@source} -C #{@directory})
-    args << parsed_options
-    args << @args
-    
-    # Like the ::Gem::Package::TarWriter but contains some backports and bug fixes
-class FPM::Util::TarWriter < ::Gem::Package::TarWriter
-  if FPM::Issues::TarWriter.has_issues_with_split_name?
-    def split_name(name)
-      if name.bytesize > 256 then
-        raise ::Gem::Package::TooLongFileName.new('File \'#{name}\' has a too long path (should be 256 or less)')
-      end
+      # wrapper around mknod ffi calls
+  def mknod_w(path, mode, dev)
+    rc = -1
+    case %x{uname -s}.chomp
+    when 'Linux'
+      # bits/stat.h #define _MKNOD_VER_LINUX  0
+      rc = xmknod(0, path, mode, FFI::MemoryPointer.new(dev))
+    else
+      rc = mknod(path, mode, dev)
+    end
+    rc
+  end
