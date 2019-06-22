@@ -1,133 +1,170 @@
 
         
-                for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            internal::prefetch(dst + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vld1q_s16(dst + j), v_dst1 = vld1q_s16(dst + j + 8);
-            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
+        void SILLayout::Profile(llvm::FoldingSetNodeID &id,
+                        CanGenericSignature Generics,
+                        ArrayRef<SILField> Fields) {
+  id.AddPointer(Generics.getPointer());
+  for (auto &field : Fields) {
+    id.AddPointer(field.getLoweredType().getPointer());
+    id.AddBoolean(field.isMutable());
+  }
+}
+
+    
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
     }
     
-        void operator() (const typename VecTraits<u32>::vec64 & v_src0,
-                     const typename VecTraits<u32>::vec64 & v_src1,
-                     typename VecTraits<u32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_u32(v_src0);
-        float32x2_t vs2 = vcvt_f32_u32(v_src1);
-    }
+    // Section 6.2: Decoding procedure
     
     
-    {        if (!m[-1])         CANNY_PUSH(m - 1);
-        if (!m[1])          CANNY_PUSH(m + 1);
-        if (!m[-mapstep-1]) CANNY_PUSH(m - mapstep - 1);
-        if (!m[-mapstep])   CANNY_PUSH(m - mapstep);
-        if (!m[-mapstep+1]) CANNY_PUSH(m - mapstep + 1);
-        if (!m[mapstep-1])  CANNY_PUSH(m + mapstep - 1);
-        if (!m[mapstep])    CANNY_PUSH(m + mapstep);
-        if (!m[mapstep+1])  CANNY_PUSH(m + mapstep + 1);
-    }
+    {/// Emit a Swift-style dependencies file for \p SF.
+bool emitReferenceDependencies(DiagnosticEngine &diags, SourceFile *SF,
+                               const DependencyTracker &depTracker,
+                               StringRef outputPath);
+} // end namespace swift
     
-    
-    {    void operator() (const T * src0, const T * src1, u8 * dst) const
-    {
-        dst[0] = src0[0] > src1[0] ? 255 : 0;
-    }
-};
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-    #define CVT_FUNC(T1, T2, SIMD_SIZE, CVTINIT, CVTROW)                            \
-    void convert(const Size2D &,                                                \
-                 const T1 *, ptrdiff_t,                                         \
-                 T2 *, ptrdiff_t)                                               \
-    {                                                                           \
-        internal::assertSupportedConfiguration();                               \
-    }
-    
-    
-    {            vst1q_s16(drow + x - 8, t0);
+    /**
+ * @brief An interface for the units of computation which can be composed into a
+ *        Net.
+ *
+ * Layer%s must implement a Forward function, in which they take their input
+ * (bottom) Blob%s (if any) and compute their output Blob%s (if any).
+ * They may also implement a Backward function, in which they compute the error
+ * gradients with respect to their input Blob%s, given the error gradients with
+ * their output Blob%s.
+ */
+template <typename Dtype>
+class Layer {
+ public:
+  /**
+   * You should not implement your own constructor. Any set up code should go
+   * to SetUp(), where the dimensions of the bottom blobs are provided to the
+   * layer.
+   */
+  explicit Layer(const LayerParameter& param)
+    : layer_param_(param) {
+      // Set phase and copy blobs (if there are any).
+      phase_ = param.phase();
+      if (layer_param_.blobs_size() > 0) {
+        blobs_.resize(layer_param_.blobs_size());
+        for (int i = 0; i < layer_param_.blobs_size(); ++i) {
+          blobs_[i].reset(new Blob<Dtype>());
+          blobs_[i]->FromProto(layer_param_.blobs(i));
         }
-    
-    namespace leveldb {
-namespace log {
+      }
     }
+  virtual ~Layer() {}
     }
     
-    class SequentialFile;
+    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+
     
-      // Return the key for the current entry.  The underlying storage for
-  // the returned slice is valid only until the next modification of
-  // the iterator.
-  // REQUIRES: Valid()
-  virtual Slice key() const = 0;
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
+    }
     
-    {  // OK status has a null state_.  Otherwise, state_ is a new[] array
-  // of the following form:
-  //    state_[0..3] == length of message
-  //    state_[4]    == code
-  //    state_[5..]  == message
-  const char* state_;
+    class ScriptDetector {
+ public:
+  ScriptDetector(const GenericVector<int>* allowed_scripts,
+                 OSResults* osr, tesseract::Tesseract* tess);
+  void detect_blob(BLOB_CHOICE_LIST* scores);
+  bool must_stop(int orientation);
+ private:
+  OSResults* osr_;
+  static const char* korean_script_;
+  static const char* japanese_script_;
+  static const char* fraktur_script_;
+  int korean_id_;
+  int japanese_id_;
+  int katakana_id_;
+  int hiragana_id_;
+  int han_id_;
+  int hangul_id_;
+  int latin_id_;
+  int fraktur_id_;
+  tesseract::Tesseract* tess_;
+  const GenericVector<int>* allowed_scripts_;
 };
     
-    // Some commands are not affecting the state machine state of the calc flow. But these are more of
-// some gui mode kind of settings (eg Inv button, or Deg,Rad , Back etc.). This list is getting bigger & bigger
-// so we abstract this as a separate routine. Note: There is another side to this. Some commands are not
-// gui mode setting to begin with, but once it is discovered it is invalid and we want to behave as though it
-// was never inout, we need to revert the state changes made as a result of this test
-bool IsGuiSettingOpCode(OpCode opCode)
-{
-    if (IsOpInRange(opCode, IDM_HEX, IDM_BIN) || IsOpInRange(opCode, IDM_QWORD, IDM_BYTE) || IsOpInRange(opCode, IDM_DEG, IDM_GRAD))
-    {
-        return true;
-    }
-    }
+    #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
     
-    class CUnaryCommand final : public IUnaryCommand
-{
-public:
-    CUnaryCommand(int command);
-    CUnaryCommand(int command1, int command2);
-    const std::shared_ptr<CalculatorVector<int>>& GetCommands() const override;
-    CalculationManager::CommandType GetCommandType() const override;
-    void SetCommand(int command) override;
-    void SetCommands(int command1, int command2) override;
-    void Accept(_In_ ISerializeCommandVisitor& commandVisitor) override;
-    }
-    
-    class IBinaryCommand : public IOperatorCommand
-{
-public:
-    virtual void SetCommand(int command) override = 0;
-    virtual int GetCommand() const = 0;
-};
-    
-            DUPRAT(term, rat_one);
-        divrat(&term, *pn, precision);
-        subrat(&term, tmp, precision);
+      // Returns a pointer to the vector with all unichar ids that appear in the
+  // 'correct' part of the ambiguity pair when the given unichar id appears
+  // in the 'wrong' part of the ambiguity. E.g. if DangAmbigs file consist of
+  // m->rn,rn->m,m->iii, UnicharAmbigsForAdaption() called with unichar id of
+  // m will return a pointer to a vector with unichar ids of r,n,i.
+  inline const UnicharIdVector *AmbigsForAdaption(
+      UNICHAR_ID unichar_id) const {
+    if (ambigs_for_adaption_.empty()) return nullptr;
+    return ambigs_for_adaption_[unichar_id];
+  }
     
     
-    {protected:
-    std::string       _key;
-    float            _from, _to;
-    float            _delta;
-};
+    {}
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+    //////////////////////////////////////////////////////////////////////
     
-    NS_CC_END
+      // Special code for overflow handling
+  bool cond = (BranchConditions::Always != bc);
+  if (bc == BranchConditions::Overflow || bc == BranchConditions::NoOverflow) {
+    a.xor(reg::r0, reg::r0, reg::r0,false);
+    a.mtspr(Assembler::SpecialReg::XER, reg::r0);
+  } else if (cond && immt != ImmType::AnyCompact) {
+    // Unconditional branch (jmp or call) doesn't need this reserve bytes
+    a.emitNop(2 * instr_size_in_bytes);
+  }
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+    
+    private:
+  bool m_get;
+  bool m_ignoreErrors;
+  const char* m_method;
+  Array m_headers;
+  String m_postData;
+  int m_maxRedirect;
+  int m_timeout;
+  std::string m_error;
+  StringBuffer m_response;
+  Array m_responseHeaders;
