@@ -1,109 +1,100 @@
 
         
-            # The output is [num_batch_paths, max_path_len, output_dim].
-    self.lstm_outputs, _ = tf.nn.dynamic_rnn(
-        lstm_cell, self.path_matrix, dtype=tf.float32,
-        sequence_length=self.sequence_lengths)
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
-      # Sample neuron subsets.  The assumption is the PC axes of the RNN
-  # are not unit aligned, so sampling units is adequate to sample all
-  # the high-variance PCs.
-  P_sxn = np.eye(S,N)
-  for m in range(n):
-    P_sxn = np.roll(P_sxn, S, axis=1)
+        def test_timeout(self):
+        self.assertTrue(self.timeout.timeout)
+        self.assertFalse(self.invalid.timeout)
     
-    np.set_printoptions(precision=3)
-np.set_printoptions(suppress=True)
+        def setUp(self):
+        from acme.fields import Resource
+        self.field = Resource('x')
     
-      data_len = len(raw_data)
-  batch_len = data_len // batch_size
-  data = np.full([batch_size, batch_len], EOS_INDEX, dtype=np.int32)
-  for i in range(batch_size):
-    data[i] = raw_data[batch_len * i:batch_len * (i + 1)]
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-              eval_feed = {model.inputs: x, model.targets: y, model.present: p}
-    
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    import io
-import sys
-import re
-    
-    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-README_FILE = os.path.join(ROOT_DIR, 'README.md')
-    
-        def test_comments(self):
-        'Skipping: Not yet fully implemented'
-        return
-        jsi = JSInterpreter('''
-        function x() {
-            var x = /* 1 + */ 2;
-            var y = /* 30
-            * 40 */ 50;
-            return x + y;
-        }
-        ''')
-        self.assertEqual(jsi.call_function('x'), 52)
-    
-            self.port = random.randint(20000, 30000)
-        self.server_process = subprocess.Popen([
-            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
-    query                                    | scan
-update-item                              | update-table
-    
-    parametrize_script = pytest.mark.parametrize('script, fixed', [
-    ('tar xvf {}', 'mkdir -p {dir} && tar xvf {filename} -C {dir}'),
-    ('tar -xvf {}', 'mkdir -p {dir} && tar -xvf {filename} -C {dir}'),
-    ('tar --extract -f {}', 'mkdir -p {dir} && tar --extract -f {filename} -C {dir}')])
-    
-    
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
-    
-        def process_response(self, request, response):
-        # No need to check for a redirect for non-404 responses.
-        if response.status_code != 404:
-            return response
-    
-    
-class settingslist_node(nodes.General, nodes.Element):
-    pass
-    
-            # Broken links can't be fixed and
-        # I am not sure what do with the local ones.
-        if errortype.lower() in ['broken', 'local']:
-            print('Not Fixed: ' + line)
-        else:
-            # If this is a new file
-            if newfilename != _filename:
-    
-        def __exit__(self, exc_type, exc_value, traceback):
-        self.proc.kill()
-        self.proc.wait()
-        time.sleep(0.2)
-    
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
+            '''
+        super(AugeasConfigurator, self).rollback_checkpoints(rollback)
+        self.aug.load()
 
     
+       # Cloudflare API credentials used by Certbot
+   dns_cloudflare_email = cloudflare@example.com
+   dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
     
-class Command(ScrapyCommand):
+    ========================================  =====================================
+``--dns-cloudxns-credentials``            CloudXNS credentials_ INI file.
+                                          (Required)
+``--dns-cloudxns-propagation-seconds``    The number of seconds to wait for DNS
+                                          to propagate before asking the ACME
+                                          server to verify the DNS record.
+                                          (Default: 30)
+========================================  =====================================
     
-            # If no credentials could be found anywhere,
-        # consider this an anonymous connection request by default;
-        # unless 'anon' was set explicitly (True/False).
-        anon = kw.get('anon')
-        if anon is None and not aws_access_key_id and not aws_secret_access_key:
-            kw['anon'] = True
-        self.anon = kw.get('anon')
+    site_info = 'CKPlayer General'
+download = ckplayer_download
+download_playlist = playlist_not_supported('ckplayer')
+
     
-            if not self._has_ajax_crawlable_variant(response):
-            return response
+    from ..common import *
+import json
+    
+            if self.api_data['ssl'] != 'true':
+            self.enc_mode = False
+            common_args.update(dict(h=h, r=r))
+        else:
+            self.enc_mode = True
+            common_args['p'] = self.__class__.ENCRYPT_MOD_VER
+        self.common_args = common_args
+        return self.update_url(received)
+    
+        def prepare(self, **kwargs):
+        if re.search(r'imgur\.com/a/', self.url):
+            # album
+            content = get_content(self.url)
+            album = match1(content, r'album\s*:\s*({.*}),') or \
+                    match1(content, r'image\s*:\s*({.*}),')
+            album = json.loads(album)
+            count = album['album_images']['count']
+            images = album['album_images']['images']
+            ext = images[0]['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
+                            for i in images],
+                    'size': sum([i['size'] for i in images]),
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
+                            for i in images],
+                    'container': 'jpg'
+                }
+            }
+            self.title = album['title']
+    
+    Cela ressemble à un excellent recipie[1] déjeuner.
+    
+            assert i == 9
+        print('\tGot ZeroDivisionError as expected from IMapIterator.next()')
+        print()
+    
+    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
+cur.execute('insert into people (name_last, age) values ('Putin',     51)')
+    
+            print('Two or more elements')
+        data = [5, 1, 7, 2, 6, -3, 5, 7, -10]
+        assert_equal(func(data), sorted(data))
+    
+            print('Test: remove on a key that doesn't exist')
+        assert_raises(KeyError, hash_table.remove, -1)
