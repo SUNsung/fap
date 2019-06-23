@@ -1,200 +1,128 @@
 
         
-            proc.sendline(u'git h')
-    assert proc.expect([TIMEOUT, u'git: 'h' is not a git command.'])
+        from enum import Enum
+    
+            (foo, p1), 2
+        (bar, p1), 2
+        (bar, p1), 1
+        (foo, p2), 3
+        (bar, p3), 10
+        (foo, p4), 1
+        '''
+        timestamp, product_id, category, quantity = line.split('\t')
+        if self.within_past_week(timestamp):
+            yield (category, product_id), quantity
     
     
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+class Graph(object):
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+            network_ok = False
+        for url in self.urls:
+            if self._test_host(url):
+                network_ok = True
+                break
+            else:
+                if __name__ == '__main__':
+                    xlog.warn('test %s fail', url)
+                time.sleep(1)
     
-    dynamodb                                 | dynamodbstreams
-ec2                                      | ecr
-'''
+        files = [x for x in root.xpath('//a/text()')
+             if x.startswith('pandas-{}'.format(version))
+             and not dest.joinpath(x).exists()]
     
-    
-no_such_subcommand_old = '''No such subcommand
-    
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
-    
-    import pytest
+    '''
+from .casting import BaseCastingTests  # noqa
+from .constructors import BaseConstructorsTests  # noqa
+from .dtype import BaseDtypeTests  # noqa
+from .getitem import BaseGetitemTests  # noqa
+from .groupby import BaseGroupbyTests  # noqa
+from .interface import BaseInterfaceTests  # noqa
+from .methods import BaseMethodsTests  # noqa
+from .ops import BaseArithmeticOpsTests, BaseComparisonOpsTests, BaseOpsUtil  # noqa
+from .printing import BasePrintingTests  # noqa
+from .reduce import BaseNoReduceTests, BaseNumericReduceTests, BaseBooleanReduceTests  # noqa
+from .missing import BaseMissingTests  # noqa
+from .reshaping import BaseReshapingTests  # noqa
+from .setitem import BaseSetitemTests  # noqa
+from .io import BaseParsingTests  # noqa
+
     
     
-def info():
-    '''Generate information for a bug report.'''
+def test_bin32():
+    header = b'\xc6'
+    data = b'x' * 65536
+    b = packb(data, use_bin_type=True)
+    assert len(b) == len(data) + 5
+    assert b[0:1] == header
+    assert b[1:5] == b'\x00\x01\x00\x00'
+    assert b[5:] == data
+    assert unpackb(b) == data
+    
+    
+class MyTuple(tuple):
+    pass
+    
     try:
-        platform_info = {
-            'system': platform.system(),
-            'release': platform.release(),
-        }
-    except IOError:
-        platform_info = {
-            'system': 'Unknown',
-            'release': 'Unknown',
-        }
+    xrange
+except NameError:
+    xrange = range
     
-    # TODO: response is the only one
+    from tornado import gen
+from tornado.options import options, define, parse_command_line
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+def render():
+    tmpl.generate(**context)
     
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, 'requests', u'Requests Documentation', [author], 1)]
+        def test_json_encode(self):
+        # json deals with strings, not bytes.  On python 2 byte strings will
+        # convert automatically if they are utf8; on python 3 byte strings
+        # are not allowed.
+        self.assertEqual(json_decode(json_encode(u'\u00e9')), u'\u00e9')
+        if bytes is str:
+            self.assertEqual(json_decode(json_encode(utf8(u'\u00e9'))), u'\u00e9')
+            self.assertRaises(UnicodeDecodeError, json_encode, b'\xe9')
     
-        create_snapshot(
-        module=module,
-        state=state,
-        description=description,
-        wait=wait,
-        wait_timeout=wait_timeout,
-        ec2=ec2,
-        volume_id=volume_id,
-        instance_id=instance_id,
-        snapshot_id=snapshot_id,
-        device_name=device_name,
-        snapshot_tags=snapshot_tags,
-        last_snapshot_min_age=last_snapshot_min_age
-    )
+    def update_rollout_dict(spec, rollout_dict):
+    '''
+    Takes as input the environment spec for which the rollout is to be generated,
+    and the existing dictionary of rollouts. Returns True iff the dictionary was
+    modified.
+    '''
+    # Skip platform-dependent
+    if should_skip_env_spec_for_tests(spec):
+        logger.info('Skipping tests for {}'.format(spec.id))
+        return False
     
+            obser, r, done, info = env.step(a)
+        if r != 0:
+            print('reward %0.3f' % r)
+        total_reward += r
+        window_still_open = env.render()
+        if window_still_open==False: return False
+        if done: break
+        if human_wants_restart: break
+        while human_sets_pause:
+            env.render()
+            time.sleep(0.1)
+        time.sleep(0.1)
+    print('timesteps %i reward %0.2f' % (total_timesteps, total_reward))
     
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            auth_token=dict(
-                type='str',
-                default=os.environ.get('ONEANDONE_AUTH_TOKEN')),
-            api_url=dict(
-                type='str',
-                default=os.environ.get('ONEANDONE_API_URL')),
-            name=dict(type='str'),
-            firewall_policy=dict(type='str'),
-            description=dict(type='str'),
-            rules=dict(type='list', default=[]),
-            add_server_ips=dict(type='list', default=[]),
-            remove_server_ips=dict(type='list', default=[]),
-            add_rules=dict(type='list', default=[]),
-            remove_rules=dict(type='list', default=[]),
-            wait=dict(type='bool', default=True),
-            wait_timeout=dict(type='int', default=600),
-            wait_interval=dict(type='int', default=5),
-            state=dict(type='str', default='present', choices=['present', 'absent', 'update']),
-        ),
-        supports_check_mode=True
-    )
+    class RandomAgent(object):
+    '''The world's simplest agent!'''
+    def __init__(self, action_space):
+        self.action_space = action_space
     
-            for _port in ports:
-            monitoring_policy_port = oneandone.client.Port(
-                protocol=_port['protocol'],
-                port=_port['port'],
-                alert_if=_port['alert_if'],
-                email_notification=_port['email_notification']
-            )
-            monitoring_policy_ports.append(monitoring_policy_port)
-    
-    
-class DNSZoneIPAClient(IPAClient):
-    def __init__(self, module, host, port, protocol):
-        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
-    
-    import traceback
-    
-        module = AnsibleModule(
-        argument_spec=dict(
-            component=dict(required=True, aliases=['name']),
-            version=dict(required=True),
-            token=dict(required=True, no_log=True),
-            state=dict(required=True, choices=['started', 'finished', 'failed']),
-            hosts=dict(required=False, default=[socket.gethostname()], aliases=['host']),
-            env=dict(required=False),
-            owner=dict(required=False),
-            description=dict(required=False),
-            message=dict(required=False),
-            source_system=dict(required=False, default='ansible'),
-            validate_certs=dict(default='yes', type='bool'),
-            url=dict(required=False, default='https://api.bigpanda.io'),
-        ),
-        supports_check_mode=True,
-    )
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
-data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
-if not os.path.isdir(data_path):
-    data_path = current_path
-    
-    import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
-    
-    
-def icourses_playlist_new(url, page=None):
-    # 2 helpers using same interface in the js code
-    def to_chap(course_id, chap_id, mod):
-        ep = 'http://www.icourses.cn/jpk/viewCharacterDetail2.action?courseId={}&characId={}&mod={}'
-        req = post_content(ep.format(course_id, chap_id, mod), post_data={})
-        return req
-    
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
+    class TestInputGeneration(unittest.TestCase):
+    '''Test random input generation.
+    '''
+    def test_tape_inputs(self):
+        for env_kls in ALL_TAPE_ENVS:
+            env = env_kls()
+            for size in range(2,5):
+                input_tape = env.generate_input_data(size)
+                self.assertTrue(all(0<=x<=env.base for x in input_tape),
+                'Invalid input tape from env {}: {}'.format(env_kls, input_tape))
+                # DuplicatedInput needs to generate inputs with even length,
+                # so it may be short one
+                self.assertLessEqual(len(input_tape), size)
