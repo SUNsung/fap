@@ -1,105 +1,156 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+            Rational Sin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Cos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational Tan(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ASin(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ACos(Rational const& rat, ANGLE_TYPE angletype);
+    Rational ATan(Rational const& rat, ANGLE_TYPE angletype);
     
-    namespace tensorflow {
-    }
+            explicit Number(PNUMBER p) noexcept;
+        PNUMBER ToPNUMBER() const;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'Header Files/CalcEngine.h'
+#include 'Header Files/CalcUtils.h'
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/framework/types.pb.h'
-#include 'tensorflow/core/lib/core/status.h'
+    void acoshrat(PRAT* px, uint32_t radix, int32_t precision)
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/platform/logging.h'
+        mulnumx(&((*pa)->pp), tmp->pq);
+    mulnumx(&(tmp->pp), (*pa)->pq);
+    remnum(&((*pa)->pp), tmp->pp, BASEX);
+    mulnumx(&((*pa)->pq), tmp->pq);
     
-      // Factory for the default set of device options.
-  static DeviceOptions Default() { return DeviceOptions(0); }
+    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+
     
-          // colon indicates that the argument starts with a URI scheme
-      if (c == ':') {
-        // it could also be a Windows filesystem path
-        if (p == arg + 1)
-          break;
-    }
+    #include <cstddef>
+#include <cstdlib>
+#include <sstream>
+#include <limits>
+#include <map>
+#include <set>
+#include <typeinfo>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <utility>
     
-    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
+    
+    {
+    {/*! \brief typedef the factory function of data iterator */
+typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
+/*!
+ * \brief Registry entry for DataIterator factory functions.
+ */
+struct ImageAugmenterReg
+    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
+                                        ImageAugmenterFactory> {
+};
+//--------------------------------------------------------------
+// The following part are API Registration of Iterators
+//--------------------------------------------------------------
+/*!
+ * \brief Macro to register image augmenter
+ *
+ * \code
+ * // example of registering a mnist iterator
+ * REGISTER_IMAGE_AUGMENTER(aug_default)
+ * .describe('default augmenter')
+ * .set_body([]() {
+ *     return new DefaultAugmenter();
+ *   });
+ * \endcode
+ */
+#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
+  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_USE_OPENCV
+    
+     protected:
+  /*! \brief prefetcher parameters */
+  PrefetcherParam param_;
+  /*! \brief backend thread */
+  dmlc::ThreadedIter<DataBatch> iter;
+  /*! \brief internal batch loader */
+  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+    
+    enum class CompressionType {
+  kNone, kTwoBit
+};
+    
+    // C callback that can be used by TVM to extract
+// the WrapAsyncCall function.
+extern 'C' MXNET_DLL int MXTVMBridge(TVMFunctionHandle pregister) {
+  using tvm::runtime::PackedFunc;
+  const PackedFunc& fregister =
+      *static_cast<PackedFunc*>(pregister);
+  fregister('WrapAsyncCall', PackedFunc(mxnet::WrapAsyncCall));
+  return 0;
+}
+
+    
+    
+    {
+    {
+    {  bool init_cudnn_;
+  cudnnDataType_t dtype_;
+  cudnnSpatialTransformerDescriptor_t st_desc_;
+  cudnnTensorDescriptor_t in_desc_;
+  cudnnTensorDescriptor_t out_desc_;
+  cudnnSamplerType_t sampler_;
+  #if CUDNN_MAJOR >= 5
+  cudnnTensorFormat_t format_;
+  #endif
+  BilinearSamplerParam param_;
+};
+#endif  // __CUDACC__ && CUDNN
+}  // namespace op
+}  // namespace mxnet
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/options.h'
+    
+    class MyFilter : public rocksdb::CompactionFilter {
  public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
-    }
-    
-    
-    {}  // namespace api
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    #include 'atom/browser/api/event_emitter.h'
-#include 'native_mate/handle.h'
-#include 'ui/display/display_observer.h'
-#include 'ui/display/screen.h'
-    
-      // Gets/Sets the delegate.
-  static Delegate* GetDelegate();
-  static void SetDelegate(Delegate* delegate);
-    
-    #include 'atom/browser/net/about_protocol_handler.h'
-    
-    void OffscreenViewProxy::SetBitmap(const SkBitmap& bitmap) {
-  if (view_bounds_.width() == bitmap.width() &&
-      view_bounds_.height() == bitmap.height() && observer_) {
-    view_bitmap_.reset(new SkBitmap(bitmap));
-    observer_->OnProxyViewPaint(view_bounds_);
+  bool Filter(int level, const rocksdb::Slice& key,
+              const rocksdb::Slice& existing_value, std::string* new_value,
+              bool* value_changed) const override {
+    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
+    ++count_;
+    assert(*value_changed == false);
+    return false;
   }
-}
-    
-    namespace internal {
     }
     
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    #include <string>
+    
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
     }
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
+    #ifdef LUA
+#include <string>
+#include <vector>
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
+      // Attempt to acquire lock.  Return OK on success, or other Status on failure.
+  // If returned status is OK, TransactionDB will eventually call UnLock().
+  virtual Status Lock() = 0;
     
-    typedef std::map<std::string,std::string> KeyMap;
-    
-    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-  return true;
-}
-    
-    NwObjDestroyFunction::NwObjDestroyFunction() {
+    /*
+ * Class:     org_rocksdb_Checkpoint
+ * Method:    dispose
+ * Signature: (J)V
+ */
+void Java_org_rocksdb_Checkpoint_disposeInternal(JNIEnv* /*env*/,
+                                                 jobject /*jobj*/,
+                                                 jlong jhandle) {
+  auto* checkpoint = reinterpret_cast<rocksdb::Checkpoint*>(jhandle);
+  assert(checkpoint != nullptr);
+  delete checkpoint;
 }
