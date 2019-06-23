@@ -1,156 +1,186 @@
-      command_return = ActionCommandReturn.new(
-        return_value: action_return,
-        return_value_type: action_class_ref.return_type,
-        closure_argument_value: closure_argument_value
-      )
-      return command_return
-    end
+
+        
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-        def rescue_connection_failed_error(e)
-      if e.message.include?('Connection reset by peer - SSL_connect')
-        handle_tls_error!(e)
-      else
-        handle_unknown_error!(e)
-      end
-    end
+    def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
+end
     
-          it 'allows you to specify the commit where to add the tag' do
-        tag = '2.0.0'
-        commit = 'beta_tag'
-        message = 'message'
+          #
     
-          it 'adds crossref_format param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            crossref_format: 'some regex'
-          )
-        end').runner.execute(:test)
+      auto_updates true
+  depends_on cask: 'homebrew/cask-versions/adobe-photoshop-lightroom600'
     
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
       #
-  # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
-  #    'can't add a new key into hash during iteration'
-  #
-  def each(&block)
-    list = []
-    self.keys.sort.each do |sidx|
-      list << [sidx, self[sidx]]
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
+      end
+    
+          def ignored_node?(node)
+        # Same object found in array?
+        ignored_nodes.any? { |n| n.equal?(node) }
+      end
+    
+        pkg_origin = attributes[:freebsd_origin]
+    if pkg_origin == 'fpm/<name>'  # fill in default
+      pkg_origin = 'fpm/#{name}'
     end
-    list.each(&block)
-  end
     
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      0x01, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # HMAC-SHA1
-      0x01, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # AES Encryption
-      0x01, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-              # Encodes the components field
-          #
-          # @return [String]
-          def encode_components
-            encoded = ''
-    
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def encode
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
+      end
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
         end
       end
+    
+      def build!(params)
+    # TODO(sissel): Support these somehow, perhaps with execs and files.
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+        when 'post-install'
+        when 'pre-uninstall'
+        when 'post-uninstall'
+      end # case name
+    end # self.scripts.each
+    
+      def create_scripts
+    if script?(:after_install)
+      File.write(File.join(fpm_meta_path, 'after_install'), script(:after_install))
     end
   end
-end
     
-              # Decodes the realm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_realm(input)
-            input.value[0].value
-          end
+    class FPM::RakeTask < Rake::TaskLib
+  attr_reader :options
     
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
-    
-      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
-  name 'Adobe Photoshop Lightroom'
-  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
-    
-      def test_symlink_exists(path)
-    exists?('L', path)
-  end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
-    
-          def echo?
-        (options || {}).fetch(:echo, true)
+    module FPM
+  module Issues
+    module TarWriter
+      # See https://github.com/rubygems/rubygems/issues/1608
+      def self.has_issue_1608?
+        name, prefix = nil,nil
+        io = StringIO.new
+        ::Gem::Package::TarWriter.new(io) do |tw|
+          name, prefix = tw.split_name('/123456789'*9 + '/1234567890') # abs name 101 chars long
+        end
+        return prefix.empty?
       end
+    
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
+    end
+  end
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
     end
   end
 end
 
     
-          def keys
-        values.keys
+        def pre_window
+      params = if rbenv?
+                 'rbenv shell #{yaml['rbenv']}'
+               elsif rvm?
+                 'rvm use #{yaml['rvm']}'
+               elsif pre_tab?
+                 yaml['pre_tab']
+               else
+                 yaml['pre_window']
+               end
+      parsed_parameters(params)
+    end
+    
+        def self.register(view_hash)
+      view_hash.each do |view_key, view_class|
+        super view_key, view_class
+        add_writer(view_key)
+        send '#{view_key}=', view_class
+      end
+    end
+    
+          # Override the default to_s to include a closing form tag
+      def to_s
+        content + closing_form_tag
       end
     
-      at_exit { Application.run! if $!.nil? && Application.run? }
+          # Return the set of batch actions that should be displayed
+      def batch_actions_to_display
+        @batch_actions.select do |batch_action|
+          call_method_or_proc_on(self, batch_action.display_if_block)
+        end
+      end
+    
+      end
 end
+
     
-      File.open('rack-protection.gemspec', 'w') { |f| f << content }
-end
+        def self.config
+      {
+        path: ActiveAdmin.application.default_namespace || '/',
+        controllers: ActiveAdmin::Devise.controllers,
+        path_names: { sign_in: 'login', sign_out: 'logout' },
+        sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
+      }
+    end
     
-          def set_token(session)
-        session[:csrf] ||= self.class.random_token
+        it { is_expected.to eq('') }
+    
+          def check_extension_whitelist!(new_file)
+        extension = new_file.extension.to_s
+        if extension_whitelist && !whitelisted_extension?(extension)
+          raise CarrierWave::IntegrityError, I18n.translate(:'errors.messages.extension_whitelist_error', extension: new_file.extension.inspect, allowed_types: Array(extension_whitelist).join(', '))
+        end
       end
-    
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
-    
-      it 'prevents ajax requests without a valid token' do
-    expect(post('/', {}, 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest')).not_to be_ok
-  end
