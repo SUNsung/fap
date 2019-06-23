@@ -1,128 +1,99 @@
 
         
-        from enum import Enum
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-    
-class Graph(object):
-    
-            network_ok = False
-        for url in self.urls:
-            if self._test_host(url):
-                network_ok = True
-                break
-            else:
-                if __name__ == '__main__':
-                    xlog.warn('test %s fail', url)
-                time.sleep(1)
-    
-        files = [x for x in root.xpath('//a/text()')
-             if x.startswith('pandas-{}'.format(version))
-             and not dest.joinpath(x).exists()]
-    
-    '''
-from .casting import BaseCastingTests  # noqa
-from .constructors import BaseConstructorsTests  # noqa
-from .dtype import BaseDtypeTests  # noqa
-from .getitem import BaseGetitemTests  # noqa
-from .groupby import BaseGroupbyTests  # noqa
-from .interface import BaseInterfaceTests  # noqa
-from .methods import BaseMethodsTests  # noqa
-from .ops import BaseArithmeticOpsTests, BaseComparisonOpsTests, BaseOpsUtil  # noqa
-from .printing import BasePrintingTests  # noqa
-from .reduce import BaseNoReduceTests, BaseNumericReduceTests, BaseBooleanReduceTests  # noqa
-from .missing import BaseMissingTests  # noqa
-from .reshaping import BaseReshapingTests  # noqa
-from .setitem import BaseSetitemTests  # noqa
-from .io import BaseParsingTests  # noqa
+            def format(self, record):
+        if isinstance(record.msg, six.binary_type):
+            record.msg = record.msg.decode('utf-8')
+        message = super(ConsoleWarningFormatter, self).format(record)
+        return '{0}{1}'.format(self.get_level_message(record), message)
 
     
     
-def test_bin32():
-    header = b'\xc6'
-    data = b'x' * 65536
-    b = packb(data, use_bin_type=True)
-    assert len(b) == len(data) + 5
-    assert b[0:1] == header
-    assert b[1:5] == b'\x00\x01\x00\x00'
-    assert b[5:] == data
-    assert unpackb(b) == data
+def hang_up(signal, frame):
+    raise HangUpException()
+    
+        def proxy_callable(self, call_name, *args, **kwargs):
+        self.log.info('%s %s <- %s',
+                      self.obj_name,
+                      call_name,
+                      format_call(args, kwargs))
     
     
-class MyTuple(tuple):
-    pass
-    
-    try:
-    xrange
-except NameError:
-    xrange = range
-    
-    from tornado import gen
-from tornado.options import options, define, parse_command_line
+def get_service_name_from_network_mode(network_mode):
+    return get_source_name_from_network_mode(network_mode, 'service')
     
     
-def render():
-    tmpl.generate(**context)
+class TestHandleConnectionErrors(object):
     
-        def test_json_encode(self):
-        # json deals with strings, not bytes.  On python 2 byte strings will
-        # convert automatically if they are utf8; on python 3 byte strings
-        # are not allowed.
-        self.assertEqual(json_decode(json_encode(u'\u00e9')), u'\u00e9')
-        if bytes is str:
-            self.assertEqual(json_decode(json_encode(utf8(u'\u00e9'))), u'\u00e9')
-            self.assertRaises(UnicodeDecodeError, json_encode, b'\xe9')
+    from .. import unittest
+from compose.utils import split_buffer
     
-    def update_rollout_dict(spec, rollout_dict):
+    import docker
+import pytest
+    
+          outputs = {
+          'embedding_output': model.get_embedding_output(),
+          'sequence_output': model.get_sequence_output(),
+          'pooled_output': model.get_pooled_output(),
+          'all_encoder_layers': model.get_all_encoder_layers(),
+      }
+      return outputs
+    
+      name_to_features = {
+      'unique_ids': tf.FixedLenFeature([], tf.int64),
+      'input_ids': tf.FixedLenFeature([seq_length], tf.int64),
+      'input_mask': tf.FixedLenFeature([seq_length], tf.int64),
+      'segment_ids': tf.FixedLenFeature([seq_length], tf.int64),
+  }
+    
+          masked_lms.append(MaskedLmInstance(index=index, label=tokens[index]))
+  assert len(masked_lms) <= num_to_predict
+  masked_lms = sorted(masked_lms, key=lambda x: x.index)
+    
+        # [[1,2,3],[1,2,3]]-[[1,2,3],[1,2,0]]
+    # (A1-A2)^2+(B1-B2)^2+(c1-c2)^2
+    
+    # inx - dataset 使用了numpy broadcasting，见 https://docs.scipy.org/doc/numpy-1.13.0/user/basics.broadcasting.html
+    # np.sum() 函数的使用见 https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.sum.html
+    # '''
+	#   dist = np.sum((inx - dataset)**2, axis=1)**0.5
+    
+    # '''
+    # 2. k个最近的标签
+    
+    # 对距离排序使用numpy中的argsort函数， 见 https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.sort.html#numpy.sort
+    # 函数返回的是索引，因此取前k个索引使用[0 : k]
+    # 将这k个标签存在列表k_labels中
+    # '''
+    # k_labels = [labels[index] for index in dist.argsort()[0 : k]]
+	# '''
+    # 3. 出现次数最多的标签即为最终类别
+    
+    # 使用collections.Counter可以统计各个标签的出现次数，most_common返回出现次数最多的标签tuple，例如[('lable1', 2)]，因此[0][0]可以取出标签值
+	# '''
+    # label = Counter(k_labels).most_common(1)[0][0]
+    # return label
+    
+    # 构造简单的数据集
+def get_training_dataset():
     '''
-    Takes as input the environment spec for which the rollout is to be generated,
-    and the existing dictionary of rollouts. Returns True iff the dictionary was
-    modified.
+    Desc:
+        构建一个简单的训练数据集
+    Args:
+        None
+    Returns:
+        input_vecs —— 训练数据集的特征部分
+        labels —— 训练数据集的数据对应的标签，是一一对应的
     '''
-    # Skip platform-dependent
-    if should_skip_env_spec_for_tests(spec):
-        logger.info('Skipping tests for {}'.format(spec.id))
-        return False
+    # 构建数据集，输入向量列表，每一项是工作年限
+    input_vecs = [[5], [3], [8], [1.4], [10.1]]
+    # 期望的输出列表，也就是输入向量的对应的标签，与工作年限对应的收入年薪
+    labels = [5500, 2300, 7600, 1800, 11400]
+    return input_vecs, labels
     
-            obser, r, done, info = env.step(a)
-        if r != 0:
-            print('reward %0.3f' % r)
-        total_reward += r
-        window_still_open = env.render()
-        if window_still_open==False: return False
-        if done: break
-        if human_wants_restart: break
-        while human_sets_pause:
-            env.render()
-            time.sleep(0.1)
-        time.sleep(0.1)
-    print('timesteps %i reward %0.2f' % (total_timesteps, total_reward))
     
-    class RandomAgent(object):
-    '''The world's simplest agent!'''
-    def __init__(self, action_space):
-        self.action_space = action_space
+def testBiKMeans():
+    # 加载测试数据集
+    dataMat = mat(loadDataSet('data/10.KMeans/testSet2.txt'))
     
-    class TestInputGeneration(unittest.TestCase):
-    '''Test random input generation.
-    '''
-    def test_tape_inputs(self):
-        for env_kls in ALL_TAPE_ENVS:
-            env = env_kls()
-            for size in range(2,5):
-                input_tape = env.generate_input_data(size)
-                self.assertTrue(all(0<=x<=env.base for x in input_tape),
-                'Invalid input tape from env {}: {}'.format(env_kls, input_tape))
-                # DuplicatedInput needs to generate inputs with even length,
-                # so it may be short one
-                self.assertLessEqual(len(input_tape), size)
+    
+class MRWordCountUtility(MRJob):
