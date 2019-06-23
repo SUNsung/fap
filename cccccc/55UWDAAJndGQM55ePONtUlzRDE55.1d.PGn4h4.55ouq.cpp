@@ -1,96 +1,75 @@
 
         
-        **Code**
+            // Setup time step
+    INT64 current_time;
+    ::QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
+    io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
+    g_Time = current_time;
     
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
-  }
+    #pragma once
+    
+    void ImGui_ImplGLUT_MotionFunc(int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
 }
-    
-    #endif
 
     
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-      // Backwards compatible constrained fit with a supplied gradient.
-  // Deprecated. Use ConstrainedFit(const FCOORD& direction) where possible
-  // to avoid potential difficulties with infinite gradients.
-  double ConstrainedFit(double m, float* c);
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     
-      // Sets up the DENORM to execute a non-linear transformation based on
-  // preserving an even distribution of stroke edges. The transformation
-  // operates only within the given box, scaling input coords within the box
-  // non-linearly to a box of target_width by target_height, with all other
-  // coords being clipped to the box edge. As with SetupNormalization above,
-  // final_xshift and final_yshift are applied after scaling, and the bottom-
-  // left of box is used as a pre-scaling origin.
-  // x_coords is a collection of the x-coords of vertical edges for each
-  // y-coord starting at box.bottom().
-  // y_coords is a collection of the y-coords of horizontal edges for each
-  // x-coord starting at box.left().
-  // Eg x_coords[0] is a collection of the x-coords of edges at y=bottom.
-  // Eg x_coords[1] is a collection of the x-coords of edges at y=bottom + 1.
-  // The second-level vectors must all be sorted in ascending order.
-  void SetupNonLinear(const DENORM* predecessor, const TBOX& box,
-                      float target_width, float target_height,
-                      float final_xshift, float final_yshift,
-                      const GenericVector<GenericVector<int> >& x_coords,
-                      const GenericVector<GenericVector<int> >& y_coords);
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
     
-    /*
-Method:
-Start at vertex with minimum y (pick maximum x one if there are two).  
-We aim our 'lastDir' vector at (1.0, 0)
-We look at the two rays going off from our start vertex, and follow whichever
-has the smallest angle (in -Pi -> Pi) wrt lastDir ('rightest' turn)
+    public:
+  DHTResponseMessage(const std::shared_ptr<DHTNode>& localNode,
+                     const std::shared_ptr<DHTNode>& remoteNode,
+                     const std::string& transactionID);
+    
+      std::unique_ptr<DHTBucketTreeNode> root_;
     
     
-    {	};
+    {} // namespace aria2
+
     
-    typedef opus_val32 celt_sig;
-typedef opus_val16 celt_norm;
-typedef opus_val32 celt_ener;
+    class DHTNode;
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
+{
+  routingTable_ = routingTable;
+}
     
-    #ifdef OPUS_ARM_INLINE_MEDIA
+      void setMessageDispatcher(DHTMessageDispatcher* dispatcher);
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    
+    {    // out_of_range.404
+    try
+    {
+        // try to use a JSON pointer that cannot be resolved
+        json::const_reference ref = j.at('/number/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
