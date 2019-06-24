@@ -1,113 +1,108 @@
 
         
-            def translation_scope
-      'devise.unlocks'
-    end
-end
-
+              def self.details
+        list = <<-LIST.markdown_list
+          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
+          `lane` is the name of the current fastlane lane
+          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
+          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
+          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
+        LIST
     
-          if options.has_key?(:only)
-        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
-      elsif options[:skip] == :all
-        @used_routes = []
-      else
-        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+            expect(result).to include(' oclint -report-type=pmd -o=report_path.xml ')
+        expect(result).to include(' -max-priority-1=10 ')
+        expect(result).to include(' -max-priority-2=20 ')
+        expect(result).to include(' -max-priority-3=30 ')
+        expect(result).to include(' -rc=LONG_LINE=200 -rc=LONG_METHOD=200 ')
+        expect(result).to include(' -rule DoubleNegative -rule DeadCode ')
+        expect(result).to include(' -disable-rule GotoStatement -disable-rule ShortVariableName ')
+        expect(result).to include(' -list-enabled-rules ')
+        expect(result).to include(' -enable-clang-static-analyzer ')
+        expect(result).to include(' -enable-global-analysis ')
+        expect(result).to include(' -allow-duplicated-violations ')
       end
-    end
     
-            # Attempt to find a user by its email. If a record is found, send new
-        # password instructions to it. If user is not found, returns a new user
-        # with an email not found error.
-        # Attributes must contain the user's email
-        def send_reset_password_instructions(attributes={})
-          recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
-          recoverable.send_reset_password_instructions if recoverable.persisted?
-          recoverable
-        end
-    
-            # Generate a token checking if one does not already exist in the database.
-        def remember_token #:nodoc:
-          loop do
-            token = Devise.friendly_token
-            break token unless to_adapter.find_first({ remember_token: token })
-          end
-        end
-    
-          module ClassMethods
-        Devise::Models.config(self, :timeout_in)
-      end
+        it 'recognizes an array as the first element of a command' do
+      message = 'A message'
+      command = command_from_args(['/usr/local/bin/git', 'git'], 'commit', '-m', message)
+      expect(command).to eq('/usr/local/bin/git commit -m #{message.shellescape}')
     end
   end
 end
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
+    else
+      return str
+    end
+  end
+  module_function :shellescape
+end
 
     
-        # Extract each header value pair
-    header.split(/\r\n/mn).each { |str|
-      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
-        if (self[md[1]])
-          self[md[1]] << ', ' + md[2]
-        else
-          self[md[1]] = md[2]
-        end
+    describe 'monkey patch of Array.shelljoin (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+    end
+    
+          it 'keeps the specified screenshots folder' do
+        expect(options[:screenshots_path]).to eq('./screenshots')
       end
-    }
+    
+      get '/' => 'test#index'
+end
+    
+            if options[:bypass]
+          ActiveSupport::Deprecation.warn(<<-DEPRECATION.strip_heredoc, caller)
+          [Devise] bypass option is deprecated and it will be removed in future version of Devise.
+          Please use bypass_sign_in method instead.
+          Example:
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+          private
+    
+          def remember_me!
+        self.remember_token ||= self.class.remember_token if respond_to?(:remember_token)
+        self.remember_created_at ||= Time.now.utc
+        save(validate: false) if self.changed?
+      end
+    
+          redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
+    end
+    
+      def hub_lease_seconds
+    params['hub.lease_seconds']
   end
     
-      # Handling incoming control packets
-  # TODO: Enforce sequence order to prevent duplicates from breaking our state
-  def handle_control(pkt)
-    src_call, dst_call, tstamp, out_seq, inp_seq, itype = pkt.unpack('nnNCCC')
+    class Api::SalmonController < Api::BaseController
+  include SignatureVerification
     
-            # Receives a Kerberos Response over a tcp connection
-        #
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
-        # @raise [RuntimeError] if the response can't be processed
-        # @raise [EOFError] if expected data can't be read
-        def recv_response_tcp
-          length_raw = connection.get_once(4, timeout)
-          unless length_raw && length_raw.length == 4
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
-          length = length_raw.unpack('N')[0]
+      def update
+    if subscription.verify(body, request.headers['HTTP_X_HUB_SIGNATURE'])
+      ProcessingWorker.perform_async(@account.id, body.force_encoding('UTF-8'))
+    end
     
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.decrypt
-            cipher.key = k3
-            decrypted = cipher.update(data) + cipher.final
+      def update
+    setting.data = params[:data]
+    setting.save!
     
-              # Decodes the end_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_end_time(input)
-            input.value[0].value
-          end
-    
-              # Decodes the kvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_kvno(input)
-            input.value[0].value.to_i
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
-            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
-            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
-            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
-            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
-            seq_asn1.to_der
-          end
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
+      private
