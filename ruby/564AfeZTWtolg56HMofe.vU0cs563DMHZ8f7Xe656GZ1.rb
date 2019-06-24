@@ -1,65 +1,58 @@
 
         
-            def initialize
-      @pages = {}
-    end
+              private
     
-        def effective_path
-      @effective_path ||= effective_url.path
-    end
-  end
-end
-
+            include ::EachBatch
+      end
     
-        delegate :puts, :print, :tty?, to: :$stdout
-    
-            css('.note h3', '.warning h3').each do |node|
-          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+            def representation_class
+          Representation::DiffNote
         end
     
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
-
+            def importer_class
+          IssueAndLabelLinksImporter
+        end
     
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
-    end
+              issue.label_names.each do |label_name|
+            # Although unlikely it's technically possible for an issue to be
+            # given a label that was created and assigned after we imported all
+            # the project's labels.
+            next unless (label_id = label_finder.id_for(label_name))
     
-      # Execute this command. See Clamp::Command#execute and Clamp's documentation
-  def execute
-    logger.level = :warn
-    logger.level = :info if verbose? # --verbose
-    logger.level = :debug if debug? # --debug
-    if log_level
-      logger.level = log_level.to_sym
-    end
+            def representation_class
+          Representation::Note
+        end
     
-        pkginfo = ''
+          # The class used for converting API responses to Hashes when performing
+      # the import.
+      def representation_class
+        raise NotImplementedError
+      end
     
-        npm_flags = []
-    settings.each do |key, value|
-      # npm lets you specify settings in a .npmrc but the same key=value settings
-      # are valid as '--key value' command arguments to npm. Woo!
-      logger.debug('Configuring npm', key => value)
-      npm_flags += [ '--#{key}', value ]
-    end
+          def field_container(model, method, options = {}, &block)
+        css_classes = options[:class].to_a
+        css_classes << 'field'
+        css_classes << 'withError' if error_message_on(model, method).present?
+        content_tag(
+          :div, capture(&block),
+          options.merge(class: css_classes.join(' '), id: '#{model}_#{method}_field')
+        )
+      end
     
-      def architecture
-    case @architecture
-      when nil
-        return %x{uname -m}.chomp   # default to current arch
-      when 'amd64' # debian and pacman disagree on architecture names
-        return 'x86_64'
-      when 'native'
-        return %x{uname -m}.chomp   # 'native' is current arch
-      when 'all', 'any', 'noarch'
-        return 'any'
-      else
-        return @architecture
-    end
-  end # def architecture
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
+          end
+    
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
+    
+            def create
+          authorize! :create, Product
+          params[:product][:available_on] ||= Time.current
+          set_up_shipping_category
