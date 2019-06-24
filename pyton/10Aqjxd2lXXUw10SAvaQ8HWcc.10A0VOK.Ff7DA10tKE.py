@@ -1,118 +1,107 @@
 
         
-        
-# Certain versions of pypy have a bug where clearing the exception stack
-# breaks the __exit__ function in a very peculiar way.  The second level of
-# exception blocks is necessary because pypy seems to forget to check if an
-# exception happened until the next bytecode instruction?
-#
-# Relevant PyPy bugfix commit:
-# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
-# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
-# versions.
-#
-# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
-BROKEN_PYPY_CTXMGR_EXIT = False
-if hasattr(sys, 'pypy_version_info'):
-    
-        #: When data is changed, this is set to ``True``. Only the session
-    #: dictionary itself is tracked; if the session contains mutable
-    #: data (for example a nested dict) then this must be set to
-    #: ``True`` manually when modifying that data. The session cookie
-    #: will only be written to the response if this is ``True``.
-    modified = False
+        import random
     
     
-def unicode_is_ascii(u_string):
-    '''Determine if unicode string only contains ASCII characters.
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
+    from django.conf import settings
+from django.template.backends.django import DjangoTemplates
+from django.template.loader import get_template
+from django.utils.functional import cached_property
+from django.utils.module_loading import import_string
     
-        return {
-        'platform': platform_info,
-        'implementation': implementation_info,
-        'system_ssl': system_ssl_info,
-        'using_pyopenssl': pyopenssl is not None,
-        'pyOpenSSL': pyopenssl_info,
-        'urllib3': urllib3_info,
-        'chardet': chardet_info,
-        'cryptography': cryptography_info,
-        'idna': idna_info,
-        'requests': {
-            'version': requests_version,
-        },
-    }
     
-            # Verify we haven't overwritten the location with our previous fragment.
-        assert r.history[1].request.url == 'http://{}:{}/get#relevant-section'.format(host, port)
-        # Verify previous fragment is used and not the original.
-        assert r.url == 'http://{}:{}/final-url/#relevant-section'.format(host, port)
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
     
-        @pytest.mark.parametrize(
-        ('encoding', 'expected'), (
-            ('utf-16-be', 'utf-16'),
-            ('utf-16-le', 'utf-16'),
-            ('utf-32-be', 'utf-32'),
-            ('utf-32-le', 'utf-32')
-        ))
-    def test_guess_by_bom(self, encoding, expected):
-        data = u'\ufeff{}'.encode(encoding)
-        assert guess_json_utf(data) == expected
+            '''
+        super(AugeasConfigurator, self).recovery_routine()
+        # Need to reload configuration after these changes take effect
+        self.aug.load()
     
-        def test_copy(self):
-        cid = CaseInsensitiveDict({
-            'Accept': 'application/json',
-            'user-Agent': 'requests',
-        })
-        cid_copy = cid.copy()
-        assert cid == cid_copy
-        cid['changed'] = True
-        assert cid != cid_copy
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
-        def delete_face_at_index(self, frame, idx):
-        ''' Delete the face alignment for given frame at given index '''
-        logger.debug('Deleting face %s for frame '%s'', idx, frame)
-        idx = int(idx)
-        if idx + 1 > self.count_faces_in_frame(frame):
-            logger.debug('No face to delete: (frame: '%s', idx %s)', frame, idx)
-            return False
-        del self.data[frame][idx]
-        logger.debug('Deleted face: (frame: '%s', idx %s)', frame, idx)
-        return True
     
-            if self.config.get('mask_type', None):
-            var_y = input_
-            var_y = self.blocks.upscale(var_y, decoder_complexity)
-            var_y = self.blocks.upscale(var_y, decoder_complexity)
-            var_y = self.blocks.upscale(var_y, decoder_complexity // 2)
-            var_y = self.blocks.upscale(var_y, decoder_complexity // 4)
-            var_y = Conv2D(1, kernel_size=5, padding='same', activation='sigmoid')(var_y)
-            outputs.append(var_y)
-        return KerasModel(input_, outputs=outputs)
+Named Arguments
+---------------
     
-        def store_history(self, side, loss):
-        ''' Store the history of this step '''
-        logger.trace('Updating loss history: '%s'', side)
-        self.model.history[side].append(loss[0])  # Either only loss or total loss
-        logger.trace('Updated loss history: '%s'', side)
+        # Close the env and write monitor result info to disk
+    env.close()
+
     
-    import locale
-import logging
-import os
+        return output_spec
+    
+    
+if __name__ == '__main__':
+  flags.mark_flag_as_required('input_file')
+  flags.mark_flag_as_required('vocab_file')
+  flags.mark_flag_as_required('bert_config_file')
+  flags.mark_flag_as_required('init_checkpoint')
+  flags.mark_flag_as_required('output_file')
+  tf.app.run()
+
+    
+        def run(self):
+        time.sleep(1)
+        self.output().open('w').close()
+    
+        def run(self):
+        print('{task} says: Hello world!'.format(task=self.__class__.__name__))
+    
+        def output(self):
+        return luigi.LocalTarget(path='/tmp/_docs-%s.ldj' % self.task_id)
+    
+        def mapper(self, line):
+        for word in line.strip().split():
+            yield word, 1
+    
+          - Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+      - Initially, let p equal 2, the smallest prime number.
+      - Enumerate the multiples of p by counting to n from 2p in increments of p, and mark them in the list (these will be 2p, 
+        3p, 4p, ...; the p itself should not be marked).
+      - Find the first number greater than p in the list that is not marked. If there was no such number, stop. Otherwise, let 
+        p now equal this new number (which is the next prime), and repeat from step 3.
+      - When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
+'''
 import sys
-import tkinter as tk
     
-            lbltitle = ttk.Label(statusframe, text='Status:', width=6, anchor=tk.W)
-        lbltitle.pack(side=tk.LEFT, expand=False)
+    # Description   : This will scan the current directory and all subdirectories and display the size.
     
-        def compute_output_shape(self, input_shape):
-        ''' If you are using 'channels_last' configuration'''
-        input_shape = self.input_spec[0].shape
-        in_width, in_height = input_shape[2], input_shape[1]
-        kernel_width, kernel_height  = self.kernel_size, self.kernel_size
+    for host in HOSTS:
+    result = []
+    for command in COMMANDS:
+        ssh = subprocess.Popen(['ssh', '%s' % host, command],
+                               shell=False,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+        result.append(ssh.stdout.readlines())
+    print('--------------- ' + host + ' --------------- ')
+    for res in result:
+        if not res:
+            print(ssh.stderr.readlines())
+            break
+        else:
+            print(res)
+
+    
+    if __name__=='__main__':
+    game()
+
+    
+            self.inputNotice = Text(self.TNotebook1_t0)
+        self.inputNotice.place(relx=0.02, rely=0.28, relheight=0.64
+                , relwidth=0.68)
+        self.inputNotice.configure(background='white')
+        self.inputNotice.configure(font='TkTextFont')
+        self.inputNotice.configure(selectbackground='#c4c4c4')
+        self.inputNotice.configure(width=396)
+        self.inputNotice.configure(wrap=WORD)
+    
+    # Modifications		: 
