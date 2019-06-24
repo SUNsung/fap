@@ -1,125 +1,160 @@
 
         
-              def self.[](type)
-        type_klass[type]
-      end
+              @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
     
-    module AbstractController
-  module Testing
-    class ControllerWithHelpers < AbstractController::Base
-      include AbstractController::Helpers
-      include AbstractController::Rendering
-      include ActionView::Rendering
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LabelLinksImporter
+        attr_reader :issue, :project, :client, :label_finder
     
-      attr_reader :id
-  attr_reader :post_id
-  def initialize(id = nil, post_id = nil); @id, @post_id = id, post_id end
-  def to_key; id ? [id] : nil end
-  def save; @id = 1; @post_id = 1 end
-  def persisted?; @id.present? end
-  def to_param; @id && @id.to_s; end
-  def value
-    @id.nil? ? 'new #{self.class.name.downcase}' : '#{self.class.name.downcase} ##{@id}'
-  end
-    
-      def persisted?
-    false
-  end
-end
-    
-        def types_as_json
-      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
-    
-        def version
-      context[:version]
-    end
-    
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
-    end
-    
-        def handle_response(response)
-      if process_response?(response)
-        instrument 'process_response.scraper', response: response do
-          process_response(response)
+            # attributes - A hash containing the raw issue details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
         end
-      else
-        instrument 'ignore_response.scraper', response: response
-      end
-    rescue => e
-      if Docs.rescue_errors
-        instrument 'error.doc', exception: e, url: response.url
-        nil
-      else
-        raise e
-      end
-    end
     
-        module MultipleBaseUrls
-      def self.included(base)
-        base.extend ClassMethods
-      end
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
     
-          def mod
-        return @mod if defined?(@mod)
-        @mod = slug[/api\/([\w\-\.]+)\//, 1]
-        @mod.remove! 'angular2.' if @mod
-        @mod
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Environment] env Vagrant::Environment object of the
+        #   environment that this configuration has been loaded into. This
+        #   gives you convenient access to things like the the root path
+        #   and so on.
+        # @param [ErrorRecorder] errors
+        def validate(env, errors)
+        end
       end
     end
   end
 end
 
     
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
         end
     
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+      def body
+    @_body ||= request.body.read
+  end
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
+      end
+    end
+  end
+    
+    module UserTrackingConcern
+  extend ActiveSupport::Concern
+    
+      #
+  # Gets cookies from the Set-Cookie header in a parsed format
+  #
+  def get_cookies_parsed
+    if (self.headers.include?('Set-Cookie'))
+      ret = CGI::Cookie::parse(self.headers['Set-Cookie'])
+    else
+      ret = {}
+    end
+    ret
+  end
+    
+        if res[1] == IAX_SUBTYPE_REGREJ
+      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
+      dprint('REGREJ: #{reason}')
+      return
+    end
+    
+    module Rex
+module Proto
+module IPMI
+  require 'rex/proto/ipmi/channel_auth_reply'
+  require 'rex/proto/ipmi/open_session_reply'
+  require 'rex/proto/ipmi/rakp2'
+    
+        head + [data.length].pack('v') + data
+  end
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncryptionKey, invalid input'
+            end
+    
+              # Decodes the enc_part
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_part(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
+          end
+        end
       end
     end
   end
 end
-
     
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
+                decode_asn1(asn1)
+          end
+    
+        def initialize(values={})
+      @variables = ValidatedVariables.new(Variables.new(values))
     end
     
-          def bar_side
-        @bar_side.to_s
-      end
+          def response
+        return @response if defined? @response
     
-    task :default => :test
-    
-        class MapGollum
-      def initialize(base_path)
-        @mg = Rack::Builder.new do
-          
-          map '/#{base_path}' do
-            run Precious::App
-          end
-          map '/' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          map '/*' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          
-        end
+          def with(properties)
+        properties.each { |key, value| add_property(key, value) }
+        self
       end
