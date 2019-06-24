@@ -1,108 +1,273 @@
 
         
-        
-    {}  // namespace tesseract.
-
+        RequirementEnvironment::RequirementEnvironment(
+                                           DeclContext *conformanceDC,
+                                           GenericSignature *reqSig,
+                                           ProtocolDecl *proto,
+                                           ClassDecl *covariantSelf,
+                                           ProtocolConformance *conformance)
+    : reqSig(reqSig) {
+  ASTContext &ctx = conformanceDC->getASTContext();
+    }
     
-    #endif  // TESSERACT_CCMAIN_PARAGRAPHS_H_
-
+    namespace clang {
+  class RecordDecl;
+  class TypedefNameDecl;
+}
+    
+    namespace clang {
+class Sema;
+class NamedDecl;
+class TypeDecl;
+class FunctionDecl;
+}
+    
+    #ifndef SWIFT_FRONTENDTOOL_REFERENCEDEPENDENCIES_H
+#define SWIFT_FRONTENDTOOL_REFERENCEDEPENDENCIES_H
     
     
-    {  TBOX bbox_;
-  int length_;
-  GenericVector<TBOX> boxes_;
+    {  Alignment getAlignment() const {
+    return Align;
+  }
+  
+  llvm::PointerType *getType() const {
+    return cast<llvm::PointerType>(Addr->getType());
+  }
 };
     
-      // Returns definite 1-1 ambigs for the given unichar id.
-  inline const UnicharIdVector *OneToOneDefiniteAmbigs(
-      UNICHAR_ID unichar_id) const {
-    if (one_to_one_definite_ambigs_.empty()) return nullptr;
-    return one_to_one_definite_ambigs_[unichar_id];
+    
+    {  // Moving messages on two different arenas should lead to a copy.
+  *message2_on_arena = std::move(*message1_on_arena);
+  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
+  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
+  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+}
+    
+      desired_output_for_decode = 'ABCD__EfghI_j';
+  expected = string('\x64\x80\xC5\xA1\x0', 5);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+    
+    string Status::ToString() const {
+  if (error_code_ == error::OK) {
+    return 'OK';
+  } else {
+    if (error_message_.empty()) {
+      return error::CodeEnumToString(error_code_);
+    } else {
+      return error::CodeEnumToString(error_code_) + ':' +
+          error_message_;
+    }
   }
+}
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
+  }
+}
+    
+    string StripProto(string filename) {
+  return filename.substr(0, filename.rfind('.proto'));
+}
+    
+     private:
+  void ScrubEnum(EnumDescriptorProto *enum_type) {
+    if (enum_type->value(0).number() != 0) {
+      bool has_zero = false;
+      for (int j = 0; j < enum_type->value().size(); j++) {
+        if (enum_type->value(j).number() == 0) {
+          EnumValueDescriptorProto temp_enum_value;
+          temp_enum_value.CopyFrom(enum_type->value(j));
+          enum_type->mutable_value(j)->CopyFrom(enum_type->value(0));
+          enum_type->mutable_value(0)->CopyFrom(temp_enum_value);
+          has_zero = true;
+          break;
+        }
+      }
+      if (!has_zero) {
+        enum_type->mutable_value()->Add();
+        for (int i = enum_type->mutable_value()->size() - 1; i > 0; i--) {
+          enum_type->mutable_value(i)->CopyFrom(
+              *enum_type->mutable_value(i - 1));
+        }
+        enum_type->mutable_value(0)->set_number(0);
+        enum_type->mutable_value(0)->set_name('ADDED_ZERO_VALUE_' +
+                                              std::to_string(total_added_++));
+      }
+    }
+    }
+    
+    
+    {
+    {
+    {      switch (phone_number.type()) {
+        case tutorial::Person::MOBILE:
+          cout << '  Mobile phone #: ';
+          break;
+        case tutorial::Person::HOME:
+          cout << '  Home phone #: ';
+          break;
+        case tutorial::Person::WORK:
+          cout << '  Work phone #: ';
+          break;
+        default:
+          cout << '  Unknown phone #: ';
+          break;
+      }
+      cout << phone_number.number() << endl;
+    }
+    if (person.has_last_updated()) {
+      cout << '  Updated: ' << TimeUtil::ToString(person.last_updated()) << endl;
+    }
+  }
+}
+    
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
+    
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+      // Get the value of the top (smallest, defined by operator< ) element.
+  const Pair& PeekTop() const {
+    return heap_[0];
+  }
+  // Get the value of the worst (largest, defined by operator< ) element.
+  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
+    
+      static void OnDoneRecvTrailingMetadataCb(void* user_data, grpc_error* error);
+    
+    MeasureInt64 RpcServerSentMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcServerSentMessagesPerRpcMeasureName,
+                             'Number of messages sent per RPC', kCount);
+  return measure;
+}
     
     namespace grpc {
-namespace {
-    }
     }
     
-    #endif  // GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
-
+    namespace {
+    }
     
-    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
-  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
-    return system_clock::time_point::max();
+    #ifndef GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+#define GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+    
+    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
+                          gpr_timespec* to) {
+  high_resolution_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == high_resolution_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
+    return;
   }
-  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
-  system_clock::time_point tp;
-  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
-  tp +=
-      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
-  return tp;
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
+}
+    
+      Hash hash(HASH_TYPE_SHA1);
+  hash.update(hn.c_str(), hn.size());
+  auto hn_hash = hash.digest();
+    
+      fpack.platform_ = 'freebsd';
+  if (isPlatform(PlatformType::TYPE_FREEBSD)) {
+    EXPECT_TRUE(fpack.checkPlatform());
+  } else {
+    EXPECT_FALSE(fpack.checkPlatform());
+  }
+    
+    ExpectedSuccess<DatabaseError> RocksdbDatabase::putRawBytes(
+    const std::string& domain,
+    const std::string& key,
+    const std::string& value) {
+  auto handle = getHandle(domain);
+  if (handle) {
+    std::shared_ptr<Handle> handle_ptr = handle.take();
+    return putRawBytesInternal(handle_ptr.get(), key, value);
+  }
+  return handle.takeError();
 }
     
     
-    {    Rational Sinh(Rational const& rat);
-    Rational Cosh(Rational const& rat);
-    Rational Tanh(Rational const& rat);
-    Rational ASinh(Rational const& rat);
-    Rational ACosh(Rational const& rat);
-    Rational ATanh(Rational const& rat);
-}
-
-    
-    Rational RationalMath::Fact(Rational const& rat)
-{
-    PRAT prat = rat.ToPRAT();
-    }
-    
-    // Some commands are not affecting the state machine state of the calc flow. But these are more of
-// some gui mode kind of settings (eg Inv button, or Deg,Rad , Back etc.). This list is getting bigger & bigger
-// so we abstract this as a separate routine. Note: There is another side to this. Some commands are not
-// gui mode setting to begin with, but once it is discovered it is invalid and we want to behave as though it
-// was never inout, we need to revert the state changes made as a result of this test
-bool IsGuiSettingOpCode(OpCode opCode)
-{
-    if (IsOpInRange(opCode, IDM_HEX, IDM_BIN) || IsOpInRange(opCode, IDM_QWORD, IDM_BYTE) || IsOpInRange(opCode, IDM_DEG, IDM_GRAD))
-    {
-        return true;
-    }
-    }
-    
-    
-    {    return grouping;
+    {  fs::rename(src_path, dst_path, ec);
+  if (!ec) {
+    return createError(RocksdbMigrationError::FailMoveDatabase)
+           << 'Move failed: ' << ec.value() << ' ' << ec.message();
+  }
+  return Success();
 }
     
-    {
-    asinrat(pa, radix, precision);
-    ascalerat(pa, angletype, precision);
+    #include <osquery/utils/expected/expected.h>
+    
+      // Initialize the distributed plugin, if necessary
+  if (!FLAGS_disable_distributed) {
+    initActivePlugin('distributed', FLAGS_distributed_plugin);
+  }
+    
+    TEST_F(RocksdbDatabaseTest, test_open) {
+  auto path = randomDBPath();
+  auto db = std::make_unique<RocksdbDatabase>('test', path_);
+  auto result = db->open();
+  EXPECT_TRUE(result);
+  db->close();
 }
-    
-        template <>
-    /*static*/ NDArrayViewPtr NDArrayView::RandomNormal<int8_t>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device)
-    {
-        return NDArrayView::_RandomNormal<int8_t, char>(shape, mean, stdDev, seed, device);
-    }
-    
-        template <typename ElementType>
-    void Value::CopyVariableValueToVector(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences)
-    {
-        if (outputVariable.Shape()[0] != outputVariable.Shape().TotalSize())
-            InvalidArgument('For sparse data, the outputVariable's leading axis dimensionality (%zu) must equal the total size (%zu) of the Variable '%S'.',
-                            outputVariable.Shape()[0], outputVariable.Shape().TotalSize(), outputVariable.AsString().c_str());
-    }
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
