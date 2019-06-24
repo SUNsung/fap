@@ -1,139 +1,140 @@
 
         
-        from __future__ import print_function
-    
-        fpath = os.path.join(path, 'test_batch')
-    x_test, y_test = load_batch(fpath)
-    
-    
-def l1_l2(l1=0.01, l2=0.01):
-    return L1L2(l1=l1, l2=l2)
+        def rabinMiller(num):
+    s = num - 1
+    t = 0
     
     
-def test_cifar():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
+class HashTable:
+    '''
+        Basic Hash Table example with open addressing and linear probing
+    '''
     
-    model.compile(loss=keras.losses.categorical_crossentropy,
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
+        score = np.sqrt(mean_square_diff)
     
-    To use this with Keras, we make a dataset out of elements
-of the form (input batch, output batch). From there, we
-create a one-shot iterator and a graph node corresponding
-to its get_next() method. Its components are then provided
-to the network's Input layer and the Model.compile() method,
-respectively.
+            a += a
+        b >>= 1
     
-    from __future__ import print_function
+    letters = [letter for letter in string.ascii_letters]
+digits = [digit for digit in string.digits]
+symbols = [symbol for symbol in string.punctuation]
+chars = letters + digits + symbols
+random.shuffle(chars)
     
-    - Klambauer, G., Unterthiner, T., Mayr, A., & Hochreiter, S. (2017).
-  Self-Normalizing Neural Networks. arXiv preprint arXiv:1706.02515.
-  https://arxiv.org/abs/1706.02515
-'''
-from __future__ import print_function
+                # the (n+1)th request fails
+            with pytest.raises(requests.exceptions.ConnectionError):
+                r = requests.get(server_url)
     
+    from .structures import LookupDict
     
-def test_deconv_length():
-    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
-    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
-    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
-    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
-    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
-    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
-    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
-    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
-    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
-    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
+        return urlunparse((scheme, netloc, path, params, query, ''))
     
-        if __password__ and __password__ != kwargs.get('password', ''):
-        start_response('403 Forbidden', [('Content-Type', 'text/html')])
-        yield message_html('403 Wrong password', 'Wrong password(%r)' % kwargs.get('password', ''), 'GoAgent proxy.ini password is wrong!')
-        raise StopIteration
+            # Adding unique constraint on 'TagKey', fields ['project_id', 'environment_id', 'key']
+        db.create_unique(u'tagstore_tagkey', ['project_id', 'environment_id', 'key'])
     
-            ## State of a lexer, parser, or tree parser are collected into a state
-        # object so the state can be shared.  This sharing is needed to
-        # have one grammar import others and share same error variables
-        # and other state variables.  It's a kind of explicit multiple
-        # inheritance via delegation of methods and shared state.
-        if state is None:
-            state = RecognizerSharedState()
-        self._state = state
+        # Flag to indicate if this migration is too risky
+    # to run online and needs to be coordinated for offline
+    is_dangerous = True
     
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
+        return results
+    
+            for platform, project_id in queryset:
+            platform = platform.lower()
+            if platform not in VALID_PLATFORMS:
+                continue
+            ProjectPlatform.objects.create_or_update(
+                project_id=project_id,
+                platform=platform,
+                values={
+                    'last_seen': now,
+                },
+            )
+        min_project_id += step
+    
+    import logging
     
     
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
+def main():
+    parse_command_line()
+    t = Timer(e1)
+    results = t.timeit(options.num) / options.num
+    print('engine: %0.3f ms per iteration' % (results * 1000))
+    t = Timer(c1)
+    results = t.timeit(options.num) / options.num
+    print('coroutine: %0.3f ms per iteration' % (results * 1000))
     
-            '''
-        self.revert_temporary_config()
-        self.aug.load()
+        url = options.url + '/updateReports?agent=%s' % options.name
+    update_ws = yield websocket_connect(url, None)
+    msg = yield update_ws.read_message()
+    assert msg is None
+    IOLoop.instance().stop()
     
-    ALL_SSL_OPTIONS_HASHES = [
-    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
-    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
-    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
-    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
-    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
-    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
-    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
-    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
-]
-'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
+        @gen.coroutine
+    def resolve(
+        self, host: str, port: int, family: int = 0
+    ) -> 'Generator[Any, Any, List[Tuple[int, Any]]]':
+        if is_valid_ip(host):
+            addresses = [host]
+        else:
+            # gethostbyname doesn't take callback as a kwarg
+            fut = Future()  # type: Future[Tuple[Any, Any]]
+            self.channel.gethostbyname(
+                host, family, lambda result, error: fut.set_result((result, error))
+            )
+            result, error = yield fut
+            if error:
+                raise IOError(
+                    'C-Ares returned error %s: %s while resolving %s'
+                    % (error, pycares.errno.strerror(error), host)
+                )
+            addresses = result.addresses
+        addrinfo = []
+        for address in addresses:
+            if '.' in address:
+                address_family = socket.AF_INET
+            elif ':' in address:
+                address_family = socket.AF_INET6
+            else:
+                address_family = socket.AF_UNSPEC
+            if family != socket.AF_UNSPEC and family != address_family:
+                raise IOError(
+                    'Requested socket family %d but got %d' % (family, address_family)
+                )
+            addrinfo.append((typing.cast(int, address_family), (address, port)))
+        return addrinfo
+
     
-    from certbot_apache.display_ops import select_vhost_multiple
-from certbot_apache.tests import util
+        def test_ioloop_close_leak(self):
+        orig_count = len(IOLoop._ioloop_for_asyncio)
+        for i in range(10):
+            # Create and close an AsyncIOLoop using Tornado interfaces.
+            loop = AsyncIOLoop()
+            loop.close()
+        new_count = len(IOLoop._ioloop_for_asyncio) - orig_count
+        self.assertEqual(new_count, 0)
     
-            complex_vh = VirtualHost(
-            'fp', 'vhp',
-            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
-            False, False)
-        self.assertTrue(complex_vh.conflicts([self.addr1]))
-        self.assertTrue(complex_vh.conflicts([self.addr2]))
-        self.assertFalse(complex_vh.conflicts([self.addr_default]))
+            self._last_char[0] = byte_str[-1]
     
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-dns-cloudflare', u'certbot-dns-cloudflare Documentation',
-     [author], 1)
-]
+        def __init__(self, model, reversed=False, name_prober=None):
+        super(SingleByteCharSetProber, self).__init__()
+        self._model = model
+        # TRUE if we need to reverse every pair in the model lookup
+        self._reversed = reversed
+        # Optional auxiliary prober for name decision
+        self._name_prober = name_prober
+        self._last_order = None
+        self._seq_counters = None
+        self._total_seqs = None
+        self._total_char = None
+        self._freq_char = None
+        self.reset()
     
-       # CloudXNS API credentials used by Certbot
-   dns_cloudxns_api_key = 1234567890abcdef1234567890abcdef
-   dns_cloudxns_secret_key = 1122334455667788
+        @property
+    def language(self):
+        return 'Japanese'
     
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'certbot-dns-cloudxns.tex', u'certbot-dns-cloudxns Documentation',
-     u'Certbot Project', 'manual'),
-]
-    
-    .. code-block:: bash
-   :caption: To acquire a certificate for ``example.com``, waiting 60 seconds
-             for DNS propagation
+        def __init__(self):
+        super(UTF8Prober, self).__init__()
+        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
+        self._num_mb_chars = None
+        self.reset()
