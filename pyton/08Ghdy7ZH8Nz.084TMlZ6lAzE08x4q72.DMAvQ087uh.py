@@ -1,97 +1,178 @@
 
         
-            def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+        
+class User(object):
     
-        def remove(self, key):
+        def current_year_month(self):
+        '''Return the current year and month.'''
+        ...
+    
+        def mapper_sort(self, key, value):
+        '''Construct key to ensure proper sorting.
+    
+        def get(self, key):
         hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
+        for item in self.table[hash_index]:
             if item.key == key:
-                del self.table[hash_index][index]
-                return
+                return item.value
         raise KeyError('Key not found')
+    
+        def process_query(self, query):
+        query = self.parse_query(query)
+        results = self.memory_cache.get(query)
+        if results is None:
+            results = self.reverse_index_cluster.process_search(query)
+            self.memory_cache.set(query, results)
+        return results
+    
+            if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+        elif (
+            db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone()
+            is not None
+        ):
+            error = 'User {0} is already registered.'.format(username)
+    
+    
+def test_init_db_command(runner, monkeypatch):
+    class Recorder(object):
+        called = False
+    
+    from flask import has_request_context
+from flask import url_for
+    
+    # Read lines from the linkcheck output file
+try:
+    with open('build/linkcheck/output.txt') as out:
+        output_lines = out.readlines()
+except IOError:
+    print('linkcheck output not found; please run linkcheck first.')
+    exit(1)
+    
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+        def long_desc(self):
+        return ('Edit a spider using the editor defined in the EDITOR environment'
+                ' variable or else the EDITOR setting')
+    
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
+    
+    
+class Command(ScrapyCommand):
+    
+        DEFAULT_CIPHERS = AcceptableCiphers.fromOpenSSLCipherString('DEFAULT')
 
     
+        def report_out_of_quota(self, appid):
+        self.logger.warn('report_out_of_quota:%s', appid)
+        with self.lock:
+            if appid not in self.out_of_quota_appids:
+                self.out_of_quota_appids.append(appid)
+            try:
+                self.working_appid_list.remove(appid)
+            except:
+                pass
     
-class QueryApi(object):
-    
-            while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
-    
-        def solve_sub_array(self):
-        rear = [int(self.array[0])]*len(self.array)
-        sum_value = [int(self.array[0])]*len(self.array)
-        for i in range(1, len(self.array)):
-            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
-            rear[i] = max(sum_value[i], rear[i-1])
-        return rear[len(self.array)-1]
-    
-        return diff
-
+        @staticmethod
+    def import_linux_firefox_ca(common_name, ca_file):
+        xlog.debug('Begin importing CA to Firefox')
+        firefox_config_path = CertUtil.get_linux_firefox_path()
+        if not firefox_config_path:
+            #xlog.debug('Not found Firefox path')
+            return False
     
     
-# ALTERNATIVE METHODS  
-# ctbi= characters that must be in password
-# i= how many letters or characters the password length will be 
-def password_generator(ctbi, i):
-  # Password generator = full boot with random_number, random_letters, and random_character FUNCTIONS
-  pass  # Put your code here...
+    def rewind(self, marker=None):
+        '''
+        Reset the stream so that next call to index would return marker.
+        The marker will usually be index() but it doesn't have to be.  It's
+        just a marker to indicate what state the stream was in.  This is
+        essentially calling release() and seek().  If there are markers
+        created after this marker argument, this routine must unroll them
+        like a stack.  Assume the state the stream was in when this marker
+        was created.
     
-    import cv2
-import logging
-import os
-import uuid
+        def test_untag_resource(self):
+        response = testutil.send_dynamodb_request('', action='UntagResource', request_body=json.dumps({
+            'ResourceArn': testutil.get_sample_arn('dynamodb', 'table'),
+            'TagKeys': ['tagkey1', 'tagkey2']  # Keys to untag
+        }))
+        assert response.status_code == 200
+        assert not response._content  # Empty string if untagging succeeded (mocked for now)
     
     
-# ---------------------------------------------------------------------------- #
-# Functions for bolting FPN onto a backbone architectures
-# ---------------------------------------------------------------------------- #
+def get_kcl_dir():
+    return get_dir_of_file(kcl.__file__)
+    
+        # create ES domain
+    es_client.create_elasticsearch_domain(DomainName=TEST_DOMAIN_NAME)
+    assert_true(TEST_DOMAIN_NAME in
+        [d['DomainName'] for d in es_client.list_domain_names()['DomainNames']])
+    
+        cmd = 'list-event-source-mappings'
+    if func_name:
+        cmd = '%s --function-name %s' % (cmd, func_name)
+    out = cmd_lambda(cmd, env=env)
+    out = json.loads(out)
+    result = out['EventSourceMappings']
+    return result
     
     
-def add_fast_rcnn_losses(model):
-    '''Add losses for RoI classification and bounding box regression.'''
-    cls_prob, loss_cls = model.net.SoftmaxWithLoss(
-        ['cls_score', 'labels_int32'], ['cls_prob', 'loss_cls'],
-        scale=model.GetLossScale()
-    )
-    loss_bbox = model.net.SmoothL1Loss(
-        [
-            'bbox_pred', 'bbox_targets', 'bbox_inside_weights',
-            'bbox_outside_weights'
-        ],
-        'loss_bbox',
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(model, [loss_cls, loss_bbox])
-    model.Accuracy(['cls_prob', 'labels_int32'], 'accuracy_cls')
-    model.AddLosses(['loss_cls', 'loss_bbox'])
-    model.AddMetrics('accuracy_cls')
-    return loss_gradients
+def get_rest_api_paths(rest_api_id):
+    apigateway = aws_stack.connect_to_service(service_name='apigateway')
+    resources = apigateway.get_resources(restApiId=rest_api_id, limit=100)
+    resource_map = {}
+    for resource in resources['items']:
+        path = aws_stack.get_apigateway_path_for_resource(rest_api_id, resource['id'])
+        resource_map[path] = resource
+    return resource_map
     
-        for i in range(cfg.KRCNN.NUM_STACKED_CONVS):
-        current = model.Conv(
-            current,
-            'conv_fcn' + str(i + 1),
-            dim_in,
-            hidden_dim,
-            kernel_size,
-            stride=1,
-            pad=pad_size,
-            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.01}),
-            bias_init=('ConstantFill', {'value': 0.})
-        )
-        current = model.Relu(current, current)
-        dim_in = hidden_dim
     
-        loss_gradients.update(blob_utils.get_loss_gradients(model, gradients))
-    model.AddLosses(losses)
-    return loss_gradients
-
+class BigfilePiecefieldPacked(object):
+    __slots__ = ['data']
     
-        # See doc string in _run_speed_test
-    # def test_perf(self):
-    #     with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
-    #         self._run_speed_test()
+            # Load all include files data into a merged set
+        for include_path in self.file_content['includes']:
+            address, inner_path = include_path.split('/', 1)
+            try:
+                content = self.site_manager.get(address).storage.loadJson(inner_path)
+            except Exception as err:
+                self.log.warning(
+                    'Error loading include %s: %s' %
+                    (include_path, Debug.formatException(err))
+                )
+                continue
+    
+    
+def open_database(database, mode=MODE_AUTO):
+    '''Open a Maxmind DB database
+    
+        int_from_byte = lambda x: x
