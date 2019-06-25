@@ -1,122 +1,74 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        from __future__ import print_function
     
-    # -- General configuration ------------------------------------------------
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
     
-        def test_youtube(self):
-        self._assert_restricted('07FYdnEawAQ', '07FYdnEawAQ.mp4', 10)
+        fpath = os.path.join(path, 'test')
+    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        deserialized = losses.deserialize(serialized)
+    assert isinstance(deserialized, MSE_MAE_loss)
+    assert deserialized.mse_fraction == 0.3
+    
+        input_tensor = Input(shape=(data_dim,))
+    dummy_model = Model(input_tensor, dense_layer(input_tensor))
+    
+    print('Evaluate IRNN...')
+model = Sequential()
+model.add(SimpleRNN(hidden_units,
+                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
+                    recurrent_initializer=initializers.Identity(gain=1.0),
+                    activation='relu',
+                    input_shape=x_train.shape[1:]))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+rmsprop = RMSprop(lr=learning_rate)
+model.compile(loss='categorical_crossentropy',
+              optimizer=rmsprop,
+              metrics=['accuracy'])
+    
+    1 - Train a simple convnet on the MNIST dataset the first 5 digits [0..4].
+2 - Freeze convolutional layers and fine-tune dense layers
+   for the classification of digits [5..9].
     
     
-if __name__ == '__main__':
-    unittest.main()
+def squared_hinge(y_true, y_pred):
+    return K.mean(K.square(K.maximum(1. - y_true * y_pred, 0.)), axis=-1)
+    
+    # Used for remembering the file (and its contents)
+# so we don't have to open the same file again.
+_filename = None
+_contents = None
+    
+    
+class Root(Resource):
+    
+    del sys
 
     
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-try:
-    _DEV_NULL = subprocess.DEVNULL
-except AttributeError:
-    _DEV_NULL = open(os.devnull, 'wb')
+            assert len(self.args) in [1, 2, 3]
+        self.obj_name = self.args[0] or None
+        self.obj_type = self.objects[self.obj_name]
     
-            jsi = JSInterpreter('function f(){return 11 >> 2;}')
-        self.assertEqual(jsi.call_function('f'), 2)
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+logger = logging.getLogger(__name__)
     
-        if not module.check_mode and (additions > 0 or deletions > 0):
-        task = gateway.save_services_configuration()
-        vca.block_until_completed(task)
-    
-        def role_remove_service(self, name, item):
-        return self.role_remove_member(name=name, item={'service': item})
-    
-        # Build the common request body
-    body = dict()
-    for k in ('component', 'version', 'hosts'):
-        v = module.params[k]
-        if v is not None:
-            body[k] = v
-    
-    short_description: Manage Icinga2 feature
-description:
-    - This module can be used to enable or disable an Icinga2 feature.
-version_added: '2.3'
-author: 'Loic Blot (@nerzhul)'
-options:
-    name:
-      description:
-      - This is the feature name to enable or disable.
-      required: True
-    state:
-      description:
-      - If set to C(present) and feature is disabled, then feature is enabled.
-      - If set to C(present) and feature is already enabled, then nothing is changed.
-      - If set to C(absent) and feature is enabled, then feature is disabled.
-      - If set to C(absent) and feature is already disabled, then nothing is changed.
-      choices: [ 'present', 'absent' ]
-      default: present
-'''
-    
-    module: stackdriver
-short_description: Send code deploy and annotation events to stackdriver
-description:
-  - Send code deploy and annotation events to Stackdriver
-version_added: '1.6'
-author: 'Ben Whaley (@bwhaley)'
-options:
-  key:
-    description:
-      - API key.
-    required: true
-  event:
-    description:
-      - The type of event to send, either annotation or deploy
-    choices: ['annotation', 'deploy']
-  revision_id:
-    description:
-      - The revision of the code that was deployed. Required for deploy events
-  deployed_by:
-    description:
-      - The person or robot responsible for deploying the code
-    default: 'Ansible'
-  deployed_to:
-    description:
-      - 'The environment code was deployed to. (ie: development, staging, production)'
-  repository:
-    description:
-      - The repository (or project) deployed
-  msg:
-    description:
-      - The contents of the annotation message, in plain text.  Limited to 256 characters. Required for annotation.
-  annotated_by:
-    description:
-      - The person or robot who the annotation should be attributed to.
-    default: 'Ansible'
-  level:
-    description:
-      - one of INFO/WARN/ERROR, defaults to INFO if not supplied.  May affect display.
-    choices: ['INFO', 'WARN', 'ERROR']
-    default: 'INFO'
-  instance_id:
-    description:
-      - id of an EC2 instance that this event should be attached to, which will limit the contexts where this event is shown
-  event_epoch:
-    description:
-      - 'Unix timestamp of where the event should appear in the timeline, defaults to now. Be careful with this.'
-'''
+        def _is_bzip2(self, response):
+        try:
+            body = bz2.decompress(response.body)
+        except IOError:
+            return
