@@ -1,124 +1,98 @@
 
         
-        
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+                # Adding model 'EventTag'
+        db.create_table(u'tagstore_eventtag', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('event_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()),
+            ('key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagValue'], db_column='value_id')),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(
+                db_index=True)),
+        ))
+        db.send_create_signal('tagstore', ['EventTag'])
     
+        models = {
+        'tagstore.eventtag': {
+            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
+            'event_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
+        },
+        'tagstore.grouptagkey': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.grouptagvalue': {
+            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagkey': {
+            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
+            'environment_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'null': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
+        },
+        'tagstore.tagvalue': {
+            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
+            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
+            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
+            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
+            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'db_index': 'True'}),
+            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        }
+    }
     
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
+            # Changing field 'GroupTagKey.project_id'
+        db.alter_column(u'tagstore_grouptagkey', 'project_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
     
-    You can install with Homebrew-Cask:
-  brew cask install osxfuse
-    
-    First, we fix a training set, increase the number of
-samples to classify and plot number of classified samples as a
-function of time.
-    
-        package is the name of the root module of the package
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
-    
-    Some of the clusters learned without connectivity constraints do not
-respect the structure of the swiss roll and extend across different folds of
-the manifolds. On the opposite, when opposing connectivity constraints,
-the clusters form a nice parcellation of the swiss roll.
+    :copyright: (c) 2010-2015 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
 '''
     
+    from sentry.models import (Activity, GroupResolution, Release)
+from sentry.tasks.base import instrumented_task
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'GroupCommitResolution'
-        db.create_table(
-            'sentry_groupcommitresolution', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'group_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-                ), (
-                    'commit_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-                ), (
-                    'datetime', self.gf('django.db.models.fields.DateTimeField')(
-                        db_index=True
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['GroupCommitResolution'])
+    :copyright: (c) 2010-2015 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
     
-            for project in RangeQuerySetWrapperWithProgressBar(orm.Project.objects.all()):
-            orm.Environment.objects.filter(
-                project_id=project.id, organization_id__isnull=True
-            ).update(organization_id=project.organization_id)
-    
-        def backwards(self, orm):
-    
-        def backwards(self, orm):
-        'Write your backwards methods here.'
-    
-            # Deleting field 'ApiToken.application'
-        db.delete_column('sentry_apitoken', 'application_id')
-    
-            # Adding field 'ApiToken.scope_list'
-        db.add_column(
-            'sentry_apitoken',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
+    from django.utils import timezone
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'CommitAuthor.external_id'
-        db.add_column(
-            'sentry_commitauthor',
-            'external_id',
-            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
-            keep_default=False
-        )
+class UndirectWeightedGraph:
+    d = 0.85
     
-            # Deleting model 'Distribution'
-        db.delete_table('sentry_distribution')
+        def __init__(self, tokenizer=None):
+        self.tokenizer = tokenizer or jieba.Tokenizer()
+        self.load_word_tag(self.tokenizer.get_dict_file())
     
+    file_name = args[0]
     
-def testSignedInt():
-    check(b'\x99\xd0\x00\xd0\x80\xd0\xff\xd1\x00\x00\xd1\x80\x00'
-          b'\xd1\xff\xff\xd2\x00\x00\x00\x00\xd2\x80\x00\x00\x00'
-          b'\xd2\xff\xff\xff\xff', (0,
-                                    -128,
-                                    -1,
-                                    0,
-                                    -32768,
-                                    -1,
-                                    0,
-                                    -2147483648,
-                                    -1, ))
-    
-    ax = fig.add_axes((0.63 + 0.18, 0.1, 0.16, 0.8))
-y = np.row_stack((fnx(), fnx(), fnx()))
-x = np.arange(10)
-y1, y2, y3 = fnx(), fnx(), fnx()
-ax.stackplot(x, y1, y2, y3)
-ax.set_xticks([])
-ax.set_yticks([])
+    USAGE ='usage:    python extract_tags.py [file name] -k [top k]'
