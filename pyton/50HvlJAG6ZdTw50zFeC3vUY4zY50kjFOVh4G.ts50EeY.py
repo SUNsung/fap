@@ -1,258 +1,242 @@
 
         
-            def move_to_front(self, node):
-        pass
+            def ensure_disabled(self):
+        '''Ensures the rule and targets are present, but disabled, and synced'''
+        self.ensure_present(enabled=False)
     
-        def _park_starting_at_spot(self, spot, vehicle):
-        '''Occupy starting at spot.spot_number to vehicle.spot_size.'''
-        pass
-    
-    
-if __name__ == '__main__':
-    SpendingByCategory.run()
-
-    
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
-    
-      input_title = ''
-  if 'controller_outputs' in model_vals.keys():
-    input_title += ' Controller Output'
-    plt.subplot(nrows,2,3+subplot_cidx)
-    u_t = model_vals['controller_outputs'][0:-1]
-    plot_time_series(u_t, bidx, n_to_plot=n_to_plot, color='c', scale=1.0,
-                     title=col_title + input_title)
-    
-      Args:
-    in_size: The integer size of the non-batc input dimension. [(x),y]
-    out_size: The integer size of non-batch output dimension. [x,(y)]
-    do_bias (optional): Add a (learnable) bias vector to the operation,
-      if false, b will be None
-    mat_init_value (optional): numpy constant for matrix initialization, if None
-      , do random, with additional parameters.
-    alpha (optional): A multiplicative scaling for the weight initialization
-      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
-    identity_if_possible (optional): just return identity,
-      if x.shape[1] == out_size.
-    normalized (optional): Option to divide out by the norms of the rows of W.
-    name (optional): The name prefix to add to variables.
-    collections (optional): List of additional collections. (Placed in
-      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
-    
-    '''A library for loading 1B word benchmark dataset.'''
-    
-      Raises:
-    ValueError: if batch_size or num_steps are too high.
-  '''
-  del epoch_size_override
-  data_len = len(raw_data)
-  num_batches = data_len // batch_size - 1
+        updates = list()
+    additions = list()
+    deletions = list()
     
     
-def variable_summaries(var, name):
-  '''Attach a lot of summaries to a Tensor.'''
-  mean = tf.reduce_mean(var)
-  tf.summary.scalar('mean/' + name, mean)
-  with tf.name_scope('stddev'):
-    stddev = tf.sqrt(tf.reduce_sum(tf.square(var - mean)))
-  tf.summary.scalar('sttdev/' + name, stddev)
-  tf.summary.scalar('max/' + name, tf.reduce_max(var))
-  tf.summary.scalar('min/' + name, tf.reduce_min(var))
-  tf.summary.histogram(name, var)
-    
-      Returns:
-    predictions:  tf.float32 Tensor of predictions of shape [batch_size,
-      sequence_length]
-  '''
-  if FLAGS.discriminator_model == 'cnn':
-    predictions = cnn.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'fnn':
-    predictions = feedforward.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn':
-    predictions = rnn.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'bidirectional':
-    predictions = bidirectional.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'bidirectional_zaremba':
-    predictions = bidirectional_zaremba.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'seq2seq_vd':
-    predictions = seq2seq_vd.discriminator(
-        hparams,
-        inputs,
-        present,
-        sequence,
-        is_training=is_training,
-        reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_zaremba':
-    predictions = rnn_zaremba.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_nas':
-    predictions = rnn_nas.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_vd':
-    predictions = rnn_vd.discriminator(
-        hparams,
-        sequence,
-        is_training=is_training,
-        reuse=reuse,
-        initial_state=initial_state)
-  elif FLAGS.discriminator_model == 'bidirectional_vd':
-    predictions = bidirectional_vd.discriminator(
-        hparams,
-        sequence,
-        is_training=is_training,
-        reuse=reuse,
-        initial_state=initial_state)
-  else:
-    raise NotImplementedError
-  return predictions
-    
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      dis_fwd_variable_maps = variable_mapping.dis_fwd_bidirectional(hparams)
-      dis_bwd_variable_maps = variable_mapping.dis_bwd_bidirectional(hparams)
-      # Savers for the forward/backward Discriminator components.
-      dis_fwd_init_saver = tf.train.Saver(var_list=dis_fwd_variable_maps)
-      dis_bwd_init_saver = tf.train.Saver(var_list=dis_bwd_variable_maps)
-      init_savers['dis_fwd_init_saver'] = dis_fwd_init_saver
-      init_savers['dis_bwd_init_saver'] = dis_bwd_init_saver
-    
-      if FLAGS.dis_share_embedding:
-    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
-        'If you wish to share Discriminator/Generator embeddings, they must be'
-        ' same dimension.')
-    with tf.variable_scope('gen/rnn', reuse=True):
-      embedding = tf.get_variable('embedding',
-                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
-    
-    def sum32(a,b):
-	return (a + b) % 2**32
+class DNSZoneIPAClient(IPAClient):
+    def __init__(self, module, host, port, protocol):
+        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
     
     
-        '''
-        loop over all possible splits for the decision tree. find the best split.
-        if no split exists that is less than 2 * error for the entire array
-        then the data set is not split and the average for the entire array is used as the predictor
-        '''
-        for i in range(len(X)):
-            if len(X[:i]) < self.min_leaf_size:
-                continue
-            elif len(X[i:]) < self.min_leaf_size:
-                continue
-            else:
-                error_left = self.mean_squared_error(X[:i], np.mean(y[:i]))
-                error_right = self.mean_squared_error(X[i:], np.mean(y[i:]))
-                error = error_left + error_right
-                if error < min_error:
-                    best_split = i
-                    min_error = error
+DOCUMENTATION = '''
+---
+module: bigpanda
+author: 'Hagai Kariti (@hkariti)'
+short_description: Notify BigPanda about deployments
+version_added: '1.8'
+description:
+   - Notify BigPanda when deployments start and end (successfully or not). Returns a deployment object containing all the parameters for future module calls.
+options:
+  component:
+    description:
+      - 'The name of the component being deployed. Ex: billing'
+    required: true
+    aliases: ['name']
+  version:
+    description:
+      - The deployment version.
+    required: true
+  token:
+    description:
+      - API token.
+    required: true
+  state:
+    description:
+      - State of the deployment.
+    required: true
+    choices: ['started', 'finished', 'failed']
+  hosts:
+    description:
+      - Name of affected host name. Can be a list.
+    required: false
+    default: machine's hostname
+    aliases: ['host']
+  env:
+    description:
+      - The environment name, typically 'production', 'staging', etc.
+    required: false
+  owner:
+    description:
+      - The person responsible for the deployment.
+    required: false
+  description:
+    description:
+      - Free text description of the deployment.
+    required: false
+  url:
+    description:
+      - Base URL of the API server.
+    required: False
+    default: https://api.bigpanda.io
+  validate_certs:
+    description:
+      - If C(no), SSL certificates for the target url will not be validated. This should only be used
+        on personally controlled sites using self-signed certificates.
+    required: false
+    default: 'yes'
+    type: bool
     
-            a += a
-        b >>= 1
+        namespace = dict(ca='http://www.ca.com/spectrum/restful/schema/response')
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
+        module = AnsibleModule(
+        argument_spec=dict(
+            key=dict(required=True),
+            event=dict(required=True, choices=['deploy', 'annotation']),
+            msg=dict(),
+            revision_id=dict(),
+            annotated_by=dict(default='Ansible'),
+            level=dict(default='INFO', choices=['INFO', 'WARN', 'ERROR']),
+            instance_id=dict(),
+            event_epoch=dict(),
+            deployed_by=dict(default='Ansible'),
+            deployed_to=dict(),
+            repository=dict(),
+        ),
+        supports_check_mode=True
+    )
     
-        @classmethod
-    def basic_response_server(cls, **kwargs):
-        return cls.text_response_server(
-            'HTTP/1.1 200 OK\r\n' +
-            'Content-Length: 0\r\n\r\n',
-            **kwargs
-        )
+    import numpy as np
+import gc
+from time import time
+from collections import defaultdict
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_lfw_people
+from sklearn.decomposition import IncrementalPCA, PCA
     
-        def test_server_finishes_on_error(self):
-        '''the server thread exits even if an exception exits the context manager'''
-        server = Server.basic_response_server()
-        with pytest.raises(Exception):
-            with server:
-                raise Exception()
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-    # The HTML theme for the epub output. Since the default themes are not
-# optimized for small screen space, using the same theme for HTML and epub
-# output is usually not wise. This defaults to 'epub', a theme designed to save
-# visual space.
-# epub_theme = 'epub'
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
+    plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
+                     np.sort(model.column_labels_) + 1),
+            cmap=plt.cm.Blues)
+plt.title('Checkerboard structure of rearranged data')
+    
+    # Import datasets, classifiers and performance metrics
+from sklearn import datasets, svm, metrics
+    
+        if sys.platform == 'win32':
+        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
+        sys.path.append(win32_lib)
+    elif sys.platform.startswith('linux'):
+        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
+        sys.path.append(linux_lib)
+    elif sys.platform == 'darwin':
+        darwin_lib = os.path.abspath( os.path.join(python_path, 'lib', 'darwin'))
+        sys.path.append(darwin_lib)
+        extra_lib = '/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'
+        sys.path.append(extra_lib)
     
     
-def _linkcode_resolve(domain, info, package, url_fmt, revision):
-    '''Determine a link to online source for a class/method/function
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    
-def generate_data(case, sparse=False):
-    '''Generate regression/classification data.'''
-    bunch = None
-    if case == 'regression':
-        bunch = datasets.load_boston()
-    elif case == 'classification':
-        bunch = datasets.fetch_20newsgroups_vectorized(subset='all')
-    X, y = shuffle(bunch.data, bunch.target)
-    offset = int(X.shape[0] * 0.8)
-    X_train, y_train = X[:offset], y[:offset]
-    X_test, y_test = X[offset:], y[offset:]
-    if sparse:
-        X_train = csr_matrix(X_train)
-        X_test = csr_matrix(X_test)
+def report_fail(ip):
+    if '.' in ip:
+        IPv4.report_fail()
     else:
-        X_train = np.array(X_train)
-        X_test = np.array(X_test)
-    y_test = np.array(y_test)
-    y_train = np.array(y_train)
-    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
-            'y_test': y_test}
-    return data
+        IPv6.report_fail()
     
-    n_clusters = (4, 3)
-data, rows, columns = make_checkerboard(
-    shape=(300, 300), n_clusters=n_clusters, noise=10,
-    shuffle=False, random_state=0)
+        m = re.match(r'(\d+)\.(\d+)(\.(\d+))?(b(\d+))?', version_str)
+    if m is None:
+        raise ValueError('Bad version string %r' % version_str)
     
-    print('consensus score: {:.3f}'.format(score))
+    MIN_TOKEN_TYPE = UP+1
+	
+INVALID_TOKEN_TYPE = 0
     
-    The second plot demonstrate one single run of the ``MiniBatchKMeans``
-estimator using a ``init='random'`` and ``n_init=1``. This run leads to
-a bad convergence (local optimum) with estimated centers stuck
-between ground truth clusters.
+            Terence implemented packed table initializers, because Java has a
+        size restriction on .class files and the lookup tables can grow
+        pretty large. The generated JavaLexer.java of the Java.g example
+        would be about 15MB with uncompressed array initializers.
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
+    
+    if args.quiet:
+    jieba.setLogLevel(60)
+if args.pos:
+    import jieba.posseg
+    posdelim = args.pos
+    def cutfunc(sentence, _, HMM=True):
+        for w, f in jieba.posseg.cut(sentence, HMM):
+            yield w + posdelim + f
+else:
+    cutfunc = jieba.cut
+    
+        def textrank(self, sentence, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'), withFlag=False):
+        '''
+        Extract keywords from sentence using TextRank algorithm.
+        Parameter:
+            - topK: return how many top keywords. `None` for all possible words.
+            - withWeight: if True, return a list of (word, weight);
+                          if False, return a list of words.
+            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v'].
+                        if the POS of w is not in this list, it will be filtered.
+            - withFlag: if True, return a list of pair(word, weight) like posseg.cut
+                        if False, return a list of words
+        '''
+        self.pos_filt = frozenset(allowPOS)
+        g = UndirectWeightedGraph()
+        cm = defaultdict(int)
+        words = tuple(self.tokenizer.cut(sentence))
+        for i, wp in enumerate(words):
+            if self.pairfilter(wp):
+                for j in xrange(i + 1, i + self.span):
+                    if j >= len(words):
+                        break
+                    if not self.pairfilter(words[j]):
+                        continue
+                    if allowPOS and withFlag:
+                        cm[(wp, words[j])] += 1
+                    else:
+                        cm[(wp.word, words[j].word)] += 1
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+parser.add_option('-w', dest='withWeight')
+opt, args = parser.parse_args()
+    
+    n_topic = 10
+n_top_words = 25
+    
+        def testPosseg_NOHMM(self):
+        import jieba.posseg as pseg
+        for content in test_contents:
+            result = pseg.cut(content,HMM=False)
+            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
+            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
+        print('testPosseg_NOHMM', file=sys.stderr)
+    
+    import jieba
+    
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
