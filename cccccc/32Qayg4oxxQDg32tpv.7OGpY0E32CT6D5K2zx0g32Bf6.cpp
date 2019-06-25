@@ -1,465 +1,340 @@
 
         
-        #include 'include/secp256k1_ecdh.h'
-#include 'ecmult_const_impl.h'
+          rotate += getRotate();
+  if (rotate >= 360) {
+    rotate -= 360;
+  } else if (rotate < 0) {
+    rotate += 360;
+  }
     
-        /* Check for (correctly reporting) a parsing error if the initial
-       JSON construct is followed by more stuff.  Note that whitespace
-       is, of course, exempt.  */
+      // Was the Page Transition created successfully?
+  GBool isOk() { return ok; }
     
-    ROTATE_ARGS
-	movdqa	XTMP2, XTMP3	; XTMP2 = W[-15]
-    mov	y0, e		; y0 = e
-    mov	y1, a		; y1 = a
-	movdqa	XTMP4, XTMP3	; XTMP4 = W[-15]
-    ror	y0, (25-11)	; y0 = e >> (25-11)
-    xor	y0, e		; y0 = e ^ (e >> (25-11))
-    mov	y2, f		; y2 = f
-    ror	y1, (22-13)	; y1 = a >> (22-13)
-	pslld	XTMP3, (32-18)
-    xor	y1, a		; y1 = a ^ (a >> (22-13)
-    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
-    xor	y2, g		; y2 = f^g
-	psrld	XTMP2, 18
-    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
-    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
-    and	y2, e		; y2 = (f^g)&e
-    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
-	pxor	XTMP1, XTMP3
-    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
-    xor	y2, g		; y2 = CH = ((f^g)&e)^g
-	psrld	XTMP4, 3	; XTMP4 = W[-15] >> 3
-    add	y2, y0		; y2 = S1 + CH
-    add	y2, [rsp + _XFER + 1*4]	; y2 = k + w + S1 + CH
-    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
-	pxor	XTMP1, XTMP2	; XTMP1 = W[-15] ror 7 ^ W[-15] ror 18
-    mov	y0, a		; y0 = a
-    add	h, y2		; h = h + S1 + CH + k + w
-    mov	y2, a		; y2 = a
-	pxor	XTMP1, XTMP4	; XTMP1 = s0
-    or	y0, c		; y0 = a|c
-    add	d, h		; d = d + h + S1 + CH + k + w
-    and	y2, c		; y2 = a&c
-	;; compute low s1
-	pshufd	XTMP2, X3, 11111010b	; XTMP2 = W[-2] {BBAA}
-    and	y0, b		; y0 = (a|c)&b
-    add	h, y1		; h = h + S1 + CH + k + w + S0
-	paddd	XTMP0, XTMP1	; XTMP0 = W[-16] + W[-7] + s0
-    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
-    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2006, 2010 Albert Astals Cid <aacid@kde.org>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
     
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+    
+    {    int num, gen;
+};
+    
+      //----- text drawing
+  virtual void beginStringOp(GfxState *state);
+  virtual void endStringOp(GfxState *state);
+  virtual GBool beginType3Char(GfxState *state, double x, double y,
+			       double dx, double dy,
+			       CharCode code, Unicode *u, int uLen);
+  virtual void endType3Char(GfxState *state);
+    
+      // Constructor.
+  ProfileData ();
+    
+      if (obj->dictLookup('C', &tmp)->isBool()) {
+    showControls = tmp.getBool();
+  }
+  tmp.free();
+    
+      MediaParameters();
+  ~MediaParameters();
+    
+    StandardSecurityHandler::~StandardSecurityHandler() {
+  if (fileID) {
+    delete fileID;
+  }
+  if (ownerKey) {
+    delete ownerKey;
+  }
+  if (userKey) {
+    delete userKey;
+  }
+}
+    
+    struct T3GlyphStack {
+  Gushort code;			// character code
+    }
+    
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2005 Takashi Iwai <tiwai@suse.de>
+// Copyright (C) 2009, 2010 Thomas Freitag <Thomas.Freitag@alfa.de>
+// Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
+            const Locale &locale, UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new SuperscriptStyle(),
+            status);
+}
+    
+    ScriptSet &ScriptSet::reset(UScriptCode script, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return *this;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    bits[index] &= ~bit;
+    return *this;
+}
+    
+    void SearchIterator::setAttribute(USearchAttribute       attribute,
+                                  USearchAttributeValue  value,
+                                  UErrorCode            &status)
+{
+    if (U_SUCCESS(status)) {
+        switch (attribute)
+        {
+        case USEARCH_OVERLAP :
+            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_CANONICAL_MATCH :
+            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
+            break;
+        case USEARCH_ELEMENT_COMPARISON :
+            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+                m_search_->elementComparisonType = (int16_t)value;
+            } else {
+                m_search_->elementComparisonType = 0;
+            }
+            break;
+        default:
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+    
+    #define LOW_A             ((UChar)0x0061)
+#define LOW_B             ((UChar)0x0062)
+#define LOW_C             ((UChar)0x0063)
+#define LOW_D             ((UChar)0x0064)
+#define LOW_E             ((UChar)0x0065)
+#define LOW_F             ((UChar)0x0066)
+#define LOW_G             ((UChar)0x0067)
+#define LOW_H             ((UChar)0x0068)
+#define LOW_I             ((UChar)0x0069)
+#define LOW_J             ((UChar)0x006a)
+#define LOW_K             ((UChar)0x006B)
+#define LOW_L             ((UChar)0x006C)
+#define LOW_M             ((UChar)0x006D)
+#define LOW_N             ((UChar)0x006E)
+#define LOW_O             ((UChar)0x006F)
+#define LOW_P             ((UChar)0x0070)
+#define LOW_Q             ((UChar)0x0071)
+#define LOW_R             ((UChar)0x0072)
+#define LOW_S             ((UChar)0x0073)
+#define LOW_T             ((UChar)0x0074)
+#define LOW_U             ((UChar)0x0075)
+#define LOW_V             ((UChar)0x0076)
+#define LOW_W             ((UChar)0x0077)
+#define LOW_X             ((UChar)0x0078)
+#define LOW_Y             ((UChar)0x0079)
+#define LOW_Z             ((UChar)0x007A)
+    
+    U_NAMESPACE_END
+    
+    #endif  // __SIGNIFICANTDIGITINTERVAL_H__
 
     
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
+    #include 'unicode/uniset.h'
+#include 'unicode/udat.h'
+#include 'cmemory.h'
+#include 'uassert.h'
+#include 'ucln_in.h'
+#include 'umutex.h'
     
-    #include 'base/logging.h'
-#include 'base/strings/string16.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-    
-    namespace nw {
-    }
-    
-    
-    {}  // namespace
-    
-    
-    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
-                           base::WaitableEvent::InitialState::NOT_SIGNALED);
-  base::PostTaskWithTraits(
-      FROM_HERE, {content::BrowserThread::IO},
-      base::BindOnce(&SetProxyConfigCallback, &done,
-                 base::WrapRefCounted(context_getter), config));
-  done.Wait();
-  return true;
-}
-    
-    
-    {  // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.quit', UNKNOWN)
- private:
-  void Callback();
-};
-    
-      for(auto& data : params->data) {
-    if (!writer->Write(data)) {
-      *error = writer->error();
-      writer->Reset();
-      return false;
-    }
-  }
-    
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-      // Null char in the string.
-    
-    #include <google/protobuf/io/zero_copy_stream.h>
-    
-    #include <ostream>
-#include <stdio.h>
-#include <string>
-#include <utility>
-    
-    // Copyright 2008 Google Inc. All Rights Reserved.
-// Author: xpeng@google.com (Peter Peng)
-    
-    #include 'google/protobuf/message.h'
-#include 'google/protobuf/descriptor.h'
-    
-    namespace {
-    }
-    
-    string StripProto(string filename) {
-  return filename.substr(0, filename.rfind('.proto'));
-}
-    
-      cout << 'Enter name: ';
-  getline(cin, *person->mutable_name());
-    
-        float32* x; //vertex arrays
-    float32* y;
-    int32 nVertices;
-	
-	float32 area;
-	bool areaIsSet;
-	
-    b2Polygon(float32* _x, float32* _y, int32 nVert);
-    b2Polygon(b2Vec2* v, int32 nVert);
-	b2Polygon();
-    ~b2Polygon();
-	
-	float32 GetArea();
-	
-	void MergeParallelEdges(float32 tolerance);
-    b2Vec2* GetVertexVecs();
-    b2Polygon(b2Triangle& t);
-    void Set(const b2Polygon& p);
-    bool IsConvex();
-	bool IsCCW();
-	bool IsUsable(bool printError);
-	bool IsUsable();
-    bool IsSimple();
-   // void AddTo(b2FixtureDef& pd);
-	
-    b2Polygon* Add(b2Triangle& t);
-    
-    #ifndef VPX_DSP_TXFM_COMMON_H_
-#define VPX_DSP_TXFM_COMMON_H_
-    
-      Decompression is memory safe and guaranteed not to write the output buffer
-  more than what is specified in maxout.
- */
-    
-    #define NORM_SCALING 1.f
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b),'r'(a)
-  );
-  return res;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
-    
-    /* Requires that shift > 0 */
-#define silk_RSHIFT_ROUND(a, shift)         ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
-#define silk_RSHIFT_ROUND64(a, shift)       ((shift) == 1 ? ((a) >> 1) + ((a) & 1) : (((a) >> ((shift) - 1)) + 1) >> 1)
-    
-      ~AutoCompactTest() {
-    delete db_;
-    DestroyDB(dbname_, Options());
-    delete tiny_cache_;
-  }
-    
-    #include 'db/builder.h'
-    
-    
-    {  ParsedInternalKey() { }  // Intentionally left uninitialized (for speed)
-  ParsedInternalKey(const Slice& u, const SequenceNumber& seq, ValueType t)
-      : user_key(u), sequence(seq), type(t) { }
-  std::string DebugString() const;
-};
-    
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
- public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
-  }
-};
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    class FileNameTest { };
-    
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-null, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-         uint64_t initial_offset);
-    
-    class LogTest {
- private:
-  class StringDest : public WritableFile {
-   public:
-    std::string contents_;
-    }
-    }
-    
-    
-    {
-    {      // Install new manifest
-      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
-      if (status.ok()) {
-        status = SetCurrentFile(env_, dbname_, 1);
-      } else {
-        env_->DeleteFile(tmp);
-      }
-    }
-    return status;
-  }
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != nullptr) {
-    *tableptr = nullptr;
-  }
-    }
-    
-    
-    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
-};
-    
-    uint32_t Extension_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin('Extension_ping_args');
-    }
-    
-    
-    {};
+    #if !UCONFIG_NO_FORMATTING
     
     /**
- * @brief Represents a hardware driver type that SMART api can you use to query
- * device information.
- *
- * @param driver name of SMART controller driver
- * @param maxID max ID number of which disks on the controller is monitored
+ * UnicodeReplacer API
  */
-struct hardwareDriver {
-  std::string driver;
-  size_t maxID;
-};
+UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
+                                                UBool /*escapeUnprintable*/) const {
+    // assert(segmentNumber > 0);
+    rule.truncate(0);
+    rule.append((UChar)0x0024 /*$*/);
+    ICU_Utility::appendNumber(rule, segmentNumber, 10, 1);
+    return rule;
+}
     
-    
-    {  auto blk_devices = SQL::selectAllFrom('block_devices');
-  for (const auto& device : blk_devices) {
-    auto size = device.find('size');
-    auto name = device.find('name');
-    if (size != device.end() && size->second != '0' && size->second != '' &&
-        name != device.end()) {
-      handle_device_func(name->second, type);
-    }
+    bool WriteController::IsStopped() const {
+  return total_stopped_.load(std::memory_order_relaxed) > 0;
+}
+// This is inside DB mutex, so we can't sleep and need to minimize
+// frequency to get time.
+// If it turns out to be a performance issue, we can redesign the thread
+// synchronization model here.
+// The function trust caller will sleep micros returned.
+uint64_t WriteController::GetDelay(Env* env, uint64_t num_bytes) {
+  if (total_stopped_.load(std::memory_order_relaxed) > 0) {
+    return 0;
   }
-}
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    #include <osquery/tests/integration/tables/helper.h>
-    
-    TEST_F(kernelExtensions, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_extensions');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'idx', IntType}
-  //      {'refs', IntType}
-  //      {'size', IntType}
-  //      {'name', NormalType}
-  //      {'version', NormalType}
-  //      {'linked_against', NormalType}
-  //      {'path', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    TEST_F(KernelInfo, test_sanity) {
-  QueryData data = execute_query('select * from kernel_info');
-  ValidatatioMap row_map = {{'version', NonEmptyString},
-                            {'arguments', NormalType},
-                            {'path', NormalType},
-                            {'device', NonEmptyString}};
-  validate_rows(data, row_map);
-}
-    
-    TEST_F(kernelIntegrity, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_integrity');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'sycall_addr_modified', IntType}
-  //      {'text_segment_hash', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    TEST_F(keychainAcls, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from keychain_acls');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'keychain_path', NormalType}
-  //      {'authorizations', NormalType}
-  //      {'path', NormalType}
-  //      {'description', NormalType}
-  //      {'label', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    TEST(CanSenderTest, OneRunCase) {
-  CanSender<::apollo::canbus::ChassisDetail> sender;
-  can::FakeCanClient can_client;
-  sender.Init(&can_client, true);
+  if (total_delayed_.load(std::memory_order_relaxed) == 0) {
+    return 0;
+  }
     }
     
-    #include 'modules/drivers/canbus/common/byte.h'
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
     
-    int ObjectGeneralInfo60B::dynprop(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 3);
+    
+    {  return 0;
+}
+
+    
+      // Comparator used to define the order of keys in the table.
+  // Default: a comparator that uses lexicographic byte-wise ordering
+  //
+  // REQUIRES: The client must ensure that the comparator supplied
+  // here has the same name and orders keys *exactly* the same as the
+  // comparator provided to previous open calls on the same DB.
+  const Comparator* comparator;
+    
+    #include <string>
+#include <vector>
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    sync
+ * Signature: (J)Z
+ */
+jboolean Java_org_rocksdb_BackupableDBOptions_sync(JNIEnv* /*env*/,
+                                                   jobject /*jobj*/,
+                                                   jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return bopt->sync;
+}
+    
+        serv.onStart = my_onStart;
+    serv.onShutdown = my_onShutdown;
+    serv.onConnect = my_onConnect;
+    serv.onReceive = my_onReceive;
+    serv.onPacket = my_onPacket;
+    serv.onClose = my_onClose;
+    serv.onWorkerStart = my_onWorkerStart;
+    serv.onWorkerStop = my_onWorkerStop;
+    
+    #endif /* !__HIREDIS_EXAMPLE_QT_H */
+
+    
+        int i;
+    for (i = 0; i < WRITE_N; i++)
+    {
+        size = 10000 + rand() % 90000;
     }
     
-    class SpeedLimitTest : public ::testing::Test {
+        un1.sun_family = AF_UNIX;
+    un2.sun_family = AF_UNIX;
+    
+        ret = p.write(&p, (void*) SW_STRS('hello world1'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world2'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world3'));
+    ASSERT_GT(ret, 0);
+    
+    namespace folly {
+    }
+    
+      // no permutations in locality index mapping
+  for (size_t cpu = 0; cpu < numCpus; ++cpu) {
+    rv.localityIndexByCpu.push_back(cpu);
+  }
+    
+    /**
+ * This class creates core-local caches for a given shared_ptr, to
+ * mitigate contention when acquiring/releasing it.
+ *
+ * It has the same thread-safety guarantees as shared_ptr: it is safe
+ * to concurrently call get(), but reset()s must be synchronized with
+ * reads and other resets().
+ *
+ * @author Giuseppe Ottaviano <ott@fb.com>
+ */
+template <class T, size_t kNumSlots = 64>
+class CoreCachedSharedPtr {
  public:
-  virtual void SetUp() {
-    speed_limit_.Clear();
-    for (int i = 0; i < 100; ++i) {
-      std::pair<double, double> sp;
-      sp.first = i * 1.0;
-      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
-      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
-    }
+  explicit CoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
+    reset(p);
   }
     }
     
-      MatrixXd mat_golden(10, 10);
-  // clang-format off
-  mat_golden <<
-      6, -4,  1,  0,  0,  0,  0,  0,  0,  0,
-     -4,  6, -4,  1,  0,  0,  0,  0,  0,  0,
-      1, -4,  6, -4,  1,  0,  0,  0,  0,  0,
-      0,  1, -4,  6, -4,  1,  0,  0,  0,  0,
-      0,  0,  1, -4,  6, -4,  1,  0,  0,  0,
-      0,  0,  0,  1, -4,  6, -4,  1,  0,  0,
-      0,  0,  0,  0,  1, -4,  6, -4,  1,  0,
-      0,  0,  0,  0,  0,  1, -4,  6, -4,  1,
-      0,  0,  0,  0,  0,  0,  1, -4,  5, -2,
-      0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
     
-    SplineSegKernel::SplineSegKernel() {
-  const int reserved_num_params = reserved_order_ + 1;
-  CalculateFx(reserved_num_params);
-  CalculateDerivative(reserved_num_params);
-  CalculateSecondOrderDerivative(reserved_num_params);
-  CalculateThirdOrderDerivative(reserved_num_params);
-}
+    {} // namespace
     
+      static void prepare() noexcept {
+    instance().tasksLock.lock();
+    while (true) {
+      auto& tasks = instance().tasks;
+      auto task = tasks.rbegin();
+      for (; task != tasks.rend(); ++task) {
+        if (!task->prepare()) {
+          break;
+        }
+      }
+      if (task == tasks.rend()) {
+        return;
+      }
+      for (auto untask = tasks.rbegin(); untask != task; ++untask) {
+        untask->parent();
+      }
+    }
+  }
     
-    {  acc.Parse(bytes, length, &chassis_detail);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
-                   0.772);
-  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
-}
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
+      template <std::size_t N>
+  static std::pair<std::array<uint8_t, N>, uint8_t> longestCommonPrefix(
+      const std::array<uint8_t, N>& one,
+      uint8_t oneMask,
+      const std::array<uint8_t, N>& two,
+      uint8_t twoMask) {
+    static constexpr auto kBitCount = N * 8;
+    static constexpr std::array<uint8_t, 8> kMasks{{
+        0x80, // /1
+        0xc0, // /2
+        0xe0, // /3
+        0xf0, // /4
+        0xf8, // /5
+        0xfc, // /6
+        0xfe, // /7
+        0xff // /8
+    }};
+    if (oneMask > kBitCount || twoMask > kBitCount) {
+      throw std::invalid_argument(sformat(
+          'Invalid mask length: {}. Mask length must be <= {}',
+          std::max(oneMask, twoMask),
+          kBitCount));
     }
     }
-    }
-    
-      Brakerpt6c brake;
-  brake.Parse(bytes, length, &chassis_detail);
-    
-    
-    {  bool ret = x;
-  return ret;
-}
