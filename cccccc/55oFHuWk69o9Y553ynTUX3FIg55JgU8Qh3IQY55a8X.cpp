@@ -1,83 +1,10 @@
 
         
-        void GenerateLowerCaseOpName(const string& str, string* result);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace tensorflow {
-    }
-    
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    // Must be included first.
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-    
+        
     {
-    {}  // namespace host
-}  // namespace stream_executor
-
-    
-    void HostTimer::StartNow() { start_time_ = clock::now(); }
-    
-    namespace stream_executor {
+    {        for (; j < size.width; j++)
+            dst[j] = (u16)src0[j] + (u16)src1[j];
     }
-    
-    
-    {
-    {}  // namespace port
-}  // namespace stream_executor
-
-    
-    TegraUnaryOp_Invoker(bitwiseNot, bitwiseNot)
-#define TEGRA_UNARYOP(type, op, src1, sz1, dst, sz, w, h) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    parallel_for_(Range(0, h), \
-    TegraGenOp_##op##_Invoker<const type, type>(src1, sz1, dst, sz, w, h), \
-    (w * h) / static_cast<double>(1<<16)), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        v_dst = internal::vqaddq(v_src0, v_src1);
-    }
-    
-    void bitwiseAnd(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseAnd());
 #else
     (void)size;
     (void)src0Base;
@@ -89,414 +16,361 @@ string TryFindKernelClass(const string& serialized_node_def);
 #endif
 }
     
-    #endif 
+            1   2   3
+         *  *  *
+          * * *
+        0*******0
+          * * *
+         *  *  *
+        3   2   1
+    */
     
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
+    template <typename Op>
+void vcompare(Size2D size,
+              const typename Op::type * src0Base, ptrdiff_t src0Stride,
+              const typename Op::type * src1Base, ptrdiff_t src1Stride,
+              u8 * dstBase, ptrdiff_t dstStride, const Op & op)
+{
+    typedef typename Op::type type;
+    typedef typename internal::VecTraits<type>::vec128 vec128;
+    typedef typename internal::VecTraits<type>::unsign::vec128 uvec128;
     }
     
-    
-    {    return 0;
-#endif
-}
-    
-    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
-inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
-inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
-    
-    inline uint8x8_t vqtbl1_u8 (uint8x16_t a, uint8x8_t b)
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s8, s32, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
 {
-#ifdef __aarch64__
-    // AArch64 supports this natively
-    return ::vqtbl1_u8(a, b);
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s8 q3, d4                                       \n\t'
+            'vmovl.s8 q4, d5                                       \n\t'
+            'vmovl.s16 q5, d6                                      \n\t'
+            'vmovl.s16 q6, d7                                      \n\t'
+            'vmovl.s16 q7, d8                                      \n\t'
+            'vmovl.s16 q8, d9                                      \n\t'
+            'vcvt.f32.s32 q9, q5                                   \n\t'
+            'vcvt.f32.s32 q10, q6                                  \n\t'
+            'vcvt.f32.s32 q11, q7                                  \n\t'
+            'vcvt.f32.s32 q12, q8                                  \n\t'
+            'vmul.f32 q13, q9, q0                                  \n\t'
+            'vmul.f32 q14, q10, q0                                 \n\t'
+            'vmul.f32 q15, q11, q0                                 \n\t'
+            'vmul.f32 q2, q12, q0                                  \n\t'
+            'vadd.f32 q3, q13, q1                                  \n\t'
+            'vadd.f32 q4, q14, q1                                  \n\t'
+            'vadd.f32 q5, q15, q1                                  \n\t'
+            'vadd.f32 q6, q2, q1                                   \n\t'
+            'vcvt.s32.f32 q7, q3                                   \n\t'
+            'vcvt.s32.f32 q8, q4                                   \n\t'
+            'vcvt.s32.f32 q9, q5                                   \n\t'
+            'vcvt.s32.f32 q10, q6                                  \n\t'
+            'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
+            'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
+            'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
+            'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              [dst3] 'r' (_dst + i + 8),
+              [dst4] 'r' (_dst + i + 12),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10',
+            'd11','d12','d13','d14','d15','d16','d17',
+            'd18','d19','d20','d21','d22','d23','d24',
+            'd25','d26','d27','d28','d29','d30','d31'
+        );
+    }
+})
 #else
-    union { uint8x16_t v; uint8x8x2_t w; } u = { a };
-    return vtbl2_u8(u.w, b);
+CVTS_FUNC(s8, s32, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        int8x16_t vline = vld1q_s8(_src + i);
+        int16x8_t vline1_s16 = vmovl_s8(vget_low_s8 (vline));
+        int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline));
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline1_s16));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline1_s16));
+        int32x4_t vline3_s32 = vmovl_s16(vget_low_s16 (vline2_s16));
+        int32x4_t vline4_s32 = vmovl_s16(vget_high_s16(vline2_s16));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
+        float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline3_f32 = vmulq_f32(vline3_f32, vscale);
+        vline4_f32 = vmulq_f32(vline4_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline3_f32 = vaddq_f32(vline3_f32, vshift);
+        vline4_f32 = vaddq_f32(vline4_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        vline3_s32 = vcvtq_s32_f32(vline3_f32);
+        vline4_s32 = vcvtq_s32_f32(vline4_f32);
+        vst1q_s32(_dst + i + 0,  vline1_s32);
+        vst1q_s32(_dst + i + 4,  vline2_s32);
+        vst1q_s32(_dst + i + 8,  vline3_s32);
+        vst1q_s32(_dst + i + 12, vline4_s32);
+    }
+})
 #endif
+    
+    bool isFlipSupported(FLIP_MODE flipMode, u32 elemSize)
+{
+    bool supportedElemSize = (elemSize == 1) || (elemSize == 2) || (elemSize == 3) || (elemSize == 4);
+    return isSupportedConfiguration() &&
+            ((supportedElemSize && ((flipMode == FLIP_BOTH_MODE) || (flipMode == FLIP_HORIZONTAL_MODE))) ||
+             (flipMode == FLIP_VERTICAL_MODE));
 }
     
     
     {
-    {        for( ; x < cols; x++ )
+    {
+    {
+    {                vst4_u8(dst + x, vRes);
+#endif
+            }
+            break;
+        }
+        for (s32 h = 0; h < cn; ++h)
         {
-            if (x == 0) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE) {
-                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
-                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-                } else if (border == BORDER_MODE_REFLECT) {
-                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
-                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    pprevx = v0[2] + 2*v1[2] + 2*v2[2] + 2*v3[2] + v4[2];
-                    prevx = 2*v0[1] - 4*v2[1] + 2*v4[1];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    pprevx = 8 * borderValue;
-                    prevx = 0;
-                }
-            } else if (x == 1) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
-                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    pprevx = 8 * borderValue;
-                }
-                prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-            } else {
-                pprevx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
-                prevx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
+            u16* ln = lane + h;
+            u8* dt = dst + h;
+            for (size_t k = x; k < colsn; k += cn)
+            {
+                dt[k] = (u8)((ln[k-2*cn] + ln[k+2*cn]
+                               + u16(4) * (ln[k-cn] + ln[k+cn])
+                               + u16(6) * ln[k] + (1 << 7)) >> 8);
             }
-            s16 currx = 2*v0[x] - 4*v1[x] - 12*v2[x] - 4*v3[x] + 2*v4[x];
-            if (x == cols-1) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE) {
-                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
-                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
-                } else if (border == BORDER_MODE_REFLECT) {
-                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
-                    nnextx = v0[x-1] + 2*v1[x-1] + 2*v2[x-1] + 2*v3[x-1] + v4[x-1];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    nextx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
-                    nnextx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    nextx = 0;
-                    nnextx = 8 * borderValue;
-                }
-            } else if (x == cols-2) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
-                    nnextx = v0[x+1] + 2*v1[x+1] + 2*v2[x+1] + 2*v3[x+1] + v4[x+1];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    nnextx = 8 * borderValue;
-                }
-                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
-            } else {
-                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
-                nnextx = v0[x+2] + 2*v1[x+2] + 2*v2[x+2] + 2*v3[x+2] + v4[x+2];
-            }
-            s16 res = pprevx + prevx + currx + nextx + nnextx;
-            *(drow+x) = 2*res;
         }
     }
 #else
-    (void)size;
     (void)srcBase;
     (void)srcStride;
     (void)dstBase;
     (void)dstStride;
-    (void)border;
     (void)borderValue;
+    (void)borderMargin;
 #endif
 }
     
-    namespace nw {
-    }
-    
-    using content::RenderView;
-using content::RenderThread;
-using content::V8ValueConverter;
-using blink::WebFrame;
-using blink::WebLocalFrame;
-using blink::WebView;
-    
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    bool MenuDelegate::IsItemForCommandIdDynamic(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
-    
-        bool Write(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return WriteText(data);
-        break;
-        case TYPE_HTML:
-        return WriteHTML(data);
-        break;
-        case TYPE_RTF:
-        return WriteRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return WriteImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
-      }
-      NOTREACHED();
-      return false;
-    }
-    
-    // Can't use an anonymous namespace here due to brokenness of Tru64 compiler.
-namespace cpp_unittest {
-    }
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-      uint8 expected_data[] = {
-      0x4,
-      0x1, 0x0, 'z', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'I', 'J', 0x0,
-      0x3, 0x0, 'a', 'b', 'c', 'd', 'e', 'z', 'g', 'h', 'I', 'J', 0x0,
-      0x2, 0x0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'I', 0x0,
-      0x4, 0x0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'I', 'J', 'z', 0x0,
-  };
-  string expected((const char*)expected_data, sizeof(expected_data));
-    
-    template<class T, T v>
-struct integral_constant {
-  static const T value = v;
-  typedef T value_type;
-  typedef integral_constant<T, v> type;
-};
-    
-    namespace GOOGLE_NAMESPACE = google::protobuf::internal;
-    
-        for (size_t i = 0; i < set_fields.size(); i++) {
-      const FieldDescriptor* field = set_fields[i];
-      if (ShouldBeClear(field)) {
-        reflection->ClearField(message, field);
-        continue;
-      }
-      if (field->type() == FieldDescriptor::TYPE_MESSAGE) {
-        if (field->is_repeated()) {
-          for (int j = 0; j < reflection->FieldSize(*message, field); j++) {
-            StripMessage(reflection->MutableRepeatedMessage(message, field, j));
-          }
-        } else {
-          StripMessage(reflection->MutableMessage(message, field));
-        }
-      }
-    }
-    
-    std::string ReadFile(const std::string& name) {
-  std::ifstream file(name.c_str());
-  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
-      << name
-      << '', please make sure you are running this command from the benchmarks'
-      << ' directory.\n';
-  return std::string((std::istreambuf_iterator<char>(file)),
-                     std::istreambuf_iterator<char>());
-}
-    
-        for (int i = 0; i < dataset.payload_size(); i++) {
-      message->ParseFromString(dataset.payload(i));
-      Proto3DataStripper stripper;
-      stripper.StripMessage(message);
-      dataset.set_payload(i, message->SerializeAsString());
-    }
-    
-      virtual bool Generate(const FileDescriptor* file,
-                        const string& parameter,
-                        GeneratorContext* context,
-                        string* error) const {
-    FileDescriptorProto new_file;
-    file->CopyTo(&new_file);
-    SchemaGroupStripper::StripFile(file, &new_file);
-    }
-    
-    
-    {}
-
-    
-    
-    {		case Image::Format::R11:
-		case Image::Format::SIGNED_R11:
-			m_pencoding = new Block4x4Encoding_R11;
-			break;
-		case Image::Format::RG11:
-		case Image::Format::SIGNED_RG11:
-			m_pencoding = new Block4x4Encoding_RG11;
-			break;
-		default:
-			assert(0);
-			break;
-		}
-    
-    	protected:
-    
-    #include <assert.h>
-    
-    enum ClipType { ctIntersection, ctUnion, ctDifference, ctXor };
-enum PolyType { ptSubject, ptClip };
-//By far the most widely used winding rules for polygon filling are
-//EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
-//Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
-//see http://glprogramming.com/red/chapter11.html
-enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
+    template <typename T, int elsize> struct vtail
 {
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b),'r'(a<<16)
-  );
-  return rd_hi;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
-    
-    /** 16x16 multiply-add where the result fits in 32 bits */
-#define MAC16_16(c,a,b) (ADD32((c),MULT16_16((a),(b))))
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#define MAC16_32_Q15(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),15)), SHR(MULT16_16((a),((b)&0x00007fff)),15)))
-    
-    /*!
- * Downsample by a factor 2/3, low quality
-*/
-void silk_resampler_down2_3(
-    opus_int32                  *S,                 /* I/O  State vector [ 6 ]                                          */
-    opus_int16                  *out,               /* O    Output signal [ floor(2*inLen/3) ]                          */
-    const opus_int16            *in,                /* I    Input signal [ inLen ]                                      */
-    opus_int32                  inLen               /* I    Number of input samples                                     */
-);
-    
-      kFullType = 1,
-    
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-LEVELDB_EXPORT Env* NewMemEnv(Env* base_env);
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed);
-    
-      WritableFile* writable_file;
-  ASSERT_OK(env_->NewWritableFile('/a/b', &writable_file));
-    
-    // A Table is a sorted map from strings to strings.  Tables are
-// immutable and persistent.  A Table may be safely accessed from
-// multiple threads without external synchronization.
-class LEVELDB_EXPORT Table {
- public:
-  // Attempt to open the table that is stored in bytes [0..file_size)
-  // of 'file', and read the metadata entries necessary to allow
-  // retrieving data from the table.
-  //
-  // If successful, returns ok and sets '*table' to the newly opened
-  // table.  The client should delete '*table' when no longer needed.
-  // If there was an error while initializing the table, sets '*table'
-  // to nullptr and returns a non-ok status.  Does not take ownership of
-  // '*source', but the client must ensure that 'source' remains live
-  // for the duration of the returned table's lifetime.
-  //
-  // *file must remain live while this Table is in use.
-  static Status Open(const Options& options, RandomAccessFile* file,
-                     uint64_t file_size, Table** table);
+    static inline void inRange(const T *, const T *, const T *,
+                               u8 *, size_t &, size_t)
+    {
+        //do nothing since there couldn't be enough data
     }
-    
-    
-    {  struct Rep;
-  Rep* rep_;
+};
+template <typename T> struct vtail<T, 2>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
+        if( x + 8 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1(dst + x, internal::vmovn(vd));
+            x+=8;
+        }
+    }
+};
+template <typename T> struct vtail<T, 1>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        typedef typename internal::VecTraits<T>::vec64 vec64;
+        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
+        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
+        if( x + 16 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1q(dst + x, vd);
+            x+=16;
+        }
+        if( x + 8 < width)
+        {
+             vec64  vs = internal::vld1( src + x);
+             vec64 vr1 = internal::vld1(rng1 + x);
+             vec64 vr2 = internal::vld1(rng2 + x);
+            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
+            internal::vst1(dst + x, vd);
+            x+=8;
+        }
+    }
 };
     
-    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
-#define STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
     
-    uint64_t TableBuilder::NumEntries() const { return rep_->num_entries; }
-    
-      EnvWindowsTest() : env_(Env::Default()) {}
-    
-    // WriteController is controlling write stalls in our write code-path. Write
-// stalls happen when compaction can't keep up with write rate.
-// All of the methods here (including WriteControllerToken's destructors) need
-// to be called while holding DB mutex
-class WriteController {
- public:
-  explicit WriteController(uint64_t _delayed_write_rate = 1024u * 1024u * 32u,
-                           int64_t low_pri_rate_bytes_per_sec = 1024 * 1024)
-      : total_stopped_(0),
-        total_delayed_(0),
-        total_compaction_pressure_(0),
-        bytes_left_(0),
-        last_refill_time_(0),
-        low_pri_rate_limiter_(
-            NewGenericRateLimiter(low_pri_rate_bytes_per_sec)) {
-    set_max_delayed_write_rate(_delayed_write_rate);
-  }
-  ~WriteController() = default;
-    }
-    
-    // A simple compaction algorithm that always compacts everything
-// to the highest level whenever possible.
-class FullCompactor : public Compactor {
- public:
-  explicit FullCompactor(const Options options) : options_(options) {
-    compact_options_.compression = options_.compression;
-    compact_options_.output_file_size_limit =
-        options_.target_file_size_base;
-  }
-    }
-    
-    class MyFilter : public rocksdb::CompactionFilter {
- public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
-    return false;
-  }
-    }
-    
-    
-    {
-    {}  // namespace experimental
-}  // namespace rocksdb
+    {} // namespace caffe2
 
     
-      // If true, an error is raised if the database already exists.
-  // Default: false
-  bool error_if_exists;
     
-      virtual ~OptimisticTransactionDB() {}
+    {} // namespace caffe2
     
-    #include 'include/org_rocksdb_Checkpoint.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/utilities/checkpoint.h'
-#include 'rocksjni/portal.h'
-/*
- * Class:     org_rocksdb_Checkpoint
- * Method:    newCheckpoint
- * Signature: (J)J
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
  */
-jlong Java_org_rocksdb_Checkpoint_newCheckpoint(JNIEnv* /*env*/,
-                                                jclass /*jclazz*/,
-                                                jlong jdb_handle) {
-  auto* db = reinterpret_cast<rocksdb::DB*>(jdb_handle);
-  rocksdb::Checkpoint* checkpoint;
-  rocksdb::Checkpoint::Create(db, &checkpoint);
-  return reinterpret_cast<jlong>(checkpoint);
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+    
+    {}  // namespace caffe
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+
+    
+    # else
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+    
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
+    
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
+    
+      template <GTEST_8_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_8_TUPLE_(U)& t) {
+    return CopyFrom(t);
+  }
+    
+    template <typename T>
+struct AssertTypeEq<T, T> {
+  typedef bool type;
+};
+    
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
+
+    
+        Number::Number(PNUMBER p) noexcept
+        : m_sign{ p->sign }
+        , m_exp{ p->exp }
+        , m_mantissa{}
+    {
+        m_mantissa.reserve(p->cdigit);
+        copy(p->mant, p->mant + p->cdigit, back_inserter(m_mantissa));
+    }
+    
+    CalculationManager::CommandType CUnaryCommand::GetCommandType() const
+{
+    return CalculationManager::CommandType::UnaryCommand;
 }
