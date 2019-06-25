@@ -1,130 +1,134 @@
 
         
-            def remove_from_tail(self):
-        pass
+        
+class User(object):
     
     
-class PrivateChat(Chat):
+class DefaultCategories(Enum):
     
-            Emit key value pairs of the form:
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-        def _hash_function(self, key):
-        return key % self.size
-    
-    FISH_COMPLETION_FILE = 'youtube-dl.fish'
-FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
-    
-    print('WARNING: Lazy loading extractors is an experimental feature that may not always work', file=sys.stderr)
-    
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
 
     
-    import io
-import optparse
-import os.path
-import re
-    
-    
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
-    
-    
-@bp.route('/login', methods=('GET', 'POST'))
-def login():
-    '''Log in a registered user by adding the user id to the session.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
-    
-        with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
-    
-    
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
 
     
+        requires_project = False
     
-class TagMarkup(JSONTag):
-    '''Serialize anything matching the :class:`~flask.Markup` API by
-    having a ``__html__`` method to the result of that method. Always
-    deserializes to an instance of :class:`~flask.Markup`.'''
     
-            .. versionchanged:: 0.10
-           Raise a :exc:`BadRequest` error instead of returning an error
-           message as JSON. If you want that behavior you can add it by
-           subclassing.
+def _parsed_url_args(parsed):
+    # Assume parsed is urlparse-d from Request.url,
+    # which was passed via safe_url_string and is ascii-only.
+    b = lambda s: to_bytes(s, encoding='ascii')
+    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))
+    path = b(path)
+    host = b(parsed.hostname)
+    port = parsed.port
+    scheme = b(parsed.scheme)
+    netloc = b(parsed.netloc)
+    if port is None:
+        port = 443 if scheme == b'https' else 80
+    return scheme, netloc, host, port, path
     
-                datestr, codename = match.groups()
-            return version, parse_date(datestr), codename
+            # scrapy already handles #! links properly
+        ajax_crawl_request = request.replace(url=request.url+'#!')
+        logger.debug('Downloading AJAX crawlable %(ajax_crawl_request)s instead of %(request)s',
+                     {'ajax_crawl_request': ajax_crawl_request, 'request': request},
+                     extra={'spider': spider})
     
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#
-# html_use_opensearch = ''
+        def test_login(self):
+        with self.mock_login():
+            res = self.do_login()
+            self.assert_success(res)
     
-        def scan_devices(self):
-        '''Scan for new devices and return a list with found device IDs.'''
-        self._update_info()
+        @patch('r2.lib.authorize.interaction.Bid._new')
+    def test_auth_freebie_transaction(self, _new):
+        '''Test auth_freebie_transaction'''
+        link = Mock(spec=Link)
+        link._id = 99
+        amount = 100
+        campaign_id = 99
     
-        def get_thomson_data(self):
-        '''Retrieve data from THOMSON and return parsed result.'''
-        try:
-            telnet = telnetlib.Telnet(self.host)
-            telnet.read_until(b'Username : ')
-            telnet.write((self.username + '\r\n').encode('ascii'))
-            telnet.read_until(b'Password : ')
-            telnet.write((self.password + '\r\n').encode('ascii'))
-            telnet.read_until(b'=>')
-            telnet.write(('hostmgr list\r\n').encode('ascii'))
-            devices_result = telnet.read_until(b'=>').split(b'\r\n')
-            telnet.write('exit\r\n'.encode('ascii'))
-        except EOFError:
-            _LOGGER.exception('Unexpected response from router')
-            return
-        except ConnectionRefusedError:
-            _LOGGER.exception(
-                'Connection refused by router. Telnet enabled?')
-            return
+            self.amqp.assert_event_item(
+            {
+                'event_type': 'ss.report',
+                'event_topic': 'report_events',
+                'payload': {
+                    'process_notes': 'CUSTOM',
+                    'target_fullname': target._fullname,
+                    'target_name': target.name,
+                    'target_title': target.title,
+                    'target_type': 'self',
+                    'target_author_id': target.author_slow._id,
+                    'target_author_name': target.author_slow.name,
+                    'target_id': target._id,
+                    'target_age_seconds': target._age.total_seconds(),
+                    'target_created_ts': self.created_ts_mock,
+                    'domain': request.host,
+                    'user_agent': request.user_agent,
+                    'user_agent_parsed': request.parsed_agent.to_dict(),
+                    'referrer_url': request.headers.get(),
+                    'user_id': context.user._id,
+                    'user_name': context.user.name,
+                    'oauth2_client_id': context.oauth2_client._id,
+                    'oauth2_client_app_type': context.oauth2_client.app_type,
+                    'oauth2_client_name': context.oauth2_client.name,
+                    'referrer_domain': self.domain_mock(),
+                    'geoip_country': context.location,
+                    'obfuscated_data': {
+                        'client_ip': request.ip,
+                        'client_ipv4_24': '1.2.3',
+                        'client_ipv4_16': '1.2',
+                    }
+                }
+            }
+        )
     
-        def _retrieve_list_with_retry(self):
-        '''Retrieve the device list with a retry if token is invalid.
     
-            if data is not None:
-            body_message.update(data)
-            # Only one of text or attachment can be specified
-            if 'attachment' in body_message:
-                body_message.pop('text')
+    {                    'request_url': request.fullpath,
+                    'domain': request.host,
+                    'geoip_country': context.location,
+                    'oauth2_client_id': context.oauth2_client._id,
+                    'oauth2_client_app_type': context.oauth2_client.app_type,
+                    'oauth2_client_name': context.oauth2_client.name,
+                    'referrer_domain': self.domain_mock(),
+                    'referrer_url': request.headers.get(),
+                    'user_agent': request.user_agent,
+                    'user_agent_parsed': request.parsed_agent.to_dict(),
+                    'obfuscated_data': {
+                        'client_ip': request.ip,
+                    }
+                },
+            )
+        )
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.file/
-'''
-import logging
-import os
-    
-    import voluptuous as vol
-    
-        client = messagebird.Client(config[CONF_API_KEY])
-    try:
-        # validates the api key
-        client.balance()
-    except messagebird.client.ErrorException:
-        _LOGGER.error('The specified MessageBird API key is invalid')
-        return None
+        def test_parse_addr(self):
+        self.assertEquals(
+            ('1:2', 3), stats.StatsdConnection._parse_addr('1:2:3'))
