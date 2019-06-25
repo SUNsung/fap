@@ -1,161 +1,205 @@
 
         
         
-    {  for (auto Entry : DCache.Entries) {
-    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
+    {    BOOST_CHECK_EQUAL(vals[1].get_int(), 10);
+    BOOST_CHECK_THROW(vals[1].get_bool(), std::runtime_error);
+}
+    
+      FileState() : pos_(-1), pos_at_last_sync_(-1), pos_at_last_flush_(-1) {}
+    
+    #endif  // CONTENT_NW_SRC_API_APP_APP_H_
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+    namespace content {
+class RenderView;
+}
+    
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
-  DCache.Entries.clear();
 }
     
-    void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
-}
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
     
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
+    #include <vector>
     
-    
-    {  return '';
-}
-
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-    
-    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
-} // namespace caffe2
-
-    
-    #include <config.h>
-    
-      // Get angle
-  int getAngle() { return angle; }
-    
-        ~ObjectItem()
-    {
-      item.free();
-    }
-    
-      // Constructor.
-  PreScanOutputDev();
-    
-    // Define a customized logistic regression objective in C++.
-// Implement the interface.
-class MyLogistic : public ObjFunction {
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
  public:
-  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param_.InitAllowUnknown(args);
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
   }
-  void GetGradient(const HostDeviceVector<bst_float> &preds,
-                   const MetaInfo &info,
-                   int iter,
-                   HostDeviceVector<GradientPair> *out_gpair) override {
-    out_gpair->Resize(preds.Size());
-    const std::vector<bst_float>& preds_h = preds.HostVector();
-    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
-    const std::vector<bst_float>& labels_h = info.labels_.HostVector();
-    for (size_t i = 0; i < preds_h.size(); ++i) {
-      bst_float w = info.GetWeight(i);
-      // scale the negative examples!
-      if (labels_h[i] == 0.0f) w *= param_.scale_neg_weight;
-      // logistic transformation
-      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
-      // this is the gradient
-      bst_float grad = (p - labels_h[i]) * w;
-      // this is the second order gradient
-      bst_float hess = p * (1.0f - p) * w;
-      out_gpair_h.at(i) = GradientPair(grad, hess);
-    }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
   }
-  const char* DefaultEvalMetric() const override {
-    return 'error';
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
   }
-  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
-    // transform margin value to probability.
-    std::vector<bst_float> &preds = io_preds->HostVector();
-    for (size_t i = 0; i < preds.size(); ++i) {
-      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
-    }
-  }
-  bst_float ProbToMargin(bst_float base_score) const override {
-    // transform probability to margin value
-    return -std::log(1.0f / base_score - 1.0f);
-  }
-    }
-    
-    
-    {
-    {    for (const auto &batch : (*dmat)->GetRowBatches()) {
-      for (int i = 0; i < batch.Size(); i++) {
-        auto inst = batch[i];
-        for (int j = 0; i < inst.size(); i++) {
-          ASSERT_EQ(inst[j].fvalue, 1.5);
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
         }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
       }
     }
-    delete dmat;
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
   }
-}
-
-    
-    #ifndef XGBOOST_COMMON_IO_H_
-#define XGBOOST_COMMON_IO_H_
-    
-    #define TRANSFORM_GPU_RANGE GPUSet::Empty()
-#define TRANSFORM_GPU_DIST GPUDistribution::Block(GPUSet::Empty())
-    
-    #define XO1(name, arg3, oe, xop)                                          \
-void Assembler::name(const Reg64& rt, const Reg64& ra, arg3 bool rc) {
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
     }
     
-    
-    {}
-    
-    #include 'hphp/runtime/base/type-string.h'
-    
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
+    bool SimpleCSRSource::Next() {
+  if (!at_first_) return false;
+  at_first_ = false;
+  return true;
 }
     
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
+      double double2[2] = {1.0, 2.0};
+  EXPECT_EQ(info.GetRoot(1), 0)
+    << 'When no root_index is given, was expecting default value 0';
+  info.SetInfo('root_index', double2, xgboost::kDouble, 2);
+  EXPECT_EQ(info.GetRoot(1), 2.0f);
+    
+      /*!
+   * \brief Parse configuration file into key-value pairs.
+   * \param path path to configuration file
+   * \return list of key-value pairs
+   */
+  std::vector<std::pair<std::string, std::string>> Parse() {
+    std::string content { LoadConfigFile(path_) };
+    content = NormalizeConfigEOL(content);
+    std::stringstream ss { content };
+    std::vector<std::pair<std::string, std::string>> results;
+    char delimiter = '=';
+    char comment = '#';
+    std::string line;
+    std::string key, value;
+    // Loop over every line of the configuration file
+    while (std::getline(ss, line)) {
+      if (ParseKeyValuePair(line, &key, &value)) {
+        results.emplace_back(key, value);
+      }
+    }
+    return results;
+  }
