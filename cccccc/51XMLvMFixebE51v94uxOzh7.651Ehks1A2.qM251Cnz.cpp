@@ -1,142 +1,222 @@
 
         
-        
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    // FIXME: Not thread-safe! It should avoid deleting the value until
-    // 'releaseValue is called on it.
-    *Value_out = Entry->second;
-    return true;
-  }
-  return false;
-}
-    
-    // We'd like the dump routine to be present in all builds, but it's
-// a pretty large amount of code, most of which is not sensitive to the
-// actual key and value data.  If we try to have a common implementation,
-// we're left with the problem of describing the layout of a node when
-// that's technically instantiation-specific.  Redefining the struct here
-// is technically an aliasing violation, but we can just tell the compilers
-// that actually use TBAA that this is okay.
-typedef struct _Node Node LLVM_MAY_ALIAS;
-struct _Node {
-  // If you change the layout in the header, you'll need to change it here.
-  // (This comment is repeated there.)
-  Node *Left, *Right, *Further;
-};
-    
-    /// Maintain a set of known CF types.
-static bool isKnownCFTypeName(StringRef name) {
-  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
-                            name, SortByLengthComparator());
-}
-    
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
-    
-    
-    {  llvm_unreachable('invalid class');
-}
-    
-    class LLVM_LIBRARY_VISIBILITY Windows : public ToolChain {
-protected:
-  InvocationInfo constructInvocation(const LinkJobAction &job,
-                                     const JobContext &context) const override;
+        /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    #include <utility>
+#include <vector>
+    
+    #endif  // CAFFE_BNLL_LAYER_HPP_
+
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+    // Values() allows generating tests from explicitly specified list of
+// parameters.
+//
+// Synopsis:
+// Values(T v1, T v2, ..., T vN)
+//   - returns a generator producing sequences with elements v1, v2, ..., vN.
+//
+// For example, this instantiates tests from test case BarTest each
+// with values 'one', 'two', and 'three':
+//
+// INSTANTIATE_TEST_CASE_P(NumSequence, BarTest, Values('one', 'two', 'three'));
+//
+// This instantiates tests from test case BazTest each with values 1, 2, 3.5.
+// The exact type of values will depend on the type of parameter in BazTest.
+//
+// INSTANTIATE_TEST_CASE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
+//
+// Currently, Values() supports from 1 to 50 parameters.
+//
+template <typename T1>
+internal::ValueArray1<T1> Values(T1 v1) {
+  return internal::ValueArray1<T1>(v1);
+}
+    
+      const InterceptMode intercept_mode_;
+  TestPartResultReporterInterface* old_reporter_;
+  TestPartResultArray* const result_;
+    
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2;
+}
+    
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+    
+      // The default c'tor constructs a NULL string.
+  MyString() : c_string_(NULL) {}
+    
+    AuthPropertyIterator::AuthPropertyIterator(
+    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
+    : property_(property),
+      ctx_(iter->ctx),
+      index_(iter->index),
+      name_(iter->name) {}
+    
+    #include <grpc/support/port_platform.h>
+    
+    void CensusClientCallData::StartTransportStreamOpBatch(
+    grpc_call_element* elem, TransportStreamOpBatch* op) {
+  if (op->send_initial_metadata() != nullptr) {
+    census_context* ctxt = op->get_census_context();
+    GenerateClientContext(
+        qualified_method_, &context_,
+        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
+    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
+                                               kMaxTraceContextLen);
+    if (tracing_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &tracing_bin_,
+              grpc_mdelem_from_slices(
+                  GRPC_MDSTR_GRPC_TRACE_BIN,
+                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
+    }
+    grpc_slice tags = grpc_empty_slice();
+    // TODO: Add in tagging serialization.
+    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
+    if (encoded_tags_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &stats_bin_,
+              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
+    }
+  }
+    }
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
+
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusServerCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusServerCallData : public CallData {
+ public:
+  // Maximum size of server stats that are sent on the wire.
+  static constexpr uint32_t kMaxServerStatsLen = 16;
+    }
+    
+    Status ProtoServerReflection::GetFileContainingSymbol(
+    ServerContext* context, const grpc::string& symbol,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
+    }
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    #include <grpc/support/port_platform.h>
+    
+    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
+  memset(core, 0, sizeof(*core));
+  for (const auto& m : proto.metrics()) {
+    switch (m.value_case()) {
+      case Metric::VALUE_NOT_SET:
+        break;
+      case Metric::kCount:
+        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
+          if (m.name() == grpc_stats_counter_name[i]) {
+            core->counters[i] = m.count();
+            break;
+          }
         }
-    
-        // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver.
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-    
-    {        ImGui::Render();
+        break;
+      case Metric::kHistogram:
+        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
+          if (m.name() == grpc_stats_histogram_name[i]) {
+            const auto& h = m.histogram();
+            bool valid = true;
+            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
+            for (int j = 0; valid && j < h.buckets_size(); j++) {
+              if (grpc_stats_histo_bucket_boundaries[i][j] !=
+                  h.buckets(j).start()) {
+                valid = false;
+              }
+            }
+            if (!valid) {
+              gpr_log(GPR_ERROR,
+                      'Found histogram %s but shape is different from proto',
+                      m.name().c_str());
+            }
+            for (int j = 0; valid && j < h.buckets_size(); j++) {
+              core->histograms[grpc_stats_histo_start[i] + j] =
+                  h.buckets(j).count();
+            }
+          }
+        }
+        break;
     }
-    
-    void ExtensionManagerProcessor::process_getQueryColumns(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext('ExtensionManager.getQueryColumns', callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, 'ExtensionManager.getQueryColumns');
-    }
-    
-    #include 'Extension.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    TEST_F(iokitDevicetree, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from iokit_devicetree');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'name', NormalType}
-  //      {'class', NormalType}
-  //      {'id', IntType}
-  //      {'parent', IntType}
-  //      {'device_path', NormalType}
-  //      {'service', IntType}
-  //      {'busy_state', IntType}
-  //      {'retain_count', IntType}
-  //      {'depth', IntType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
 }
     
-    class keychainItems : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
+    int ClusterQualityInfo702::longitude_dist_rms(const std::uint8_t* bytes,
+                                              int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(3, 5);
+    }
+    
+      x <<= 3;
+  x |= t;
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
