@@ -1,77 +1,58 @@
 
         
-            try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
+            def __exit__(self, exc_type, exc_value, traceback):
+        self.proc.kill()
+        self.proc.wait()
+        time.sleep(0.2)
     
-        @property
-    def cache_key(self):
-        return self.cache_key_prefix + self._get_or_create_session_key()
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
     
-            if data is None:
-            s = self._get_session_from_db()
-            if s:
-                data = self.decode(s.session_data)
-                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
-            else:
-                data = {}
-        return data
+            body = tar_file.extractfile(tar_file.members[0]).read()
+        respcls = responsetypes.from_args(filename=tar_file.members[0].name, body=body)
+        return response.replace(body=body, cls=respcls)
     
     
+def check_raw(overhead, num):
+    check(num + overhead, b' ' * num)
+    
+        def __instancecheck__(cls, inst):
+        return hasattr(inst, '_data')
+    
+        return df
     
     
-class CheckNetwork(object):
-    def __init__(self, type='IPv4'):
-        self.type = type
-        self.urls = []
-        self._checking_lock = threading.Lock()
-        self._checking_num = 0
-        self.network_stat = 'unknown'
-        self.last_check_time = 0
-        self.continue_fail_count = 0
+def test_write_unsupported_compression_type():
+    df = pd.read_json('{'a': [1, 2, 3], 'b': [4, 5, 6]}')
+    with tm.ensure_clean() as path:
+        msg = 'Unrecognized compression type: unsupported'
+        with pytest.raises(ValueError, match=msg):
+            df.to_json(path, compression='unsupported')
     
-        def __init__(self, json_name, value):
-        self.value = value
-        super(Fixed, self).__init__(
-            json_name=json_name, default=value, omitempty=False)
     
-    # Load a test image and get encondings for it
-image_to_test = face_recognition.load_image_file('obama2.jpg')
-image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+def test_bin32():
+    header = b'\xc6'
+    data = b'x' * 65536
+    b = packb(data, use_bin_type=True)
+    assert len(b) == len(data) + 5
+    assert b[0:1] == header
+    assert b[1:5] == b'\x00\x01\x00\x00'
+    assert b[5:] == data
+    assert unpackb(b) == data
     
-        pool = context.Pool(processes=processes)
     
-            # If you had more than 2 faces, you could make this logic a lot prettier
-        # but I kept it simple for the demo
-        name = None
-        if match[0]:
-            name = 'Lin-Manuel Miranda'
-        elif match[1]:
-            name = 'Alex Lacamoire'
+def gen_binary_data(idx):
+    return binarydata[:idx % 300]
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
     
-            self.assertEqual(type(match_results), list)
-        self.assertTrue(match_results[0])
-        self.assertTrue(match_results[1])
-        self.assertFalse(match_results[2])
+if __name__ == '__main__':
+    main()
+
     
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
-    
-            # Find all the faces and face encodings in the frame of video, cost most time
-        face_locations = face_recognition.face_locations(rgb_frame)
-        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    import sys
+from timeit import Timer
