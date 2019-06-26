@@ -1,309 +1,130 @@
 
         
-        /*!
- * \brief Gradient function that takes output value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT0)(const OutputGrad& out_grad,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Gradient function that takes output value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param out_value the value of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT1)(const OutputGrad& out_grad,
-                                    const OutputValue& out_value,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Gradient function that takes input value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param in_data0 the input value of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT2)(const OutputGrad& out_grad,
-                                    const Input0& in_data0,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Binary function that takes lhs, rhs and save result to ret.
- *  The result container is pre-allocated with the correct shape.
- * \param lhs The left operand
- * \param rhs The right operand
- * \param env The Environment arguments.
- * \param ret The containter to store return value.
- * \param req The requirement to stroe the ret.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryFunction)(const TBlob& lhs,
-                               const TBlob& rhs,
-                               const EnvArguments& env,
-                               TBlob* ret,
-                               OpReqType req,
-                               RunContext ctx);
-    
-    template<>
-void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
+        bool Converter<PersistentDictionary>::FromV8(v8::Isolate* isolate,
+                                             v8::Local<v8::Value> val,
+                                             PersistentDictionary* out) {
+  if (!val->IsObject())
+    return false;
+  *out = PersistentDictionary(isolate, v8::Local<v8::Object>::Cast(val));
+  return true;
 }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_blob.h
- * \brief conversion between tensor and caffeBlob
- * \author Haoran Wang
-*/
-#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
-#define PLUGIN_CAFFE_CAFFE_BLOB_H_
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+    bool CertificateManagerModel::ImportServerCert(
+    const net::ScopedCERTCertificateList& certificates,
+    net::NSSCertDatabase::TrustBits trust_bits,
+    net::NSSCertDatabase::ImportCertFailureList* not_imported) {
+  return cert_db_->ImportServerCert(certificates, trust_bits, not_imported);
 }
     
-      std::vector<std::string> ListOutputs() const override {
-    if (param_.num_out > 1) {
-      std::vector<std::string> ret;
-      for (int i = 0; i < param_.num_out; ++i)
-        ret.push_back('output' + std::to_string(i));
-      return ret;
-    } else {
-      return {'output'};
-    }
+      template <typename T>
+  bool GetHolder(T* out) {
+    return ConvertFromV8(isolate_, info_->Holder(), out);
   }
     
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
-  }
-    
-    /*!
- * \brief tblob batch
- *
- * data are stored in tblob before going into NDArray
- */
-struct TBlobBatch {
- public:
-  /*! \brief unique id for instance, can be NULL, sometimes is useful */
-  unsigned *inst_index;
-  /*! \brief number of instance */
-  mshadow::index_t batch_size;
-  /*! \brief number of padding elements in this batch,
-       this is used to indicate the last elements in the batch are only padded up to match the batch, and should be discarded */
-  mshadow::index_t num_batch_padd;
-  /*! \brief content of dense data */
-  std::vector<TBlob> data;
-  /*! \brief extra data to be fed to the network */
-  std::string extra_data;
-  /*! \brief constructor */
-  TBlobBatch(void) {
-    inst_index = NULL;
-    batch_size = 0; num_batch_padd = 0;
-  }
-  /*! \brief destructor */
-  ~TBlobBatch() {
-    delete[] inst_index;
-  }
-};  // struct TBlobBatch
-    
-            template <typename ElementType>
-        static Microsoft::MSR::CNTK::TensorView<ElementType>* GetWritableTensorView(const NDArrayViewPtr& arrayView);
-    
-        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
-    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
-    size_t currentseed;             // seed for current sequence
-    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
-                                    // special values (randomizeDisable)
-    void Invalidate()
-    {
-        currentseed = (size_t) -1;
-    }
-    
-        double ElapsedSeconds();
-    
-    
-    {            // reshape Input(2)
-            Input(2)->SetDims(TensorShape(dimsA), false);
-            fprintf(stderr, '\n%ls %ls operation: For legacy compatibility, the sample layout of third input (%ls %ls operation) was patched to [%s] (from [%s])\n',
-                NodeName().c_str(), OperationName().c_str(), Input(2)->NodeName().c_str(), Input(2)->OperationName().c_str(), string(Input(2)->GetSampleLayout()).c_str(), dimsCstring.c_str());
-        }
-    
-        virtual void Load(File& fstream, size_t modelVersion) override
-    {
-        Base::Load(fstream, modelVersion);
-        fstream >> m_subPen;
-        fstream >> m_delPen;
-        fstream >> m_insPen;
-        fstream >> m_squashInputs;
-        fstream >> m_tokensToIgnore;
-    }
-    
-    
-//---------------------------------------------------------------------
-//
-//   dump    Output the compiled form of the pattern.
-//           Debugging function only.
-//
-//---------------------------------------------------------------------
-void   RegexPattern::dumpOp(int32_t index) const {
-    (void)index;  // Suppress warnings in non-debug build.
-#if defined(REGEX_DEBUG)
-    static const char * const opNames[] = {URX_OPCODE_NAMES};
-    int32_t op          = fCompiledPat->elementAti(index);
-    int32_t val         = URX_VAL(op);
-    int32_t type        = URX_TYPE(op);
-    int32_t pinnedType  = type;
-    if ((uint32_t)pinnedType >= UPRV_LENGTHOF(opNames)) {
-        pinnedType = 0;
-    }
-    }
-    
-    UCollationResult
-RuleBasedCollator::doCompare(const uint8_t *left, int32_t leftLength,
-                             const uint8_t *right, int32_t rightLength,
-                             UErrorCode &errorCode) const {
-    // U_FAILURE(errorCode) checked by caller.
-    if(left == right && leftLength == rightLength) {
-        return UCOL_EQUAL;
-    }
-    }
-    
-    U_NAMESPACE_END
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
+    template <size_t requested_index, size_t... indices>
+struct IndicesGenerator {
+  using type = typename IndicesGenerator<requested_index - 1,
+                                         requested_index - 1,
+                                         indices...>::type;
+};
+template <size_t... indices>
+struct IndicesGenerator<0, indices...> {
+  using type = IndicesHolder<indices...>;
 };
     
-                // In strict mode, this run of whitespace
-            // may have been at the end.
-            if (p >= literal.length()) {
-                break;
-            }
-        }
-        if (t >= text.length() || literal.charAt(p) != text.charAt(t)) {
-            // Ran out of text, or found a non-matching character:
-            // OK in lenient mode, an error in strict mode.
-            if (whitespaceLenient) {
-                if (t == textOffset && text.charAt(t) == 0x2e &&
-                        isAfterNonNumericField(pattern, patternOffset)) {
-                    // Lenient mode and the literal input text begins with a '.' and
-                    // we are after a non-numeric field: We skip the '.'
-                    ++t;
-                    continue;  // Do not update p.
-                }
-                // if it is actual whitespace and we're whitespace lenient it's OK
+    // Create a symlink. Returns true on success.
+bool SymlinkPath(const base::FilePath& target, const base::FilePath& path) {
+  if (!base::CreateSymbolicLink(target, path)) {
+    // Double check the value in case symlink suceeded but we got an incorrect
+    // failure due to NFS packet loss & retry.
+    int saved_errno = errno;
+    if (ReadLink(path) != target) {
+      // If we failed to create the lock, most likely another instance won the
+      // startup race.
+      errno = saved_errno;
+      PLOG(ERROR) << 'Failed to create ' << path.value();
+      return false;
     }
+  }
+  return true;
+}
     
-    ExitConstrDeleteAll: // Remove all sets and return error
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    GlobalMenuBarRegistrarX11::~GlobalMenuBarRegistrarX11() {
+  if (registrar_proxy_) {
+    g_signal_handlers_disconnect_by_func(
+        registrar_proxy_, reinterpret_cast<void*>(OnNameOwnerChangedThunk),
+        this);
+    g_object_unref(registrar_proxy_);
+  }
+}
     
-    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
     
-    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
-    
-    //eof
+    {  OutLines.append(Lines.begin(), Lines.end());
+}
 
     
-    int main()
-{
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
-    }
-    
-    // -----------------------------------------------------------------------------
-// ES6 section 19.3 Boolean Objects
-    
-    
-    {  void CallOrConstructWithArrayLike(TNode<Object> target,
-                                    SloppyTNode<Object> new_target,
-                                    TNode<Object> arguments_list,
-                                    TNode<Context> context);
-  void CallOrConstructDoubleVarargs(TNode<Object> target,
-                                    SloppyTNode<Object> new_target,
-                                    TNode<FixedDoubleArray> elements,
-                                    TNode<Int32T> length,
-                                    TNode<Int32T> args_count,
-                                    TNode<Context> context, TNode<Int32T> kind);
-  void CallOrConstructWithSpread(TNode<Object> target, TNode<Object> new_target,
-                                 TNode<Object> spread, TNode<Int32T> args_count,
-                                 TNode<Context> context);
-};
-    
-      CodeStubArguments args(this, ChangeInt32ToIntPtr(argc));
-  BranchIfToBooleanIsTrue(args.AtIndex(0), &out, &runtime);
-  BIND(&out);
-  args.PopAndReturn(UndefinedConstant());
-    
-        // Check if {num} is a HeapNumber.
-    Label if_numisheapnumber(this),
-        if_numisnotheapnumber(this, Label::kDeferred);
-    Branch(IsHeapNumber(num), &if_numisheapnumber, &if_numisnotheapnumber);
-    
-    namespace v8 {
-namespace internal {
-    }
-    }
-    
-    
-    {  // This shouldn't happen, we've already validated the type.
-  BIND(&other);
-  Unreachable();
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
 }
+    
+      bool isVoid() const {
+    assert(isValid());
+    return Decl.isNull();
+  }
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file iter_prefetcher.h
+ * \brief define a prefetcher using threaditer to keep k batch fetched
+ */
+#ifndef MXNET_IO_ITER_PREFETCHER_H_
+#define MXNET_IO_ITER_PREFETCHER_H_
+    
+    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
+.describe(R'code(
+    
+    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#include <vector>
+#include './lrn-inl.h'
+    
+    
+    {        uint32_t scratch;
+        bool success;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %[desired_lo], %%ebx\n\t'
+            'lock; cmpxchg8b %[dest]\n\t'
+            'movl %[scratch], %%ebx\n\t'
+            'sete %[success]\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A,A,A,A,A' (expected), [dest] '+m,m,m,m,m,m' (storage), [scratch] '=m,m,m,m,m,m' (scratch), [success] '=q,m,q,m,q,m' (success)
+            : [desired_lo] 'S,S,D,D,m,m' ((uint32_t)desired), 'c,c,c,c,c,c' ((uint32_t)(desired >> 32))
+#else
+            : '+A' (expected), [dest] '+m' (storage), [scratch] '=m' (scratch), [success] '=q' (success)
+            : [desired_lo] 'S' ((uint32_t)desired), 'c' ((uint32_t)(desired >> 32))
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return success;
+#else
+        bool success;
+        __asm__ __volatile__
+        (
+            'lock; cmpxchg8b %[dest]\n\t'
+            'sete %[success]\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A' (expected), [dest] '+m,m' (storage), [success] '=q,m' (success)
+            : 'b,b' ((uint32_t)desired), 'c,c' ((uint32_t)(desired >> 32))
+#else
+            : '+A' (expected), [dest] '+m' (storage), [success] '=q' (success)
+            : 'b' ((uint32_t)desired), 'c' ((uint32_t)(desired >> 32))
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return success;
+#endif
+    }
