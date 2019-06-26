@@ -1,226 +1,184 @@
 
         
-        #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
+        
+    {  if (!wasInline) delete[] oldAllocation;
+}  
     
-      std::map<uv_timer_t*, base::OnceClosure> tasks_;
-    
-    
-    {}  // namespace atom
-    
-    class Delegate {
- public:
-  // An error happened.
-  virtual void OnError(const std::string& error) {}
+    swift::unicode::GraphemeClusterBreakProperty
+swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
+  // FIXME: replace linear search with a trie lookup.
     }
     
-    namespace atom {
+      uint32_t n = initial_n;
+  int delta = 0;
+  int bias = initial_bias;
+    
+    namespace b2ConvexDecomp {
     }
     
-    // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
-// process, and allows additional arguments to be supplied to the relauncher
-// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
-// an executable file. The helper path given must be from the same version of
-// Chrome as the running parent browser process, as there are no guarantees
-// that the parent and relauncher processes from different versions will be
-// able to communicate with one another. This variant can be useful to
-// relaunch the same version of Chrome from another location, using that
-// location's helper.
-bool RelaunchAppWithHelper(const base::FilePath& helper,
-                           const StringVector& relauncher_args,
-                           const StringVector& args);
+    	struct RawImage
+	{
+		int uiExtendedWidth;
+		int uiExtendedHeight;
+		unsigned int uiEncodingBitsBytes;
+		std::shared_ptr<unsigned char> paucEncodingBits;
+	};
     
+      If the input is not compressible, the return value might be larger than
+  length (input buffer size).
     
-    {  if (event.filter != EVFILT_PROC || event.fflags != NOTE_EXIT ||
-      event.ident != static_cast<uintptr_t>(parent_pid)) {
-    LOG(ERROR) << 'kevent (monitor): unexpected event, filter ' << event.filter
-               << ', fflags ' << event.fflags << ', ident ' << event.ident;
-    return;
-  }
-}
-    
-    #include <vector>
-    
-    // Request Shell's id for current render_view_host.
-IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_GetShellId,
-                           int /* result */)
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    
-    {}
-    
-    NwClipboardClearSyncFunction::NwClipboardClearSyncFunction() {
-    }
-    
-     protected:
-  ~NwClipboardClearSyncFunction() override;
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    namespace extensions {
-    }
-    
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
-    
-      // Formats an int value as '%02d'.
-  static std::string FormatIntWidth2(int value);  // '%02d' for width == 2
-    
-    template <GTEST_5_TYPENAMES_(T)>
-inline GTEST_5_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4) {
-  return GTEST_5_TUPLE_(T)(f0, f1, f2, f3, f4);
-}
-    
-        for (int i = 2; i <= max; i++) {
-      if (!is_prime_[i]) continue;
-    }
-    
-     public:
-  // Clones a 0-terminated C string, allocating memory using new.
-  static const char* CloneCString(const char* a_c_string);
-    
-      static void clearData();
-    
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
+    /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
+#undef silk_SMULWB
+static OPUS_INLINE opus_int32 silk_SMULWB_armv4(opus_int32 a, opus_int16 b)
 {
-  getBucketFor(node)->dropNode(node);
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#silk_SMULWB\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(a), 'r'(b<<16)
+  );
+  return rd_hi;
 }
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
+#define silk_SMULWB(a, b) (silk_SMULWB_armv4(a, b))
+    
+    /* add/subtract with output saturated */
+#undef silk_ADD_SAT32
+static OPUS_INLINE opus_int32 silk_ADD_SAT32_armv5e(opus_int32 a, opus_int32 b)
+{
+  int res;
+  __asm__(
+      '#silk_ADD_SAT32\n\t'
+      'qadd %0, %1, %2\n\t'
+      : '=r'(res)
+      : '%r'(a), 'r'(b)
+  );
+  return res;
+}
+#define silk_ADD_SAT32(a, b) (silk_ADD_SAT32_armv5e(a, b))
+    
+      /**
+   * /brief Customize set method for LayerParameter
+   * /tparam value string of caffe's layer configuration
+   * */
+  virtual void Set(void *head, const std::string &value) const {
+    caffe::NetParameter net_param;
+    if (!ReadProtoFromTextContent(value, &net_param))
+      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    }
+    
+      void InitParams(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    std::vector<std::pair<std::string, std::string> > kwargs_left;
+    // init image rec param
+    kwargs_left = param_.InitAllowUnknown(kwargs);
+    // maximum prefetch threaded iter internal size
+    const int kMaxPrefetchBuffer = 16;
+    // init thread iter
+    iter.set_max_capacity(kMaxPrefetchBuffer);
   }
+    
+      // Perform row-wise Kronecker product
+  row_wise_kronecker(out_t, ts_t_arr);
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_bilinear_sampler-inl.h
+ * \brief
+ * \author Xu Dong
 */
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
+#ifndef MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
+#define MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
     
-    #endif // D_DHT_TASK_H
+    
+    {
+    {}  // namespace op
+}  // namespace mxnet
 
     
-    class DHTTask;
+            virtual Dictionary GetCheckpointState() const override;
+        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
     
     
-    {// end of actions group
-/// @}
-    
-    
-    {protected:
-    struct _hashElement    *_targets;
-    struct _hashElement    *_currentTarget;
-    bool            _currentTargetSalvaged;
-};
-    
-        //
-    // Overrides
-    //
-    virtual ProgressTo* clone() const override;
-    virtual ProgressTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ProgressTo() {}
-    virtual ~ProgressTo() {}
-    
-    
-    {// end of actions group
-/// @}
-    
-    void Component::onRemove()
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        sendComponentEventToJS(this, kComponentOnRemove);
+    {        return dict[versionKey].Value<size_t>();
     }
-#endif
-}
     
+            // Here we update m_prevMinibatchNumSamples with aggregated value in the
+        // case of distributed learner.
+        m_prevMinibatchNumSamples = info.numberOfSamples;
     
-#include '2d/CCComponentContainer.h'
-#include '2d/CCComponent.h'
-#include '2d/CCNode.h'
+        // Update internal state.
+        if (emptyMinibatch)
+        {
+            // Have to reassign loss and criterion.
+            m_prevMinibatchAggregateEvalCriterionValue = std::make_shared<Value>(info.evalCriterionValue);
+            m_prevMinibatchAggregateTrainingLossValue = std::make_shared<Value>(info.trainingLossValue);
+        }
     
-    /// @cond DO_NOT_SHOW
-    
-    TEST(Expected, CoroutineException) {
-  EXPECT_THROW(
-      ([]() -> Expected<int, Err> {
-        auto x = co_await throws();
-        ADD_FAILURE();
-        co_return x;
-      }()),
-      Exn);
-}
-    
-    template <class String>
-String Uri::toString() const {
-  String str;
-  if (hasAuthority_) {
-    toAppend(scheme_, '://', &str);
-    if (!password_.empty()) {
-      toAppend(username_, ':', password_, '@', &str);
-    } else if (!username_.empty()) {
-      toAppend(username_, '@', &str);
+    namespace Microsoft { namespace MSR { namespace CNTK {
     }
-    toAppend(host_, &str);
-    if (port_ != 0) {
-      toAppend(':', port_, &str);
-    }
-  } else {
-    toAppend(scheme_, ':', &str);
-  }
-  toAppend(path_, &str);
-  if (!query_.empty()) {
-    toAppend('?', query_, &str);
-  }
-  if (!fragment_.empty()) {
-    toAppend('#', fragment_, &str);
-  }
-  return str;
-}
-    
-      std::sort(cpus.begin(), cpus.end(), [&](size_t lhs, size_t rhs) -> bool {
-    // sort first by equiv class of cache with highest index,
-    // direction doesn't matter.  If different cpus have
-    // different numbers of caches then this code might produce
-    // a sub-optimal ordering, but it won't crash
-    auto& lhsEquiv = equivClassesByCpu[lhs];
-    auto& rhsEquiv = equivClassesByCpu[rhs];
-    for (ssize_t i = ssize_t(std::min(lhsEquiv.size(), rhsEquiv.size())) - 1;
-         i >= 0;
-         --i) {
-      auto idx = size_t(i);
-      if (lhsEquiv[idx] != rhsEquiv[idx]) {
-        return lhsEquiv[idx] < rhsEquiv[idx];
-      }
     }
     }
     
-    #include <folly/concurrency/AtomicSharedPtr.h>
-#include <folly/concurrency/CacheLocality.h>
-#include <folly/container/Enumerate.h>
-#include <folly/synchronization/Hazptr.h>
+        virtual bool OutputUsedInComputingInputNodesGradients() const override { return false; }
+    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override { return false; }
     
-    namespace detail {
+    
+    {        m_topK = 1;
+        // TODO: Make topK a constructor parameter
+        if (m_inputs.size() == 3)
+        {
+            if (Input(2)->GetSampleLayout().GetNumElements() != 1)
+                InvalidArgument('%ls %ls operation requires TopK to be a scalar value.', NodeName().c_str(), OperationName().c_str());
+            m_topK = static_cast<int>(Input(2)->Get00Element());
+        }
     }
     
-    #pragma once
+    
+    {        auto parent = iter->second;
+        auto& aliasInfo = m_aliasGroups[parent];
+        if (aliasInfo.pMatrixPtr == nullptr)
+        {
+            // first allocation for the group
+            aliasInfo.pMatrixPtr = pMatrixPtr;
+            RequestAllocate(deviceId, pMatrixPtr, matrixSize, mbScale, false);
+        }
+        else
+        {
+            auto aliasRootMatrixPtr = (shared_ptr<Matrix<ElemType>>*)aliasInfo.pMatrixPtr;
+            *pMatrixPtr = *aliasRootMatrixPtr;
+            GetMemInfo<ElemType>(aliasRootMatrixPtr)->pMatrixPtrs.push_back(pMatrixPtr);
+        }
+    }
+    
+        JSON params;
+    params.add('block_id', i);
+    params.add('session_id', session_id);
+    params.add('request_id', requestId_);
+    params.add('data', base64::encode(std::string(block.begin(), block.end())));
+    
+    #include <osquery/dispatcher.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/utils/status/status.h>
+    
+    #include <map>
+#include <string>
+    
+      // This funcion should completely destroy db, so after next open
+  // db should be fresh new
+  // Implementation can expect that db is closed before
+  // calling destroyDB and should crash/fail in case when db is still open
+  virtual ExpectedSuccess<DatabaseError> destroyDB() = 0;
+    
+      // This method bypass type validation and will silently update value
+  // even if type was changed (e.g int->string)
+  ExpectedSuccess<DatabaseError> putStringsUnsafe(
+      const std::string& domain,
+      const std::vector<std::pair<std::string, std::string>>& data) override;
+    
+    #include 'plugin.h'
+    
+    class RocksdbDatabaseTest : public ::testing::Test {
+ protected:
+  std::string path_;
+    }
