@@ -1,55 +1,120 @@
 
         
-        multitask :default => [:test, :features]
-    
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
-    
-      </body>
-</html>
-HTML
-    
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
-      end
-    
-        # The path used after sending unlock password instructions
-    def after_sending_unlock_instructions_path_for(resource)
-      new_session_path(resource) if is_navigational_format?
+          def self.clear_cache!(date = nil)
+    if date.nil?
+      clear_cache!(Time.now.utc)
+      clear_cache!(Time.now.utc.yesterday)
+      return
     end
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
+        def build
+      policy = ActionDispatch::ContentSecurityPolicy.new
     
-        def default_constraints(options)
-      @constraints = Hash.new
-      @constraints.merge!(options[:constraints]) if options[:constraints]
-    end
+    CSP = ContentSecurityPolicy
+
     
-              if recoverable.persisted?
-            if recoverable.reset_password_period_valid?
-              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
-            else
-              recoverable.errors.add(:reset_password_token, :expired)
-            end
-          end
-    
-          def time_from_json(value)
-        if value =~ /\A\d+\.\d+\Z/
-          Time.at(value.to_f)
-        else
-          Time.parse(value) rescue nil
+          Theme.where(id: Theme.transform_ids(theme_ids)).find_each do |theme|
+        theme.cached_settings.each do |setting, value|
+          extensions << build_theme_extension(value) if setting.to_s == THEME_SETTING
         end
       end
     
-          def self.required_fields(klass)
-        []
+    end
+
+    
+    # == Schema Information
+#
+# Table name: user_auth_tokens
+#
+#  id              :integer          not null, primary key
+#  user_id         :integer          not null
+#  auth_token      :string           not null
+#  prev_auth_token :string           not null
+#  user_agent      :string
+#  auth_token_seen :boolean          default(FALSE), not null
+#  client_ip       :inet
+#  rotated_at      :datetime         not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  seen_at         :datetime
+#
+# Indexes
+#
+#  index_user_auth_tokens_on_auth_token       (auth_token) UNIQUE
+#  index_user_auth_tokens_on_prev_auth_token  (prev_auth_token) UNIQUE
+#  index_user_auth_tokens_on_user_id          (user_id)
+#
+
+    
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+      # Checks whether it's a devise mapped resource or not.
+  def assert_is_devise_resource! #:nodoc:
+    unknown_action! <<-MESSAGE unless devise_mapping
+Could not find devise mapping for path #{request.fullpath.inspect}.
+This may happen for two reasons:
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
       end
+    end
+  end
+end
+
+    
+        def default_defaults(options)
+      @defaults = Hash.new
+      @defaults.merge!(options[:defaults]) if options[:defaults]
+    end
+    
+            Devise::Models.config(self, :remember_for, :extend_remember_period, :rememberable_options, :expire_all_remember_me_on_sign_out)
+      end
+    end
+  end
+end
+
+    
+          def timeout_in
+        self.class.timeout_in
+      end
+    
+      # Debug mode disables concatenation and preprocessing of assets.
+  # This option may cause significant delays in view rendering with a large
+  # number of complex assets.
+  config.assets.debug = true
+    
+        it 'accepts jsfiddle link with a / at the end' do
+      jsfiddle_link = 'http://jsfiddle.net/link2twenty/v2kx9jcd/'
+      expect do
+        generate_new_liquid(jsfiddle_link)
+      end.not_to raise_error
+    end
+    
+      def create
+    @broadcast = Broadcast.new(broadcast_params)
+    redirect_to '/internal/broadcasts'
+  end
+    
+    def ask(message, valid_options)
+  if valid_options
+    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
+  else
+    answer = get_stdin(message)
+  end
+  answer
+end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
