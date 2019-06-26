@@ -1,320 +1,221 @@
 
         
-        
-    {    return GenericTypeParamType::get(genericParam->getDepth(),
-                                     genericParam->getIndex(), ctx);
-  };
-  auto conformanceToSyntheticConformanceFn =
-      MakeAbstractConformanceForGenericType();
+        PersistentDictionary::PersistentDictionary(const PersistentDictionary& other) =
+    default;
     
-    void CacheImpl::removeAll() {
-  cache_remove_all(static_cast<cache_t*>(Impl));
+    v8::Local<v8::Value> Arguments::PeekNext() const {
+  if (next_ >= info_->Length())
+    return v8::Local<v8::Value>();
+  return (*info_)[next_];
 }
     
-    bool importer::isCFTypeDecl(
-       const clang::TypedefNameDecl *Decl) {
-  if (CFPointeeInfo::classifyTypedef(Decl))
-    return true;
-  return false;
+    ObjectTemplateBuilder& ObjectTemplateBuilder::SetPropertyImpl(
+    const base::StringPiece& name,
+    v8::Local<v8::FunctionTemplate> getter,
+    v8::Local<v8::FunctionTemplate> setter) {
+  template_->SetAccessorProperty(StringToSymbol(isolate_, name), getter,
+                                 setter);
+  return *this;
 }
     
-    static SourceLoc findEndOfLine(SourceManager &SM, SourceLoc loc,
-                               unsigned bufferID) {
-  CharSourceRange entireBuffer = SM.getRangeForBuffer(bufferID);
-  CharSourceRange rangeFromLoc{SM, loc, entireBuffer.getEnd()};
-  StringRef textFromLoc = SM.extractText(rangeFromLoc);
-  size_t newlineOffset = textFromLoc.find_first_of({'\r\n\0', 3});
-  if (newlineOffset == StringRef::npos)
-    return entireBuffer.getEnd();
-  return loc.getAdvancedLoc(newlineOffset);
-}
-    
-    bool Mangle::needsPunycodeEncoding(StringRef str) {
-  for (unsigned char c : str) {
-    if (!isValidSymbolChar(c))
-      return true;
-  }
-  return false;
-}
-    
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
-}
-    
-    
-    {  // -- Build the decoded string as UTF32 first because we need random access.
-  uint32_t n = initial_n;
-  int i = 0;
-  int bias = initial_bias;
-  /// let output = an empty string indexed from 0
-  // consume all code points before the last delimiter (if there is one)
-  //  and copy them to output,
-  size_t lastDelimiter = InputPunycode.find_last_of(delimiter);
-  if (lastDelimiter != StringRef::npos) {
-    for (char c : InputPunycode.slice(0, lastDelimiter)) {
-      // fail on any non-basic code point
-      if (static_cast<unsigned char>(c) > 0x7f)
-        return true;
-      OutCodePoints.push_back(c);
+      template <typename T>
+  bool GetNext(T* out) {
+    if (next_ >= info_->Length()) {
+      insufficient_arguments_ = true;
+      return false;
     }
-    // if more than zero code points were consumed then consume one more
-    //  (which will be the last delimiter)
-    InputPunycode =
-        InputPunycode.slice(lastDelimiter + 1, InputPunycode.size());
+    v8::Local<v8::Value> val = (*info_)[next_];
+    bool success = ConvertFromV8(isolate_, val, out);
+    if (success)
+      next_++;
+    return success;
   }
-  
-  while (!InputPunycode.empty()) {
-    int oldi = i;
-    int w = 1;
-    for (int k = base; ; k += base) {
-      // consume a code point, or fail if there was none to consume
-      if (InputPunycode.empty())
-        return true;
-      char codePoint = InputPunycode.front();
-      InputPunycode = InputPunycode.slice(1, InputPunycode.size());
-      // let digit = the code point's digit-value, fail if it has none
-      int digit = digit_index(codePoint);
-      if (digit < 0)
-        return true;
-      
-      i = i + digit * w;
-      int t = k <= bias ? tmin
-            : k >= bias + tmax ? tmax
-            : k - bias;
-      if (digit < t)
-        break;
-      w = w * (base - t);
-    }
-    bias = adapt(i - oldi, OutCodePoints.size() + 1, oldi == 0);
-    n = n + i / (OutCodePoints.size() + 1);
-    i = i % (OutCodePoints.size() + 1);
-    // if n is a basic code point then fail
-    if (n < 0x80)
-      return true;
-    // insert n into output at position i
-    OutCodePoints.insert(OutCodePoints.begin() + i, n);
-    i++;
-  }
-  
-  return true;
-}
     
-    void ModuleWrapJobAction::anchor() {}
-    
-            size_t width;
-        size_t height;
-    
-    namespace {
+    // CreateFunctionTemplate creates a v8::FunctionTemplate that will create
+// JavaScript functions that execute a provided C++ function or base::Callback.
+// JavaScript arguments are automatically converted via gin::Converter, as is
+// the return value of the C++ function, if any.
+//
+// NOTE: V8 caches FunctionTemplates for a lifetime of a web page for its own
+// internal reasons, thus it is generally a good idea to cache the template
+// returned by this function.  Otherwise, repeated method invocations from JS
+// will create substantial memory leaks. See http://crbug.com/463487.
+template <typename Sig>
+v8::Local<v8::FunctionTemplate> CreateFunctionTemplate(
+    v8::Isolate* isolate,
+    const base::Callback<Sig> callback,
+    int callback_flags = 0) {
+  typedef internal::CallbackHolder<Sig> HolderT;
+  HolderT* holder = new HolderT(isolate, callback, callback_flags);
     }
     
-    void bitwiseOr(const Size2D &size,
-               const u8 *src0Base, ptrdiff_t src0Stride,
-               const u8 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseOr());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-            // perform vertical convolution
-        for ( ; x <= bwidth; x += 8)
-        {
-            internal::prefetch(srow0 + x);
-            internal::prefetch(srow1 + x);
-            internal::prefetch(srow2 + x);
+    namespace mate {
     }
     
-    #define CONTSRC2 dstStride == src0Stride && \
-                 dstStride == src1Stride &&
-#define CONTSRC3 dstStride == src0Stride && \
-                 dstStride == src1Stride && \
-                 dstStride == src2Stride &&
-#define CONTSRC4 dstStride == src0Stride && \
-                 dstStride == src1Stride && \
-                 dstStride == src2Stride && \
-                 dstStride == src3Stride &&
+    namespace mate {
+    }
     
-                    uint8x8x3_t vRes;
-                vRes.val[0] = vrshrn_n_u16(vSum_0_4, 8);
-                vRes.val[1] = vrshrn_n_u16(vSum_1_5, 8);
-                vRes.val[2] = vrshrn_n_u16(vSum_2_6, 8);
+      // Path in file system to the lock.
+  base::FilePath lock_path_;
+    
+    
+    {  live_xids_.erase(xid);
+}
+    
+    // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    
+    {}  // namespace
+    
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
+      routing_id,
+      object_id,
+      type,
+      *static_cast<base::DictionaryValue*>(value_option.get())));
+  return v8::Undefined(isolate);
+}
+    
+    bool MenuDelegate::IsCommandIdChecked(int command_id) const {
+  if (command_id < 0)
+    return false;
+    }
+    
+    namespace nw {
+    }
+    
+    ExtensionFunction::ResponseAction
+NwAppQuitFunction::Run() {
+  ExtensionService* service =
+    ExtensionSystem::Get(browser_context())->extension_service();
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppQuitFunction::DoJob,
+                   service,
+                   extension_id()));
+  return RespondNow(NoArguments());
+}
+    
+        bool ReadImage(ClipboardData& data) {
+      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
+      std::vector<unsigned char> encoded_image;
+      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
+    }
+    
+     protected:
+  ~NwClipboardSetListSyncFunction() override;
+    
+    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
     
     
     {	
 };
     
-    					if (imageformat == Image::Format::R11 ||
-						imageformat == Image::Format::SIGNED_R11)
-					{
-						m_afrgbaSource[uiPixel].fA = 1.0f;
-						m_afrgbaSource[uiPixel].fG = 0.0f;
-						m_afrgbaSource[uiPixel].fB = 0.0f;
-					}
+    #define ETCCOMP_MIN_EFFORT_LEVEL (0.0f)
+#define ETCCOMP_DEFAULT_EFFORT_LEVEL (40.0f)
+#define ETCCOMP_MAX_EFFORT_LEVEL (100.0f)
     
-    #define opus_fft_alloc_arch(_st, arch) \
-   ((void)(arch), opus_fft_alloc_arm_neon(_st))
+    		unsigned int	m_uiEncodingIterations;
+		bool			m_boolDone;						// all iterations have been done
+		ErrorMetric		m_errormetric;
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+    						// pre-compute decoded pixels for each selector
+						ColorFloatRGBA afrgbaSelectors[SELECTORS];
+						assert(SELECTORS == 4);
+						afrgbaSelectors[0] = (frgbaColor + s_aafCwTable[uiCW][0]).ClampRGB();
+						afrgbaSelectors[1] = (frgbaColor + s_aafCwTable[uiCW][1]).ClampRGB();
+						afrgbaSelectors[2] = (frgbaColor + s_aafCwTable[uiCW][2]).ClampRGB();
+						afrgbaSelectors[3] = (frgbaColor + s_aafCwTable[uiCW][3]).ClampRGB();
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+      Compression level can be specified in parameter level. At the moment,
+  only level 1 and level 2 are supported.
+  Level 1 is the fastest compression and generally useful for short data.
+  Level 2 is slightly slower but it gives better compression ratio.
     
-    /* (a32 * (b32 >> 16)) >> 16 */
-#undef silk_SMULWT
-static OPUS_INLINE opus_int32 silk_SMULWT_armv5e(opus_int32 a, opus_int32 b)
-{
-  int res;
-  __asm__(
-      '#silk_SMULWT\n\t'
-      'smulwt %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define silk_SMULWT(a, b) (silk_SMULWT_armv5e(a, b))
+    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
+#undef MULT32_32_Q31
+#define MULT32_32_Q31(a,b) (opus_val32)((((opus_int64)(a)) * ((opus_int64)(b)))>>31)
+    
+    #endif /* OPUS_ARM_INLINE_MEDIA */
     
     
-    {  m_last_elem_pos += 1;
-  return offset;
-}
-    
-        if (!semi) {
-      // only media type (type/subtype,data)
-      ssize_t media_len = comma - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else if (slash && slash < semi) {
-      // media type + param (type/subtype;param,data)
-      ssize_t media_len = semi - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else {
-      // no media type (;base64,data)
-      if (semi != data // ex. foo;base64,data
-          || meta_len != sizeof(';base64') - 1 // ex. ;something,data
-          || memcmp(data, ';base64',
-                    sizeof(';base64') - 1)) { // ex. ;base65,data
-          raise_warning('rfc2397: invalid meta data');
-          return nullptr;
-        }
-    }
-    
-    struct DataStreamWrapper final : Stream::Wrapper {
-  DataStreamWrapper() {
-    m_isLocal = true;
-  }
-    }
-    
-    public:
-  virtual ~IDebuggable() {}
-    
-    IMPLEMENT_RESOURCE_ALLOCATION(PlainDirectory)
-    
-      CLASSNAME_IS('OutputFile');
-  // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
-    
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-    }
-    
-    
-    {};
-    
-    #pragma once
-    
-    
-    {
-    {struct mei_version {
-  uint32_t important_details[7];
-  uint16_t major;
-  uint16_t minor;
-  uint16_t hotfix;
-  uint16_t build;
-  uint16_t r_major;
-  uint16_t r_minor;
-  uint16_t r_hotfix;
-  uint16_t r_build;
-  uint16_t codes[6];
-};
-}
-}
-
-    
-    TEST_F(kernelExtensions, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_extensions');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'idx', IntType}
-  //      {'refs', IntType}
-  //      {'size', IntType}
-  //      {'name', NormalType}
-  //      {'version', NormalType}
-  //      {'linked_against', NormalType}
-  //      {'path', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
-    
-    namespace osquery {
-namespace table_tests {
+//--------------------------------------------------------------------------------
+//
+//  groupNumberFromName()
+//
+//--------------------------------------------------------------------------------
+int32_t RegexPattern::groupNumberFromName(const UnicodeString &groupName, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return 0;
     }
     }
     
-    TEST_F(kernelIntegrity, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from kernel_integrity');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'sycall_addr_modified', IntType}
-  //      {'text_segment_hash', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        DecimalFormat *fmtToAdopt,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            fmtToAdopt,
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
 }
     
+    U_CAPI UBool U_EXPORT2
+uhash_equalsScriptSet(const UElement key1, const UElement key2) {
+    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
+    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
+    return (*s1 == *s2);
+}
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
+        /* We don't always have to compute endCompare.  For many instances,
+     * startCompare is enough to determine if we are in DST or not.  In the
+     * northern hemisphere, if we are before the start rule, we can't have
+     * DST.  In the southern hemisphere, if we are after the start rule, we
+     * must have DST.  This is reflected in the way the next if statement
+     * (not the one immediately following) short circuits. */
+    if(southern != (startCompare >= 0)) {
+        endCompare = compareToRule((int8_t)month, (int8_t)monthLength, (int8_t)prevMonthLength,
+                                   (int8_t)day, (int8_t)dayOfWeek, millis,
+                                   endTimeMode == WALL_TIME ? dstSavings :
+                                    (endTimeMode == UTC_TIME ? -rawOffset : 0),
+                                   endMode, (int8_t)endMonth, (int8_t)endDayOfWeek,
+                                   (int8_t)endDay, endTime);
+    }
+    
+    
+void SimpleDateFormat::NSOverride::free() {
+    NSOverride *cur = this;
+    while (cur) {
+        NSOverride *next = cur->next;
+        delete cur;
+        cur = next;
+    }
+}
+    
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the plural form corresponding to the keyword
+     */
+    static Form fromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+        return static_cast<Form>(indexFromString(keyword, errorCode));
+    }
+    
+        /**
+     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
+     * and return the pointer.
+     * @return the UnicodeMatcher point.
+     */
+    virtual UnicodeMatcher* toMatcher() const;
