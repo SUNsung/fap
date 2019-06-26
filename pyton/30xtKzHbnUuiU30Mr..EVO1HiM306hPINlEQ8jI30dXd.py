@@ -1,129 +1,242 @@
 
         
-            def __init__(self, groups, env=Environment(), **kwargs):
+                self.wait_to_close_event = wait_to_close_event
+        self.ready_event = threading.Event()
+        self.stop_event = threading.Event()
+    
+    try:
+    from urllib3.contrib import pyopenssl
+except ImportError:
+    pyopenssl = None
+    OpenSSL = None
+    cryptography = None
+else:
+    import OpenSSL
+    import cryptography
+    
+        monkeypatch.setenv('http_proxy', '')
+    monkeypatch.setenv('https_proxy', '')
+    monkeypatch.setenv('ftp_proxy', '')
+    monkeypatch.setenv('no_proxy', '')
+    monkeypatch.setenv('NO_PROXY', '')
+    monkeypatch.setattr(winreg, 'OpenKey', OpenKey)
+    monkeypatch.setattr(winreg, 'QueryValueEx', QueryValueEx)
+    assert should_bypass_proxies(url, None) == expected
+    
+                # Add content-type if it wasn't explicitly provided.
+            if content_type and ('content-type' not in self.headers):
+                self.headers['Content-Type'] = content_type
+    
+    ax = fig.add_axes((0.63 + 0.18, 0.1, 0.16, 0.8))
+y = np.row_stack((fnx(), fnx(), fnx()))
+x = np.arange(10)
+y1, y2, y3 = fnx(), fnx(), fnx()
+ax.stackplot(x, y1, y2, y3)
+ax.set_xticks([])
+ax.set_yticks([])
+    
+    
+ABCIndex = create_pandas_abc_type('ABCIndex', '_typ', ('index', ))
+ABCInt64Index = create_pandas_abc_type('ABCInt64Index', '_typ',
+                                       ('int64index', ))
+ABCUInt64Index = create_pandas_abc_type('ABCUInt64Index', '_typ',
+                                        ('uint64index', ))
+ABCRangeIndex = create_pandas_abc_type('ABCRangeIndex', '_typ',
+                                       ('rangeindex', ))
+ABCFloat64Index = create_pandas_abc_type('ABCFloat64Index', '_typ',
+                                         ('float64index', ))
+ABCMultiIndex = create_pandas_abc_type('ABCMultiIndex', '_typ',
+                                       ('multiindex', ))
+ABCDatetimeIndex = create_pandas_abc_type('ABCDatetimeIndex', '_typ',
+                                          ('datetimeindex', ))
+ABCTimedeltaIndex = create_pandas_abc_type('ABCTimedeltaIndex', '_typ',
+                                           ('timedeltaindex', ))
+ABCPeriodIndex = create_pandas_abc_type('ABCPeriodIndex', '_typ',
+                                        ('periodindex', ))
+ABCCategoricalIndex = create_pandas_abc_type('ABCCategoricalIndex', '_typ',
+                                             ('categoricalindex', ))
+ABCIntervalIndex = create_pandas_abc_type('ABCIntervalIndex', '_typ',
+                                          ('intervalindex', ))
+ABCIndexClass = create_pandas_abc_type('ABCIndexClass', '_typ',
+                                       ('index', 'int64index', 'rangeindex',
+                                        'float64index', 'uint64index',
+                                        'multiindex', 'datetimeindex',
+                                        'timedeltaindex', 'periodindex',
+                                        'categoricalindex', 'intervalindex'))
+    
+    import pandas as pd
+from pandas import DataFrame, Series, concat
+from pandas.util import testing as tm
+    
+    
+@pytest.mark.parametrize('input_color,output_color', (
+    [(name, rgb) for name, rgb in CSSToExcelConverter.NAMED_COLORS.items()] +
+    [('#' + rgb, rgb) for rgb in CSSToExcelConverter.NAMED_COLORS.values()] +
+    [('#F0F', 'FF00FF'), ('#ABC', 'AABBCC')])
+)
+def test_css_to_excel_good_colors(input_color, output_color):
+    # see gh-18392
+    css = ('border-top-color: {color}; '
+           'border-right-color: {color}; '
+           'border-bottom-color: {color}; '
+           'border-left-color: {color}; '
+           'background-color: {color}; '
+           'color: {color}').format(color=input_color)
+    
+    
+def test_chunksize_with_compression(compression):
+    
+    
+def test_correct_type_nested_array():
+    unpacker = Unpacker()
+    unpacker.feed(packb({'a': ['b', 'c', 'd']}))
+    try:
+        unpacker.read_array_header()
+        assert 0, 'should raise exception'
+    except UnexpectedTypeException:
+        assert 1, 'okay'
+    
+    import io
+    
+            # 根据式9计算delta_o
+        delta_o = (delta_k * tanh_c * 
+            self.gate_activator.backward(og))
+        delta_f = (delta_k * og * 
+            (1 - tanh_c * tanh_c) * c_prev *
+            self.gate_activator.backward(fg))
+        delta_i = (delta_k * og * 
+            (1 - tanh_c * tanh_c) * ct *
+            self.gate_activator.backward(ig))
+        delta_ct = (delta_k * og * 
+            (1 - tanh_c * tanh_c) * ig *
+            self.output_activator.backward(ct))
+        delta_h_prev = (
+                np.dot(delta_o.transpose(), self.Woh) +
+                np.dot(delta_i.transpose(), self.Wih) +
+                np.dot(delta_f.transpose(), self.Wfh) +
+                np.dot(delta_ct.transpose(), self.Wch)
+            ).transpose()
+    
+    
+# 数据加载器基类
+class Loader(object):
+    def __init__(self, path, count):
         '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+        初始化加载器
+        path: 数据文件路径
+        count: 文件中的样本个数
+        '''
+        self.path = path
+        self.count = count
     
-        def iter_body(self):
-        return self.msg.iter_body(self.chunk_size)
+    def f(x):
+    '''
+    Desc:
+        定义激活函数 f
+    Args:
+        x —— 输入向量
+    Returns:
+        （实现阶跃函数）大于 0 返回 1，否则返回 0
+    '''
+    return 1 if x > 0 else 0
     
+        # -1表示倒序，返回topN的特征值[-1 到 -(topNfeat+1) 但是不包括-(topNfeat+1)本身的倒叙]
+    eigValInd = eigValInd[:-(topNfeat+1):-1]
+    # print 'eigValInd2=', eigValInd
+    # 重组 eigVects 最大到最小
+    redEigVects = eigVects[:, eigValInd]
+    # print 'redEigVects=', redEigVects.T
+    # 将数据转换到新空间
+    # print '---', shape(meanRemoved), shape(redEigVects)
+    lowDDataMat = meanRemoved * redEigVects
+    reconMat = (lowDDataMat * redEigVects.T) + meanVals
+    # print 'lowDDataMat=', lowDDataMat
+    # print 'reconMat=', reconMat
+    return lowDDataMat, reconMat
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+        def configure_options(self):
+        super(MRsvm, self).configure_options()
+        self.add_passthrough_option(
+            '--iterations', dest='iterations', default=2, type='int',
+            help='T: number of iterations to run')
+        self.add_passthrough_option(
+            '--batchsize', dest='batchsize', default=100, type='int',
+            help='k: number of data points in a batch')
     
+        def mapper_final(self):
+        yield('chars', self.chars)
+        yield('words', self.words)
+        yield('lines', self.lines)
     
-def test_unicode_json_item_verbose(httpbin):
-    r = http('--verbose', '--json',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+    With this, we have reduced the array size to a half,
+and complexity it's also a half now.
+'''
     
-        def test_provider_shall_update_affected_subscribers_with_published_subscription(cls):
-        pro = Provider()
-        pub = Publisher(pro)
-        sub1 = Subscriber('sub 1 name', pro)
-        sub1.subscribe('sub 1 msg 1')
-        sub1.subscribe('sub 1 msg 2')
-        sub2 = Subscriber('sub 2 name', pro)
-        sub2.subscribe('sub 2 msg 1')
-        sub2.subscribe('sub 2 msg 2')
-        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
-            pro.update()
-            cls.assertEqual(mock_subscriber1_run.call_count, 0)
-            cls.assertEqual(mock_subscriber2_run.call_count, 0)
-        pub.publish('sub 1 msg 1')
-        pub.publish('sub 1 msg 2')
-        pub.publish('sub 2 msg 1')
-        pub.publish('sub 2 msg 2')
-        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
-            pro.update()
-            expected_sub1_calls = [call('sub 1 msg 1'), call('sub 1 msg 2')]
-            mock_subscriber1_run.assert_has_calls(expected_sub1_calls)
-            expected_sub2_calls = [call('sub 2 msg 1'), call('sub 2 msg 2')]
-            mock_subscriber2_run.assert_has_calls(expected_sub2_calls)
+        def test_del_msg_failure_with_link(self):
+        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
+        link = MagicMock(spec=Link)
+        link.del_on_recipient = False
+        link.name = 'msg_2'
+    
+            cfg = {'url': 'test_state'}
+        self.world.url_features = mock.Mock(return_value={'x', 'test_state'})
+        feature_state = self.world._make_state(cfg)
+        self.assertTrue(feature_state.is_enabled())
+        self.assertTrue(feature_state.is_enabled(user=gary))
+    
+        # Safari 5.x parser resynchronization issues
+    def test_semicolon_function(self):
+        testcase = u'*{color: calc(;color:red;);}'
+        self.assertInvalid(testcase)
+    
+        def test_returning(self):
+        request = MagicMock()
+        context = MagicMock()
+        request.cookies = {LOID_COOKIE: 'foo', LOID_CREATED_COOKIE: 'bar'}
+        loid = LoId.load(request, context, create=False)
+        self.assertEqual(loid.loid, 'foo')
+        self.assertNotEqual(loid.created, 'bar')
+        self.assertFalse(loid.new)
+        self.assertTrue(loid.serializable)
+        loid.save()
+        self.assertFalse(bool(context.cookies.add.called))
 
     
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def test_car_adapter_shall_make_loud_noise(self):
-        car = Car()
-        car_adapter = Adapter(car, make_noise=car.make_noise)
-        noise = car_adapter.make_noise(1)
-        expected_noise = 'vroom!'
-        self.assertEqual(noise, expected_noise)
-    
-        def test_given_standby_on_message_switchover_shall_call_hsm_methods(cls):
-        with patch.object(cls.hsm, '_perform_switchover') as mock_perform_switchover, patch.object(
-            cls.hsm, '_check_mate_status'
-        ) as mock_check_mate_status, patch.object(
-            cls.hsm, '_send_switchover_response'
-        ) as mock_send_switchover_response, patch.object(
-            cls.hsm, '_next_state'
-        ) as mock_next_state:
-            cls.hsm.on_message('switchover')
-            cls.assertEqual(mock_perform_switchover.call_count, 1)
-            cls.assertEqual(mock_check_mate_status.call_count, 1)
-            cls.assertEqual(mock_send_switchover_response.call_count, 1)
-            cls.assertEqual(mock_next_state.call_count, 1)
-    
-    Port of the Java example of Dependency Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
+        def test_image_link(self):
+        post = Link(is_self=True, selftext='''
+Some text here.
+https://example.com
+https://reddit.com/a.jpg''')
+        url = _get_scrape_url(post)
+        self.assertEqual(url, 'https://reddit.com/a.jpg')
     
     
-class BaseRegisteredClass(metaclass=RegistryHolder):
-    '''
-    Any class that will inherits from BaseRegisteredClass will be included
-    inside the dict RegistryHolder.REGISTRY, the key being the name of the
-    class and the associated value, the class itself.
-    '''
-    
-        def amount(self, val):
-        print(val, end=' ')
-        return self
-    
-            As an alternative you might even in case of success
-        call the next handler.
-        '''
-        res = self.check_range(request)
-        if not res and self.successor:
-            self.successor.handle(request)
-    
-    STOP_WORDS = frozenset(('a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'can',
-                        'for', 'from', 'have', 'if', 'in', 'is', 'it', 'may',
-                        'not', 'of', 'on', 'or', 'tbd', 'that', 'the', 'this',
-                        'to', 'us', 'we', 'when', 'will', 'with', 'yet',
-                        'you', 'your', '的', '了', '和'))
-    
-        def pairfilter(self, wp):
-        return (wp.flag in self.pos_filt and len(wp.word.strip()) >= 2
-                and wp.word.lower() not in self.stop_words)
+class TestPromoteRefunds(unittest.TestCase):
+    def setUp(self):
+        self.link = Mock()
+        self.campaign = MagicMock(spec=PromoCampaign)
+        self.campaign._id = 1
+        self.campaign.owner_id = 1
+        self.campaign.trans_id = 1
+        self.campaign.bid_pennies = 1
+        self.campaign.start_date = datetime.datetime.now()
+        self.campaign.end_date = (datetime.datetime.now() +
+            datetime.timedelta(days=1))
+        self.campaign.total_budget_dollars = 200.
+        self.refund_amount = 100.
+        self.billable_amount = 100.
+        self.billable_impressions = 1000
     
     
-if sys.platform.startswith('java'):
-    char_state_tab_P, start_P, trans_P, emit_P = load_model()
-else:
-    from .char_state_tab import P as char_state_tab_P
-    from .prob_start import P as start_P
-    from .prob_trans import P as trans_P
-    from .prob_emit import P as emit_P
+class TestLocalResizer(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.provider = UnsplashitImageResizingProvider()
     
-    log_f = open('1.log','wb')
-log_f.write(words.encode('utf-8'))
-    
-    jieba.enable_parallel(4)
+        def test_garbage_header(self):
+        body = '{'user': 'reddit', 'password': 'hunter2'}'
+        self.assert_invalid(
+            body,
+            header='idontneednosignature',
+            error=signing.ERRORS.INVALID_FORMAT,
+        )
