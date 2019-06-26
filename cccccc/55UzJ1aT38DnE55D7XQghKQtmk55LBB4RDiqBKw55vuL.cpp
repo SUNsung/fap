@@ -1,124 +1,150 @@
 
         
-          // Finally, add the generic parameters from the requirement.
-  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
-    // The only depth that makes sense is depth == 1, the generic parameters
-    // of the requirement itself. Anything else is from invalid code.
-    if (genericParam->getDepth() != 1) {
-      return;
-    }
-    }
-    
-    void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
+        bool Converter<Dictionary>::FromV8(v8::Isolate* isolate,
+                                   v8::Local<v8::Value> val,
+                                   Dictionary* out) {
+  if (!val->IsObject() || val->IsFunction())
+    return false;
+  *out = Dictionary(isolate, v8::Local<v8::Object>::Cast(val));
+  return true;
 }
     
-      Begin = new char[capacity];
-  EndOfAllocation = Begin + capacity;
-  End = Begin + oldSize + needed;
-  std::memcpy(Begin, oldBegin, oldSize);
-    
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
-    return;
-  }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+    v8::Local<v8::Value> Converter<Promise>::ToV8(v8::Isolate* isolate,
+                                              Promise val) {
+  return val.GetHandle();
 }
     
+    ObjectTemplateBuilder::~ObjectTemplateBuilder() {}
     
-void ClangDiagnosticConsumer::HandleDiagnostic(
-    clang::DiagnosticsEngine::Level clangDiagLevel,
-    const clang::Diagnostic &clangDiag) {
-  // Handle the module-not-found diagnostic specially if it's a top-level module
-  // we're looking for.
-  if (clangDiag.getID() == clang::diag::err_module_not_found &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    return;
-  }
-    }
+    bool CertificateManagerModel::ImportServerCert(
+    const net::ScopedCERTCertificateList& certificates,
+    net::NSSCertDatabase::TrustBits trust_bits,
+    net::NSSCertDatabase::ImportCertFailureList* not_imported) {
+  return cert_db_->ImportServerCert(certificates, trust_bits, not_imported);
+}
     
+    template <typename T>
+bool ConvertFromV8(v8::Isolate* isolate,
+                   v8::Local<v8::Value> input,
+                   T* result) {
+  return Converter<T>::FromV8(isolate, input, result);
+}
     
-    { protected:
-  int n_ = 0;
-  std::mutex m_;
-  std::condition_variable cv_;
-};
-    
-    
-    {} // namespace
-    
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
+    // Like Dictionary, but stores object in persistent handle so you can keep it
+// safely on heap.
+class PersistentDictionary : public Dictionary {
  public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
+  PersistentDictionary();
+  PersistentDictionary(v8::Isolate* isolate, v8::Local<v8::Object> object);
+  PersistentDictionary(const PersistentDictionary& other);
+  ~PersistentDictionary() override;
+    }
+    
+    namespace {
+    }
+    
+    static void secp256k1_ecdsa_recoverable_signature_save(secp256k1_ecdsa_recoverable_signature* sig, const secp256k1_scalar* r, const secp256k1_scalar* s, int recid) {
+    if (sizeof(secp256k1_scalar) == 32) {
+        memcpy(&sig->data[0], r, 32);
+        memcpy(&sig->data[32], s, 32);
+    } else {
+        secp256k1_scalar_get_b32(&sig->data[0], r);
+        secp256k1_scalar_get_b32(&sig->data[32], s);
+    }
+    sig->data[64] = recid;
+}
+    
+    const std::vector<UniValue>& UniValue::getValues() const
+{
+    if (typ != VOBJ && typ != VARR)
+        throw std::runtime_error('JSON value is not an object or array as expected');
+    return values;
+}
+    
+    /** A hasher class for RIPEMD-160. */
+class CRIPEMD160
+{
+private:
+    uint32_t s[5];
+    unsigned char buf[64];
+    uint64_t bytes;
+    }
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+      ~LookupKey();
+    
+    class FileNameTest { };
+    
+      // other boxes
+  bleedBox = cropBox;
+  readBox(dict, 'BleedBox', &bleedBox);
+  trimBox = cropBox;
+  readBox(dict, 'TrimBox', &trimBox);
+  artBox = cropBox;
+  readBox(dict, 'ArtBox', &artBox);
+    
+    
+    {  PDFRectangle mediaBox;
+  PDFRectangle cropBox;
+  GBool haveCropBox;
+  PDFRectangle bleedBox;
+  PDFRectangle trimBox;
+  PDFRectangle artBox;
+  int rotate;
+  Object lastModified;
+  Object boxColorInfo;
+  Object group;
+  Object metadata;
+  Object pieceInfo;
+  Object separationInfo;
+  Object resources;
 };
     
-    struct SrcPos {
-  bool operator==(SrcPos o) const {
-    return line == o.line && col == o.col;
+      // get direction
+  if (dict->lookup('M', &obj)->isName()) {
+    const char *m = obj.getName();
+    
+    if (strcmp('I', m) == 0)
+      direction = transitionInward;
+    else if (strcmp('O', m) == 0)
+      direction = transitionOutward;
   }
-  bool operator!=(SrcPos o) const { return !(*this == o); }
+  obj.free();
+    
+    class ProfileData {
+public:
     }
     
-      // The HHIRLICM runtime option is all capitals, so separation
-  // cannot be determined. Special case it.
-  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
-  // The HHVM ini option becomes the standard PHP option.
-  boost::replace_first(out,
-                       'hhvm.server.upload.max_file_uploads',
-                       'max_file_uploads');
-  // Make sure IPv6 or IPv4 are handled correctly
-  boost::replace_first(out, '_i_pv', '_ipv');
-  boost::replace_first(out, '.i_pv', '.ipv');
-  // urls are special too. Let's not have 'ur_ls'
-  boost::replace_first(out, '_ur_ls', '_urls');
-  boost::replace_first(out, '.ur_ls', '.urls');
-  // No use of Eval in our ini strings
-  boost::replace_first(out, '.eval.', '.');
-  boost::replace_first(out, '.my_sql.', '.mysql.');
-  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
+    //------------------------------------------------------------------------
     
+      //----- Type 3 font operators
+  virtual void type3D0(GfxState *state, double wx, double wy);
+  virtual void type3D1(GfxState *state, double wx, double wy,
+		       double llx, double lly, double urx, double ury);
     
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
-    }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
+    #include <config.h>
     
-    #include 'hphp/runtime/base/directory.h'
+    #ifndef STDINCACHELOADER_H
+#define STDINCACHELOADER_H
+    
+    #include 'StdinPDFDocBuilder.h'
+#include 'CachedFile.h'
+#include 'StdinCachedFile.h'
