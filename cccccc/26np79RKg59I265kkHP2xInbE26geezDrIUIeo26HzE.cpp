@@ -1,186 +1,268 @@
 
         
-        #endif // BITCOIN_QT_OPENURIDIALOG_H
-
-    
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
-    
-        azi = (secp256k1_fe *)checked_malloc(cb, sizeof(secp256k1_fe) * count);
-    secp256k1_fe_inv_all_var(azi, az, count);
-    free(az);
+        #include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
     
     
-    {    /* cleanup */
-    secp256k1_context_destroy(none);
-    secp256k1_context_destroy(sign);
-    secp256k1_context_destroy(vrfy);
-    secp256k1_context_destroy(both);
-}
-    
-    #include <stdint.h>
-#include <stdlib.h>
-    
-    
-    {  int Compare(const InternalKey& a, const InternalKey& b) const;
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
+  }
 };
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+    </details>
+    
+    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
+ *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
+ */
+template <typename Dtype>
+class PositiveUnitballFiller : public Filler<Dtype> {
+ public:
+  explicit PositiveUnitballFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    DCHECK(blob->count());
+    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
+    // We expect the filler to not be called very frequently, so we will
+    // just use a simple implementation
+    int dim = blob->count() / blob->shape(0);
+    CHECK(dim);
+    for (int i = 0; i < blob->shape(0); ++i) {
+      Dtype sum = 0;
+      for (int j = 0; j < dim; ++j) {
+        sum += data[i * dim + j];
+      }
+      for (int j = 0; j < dim; ++j) {
+        data[i * dim + j] /= sum;
+      }
+    }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
+};
+    
+      /**
+   * @brief Does layer-specific setup: your layer should implement this function
+   *        as well as Reshape.
+   *
+   * @param bottom
+   *     the preshaped input blobs, whose data fields store the input data for
+   *     this layer
+   * @param top
+   *     the allocated but unshaped output blobs
+   *
+   * This method should do one-time layer specific setup. This includes reading
+   * and processing relevent parameters from the <code>layer_param_</code>.
+   * Setting up the shapes of top blobs and internal buffers should be done in
+   * <code>Reshape</code>, which will be called before the forward pass to
+   * adjust the top blob sizes.
+   */
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+     public:
+  // Constructs an empty Message.
+  Message();
+    
+    namespace testing {
+    }
+    
+     private:
+  // A string containing a description of the outcome of the last death test.
+  static std::string last_death_test_message_;
+    
+      // Static methods
+    
+    template <GTEST_6_TYPENAMES_(T)>
+inline GTEST_6_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
+    const T3& f3, const T4& f4, const T5& f5) {
+  return GTEST_6_TUPLE_(T)(f0, f1, f2, f3, f4, f5);
+}
+    
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
 }
 
     
-            Dictionary distributedState = checkpoint[distributedStatePropertyName].Value<Dictionary>();
     
-    #pragma once
+    {}  // namespace grpc
     
-    namespace CNTK
+      Status GetFileContainingExtension(
+      ServerContext* context,
+      const reflection::v1alpha::ExtensionRequest* request,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  gpr_log(GPR_ERROR,
+          'Platforms other than Linux, Windows, and MacOS are not supported.');
+  return std::make_pair(busy, total);
+}
+    
+    #include '2d/CCActionInstant.h'
+#include '2d/CCNode.h'
+#include '2d/CCSprite.h'
+    
+        void removeActionAtIndex(ssize_t index, struct _hashElement *element);
+    void deleteHashElement(struct _hashElement *element);
+    void actionAllocWithHashElement(struct _hashElement *element);
+    
+    GridBase* PageTurn3D::getGrid()
 {
-    struct VariableFields final : public std::enable_shared_from_this<VariableFields>
+    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
+    if (result)
     {
-        friend class CompositeFunction;
-    }
-    }
-    
-            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
-        {
-            // failed to acquire
-            int rc = ::CloseHandle(m_handle);
-            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-            {
-                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
-            }
-            m_handle = NULL;
-            return false;
-        }
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-    
-    {        for (const auto& pair : rootLookupMap)
-        {
-            if (groupMap.find(pair.second) == groupMap.end())
-                InvalidArgument('lookup root should be group key');
-        }
-        m_aliasLookup = rootLookupMap;
+        result->setNeedDepthTestForBlit(true);
     }
     
-            // create the necessary shape.
-        shapeYT = TensorShape(this->GetTensorSliceFor(SIZE_MAX, fr));
-        // this swap results in a shape with swapped dimensions, but also swapped strides
-        shapeYT.SwapDimsInPlace(1, 2);
-        // this copy is necessary so that the strides are dense.
-        shapeYT = TensorShape(shapeYT.GetDims());
-    
-      // Doesn't include records skipped because of
-  // CompactionFilter::Decision::kRemoveAndSkipUntil.
-  int64_t num_record_drop_user = 0;
-    
-    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
-                                   const SliceParts& begin_key,
-                                   const SliceParts& end_key) {
-  std::string begin_key_buf, end_key_buf;
-  Slice begin_key_slice(begin_key, &begin_key_buf);
-  Slice end_key_slice(end_key, &end_key_buf);
-  return DeleteRange(column_family, begin_key_slice, end_key_slice);
+    return result;
 }
     
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
+        /**
+    @brief Show part of the tile.
+    @param pos The position index of the tile should be shown.
+    @param distance The percentage that the tile should be shown.
+    */
+    virtual void transformTile(const Vec2& pos, float distance);
     
-      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
-                          const rocksdb::Slice& existing_value) const override {
-    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
-    ++merge_count_;
-    return existing_value == 'bad';
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    void ClippingRectangleNode::onBeforeVisitScissor()
+{
+    if (_clippingEnabled) {
+        glEnable(GL_SCISSOR_TEST);
+    }
+    }
+    
+    /**
+@brief Clipping Rectangle Node.
+@details A node that clipped with specified rectangle.
+ The region of ClippingRectangleNode doesn't support any transform except scale.
+@js NA
+*/
+class CC_DLL ClippingRectangleNode : public Node
+{    
+public:
+    /**
+    @brief Create node with specified clipping region.
+    @param clippingRegion Specify the clipping rectangle.
+    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
+    */
+    static ClippingRectangleNode* create(const Rect& clippingRegion);
+    /**
+    @brief Create a clipping rectangle node.
+    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
+    */
+    static ClippingRectangleNode* create();
+    
+    /**
+    @brief Get the clipping rectangle.
+    @return The clipping rectangle.
+    */
+    const Rect& getClippingRegion() const {
+        return _clippingRegion;
+    }
+    /**
+    @brief Set the clipping rectangle.
+    @param clippingRegion Specify the clipping rectangle.
+    */
+    void setClippingRegion(const Rect& clippingRegion);
+    
+    /**
+    @brief Get whether the clipping is enabled or not.
+    @return Whether the clipping is enabled or not. Default is true.
+    */
+    bool isClippingEnabled() const {
+        return _clippingEnabled;
+    }
+    }
+    
+    NS_CC_END
+
+    
+        virtual void onEnter();
+    virtual void onExit();
+    virtual void onAdd();
+    virtual void onRemove();
+    
+        /** Unload all texture atlas texture create by special file name.
+     CAUTION : All component use this font texture should be reset font name, though the file name is same!
+               otherwise, it will cause program crash!
+    */
+    static void unloadFontAtlasTTF(const std::string& fontFileName);
+    
+    
+    {};
+    
+      QJsonDocument jsonConfig = QJsonDocument::fromJson(data);
+    
+    void TabViewModel::setCurrentTab(int i) { m_currentTabIndex = i; }
+    
+    template <class T>
+TabViewModel::ModelFactory getTabModelFactory() {
+  return TabViewModel::ModelFactory(
+      [](QSharedPointer<RedisClient::Connection> c, int dbIndex) {
+        return QSharedPointer<TabModel>(new T(c, dbIndex),
+                                        &QObject::deleteLater);
+      });
+}
+
+    
+    // Creates a strong reference from a raw pointer, assuming that it points to a
+// freshly-created object. See the documentation for RefPtr for usage.
+template <typename T>
+static inline RefPtr<T> adoptRef(T* ptr) {
+  return RefPtr<T>::adoptRef(ptr);
+}
+    
+    // This allows storing the assert message before the current process terminates due to a crash
+typedef void (*AssertHandler)(const char* message);
+void setAssertHandler(AssertHandler assertHandler);
+    
+      // Define a method that calls into the represented Java class
+  local_ref<JFile::javaobject> getCacheDir() {
+    static auto method = getClass()->getMethod<JFile::javaobject()>('getCacheDir');
+    return method(self());
   }
     
-      // Read a key using the snapshot
-  read_options.snapshot = snapshot;
-  s = txn->GetForUpdate(read_options, 'abc', &value);
-  assert(value == 'def');
-    
-      PinnableSlice pinnable_val;
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
-  assert(s.IsNotFound());
-  // Reset PinnableSlice after each use and before each reuse
-  pinnable_val.Reset();
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-  assert(pinnable_val == 'value');
-  pinnable_val.Reset();
-  // The Slice pointed by pinnable_val is not valid after this point
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/status.h'
-    
-      // Compress blocks using the specified compression algorithm.  This
-  // parameter can be changed dynamically.
-  //
-  // Default: kSnappyCompression, which gives lightweight but fast
-  // compression.
-  //
-  // Typical speeds of kSnappyCompression on an Intel(R) Core(TM)2 2.4GHz:
-  //    ~200-500MB/s compression
-  //    ~400-800MB/s decompression
-  // Note that these speeds are significantly faster than most
-  // persistent storage speeds, and therefore it is typically never
-  // worth switching to kNoCompression.  Even if the input data is
-  // incompressible, the kSnappyCompression implementation will
-  // efficiently detect that and will switch to uncompressed mode.
-  CompressionType compression;
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    TEST_F(SpeedLimitTest, GetSpeedLimitByS) {
-  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
-  double s = 0.0;
-  const double ds = 0.01;
-  while (s < 99.0) {
-    double v_limit = speed_limit_.GetSpeedLimitByS(s);
-    }
+    class JFile : public JavaClass<JFile> {
+ public:
+  static constexpr const char* kJavaDescriptor = 'Ljava/io/File;';
     }
     
-    #include 'glog/logging.h'
     
-    Brakemotorrpt170::Brakemotorrpt170() {}
-const int32_t Brakemotorrpt170::ID = 0x70;
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
+    {
+    {
+} // namespace jni
+} // namespace facebook
