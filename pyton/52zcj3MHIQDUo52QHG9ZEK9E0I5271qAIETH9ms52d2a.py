@@ -1,156 +1,61 @@
 
         
-            def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
+            return clean
     
-            Emit key value pairs of the form:
+        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
     
-    
-seller_category_map = {}
-seller_category_map['Exxon'] = DefaultCategories.GAS
-seller_category_map['Target'] = DefaultCategories.SHOPPING
-    
-        def parse_query(self, query):
-        '''Remove markup, break text into terms, deal with typos,
-        normalize capitalization, convert to use boolean operations.
-        '''
-        ...
-    
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-        def test_no_leading_slash(self):
-        # http://bugs.python.org/issue2254
-        res = self.request('cgi-bin/file1.py')
-        self.assertEqual(
-            (b'Hello World' + self.linesep, 'text/html', HTTPStatus.OK),
-            (res.read(), res.getheader('Content-type'), res.status))
-    
-        def test_file_buttons(self):
-        '''Test buttons that display files.'''
-        dialog = self.dialog
-        button_sources = [(self.dialog.readme, 'README.txt', 'readme'),
-                          (self.dialog.idle_news, 'NEWS.txt', 'news'),
-                          (self.dialog.idle_credits, 'CREDITS.txt', 'credits')]
+        print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
+    while True:
+        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
+        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
+            break
     
     
-# Split a path in root and extension.
-# The extension is everything starting at the last dot in the last
-# pathname component; the root is everything before that.
-# It is always true that root + ext == p.
+class EditDistance:
+    '''
+    Use :
+    solver              = EditDistance()
+    editDistanceResult  = solver.solve(firstString, secondString)
+    '''
     
-            print('Testing IMapIterator.next() with timeout:', end=' ')
-        it = pool.imap(calculatestar, TASKS)
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % it.next(0.02))
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+        return diff
+
     
-    
-  def Response( self ):
-    return self._response
-    
-        if not self._response_future or self._event_name != 'FileReadyToParse':
-      return []
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
-    
-      with CurrentWorkingDirectory( unicode_dir ):
-    with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-      with MockCompletionRequest( ServerResponse ):
-        ycm.SendCompletionRequest()
-        ok_( ycm.CompletionRequestReady() )
-        assert_that(
-          ycm.GetCompletionResponse(),
-          has_entries( {
-            'completions': empty(),
-            'completion_start_column': 1
-          } )
-        )
+    '''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
+* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a ^ b
+* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
+*
+* As far as the modulo is concerned,
+* the fact : (a*b) % c = ((a%c) * (b%c)) % c
+* Now apply RULE 1 OR 2 whichever is required.
+'''
+
     
     
-class FakeResponse( object ):
-  '''A fake version of a requests response object, just about suitable for
-  mocking a server response. Not usually used directly. See
-  MockServerResponse* methods'''
-  def __init__( self, response, exception ):
-    self._json = response
-    self._exception = exception
-    self.status_code = requests.codes.ok
-    self.text = not exception
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
     
-    from concurrent.futures import _base
-    
-        # Create and fill-in the class template
-    numfields = len(field_names)
-    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
-    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
-    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
-    template = '''class %(typename)s(tuple):
-        '%(typename)s(%(argtxt)s)' \n
-        __slots__ = () \n
-        _fields = %(field_names)r \n
-        def __new__(_cls, %(argtxt)s):
-            return _tuple.__new__(_cls, (%(argtxt)s)) \n
-        @classmethod
-        def _make(cls, iterable, new=tuple.__new__, len=len):
-            'Make a new %(typename)s object from a sequence or iterable'
-            result = new(cls, iterable)
-            if len(result) != %(numfields)d:
-                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
-            return result \n
-        def __repr__(self):
-            return '%(typename)s(%(reprtxt)s)' %% self \n
-        def _asdict(t):
-            'Return a new dict which maps field names to their values'
-            return {%(dicttxt)s} \n
-        def _replace(_self, **kwds):
-            'Return a new %(typename)s object replacing specified fields with new values'
-            result = _self._make(map(kwds.pop, %(field_names)r, _self))
-            if kwds:
-                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
-            return result \n
-        def __getnewargs__(self):
-            return tuple(self) \n\n''' % locals()
-    for i, name in enumerate(field_names):
-        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
-    
-    URLS = ['http://www.google.com/',
-        'http://www.apple.com/',
-        'http://www.ibm.com',
-        'http://www.thisurlprobablydoesnotexist.com',
-        'http://www.slashdot.org/',
-        'http://www.python.org/',
-        'http://www.bing.com/',
-        'http://www.facebook.com/',
-        'http://www.yahoo.com/',
-        'http://www.youtube.com/',
-        'http://www.blogger.com/']
-    
-            self.assertEqual(set([SUCCESSFUL_FUTURE,
-                              CANCELLED_AND_NOTIFIED_FUTURE,
-                              EXCEPTION_FUTURE,
-                              future1,
-                              future2]), finished)
-        self.assertEqual(set(), pending)
+        else:
+        assert False, 'Unsupported type: {}'.format(bump_type)
