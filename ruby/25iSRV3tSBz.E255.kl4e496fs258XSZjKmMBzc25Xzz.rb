@@ -1,151 +1,123 @@
 
         
-            def length
-      @queue.length
-    end
+          def create
+    raise Discourse::NotFound unless report_collection_enabled?
     
-        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
-    end
+    # == Schema Information
+#
+# Table name: drafts
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer          not null
+#  draft_key  :string           not null
+#  data       :text             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  sequence   :integer          default(0), not null
+#  revisions  :integer          default(1), not null
+#
+# Indexes
+#
+#  index_drafts_on_user_id_and_draft_key  (user_id,draft_key)
+#
+
     
-        def show_message
-      UI.message('Sending anonymous analytics information')
-      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
-      UI.message('No personal or sensitive data is sent.')
-      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
-    end
-    
-          it 'handles extension and extensions parameters correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
-      end
-    
-            it 'sets up metadata folder in fastlane folder' do
-          expect(options[:metadata_path]).to eq('./fastlane/metadata')
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
         end
-      end
-    
-        def slug
-      @slug ||= subpath.sub(/\A\//, '').remove(/\.html\z/)
-    end
-    
-        def initialize
-      @pages = {}
-    end
-    
-            def store_pages(store)
-          instrument 'info.doc', msg: 'Fetching redirections...'
-          with_redirections do
-            instrument 'info.doc', msg: 'Continuing...'
-            super
-          end
-        end
-    
-            doc
       end
     end
   end
 end
 
     
-            name.prepend '#{breadcrumbs.join('.')}#' if breadcrumbs.present? && breadcrumbs[0] != name
-        name << '()' if %w(Function Method Constructor).include?(subtitle)
-        name
-      end
-    
-              node.before(node.children).remove
+            def id_for_already_imported_cache(note)
+          note.id
         end
-    
-        describe 'filter notifications' do
-      it 'supports filtering by notification type' do
-        FactoryGirl.create(:notification, :recipient => alice, :type => 'Notifications::StartedSharing')
-        get :index, params: {type: 'started_sharing'}
-        expect(assigns[:notifications].count).to eq(1)
-      end
-    
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
-      end
-    end
-    
-      describe '#index' do
-    context 'with a private post' do
-      before do
-        @alices_aspect = alice.aspects.where(name: 'generic').first
-        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
-      end
-    
-          it 'succeeds' do
-        expect { @controller.send(:reset_authentication_token) }.to_not raise_error
-      end
-    end
-    
-          def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
-        !!@sidebar
-      end
-    
-          def format
-        @format = (@page.format || false) if @format.nil?
-        @format.to_s.downcase
       end
     end
   end
 end
 
     
-        get '/pages'
+            # Builds an issue from a GitHub API response.
+        #
+        # issue - An instance of `Sawyer::Resource` containing the issue
+        #         details.
+        def self.from_api_response(issue)
+          user =
+            if issue.user
+              Representation::User.from_api_response(issue.user)
+            end
     
-      test 'displays_latest_changes' do
-    get('/latest_changes')
-    body = last_response.body
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
     
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
     
-          @@country_attributes = [:id, :iso_name, :iso, :iso3, :name, :numcode]
+        desc 'Commits the version to github repository'
+    task :commit_version do
+      sh <<-SH
+        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
+      SH
     
-      private
+    __END__
     
-      def create
-    login(User.authenticate(params[:email_address], params[:password]))
-    flash[:remember_login] = true
-    redirect_to_with_return_to root_path
-  rescue Postal::Errors::AuthenticationError => e
-    flash.now[:alert] = 'The credentials you've provided are incorrect. Please check and try again.'
-    render 'new'
+          def session(env)
+        return env[options[:session_key]] if session? env
+        fail 'you need to set up a session middleware *before* #{self.class}'
+      end
+    
+          def remove_bad_cookies(request, response)
+        return if bad_cookies.empty?
+        paths = cookie_paths(request.path)
+        bad_cookies.each do |name|
+          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
+        end
+      end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
+    
+          expected_header = <<-END.chomp
+rack.%2573ession=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+END
+      expect(last_response.headers['Set-Cookie']).to eq(expected_header)
+    end
   end
