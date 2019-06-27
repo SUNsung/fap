@@ -1,134 +1,240 @@
 
         
-        from mrjob.job import MRJob
-    
-        with open(filename, 'w') as f:
-        f.write(contents)
-    
-    
-def _lookup_app_object(name):
-    top = _app_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_app_ctx_err_msg)
-    return getattr(top, name)
-    
-        Takes the same arguments as the built-in :func:`json.loads`, and
-    does some extra configuration based on the application. If the
-    simplejson package is installed, it is preferred.
-    
-        tag = to_json
-    
-        try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
-    
-            # No redirect was found. Return the response.
-        return response
-
-    
-    
-def _create_with_wait(snapshot, wait_timeout_secs, sleep_func=time.sleep):
-    '''
-    Wait for the snapshot to be created
-    :param snapshot:
-    :param wait_timeout_secs: fail this step after this many seconds
-    :param sleep_func:
-    :return:
-    '''
-    time_waited = 0
-    snapshot.update()
-    while snapshot.status != 'completed':
-        sleep_func(3)
-        snapshot.update()
-        time_waited += 3
-        if wait_timeout_secs and time_waited > wait_timeout_secs:
-            return False
-    return True
+        options:
+  query:
+    description:
+      - Specifies the resource type for which to gather facts.  Leave blank to retrieve all facts.
+    required: true
+    choices: [ 'aliases', 'all', 'config', 'mappings', 'policy', 'versions' ]
+    default: 'all'
+  function_name:
+    description:
+      - The name of the lambda function for which facts are requested.
+    aliases: [ 'function', 'name']
+  event_source_arn:
+    description:
+      - For query type 'mappings', this is the Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream.
+author: Pierre Jodouin (@pjodouin)
+requirements:
+    - boto3
+extends_documentation_fragment:
+  - aws
+  - ec2
+'''
     
     try:
-    import boto
-    from boto.elasticache import connect_to_region
-    from boto.exception import BotoServerError
-    HAS_BOTO = True
-except ImportError:
-    HAS_BOTO = False
+    from google.cloud import pubsub
+    HAS_GOOGLE_CLOUD_PUBSUB = True
+except ImportError as e:
+    HAS_GOOGLE_CLOUD_PUBSUB = False
     
-            if wait:
-            wait_for_resource_creation_completion(
-                oneandone_conn,
-                OneAndOneResources.firewall_policy,
-                firewall_policy['id'],
-                wait_timeout,
-                wait_interval)
+            elif desired_state == 'absent':
+            if current_state != HOST_ABSENT:
+                if one.host.delete(host.ID):
+                    result['changed'] = True
+                else:
+                    self.fail(msg='could not delete host from cluster')
+    
+    
+def protocol_to_type(protocol):
+    try:
+        protocols = ProtocolsType()
+        setattr(protocols, protocol, True)
+        return protocols
+    except AttributeError:
+        raise VcaError('The value in protocol is not valid')
+    
+        module = AnsibleModule(argument_spec=argument_spec,
+                           supports_check_mode=True,
+                           )
+    
+        def _exec(self, args):
+        cmd = [self._icinga2, 'feature']
+        rc, out, err = self.module.run_command(cmd + args, check_rc=True)
+        return rc, out
+    
+        if running and state == 'stopped':
+        if module.check_mode:
+            module.exit_json(changed=True)
+        status = run_command('stop')
+        if status in ['not monitored'] or 'stop pending' in status:
+            module.exit_json(changed=True, name=name, state=state)
+        module.fail_json(msg='%s process not stopped' % name, status=status)
+    
+        def set_appid_not_exist(self, appid):
+        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
+        with self.lock:
+            if appid not in self.not_exist_appids:
+                self.not_exist_appids.append(appid)
+            try:
+                self.config.GAE_APPIDS.remove(appid)
+            except:
+                pass
+    
+        def close(self):
+        self.fd.close()
+    
+    def version_str_to_tuple(version_str):
+    import re
+    import sys
+    
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
+    
+            return ''.join([t.text for t in self.tokens[start:stop+1]])
+    
+            The pattern is deliberately not stored as a loader attribute so that
+        packages can continue discovery themselves. top_level_dir is stored so
+        load_tests does not need to pass this argument in to loader.discover().
+    
+    # This is a copy of lib2to3.fixes.fix_imports.MAPPING.  We cannot import
+# lib2to3 and use the mapping defined there, because lib2to3 uses pickle.
+# Thus, this could cause the module to be imported recursively.
+IMPORT_MAPPING = {
+    '__builtin__' : 'builtins',
+    'copy_reg': 'copyreg',
+    'Queue': 'queue',
+    'SocketServer': 'socketserver',
+    'ConfigParser': 'configparser',
+    'repr': 'reprlib',
+    'tkFileDialog': 'tkinter.filedialog',
+    'tkSimpleDialog': 'tkinter.simpledialog',
+    'tkColorChooser': 'tkinter.colorchooser',
+    'tkCommonDialog': 'tkinter.commondialog',
+    'Dialog': 'tkinter.dialog',
+    'Tkdnd': 'tkinter.dnd',
+    'tkFont': 'tkinter.font',
+    'tkMessageBox': 'tkinter.messagebox',
+    'ScrolledText': 'tkinter.scrolledtext',
+    'Tkconstants': 'tkinter.constants',
+    'Tix': 'tkinter.tix',
+    'ttk': 'tkinter.ttk',
+    'Tkinter': 'tkinter',
+    'markupbase': '_markupbase',
+    '_winreg': 'winreg',
+    'thread': '_thread',
+    'dummy_thread': '_dummy_thread',
+    'dbhash': 'dbm.bsd',
+    'dumbdbm': 'dbm.dumb',
+    'dbm': 'dbm.ndbm',
+    'gdbm': 'dbm.gnu',
+    'xmlrpclib': 'xmlrpc.client',
+    'SimpleXMLRPCServer': 'xmlrpc.server',
+    'httplib': 'http.client',
+    'htmlentitydefs' : 'html.entities',
+    'HTMLParser' : 'html.parser',
+    'Cookie': 'http.cookies',
+    'cookielib': 'http.cookiejar',
+    'BaseHTTPServer': 'http.server',
+    'test.test_support': 'test.support',
+    'commands': 'subprocess',
+    'urlparse' : 'urllib.parse',
+    'robotparser' : 'urllib.robotparser',
+    'urllib2': 'urllib.request',
+    'anydbm': 'dbm',
+    '_abcoll' : 'collections.abc',
+}
+    
+    class TokenizeTest(TestCase):
+    # Tests for the tokenize module.
+    
+    import smtplib
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+        with open(args.msgfile, 'rb') as fp:
+        msg = email.message_from_binary_file(fp, policy=default)
+    
+            it = pool.imap(f, list(range(10)))
+        for i in range(10):
+            try:
+                x = next(it)
+            except ZeroDivisionError:
+                if i == 5:
+                    pass
+            except StopIteration:
+                break
+            else:
+                if i == 5:
+                    raise AssertionError('expected ZeroDivisionError')
+    
+    def plus(a, b):
+    time.sleep(0.5*random.random())
+    return a + b
+    
+    
+def relu(x):
+    '''ReLU
+    `o = max(0., x)`
+    '''
+    return tf.nn.relu(x)
+    
+    References：
+    [1509.01626] Character-level Convolutional Networks for Text Classification https://arxiv.org/abs/1509.01626
+'''
+    
+    l2_regularizer = L1L2Regularizer(l2=0.01)
+    
+    
+class GraphSearch:
+    
+        def test_cloning_propperty_assigned_values(self):
+        sample_object_1 = self.prototype.clone()
+        sample_object_2 = self.prototype.clone(value='re-assigned')
+        self.assertNotEqual(sample_object_1.value, sample_object_2.value)
+    
+    
+class StandbyStateTest(unittest.TestCase):
+    ''' Exemplary 2nd level state test class (here: Standby state). Add missing
+    state test classes... '''
+    
+        def unsubscribe(self, msg):
+        self.provider.unsubscribe(msg, self)
+    
+        @classmethod
+    def get_registry(cls):
+        return dict(cls.REGISTRY)
     
     
 def main():
-    argument_spec = vca_argument_spec()
-    argument_spec.update(
-        dict(
-            fw_rules=dict(required=True, type='list'),
-            gateway_name=dict(default='gateway'),
-            state=dict(default='present', choices=['present', 'absent'])
-        )
-    )
-    
-    # Ensure role is absent
-- ipa_role:
-    name: dba
-    state: absent
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-'''
-    
-        try:
-        data = urlencode(params)
-        response, info = fetch_url(module, url, data=data)
-    except Exception as e:
-        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
-    else:
-        if info['status'] == 201:
-            module.exit_json(changed=True)
-        else:
-            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
-    
-        def get_status():
-        '''Return the status of the process in monit, or the empty string if not present.'''
-        rc, out, err = module.run_command('%s %s' % (MONIT, SUMMARY_COMMAND), check_rc=True)
-        for line in out.split('\n'):
-            # Sample output lines:
-            # Process 'name'    Running
-            # Process 'name'    Running - restart pending
-            parts = parse(line.split())
-            if parts != '':
-                return parts
+    '''
+    Before subclassing
+    >>> sorted(RegistryHolder.REGISTRY)
+    ['BaseRegisteredClass']
     
     
-class JWS(jose.JWS):
-    '''ACME-specific JWS. Includes none, url, and kid in protected header.'''
-    signature_cls = Signature
-    __slots__ = jose.JWS._orig_slots  # pylint: disable=no-member
-    
-    # Documents to append as an appendix to all manuals.
-#latex_appendices = []
-    
-       # CloudXNS API credentials used by Certbot
-   dns_cloudxns_api_key = 1234567890abcdef1234567890abcdef
-   dns_cloudxns_secret_key = 1122334455667788
-    
-    
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
+def main():
+    '''
+    >>> move = Action('move')
+    >>> person = Person('Jack', move)
+    >>> person.do_action().amount('5m').stop()
+    Jack move 5m then stop
+    '''
