@@ -1,388 +1,291 @@
 
         
-        #ifndef ATOM_APP_COMMAND_LINE_ARGS_H_
-#define ATOM_APP_COMMAND_LINE_ARGS_H_
-    
-    namespace api {
+            for (recid = 0; recid < 4; recid++) {
+        int i;
+        int recid2;
+        /* (4,4) encoded in DER. */
+        unsigned char sigbder[8] = {0x30, 0x06, 0x02, 0x01, 0x04, 0x02, 0x01, 0x04};
+        unsigned char sigcder_zr[7] = {0x30, 0x05, 0x02, 0x00, 0x02, 0x01, 0x01};
+        unsigned char sigcder_zs[7] = {0x30, 0x05, 0x02, 0x01, 0x01, 0x02, 0x00};
+        unsigned char sigbderalt1[39] = {
+            0x30, 0x25, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt2[39] = {
+            0x30, 0x25, 0x02, 0x01, 0x04, 0x02, 0x20, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        unsigned char sigbderalt3[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt4[40] = {
+            0x30, 0x26, 0x02, 0x01, 0x04, 0x02, 0x21, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        /* (order + r,4) encoded in DER. */
+        unsigned char sigbderlong[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xBA, 0xAE, 0xDC,
+            0xE6, 0xAF, 0x48, 0xA0, 0x3B, 0xBF, 0xD2, 0x5E,
+            0x8C, 0xD0, 0x36, 0x41, 0x45, 0x02, 0x01, 0x04
+        };
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 1);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 1);
+        for (recid2 = 0; recid2 < 4; recid2++) {
+            secp256k1_pubkey pubkey2b;
+            CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid2) == 1);
+            CHECK(secp256k1_ecdsa_recover(ctx, &pubkey2b, &rsig, msg32) == 1);
+            /* Verifying with (order + r,4) should always fail. */
+            CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderlong, sizeof(sigbderlong)) == 1);
+            CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        }
+        /* DER parsing tests. */
+        /* Zero length r/s. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zr, sizeof(sigcder_zr)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zs, sizeof(sigcder_zs)) == 0);
+        /* Leading zeros. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt1, sizeof(sigbderalt1)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt2, sizeof(sigbderalt2)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 0);
+        sigbderalt3[4] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbderalt4[7] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        /* Damage signature. */
+        sigbder[7]++;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbder[7]--;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, 6) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder) - 1) == 0);
+        for(i = 0; i < 8; i++) {
+            int c;
+            unsigned char orig = sigbder[i];
+            /*Try every single-byte change.*/
+            for (c = 0; c < 256; c++) {
+                if (c == orig ) {
+                    continue;
+                }
+                sigbder[i] = c;
+                CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 0 || secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+            }
+            sigbder[i] = orig;
+        }
     }
     
-     private:
-  void Destroy();
-    
-    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {}
-    
-    // relauncher implements main browser application relaunches across platforms.
-// When a browser wants to relaunch itself, it can't simply fork off a new
-// process and exec a new browser from within. That leaves open a window
-// during which two browser applications might be running concurrently. If
-// that happens, each will wind up with a distinct Dock icon, which is
-// especially bad if the user expected the Dock icon to be persistent by
-// choosing Keep in Dock from the icon's contextual menu.
-//
-// relauncher approaches this problem by introducing an intermediate
-// process (the 'relauncher') in between the original browser ('parent') and
-// replacement browser ('relaunched'). The helper executable is used for the
-// relauncher process; because it's an LSUIElement, it doesn't get a Dock
-// icon and isn't visible as a running application at all. The parent will
-// start a relauncher process, giving it the 'writer' side of a pipe that it
-// retains the 'reader' end of. When the relauncher starts up, it will
-// establish a kqueue to wait for the parent to exit, and will then write to
-// the pipe. The parent, upon reading from the pipe, is free to exit. When the
-// relauncher is notified via its kqueue that the parent has exited, it
-// proceeds, launching the relaunched process. The handshake to synchronize
-// the parent with the relauncher is necessary to avoid races: the relauncher
-// needs to be sure that it's monitoring the parent and not some other process
-// in light of PID reuse, so the parent must remain alive long enough for the
-// relauncher to set up its kqueue.
-    
-    int LaunchProgram(const StringVector& relauncher_args,
-                  const StringVector& argv) {
-  base::LaunchOptions options;
-  base::Process process =
-      base::LaunchProcess(ArgvToCommandLineString(argv), options);
-  return process.IsValid() ? 0 : 1;
-}
-    
-    namespace atom {
-    }
-    
-      // Offset and value for currently supported version ID.
-  static constexpr size_t kVersionIdOffset = 0;
-  static constexpr size_t kVersionId = 0;
-    
-      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
-               grpc_closure* then_call_closure) override;
-    
-      const protobuf::Descriptor* desc =
-      descriptor_pool_->FindMessageTypeByName(type);
-  if (desc == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Type not found.');
-  }
-    
-    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-    
-    namespace grpc {
-namespace load_reporter {
-    }
-    }
-    
-    /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
+        strKey = 'first';
+    strVal = 'John';
+    BOOST_CHECK(obj.pushKV(strKey, strVal));
     
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
+    {} // namespace bech32
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
-}
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
 
     
-    class SparsePageRawFormat : public SparsePageFormat {
- public:
-  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
-    auto& offset_vec = page->offset.HostVector();
-    if (!fi->Read(&offset_vec)) return false;
-    auto& data_vec = page->data.HostVector();
-    CHECK_NE(page->offset.Size(), 0U) << 'Invalid SparsePage file';
-    data_vec.resize(offset_vec.back());
-    if (page->data.Size() != 0) {
-      CHECK_EQ(fi->Read(dmlc::BeginPtr(data_vec),
-                        (page->data).Size() * sizeof(Entry)),
-               (page->data).Size() * sizeof(Entry))
-          << 'Invalid SparsePage file';
-    }
-    return true;
+      virtual void ReleaseSnapshot(const Snapshot* snapshot) {
+    delete reinterpret_cast<const ModelSnapshot*>(snapshot);
   }
-    }
-    
-    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
-  // use qid to get group info
-  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
-  uint64_t last_group_id = default_max;
-  bst_uint group_size = 0;
-  this->Clear();
-  while (parser->Next()) {
-    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
-    if (batch.label != nullptr) {
-      auto& labels = info.labels_.HostVector();
-      labels.insert(labels.end(), batch.label, batch.label + batch.size);
-    }
-    if (batch.weight != nullptr) {
-      auto& weights = info.weights_.HostVector();
-      weights.insert(weights.end(), batch.weight, batch.weight + batch.size);
-    }
-    if (batch.qid != nullptr) {
-      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
-      // get group
-      for (size_t i = 0; i < batch.size; ++i) {
-        const uint64_t cur_group_id = batch.qid[i];
-        if (last_group_id == default_max || last_group_id != cur_group_id) {
-          info.group_ptr_.push_back(group_size);
-        }
-        last_group_id = cur_group_id;
-        ++group_size;
+  virtual Status Write(const WriteOptions& options, WriteBatch* batch) {
+    class Handler : public WriteBatch::Handler {
+     public:
+      KVMap* map_;
+      virtual void Put(const Slice& key, const Slice& value) {
+        (*map_)[key.ToString()] = value.ToString();
       }
-    }
-    }
-    }
-    
-    TEST(c_api, XGDMatrixCreateFromMat_omp) {
-  std::vector<int> num_rows = {100, 11374, 15000};
-  for (auto row : num_rows) {
-    int num_cols = 50;
-    int num_missing = 5;
-    DMatrixHandle handle;
-    std::vector<float> data(num_cols * row, 1.5);
-    for (int i = 0; i < num_missing; i++) {
-      data[i] = std::numeric_limits<float>::quiet_NaN();
-    }
-    }
-    }
-    
-    void DHTRoutingTable::showBuckets() const
-{
-  /*
-    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
-    buckets_.begin(); itr != buckets_.end(); ++itr) {
-    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
-    << 'nodes = ' << (*itr)->countNode() << endl;
-    }
-  */
-}
-    
-    
-    {} // namespace aria2
-
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
-    const std::shared_ptr<DHTBucket>& bucket,
-    const std::shared_ptr<DHTNode>& newNode)
-{
-  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
-    
-    namespace aria2 {
-    }
-    
-    void DHTTaskQueueImpl::addPeriodicTask1(const std::shared_ptr<DHTTask>& task)
-{
-  periodicTaskQueue1_.addTask(task);
-}
-    
-    
-    {} // namespace aria2
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    class DHTTokenUpdateCommand : public TimeBasedCommand {
-private:
-  DHTTokenTracker* tokenTracker_;
-    }
-    
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
+      virtual void Delete(const Slice& key) {
+        map_->erase(key.ToString());
+      }
+    };
+    Handler handler;
+    handler.map_ = &map_;
+    return batch->Iterate(&handler);
   }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
+    
+    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
+  FileType ftype;
+  if (!GuessType(fname, &ftype)) {
+    return Status::InvalidArgument(fname + ': unknown file type');
   }
-}
-    
-      int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-    
-    
-    {};
-    
-    
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
+  switch (ftype) {
+    case kLogFile:         return DumpLog(env, fname, dst);
+    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
+    case kTableFile:       return DumpTable(env, fname, dst);
+    default:
       break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
   }
-    
-    
-    {};
-    
-    #include 'ExtensionManager.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    using namespace ::apache::thrift;
-using namespace ::apache::thrift::protocol;
-using namespace ::apache::thrift::transport;
-using namespace ::apache::thrift::server;
-    
-    #include <smartmontools/libsmartctl.h>
-    
-    
-    {  FRIEND_TEST(KillswitchTests, test_killswitch_plugin);
-};
-    
-    
-    {  auto dst = std::vector<TestMessage>{};
-  auto status =
-      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
-          &buf[0], tail, head, buf.size(), dst);
-  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
-  ASSERT_EQ(dst.size(), test_size);
-  for (std::size_t i = 0; i < test_size; ++i) {
-    EXPECT_EQ(dst[i].c_, 't');
-    EXPECT_EQ(dst[i].d_, 'i');
-  }
-  EXPECT_EQ(dst[0].a_, 1);
-  EXPECT_EQ(dst[0].b_, 2);
-  EXPECT_EQ(dst[1].a_, 3);
-  EXPECT_EQ(dst[1].b_, 4);
-  EXPECT_EQ(dst[2].a_, 5);
-  EXPECT_EQ(dst[2].b_, 6);
+  return Status::InvalidArgument(fname + ': not a dump-able file type');
 }
     
-    
-    {  ValidatatioMap row_map = {{'filter_name', NonEmptyString},
-                            {'chain', NormalType},
-                            {'policy', NormalType},
-                            {'target', NormalType},
-                            {'protocol', IntType},
-                            {'src_port', IntMinMaxCheck(0, 65535)},
-                            {'dst_port', IntMinMaxCheck(0, 65535)},
-                            {'src_ip', verifyEmptyStringOrIpAddress},
-                            {'src_mask', verifyEmptyStringOrIpAddress},
-                            {'iniface', NormalType},
-                            {'iniface_mask', verifyEmptyStringOrIpAddress},
-                            {'dst_ip', verifyEmptyStringOrIpAddress},
-                            {'dst_mask', verifyEmptyStringOrIpAddress},
-                            {'outiface', NormalType},
-                            {'outiface_mask', verifyEmptyStringOrIpAddress},
-                            {'match', SpecificValuesCheck{'yes', 'no'}},
-                            {'packets', NonNegativeInt},
-                            {'bytes', NonNegativeInt}};
-  validate_rows(data, row_map);
+    void FaultInjectionTestEnv::UntrackFile(const std::string& f) {
+  MutexLock l(&mutex_);
+  db_file_state_.erase(f);
+  new_files_since_last_dir_sync_.erase(f);
 }
     
+    bool b2Triangle::IsInside(float32 _x, float32 _y){
+	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
+	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
+	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
+	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
+		
+		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
+		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
+		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		
+		float32 dot00 = vx0*vx0+vy0*vy0;
+		float32 dot01 = vx0*vx1+vy0*vy1;
+		float32 dot02 = vx0*vx2+vy0*vy2;
+		float32 dot11 = vx1*vx1+vy1*vy1;
+		float32 dot12 = vx1*vx2+vy1*vy2;
+		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		
+		return ((u>=0)&&(v>=0)&&(u+v<=1));    
+}
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
+    		inline Block4x4Encoding * GetEncoding(void)
+		{
+			return m_pencoding;
+		}
+    
+    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
+static const tran_high_t sinpi_1_9 = 5283;
+static const tran_high_t sinpi_2_9 = 9929;
+static const tran_high_t sinpi_3_9 = 13377;
+static const tran_high_t sinpi_4_9 = 15212;
+    
+    void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed);
+void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed);
+void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution);
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    namespace HPHP {
+    }
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
 
     
-    TEST_F(KernelInfo, test_sanity) {
-  QueryData data = execute_query('select * from kernel_info');
-  ValidatatioMap row_map = {{'version', NonEmptyString},
-                            {'arguments', NormalType},
-                            {'path', NormalType},
-                            {'device', NonEmptyString}};
-  validate_rows(data, row_map);
+    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
+#define HPHP_GLOB_STREAM_WRAPPER_H
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+        // create an array from std::list
+    std::list<bool> c_list {true, true, false, true};
+    json j_list(c_list);
+    
+    void Action::step(float /*dt*/)
+{
+    CCLOG('[Action step]. override me');
+}
+    
+    FlipX3D* FlipX3D::clone() const
+{
+    // no copy constructor    
+    auto a = new (std::nothrow) FlipX3D();
+    a->initWithSize(_gridSize, _duration);
+    a->autorelease();
+    return a;
 }
     
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
-
-    
-    TEST_F(keychainItems, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from keychain_items');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'label', NormalType}
-  //      {'description', NormalType}
-  //      {'comment', NormalType}
-  //      {'created', NormalType}
-  //      {'modified', NormalType}
-  //      {'type', NormalType}
-  //      {'path', NormalType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
+    {     actionAllocWithHashElement(element);
+ 
+     CCASSERT(! ccArrayContainsObject(element->actions, action), 'action already be added!');
+     ccArrayAppendObject(element->actions, action);
+ 
+     action->startWithTarget(target);
 }
+    
+        /** Resumes the target. All queued actions will be resumed.
+     *
+     * @param target    A certain target.
+     */
+    virtual void resumeTarget(Node *target);
+    
+    /** Pauses all running actions, returning a list of targets whose actions were paused.
+     *
+     * @return  A list of targets whose actions were paused.
+     */
+    virtual Vector<Node*> pauseAllRunningActions();
+    
+    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
+     *
+     * @param targetsToResume   A set of targets need to be resumed.
+     */
+    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
+    
+    /** Main loop of ActionManager.
+     * @param dt    In seconds.
+     */
+    virtual void update(float dt);
+    
+protected:
+    // declared in ActionManager.m
+    
+        /**
+     * @brief Initializes the action with a duration, a 'from' percentage and a 'to' percentage.
+     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
+     * @param fromPercentage Specify the source percentage.
+     * @param toPercentage Specify the destination percentage.
+     * @return If the creation success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, float fromPercentage, float toPercentage);
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    class CC_DLL ComponentContainer
+{
+protected:
+    /**
+     * @js ctor
+     */
+    ComponentContainer(Node* node);
+    
+public:
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~ComponentContainer();
+    
+	/**
+     * @js getComponent
+     */
+	Component* get(const std::string& name) const;
+    }
