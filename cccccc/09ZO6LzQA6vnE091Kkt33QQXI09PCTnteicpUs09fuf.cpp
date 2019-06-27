@@ -1,184 +1,274 @@
 
         
-        
-    {  if (!wasInline) delete[] oldAllocation;
-}  
+            typedef int8_t   s8;
+    typedef uint8_t  u8;
+    typedef int16_t  s16;
+    typedef uint16_t u16;
+    typedef int32_t  s32;
+    typedef uint32_t u32;
+    typedef float    f32;
+    typedef int64_t  s64;
+    typedef uint64_t u64;
+    typedef double   f64;
     
-    swift::unicode::GraphemeClusterBreakProperty
-swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
-  // FIXME: replace linear search with a trie lookup.
+    
+    {    void operator() (const s32 * src0, const s32 * src1, s32 * dst) const
+    {
+        dst[0] = saturate_cast<s32>(alpha*src0[0] + beta*src1[0] + gamma);
     }
+};
     
-      uint32_t n = initial_n;
-  int delta = 0;
-  int bias = initial_bias;
     
-    namespace b2ConvexDecomp {
+    {    // the final pass, form the final image
+    uint8x16_t v2 = vmovq_n_u8(2);
+    const u8* ptrmap = map + mapstep + 1;
+    for (size_t i = 0; i < size.height; i++, ptrmap += mapstep)
+    {
+        u8* _dst = internal::getRowPtr(dstBase, dstStride, i);
+        ptrdiff_t j = 0;
+        for (; j < (ptrdiff_t)size.width - 16; j += 16)
+        {
+            internal::prefetch(ptrmap);
+            uint8x16_t vmap = vld1q_u8(ptrmap + j);
+            uint8x16_t vdst = vceqq_u8(vmap, v2);
+            vst1q_u8(_dst+j, vdst);
+        }
+        for (; j < (ptrdiff_t)size.width; j++)
+            _dst[j] = (u8)-(ptrmap[j] >> 1);
     }
-    
-    	struct RawImage
-	{
-		int uiExtendedWidth;
-		int uiExtendedHeight;
-		unsigned int uiEncodingBitsBytes;
-		std::shared_ptr<unsigned char> paucEncodingBits;
-	};
-    
-      If the input is not compressible, the return value might be larger than
-  length (input buffer size).
-    
-    /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
-#undef silk_SMULWB
-static OPUS_INLINE opus_int32 silk_SMULWB_armv4(opus_int32 a, opus_int16 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#silk_SMULWB\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(a), 'r'(b<<16)
-  );
-  return rd_hi;
 }
-#define silk_SMULWB(a, b) (silk_SMULWB_armv4(a, b))
     
-    /* add/subtract with output saturated */
-#undef silk_ADD_SAT32
-static OPUS_INLINE opus_int32 silk_ADD_SAT32_armv5e(opus_int32 a, opus_int32 b)
+    #include 'common.hpp'
+#include 'vtransform.hpp'
+    
+    #include <carotene/functions.hpp>
+#include 'saturate_cast.hpp'
+    
+    bool isGaussianBlur3x3Supported(const Size2D &size, BORDER_MODE border)
 {
-  int res;
-  __asm__(
-      '#silk_ADD_SAT32\n\t'
-      'qadd %0, %1, %2\n\t'
-      : '=r'(res)
-      : '%r'(a), 'r'(b)
-  );
-  return res;
+    return isSupportedConfiguration() && size.width >= 8 &&
+        (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REPLICATE);
 }
-#define silk_ADD_SAT32(a, b) (silk_ADD_SAT32_armv5e(a, b))
     
-      /**
-   * /brief Customize set method for LayerParameter
-   * /tparam value string of caffe's layer configuration
-   * */
-  virtual void Set(void *head, const std::string &value) const {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    namespace CAROTENE_NS {
     }
     
-      void InitParams(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    std::vector<std::pair<std::string, std::string> > kwargs_left;
-    // init image rec param
-    kwargs_left = param_.InitAllowUnknown(kwargs);
-    // maximum prefetch threaded iter internal size
-    const int kMaxPrefetchBuffer = 16;
-    // init thread iter
-    iter.set_max_capacity(kMaxPrefetchBuffer);
+    void Clipboard::Call(const std::string& method,
+                     const base::ListValue& arguments) {
+  if (method == 'Set') {
+    std::string text, type;
+    arguments.GetString(0, &text);
+    arguments.GetString(1, &type);
+    SetText(text);
+  } else if (method == 'Clear') {
+    Clear();
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
+}
     
-      // Perform row-wise Kronecker product
-  row_wise_kronecker(out_t, ts_t_arr);
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file cudnn_bilinear_sampler-inl.h
- * \brief
- * \author Xu Dong
-*/
-#ifndef MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
-#define MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
+    #include 'content/nw/src/api/base/base.h'
+#include 'ui/gfx/display_observer.h'
+    
+     protected:
+  ~NwAppCrashBrowserFunction() override {}
+    
+    
+    {}
+    
+    namespace grpc {
+    }
+    
+    #include 'src/cpp/ext/filters/census/context.h'
+    
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
     
     
     {
-    {}  // namespace op
-}  // namespace mxnet
+    {   private:
+    const grpc::string name_;
+    const int value_;
+  };
+  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
+}
+    
+    #ifdef GPR_APPLE
+    
+    
+    {
+    {}  // namespace load_reporter
+}  // namespace grpc
+    
+    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
+  memset(core, 0, sizeof(*core));
+  for (const auto& m : proto.metrics()) {
+    switch (m.value_case()) {
+      case Metric::VALUE_NOT_SET:
+        break;
+      case Metric::kCount:
+        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
+          if (m.name() == grpc_stats_counter_name[i]) {
+            core->counters[i] = m.count();
+            break;
+          }
+        }
+        break;
+      case Metric::kHistogram:
+        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
+          if (m.name() == grpc_stats_histogram_name[i]) {
+            const auto& h = m.histogram();
+            bool valid = true;
+            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
+            for (int j = 0; valid && j < h.buckets_size(); j++) {
+              if (grpc_stats_histo_bucket_boundaries[i][j] !=
+                  h.buckets(j).start()) {
+                valid = false;
+              }
+            }
+            if (!valid) {
+              gpr_log(GPR_ERROR,
+                      'Found histogram %s but shape is different from proto',
+                      m.name().c_str());
+            }
+            for (int j = 0; valid && j < h.buckets_size(); j++) {
+              core->histograms[grpc_stats_histo_start[i] + j] =
+                  h.buckets(j).count();
+            }
+          }
+        }
+        break;
+    }
+  }
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
 
     
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
     
+    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
+  // the stack frame will be wrong
+  ActRec* ar = g_context->getStackFrame();
+  const char* fn = (ar != nullptr)
+    ? ar->func()->name()->data()
+    : 'OPTIMIZED_BUILTIN';
+  raise_warning('%s(%s): failed to open stream: '
+                'wrapper does not support stream open',
+                fn, filename.data());
+  return nullptr;
+}
     
-    {        return dict[versionKey].Value<size_t>();
+    #include 'hphp/runtime/base/file.h'
+    
+    template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done) {
+  if (LIKELY(map.numSubMaps() == 1) ||
+      done.load(std::memory_order_relaxed) ||
+      done.exchange(true, std::memory_order_relaxed)) {
+    return;
+  }
     }
     
-            // Here we update m_prevMinibatchNumSamples with aggregated value in the
-        // case of distributed learner.
-        m_prevMinibatchNumSamples = info.numberOfSamples;
+    public:
+  DHTRoutingTableDeserializer(int family);
     
-        // Update internal state.
-        if (emptyMinibatch)
-        {
-            // Have to reassign loss and criterion.
-            m_prevMinibatchAggregateEvalCriterionValue = std::make_shared<Value>(info.evalCriterionValue);
-            m_prevMinibatchAggregateTrainingLossValue = std::make_shared<Value>(info.trainingLossValue);
-        }
+        receiver->setMessageFactory(factory.get());
+    receiver->setRoutingTable(routingTable.get());
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
+    
+    {} // namespace aria2
+    
+    
+    {  size_t getQueueSize() const { return queue_.size(); }
+};
+    
+    public:
+  DHTTaskFactoryImpl();
+    
+    public:
+  DHTTaskQueueImpl();
+    
+    void DHTTokenUpdateCommand::process()
+{
+  try {
+    tokenTracker_->updateTokenSecret();
+  }
+  catch (RecoverableException& e) {
+    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
+  }
+}
+    
+    #include <cstring>
+#include <cstdlib>
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+    
+    
+    {    // TODO: Error sending files.
+    status = contRequest.call(params);
+    if (!status.ok()) {
+      VLOG(1) << 'Post of carved block ' << i
+              << ' failed: ' << status.getMessage();
+      continue;
     }
+  }
+    
+      stripConfigComments(clone);
+  auto doc = JSON::newObject();
+  if (!doc.fromString(clone) || !doc.doc().IsObject()) {
+    LOG(WARNING) << 'Error parsing the \'' << name << '\' pack JSON';
+  } else {
+    addPack(name, source, doc.doc());
+  }
+    
+    
+    {} // namespace osquery
+
+    
+      assert(column_families.size() == raw_handles.size() &&
+         'can't map column families to handles');
+  if (column_families.size() != raw_handles.size()) {
+    return createError(
+        DatabaseError::FailToOpenDatabase,
+        'Fail to open database: can't map column families to handles');
+  }
+    
+    int Flag::createAlias(const std::string& alias, const FlagDetail& flag) {
+  instance().aliases_.insert(std::make_pair(alias, flag));
+  return 0;
+}
+    
+    class SQLPlugin : public Plugin {
+ public:
+  /// Run a SQL query string against the SQL implementation.
+  virtual Status query(const std::string& query,
+                       QueryData& results,
+                       bool use_cache) const = 0;
     }
-    }
-    
-        virtual bool OutputUsedInComputingInputNodesGradients() const override { return false; }
-    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override { return false; }
     
     
-    {        m_topK = 1;
-        // TODO: Make topK a constructor parameter
-        if (m_inputs.size() == 3)
-        {
-            if (Input(2)->GetSampleLayout().GetNumElements() != 1)
-                InvalidArgument('%ls %ls operation requires TopK to be a scalar value.', NodeName().c_str(), OperationName().c_str());
-            m_topK = static_cast<int>(Input(2)->Get00Element());
-        }
-    }
-    
-    
-    {        auto parent = iter->second;
-        auto& aliasInfo = m_aliasGroups[parent];
-        if (aliasInfo.pMatrixPtr == nullptr)
-        {
-            // first allocation for the group
-            aliasInfo.pMatrixPtr = pMatrixPtr;
-            RequestAllocate(deviceId, pMatrixPtr, matrixSize, mbScale, false);
-        }
-        else
-        {
-            auto aliasRootMatrixPtr = (shared_ptr<Matrix<ElemType>>*)aliasInfo.pMatrixPtr;
-            *pMatrixPtr = *aliasRootMatrixPtr;
-            GetMemInfo<ElemType>(aliasRootMatrixPtr)->pMatrixPtrs.push_back(pMatrixPtr);
-        }
-    }
-    
-        JSON params;
-    params.add('block_id', i);
-    params.add('session_id', session_id);
-    params.add('request_id', requestId_);
-    params.add('data', base64::encode(std::string(block.begin(), block.end())));
-    
-    #include <osquery/dispatcher.h>
-#include <osquery/filesystem/filesystem.h>
-#include <osquery/utils/status/status.h>
-    
-    #include <map>
-#include <string>
-    
-      // This funcion should completely destroy db, so after next open
-  // db should be fresh new
-  // Implementation can expect that db is closed before
-  // calling destroyDB and should crash/fail in case when db is still open
-  virtual ExpectedSuccess<DatabaseError> destroyDB() = 0;
-    
-      // This method bypass type validation and will silently update value
-  // even if type was changed (e.g int->string)
-  ExpectedSuccess<DatabaseError> putStringsUnsafe(
-      const std::string& domain,
-      const std::vector<std::pair<std::string, std::string>>& data) override;
-    
-    #include 'plugin.h'
-    
-    class RocksdbDatabaseTest : public ::testing::Test {
- protected:
-  std::string path_;
-    }
+    {  EXPECT_TRUE(db->putString(kPersistentSettings, 'test_key_string', 'string'));
+  auto string_value = db->getString(kPersistentSettings, 'test_key_string');
+  EXPECT_TRUE(string_value);
+  EXPECT_EQ(string_value.take(), 'string');
+}
