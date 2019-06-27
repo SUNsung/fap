@@ -1,190 +1,157 @@
 
         
-            ~reverse_lock() {
-        templock.lock();
-        templock.swap(lock);
-    }
+          /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
     
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
-}
-    
-    #include <stdint.h>
-#include <string>
-#include <vector>
-    
-    public:
-    static const size_t OUTPUT_SIZE = 20;
-    
-      Status NewWritableFile(const std::string& f, WritableFile** r) {
-    class DataFile : public WritableFile {
-     private:
-      SpecialEnv* env_;
-      WritableFile* base_;
-    }
-    }
-    
-    // A basic file truncation function suitable for this test.
-Status Truncate(const std::string& filename, uint64_t length) {
-  leveldb::Env* env = leveldb::Env::Default();
-    }
-    
-    
-    {}  // namespace leveldb
-
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
-};
-    
-    
-    {}
-    
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
-    
-    TEST(StructurallyValidTest, ValidUTF8String) {
-  // On GCC, this string can be written as:
-  //   'abcd 1234 - \u2014\u2013\u2212'
-  // MSVC seems to interpret \u differently.
-  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
-  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
-                                      valid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
-                                        valid_str.size() - i));
-  }
-}
-    
-      while (true) {
-    const void* inptr;
-    int inlen;
-    bool ok;
-    ok = in.Next(&inptr, &inlen);
-    if (!ok) {
-      break;
-    }
-    if (inlen > 0) {
-      int err = write(STDOUT_FILENO, inptr, inlen);
-      if (err != inlen) {
-        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
-        return 1;
-      }
-    }
-  }
-    
-    
-    {
-    {
-    {}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #include <fstream>
-#include <google/protobuf/util/time_util.h>
-#include <iostream>
-#include <string>
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// initialize the generic encoding for a 4x4 block
-	// a_pblockParent points to the block associated with this encoding
-	// a_errormetric is used to choose the best encoding
-	// init the decoded pixels to -1 to mark them as undefined
-	// init the error to -1 to mark it as undefined
-	//
-	void Block4x4Encoding::Init(Block4x4 *a_pblockParent,
-								ColorFloatRGBA *a_pafrgbaSource,
-								ErrorMetric a_errormetric)
-	{
-    }
-    
-    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
-static const tran_high_t sinpi_1_9 = 5283;
-static const tran_high_t sinpi_2_9 = 9929;
-static const tran_high_t sinpi_3_9 = 13377;
-static const tran_high_t sinpi_4_9 = 15212;
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
     /**
-  Decompress a block of compressed data and returns the size of the
-  decompressed block. If error occurs, e.g. the compressed data is
-  corrupted or the output buffer is not large enough, then 0 (zero)
-  will be returned instead.
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
 */
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
     }
     
-    namespace leveldb {
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of SigmoidLayer.
+ */
+template <typename Dtype>
+class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
+ public:
+  explicit CuDNNSigmoidLayer(const LayerParameter& param)
+      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSigmoidLayer();
     }
     
-      // Get initial measurement of the space we will be reading.
-  const int64_t initial_size = Size(Key(0), Key(n));
-  const int64_t initial_other_size = Size(Key(n), Key(kCount));
+    namespace caffe {
+    }
     
-    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
-
+    /* NurbsCallback */
+#define GLU_NURBS_ERROR                    100103
+#define GLU_ERROR                          100103
+#define GLU_NURBS_BEGIN                    100164
+#define GLU_NURBS_BEGIN_EXT                100164
+#define GLU_NURBS_VERTEX                   100165
+#define GLU_NURBS_VERTEX_EXT               100165
+#define GLU_NURBS_NORMAL                   100166
+#define GLU_NURBS_NORMAL_EXT               100166
+#define GLU_NURBS_COLOR                    100167
+#define GLU_NURBS_COLOR_EXT                100167
+#define GLU_NURBS_TEXTURE_COORD            100168
+#define GLU_NURBS_TEX_COORD_EXT            100168
+#define GLU_NURBS_END                      100169
+#define GLU_NURBS_END_EXT                  100169
+#define GLU_NURBS_BEGIN_DATA               100170
+#define GLU_NURBS_BEGIN_DATA_EXT           100170
+#define GLU_NURBS_VERTEX_DATA              100171
+#define GLU_NURBS_VERTEX_DATA_EXT          100171
+#define GLU_NURBS_NORMAL_DATA              100172
+#define GLU_NURBS_NORMAL_DATA_EXT          100172
+#define GLU_NURBS_COLOR_DATA               100173
+#define GLU_NURBS_COLOR_DATA_EXT           100173
+#define GLU_NURBS_TEXTURE_COORD_DATA       100174
+#define GLU_NURBS_TEX_COORD_DATA_EXT       100174
+#define GLU_NURBS_END_DATA                 100175
+#define GLU_NURBS_END_DATA_EXT             100175
     
-    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+    #ifndef PAGE_H
+#define PAGE_H
     
-      // Returns true iff some file in the specified level overlaps
-  // some part of [*smallest_user_key,*largest_user_key].
-  // smallest_user_key==nullptr represents a key smaller than all the DB's keys.
-  // largest_user_key==nullptr represents a key largest than all the DB's keys.
-  bool OverlapInLevel(int level, const Slice* smallest_user_key,
-                      const Slice* largest_user_key);
+      dict = trans->getDict();
     
-    
-    {  // These are no-ops, but we test they return success.
-  ASSERT_OK(writable_file->Sync());
-  ASSERT_OK(writable_file->Flush());
-  ASSERT_OK(writable_file->Close());
-  delete writable_file;
+    void PopplerCache::put(PopplerCacheKey *key, PopplerCacheItem *item)
+{
+  int movingStartIndex = lastValidCacheIndex + 1;
+  if (lastValidCacheIndex == cacheSize - 1) {
+    delete keys[lastValidCacheIndex];
+    delete items[lastValidCacheIndex];
+    movingStartIndex = cacheSize - 1;
+  } else {
+    lastValidCacheIndex++;
+  }
+  for (int i = movingStartIndex; i > 0; i--) {
+    keys[i] = keys[i - 1];
+    items[i] = items[i - 1];
+  }
+  keys[0] = key;
+  items[0] = item;
 }
     
-     private:
-  enum Code {
-    kOk = 0,
-    kNotFound = 1,
-    kCorruption = 2,
-    kNotSupported = 3,
-    kInvalidArgument = 4,
-    kIOError = 5
-  };
+      newsound->kind = kind;
+  if (fileName) {
+    newsound->fileName = fileName->copy();
+  }
+  newsound->samplingRate = samplingRate;
+  newsound->channels = channels;
+  newsound->bitsPerSample = bitsPerSample;
+  newsound->encoding = encoding;
     
-      Table(const Table&) = delete;
-  Table& operator=(const Table&) = delete;
-    
-      ~BloomTest() { delete policy_; }
-    
-    TEST(EnvWindowsTest, TestOpenOnRead) {
-  // Write some test data to a single file that will be opened |n| times.
-  std::string test_dir;
-  ASSERT_OK(env_->GetTestDirectory(&test_dir));
-  std::string test_file = test_dir + '/open_on_read.txt';
+    static void splashOutBlendSaturation(SplashColorPtr src, SplashColorPtr dest,
+				     SplashColorPtr blend,
+				     SplashColorMode cm) {
+  int hs, ss, vs, hd, sd, vd;
+#if SPLASH_CMYK
+  Guchar r, g, b;
+#endif
     }
+    
+      T3FontCache *			// Type 3 font cache
+    t3FontCache[splashOutT3FontCacheSize];
+  int nT3Fonts;			// number of valid entries in t3FontCache
+  T3GlyphStack *t3GlyphStack;	// Type 3 glyph context stack
