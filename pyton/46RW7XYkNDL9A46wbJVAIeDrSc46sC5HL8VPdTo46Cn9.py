@@ -1,114 +1,99 @@
 
         
-            assert get_new_command(command) == new_command
-
+                next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+    print(longestSub([4,8,7,5,1,12,2,3,9]))
+print(longestSub([9,8,7,6,5,7]))
     
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+'''
+from __future__ import print_function
     
-MOD_SSL_CONF_DEST = 'options-ssl-apache.conf'
-'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
+        def run(self):
+        try:
+            self.server_sock = self._create_socket_and_bind()
+            # in case self.port = 0
+            self.port = self.server_sock.getsockname()[1]
+            self.ready_event.set()
+            self._handle_requests()
     
-        def test_no_vhosts(self):
-        self.assertEqual(self._call([]), None)
-    
-       certbot certonly \\
-     --dns-cloudflare \\
-     --dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini \\
-     -d example.com
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
     
-def contains(name):
-    '''Determine if the dataset is in the catalog.'''
-    return name in _DATASETS.keys()
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
     
     
-def get_min_max_levels():
-    '''The min and max FPN levels required for supporting RPN and/or RoI
-    transform operations on multiple FPN levels.
-    '''
-    min_level = LOWEST_BACKBONE_LVL
-    max_level = HIGHEST_BACKBONE_LVL
-    if cfg.FPN.MULTILEVEL_RPN and not cfg.FPN.MULTILEVEL_ROIS:
-        max_level = cfg.FPN.RPN_MAX_LEVEL
-        min_level = cfg.FPN.RPN_MIN_LEVEL
-    if not cfg.FPN.MULTILEVEL_RPN and cfg.FPN.MULTILEVEL_ROIS:
-        max_level = cfg.FPN.ROI_MAX_LEVEL
-        min_level = cfg.FPN.ROI_MIN_LEVEL
-    if cfg.FPN.MULTILEVEL_RPN and cfg.FPN.MULTILEVEL_ROIS:
-        max_level = max(cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.ROI_MAX_LEVEL)
-        min_level = min(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.ROI_MIN_LEVEL)
-    return min_level, max_level
+# -- Options for manual page output ---------------------------------------
+    
+            if 'latency' in request.args:
+            latency = float(request.args['latency'][0])
+            reactor.callLater(latency, self._finish, request)
+            return NOT_DONE_YET
+    
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+        def short_desc(self):
+        return 'Run a self-contained spider (without creating a project)'
+    
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
+    
+        # taken from twisted/twisted/internet/_sslverify.py
+    
+        def connectionLost(self, reason):
+        self._connection_lost_reason = reason
+        HTTPClient.connectionLost(self, reason)
+        self.factory.noPage(reason)
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+                viableTokensFollowingThisRule = self.computeContextSensitiveRuleFOLLOW()
+            follow = follow | viableTokensFollowingThisRule
     
     
-def build_data_parallel_model(model, single_gpu_build_func):
-    '''Build a data parallel model given a function that builds the model on a
-    single GPU.
-    '''
-    if model.only_build_forward_pass:
-        single_gpu_build_func(model)
-    elif model.train:
-        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
-        # Add backward pass on all GPUs
-        model.AddGradientOperators(all_loss_gradients)
-        if cfg.NUM_GPUS > 1:
-            _add_allreduce_graph(model)
-        for gpu_id in range(cfg.NUM_GPUS):
-            # After allreduce, all GPUs perform SGD updates on their identical
-            # params and gradients in parallel
-            with c2_utils.NamedCudaScope(gpu_id):
-                add_single_gpu_param_update_ops(model, gpu_id)
-    else:
-        # Test-time network operates on single GPU
-        # Test-time parallelism is implemented through multiprocessing
-        with c2_utils.NamedCudaScope(model.target_gpu_id):
-            single_gpu_build_func(model)
+class FunctionDocstringTest(FuncAttrsTest):
+    def test_set_docstring_attr(self):
+        self.assertEqual(self.b.__doc__, None)
+        docstr = 'A test method that does nothing'
+        self.b.__doc__ = docstr
+        self.F.a.__doc__ = docstr
+        self.assertEqual(self.b.__doc__, docstr)
+        self.assertEqual(self.fi.a.__doc__, docstr)
+        self.cannot_set_attr(self.fi.a, '__doc__', docstr, AttributeError)
     
-    from detectron.core.config import cfg
-from detectron.modeling.generate_anchors import generate_anchors
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-import detectron.modeling.FPN as FPN
-import detectron.utils.blob as blob_utils
+    prefix_map = {
+    # backend path prefix: path to the `models` parent model used
+    'sentry.tagstore.legacy': 'sentry.tagstore.legacy',
+    'sentry.tagstore.v2': 'sentry.tagstore.v2',
+    'sentry.tagstore.snuba': 'sentry.tagstore.v2',
+}
     
-                if work_item.future.set_running_or_notify_cancel():
-                call_queue.put(_CallItem(work_id,
-                                         work_item.fn,
-                                         work_item.args,
-                                         work_item.kwargs),
-                               block=True)
-            else:
-                del pending_work_items[work_id]
-                continue
+        models = {
+    }
     
+            # Changing field 'TagKey.environment_id'
+        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True))
     
-# -- Options for HTML output ---------------------------------------------------
-    
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
+        __repr__ = sane_repr('event_id', 'key_id', 'value_id')
