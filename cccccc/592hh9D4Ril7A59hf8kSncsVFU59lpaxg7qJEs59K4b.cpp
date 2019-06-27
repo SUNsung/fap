@@ -1,221 +1,409 @@
 
         
-        PersistentDictionary::PersistentDictionary(const PersistentDictionary& other) =
-    default;
+        REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
     
-    v8::Local<v8::Value> Arguments::PeekNext() const {
-  if (next_ >= info_->Length())
-    return v8::Local<v8::Value>();
-  return (*info_)[next_];
-}
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
     
-    ObjectTemplateBuilder& ObjectTemplateBuilder::SetPropertyImpl(
-    const base::StringPiece& name,
-    v8::Local<v8::FunctionTemplate> getter,
-    v8::Local<v8::FunctionTemplate> setter) {
-  template_->SetAccessorProperty(StringToSymbol(isolate_, name), getter,
-                                 setter);
-  return *this;
-}
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
     
-      template <typename T>
-  bool GetNext(T* out) {
-    if (next_ >= info_->Length()) {
-      insufficient_arguments_ = true;
-      return false;
-    }
-    v8::Local<v8::Value> val = (*info_)[next_];
-    bool success = ConvertFromV8(isolate_, val, out);
-    if (success)
-      next_++;
-    return success;
-  }
-    
-    // CreateFunctionTemplate creates a v8::FunctionTemplate that will create
-// JavaScript functions that execute a provided C++ function or base::Callback.
-// JavaScript arguments are automatically converted via gin::Converter, as is
-// the return value of the C++ function, if any.
-//
-// NOTE: V8 caches FunctionTemplates for a lifetime of a web page for its own
-// internal reasons, thus it is generally a good idea to cache the template
-// returned by this function.  Otherwise, repeated method invocations from JS
-// will create substantial memory leaks. See http://crbug.com/463487.
-template <typename Sig>
-v8::Local<v8::FunctionTemplate> CreateFunctionTemplate(
-    v8::Isolate* isolate,
-    const base::Callback<Sig> callback,
-    int callback_flags = 0) {
-  typedef internal::CallbackHolder<Sig> HolderT;
-  HolderT* holder = new HolderT(isolate, callback, callback_flags);
-    }
-    
-    namespace mate {
-    }
-    
-    namespace mate {
-    }
-    
-      // Path in file system to the lock.
-  base::FilePath lock_path_;
-    
-    
-    {  live_xids_.erase(xid);
-}
-    
-    // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-    {}  // namespace
-    
-    
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
-      routing_id,
-      object_id,
-      type,
-      *static_cast<base::DictionaryValue*>(value_option.get())));
-  return v8::Undefined(isolate);
-}
-    
-    bool MenuDelegate::IsCommandIdChecked(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
-    
-    namespace nw {
-    }
-    
-    ExtensionFunction::ResponseAction
-NwAppQuitFunction::Run() {
-  ExtensionService* service =
-    ExtensionSystem::Get(browser_context())->extension_service();
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&NwAppQuitFunction::DoJob,
-                   service,
-                   extension_id()));
-  return RespondNow(NoArguments());
-}
-    
-        bool ReadImage(ClipboardData& data) {
-      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
-      std::vector<unsigned char> encoded_image;
-      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
-    }
-    
-     protected:
-  ~NwClipboardSetListSyncFunction() override;
-    
-    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    
-    {	
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    #define ETCCOMP_MIN_EFFORT_LEVEL (0.0f)
-#define ETCCOMP_DEFAULT_EFFORT_LEVEL (40.0f)
-#define ETCCOMP_MAX_EFFORT_LEVEL (100.0f)
+    REGISTER_CUDA_OPERATOR(LC, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LCGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
-    		unsigned int	m_uiEncodingIterations;
-		bool			m_boolDone;						// all iterations have been done
-		ErrorMetric		m_errormetric;
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
-    						// pre-compute decoded pixels for each selector
-						ColorFloatRGBA afrgbaSelectors[SELECTORS];
-						assert(SELECTORS == 4);
-						afrgbaSelectors[0] = (frgbaColor + s_aafCwTable[uiCW][0]).ClampRGB();
-						afrgbaSelectors[1] = (frgbaColor + s_aafCwTable[uiCW][1]).ClampRGB();
-						afrgbaSelectors[2] = (frgbaColor + s_aafCwTable[uiCW][2]).ClampRGB();
-						afrgbaSelectors[3] = (frgbaColor + s_aafCwTable[uiCW][3]).ClampRGB();
+      /**
+   * @brief Given the top blob error gradients, compute the bottom blob error
+   *        gradients.
+   *
+   * @param top
+   *     the output blobs, whose diff fields store the gradient of the error
+   *     with respect to themselves
+   * @param propagate_down
+   *     a vector with equal length to bottom, with each index indicating
+   *     whether to propagate the error gradients down to the bottom blob at
+   *     the corresponding index
+   * @param bottom
+   *     the input blobs, whose diff fields will store the gradient of the error
+   *     with respect to themselves after Backward is run
+   *
+   * The Backward wrapper calls the relevant device wrapper function
+   * (Backward_cpu or Backward_gpu) to compute the bottom blob diffs given the
+   * top blob diffs.
+   *
+   * Your layer should implement Backward_cpu and (optionally) Backward_gpu.
+   */
+  inline void Backward(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down,
+      const vector<Blob<Dtype>*>& bottom);
     
-      Compression level can be specified in parameter level. At the moment,
-  only level 1 and level 2 are supported.
-  Level 1 is the fastest compression and generally useful for short data.
-  Level 2 is slightly slower but it gives better compression ratio.
+      virtual inline const char* type() const { return 'AbsVal'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
-#undef MULT32_32_Q31
-#define MULT32_32_Q31(a,b) (opus_val32)((((opus_int64)(a)) * ((opus_int64)(b)))>>31)
+    #include <vector>
     
-    #endif /* OPUS_ARM_INLINE_MEDIA */
-    
-    
-//--------------------------------------------------------------------------------
-//
-//  groupNumberFromName()
-//
-//--------------------------------------------------------------------------------
-int32_t RegexPattern::groupNumberFromName(const UnicodeString &groupName, UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return 0;
+    namespace caffe {
     }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
     
-    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
-        DecimalFormat *fmtToAdopt,
-        const UnicodeString &beginMarkup,
-        const UnicodeString &endMarkup,
-        UErrorCode &status) {
-    return createInstance(
-            fmtToAdopt,
-            new MarkupStyle(beginMarkup, endMarkup),
-            status);
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
+    
+    
+    {}  // namespace caffe
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+            friend Rational operator&(Rational lhs, Rational const& rhs);
+        friend Rational operator|(Rational lhs, Rational const& rhs);
+        friend Rational operator^(Rational lhs, Rational const& rhs);
+    
+    
+    {    if (m_curOperandIndex < static_cast<int>(m_operandIndices.size()))
+    {
+        m_operandIndices[m_curOperandIndex++] = ich;
+    }
 }
     
-    U_CAPI UBool U_EXPORT2
-uhash_equalsScriptSet(const UElement key1, const UElement key2) {
-    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
-    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
-    return (*s1 == *s2);
+    vector<shared_ptr<HISTORYITEM>> const& CalculatorHistory::GetHistory()
+{
+    return m_historyItems;
 }
     
-        /* We don't always have to compute endCompare.  For many instances,
-     * startCompare is enough to determine if we are in DST or not.  In the
-     * northern hemisphere, if we are before the start rule, we can't have
-     * DST.  In the southern hemisphere, if we are after the start rule, we
-     * must have DST.  This is reflected in the way the next if statement
-     * (not the one immediately following) short circuits. */
-    if(southern != (startCompare >= 0)) {
-        endCompare = compareToRule((int8_t)month, (int8_t)monthLength, (int8_t)prevMonthLength,
-                                   (int8_t)day, (int8_t)dayOfWeek, millis,
-                                   endTimeMode == WALL_TIME ? dstSavings :
-                                    (endTimeMode == UTC_TIME ? -rawOffset : 0),
-                                   endMode, (int8_t)endMonth, (int8_t)endDayOfWeek,
-                                   (int8_t)endDay, endTime);
+        // Remove zeros
+    bool fDigitsFound = false;
+    int trimIdx = 0;
+    for (unsigned int i = 0; i < m_token.size(); i++)
+    {
+        if (m_token.at(i) != chZero)
+        {
+            if (m_token.at(i) == decimalSymbol)
+            {
+                trimIdx = i - 1;
+            }
+            else
+            {
+                trimIdx = i;
+            }
+            fDigitsFound = true;
+            break;
+        }
     }
     
+            // IIterable<Object^>
+         // Not implemented
+        virtual Windows::Foundation::Collections::IIterator<Platform::Object^>^ First() = Windows::Foundation::Collections::IIterable<Platform::Object^>::First
+            {
+                throw ref new Platform::NotImplementedException();
+            }
     
-void SimpleDateFormat::NSOverride::free() {
-    NSOverride *cur = this;
-    while (cur) {
-        NSOverride *next = cur->next;
-        delete cur;
-        cur = next;
+            static NarratorAnnouncement ^ GetMemoryClearedAnnouncement(Platform::String ^ announcement);
+        static NarratorAnnouncement ^ GetMemoryItemChangedAnnouncement(Platform::String ^ announcement);
+        static NarratorAnnouncement ^ GetMemoryItemAddedAnnouncement(Platform::String ^ announcement);
+    
+    
+    {
+    {        // For now reusing the shim to allow prefetch.
+        // Please only use a subset of the shim interface that includes
+        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
+        // Shim will be deleted in the future versions.
+        std::shared_ptr<ReaderShim<float>> m_shim;
+        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
+    };
+}
+
+    
+        std::wstring NDArrayView::AsString() const
+    {
+        wstringstream wss;
+        std::wstring device = DeviceKindName(m_device.Type());
+        wss << L'NDArrayView(' << m_viewShape.AsString() << L', ' << device << L')';
+        return wss.str();
     }
+    
+                m_samples.second += samples;
+            m_updates.second++;
+            m_totalUpdates++;
+            
+            if (ShouldWriteUpdate(m_updates.second))
+            {
+                // Time to output the accumulated updates.
+                // Note that we take snapshot of the accumulated loss/metric only when we want to write.
+                // We do it this way on purpose, since accumulated loss/metric may be stored on a GPU
+                // and we want to minimize the number of GPU->CPU data transfers.
+                if (accumulatedLoss)
+                {
+                    m_loss.second = accumulatedLoss->AsScalar<double>();
+                }
+    }
+    
+            static bool IsUDF(const FunctionPtr& f);
+    
+                    auto numColsPerSample = fullyDefinedSampleShape.SubShape(ShapeRowColSplitPoint(fullyDefinedSampleShape, isDataSparse, /*noDynamicAxes =*/ false)).TotalSize();
+                std::vector<SparseIndexType> colStarts;
+                std::vector<SparseIndexType> rowIndices;
+                std::vector<char> nonZeroValues;
+                for (size_t i = 0; i < numSequences; ++i)
+                {
+                    switch (dataType)
+                    {
+                    case DataType::Float:
+                        AppendSparseSequenceData<float>(sequences[i], colStarts, rowIndices, nonZeroValues, maxSequenceLength * numColsPerSample);
+                        break;
+                    case DataType::Double:
+                        AppendSparseSequenceData<double>(sequences[i], colStarts, rowIndices, nonZeroValues, maxSequenceLength * numColsPerSample);
+                        break;
+                    default:
+                        NOT_IMPLEMENTED;
+                    }
+                }
+    
+            const NDShape& Shape() const override { return m_unpackedShape; }
+        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
+        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
+        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
+        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
+    
+            NDShape m_shape;
+        VariableKind m_varKind;
+        ::CNTK::DataType m_dataType;
+        std::weak_ptr<Function> m_ownerFunction;
+        std::unique_ptr<std::once_flag> m_initValueFlag;
+        NDArrayViewPtr m_value;
+        std::unique_ptr<ParameterInitializer> m_valueInitializer;
+        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
+        bool m_needsGradient;
+        std::wstring m_name;
+        std::vector<Axis> m_dynamicAxes;
+        bool m_isSparse;
+        std::wstring m_uid;
+        std::atomic<size_t> m_valueTimeStamp;
+        Variable m_blockFunctionVariableMapping;
+    
+    // StartMinibatchLoop - Startup a minibatch loop
+//  mbSize - [in] size of the minibatch (number of frames, etc.)
+//  epoch - [in] epoch number for this loop
+//  requestedEpochSamples - [in] number of samples to randomize, defaults to requestDataSize which uses the number of samples there are in the dataset
+void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, size_t requestedEpochSamples)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, requestedEpochSamples);
 }
     
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword
-     */
-    static Form fromString(const UnicodeString &keyword, UErrorCode &errorCode) {
-        return static_cast<Form>(indexFromString(keyword, errorCode));
+    public:
+    virtual const std::wstring GetRequestedDynamicAxis() const { return m_dynamicAxisNodeName; }
+    
+    // This constructor helps with BrainScript integration
+template<class ElemType>
+OptimizedRNNStackNode<ElemType>::OptimizedRNNStackNode(const ScriptableObjects::IConfigRecordPtr configp)
+    : Base(configp->Get(L'deviceId'), L'<placeholder>'), 
+    m_rnnAttributes(configp->Get(L'bidirectional'), configp->Get(L'numLayers'), configp->Get(L'hiddenDims'), configp->Get(L'recurrentOp'), configp->Get(L'axis')),
+    m_BackwardDataCalledYet(false)
+{
+    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+}
+    
+    namespace HPHP { namespace HHBBC {
+    }
     }
     
-        /**
-     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
-     * and return the pointer.
-     * @return the UnicodeMatcher point.
-     */
-    virtual UnicodeMatcher* toMatcher() const;
+    
+    {}
+    
+    void Label::branchFar(Assembler& a,
+                  BranchConditions bc,
+                  LinkReg lr,
+                  ImmType immt,
+                  bool immMayChange) {
+  // Marking current address for patchAbsolute
+  addJump(&a);
+    }
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
+    }
+  }
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+      // overriding ResourceData
+  const String& o_getClassNameHook() const override { return classnameof(); }
+    
+    #include 'hphp/runtime/base/url.h'
+#include 'hphp/util/assertions.h'
+    
+    static void ImGui_ImplDX10_SetupRenderState(ImDrawData* draw_data, ID3D10Device* ctx)
+{
+    // Setup viewport
+    D3D10_VIEWPORT vp;
+    memset(&vp, 0, sizeof(D3D10_VIEWPORT));
+    vp.Width = (UINT)draw_data->DisplaySize.x;
+    vp.Height = (UINT)draw_data->DisplaySize.y;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = vp.TopLeftY = 0;
+    ctx->RSSetViewports(1, &vp);
+    }
+    
+    static void ImGui_ImplOpenGL2_SetupRenderState(ImDrawData* draw_data, int fb_width, int fb_height)
+{
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_SCISSOR_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+    
+        ImRect bb(pos, pos + ImVec2(g.FontSize, g.FontSize) + g.Style.FramePadding * 2.0f);
+    ItemAdd(bb, id);
+    bool hovered, held;
+    bool pressed = ButtonBehavior(bb, id, &hovered, &held, ImGuiButtonFlags_None);
+    
+      // Store the path to our archive for later exfiltration
+  archivePath_ = carveDir_ / fs::path(kCarveNamePrefix + carveGuid_ + '.tar');
+  compressPath_ =
+      carveDir_ / fs::path(kCarveNamePrefix + carveGuid_ + '.tar.zst');
+    
+      /*
+   * @brief the uri used to begin POSTing carve data
+   *
+   * This endpoint should negotiate the details of the carve, as well
+   * as give the client a session id used to continue POSTing the data.
+   */
+  std::string startUri_;
+    
+    JSON getExamplePacksConfig() {
+  std::string content;
+  auto const filepath = getTestConfigDirectory() / 'test_inline_pack.conf';
+  auto status = readFile(filepath, content);
+  EXPECT_TRUE(status.ok())
+      << 'Could not read file: ' << boost::io::quoted(filepath.string())
+      << ', because: ' << status.what();
+  JSON doc = JSON::newObject();
+  doc.fromString(content);
+  return doc;
+}
+    
+    ExpectedSuccess<DatabaseError> RocksdbDatabase::putStringsUnsafe(
+    const std::string& domain,
+    const std::vector<std::pair<std::string, std::string>>& data) {
+  auto handle = getHandle(domain);
+  if (handle) {
+    std::shared_ptr<Handle> handle_ptr = handle.take();
+    rocksdb::WriteBatch batch;
+    }
+    }
+    
+      rj::Document doc;
+  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
+    return;
+  }
+    
+    #include 'plugin.h'
