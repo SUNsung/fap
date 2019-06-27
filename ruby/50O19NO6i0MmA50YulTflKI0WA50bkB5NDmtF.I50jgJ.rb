@@ -1,118 +1,124 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            prefix: '#{prefix}',
-          })
-        end').runner.execute(:test)
-    
-          it 'shellescapes the exclude_dirs correctly' do
-        directory = 'My Dir'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
-      end
-    
-          it 'should shell escape keychain names when checking for installation' do
-        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
+            def order_top_with_pinned_category_for(score)
+      # display pinned topics first
+      -'CASE WHEN (COALESCE(topics.pinned_at, '#{lowest_date}') > COALESCE(tu.cleared_pinned_at, '#{lowest_date}')) THEN 0 ELSE 1 END,
+       top_topics.#{score} DESC,
+       topics.bumped_at DESC'
     end
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+      def create
+    raise Discourse::NotFound unless report_collection_enabled?
+    
+          script_srcs = parse(builder.build)['script-src']
+    
+        def normalize(directive)
+      directive.to_s.gsub('-', '_').to_sym
     end
     
-          def mailer_sender(mapping, sender = :from)
-        default_sender = default_params[sender]
-        if default_sender.present?
-          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
-        elsif Devise.mailer_sender.is_a?(Proc)
-          Devise.mailer_sender.call(mapping.name)
-        else
-          Devise.mailer_sender
-        end
-      end
-    
-        def authenticatable?
-      @authenticatable ||= self.modules.any? { |m| m.to_s =~ /authenticatable/ }
+        def report_uri
+      '#{base_url}/csp_reports'
     end
-    
-            if Devise.activerecord51?
-          def clear_reset_password_token?
-            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
-            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
-              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
-            end
-    
-          # A callback initiated after successfully being remembered. This can be
-      # used to insert your own logic that is only run after the user is
-      # remembered.
-      #
-      # Example:
-      #
-      #   def after_remembered
-      #     self.update_attribute(:invite_code, nil)
-      #   end
-      #
-      def after_remembered
-      end
-    
-      before_action :set_account
-  respond_to :txt
-    
-      private
-    
-      def compatible_locale
-    http_accept_language.compatible_language_from(available_locales)
   end
-    
-      included do
-    before_action :set_session_activity
-  end
-    
-    Given(/^a linked file '(.*?)'$/) do |file|
-  # ignoring other linked files
-  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
 end
+
     
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
+        def build_theme_extension(raw)
+      {}.tap do |extension|
+        raw.split('|').each do |entry|
+          directive, source = entry.split(':', 2).map(&:strip)
+    
+      it 'can be extended by plugins' do
+    plugin = Class.new(Plugin::Instance) do
+      attr_accessor :enabled
+      def enabled?
+        @enabled
+      end
+    end.new(nil, '#{Rails.root}/spec/fixtures/plugins/csp_extension/plugin.rb')
+    
+      def self.last_seen_key(id)
+    # frozen
+    -'user-last-seen:#{id}'
   end
     
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
+        # possible we have an api call, impersonate
+    if api_key
+      current_user = lookup_api_user(api_key, request)
+      raise Discourse::InvalidAccess.new(I18n.t('invalid_api_credentials'), nil, custom_message: 'invalid_api_credentials') unless current_user
+      raise Discourse::InvalidAccess if current_user.suspended? || !current_user.active
+      @env[API_KEY_ENV] = true
+      rate_limit_admin_api_requests(api_key)
+    end
+    
+        def URIEncodePair(cc1, cc2, result, index)
+      u = ((cc1 >> 6) & 0xF) + 1;
+      w = (cc1 >> 2) & 0xF;
+      x = cc1 & 3;
+      y = (cc2 >> 6) & 0xF;
+      z = cc2 & 63;
+      octets = Array.new(4);
+      octets[0] = (u >> 2) + 240;
+      octets[1] = (((u & 3) << 4) | w) + 128;
+      octets[2] = ((x << 4) | y) + 128;
+      octets[3] = z + 128;
+      return URIEncodeOctets(octets, result, index);
+    end
+    
+          def show_revert
+        !@message
       end
     
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
+          # return path set in app.rb not @page.path
+      def path
+        @path
       end
     
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+    MiniTest::Reporters.use!
+    
+          def call(env)
+        @mg.call(env)
+      end
+    end
+    
+    # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
+    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
+  end
+end
+
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
+    end
+    
+      s.authors  = ['Tom Preston-Werner', 'Rick Olson']
+  s.email    = 'tom@github.com'
+  s.homepage = 'http://github.com/gollum/gollum'
+    
+        context 'active sessions' do
+      before do
+        cmd = '#{project.tmux_command} ls 2> /dev/null'
+        resp = ''\
+          'foo: 1 window (created Sun May 25 10:12:00 1986) [0x0] (detached)\n'\
+          'bar: 1 window (created Sat Sept 01 00:00:00 1990) [0x0] (detached)'
+        call_tmux_ls = receive(:`).with(cmd).at_least(:once).and_return(resp)
+    
+        context '$EDITOR is not set' do
+      before do
+        allow(ENV).to receive(:[]).with('EDITOR') { nil }
+      end
+    
+          Kernel.system('$EDITOR #{new_config_path}')
     end
