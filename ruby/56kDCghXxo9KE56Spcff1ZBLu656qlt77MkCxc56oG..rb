@@ -1,110 +1,121 @@
 
         
-        class ContentSecurityPolicy
-  class Builder
-    EXTENDABLE_DIRECTIVES = %i[
-      base_uri
-      object_src
-      script_src
-      worker_src
-    ].freeze
-    
-              headers.each do |name, val|
-            io.write '#{name}: #{val}\r\n'
-          end
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Then(/^(\d+) valid releases are kept/) do |num|
-  test = %Q([ $(ls -g #{TestApp.releases_path} | grep -E '[0-9]{14}' | wc -l) == '#{num}' ])
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
-    
-            filter = Object.new
-        def filter.filter(servers)
-          block.call(servers)
-        end
-      elsif !filter.respond_to? :filter
-        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
-                         'not have a public 'filter' method'
-      end
-      @custom_filters ||= []
-      @custom_filters << filter
+            def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
     end
     
-          def value_or_default
-        if response.empty?
-          default
+        def configure_scm
+      Capistrano::Configuration::SCMResolver.new.resolve
+    end
+    
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
         else
-          response
+          servers_by_key[key] = new_host.with(properties)
         end
       end
     
-          def initialize(variables)
-        super(variables)
-        @validators = {}
+          def delete(key)
+        values.delete(key)
       end
     
-          if prefers_plain_text?(env)
-        content_type = 'text/plain'
-        body = dump_exception(e)
-      else
-        content_type = 'text/html'
-        body = pretty(env, e)
-      end
-    
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+      def self.link(title)
+    title.downcase.gsub(/(?!-)\W /, '-').gsub(' ', '-').gsub(/(?!-)\W/, '')
   end
     
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
+          # Creates a masked version of the authenticity token that varies
+      # on each request. The masking is used to mitigate SSL attacks
+      # like BREACH.
+      def mask_token(token)
+        token = decode_token(token)
+        one_time_pad = SecureRandom.random_bytes(token.length)
+        encrypted_token = xor_byte_strings(one_time_pad, token)
+        masked_token = one_time_pad + encrypted_token
+        encode_token(masked_token)
       end
     
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
-  end
+          def self.default_reaction(reaction)
+        alias_method(:default_reaction, reaction)
+      end
     
-      context 'with default reaction' do
-    before(:each) do
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
+    
+      context 'with custom session key' do
+    it 'denies requests with duplicate session cookies' do
       mock_app do
-        use Rack::Protection::CookieTossing
+        use Rack::Protection::CookieTossing, :session_key => '_session'
         run DummyApp
       end
+    
+      # puts '\n== Copying sample files =='
+  # unless File.exist?('config/database.yml')
+  #   cp 'config/database.yml.sample', 'config/database.yml'
+  # end
+    
+      # Use a real queuing backend for Active Job (and separate queues per environment)
+  # config.active_job.queue_adapter     = :resque
+  # config.active_job.queue_name_prefix = 'myapp_#{Rails.env}'
+    
+        # Parse 'epoch:version-iteration' in the version string
+    version_re = /^(?:([0-9]+):)?(.+?)(?:-(.*))?$/
+    m = version_re.match(control['pkgver'][0])
+    if !m
+      raise 'Unsupported version string '#{control['pkgver'][0]}''
+    end
+    self.epoch, self.version, self.iteration = m.captures
+    
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
+        end
+      end
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
     end
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+        cwd = ::Dir.pwd
+    ::Dir.chdir(staging_path)
     
-        if local_gems.size > 0
-      if update_all?
-        plugins_with_path = local_gems
-      else
-        plugins_with_path = plugins_arg & local_gems
-      end
+          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
+      target = File.join(base, 'files')
+      actions_script = File.join(base, 'install_actions.sh')
+      ::PleaseRun::Installer.install_files(platform, target, false)
+      ::PleaseRun::Installer.write_actions(platform, actions_script)
+    end
+    
+        ::Dir.mkdir(File.join(builddir, 'manifests'))
+    manifests.each do |manifest|
+      dir = File.join(builddir, 'manifests', File.dirname(manifest))
+      logger.info('manifests targeting: #{dir}')
+      ::Dir.mkdir(dir) if !File.directory?(dir)
+    
+      option '--user', 'USER',
+    'Set the user to USER in the prototype files.',
+    :default => 'root'
+    
+      if FPM::Issues::TarWriter.has_issues_with_add_symlink?
+    # Backport Symlink Support to TarWriter
+    # https://github.com/rubygems/rubygems/blob/4a778c9c2489745e37bcc2d0a8f12c601a9c517f/lib/rubygems/package/tar_writer.rb#L239-L253
+    def add_symlink(name, target, mode)
+      check_closed
