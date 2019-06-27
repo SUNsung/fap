@@ -1,731 +1,177 @@
 
         
-        bool ParseInt64(const std::string& str, int64_t *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    char *endp = NULL;
-    errno = 0; // strtoll will not set errno if valid
-    long long int n = strtoll(str.c_str(), &endp, 10);
-    if(out) *out = (int64_t)n;
-    // Note that strtoll returns a *long long int*, so even if strtol doesn't report a over/underflow
-    // we still have to check that the returned value is within the range of an *int64_t*.
-    return endp && *endp == 0 && !errno &&
-        n >= std::numeric_limits<int64_t>::min() &&
-        n <= std::numeric_limits<int64_t>::max();
-}
+        #include 'native_mate/function_template.h'
     
-    #endif // BITCOIN_CRYPTO_RIPEMD160_H
+    
+    {}  // namespace mate
 
     
-            'Lloop1_%=:'
-        'movdqa 0x0(%13),%%xmm9;'
-        'paddd  %%xmm4,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm7,%%xmm0;'
-        'mov    %k2,%10;'
-        'ror    $0xe,%10;'
-        'mov    %3,%11;'
-        'palignr $0x4,%%xmm6,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %k2,%10;'
-        'mov    %7,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm5,%%xmm1;'
-        'xor    %3,%11;'
-        'xor    %8,%12;'
-        'paddd  %%xmm4,%%xmm0;'
-        'xor    %k2,%10;'
-        'and    %k2,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm4,%%xmm1;'
-        'xor    %3,%11;'
-        'ror    $0x6,%10;'
-        'xor    %8,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %3,%10;'
-        'add    %12,%9;'
-        'mov    %3,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %5,%10;'
-        'add    %9,%6;'
-        'and    %5,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %4,%10;'
-        'add    %11,%9;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%9;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %6,%10;'
-        'mov    %9,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %6,%10;'
-        'mov    %k2,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %9,%11;'
-        'ror    $0x5,%10;'
-        'xor    %7,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %6,%10;'
-        'and    %6,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %9,%11;'
-        'xor    %7,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %9,%10;'
-        'add    %12,%8;'
-        'mov    %9,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %4,%10;'
-        'add    %8,%5;'
-        'and    %4,%12;'
-        'pshufd $0xfa,%%xmm7,%%xmm2;'
-        'and    %3,%10;'
-        'add    %11,%8;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%8;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %5,%10;'
-        'mov    %8,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %5,%10;'
-        'ror    $0x9,%11;'
-        'mov    %6,%12;'
-        'xor    %8,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %k2,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %5,%10;'
-        'and    %5,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %8,%11;'
-        'xor    %k2,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %8,%10;'
-        'add    %12,%7;'
-        'mov    %8,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %3,%10;'
-        'add    %7,%4;'
-        'and    %3,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %9,%10;'
-        'add    %11,%7;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%7;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %4,%10;'
-        'ror    $0xe,%10;'
-        'mov    %7,%11;'
-        'movdqa %%xmm2,%%xmm4;'
-        'ror    $0x9,%11;'
-        'xor    %4,%10;'
-        'mov    %5,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %7,%11;'
-        'xor    %6,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %4,%10;'
-        'and    %4,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm4;'
-        'xor    %7,%11;'
-        'ror    $0x6,%10;'
-        'xor    %6,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm4;'
-        'mov    %7,%10;'
-        'add    %12,%k2;'
-        'mov    %7,%12;'
-        'pshufb %%xmm11,%%xmm4;'
-        'or     %9,%10;'
-        'add    %k2,%3;'
-        'and    %9,%12;'
-        'paddd  %%xmm0,%%xmm4;'
-        'and    %8,%10;'
-        'add    %11,%k2;'
-        'or     %12,%10;'
-        'add    %10,%k2;'
-        'movdqa 0x10(%13),%%xmm9;'
-        'paddd  %%xmm5,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm4,%%xmm0;'
-        'mov    %3,%10;'
-        'ror    $0xe,%10;'
-        'mov    %k2,%11;'
-        'palignr $0x4,%%xmm7,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %3,%10;'
-        'mov    %4,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm6,%%xmm1;'
-        'xor    %k2,%11;'
-        'xor    %5,%12;'
-        'paddd  %%xmm5,%%xmm0;'
-        'xor    %3,%10;'
-        'and    %3,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm5,%%xmm1;'
-        'xor    %k2,%11;'
-        'ror    $0x6,%10;'
-        'xor    %5,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %k2,%10;'
-        'add    %12,%6;'
-        'mov    %k2,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %8,%10;'
-        'add    %6,%9;'
-        'and    %8,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %7,%10;'
-        'add    %11,%6;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%6;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %9,%10;'
-        'mov    %6,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %9,%10;'
-        'mov    %3,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %6,%11;'
-        'ror    $0x5,%10;'
-        'xor    %4,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %9,%10;'
-        'and    %9,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %6,%11;'
-        'xor    %4,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %6,%10;'
-        'add    %12,%5;'
-        'mov    %6,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %7,%10;'
-        'add    %5,%8;'
-        'and    %7,%12;'
-        'pshufd $0xfa,%%xmm4,%%xmm2;'
-        'and    %k2,%10;'
-        'add    %11,%5;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%5;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %8,%10;'
-        'mov    %5,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %8,%10;'
-        'ror    $0x9,%11;'
-        'mov    %9,%12;'
-        'xor    %5,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %3,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %8,%10;'
-        'and    %8,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %5,%11;'
-        'xor    %3,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %5,%10;'
-        'add    %12,%4;'
-        'mov    %5,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %k2,%10;'
-        'add    %4,%7;'
-        'and    %k2,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %6,%10;'
-        'add    %11,%4;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%4;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %7,%10;'
-        'ror    $0xe,%10;'
-        'mov    %4,%11;'
-        'movdqa %%xmm2,%%xmm5;'
-        'ror    $0x9,%11;'
-        'xor    %7,%10;'
-        'mov    %8,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %4,%11;'
-        'xor    %9,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %7,%10;'
-        'and    %7,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm5;'
-        'xor    %4,%11;'
-        'ror    $0x6,%10;'
-        'xor    %9,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm5;'
-        'mov    %4,%10;'
-        'add    %12,%3;'
-        'mov    %4,%12;'
-        'pshufb %%xmm11,%%xmm5;'
-        'or     %6,%10;'
-        'add    %3,%k2;'
-        'and    %6,%12;'
-        'paddd  %%xmm0,%%xmm5;'
-        'and    %5,%10;'
-        'add    %11,%3;'
-        'or     %12,%10;'
-        'add    %10,%3;'
-        'movdqa 0x20(%13),%%xmm9;'
-        'paddd  %%xmm6,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'movdqa %%xmm5,%%xmm0;'
-        'mov    %k2,%10;'
-        'ror    $0xe,%10;'
-        'mov    %3,%11;'
-        'palignr $0x4,%%xmm4,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %k2,%10;'
-        'mov    %7,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm7,%%xmm1;'
-        'xor    %3,%11;'
-        'xor    %8,%12;'
-        'paddd  %%xmm6,%%xmm0;'
-        'xor    %k2,%10;'
-        'and    %k2,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm6,%%xmm1;'
-        'xor    %3,%11;'
-        'ror    $0x6,%10;'
-        'xor    %8,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %3,%10;'
-        'add    %12,%9;'
-        'mov    %3,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %5,%10;'
-        'add    %9,%6;'
-        'and    %5,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %4,%10;'
-        'add    %11,%9;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%9;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %6,%10;'
-        'mov    %9,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %6,%10;'
-        'mov    %k2,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %9,%11;'
-        'ror    $0x5,%10;'
-        'xor    %7,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %6,%10;'
-        'and    %6,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %9,%11;'
-        'xor    %7,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %9,%10;'
-        'add    %12,%8;'
-        'mov    %9,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %4,%10;'
-        'add    %8,%5;'
-        'and    %4,%12;'
-        'pshufd $0xfa,%%xmm5,%%xmm2;'
-        'and    %3,%10;'
-        'add    %11,%8;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%8;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %5,%10;'
-        'mov    %8,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %5,%10;'
-        'ror    $0x9,%11;'
-        'mov    %6,%12;'
-        'xor    %8,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %k2,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %5,%10;'
-        'and    %5,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %8,%11;'
-        'xor    %k2,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %8,%10;'
-        'add    %12,%7;'
-        'mov    %8,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %3,%10;'
-        'add    %7,%4;'
-        'and    %3,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %9,%10;'
-        'add    %11,%7;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%7;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %4,%10;'
-        'ror    $0xe,%10;'
-        'mov    %7,%11;'
-        'movdqa %%xmm2,%%xmm6;'
-        'ror    $0x9,%11;'
-        'xor    %4,%10;'
-        'mov    %5,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %7,%11;'
-        'xor    %6,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %4,%10;'
-        'and    %4,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm6;'
-        'xor    %7,%11;'
-        'ror    $0x6,%10;'
-        'xor    %6,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm6;'
-        'mov    %7,%10;'
-        'add    %12,%k2;'
-        'mov    %7,%12;'
-        'pshufb %%xmm11,%%xmm6;'
-        'or     %9,%10;'
-        'add    %k2,%3;'
-        'and    %9,%12;'
-        'paddd  %%xmm0,%%xmm6;'
-        'and    %8,%10;'
-        'add    %11,%k2;'
-        'or     %12,%10;'
-        'add    %10,%k2;'
-        'movdqa 0x30(%13),%%xmm9;'
-        'paddd  %%xmm7,%%xmm9;'
-        'movdqa %%xmm9,%16;'
-        'add    $0x40,%13;'
-        'movdqa %%xmm6,%%xmm0;'
-        'mov    %3,%10;'
-        'ror    $0xe,%10;'
-        'mov    %k2,%11;'
-        'palignr $0x4,%%xmm5,%%xmm0;'
-        'ror    $0x9,%11;'
-        'xor    %3,%10;'
-        'mov    %4,%12;'
-        'ror    $0x5,%10;'
-        'movdqa %%xmm4,%%xmm1;'
-        'xor    %k2,%11;'
-        'xor    %5,%12;'
-        'paddd  %%xmm7,%%xmm0;'
-        'xor    %3,%10;'
-        'and    %3,%12;'
-        'ror    $0xb,%11;'
-        'palignr $0x4,%%xmm7,%%xmm1;'
-        'xor    %k2,%11;'
-        'ror    $0x6,%10;'
-        'xor    %5,%12;'
-        'movdqa %%xmm1,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    %16,%12;'
-        'movdqa %%xmm1,%%xmm3;'
-        'mov    %k2,%10;'
-        'add    %12,%6;'
-        'mov    %k2,%12;'
-        'pslld  $0x19,%%xmm1;'
-        'or     %8,%10;'
-        'add    %6,%9;'
-        'and    %8,%12;'
-        'psrld  $0x7,%%xmm2;'
-        'and    %7,%10;'
-        'add    %11,%6;'
-        'por    %%xmm2,%%xmm1;'
-        'or     %12,%10;'
-        'add    %10,%6;'
-        'movdqa %%xmm3,%%xmm2;'
-        'mov    %9,%10;'
-        'mov    %6,%11;'
-        'movdqa %%xmm3,%%xmm8;'
-        'ror    $0xe,%10;'
-        'xor    %9,%10;'
-        'mov    %3,%12;'
-        'ror    $0x9,%11;'
-        'pslld  $0xe,%%xmm3;'
-        'xor    %6,%11;'
-        'ror    $0x5,%10;'
-        'xor    %4,%12;'
-        'psrld  $0x12,%%xmm2;'
-        'ror    $0xb,%11;'
-        'xor    %9,%10;'
-        'and    %9,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm1;'
-        'xor    %6,%11;'
-        'xor    %4,%12;'
-        'psrld  $0x3,%%xmm8;'
-        'add    %10,%12;'
-        'add    4+%16,%12;'
-        'ror    $0x2,%11;'
-        'pxor   %%xmm2,%%xmm1;'
-        'mov    %6,%10;'
-        'add    %12,%5;'
-        'mov    %6,%12;'
-        'pxor   %%xmm8,%%xmm1;'
-        'or     %7,%10;'
-        'add    %5,%8;'
-        'and    %7,%12;'
-        'pshufd $0xfa,%%xmm6,%%xmm2;'
-        'and    %k2,%10;'
-        'add    %11,%5;'
-        'paddd  %%xmm1,%%xmm0;'
-        'or     %12,%10;'
-        'add    %10,%5;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %8,%10;'
-        'mov    %5,%11;'
-        'ror    $0xe,%10;'
-        'movdqa %%xmm2,%%xmm8;'
-        'xor    %8,%10;'
-        'ror    $0x9,%11;'
-        'mov    %9,%12;'
-        'xor    %5,%11;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %3,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %8,%10;'
-        'and    %8,%12;'
-        'psrld  $0xa,%%xmm8;'
-        'ror    $0xb,%11;'
-        'xor    %5,%11;'
-        'xor    %3,%12;'
-        'ror    $0x6,%10;'
-        'pxor   %%xmm3,%%xmm2;'
-        'add    %10,%12;'
-        'ror    $0x2,%11;'
-        'add    8+%16,%12;'
-        'pxor   %%xmm2,%%xmm8;'
-        'mov    %5,%10;'
-        'add    %12,%4;'
-        'mov    %5,%12;'
-        'pshufb %%xmm10,%%xmm8;'
-        'or     %k2,%10;'
-        'add    %4,%7;'
-        'and    %k2,%12;'
-        'paddd  %%xmm8,%%xmm0;'
-        'and    %6,%10;'
-        'add    %11,%4;'
-        'pshufd $0x50,%%xmm0,%%xmm2;'
-        'or     %12,%10;'
-        'add    %10,%4;'
-        'movdqa %%xmm2,%%xmm3;'
-        'mov    %7,%10;'
-        'ror    $0xe,%10;'
-        'mov    %4,%11;'
-        'movdqa %%xmm2,%%xmm7;'
-        'ror    $0x9,%11;'
-        'xor    %7,%10;'
-        'mov    %8,%12;'
-        'ror    $0x5,%10;'
-        'psrlq  $0x11,%%xmm2;'
-        'xor    %4,%11;'
-        'xor    %9,%12;'
-        'psrlq  $0x13,%%xmm3;'
-        'xor    %7,%10;'
-        'and    %7,%12;'
-        'ror    $0xb,%11;'
-        'psrld  $0xa,%%xmm7;'
-        'xor    %4,%11;'
-        'ror    $0x6,%10;'
-        'xor    %9,%12;'
-        'pxor   %%xmm3,%%xmm2;'
-        'ror    $0x2,%11;'
-        'add    %10,%12;'
-        'add    12+%16,%12;'
-        'pxor   %%xmm2,%%xmm7;'
-        'mov    %4,%10;'
-        'add    %12,%3;'
-        'mov    %4,%12;'
-        'pshufb %%xmm11,%%xmm7;'
-        'or     %6,%10;'
-        'add    %3,%k2;'
-        'and    %6,%12;'
-        'paddd  %%xmm0,%%xmm7;'
-        'and    %5,%10;'
-        'add    %11,%3;'
-        'or     %12,%10;'
-        'add    %10,%3;'
-        'sub    $0x1,%1;'
-        'jne    Lloop1_%=;'
-        'mov    $0x2,%1;'
+    #include 'base/logging.h'
+#include 'native_mate/dictionary.h'
+#include 'native_mate/object_template_builder.h'
     
+    // This set of templates invokes a base::Callback by converting the Arguments
+// into native types. It relies on the function_template.h to provide helper
+// templates.
+inline WrappableBase* InvokeFactory(
+    Arguments* args,
+    const base::Callback<WrappableBase*()>& callback) {
+  return callback.Run();
+}
     
-    {  for (int i = 0; i < iters; i++) {
-    VersionEdit vedit;
-    vedit.DeleteFile(2, fnum);
-    InternalKey start(MakeKey(2*fnum), 1, kTypeValue);
-    InternalKey limit(MakeKey(2*fnum+1), 1, kTypeDeletion);
-    vedit.AddFile(2, fnum++, 1 /* file size */, start, limit);
-    vset.LogAndApply(&vedit, &mu);
+      void Clear() {
+    wrapper_.Clear();
+    object_ = NULL;
   }
-  uint64_t stop_micros = env->NowMicros();
-  unsigned int us = stop_micros - start_micros;
-  char buf[16];
-  snprintf(buf, sizeof(buf), '%d', num_base_files);
-  fprintf(stderr,
-          'BM_LogAndApply/%-6s   %8d iters : %9u us (%7.0f us / iter)\n',
-          buf, iters, us, ((float)us) / iters);
-}
     
+    // This specialization allows people to construct function templates directly if
+// they need to do fancier stuff.
+template <>
+struct CallbackTraits<v8::Local<v8::FunctionTemplate>> {
+  static v8::Local<v8::FunctionTemplate> CreateTemplate(
+      v8::Local<v8::FunctionTemplate> templ) {
+    return templ;
+  }
+};
     
-    {  delete iter;
-  delete table;
-  delete file;
-  return Status::OK();
-}
-    
-    std::string TableFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'ldb');
-}
-    
-    NS_CC_BEGIN
-    
-    /**
- @brief This action simulates a page turn from the bottom right hand corner of the screen.
- 
- @details It's not much use by itself but is used by the PageTurnTransition.
-         Based on an original paper by L Hong et al.
-         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
-  
- @since v0.8.2
- */
-class CC_DLL PageTurn3D : public Grid3DAction
-{
-public:
-    /**
-     * @js NA 
-     */
-    virtual GridBase* getGrid() override;
+    // Wrappable is a base class for C++ objects that have corresponding v8 wrapper
+// objects. To retain a Wrappable object on the stack, use a gin::Handle.
+//
+// USAGE:
+// // my_class.h
+// class MyClass : Wrappable<MyClass> {
+//  public:
+//   ...
+// };
+//
+// Subclasses should also typically have private constructors and expose a
+// static Create function that returns a mate::Handle. Forcing creators through
+// this static Create function will enforce that clients actually create a
+// wrapper for the object. If clients fail to create a wrapper for a wrappable
+// object, the object will leak because we use the weak callback from the
+// wrapper as the signal to delete the wrapped object.
+class WrappableBase {
+ public:
+  WrappableBase();
+  virtual ~WrappableBase();
     }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-        unsigned char getAlphaByIndex(unsigned int i);
-    unsigned char getAlphaByPos(const Vec2& pos);
-    
-    NS_CC_BEGIN
-    
-    bool ComponentContainer::remove(Component *com)
-{
-    return remove(com->getName());
+    void ProcessSingleton::LinuxWatcher::StartListening(int socket) {
+  DCHECK_CURRENTLY_ON(BrowserThread::IO);
+  // Watch for client connections on this socket.
+  socket_watcher_ = base::FileDescriptorWatcher::WatchReadable(
+      socket, base::BindRepeating(&LinuxWatcher::OnSocketCanReadWithoutBlocking,
+                                  base::Unretained(this), socket));
 }
     
-    NS_CC_BEGIN
-    
-        /** Return the value for the specific property name.
-     *
-     * @param propertyName The value for the specific property name.
-     * @return The value for the specific property name.
-     */
-    Value getProperty(const std::string& propertyName) const;
-    
-    class CC_DLL Font : public Ref
-{
-public:
-    virtual FontAtlas* createFontAtlas() = 0;
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
     }
     
-        /** Unload all texture atlas texture create by special file name.
-     CAUTION : All component use this font texture should be reset font name, though the file name is same!
-               otherwise, it will cause program crash!
-    */
-    static void unloadFontAtlasTTF(const std::string& fontFileName);
+    // metrics
+#include '../src/metric/metric.cc'
+#include '../src/metric/elementwise_metric.cc'
+#include '../src/metric/multiclass_metric.cc'
+#include '../src/metric/rank_metric.cc'
+    
+        NDArrayView::NDArrayView(CNTK::DataType dataType, CNTK::StorageFormat storageType, const NDShape& viewShape, const DeviceDescriptor& device)
+        : NDArrayView(dataType, device, storageType, viewShape, false, AllocateTensorView(dataType, storageType, viewShape, device))
+    {}
+    
+            if (!m_distributed)
+        {
+            return externalState;
+        }
+    
+    namespace CNTK
+{
+    struct VariableFields final : public std::enable_shared_from_this<VariableFields>
+    {
+        friend class CompositeFunction;
+    }
+    }
+    
+    #include 'stdafx.h'
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+    
+        // process 'special nodes'
+    ProcessSpecialNodes(config, workList);
+    
+            // update after inference
+        rows0 = Input(0)->GetAsMatrixNumRows();
+        rows1 = Input(1)->HasMBLayout() ? Input(1)->GetSampleMatrixNumRows() : Input(1)->GetAsMatrixNumRows();
+        if (isFinalValidationPass && rows0 != rows1)
+            InvalidArgument('The inner matrix dimension in the %ls %ls operation does not match (%d vs. %d).', NodeName().c_str(), OperationName().c_str(), (int) rows1, (int) rows0);
+        size_t cols0 = Input(0)->GetAsMatrixNumCols();
+        if (isFinalValidationPass && cols0 != 1)
+            InvalidArgument('The first matrix should be a column vector representing the diagonal of a square matrix in the DiagTimes operation.');
+    
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        ReadOutVariable(); // read out the value once, with the purpose of validating the variableName
+        Base::Validate(isFinalValidationPass);
+        // this node does not hold mini-batch data
+        m_pMBLayout = nullptr;
+        // for now, anything this node returns is a scalar
+        SetDims(TensorShape(1), false);
+    }
+    
+    // -----------------------------------------------------------------------
+// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
+// -----------------------------------------------------------------------
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    
+    {    io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
+    #undef MAP_BUTTON
+    #undef MAP_ANALOG
+}
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    }
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
