@@ -1,207 +1,254 @@
 
         
-            plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        
+class ArrayMaxLengthValidator(MaxLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
+        'limit_value')
+    
+            return True
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
     
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
+    def getTokenErrorDisplay(self, t):
+        '''
+        How should a token be displayed in an error message? The default
+        is to display just the text, but during development you might
+        want to have a lot of information spit out.  Override in that case
+        to use t.toString() (which, for CommonToken, dumps everything about
+        the token). This is better than forcing you to override a method in
+        your token objects because you don't have to go modify your lexer
+        so that it creates a new Java type.
+        '''
+        
+        s = t.text
+        if s is None:
+            if t.type == EOF:
+                s = '<EOF>'
+            else:
+                s = '<'+t.type+'>'
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
     
+    def size(self):
+        return self.n
     
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
+    
+            # Deleting model 'TagKey'
+        db.delete_table(u'tagstore_tagkey')
+    
+            # Adding index on 'EventTag', fields ['group_id', 'key', 'value']
+        db.create_index(u'tagstore_eventtag', ['group_id', 'key_id', 'value_id'])
+    
+            # Removing index on 'EventTag', fields ['project_id', 'key', 'value']
+        db.delete_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'EventTag', fields ['project_id',
+        # 'event_id', 'key', 'value']
+        db.delete_unique(u'tagstore_eventtag', ['project_id', 'event_id', 'key_id', 'value_id'])
+    
+        # Flag to indicate if this migration is too risky
+    # to run online and needs to be coordinated for offline
+    is_dangerous = True
+    
+    :copyright: (c) 2010-2014 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
+from __future__ import absolute_import
+    
+    :copyright: (c) 2010-2015 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
+    
+        def test_a_observer_list_shall_be_empty_initially(cls):
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_shall_toggle_from_fm_to_am(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
 
     
-        session = Session(path)
-    session.load()
+        def test_extended_property_values_cloning(self):
+        sample_object_1 = self.prototype.clone()
+        sample_object_1.some_value = 'test string'
+        sample_object_2 = self.prototype.clone()
+        self.assertRaises(AttributeError, lambda: sample_object_2.some_value)
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+        def test_human_shall_speak(self):
+        noise = self.human.speak()
+        expected_noise = ''hello''
+        self.assertEqual(noise, expected_noise)
+    
+        fftv = Publisher(message_center)
+    
+    https://en.wikipedia.org/wiki/Blackboard_system
+'''
+    
+            # dictionary that will be used to determine which static method is
+        # to be executed but that will be also used to store possible param
+        # value
+        self._static_method_choices = {'param_value_1': self._static_method_1, 'param_value_2': self._static_method_2}
+    
+        @staticmethod
+    def check_range(request):
+        if 0 <= request < 10:
+            print('request {} handled in handler 0'.format(request))
+            return True
+    
+    
+def cityscapes_to_coco_without_person_rider(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: -1,  # person (ignore)
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (ignore)
+    }
+    return lookup[cityscapes_id]
+    
+        'Flipping' an entry means that that image and associated metadata (e.g.,
+    ground truth boxes and object proposals) are horizontally flipped.
     '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
-    
-    import gzip
-import os
-    
-        ```python
-         ..
-         # Not needed to change the device scope for model definition:
-         model = Xception(weights=None, ..)
-    
-    # Stack of Transposed Conv2D blocks
-# Notes:
-# 1) Use Batch Normalization before ReLU on deep networks
-# 2) Use UpSampling2D as alternative to strides>1
-# - faster but not as good as strides>1
-for filters in layer_filters[::-1]:
-    x = Conv2DTranspose(filters=filters,
-                        kernel_size=kernel_size,
-                        strides=2,
-                        activation='relu',
-                        padding='same')(x)
-    
-    import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Activation
-from keras.layers import SimpleRNN
-from keras import initializers
-from keras.optimizers import RMSprop
-    
-    model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
-model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(num_classes, activation='softmax'))
-    
-    print('Vectorizing sequence data...')
-tokenizer = Tokenizer(num_words=max_words)
-x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
-x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-        def setUp(self):
-        self.privkey = KEY
-        self.pubkey = self.privkey.public_key()
-        self.nonce = jose.b64encode(b'Nonce')
-        self.url = 'hi'
-        self.kid = 'baaaaa'
-    
-        @certbot_util.patch_get_utility()
-    def test_successful_choice(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 3)
-        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
-    
-        # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
-    
-    .. caution::
-   You should protect these API credentials as you would the password to your
-   DigitalOcean account. Users who can read this file can use these credentials
-   to issue arbitrary API calls on your behalf. Users who can cause Certbot to
-   run using these credentials can complete a ``dns-01`` challenge to acquire
-   new certificates or revoke existing certificates for associated domains,
-   even if those domains aren't being managed by this server.
-    
-    # The reST default role (used for this markup: `text`) to use for all
-# documents.
-#default_role = None
-    
-    import math
-from sklearn import neighbors
-import os
-import os.path
-import pickle
-from PIL import Image, ImageDraw
-import face_recognition
-from face_recognition.face_recognition_cli import image_files_in_folder
-    
-    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
-    
-            if file.filename == '':
-            return redirect(request.url)
-    
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
-    
-            if match[0]:
-            name = 'Barack Obama'
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-    import tensorflow as tf
+    flipped_roidb = []
+    for entry in roidb:
+        width = entry['width']
+        boxes = entry['boxes'].copy()
+        oldx1 = boxes[:, 0].copy()
+        oldx2 = boxes[:, 2].copy()
+        boxes[:, 0] = width - oldx2 - 1
+        boxes[:, 2] = width - oldx1 - 1
+        assert (boxes[:, 2] >= boxes[:, 0]).all()
+        flipped_entry = {}
+        dont_copy = ('boxes', 'segms', 'gt_keypoints', 'flipped')
+        for k, v in entry.items():
+            if k not in dont_copy:
+                flipped_entry[k] = v
+        flipped_entry['boxes'] = boxes
+        flipped_entry['segms'] = segm_utils.flip_segms(
+            entry['segms'], entry['height'], entry['width']
+        )
+        if dataset.keypoints is not None:
+            flipped_entry['gt_keypoints'] = keypoint_utils.flip_keypoints(
+                dataset.keypoints, dataset.keypoint_flip_map,
+                entry['gt_keypoints'], entry['width']
+            )
+        flipped_entry['flipped'] = True
+        flipped_roidb.append(flipped_entry)
+    roidb.extend(flipped_roidb)
     
     
-# TODO(huay): char_cnn_embedding
-def char_cnn_embedding(x, c_embed_size=8, share_cnn_weights=True, name='char_cnn_embedding', reuse=None):
+# ---------------------------------------------------------------------------- #
+# FPN level info for stages 5, 4, 3, 2 for select models (more can be added)
+# ---------------------------------------------------------------------------- #
+    
+    from detectron.core.config import cfg
+from detectron.utils.c2 import const_fill
+from detectron.utils.c2 import gauss_fill
+import detectron.modeling.ResNet as ResNet
+import detectron.utils.blob as blob_utils
+    
+    
+def build_data_parallel_model(model, single_gpu_build_func):
+    '''Build a data parallel model given a function that builds the model on a
+    single GPU.
     '''
-    In:  [N, max_n_word, max_n_char]
-    Out: [N, max_n_word, c_embed_size]
+    if model.only_build_forward_pass:
+        single_gpu_build_func(model)
+    elif model.train:
+        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
+        # Add backward pass on all GPUs
+        model.AddGradientOperators(all_loss_gradients)
+        if cfg.NUM_GPUS > 1:
+            _add_allreduce_graph(model)
+        for gpu_id in range(cfg.NUM_GPUS):
+            # After allreduce, all GPUs perform SGD updates on their identical
+            # params and gradients in parallel
+            with c2_utils.NamedCudaScope(gpu_id):
+                add_single_gpu_param_update_ops(model, gpu_id)
+    else:
+        # Test-time network operates on single GPU
+        # Test-time parallelism is implemented through multiprocessing
+        with c2_utils.NamedCudaScope(model.target_gpu_id):
+            single_gpu_build_func(model)
+    
+        if len(data.shape) == 1:
+        ret = np.empty((count, ), dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds] = data
+    else:
+        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds, :] = data
+    return ret
+    
+        # Optionally add Keypoint R-CNN blobs
+    if cfg.MODEL.KEYPOINTS_ON:
+        keypoint_rcnn_roi_data.add_keypoint_rcnn_blobs(
+            blob_dict, roidb, fg_rois_per_image, fg_inds, im_scale, batch_idx
+        )
     
     
-# # Test
-# def attention_flow_2(h, u, T=None, J=None, d=None, name=None, reuse=None):
-#     '''Attention Flow Match Layer
-#     Input shape:
-#         h: [N, T, d]  # 原文中的 shape 为 [N, T, 2d], 因为经过了 bi-LSTM, 维度扩了一倍
-#         u: [N, J, d]
-#     Output shape:
-#         [N, T, 4d]
-# 
-#     Args:
-#         h: context encoding     shape: [N, T, d]
-#         u: question encoding    shape: [N, J, d]
-#         T(int): context length
-#         J(int): question length
-#         d(int): features size
-#         name(str):
-#         reuse(bool):
-# 
-#     Returns:
-# 
-#     '''
-#     print('Test')
-#     d = d or int(h.get_shape()[-1])
-#     T = T or int(h.get_shape()[-2])
-#     J = J or int(u.get_shape()[-2])
-# 
-#     with tf.variable_scope(name or 'attention_flow', reuse=reuse):
-#         h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])
-#         u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])
-#         hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
-#         h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
-#         W_s = get_w([3 * d, 1])  # [3d, 1]
-# 
-#         # similarity matrix
-#         # S = tf.reshape(tf.einsum('ntjd,do->ntjo', h_u_hu, W_s), [-1, T, J])
-#         # 以上操作等价于
-#         S = tf.reshape(tf.matmul(tf.reshape(h_u_hu, [-1, 3 * d]), W_s), [-1, T, J])
-# 
-#         # 得到 S 后，下面的操作就与 `attention_flow_self` 一样了
-# 
-#         # u_tilde(u~): context to question attended query vectors
-#         u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
-# 
-#         # h_tilde(h~): question to context attended query vectors
-#         b = tf.reduce_max(S, axis=2)  # [N, T]
-#         b = softmax(b, axis=-1)  # [N, T]
-#         b = tf.expand_dims(b, axis=1)  # [N, 1, T]
-#         h_tilde = tf.matmul(b, h)  # [N, 1, d]
-#         h_tilde = tf.tile(h_tilde, [1, T, 1])  # [N, T, d]
-# 
-#         g = tf.concat([h, u_tilde, h * u_tilde, h * h_tilde], axis=-1)  # [N, T, 4d]
-# 
-#     return g
+def get_minibatch_blob_names(is_training=True):
+    '''Return blob names in the order in which they are read by the data loader.
+    '''
+    # data blob: holds a batch of N images, each with 3 channels
+    blob_names = ['data']
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster R-CNN
+        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
+    elif cfg.RETINANET.RETINANET_ON:
+        blob_names += retinanet_roi_data.get_retinanet_blob_names(
+            is_training=is_training
+        )
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    return blob_names
+    
+    
+def _get_retinanet_blobs(
+        foas, all_anchors, gt_boxes, gt_classes, im_width, im_height):
+    total_anchors = all_anchors.shape[0]
+    logger.debug('Getting mad blobs: im_height {} im_width: {}'.format(
+        im_height, im_width))
