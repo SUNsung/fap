@@ -1,183 +1,387 @@
 
         
-        			a_pMipmapImages[mip].paucEncodingBits = std::shared_ptr<unsigned char>(image.GetEncodingBits(), [](unsigned char *p) { delete[] p; });
-			a_pMipmapImages[mip].uiEncodingBitsBytes = image.GetEncodingBitsBytes();
-			a_pMipmapImages[mip].uiExtendedWidth = image.GetExtendedWidth();
-			a_pMipmapImages[mip].uiExtendedHeight = image.GetExtendedHeight();
+          // Build a substitution map to replace the protocol's \c Self and the type
+  // parameters of the requirement into a combined context that provides the
+  // type parameters of the conformance context and the parameters of the
+  // requirement.
+  auto selfType = cast<GenericTypeParamType>(
+      proto->getSelfInterfaceType()->getCanonicalType());
     
-    	// ----------------------------------------------------------------------------------------------------
-	//
     
-    		// perform an iteration of the encoding
-		// the first iteration must generate a complete, valid (if poor) encoding
-		virtual void PerformIteration(float a_fEffort) = 0;
-    
-    /* a32 + (b32 * (c32 >> 16)) >> 16 */
-#undef silk_SMLAWT
-static OPUS_INLINE opus_int32 silk_SMLAWT_armv5e(opus_int32 a, opus_int32 b,
- opus_int32 c)
-{
-  int res;
-  __asm__(
-      '#silk_SMLAWT\n\t'
-      'smlawt %0, %1, %2, %3\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(c), 'r'(a)
-  );
-  return res;
+    {  assert(*BufferPtr == '\r');
+  unsigned Bytes = 1;
+  if (BufferPtr != BufferEnd && *BufferPtr == '\n')
+    Bytes++;
+  return Bytes;
 }
-#define silk_SMLAWT(a, b, c) (silk_SMLAWT_armv5e(a, b, c))
     
-    Rational RationalMath::Cos(Rational const& rat, ANGLE_TYPE angletype)
-{
-    PRAT prat = rat.ToPRAT();
+    %{
     }
     
-    #include <vector>
-#include 'Ratpack/ratpak.h'
-    
-            static NarratorAnnouncement ^ GetMemoryClearedAnnouncement(Platform::String ^ announcement);
-        static NarratorAnnouncement ^ GetMemoryItemChangedAnnouncement(Platform::String ^ announcement);
-        static NarratorAnnouncement ^ GetMemoryItemAddedAnnouncement(Platform::String ^ announcement);
-    
-            property NarratorAnnouncement^ Announcement
-        {
-            NarratorAnnouncement^ get() { return GetAnnouncement(this); }
-            void set(NarratorAnnouncement^ value)
-            {
-                SetAnnouncement(this, value);
-            }
-        }
-    
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
-    }
-    
-    #if MXNET_USE_OPENCV
-#include <opencv2/opencv.hpp>
-#include <vector>  // NOLINT(*)
-#include <utility> // NOLINT(*)
-#include <string> // NOLINT(*)
-    
-      /*!
-   * \brief sets parameters for gradient compression
-   * \param kwargs a vector of pair of strings. A pair represents key and value
-   * of the parameter. Will be parsed by GradientCompressionParam
-   */
-  void SetParams(const std::vector<std::pair<std::string, std::string> >& kwargs);
-    
-    template<>
-void ElementwiseSum<DEVICE>(const std::vector<TBlob> source,
-                            TBlob *dst,
-                            RunContext ctx) {
-  typedef DEVICE xpu;
-  using namespace mshadow;
-  using namespace mshadow::expr;
-  Stream<xpu> *s = ctx.get_stream<xpu>();
-  for (size_t i = 1; i < source.size(); ++i) {
-    CHECK_EQ(source[i].type_flag_, dst->type_flag_)
-      << 'Only support input/output with the same data type';
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
   }
-  MSHADOW_TYPE_SWITCH(dst->type_flag_, DType, {
-    Tensor<xpu, 2, DType> out = dst->FlatTo2D<xpu, DType>(s);
+}
+    
+    std::string Demangle::getNodeTreeAsString(NodePointer Root) {
+  DemanglerPrinter Printer;
+  printNode(Printer, Root, 0);
+  return std::move(Printer).str();
+}
+    
+    
+    {  // let h = b = the number of basic code points in the input
+  // copy them to the output in order...
+  size_t h = 0;
+  for (auto C : InputCodePoints) {
+    if (C < 0x80) {
+      ++h;
+      OutPunycode.push_back(C);
     }
+    if (!isValidUnicodeScalar(C)) {
+      OutPunycode.clear();
+      return false;
     }
+  }
+  size_t b = h;
+  // ...followed by a delimiter if b > 0
+  if (b > 0)
+    OutPunycode.push_back(delimiter);
+  
+  while (h < InputCodePoints.size()) {
+    // let m = the minimum code point >= n in the input
+    uint32_t m = 0x10FFFF;
+    for (auto codePoint : InputCodePoints) {
+      if (codePoint >= n && codePoint < m)
+        m = codePoint;
+    }
+    
+    delta = delta + (m - n) * (h + 1);
+    n = m;
+    for (auto c : InputCodePoints) {
+      if (c < n) ++delta;
+      if (c == n) {
+        int q = delta;
+        for (int k = base; ; k += base) {
+          int t = k <= bias ? tmin
+                : k >= bias + tmax ? tmax
+                : k - bias;
+          
+          if (q < t) break;
+          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
+          q = (q - t) / (base - t);
+        }
+        OutPunycode.push_back(digit_value(q));
+        bias = adapt(delta, h + 1, h == b);
+        delta = 0;
+        ++h;
+      }
+    }
+    ++delta; ++n;
+  }
+  return true;
+}
+    
+      /// A place to keep alive any buffers that are loaded as part of setting up
+  /// the frontend inputs.
+  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> ConfigurationFileBuffers;
+    
+        /*
+        Extract a single plane from 3 channel image
+    */
+    void extract3(const Size2D &size,
+                  const u8 * srcBase, ptrdiff_t srcStride,
+                  u8 * dstBase, ptrdiff_t dstStride,
+                  u32 coi);
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vadd(v_src0, v_src1);
+    }
+    
+    struct BitwiseAnd
+{
+    typedef u8 type;
+    }
+    
+    namespace internal {
+    }
+    
+    void makeOffsets(ptrdiff_t pixel[], ptrdiff_t row_stride)
+{
+    pixel[0] = 0 + row_stride * 3;
+    pixel[1] = 1 + row_stride * 3;
+    pixel[2] = 2 + row_stride * 2;
+    pixel[3] = 3 + row_stride * 1;
+    pixel[4] = 3 + row_stride * 0;
+    pixel[5] = 3 + row_stride * -1;
+    pixel[6] = 2 + row_stride * -2;
+    pixel[7] = 1 + row_stride * -3;
+    pixel[8] = 0 + row_stride * -3;
+    pixel[9] = -1 + row_stride * -3;
+    pixel[10] = -2 + row_stride * -2;
+    pixel[11] = -3 + row_stride * -1;
+    pixel[12] = -3 + row_stride * 0;
+    pixel[13] = -3 + row_stride * 1;
+    pixel[14] = -2 + row_stride * 2;
+    pixel[15] = -1 + row_stride * 3;
+}
+    
+    
+    {}
+    
+    #ifndef CAROTENE_INTRINSICS_HPP
+#define CAROTENE_INTRINSICS_HPP
     
     
     {
-    {}  // namespace op
-}  // namespace mxnet
-
-    
-    
-    {  CHECK(param_.pinfo->forward(ptrs.size(), ptrs.data(), tags.data(), param_.pinfo->p_forward));
-  Engine::Get()->PushAsync(
-      [ndcpy, ctx](RunContext rctx, Engine::CallbackOnComplete on_complete) {
-        ctx.async_on_complete();
-        on_complete();
-      }, ndctx, ndvar, {}, FnProperty::kNormal, 0, 'NDArrayOpForward');
+    {        for( ; x < cols; x++ )
+        {
+            s16 nextx;
+            s16 prevx;
+            // make border
+            if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT)
+            {
+                prevx = x == 0 ? v1[0] : v1[x-1];
+                nextx = x == cols-1 ? v1[x] : v1[x+1];
+            }
+            else if (border == BORDER_MODE_REFLECT101)
+            {
+                prevx = x == 0 ? v1[1] : v1[x-1];
+                nextx = x == cols-1 ? v1[x-1] : v1[x+1];
+            }
+            else //if (border == BORDER_MODE_CONSTANT)
+            {
+                prevx = x == 0 ? borderValue : v1[x-1];
+                nextx = x == cols-1 ? borderValue : v1[x+1];
+            }
+            *(drow+x) = prevx + nextx - 4*v1[x] + v0[x] + v2[x];
+        }
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)border;
+    (void)borderValue;
+#endif
 }
     
-    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
-.describe('Apply a sparse regularization to the output a sigmoid activation function.')
-.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
-.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
+    MeasureDouble RpcServerServerLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerServerLatencyMeasureName,
+      'Time between first byte of request received to last byte of response '
+      'sent, or terminal error',
+      kUnitMilliseconds);
+  return measure;
+}
     
-    U_NAMESPACE_BEGIN
+    namespace grpc {
+    }
     
-    class PluralRules;
-    
-    #ifndef __SIGNIFICANTDIGITINTERVAL_H__
-#define __SIGNIFICANTDIGITINTERVAL_H__
-    
-    
-    
-    #endif  // __SMALLINTFORMATTER_H__
+    #endif  // !GRPC_CUSTOM_DEFAULT_THREAD_POOL
 
     
-    ExitConstrDeleteAll: // Remove all sets and return error
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    LoadRecordKey::LoadRecordKey(const grpc::string& client_ip_and_token,
+                             grpc::string user_id)
+    : user_id_(std::move(user_id)) {
+  GPR_ASSERT(client_ip_and_token.size() >= 2);
+  int ip_hex_size;
+  GPR_ASSERT(sscanf(client_ip_and_token.substr(0, 2).c_str(), '%d',
+                    &ip_hex_size) == 1);
+  GPR_ASSERT(ip_hex_size == 0 || ip_hex_size == kIpv4AddressLength ||
+             ip_hex_size == kIpv6AddressLength);
+  size_t cur_pos = 2;
+  client_ip_hex_ = client_ip_and_token.substr(cur_pos, ip_hex_size);
+  cur_pos += ip_hex_size;
+  if (client_ip_and_token.size() - cur_pos < kLbIdLength) {
+    lb_id_ = kInvalidLbId;
+    lb_tag_ = '';
+  } else {
+    lb_id_ = client_ip_and_token.substr(cur_pos, kLbIdLength);
+    lb_tag_ = client_ip_and_token.substr(cur_pos + kLbIdLength);
+  }
+}
     
-    U_NAMESPACE_BEGIN
+    // This is expected to be called when a binary op in the last say 1+2+ is changing to another one say 1+2* (+ changed to *)
+// It needs to know by this change a Precedence inversion happened. i.e. previous op was lower or equal to its previous op, but the new
+// one isn't. (Eg. 1*2* to 1*2^). It can add explicit brackets to ensure the precedence is inverted. (Eg. (1*2) ^)
+void CHistoryCollector::ChangeLastBinOp(int nOpCode, bool fPrecInvToHigher)
+{
+    TruncateEquationSzFromIch(m_lastBinOpStartIndex);
+    if (fPrecInvToHigher)
+    {
+        EnclosePrecInversionBrackets();
+    }
+    AddBinOpToHistory(nOpCode);
+}
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or a negative value
-     */
-    static int32_t indexOrNegativeFromString(const char *keyword);
+    namespace CalcEngine
+{
+    Number::Number() noexcept
+        : Number(1, 0, { 0 })
+    {
+    }
+    }
     
-        /**
-     * Union the set of all characters that may output by this object
-     * into the given set.
-     * @param toUnionTo the set into which to union the output characters
-     */
-    virtual void addReplacementSetTo(UnicodeSet& toUnionTo) const;
+    void CCalcEngine::InitChopNumbers()
+{
+    // these rat numbers are set only once and then never change regardless of
+    // base or precision changes
+    assert(m_chopNumbers.size() >= 4);
+    m_chopNumbers[0] = Rational{ rat_qword };
+    m_chopNumbers[1] = Rational{ rat_dword };
+    m_chopNumbers[2] = Rational{ rat_word };
+    m_chopNumbers[3] = Rational{ rat_byte };
+    }
     
-    /**
- * Implement UnicodeReplacer
+    CUnaryCommand::CUnaryCommand(int command1, int command2)
+{
+    m_command = make_shared<CalculatorVector<int>>();
+    m_command->Append(command1);
+    m_command->Append(command2);
+}
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::Foundation::Metadata;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
+    
+    class CaffeDataIterWrapper : public PrefetcherIter {
+ public:
+  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
+  virtual ~CaffeDataIterWrapper() {
+    IF_CHECK_TIMING(
+      if (next_time_.load() > 0) {
+        LOG(WARNING) << 'Caffe data loader was blocked for '
+                     << next_time_.load()
+                     << ' ms waiting for incoming data';
+      }
+    )
+  }
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    // We need to init prefetcher args in order to get dtype
+    this->param_.InitAllowUnknown(kwargs);
+    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
+    switch (this->param_.dtype.value()) {
+      case mshadow::kFloat32:
+        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat64:
+        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat16:
+        LOG(FATAL) << 'float16 layer is not supported by caffe';
+        return;
+      default:
+        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
+        return;
+    }
+    PrefetcherIter::Init(kwargs);
+    this->param_.prefetch_buffer = 1;
+  }
+  virtual void BeforeFirst(void) {
+    return PrefetcherIter::BeforeFirst();
+  }
+  virtual bool Next(void) {
+    IF_CHECK_TIMING(
+      const uint64_t start_time = GetTickCountMS();
+    )
+    const bool rc = PrefetcherIter::Next();
+    IF_CHECK_TIMING(
+      const uint64_t diff_time  = GetTickCountMS() - start_time;
+      next_time_.fetch_add(diff_time);
+    )
+    return rc;
+  }
+    }
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_fieldentry.h
+ * \brief Implement FieldEntry<caffe::LayerParameter>
+ * \author Haoran Wang
  */
-void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
-    UChar32 ch;
-    for (int32_t i=0; i<output.length(); i+=U16_LENGTH(ch)) {
-    ch = output.char32At(i);
-    UnicodeReplacer* r = data->lookupReplacer(ch);
-    if (r == NULL) {
-        toUnionTo.add(ch);
-    } else {
-        r->addReplacementSetTo(toUnionTo);
-    }
-    }
+#ifndef PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+#define PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+    
+    inline void Quantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
+                             const std::vector<mxnet::TBlob> &inputs,
+                             const float threshold) {
+  Quantize2BitKernelLaunch(s, inputs, threshold);
 }
+    
+    // relu
+MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
+.describe(R'code(Rescale the input by the square root of the channel dimension.
+    
+    namespace mxnet {
+namespace op {
+template<typename DType>
+class CuDNNLocalResponseNormOp : public Operator {
+ public:
+  explicit CuDNNLocalResponseNormOp(LRNParam param) {
+    param_ = param;
+    init_cudnn_ = false;
+    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
+  }
+    }
+    }
+    }
+    
+      for (auto& blob : in_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(0);
+  }
+  for (auto& blob : out_data) {
+    NDArray* nd = new NDArray(blob, ndctx.dev_id);
+    ptrs.push_back(reinterpret_cast<void*>(nd));
+    ndvar.push_back(nd->var());
+    tags.push_back(1);
+  }
+  std::sort(ndvar.begin(), ndvar.end());
+  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
+    
+    
+    { private:
+  int size_;
+  int dimension_;
+};  // class ConcatOp
+    
+    
+    {  static void setInitialized6(bool f) { data6_.initialized = f; }
+};
+    
+    
+    {} // namespace aria2
+
+    
+      virtual std::shared_ptr<DHTTask> createPeerLookupTask(
+      const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+      const std::shared_ptr<PeerStorage>& peerStorage) CXX11_OVERRIDE;
