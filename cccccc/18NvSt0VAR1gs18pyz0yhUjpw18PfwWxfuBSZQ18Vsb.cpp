@@ -1,193 +1,258 @@
 
         
-          grpc_error* Init(grpc_call_element* elem,
-                   const grpc_call_element_args* args) override;
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
+    #include 'base/command_line.h'
+#include 'base/logging.h'
+#include 'base/message_loop/message_loop.h'
+#include 'base/values.h'
     
-    #include <grpc/support/cpu.h>
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  host_cpu_load_info_data_t cpuinfo;
-  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
-  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
-                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
-    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
-    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
-  }
-  return std::make_pair(busy, total);
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    #ifndef GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
-#define GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
     
-    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
-  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
-    return system_clock::time_point::max();
-  }
-  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
-  system_clock::time_point tp;
-  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
-  tp +=
-      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
-  return tp;
-}
+    namespace extensions {
+class AppWindowRegistry;
+class ExtensionService;
+    }
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
+      // implement nw.Screen.initEventListeners()
+  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
+    public:
+      NwScreenInitEventListenersFunction();
+      bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    // Disable the copy and assignment operator for a class.
+#define DISABLE_COPY_AND_ASSIGN(classname) \
+private:\
+  classname(const classname&);\
+  classname& operator=(const classname&)
+    
+      /**
+   * @brief Implements common layer setup functionality.
+   *
+   * @param bottom the preshaped input blobs
+   * @param top
+   *     the allocated but unshaped output blobs, to be shaped by Reshape
+   *
+   * Checks that the number of bottom and top blobs is correct.
+   * Calls LayerSetUp to do special layer setup for individual layer types,
+   * followed by Reshape to set up sizes of top blobs and internal buffers.
+   * Sets up the loss weight multiplier blobs for any non-zero loss weights.
+   * This method may not be overridden.
    */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
+  void SetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+    CheckBlobCounts(bottom, top);
+    LayerSetUp(bottom, top);
+    Reshape(bottom, top);
+    SetLossWeights(top);
   }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
+    
+      // Adds a creator.
+  static void AddCreator(const string& type, Creator creator) {
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 0)
+        << 'Layer type ' << type << ' already registered.';
+    registry[type] = creator;
   }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
+    
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
+    
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
+    
+    namespace caffe {
     }
     
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
+    
+    {}  // namespace caffe
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    const int32 MAX_CONNECTED = 32;
+const float32 COLLAPSE_DIST_SQR = CMP_EPSILON*CMP_EPSILON;//0.1f;//1000*CMP_EPSILON*1000*CMP_EPSILON;
+	
+class b2PolyNode{
+public:
+	b2Vec2 position;
+	b2PolyNode* connected[MAX_CONNECTED];
+	int32 nConnected;
+	bool visited;
+    }
+    
+    bool b2Triangle::IsInside(float32 _x, float32 _y){
+	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
+	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
+	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
+	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
+		
+		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
+		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
+		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		
+		float32 dot00 = vx0*vx0+vy0*vy0;
+		float32 dot01 = vx0*vx1+vy0*vy1;
+		float32 dot02 = vx0*vx2+vy0*vy2;
+		float32 dot11 = vx1*vx1+vy1*vy1;
+		float32 dot12 = vx1*vx2+vy1*vy2;
+		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		
+		return ((u>=0)&&(v>=0)&&(u+v<=1));    
 }
     
-      const T* data() const {
-    return ptr_;
-  }
     
-          const size_t bin = 2 * thread_init_[0] * nbins_;
-      memcpy(hist_data + istart, (data + bin + istart), sizeof(double) * (iend - istart));
-    
-    TEST(DenseColumnWithMissing, Test) {
-  auto dmat = CreateDMatrix(100, 1, 0.5);
-  GHistIndexMatrix gmat;
-  gmat.Init((*dmat).get(), 256);
-  ColumnMatrix column_matrix;
-  column_matrix.Init(gmat, 0.2);
-  auto col = column_matrix.GetColumn(0);
-  for (auto i = 0ull; i < col.Size(); i++) {
-    if (col.IsMissing(i)) continue;
-    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
-              col.GetGlobalBinIdx(i));
-  }
-  delete dmat;
-}
-    
-    
-    {  /*!
-   * \brief Create a tree updater given name
-   * \param name Name of the tree updater.
-   */
-  static TreeUpdater* Create(const std::string& name, LearnerTrainParam const* tparam);
-};
-    
-    GPUSet GPUSet::All(GpuIdType gpu_id, GpuIdType n_gpus, int32_t n_rows) {
-  CHECK_GE(gpu_id, 0) << 'gpu_id must be >= 0.';
-  CHECK_GE(n_gpus, -1) << 'n_gpus must be >= -1.';
-    }
-    
-      friend bool operator==(const GPUSet& lhs, const GPUSet& rhs) {
-    return lhs.devices_ == rhs.devices_;
-  }
-  friend bool operator!=(const GPUSet& lhs, const GPUSet& rhs) {
-    return !(lhs == rhs);
-  }
-    
-    int ClusterQualityInfo702::ambig_state(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    int ObjectQualityInfo60C::probexist(const std::uint8_t* bytes,
-                                    int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(5, 3);
-    }
-    
-    
-    {
-    {
-    {}  // namespace msf
-}  // namespace localization
-}  // namespace apollo
+    {}
 
     
-    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
-  PiecewiseLinearConstraint constraint(10, 0.1);
-  std::vector<uint32_t> index_list;
-  std::vector<double> lower_bound;
-  std::vector<double> upper_bound;
-  for (uint32_t i = 0; i < 10; ++i) {
-    index_list.push_back(i);
-    lower_bound.push_back(1.0);
-    upper_bound.push_back(100.0);
-  }
+    		inline void SetDoneIfPerfect()
+		{
+			if (GetError() == 0.0f)
+			{
+				m_boolDone = true;
+			}
+		}
+    
+    		if (m_boolDiff)
+		{
+			int iRed1 = m_frgbaColor1.IntRed(31.0f);
+			int iGreen1 = m_frgbaColor1.IntGreen(31.0f);
+			int iBlue1 = m_frgbaColor1.IntBlue(31.0f);
     }
     
-    #include 'modules/planning/math/smoothing_spline/spline_seg_kernel.h'
+    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
+static const tran_high_t sinpi_1_9 = 5283;
+static const tran_high_t sinpi_2_9 = 9929;
+static const tran_high_t sinpi_3_9 = 13377;
+static const tran_high_t sinpi_4_9 = 15212;
     
-    // config detail: {'name': 'commanded_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 23,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::commanded_value(const std::uint8_t* bytes,
-                                   int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+       C_MUL(m,a,b)         : m = a*b
+   C_FIXDIV( c , div )  : if a fixed point impl., c /= div. noop otherwise
+   C_SUB( res, a,b)     : res = a - b
+   C_SUBFROM( res , a)  : res -= a
+   C_ADDTO( res , a)    : res += a
+ * */
+#ifdef FIXED_POINT
+#include 'arch.h'
+    
+    #ifndef FIXED_ARMv4_H
+#define FIXED_ARMv4_H
+    
+    /* a32 + (b32 * c32) output have to be 32bit int */
+#define silk_MLA(a32, b32, c32)             silk_ADD32((a32),((b32) * (c32)))
+    
+    #undef silk_SMLAWW
+static OPUS_INLINE opus_int32 silk_SMLAWW_armv4(opus_int32 a, opus_int32 b,
+ opus_int32 c)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+    '#silk_SMLAWW\n\t'
+    'smull %0, %1, %2, %3\n\t'
+    : '=&r'(rd_lo), '=&r'(rd_hi)
+    : '%r'(b), 'r'(c)
+  );
+  return a+(rd_hi<<16)+(rd_lo>>16);
+}
+#define silk_SMLAWW(a, b, c) (silk_SMLAWW_armv4(a, b, c))
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    #include <s3eKeyboard.h>
+#include <s3ePointer.h>
+#include <IwGx.h>
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+    // Helper functions
+    
+    static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
+{
+    ImGuiIO& io = ImGui::GetIO();
     }
     
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-    Brakerpt6c::Brakerpt6c() {}
-const int32_t Brakerpt6c::ID = 0x6C;
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
+
     
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
+        if (pEvent->m_Pressed == 1)
+    {
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
+            g_MousePressed[0] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
+            g_MousePressed[1] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
+            g_MousePressed[2] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
+            io.MouseWheel += pEvent->m_y;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
+            io.MouseWheel += pEvent->m_y;
+    }
+    
+        // Setup back-end capabilities flags
+    g_hWnd = (HWND)hwnd;
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendPlatformName = 'imgui_impl_win32';
+    io.ImeWindowHandle = hwnd;
+    
+        // Create window with graphics context
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_DisplayMode current;
+    SDL_GetCurrentDisplayMode(0, &current);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    g_Window = SDL_CreateWindow('Dear ImGui Emscripten example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    g_GLContext = SDL_GL_CreateContext(g_Window);
+    if (!g_GLContext)
+    {
+        fprintf(stderr, 'Failed to initialize WebGL context!\n');
+        return 1;
+    }
+    SDL_GL_SetSwapInterval(1); // Enable vsync
