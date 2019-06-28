@@ -1,88 +1,173 @@
 
         
-              File.write(new_path, '1')
-      false
-    end
-    
-          it 'updates with a single dependency' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              command: 'update',
-              dependencies: ['TestDependency']
-            )
-          end').runner.execute(:test)
-    
-          it 'handles extension and extensions parameters correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
+                if is_navigational_format?
+          session.delete(session_key)
+        else
+          session[session_key]
+        end
       end
     
-            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
+          def initialize_from_record(record)
+        @scope_name = Devise::Mapping.find_scope!(record)
+        @resource   = instance_variable_set('@#{devise_mapping.name}', record)
       end
     
-    # Windows implementation
-module WindowsShellwords
-  def shellescape(str)
-    str = str.to_s
+    module Devise
+  module Models
+    # Rememberable manages generating and clearing token for remembering the user
+    # from a saved cookie. Rememberable also has utility methods for dealing
+    # with serializing the user into the cookie and back from the cookie, trying
+    # to lookup the record based on the saved information.
+    # You probably wouldn't use rememberable methods directly, they are used
+    # mostly internally for handling the remember token.
+    #
+    # == Options
+    #
+    # Rememberable adds the following options in devise_for:
+    #
+    #   * +remember_for+: the time you want the user will be remembered without
+    #     asking for credentials. After this time the user will be blocked and
+    #     will have to enter their credentials again. This configuration is also
+    #     used to calculate the expires time for the cookie created to remember
+    #     the user. By default remember_for is 2.weeks.
+    #
+    #   * +extend_remember_period+: if true, extends the user's remember period
+    #     when remembered via cookie. False by default.
+    #
+    #   * +rememberable_options+: configuration options passed to the created cookie.
+    #
+    # == Examples
+    #
+    #   User.find(1).remember_me!  # regenerating the token
+    #   User.find(1).forget_me!    # clearing the token
+    #
+    #   # generating info to put into cookies
+    #   User.serialize_into_cookie(user)
+    #
+    #   # lookup the user based on the incoming cookie information
+    #   User.serialize_from_cookie(cookie_string)
+    module Rememberable
+      extend ActiveSupport::Concern
     
-    # confirms that the escaped string that is generated actually
-# gets turned back into the source string by the actual shell.
-# abuses a `grep` (or `find`) error message because that should be cross platform
-def confirm_shell_unescapes_string_correctly(string, escaped)
-  compare_string = string.to_s.dup
+      ##
+  # Orders this source against +other+.
+  #
+  # If +other+ is a SpecificFile from a different gem name +nil+ is returned.
+  #
+  # If +other+ is a SpecificFile from the same gem name the versions are
+  # compared using Gem::Version#<=>
+  #
+  # Otherwise Gem::Source#<=> is used.
     
-    describe Deliver::HtmlGenerator do
-  let(:generator) { Deliver::HtmlGenerator.new }
+        assert_equal 0x040603.to_bn, point.to_bn
+    assert_equal 0x040603.to_bn, point.to_bn(:uncompressed)
+    assert_equal 0x0306.to_bn, point.to_bn(:compressed)
+    assert_equal 0x070603.to_bn, point.to_bn(:hybrid)
     
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
+      def test_string_uminus
+    assert_same 'foo'.freeze, -'foo'
+    assert_redefine_method('String', '-@', 'assert_nil(-'foo')')
+  end
+    
+    class B
+  def self.m() end
 end
-
+    CONTENT
     
-    desc 'generate gemspec'
-task 'rack-protection.gemspec' do
-  require 'rack/protection/version'
-  content = File.binread 'rack-protection.gemspec'
-    
-          def set_token(session)
-        session[:csrf] ||= self.class.random_token
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-      context 'with redirect reaction' do
-    before(:each) do
-      mock_app do
-        use Rack::Protection::CookieTossing, :reaction => :redirect
-        run DummyApp
+              unless complete_option_supported?
+            actual = with_term { IRB::Color.colorize_code(code, complete: true) }
+            assert_equal(result, actual, 'Case: colorize_code(#{code.dump}, complete: false)\nResult: #{humanized_literal(actual)}')
+          end
+        else
+          actual = with_term { IRB::Color.colorize_code(code) }
+          assert_equal(code, actual)
+        end
       end
     end
     
-          def part_of_ignored_node?(node)
-        ignored_nodes.map(&:loc).any? do |ignored_loc|
-          if ignored_loc.expression.begin_pos > node.source_range.begin_pos
-            next false
-          end
+        def call_x
+      return x
+    end
+  end
     
-            def message(variable)
-          message = 'Unused #{variable_type(variable)} - `#{variable.name}`.'
+      def invoke_ruby(args, stdin_data = '', capture_stdout = false, capture_stderr = false,
+                  encoding: nil, timeout: 10, reprieve: 1, timeout_error: Timeout::Error,
+                  stdout_filter: nil, stderr_filter: nil,
+                  signal: :TERM,
+                  rubybin: EnvUtil.rubybin, precommand: nil,
+                  **opt)
+    timeout = apply_timeout_scale(timeout)
+    
+      def test_open_flag_binary
+    make_tempfile do |t|
+      open(t.path, File::RDONLY, flags: File::BINARY) do |f|
+        assert_equal true, f.binmode?
+      end
+      open(t.path, 'r', flags: File::BINARY) do |f|
+        assert_equal true, f.binmode?
+      end
+      open(t.path, mode: 'r', flags: File::BINARY) do |f|
+        assert_equal true, f.binmode?
+      end
+    end
+  end if File::BINARY != 0
+    
+    a,b,*c = nil; test_ok([a,b,c] == [nil,nil,[]])
+a,b,*c = 1; test_ok([a,b,c] == [1,nil,[]])
+a,b,*c = []; test_ok([a,b,c] == [nil,nil,[]])
+a,b,*c = [1]; test_ok([a,b,c] == [1,nil,[]])
+a,b,*c = [nil]; test_ok([a,b,c] == [nil,nil,[]])
+a,b,*c = [[]]; test_ok([a,b,c] == [[],nil,[]])
+a,b,*c = [1,2]; test_ok([a,b,c] == [1,2,[]])
+a,b,*c = [*[]]; test_ok([a,b,c] == [nil,nil,[]])
+a,b,*c = [*[1]]; test_ok([a,b,c] == [1,nil,[]])
+a,b,*c = [*[1,2]]; test_ok([a,b,c] == [1,2,[]])
+    
+          packet_gem.pack
+    
+    module RuboCop
+  # Handles caching of configurations and association of inspected
+  # ruby files to configurations.
+  class ConfigStore
+    def initialize
+      # @options_config stores a config that is specified in the command line.
+      # This takes precedence over configs located in any directories
+      @options_config = nil
+    
+        def unescapePredicate(cc)
+      if (isAlphaNumeric(cc));
+        return true
+      end
+      # !
+      if (cc == 33);
+        return true
+      end
+      # '()*
+      if (39 <= cc && cc <= 42);
+        return true
+      end
+      # -.
+      if (45 <= cc && cc <= 46);
+        return true
+      end
+      # _
+      if (cc == 95);
+        return true
+      end
+      # ~
+      if (cc == 126);
+        return true
+      end
+    
+        @wiki.update_page(@wiki.page('PG'), nil, nil, '다른 text', {})
+    page = @wiki.page('PG')
+    assert_equal '다른 text', utf8(page.raw_data)
+    
+    # Read command line options into `options` hash
+begin
+  opts.parse!
+rescue OptionParser::InvalidOption
+  puts 'gollum: #{$!.message}'
+  puts 'gollum: try 'gollum --help' for more information'
+  exit
+end
