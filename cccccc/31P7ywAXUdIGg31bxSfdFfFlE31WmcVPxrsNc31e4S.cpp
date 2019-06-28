@@ -1,250 +1,443 @@
 
         
-          gfx::Point GetCursorScreenPoint();
-  display::Display GetPrimaryDisplay();
-  std::vector<display::Display> GetAllDisplays();
-  display::Display GetDisplayNearestPoint(const gfx::Point& point);
-  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+        // hidden_ops should be a list of Op names that should get a leading _
+// in the output. Prints the output to stdout.
+// Optional fourth argument is the name of the original C++ source file
+// where the ops' REGISTER_OP() calls reside.
+void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
+                    const std::vector<string>& hidden_ops, bool require_shapes,
+                    const string& source_file_name = '');
     
-    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {}
     
-    void AutoUpdater::CheckForUpdates() {}
-    
-    #include 'atom/browser/net/about_protocol_handler.h'
-    
-    #undef cv_hal_addWeighted8u
-#define cv_hal_addWeighted8u TEGRA_ADDWEIGHTED
-#undef cv_hal_addWeighted8s
-#define cv_hal_addWeighted8s TEGRA_ADDWEIGHTED
-#undef cv_hal_addWeighted16u
-#define cv_hal_addWeighted16u TEGRA_ADDWEIGHTED
-#undef cv_hal_addWeighted16s
-#define cv_hal_addWeighted16s TEGRA_ADDWEIGHTED
-#undef cv_hal_addWeighted32s
-#define cv_hal_addWeighted32s TEGRA_ADDWEIGHTED
-//#undef cv_hal_addWeighted32f
-//#define cv_hal_addWeighted32f TEGRA_ADDWEIGHTED
-//#undef cv_hal_addWeighted64f
-//#define cv_hal_addWeighted64f TEGRA_ADDWEIGHTED
-    
-    void absDiff(const Size2D &size,
-             const u8 *src0Base, ptrdiff_t src0Stride,
-             const u8 *src1Base, ptrdiff_t src1Stride,
-             u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u8>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-        void operator() (const typename VecTraits<T>::vec64 & v_src0,
-                     const typename VecTraits<T>::vec64 & v_src1,
-                     typename VecTraits<T>::vec64 & v_dst) const
     {
-        typename VecTraits<wtype>::vec128 vr;
-        wideAdd(vmovl(v_src0), vmovl(v_src1), vr);
-    }
-    
-    void blur5x5(const Size2D &size, s32 cn,
-             const u8 * srcBase, ptrdiff_t srcStride,
-             u8 * dstBase, ptrdiff_t dstStride,
-             BORDER_MODE borderType, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isBlurU8Supported(size, cn, borderType));
-#ifdef CAROTENE_NEON
-#define FLOAT_VARIANT_1_25
-#ifdef FLOAT_VARIANT_1_25
-    float32x4_t v1_25 = vdupq_n_f32 (1.0f/25.0f);
-    float32x4_t v0_5 = vdupq_n_f32 (.5f);
-#else
-    const int16x8_t vScale = vmovq_n_s16(1310);
-#endif
-    size_t colsn = size.width*cn;
-    }
-    
-    #define SPLIT64(sgn,n) void split##n(const Size2D &_size,                                               \
-                                     const sgn##64 * srcBase, ptrdiff_t srcStride                       \
-                                     FILL_LINES##n(FARG, sgn##64) )                                     \
-{                                                                                                       \
-    internal::assertSupportedConfiguration();                                                           \
-    Size2D size(_size);                                                                                 \
-    if (CONTDST##n                                                                                      \
-        dst0Stride == (ptrdiff_t)(size.width))                                                          \
-    {                                                                                                   \
-        size.width *= size.height;                                                                      \
-        size.height = 1;                                                                                \
-    }                                                                                                   \
-    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                               \
-                                                                                                        \
-    for (size_t i = 0u; i < size.height; ++i)                                                           \
-    {                                                                                                   \
-        const sgn##64 * src = internal::getRowPtr(srcBase, srcStride, i);                               \
-        FILL_LINES##n(VROW, sgn##64)                                                                    \
-        size_t sj = 0u, dj = 0u;                                                                        \
-                                                                                                        \
-        for (; dj < size.width; sj += n, ++dj)                                                          \
-        {                                                                                               \
-            vec64 v_src = vld##n##_##sgn##64(src + sj);                                                 \
-            FILL_LINES##n(VST1, sgn##64)                                                                \
-        }                                                                                               \
-    }                                                                                                   \
-}
-    
-    #ifndef CAROTENE_SRC_COMMON_HPP
-#define CAROTENE_SRC_COMMON_HPP
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVT_FUNC(u8, u16, 16,
-     register uint8x16_t zero0 asm ('q1') = vmovq_n_u8(0);,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vst2.8 {d0,d2}, [%[dst1]]                             \n\t'
-             'vst2.8 {d1,d3}, [%[dst2]]                             \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 8),
-               'w' (zero0)
-             : 'd0','d1'
-         );
-     }
-})
-#else
-CVT_FUNC(u8, u16, 16,
-     uint8x16x2_t vline;
-     vline.val[1] = vmovq_n_u8(0);,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         vline.val[0] = vld1q_u8(_src + i);
-         vst2q_u8((uint8_t*)(_dst + i), vline);
-     }
-})
-#endif
-    
-    
-    {} // namespace CAROTENE_NS
+    {}  // end namespace grappler
+}  // end namespace tensorflow
 
     
-        for(i = 3; i < (ptrdiff_t)size.height-2; i++)
-    {
-        const u8* ptr = internal::getRowPtr(srcBase, srcStride, i) + 3;
-        u8* curr = buf[(i - 3)%3];
-        ptrdiff_t* cornerpos = cpbuf[(i - 3)%3];
-        memset(curr, 0, size.width);
-        ptrdiff_t ncorners = 0;
-    }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #include 'common.hpp'
-#include 'vtransform.hpp'
+    // Macro used to quickly declare overrides for abstract virtuals in the
+// fft::FftSupport base class. Assumes that it's emitted somewhere inside the
+// ::stream_executor namespace.
+#define TENSORFLOW_STREAM_EXECUTOR_GPU_FFT_SUPPORT_OVERRIDES                   \
+  std::unique_ptr<fft::Plan> Create1dPlan(Stream *stream, uint64 num_x,        \
+                                          fft::Type type, bool in_place_fft)   \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> Create2dPlan(Stream *stream, uint64 num_x,        \
+                                          uint64 num_y, fft::Type type,        \
+                                          bool in_place_fft) override;         \
+  std::unique_ptr<fft::Plan> Create3dPlan(                                     \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft) override;                             \
+  std::unique_ptr<fft::Plan> Create1dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, fft::Type type, bool in_place_fft,         \
+      ScratchAllocator *scratch_allocator) override;                           \
+  std::unique_ptr<fft::Plan> Create2dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, fft::Type type,              \
+      bool in_place_fft, ScratchAllocator *scratch_allocator) override;        \
+  std::unique_ptr<fft::Plan> Create3dPlanWithScratchAllocator(                 \
+      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
+      fft::Type type, bool in_place_fft, ScratchAllocator *scratch_allocator)  \
+      override;                                                                \
+  std::unique_ptr<fft::Plan> CreateBatchedPlan(                                \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count) override;                            \
+  std::unique_ptr<fft::Plan> CreateBatchedPlanWithScratchAllocator(            \
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
+      uint64 output_stride, uint64 output_distance, fft::Type type,            \
+      bool in_place_fft, int batch_count, ScratchAllocator *scratch_allocator) \
+      override;                                                                \
+  void UpdatePlanWithScratchAllocator(Stream *stream, fft::Plan *plan,         \
+                                      ScratchAllocator *scratch_allocator)     \
+      override;                                                                \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<float> &input,                                 \
+             DeviceMemory<std::complex<float>> *output) override;              \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<double> &input,                                \
+             DeviceMemory<std::complex<double>> *output) override;             \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<float>> &input,                   \
+             DeviceMemory<float> *output) override;                            \
+  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
+             const DeviceMemory<std::complex<double>> &input,                  \
+             DeviceMemory<double> *output) override;
     
-    void gaussianBlur3x3(const Size2D &size,
-                     const u8 * srcBase, ptrdiff_t srcStride,
-                     u8 * dstBase, ptrdiff_t dstStride,
-                     BORDER_MODE border, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isGaussianBlur3x3Supported(size, border));
-#ifdef CAROTENE_NEON
-    const uint16x8_t v_border_x4 = vdupq_n_u16(borderValue << 2);
-    const uint16x8_t v_zero = vdupq_n_u16(0);
-    const uint8x8_t v_border = vdup_n_u8(borderValue);
-    }
-    
-    #define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &_size,                            \
-             const T * srcBase, ptrdiff_t srcStride,         \
-             const T * rng1Base, ptrdiff_t rng1Stride,       \
-             const T * rng2Base, ptrdiff_t rng2Stride,       \
-             u8 * dstBase, ptrdiff_t dstStride)              \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
-    inRangeCheck(_size, srcBase, srcStride,                  \
-                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
-                 dstBase, dstStride);                        \
-}
-#else
-#define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &,                                 \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             u8 *, ptrdiff_t)                                \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
-}
-#endif
-    
-    
-    {            u32 buf[8];
-            vst1_u32(buf, vget_low_u32(el8shr01l));
-            vst1_u32(buf+2, el2l);
-            vst1_u32(buf+4, el2hl);
-            vst1_u32(buf+6, el2hh);
-            for(u32 k=0; k < 8; k++)
-                sqsum[j+k] = prev + prevSqSum[j+k] + buf[k];
-            prev += buf[7];
-        }
-    
-    inline float32x4_t vrecpq_f32(float32x4_t val)
-{
-    float32x4_t reciprocal = vrecpeq_f32(val);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    return reciprocal;
-}
-    
-    namespace CAROTENE_NS {
-    }
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-namespace atomics {
-namespace detail {
-    }
-    }
-    }
-    
-    // A note about memory_order_consume. Technically, this architecture allows to avoid
-// unnecessary memory barrier after consume load since it supports data dependency ordering.
-// However, some compiler optimizations may break a seemingly valid code relying on data
-// dependency tracking by injecting bogus branches to aid out of order execution.
-// This may happen not only in Boost.Atomic code but also in user's code, which we have no
-// control of. See this thread: http://lists.boost.org/Archives/boost/2014/06/213890.php.
-// For this reason we promote memory_order_consume to memory_order_acquire.
-    
-      float WXCorePadding::getPadding(const WXCorePaddingEdge &edge)const {
-    float padding = 0;
-    switch (edge) {
-      case kPaddingLeft:
-        padding = mPaddingLeft;
-        break;
-      case kPaddingTop:
-        padding = mPaddingTop;
-        break;
-      case kPaddingRight:
-        padding = mPaddingRight;
-        break;
-      case kPaddingBottom:
-        padding = mPaddingBottom;
-        break;
-      default:
-        break;
-    }
-    return padding;
+    // Allows to represent a value that is either a host scalar or a scalar stored
+// on the GPU device.
+template <typename ElemT>
+class HostOrDeviceScalar {
+ public:
+  // Not marked as explicit because when using this constructor, we usually want
+  // to set this to a compile-time constant.
+  HostOrDeviceScalar(ElemT value) : value_(value), is_pointer_(false) {}
+  explicit HostOrDeviceScalar(const DeviceMemory<ElemT>& pointer)
+      : pointer_(pointer), is_pointer_(true) {
+    CHECK_EQ(1, pointer.ElementCount());
   }
+    }
+    
+      // Construct a generic signature builder by collecting the constraints
+  // from the requirement and the context of the conformance together,
+  // because both define the capabilities of the requirement.
+  GenericSignatureBuilder builder(ctx);
+    
+    #include 'swift/Basic/DiverseList.h'
+#include 'swift/Basic/DiverseStack.h'
+using namespace swift;
+    
+    %# Ignore the following admonition; it applies to the resulting .cpp file only
+//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+    
+    /// Determine whether this typedef is a CF type.
+bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
+    
+      bool isPropertyAccessor() const {
+    return accessorKind != IAMAccessorKind::None;
+  }
+    
+    bool Punycode::decodePunycodeUTF8(StringRef InputPunycode,
+                                  std::string &OutUTF8) {
+  std::vector<uint32_t> OutCodePoints;
+  if (!decodePunycode(InputPunycode, OutCodePoints))
+    return false;
+    }
+    
+    bool ArgsToFrontendInputsConverter::addFile(StringRef file) {
+  if (Files.insert(file))
+    return false;
+  Diags.diagnose(SourceLoc(), diag::error_duplicate_input_file, file);
+  return true;
+}
+    
+      /// Returns the newly set-up FrontendInputsAndOutputs, as well as a set of
+  /// any unused primary files (those that do not correspond to an input).
+  std::pair<FrontendInputsAndOutputs, std::set<StringRef>>
+  createInputFilesConsumingPrimaries(std::set<StringRef> primaryFiles);
+    
+    /// Sort a set of paths in an order that's (comparatively) stable against
+/// variation in filesystem prefix: lexicographic comparison of the
+/// byte-reversals of each path. Used for emitting external dependencies.
+std::vector<std::string>
+reversePathSortedFilenames(const llvm::ArrayRef<std::string> paths);
+    
+      // Post 'open' event.
+  static void EmitOpenEvent(const std::string& path);
+    
+    namespace base {
+class DictionaryValue;
+class ListValue;
+}
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return !item->icon_.IsEmpty();
+}
+    
+    
+    {  ignore_result(menu_items_.empty());
+}
+    
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {}  // namespace leveldb
+    
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(uint64_t bytes, const char* reason);
+  void ReportDrop(uint64_t bytes, const Status& reason);
+    
+    class Writer {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
+    }
+    
+      // Calls (*handle_result)(arg, ...) with the entry found after a call
+  // to Seek(key).  May not make such a call if filter policy says
+  // that key is not present.
+  Status InternalGet(const ReadOptions&, const Slice& key, void* arg,
+                     void (*handle_result)(void* arg, const Slice& k,
+                                           const Slice& v));
+    
+      // Support for iterating over the contents of a batch.
+  Status Iterate(Handler* handler) const;
+    
+      BlockBuilder(const BlockBuilder&) = delete;
+  BlockBuilder& operator=(const BlockBuilder&) = delete;
+    
+    namespace leveldb {
+    }
+    
+    char* Arena::AllocateAligned(size_t bytes) {
+  const int align = (sizeof(void*) > 8) ? sizeof(void*) : 8;
+  static_assert((align & (align - 1)) == 0,
+                'Pointer size should be a power of 2');
+  size_t current_mod = reinterpret_cast<uintptr_t>(alloc_ptr_) & (align - 1);
+  size_t slop = (current_mod == 0 ? 0 : align - current_mod);
+  size_t needed = bytes + slop;
+  char* result;
+  if (needed <= alloc_bytes_remaining_) {
+    result = alloc_ptr_ + slop;
+    alloc_ptr_ += needed;
+    alloc_bytes_remaining_ -= needed;
+  } else {
+    // AllocateFallback always returned aligned memory
+    result = AllocateFallback(bytes);
+  }
+  assert((reinterpret_cast<uintptr_t>(result) & (align - 1)) == 0);
+  return result;
+}
+    
+        private:
+        std::unordered_set<StreamInformation> m_streamInfos;
+        bool m_epochEndReached;
+        size_t m_numWorkers;
+        size_t m_workerRank;
+        size_t m_prevMinibatchSize;
+        size_t m_maxNumSamplesToRead;
+        size_t m_maxNumSweepsToRead;
+        size_t m_truncationLength;
+        size_t m_maxErrors;
+        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
+    
+        public:
+        template <typename ElementType>
+        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
+            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
+        {
+            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
+            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
+            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
+    }
+    
+            // Now we have three kinds of nodes:
+        //  - unmodified nodes that will be shared with the old network
+        //  - modified nodes (user edits and their parents)
+        //  - original nodes that are no longer referenced
+        // The new network will be constructed to have the same roots as the original.
+    
+    // -----------------------------------------------------------------------
+// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
+// -----------------------------------------------------------------------
+    
+    template<class ElemType>
+void OptimizedRNNStackNode<ElemType>::TransposeHelper(const MatrixBasePtr matX, const TensorShape &shapeX, MatrixBasePtr matY, TensorShape &shapeY)
+{
+    // This function transposes the second and third axes of the input (X), creating a transposed copy in the output (Y).
+    //
+    // In 'frame mode', CNTK will present the data with the final two axes being the recurrent axis followed by the 
+    // 'minibatch axis'. CUDNN expects these to be in the reverse order, which is accomplished by TransposeHelper().
+    }
+    
+    
+    {    CollationKey &key_;
+};
+    
+    U_NAMESPACE_END
+    
+    // public get and set methods ----------------------------------------
+    
+    #ifndef __SHARED_NUMBERFORMAT_H__
+#define __SHARED_NUMBERFORMAT_H__
+    
+    U_NAMESPACE_BEGIN
+    
+    /**
+ * Sets the daylight savings ending rule. For example, in the U.S., Daylight
+ * Savings Time ends at the last (-1) Sunday in October, at 2 AM in standard time.
+ * Therefore, you can set the end rule by calling:
+ * setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+ * Various other types of rules can be specified by manipulating the dayOfWeek
+ * and dayOfWeekInMonth parameters.  For complete details, see the documentation
+ * for setStartRule().
+ * @param month the daylight savings ending month. Month is 0-based.
+ * eg, 0 for January.
+ * @param dayOfWeekInMonth the daylight savings ending
+ * day-of-week-in-month. See setStartRule() for a complete explanation.
+ * @param dayOfWeek the daylight savings ending day-of-week. See setStartRule()
+ * for a complete explanation.
+ * @param time the daylight savings ending time. Please see the member
+ * description for an example.
+ */
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    StringMatcher::StringMatcher(const StringMatcher& o) :
+    UnicodeFunctor(o),
+    UnicodeMatcher(o),
+    UnicodeReplacer(o),
+    pattern(o.pattern),
+    data(o.data),
+    segmentNumber(o.segmentNumber),
+    matchStart(o.matchStart),
+    matchLimit(o.matchLimit)
+{
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+      static const APCCollection* fromHandle(const APCHandle* handle) {
+    assertx(handle->checkInvariants());
+    assertx(handle->kind() == APCKind::SharedCollection);
+    static_assert(offsetof(APCCollection, m_handle) == 0, '');
+    return reinterpret_cast<const APCCollection*>(handle);
+  }
+    
+    #include 'hphp/util/perf-event.h'
+    
+    #include <folly/Random.h>
+    
+      explicit UrlFile(const char *method = 'GET', const Array& headers = null_array,
+                   const String& postData = null_string,
+                   int maxRedirect = HttpClient::defaultMaxRedirect,
+                   int timeout = -1, bool ignoreErrors = false);
+    
+        try {
+      pt::read_json(stream, tree);
+    } catch (const pt::ptree_error& e) {
+      stream.close();
+      return Status(
+          1, 'Error reading docker API response for ' + uri + ': ' + e.what());
+    }
+    
+    TEST_F(CarverTests, test_compression_decompression) {
+  auto const test_data_file = getWorkingDir() / 'test.data';
+  writeTextFile(test_data_file, R'raw_text(
+2TItVMSvAY8OFlbYnx1O1NSsuehfNhNiV4Qw4IPP6exA47HVzAlEXZI3blanlAd2
+JSxCUr+3boxWMwsgW2jJPzypSKvfXB9EDbFKiDjVueniBfiAepwta57pZ9tQDnJA
+uRioApcqYSWL14OJrnPQFHel5FpXylmVdIkiz()cT82JsOPZmh56vDn62Kk/mU7V
+RltGAYEpKmi8e71fuB8d/S6Lau{}AmL1153X7E+4d1G1UfiQa7Q02uVjxLLE5FEj
+JTDjVqIQNhi50Pt4J4RVopYzy1AZGwPHLhwFVIPH0s/LmzVW+xbT8/V2UMSzK4XB
+oqADd9Ckcdtplx3k7bcLU[U04j8WWUtUccmB+4e2KS]i3x7WDKviPY/sWy9xFapv
+)raw_text');
+  {
+    auto s = osquery::compress(test_data_file,
+                               getWorkingDir() / fs::path('test.zst'));
+    ASSERT_TRUE(s.ok()) << s.what();
+  }
+  {
+    auto s =
+        osquery::decompress(getWorkingDir() / fs::path('test.zst'),
+                            getWorkingDir() / fs::path('test.data.extract'));
+    ASSERT_TRUE(s.ok()) << s.what();
+  }
+    }
+    
+    template <typename StorageType>
+void InMemoryStorage<StorageType>::put(const std::string& key,
+                                       const StorageType value) {
+  storage_[key] = value;
+}
+    
+      Flag::create('logtostderr',
+               {'Log messages to stderr in addition to the logger plugin(s)',
+                false,
+                false,
+                true,
+                false});
+  Flag::create('stderrthreshold',
+               {'Stderr log level threshold', false, false, true, false});
+    
+    
+    {  name_ = name;
+}
+    
+      // verify the values are still there
+  std::string value;
+  for (int i = 1000; i < 99999; ++i) {
+    db->Get(ReadOptions(), std::to_string(i),
+                           &value);
+    assert(value == std::string(500, 'a' + (i % 26)));
+  }
+    
+      // Put key-value
+  s = db->Put(WriteOptions(), 'key1', 'value');
+  assert(s.ok());
+  std::string value;
+  // get value
+  s = db->Get(ReadOptions(), 'key1', &value);
+  assert(s.ok());
+  assert(value == 'value');
+    
+      // Builds an openable snapshot of RocksDB on the same disk, which
+  // accepts an output directory on the same disk, and under the directory
+  // (1) hard-linked SST files pointing to existing live SST files
+  // SST files will be copied if output directory is on a different filesystem
+  // (2) a copied manifest files and other files
+  // The directory should not already exist and will be created by this API.
+  // The directory will be an absolute path
+  // log_size_for_flush: if the total log file size is equal or larger than
+  // this value, then a flush is triggered for all the column families. The
+  // default value is 0, which means flush is always triggered. If you move
+  // away from the default, the checkpoint may not contain up-to-date data
+  // if WAL writing is not always enabled.
+  // Flush will always trigger if it is 2PC.
+  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
+                                  uint64_t log_size_for_flush = 0);
+    
+      // Any internal progress/error information generated by the db will
+  // be written to info_log if it is non-NULL, or to a file stored
+  // in the same directory as the DB contents if info_log is NULL.
+  // Default: NULL
+  Logger* info_log;
+    
+    #pragma once
+// lua headers
+extern 'C' {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+    
+    #pragma once
+    
+      // Starts a new Transaction.
+  //
+  // Caller is responsible for deleting the returned transaction when no
+  // longer needed.
+  //
+  // If old_txn is not null, BeginTransaction will reuse this Transaction
+  // handle instead of allocating a new one.  This is an optimization to avoid
+  // extra allocations when repeatedly creating transactions.
+  virtual Transaction* BeginTransaction(
+      const WriteOptions& write_options,
+      const OptimisticTransactionOptions& txn_options =
+          OptimisticTransactionOptions(),
+      Transaction* old_txn = nullptr) = 0;
+    
+    namespace rocksdb {
+    }
