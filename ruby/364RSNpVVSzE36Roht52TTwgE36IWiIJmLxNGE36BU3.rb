@@ -1,146 +1,116 @@
-module Admin
-  class EmailDomainBlocksController < BaseController
-    before_action :set_email_domain_block, only: [:show, :destroy]
-    
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
-    else
-      ['Unknown mode: #{hub_mode}', 422]
-    end
-  end
-    
-      private
-    
-      included do
-    before_action :set_session_activity
-  end
-    
-    (import 'mDNSResponder.sb')
-    
-    World(RemoteCommandHelpers)
 
+        
+                result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            message: '#{message}',
+            force: true
+          })
+        end').runner.execute(:test)
     
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
+          it 'adds logformat param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            logformat: '1'
+          )
+        end').runner.execute(:test)
+    
+    # Windows implementation
+module WindowsShellwords
+  def shellescape(str)
+    str = str.to_s
+    
+    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
+puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+    
+        it 'allows to delete a user' do
+      visit admin_users_path
+      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
+      expect(page).to have_text('User 'bob' was deleted.')
+      expect(page).to have_no_text('bob@example.com')
     end
     
-            @response = (gets || '').chomp
+      describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
+    
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
+    
+        it 'should ignore strings which just contain a JSONPath' do
+      expect(LiquidMigrator.convert_string('$.data')).to eq('$.data')
+      expect(LiquidMigrator.convert_string('$first_title')).to eq('$first_title')
+      expect(LiquidMigrator.convert_string(' $.data', true)).to eq(' $.data')
+      expect(LiquidMigrator.convert_string('lorem $.data', true)).to eq('lorem $.data')
+    end
+    it 'should raise an exception when encountering complex JSONPaths' do
+      expect { LiquidMigrator.convert_string('$.data.test.*', true) }.
+        to raise_error('JSONPath '$.data.test.*' is too complex, please check your migration.')
+    end
+  end
+    
+          Utils.sort_tuples!(tuples)
+      expect(tuples).to eq expected
+    end
+    
+        it 'should generate the correct specific tracking url' do
+      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
+      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
+    end
+    
+      describe '#working?' do
+    it 'should not be working until the first event was received' do
+      expect(@checker).not_to be_working
+      @checker.last_receive_at = Time.now
+      expect(@checker).to be_working
+    end
+  end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+          def process_response(response)
+        super.merge! response_effective_path: response.effective_path, response_path: response.path
       end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
+            # Remove ng-* attributes
+        css('*').each do |node|
+          node.attributes.each_key do |attribute|
+            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
           end
         end
-        block_given? ? nil : rps
-      end
     
-          def initialize(variables)
-        super(variables)
-        @validators = {}
-      end
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
     
-          def trusted?
-        @trusted
-      end
+      it 'denies post requests with wrong X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => bad_token)
+    expect(last_response).not_to be_ok
+  end
     
-    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
-  validate(strategy) do |key, _value|
-    warn(
-      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
-      'Capistrano 3.7.0.\n'\
-      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
-    )
+        it 'adds the correct Set-Cookie header' do
+      get '/some/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+    
+    module LogStash
+  module PluginManager
   end
 end
     
-      def self.link(title)
-    title.downcase.gsub(/(?!-)\W /, '-').gsub(' ', '-').gsub(/(?!-)\W/, '')
-  end
-    
-      // writing
-  $('form').on('submit',function(e) {
-    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
-    $('#msg').val(''); $('#msg').focus();
-    e.preventDefault();
-  });
-</script>
-    
-    require 'rack/show_exceptions'
-    
-          # Essentially the inverse of +mask_token+.
-      def unmask_token(masked_token)
-        # Split the token into the one-time pad and the encrypted
-        # value and decrypt it
-        token_length = masked_token.length / 2
-        one_time_pad = masked_token[0...token_length]
-        encrypted_token = masked_token[token_length..-1]
-        xor_byte_strings(one_time_pad, encrypted_token)
+          post_install_messages.compact.each do |message|
+        PluginManager.ui.info(message)
       end
     
-          def self.default_options(options)
-        define_method(:default_options) { super().merge(options) }
-      end
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+    shared_examples 'logstash update' do |logstash|
+  describe 'logstash-plugin update on #{logstash.hostname}' do
+    before :each do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
-  end
-end
-
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          def ignored_node?(node)
-        # Same object found in array?
-        ignored_nodes.any? { |n| n.equal?(node) }
-      end
-    
-            css_classes << 'selected' if selected
-    
-      desc 'Release all gems to rubygems'
-  task release: :build do
-    sh 'git tag -a -m \'Version #{version}\' v#{version}'
-    
-                if handler.error.present?
-              @coupon_message = handler.error
-              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
-              return true
-            end
-          end
-          false
-        end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
