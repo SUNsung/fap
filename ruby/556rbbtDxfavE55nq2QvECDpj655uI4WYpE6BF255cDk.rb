@@ -1,68 +1,79 @@
 
         
-          protected
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          private
-    
-        unless env['devise.skip_trackable']
-      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
+      end
     end
   end
 end
 
     
-        # Return modules for the mapping.
-    def modules
-      @modules ||= to.respond_to?(:devise_modules) ? to.devise_modules : []
+      if ENV['HOMEBREW_INTEGRATION_TEST']
+    command_name '#{ENV['HOMEBREW_INTEGRATION_TEST']} (#{$PROCESS_ID})'
+    
+        # Extract each header value pair
+    header.split(/\r\n/mn).each { |str|
+      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
+        if (self[md[1]])
+          self[md[1]] << ', ' + md[2]
+        else
+          self[md[1]] = md[2]
+        end
+      end
+    }
+  end
+    
+          when IAX_CTRL_PROCEED
+        dprint('PROCEED')
+    
+    require 'rex/proto/ipmi/utils'
+    
+              # Encodes the options field
+          #
+          # @return [OpenSSL::ASN1::BitString]
+          def encode_options
+            OpenSSL::ASN1::BitString.new([options].pack('N'))
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
+          end
+    
+        def version
+      ['--version', '-V',
+       'Display the program version.',
+       lambda do |_value|
+         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
+         exit
+       end]
     end
     
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-      before_action :require_user!
-    
-        define_method provider do
-      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
-    
-      def apply_header_remaining
-    response.headers['X-RateLimit-Remaining'] = rate_limit_remaining
-  end
-    
-      private
-    
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
-    
-            def delimiter_delta
-          return 0 if first.same_line?(second)
-          return 0 if first.delimiter != second.delimiter
-    
-            private
-    
-            field_options.merge!(readonly: options[:readonly],
-                             disabled: options[:disabled],
-                             size: options[:size])
-      end
-    
-            # write header and data to target file.
-        target_file.write(header)
-        target_file.write(data)
-      end
-      FileUtils.mv(temporary_file_name, target_path)
-    ensure
-      file.close()
-      target_file.close()
-    end
-  end
-    
-        args.flatten!.compact!
+          class ValidatedQuestion < Question
+        def initialize(validator)
+          @validator = validator
+        end
