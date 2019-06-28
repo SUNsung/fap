@@ -1,141 +1,127 @@
 
         
-            # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+                print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
     
-    
-def normalize(x, axis=-1, order=2):
-    '''Normalizes a Numpy array.
-    
-             try:
-             parallel_model = multi_gpu_model(model, cpu_relocation=True)
-             print('Training using multiple GPUs..')
-         except ValueError:
-             parallel_model = model
-             print('Training using single GPU or CPU..')
-         parallel_model.compile(..)
-         ..
-    ```
+    File: sparsity_benchmark.py
+Function: benchmark_sparse_predict at line 56
+Total time: 0.39274 s
     
     
-batch_size = 128
-buffer_size = 10000
-steps_per_epoch = int(np.ceil(60000 / float(batch_size)))  # = 469
-epochs = 5
-num_classes = 10
+def make_linkcode_resolve(package, url_fmt):
+    '''Returns a linkcode_resolve function for the given URL format
     
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
+    
+    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
+plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Shuffled dataset')
+    
+    # Create a graph capturing local connectivity. Larger number of neighbors
+# will give more homogeneous clusters to the cost of computation
+# time. A very large number of neighbors gives more evenly distributed
+# cluster sizes, but may not impose the local manifold structure of
+# the data
+knn_graph = kneighbors_graph(X, 30, include_self=False)
+    
+        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
+               vmin=0)
+    plt.xticks(range(n_clusters), labels, rotation=45)
+    plt.yticks(range(n_clusters), labels)
+    plt.colorbar()
+    plt.suptitle('Interclass %s distances' % metric, size=18)
+    plt.tight_layout()
+    
+        ax.scatter(X[:, 3], X[:, 0], X[:, 2],
+               c=labels.astype(np.float), edgecolor='k')
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
 
     
-    
-def multi_dense(x, n_unit_ls, act_fn=relu, name=None):
-    '''多层全连接
-    Input shape:  [batch_size, n_input]
-    Output shape: [batch_size, n_unit_list[-1]]
-    
-        Args:
-        x:
-        c_embed_size:
-        share_cnn_weights:
-        name:
-        reuse:
-    
-        Examples:
-        l2_regularizer = l2(0.01)
-        tf.get_variable(..., regularizer=l2_regularizer, ...)
     '''
+
     
-      Args:
-    filename: Filename of the file that is being processed.
-    file_extension: The extension (dot not included) of the file.
-    clean_lines: An array of strings, each representing a line of the file,
-                 with comments stripped.
-    line: Number of line being processed.
-    include_state: An _IncludeState instance in which the headers are inserted.
-    function_state: A _FunctionState instance which counts function lines, etc.
-    nesting_state: A NestingState instance which maintains information about
-                   the current stack of nested blocks being parsed.
-    error: A callable to which errors are reported, which takes 4 arguments:
-           filename, line number, error level, and message
-    extra_check_functions: An array of additional check functions that will be
-                           run on each source line. Each function takes 4
-                           arguments: filename, clean_lines, line, error
-  '''
-  raw_lines = clean_lines.raw_lines
-  ParseNolintSuppressions(filename, raw_lines[line], line, error)
-  nesting_state.Update(filename, clean_lines, line, error)
-  CheckForNamespaceIndentation(filename, nesting_state, clean_lines, line,
-                               error)
-  if nesting_state.InAsmBlock(): return
-  CheckForFunctionLengths(filename, clean_lines, line, function_state, error)
-  CheckForMultilineCommentsAndStrings(filename, clean_lines, line, error)
-  CheckStyle(filename, clean_lines, line, file_extension, nesting_state, error)
-  CheckLanguage(filename, clean_lines, line, file_extension, include_state,
-                nesting_state, error)
-  CheckForNonConstReference(filename, clean_lines, line, nesting_state, error)
-  CheckForNonStandardConstructs(filename, clean_lines, line,
-                                nesting_state, error)
-  CheckVlogArguments(filename, clean_lines, line, error)
-  CheckPosixThreading(filename, clean_lines, line, error)
-  CheckInvalidIncrement(filename, clean_lines, line, error)
-  CheckMakePairUsesDeduction(filename, clean_lines, line, error)
-  CheckRedundantVirtual(filename, clean_lines, line, error)
-  CheckRedundantOverrideOrFinal(filename, clean_lines, line, error)
-  if extra_check_functions:
-    for check_fn in extra_check_functions:
-      check_fn(filename, clean_lines, line, error)
+            if isinstance(obj, types.ModuleType):
+            return self.loadTestsFromModule(obj)
+        elif isinstance(obj, type) and issubclass(obj, case.TestCase):
+            return self.loadTestsFromTestCase(obj)
+        elif (isinstance(obj, types.FunctionType) and
+              isinstance(parent, type) and
+              issubclass(parent, case.TestCase)):
+            name = parts[-1]
+            inst = parent(name)
+            # static methods follow a different path
+            if not isinstance(getattr(inst, name), types.FunctionType):
+                return self.suiteClass([inst])
+        elif isinstance(obj, suite.TestSuite):
+            return obj
+        if callable(obj):
+            test = obj()
+            if isinstance(test, suite.TestSuite):
+                return test
+            elif isinstance(test, case.TestCase):
+                return self.suiteClass([test])
+            else:
+                raise TypeError('calling %s returned %s, not a test' %
+                                (obj, test))
+        else:
+            raise TypeError('don't know how to make test from: %s' % obj)
     
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
-from __future__ import absolute_import
+            loader = unittest.TestLoader()
+        loader.sortTestMethodsUsing = reversed_cmp
     
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
+            self.check_tokenize('''async def foo(async): await''', '''\
+    NAME       'async'       (1, 0) (1, 5)
+    NAME       'def'         (1, 6) (1, 9)
+    NAME       'foo'         (1, 10) (1, 13)
+    OP         '('           (1, 13) (1, 14)
+    NAME       'async'       (1, 14) (1, 19)
+    OP         ')'           (1, 19) (1, 20)
+    OP         ':'           (1, 20) (1, 21)
+    NAME       'await'       (1, 22) (1, 27)
+    ''')
     
-            # Removing unique constraint on 'GroupTagKey', fields ['project_id', 'group_id', '_key']
-        db.delete_unique(u'tagstore_grouptagkey', ['project_id', 'group_id', 'key_id'])
+        def testDecompressMultiStream(self):
+        text = bz2.decompress(self.DATA * 5)
+        self.assertEqual(text, self.TEXT * 5)
     
-            # Adding unique constraint on 'EventTag', fields ['project_id', 'event_id', 'key', 'value']
-        db.create_unique(u'tagstore_eventtag', ['project_id', 'event_id', 'key_id', 'value_id'])
+    # Import the email modules we'll need
+from email import policy
+from email.parser import BytesParser
     
-        This is currenlty only used for ``in_next_release`` resolutions.
-    '''
-    try:
-        release = Release.objects.get_from_cache(
-            id=release_id,
-        )
-    except Release.DoesNotExist:
-        return
     
-            for platform, project_id in queryset:
-            platform = platform.lower()
-            if platform not in VALID_PLATFORMS:
-                continue
-            ProjectPlatform.objects.create_or_update(
-                project_id=project_id,
-                platform=platform,
-                values={
-                    'last_seen': now,
-                },
-            )
-        min_project_id += step
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+        # Tell child processes to stop
+    for i in range(NUMBER_OF_PROCESSES):
+        task_queue.put('STOP')
