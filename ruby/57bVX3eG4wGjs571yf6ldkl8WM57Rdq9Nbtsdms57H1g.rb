@@ -1,141 +1,127 @@
 
         
-            self.last_flush = Time.now.utc
-    
-          if period_type == :all
-        DB.exec <<~SQL
-          UPDATE user_stats s
-          SET likes_given         = d.likes_given,
-              likes_received      = d.likes_received,
-              topic_count         = d.topic_count,
-              post_count          = d.post_count
-    
-    class ContentSecurityPolicy
-  class Default
-    attr_reader :directives
-    
-          SiteSetting.content_security_policy_collect_reports = false
-      report_uri = parse(policy)['report-uri']
-      expect(report_uri).to eq(nil)
-    end
-  end
-    
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
-    end
-    
-        def error?
-      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
-    end
-    
-          def inherited(subclass)
-        super
-    
-          def mod
-        return @mod if defined?(@mod)
-        @mod = slug[/api\/([\w\-\.]+)\//, 1]
-        @mod.remove! 'angular2.' if @mod
-        @mod
-      end
+            def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
     end
   end
 end
 
     
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
       end
     
-        # Creates configuration values for Devise and for the given module.
-    #
-    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
-    #
-    # The line above creates:
-    #
-    #   1) An accessor called Devise.stretches, which value is used by default;
-    #
-    #   2) Some class methods for your model Model.stretches and Model.stretches=
-    #      which have higher priority than Devise.stretches;
-    #
-    #   3) And an instance method stretches.
-    #
-    # To add the class methods you need to have a module ClassMethods defined
-    # inside the given class.
-    #
-    def self.config(mod, *accessors) #:nodoc:
-      class << mod; attr_accessor :available_configs; end
-      mod.available_configs = accessors
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
     end
+    
+    module IRB # :nodoc:
+    
+          Dir['*.gem'].each do |file|
+        begin
+          pkg = Gem::Package.new(file)
+        rescue SystemCallError, Gem::Package::FormatError
+          # ignore
+        else
+          tup = pkg.spec.name_tuple
+          @specs[tup] = [File.expand_path(file), pkg]
+    
+        def reset
+      @command_start = false
+      @cmd_state = @command_start
+    end
+    
+                str.each_line do |line|
+              if line.end_with?('\n')
+                pos[0] += 1
+                pos[1] = 0
+              else
+                pos[1] += line.bytesize
+              end
+            end
+    
+      def test_open_r_enc_in_opt
+    with_tmpdir {
+      generate_file('tmp', '')
+      open('tmp', 'r', encoding: 'euc-jp') {|f|
+        assert_equal(Encoding::EUC_JP, f.external_encoding)
+        assert_equal(nil, f.internal_encoding)
+      }
+    }
+  end
+    
+          if t > 0.0 and t < isect.t then
+        isect.t = t
+        isect.hit = true
+        isect.pl = Vec.new(ray.org.x + ray.dir.x * t,
+                          ray.org.y + ray.dir.y * t,
+                          ray.org.z + ray.dir.z * t)
+        n = isect.pl.vsub(@center)
+        isect.n = n.vnormalize
+      else
+        0.0
+      end
+    end
+    nil
   end
 end
     
-      # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
+    Then(/^directory symlinks are created in the new release$/) do
+  pending
+  TestApp.linked_dirs.each do |dir|
+    run_vagrant_command(test_symlink_exists(TestApp.release_path.join(dir)))
+  end
+end
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
+        [stdout, stderr, status]
+  end
     
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
+        require 'capistrano/scm/#{scm_name}'
+    install_plugin #{built_in_scm_plugin_class_name}
     
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
+        end
+      end
+    
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+      it 'returns the source' do
+    expect(subject.source).to eq(source)
+  end
+    
+          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
+      options = {:debug => ENV['LS_QA_DEBUG']}
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
     end
   end
-    
-              expect(gon['preloads'][:mentioned_person][:name]).to eq(alice.person.name)
-          expect(gon['preloads'][:mentioned_person][:handle]).to eq(alice.person.diaspora_handle)
-        end
-      end
-    end
-    
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
-    
-      subject { instance }
-    
-        context '$SHELL is not set' do
-      before do
-        allow(ENV).to receive(:[]).with('SHELL') { nil }
-      end
-    
-        context 'nested collections' do
-      let(:command1) { 'cd /tmp/' }
-      let(:command2) { 'ls' }
+end
