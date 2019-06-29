@@ -1,142 +1,217 @@
 
         
-        TEST(StatusOr, TestPointerCopyCtorStatusOk) {
-  const int kI = 0;
-  StatusOr<const int*> original(&kI);
-  StatusOr<const int*> copy(original);
-  EXPECT_EQ(original.status(), copy.status());
-  EXPECT_EQ(original.ValueOrDie(), copy.ValueOrDie());
+        
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
 }
     
-    #include <google/protobuf/stubs/common.h>
-#include <gtest/gtest.h>
+    TEST(TemplateUtilTest, TestTemplateTypeEquals) {
+  // Check that the TemplateTypeEquals works correctly.
+  bool value = false;
+    }
     
     
     {
-  return 0;
-}
-
-    
-     private:
-  static bool IsMessageSet(const Descriptor *descriptor) {
-    if (descriptor != nullptr
-        && descriptor->options().message_set_wire_format()) {
-      return true;
-    }
-    return false;
+    {    return true;
   }
-    
-        tutorial::Person::PhoneNumber* phone_number = person->add_phones();
-    phone_number->set_number(number);
-    
-    // Iterates though all people in the AddressBook and prints info about them.
-void ListPeople(const tutorial::AddressBook& address_book) {
-  for (int i = 0; i < address_book.people_size(); i++) {
-    const tutorial::Person& person = address_book.people(i);
+ private:
+  bool CanGenerate(const FileDescriptor* file) const {
+    if (GetPool()->FindFileByName(file->name()) != nullptr) {
+      return false;
     }
+    for (int j = 0; j < file->dependency_count(); j++) {
+      if (GetPool()->FindFileByName(file->dependency(j)->name()) == nullptr) {
+        return false;
+      }
     }
-    
-    #include 'gtest/internal/gtest-port.h'
-    
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
- public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
-  };
+    for (int j = 0; j < file->public_dependency_count(); j++) {
+      if (GetPool()->FindFileByName(
+          file->public_dependency(j)->name()) == nullptr) {
+        return false;
+      }
     }
-    
-     private:
-  std::string file_;
-  int line_;
-  int index_;
-  int write_fd_;
-    
-    // This template class represents an IEEE floating-point number
-// (either single-precision or double-precision, depending on the
-// template parameters).
-//
-// The purpose of this class is to do more sophisticated number
-// comparison.  (Due to round-off error, etc, it's very unlikely that
-// two floating-points will be equal exactly.  Hence a naive
-// comparison by the == operation often doesn't work.)
-//
-// Format of IEEE floating-point:
-//
-//   The most-significant bit being the leftmost, an IEEE
-//   floating-point looks like
-//
-//     sign_bit exponent_bits fraction_bits
-//
-//   Here, sign_bit is a single bit that designates the sign of the
-//   number.
-//
-//   For float, there are 8 exponent bits and 23 fraction bits.
-//
-//   For double, there are 11 exponent bits and 52 fraction bits.
-//
-//   More details can be found at
-//   http://en.wikipedia.org/wiki/IEEE_floating-point_standard.
-//
-// Template parameter:
-//
-//   RawType: the raw floating-point type (either float or double)
-template <typename RawType>
-class FloatingPoint {
- public:
-  // Defines the unsigned integer type that has the same size as the
-  // floating point number.
-  typedef typename TypeWithSize<sizeof(RawType)>::UInt Bits;
+    for (int j = 0; j < file->weak_dependency_count(); j++) {
+      if (GetPool()->FindFileByName(
+          file->weak_dependency(j)->name()) == nullptr) {
+        return false;
+      }
     }
-    
-      CartesianProductGenerator3(const ParamGenerator<T1>& g1,
-      const ParamGenerator<T2>& g2, const ParamGenerator<T3>& g3)
-      : g1_(g1), g2_(g2), g3_(g3) {}
-  virtual ~CartesianProductGenerator3() {}
-    
-      // Compares two C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike strcasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CaseInsensitiveCStringEquals(const char* lhs,
-                                           const char* rhs);
-    
-    
-    {    // You can generate a failure in any event handler except
-    // OnTestPartResult. Just use an appropriate Google Test assertion to do
-    // it.
-    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
+    return true;
   }
-    
-      std::chrono::seconds timeout_;
-    
-    std::shared_ptr<DHTBucket>
-DHTRoutingTable::getBucketFor(const std::shared_ptr<DHTNode>& node) const
-{
-  return getBucketFor(node->getID());
-}
-    
-    namespace aria2 {
-    }
-    
-    
-    {  virtual std::shared_ptr<DHTTask>
-  createReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                        const std::shared_ptr<DHTNode>& newNode) = 0;
 };
     
-    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
-{
-  periodicTaskQueue2_.addTask(task);
-}
+    #include <string>
+#include <set>
+#include <vector>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
     
-      DHTTaskExecutor periodicTaskQueue2_;
+    
+    {
+    {
+    {  /*!
+   * \brief Worker threads.
+   */
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+};
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
+
+    
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
+    
+        dword(xfx_formater.instruction);
+  }
+  void EmitXFXForm(const uint8_t op,
+                   const RegNumber rs,
+                   const uint16_t mask,
+                   const uint16_t xo,
+                   const uint8_t rsv = 0) {
+    
+      // @todo: check allow_url_include?
+    
+    
+    {  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+};
+    
+    #include 'hphp/runtime/base/type-string.h'
+    
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
+    
+    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
+  const char* prefix = 'glob://';
+  const char* path_str = path.data();
+  int path_len = path.length();
+    }
+    
+    /**
+ * For php://output, a simple wrapper of g_context->out().
+ */
+struct OutputFile : File {
+  DECLARE_RESOURCE_ALLOCATION(OutputFile);
+    }
+    
+      void setProxy(const String& proxy_host, int proxy_port,
+                const String& proxy_user, const String& proxy_pass);
+  bool open(const String& filename, const String& mode) override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seekable() override { return false; }
+  bool flush() override;
+  Variant getWrapperMetaData() override { return Variant(m_responseHeaders); }
+  String getLastError();
+    
+    bool ImGui::VSliderScalar(const char* label, const ImVec2& size, ImGuiDataType data_type, void* v, const void* v_min, const void* v_max, const char* format, float power)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+    }
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+        // Setup Platform/Renderer bindings
+    ImGui_ImplAllegro5_Init(display);
+    
+        // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    bool ImGui_ImplDX9_Init(IDirect3DDevice9* device)
+{
+    // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendRendererName = 'imgui_impl_dx9';
+    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
+    }
+    
+        // Backup GL state
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+    
+        // Setup viewport:
+    {
+        VkViewport viewport;
+        viewport.x = 0;
+        viewport.y = 0;
+        viewport.width = (float)fb_width;
+        viewport.height = (float)fb_height;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(command_buffer, 0, 1, &viewport);
+    }
