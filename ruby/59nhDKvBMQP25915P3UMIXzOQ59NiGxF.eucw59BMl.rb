@@ -1,50 +1,81 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            grouping: 'grouping',
-            build_number: 'build_number',
-            prefix: 'prefix',
-          })
-        end').runner.execute(:test)
+        module Gitlab
+  module GithubImport
+    module Importer
+      class NotesImporter
+        include ParallelScheduling
     
-          it 'works given the path to compile_commands.json' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
-            )
-          end').runner.execute(:test)
+    Given(/^a linked file '(.*?)'$/) do |file|
+  # ignoring other linked files
+  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
+end
     
-    # Here be helper
+    World(RemoteCommandHelpers)
+
     
-        os = 'windows'
-    shelljoin_testcases.each do |testcase|
-      it testcase['it'] + ': ' + testcase['it_result'][os] do
-        array = testcase['input']
-        expect_correct_implementation_to_be_called(array, :shelljoin, os)
-        joined = array.shelljoin
-        expect(joined).to eq(testcase['expect'][os])
-      end
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
     end
   end
     
-          it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
+          def ask_question
+        $stdout.print question
+        $stdout.flush
+      end
+    
+          def add_role(role)
+        roles.add role.to_sym
+        self
+      end
+    
+              def spree_current_order
+            @spree_current_order ||= find_spree_current_order
+          end
+    
+            def index
+          @products = if params[:ids]
+                        product_scope.where(id: params[:ids].split(',').flatten)
+                      else
+                        product_scope.ransack(params[:q]).result
+                      end
+    
+      def framework_version
+    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
+  end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
+    end
+  end
+end
+
+    
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
+        end
+      else
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
       end
     end
     
-        stub_request(:get, /trackings/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    
-      puts '\n== Preparing database =='
-  system! 'bin/rails db:setup'
+        # Returns the timestamp as defined by the <attachment>_updated_at field
+    # in the server default time zone unless :use_global_time_zone is set
+    # to false.  Note that a Rails.config.time_zone change will still
+    # invalidate any path or URL that uses :timestamp.  For a
+    # time_zone-agnostic timestamp, use #updated_at.
+    def timestamp attachment, style_name
+      attachment.instance_read(:updated_at).in_time_zone(attachment.time_zone).to_s
+    end
