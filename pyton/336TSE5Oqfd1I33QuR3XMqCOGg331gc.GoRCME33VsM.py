@@ -1,37 +1,85 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+            def test_send_blank(self):
+        self.con._http_vsn_str = ''
+        self.con.putrequest('', '')
+        self.con.endheaders()
+        res = self.con.getresponse()
+        self.assertEqual(res.status, HTTPStatus.BAD_REQUEST)
     
-            if os.path.basename(full_path).lower().startswith('__init__.py'):
-            return os.path.dirname(os.path.dirname(full_path))
-        else:
-            # here we have been given a module rather than a package - so
-            # all we can do is search the *same* directory the module is in
-            # should an exception be raised instead
-            return os.path.dirname(full_path)
+                    if set_implicit_top:
+                    if not is_namespace:
+                        self._top_level_dir = \
+                           self._get_directory_containing_module(top_part)
+                        sys.path.remove(top_level_dir)
+                    else:
+                        sys.path.remove(top_level_dir)
+    
+    PYTHON2_EXCEPTIONS = (
+    'ArithmeticError',
+    'AssertionError',
+    'AttributeError',
+    'BaseException',
+    'BufferError',
+    'BytesWarning',
+    'DeprecationWarning',
+    'EOFError',
+    'EnvironmentError',
+    'Exception',
+    'FloatingPointError',
+    'FutureWarning',
+    'GeneratorExit',
+    'IOError',
+    'ImportError',
+    'ImportWarning',
+    'IndentationError',
+    'IndexError',
+    'KeyError',
+    'KeyboardInterrupt',
+    'LookupError',
+    'MemoryError',
+    'NameError',
+    'NotImplementedError',
+    'OSError',
+    'OverflowError',
+    'PendingDeprecationWarning',
+    'ReferenceError',
+    'RuntimeError',
+    'RuntimeWarning',
+    # StandardError is gone in Python 3, so we map it to Exception
+    'StopIteration',
+    'SyntaxError',
+    'SyntaxWarning',
+    'SystemError',
+    'SystemExit',
+    'TabError',
+    'TargetScopeError',
+    'TypeError',
+    'UnboundLocalError',
+    'UnicodeDecodeError',
+    'UnicodeEncodeError',
+    'UnicodeError',
+    'UnicodeTranslateError',
+    'UnicodeWarning',
+    'UserWarning',
+    'ValueError',
+    'Warning',
+    'ZeroDivisionError',
+)
+    
+    from email.message import EmailMessage
+from email.headerregistry import Address
+from email.utils import make_msgid
+    
+    from email.message import EmailMessage
+from email.policy import SMTP
+    
+    DB_FILE = 'mydb'
+    
+            print('Test: Pop general case')
+        assert_equal(stacks.pop(), 5)
+        assert_equal(stacks.pop(), 3)
     
     
-def main():
-    import io
-    import pprint
-    
-    
-def main():
-    parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
-''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
-    args = parser.parse_args()
-    
-    def calculatestar(args):
-    return calculate(*args)
-    
-    import sqlite3
+if __name__ == '__main__':
+    main()
