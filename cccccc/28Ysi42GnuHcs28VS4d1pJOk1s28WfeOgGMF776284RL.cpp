@@ -1,177 +1,317 @@
 
         
-        #include 'native_mate/function_template.h'
-    
-    
-    {}  // namespace mate
-
-    
-    #include 'base/logging.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-    
-    // This set of templates invokes a base::Callback by converting the Arguments
-// into native types. It relies on the function_template.h to provide helper
-// templates.
-inline WrappableBase* InvokeFactory(
-    Arguments* args,
-    const base::Callback<WrappableBase*()>& callback) {
-  return callback.Run();
+        SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
 }
     
-      void Clear() {
-    wrapper_.Clear();
-    object_ = NULL;
+      DefaultCacheKey CKey(Key, &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    if (Entry->second == Value)
+      return;
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
   }
     
-    // This specialization allows people to construct function templates directly if
-// they need to do fancier stuff.
-template <>
-struct CallbackTraits<v8::Local<v8::FunctionTemplate>> {
-  static v8::Local<v8::FunctionTemplate> CreateTemplate(
-      v8::Local<v8::FunctionTemplate> templ) {
-    return templ;
+      IAMResult() = default;
+    
+      /// Emits an error for each file in \p unusedPrimaryFiles.
+  ///
+  /// \returns true if \p unusedPrimaryFiles is non-empty.
+  bool diagnoseUnusedPrimaryFiles(std::set<StringRef> unusedPrimaryFiles);
+    
+      unsigned LastArgWritten;
+    
+    #ifndef CONTENT_NW_SRC_API_APP_APP_H_
+#define CONTENT_NW_SRC_API_APP_APP_H_
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+    
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
+    
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    }
+    
+    #include 'ui/base/models/simple_menu_model.h'
+    
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+    
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
+};
+    
+    
+    {  return true;
+}
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+    #include 'extensions/browser/extension_function.h'
+    
+      Fork() {
+    pid = fork();
+    if (pid < 0) {
+      throw std::system_error(errno, std::system_category(), 'fork');
+    }
+  }
+    
+    
+    {
+    {    return SingleGradientDef(
+        'MergeSingleMapFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
   }
 };
     
-    // Wrappable is a base class for C++ objects that have corresponding v8 wrapper
-// objects. To retain a Wrappable object on the stack, use a gin::Handle.
-//
-// USAGE:
-// // my_class.h
-// class MyClass : Wrappable<MyClass> {
-//  public:
-//   ...
-// };
-//
-// Subclasses should also typically have private constructors and expose a
-// static Create function that returns a mate::Handle. Forcing creators through
-// this static Create function will enforce that clients actually create a
-// wrapper for the object. If clients fail to create a wrapper for a wrappable
-// object, the object will leak because we use the weak callback from the
-// wrapper as the signal to delete the wrapped object.
-class WrappableBase {
- public:
-  WrappableBase();
-  virtual ~WrappableBase();
+    			if ( pImageData )
+			{
+			
+				Image image(pImageData, mipWidth, mipHeight,	a_eErrMetric);
     }
     
-    void ProcessSingleton::LinuxWatcher::StartListening(int socket) {
-  DCHECK_CURRENTLY_ON(BrowserThread::IO);
-  // Watch for client connections on this socket.
-  socket_watcher_ = base::FileDescriptorWatcher::WatchReadable(
-      socket, base::BindRepeating(&LinuxWatcher::OnSocketCanReadWithoutBlocking,
-                                  base::Unretained(this), socket));
-}
+    	void EncodeMipmaps(float *a_pafSourceRGBA,
+		unsigned int a_uiSourceWidth,
+		unsigned int a_uiSourceHeight,
+		Image::Format a_format,
+		ErrorMetric a_eErrMetric,
+		float a_fEffort,
+		unsigned int a_uiJobs,
+		unsigned int a_uiMaxJobs,
+		unsigned int a_uiMaxMipmaps,
+		unsigned int a_uiMipFilterFlags,
+		RawImage* a_pMipmaps,
+		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
     
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
-    }
+    		// the alpha mix for a 4x4 block of pixels
+		enum class SourceAlphaMix
+		{
+			UNKNOWN,
+			//
+			OPAQUE,			// all 1.0
+			TRANSPARENT,	// all 0.0 or NAN
+			TRANSLUCENT		// not all opaque or transparent
+		};
     
-    // metrics
-#include '../src/metric/metric.cc'
-#include '../src/metric/elementwise_metric.cc'
-#include '../src/metric/multiclass_metric.cc'
-#include '../src/metric/rank_metric.cc'
-    
-        NDArrayView::NDArrayView(CNTK::DataType dataType, CNTK::StorageFormat storageType, const NDShape& viewShape, const DeviceDescriptor& device)
-        : NDArrayView(dataType, device, storageType, viewShape, false, AllocateTensorView(dataType, storageType, viewShape, device))
-    {}
-    
-            if (!m_distributed)
-        {
-            return externalState;
-        }
-    
-    namespace CNTK
-{
-    struct VariableFields final : public std::enable_shared_from_this<VariableFields>
-    {
-        friend class CompositeFunction;
-    }
-    }
-    
-    #include 'stdafx.h'
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+    			// Favor Luma accuracy over Chroma, and Red over Blue 
+			return LUMA_WEIGHT*fDeltaL*fDeltaL +
+					fDeltaCr*fDeltaCr +
+					CHROMA_BLUE_WEIGHT*fDeltaCb*fDeltaCb +
+					fDAlpha*fDAlpha;
+	#if 0
+			float fDRed = a_frgbaDecodedPixel.fR - a_frgbaSourcePixel.fR;
+			float fDGreen = a_frgbaDecodedPixel.fG - a_frgbaSourcePixel.fG;
+			float fDBlue = a_frgbaDecodedPixel.fB - a_frgbaSourcePixel.fB;
+			return 2.0f * 3.0f * fDeltaL * fDeltaL + fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue;
 #endif
+		}
+		else if (m_errormetric == ErrorMetric::NORMALXYZ)
+		{
+			float fDecodedX = 2.0f * a_frgbaDecodedColor.fR - 1.0f;
+			float fDecodedY = 2.0f * a_frgbaDecodedColor.fG - 1.0f;
+			float fDecodedZ = 2.0f * a_frgbaDecodedColor.fB - 1.0f;
     
-        // process 'special nodes'
-    ProcessSpecialNodes(config, workList);
+    /** Shift by a and round-to-neareast 32-bit value. Result is a 16-bit value */
+#define ROUND16(x,a) (EXTRACT16(PSHR32((x),(a))))
+/** Divide by two */
+#define HALF16(x)  (SHR16(x,1))
+#define HALF32(x)  (SHR32(x,1))
     
-            // update after inference
-        rows0 = Input(0)->GetAsMatrixNumRows();
-        rows1 = Input(1)->HasMBLayout() ? Input(1)->GetSampleMatrixNumRows() : Input(1)->GetAsMatrixNumRows();
-        if (isFinalValidationPass && rows0 != rows1)
-            InvalidArgument('The inner matrix dimension in the %ls %ls operation does not match (%d vs. %d).', NodeName().c_str(), OperationName().c_str(), (int) rows1, (int) rows0);
-        size_t cols0 = Input(0)->GetAsMatrixNumCols();
-        if (isFinalValidationPass && cols0 != 1)
-            InvalidArgument('The first matrix should be a column vector representing the diagonal of a square matrix in the DiagTimes operation.');
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        ReadOutVariable(); // read out the value once, with the purpose of validating the variableName
-        Base::Validate(isFinalValidationPass);
-        // this node does not hold mini-batch data
-        m_pMBLayout = nullptr;
-        // for now, anything this node returns is a scalar
-        SetDims(TensorShape(1), false);
+    /* ((a32 >> 16)  * (b32 >> 16)) output have to be 32bit int */
+#define silk_SMULTT(a32, b32)               (((a32) >> 16) * ((b32) >> 16))
+    
+      //----- text drawing
+  virtual void drawString(GfxState *state, GooString *s);
+  virtual void beginTextObject(GfxState *state);
+  virtual GBool deviceHasTextClip(GfxState *state) { return haveTextClip && haveCSPattern; }
+  virtual void endTextObject(GfxState *state);
+    
+      void makeBox(double hDPI, double vDPI, int rotate,
+	       GBool useMediaBox, GBool upsideDown,
+	       double sliceX, double sliceY, double sliceW, double sliceH,
+	       PDFRectangle *box, GBool *crop);
+    
+    #include <limits.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <assert.h>
+    
+    // if changed remember to keep in sync with frontend enums
+enum PageTransitionType {
+  transitionReplace = 0,
+  transitionSplit,
+  transitionBlinds,
+  transitionBox,
+  transitionWipe,
+  transitionDissolve,
+  transitionGlitter,
+  transitionFly,
+  transitionPush,
+  transitionCover,
+  transitionUncover,
+  transitionFade
+};
+    
+    class PopplerCacheKey
+{
+  public:
+    virtual ~PopplerCacheKey();
+    virtual bool operator==(const PopplerCacheKey &key) const = 0;
+};
+    
+    
+    
+      // Create authorization data for the specified owner and user
+  // passwords.  If the security handler doesn't support 'batch' mode,
+  // this function should return NULL.
+  virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword) = 0;
+    
+    class Sound
+{
+public:
+  // Try to parse the Object s
+  static Sound *parseSound(Object *s);
     }
     
-    // -----------------------------------------------------------------------
-// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
-// -----------------------------------------------------------------------
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    {void Executor::keepAliveRelease() {
+  LOG(FATAL) << __func__ << '() should not be called for folly::Executor types '
+             << 'which do not override keepAliveAcquire()';
+}
+} // namespace folly
+
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    
-    {    io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
-    #undef MAP_BUTTON
-    #undef MAP_ANALOG
+    template <class String>
+String Uri::toString() const {
+  String str;
+  if (hasAuthority_) {
+    toAppend(scheme_, '://', &str);
+    if (!password_.empty()) {
+      toAppend(username_, ':', password_, '@', &str);
+    } else if (!username_.empty()) {
+      toAppend(username_, '@', &str);
+    }
+    toAppend(host_, &str);
+    if (port_ != 0) {
+      toAppend(':', port_, &str);
+    }
+  } else {
+    toAppend(scheme_, ':', &str);
+  }
+  toAppend(path_, &str);
+  if (!query_.empty()) {
+    toAppend('?', query_, &str);
+  }
+  if (!fragment_.empty()) {
+    toAppend('#', fragment_, &str);
+  }
+  return str;
 }
     
     
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
+    {    return newlocal;
+  }
+    
+      bool found = PrintAllDigits;
+  while (powerToPrint) {
+    if (found || powerToPrint <= val) {
+      IntegralType value = IntegralType(val / powerToPrint);
+      if (Base == 10 || value < 10) {
+        value += '0';
+      } else {
+        value += ('a' - 10);
+      }
+      *(buf++) = char(value);
+      val %= powerToPrint;
+      found = true;
+    }
     }
     
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
-    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
+    {
+    {size_t qfind_first_byte_of_byteset(
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
+  SparseByteSet s;
+  for (auto needle : needles) {
+    s.add(uint8_t(needle));
+  }
+  for (size_t index = 0; index < haystack.size(); ++index) {
+    if (s.contains(uint8_t(haystack[index]))) {
+      return index;
     }
+  }
+  return std::string::npos;
+}
+} // namespace detail
+} // namespace folly
+
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+        ~JStringCache() {}
+    
+    #include <vector>
+    
+    
+    {
+    { public:
+  std::map<std::string, std::string> *styles_;
+  std::map<std::string, std::string> *attributes_;
+  std::set<std::string> *events_;
+  WXCoreMargin margins_;
+  WXCorePadding paddings_;
+  WXCoreBorderWidth borders_;
+  std::string page_id_;
+  std::string component_type_;
+  std::string parent_ref_;
+  std::string ref_;
+  int index_;
+  bool will_layout_;
+};
+}  // namespace WeexCore
+    
+    #endif  // CORE_RENDER_ACTION_RENDER_ACTION_ADD_EVENT_H_
