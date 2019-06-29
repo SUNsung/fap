@@ -1,160 +1,86 @@
 
         
-          // Gets the outcome of the test part.
-  Type type() const { return type_; }
+        ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerServerLatency();
+::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
     
     
-    { private:
-  // The key supplied by the user.
-  std::string key_;
-  // The value supplied by the user.
-  std::string value_;
-};
-    
-    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5>
-AssertionResult AssertPred5Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  const char* e5,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4,
-                                  const T5& v5) {
-  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+    {    uint8_t version = buf[kVersionIdOffset];
+    uint32_t fieldID = buf[kServerElapsedTimeOffset];
+    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
+      *time = 0;
+      return kEncodeDecodeFailure;
     }
+    *time = absl::little_endian::Load64(
+        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
+    return kRpcServerStatsSize;
+  }
     
-    // Constructs and returns the message for an equality assertion
-// (e.g. ASSERT_EQ, EXPECT_STREQ, etc) failure.
-//
-// The first four parameters are the expressions used in the assertion
-// and their values, as strings.  For example, for ASSERT_EQ(foo, bar)
-// where foo is 5 and bar is 6, we have:
-//
-//   expected_expression: 'foo'
-//   actual_expression:   'bar'
-//   expected_value:      '5'
-//   actual_value:        '6'
-//
-// The ignoring_case parameter is true iff the assertion is a
-// *_STRCASEEQ*.  When it's true, the string ' (ignoring case)' will
-// be inserted into the message.
-GTEST_API_ AssertionResult EqFailure(const char* expected_expression,
-                                     const char* actual_expression,
-                                     const std::string& expected_value,
-                                     const std::string& actual_value,
-                                     bool ignoring_case);
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
     
-        void ComputeCurrentValue() {
-      if (!AtEnd())
-        current_value_ = ParamType(*current1_, *current2_, *current3_,
-            *current4_);
-    }
-    bool AtEnd() const {
-      // We must report iterator past the end of the range when either of the
-      // component iterators has reached the end of its range.
-      return
-          current1_ == end1_ ||
-          current2_ == end2_ ||
-          current3_ == end3_ ||
-          current4_ == end4_;
-    }
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
-};
-    
-    #include 'gtest/gtest.h'
-    
-            virtual const std::unordered_set<StreamInformation>& StreamInfos() override { return m_streamInfos; }
-    
-    // Exception wrapper to include native call stack string
-template <class E>
-class ExceptionWithCallStack : public E, public IExceptionWithCallStackBase
-{
-public:
-    ExceptionWithCallStack(const std::string& msg, const std::string& callstack) :
-        E(msg), m_callStack(callstack)
-    { }
-    }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-    // -----------------------------------------------------------------------
-// SumColumnElements (input)
-// Sums up all elements in each sample (column) of the input. Every sample
-// will be reduced to a scalar. This is equivalent to multiplying with a row of ones.
-// This is deprecated, in favor of ReduceElements().
-// -----------------------------------------------------------------------
-    
-    // -----------------------------------------------------------------------
-// SequenceDecoderNode (label, position_dependent_score, transition_score)
-// Decoder that matches CRF training.
-//  - label : output label vector of [0:T-1]
-//  - position_dependent_score : score from position dependent node,
-//    in the R-CRF case, it is the RNN output score before softmax
-//  - transition score : score from the transition node,
-//    in the R-CRF case, it is the transition probability between labels
-// -----------------------------------------------------------------------
-    
-    Waves3D* Waves3D::clone() const
-{
-    // no copy constructor
-    return Waves3D::create(_duration, _gridSize, _waves, _amplitude);
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  host_cpu_load_info_data_t cpuinfo;
+  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
+  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
+                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
+    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
+    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
+  }
+  return std::make_pair(busy, total);
 }
     
-    NS_CC_END
+    #include <windows.h>
+#include <cstdint>
     
-                coords.bl.z = (sinf(time * (float)M_PI  *_waves * 2 + 
-                (coords.bl.y+coords.bl.x) * .01f) * _amplitude * _amplitudeRate );
-            coords.br.z    = coords.bl.z;
-            coords.tl.z = coords.bl.z;
-            coords.tr.z = coords.bl.z;
+    #include <grpc/support/log.h>
     
-    http://www.cocos2d-x.org
+    #include 'util/logging.h'
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __CC_ANIMATION_H__
-#define __CC_ANIMATION_H__
+        // ReadPhysicalRecord may have only had an empty trailer remaining in its
+    // internal buffer. Calculate the offset of the next physical record now
+    // that it has returned, properly accounting for its header size.
+    uint64_t physical_record_offset =
+        end_of_buffer_offset_ - buffer_.size() - kHeaderSize - fragment.size();
     
+    WriteBatch::Handler::~Handler() = default;
     
-NS_CC_END
-
+    // Read the block identified by 'handle' from 'file'.  On failure
+// return non-OK.  On success fill *result and return OK.
+Status ReadBlock(RandomAccessFile* file, const ReadOptions& options,
+                 const BlockHandle& handle, BlockContents* result);
     
+    class CorruptionTest {
+ public:
+  CorruptionTest()
+      : db_(nullptr),
+        dbname_('/memenv/corruption_test'),
+        tiny_cache_(NewLRUCache(100)) {
+    options_.env = &env_;
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    }
+    }
     
-    {private:
-    Map<std::string, Animation*> _animations;
-    static AnimationCache* s_sharedAnimationCache;
-};
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+      // Returns an estimate of the number of bytes of data in use by this
+  // data structure. It is safe to call when MemTable is being modified.
+  size_t ApproximateMemoryUsage();
+    
+    double ObjectGeneralInfo60B::longitude_dist(const std::uint8_t* bytes,
+                                            int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    TEST(TestPiecewiseLinearKernel, add_regularization) {
+  PiecewiseLinearKernel kernel(10, 0.1);
+    }
