@@ -1,237 +1,351 @@
 
         
-        Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
-                                     std::ostream& os) {
-  GraphProperties properties(item_);
-  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
+        // CertificateManagerModel provides the data to be displayed in the certificate
+// manager dialog, and processes changes from the view.
+class CertificateManagerModel {
+ public:
+  typedef base::Callback<void(std::unique_ptr<CertificateManagerModel>)>
+      CreationCallback;
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    CallbackHolderBase::CallbackHolderBase(v8::Isolate* isolate)
+    : v8_ref_(isolate, v8::External::New(isolate, this)) {
+  v8_ref_.SetWeak(this, &CallbackHolderBase::FirstWeakCallback,
+                  v8::WeakCallbackType::kParameter);
+}
     
-      // Initializes the NumPy descriptor.
-  PyArray_InitArrFuncs(&NPyBfloat16_ArrFuncs);
-  NPyBfloat16_ArrFuncs.getitem = NPyBfloat16_GetItem;
-  NPyBfloat16_ArrFuncs.setitem = NPyBfloat16_SetItem;
-  NPyBfloat16_ArrFuncs.copyswapn = NPyBfloat16_CopySwapN;
-  NPyBfloat16_ArrFuncs.copyswap = NPyBfloat16_CopySwap;
-  NPyBfloat16_ArrFuncs.nonzero = NPyBfloat16_NonZero;
-  NPyBfloat16_ArrFuncs.fill = NPyBfloat16_Fill;
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
-#define TESSERACT_CCMAIN_OSDETECT_H_
+      // Add 'destroy' and 'isDestroyed' methods.
+  ObjectTemplateBuilder& MakeDestroyable();
     
     
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
+    {}  // namespace mate
+    
+    template <typename T>
+class Wrappable : public WrappableBase {
+ public:
+  Wrappable() {}
+    }
+    
+    #ifndef CHROME_BROWSER_PROCESS_SINGLETON_H_
+#define CHROME_BROWSER_PROCESS_SINGLETON_H_
+    
+    bool DownloadItem::IsDone() const {
+  return download_item_->IsDone();
+}
+    
+    #if defined(WIDEVINE_CDM_AVAILABLE)
+bool IsWidevineAvailable(
+    base::FilePath* cdm_path,
+    std::vector<media::VideoCodec>* codecs_supported,
+    base::flat_set<media::CdmSessionType>* session_types_supported,
+    base::flat_set<media::EncryptionMode>* modes_supported) {
+  static enum {
+    NOT_CHECKED,
+    FOUND,
+    NOT_FOUND,
+  } widevine_cdm_file_check = NOT_CHECKED;
+    }
+    
+    TegraRowOp_Invoker(combine2, combine2, 2, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 2*sizeof(DT)), range.end-range.start)
+TegraRowOp_Invoker(combine3, combine3, 3, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 3*sizeof(DT)), range.end-range.start)
+TegraRowOp_Invoker(combine4, combine4, 4, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src4_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 4*sizeof(DT)), range.end-range.start)
+#define TEGRA_MERGE64S(type, src, dst, len, cn) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+        cn == 2 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine2_Invoker<const type, type>(src[0], src[1], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        cn == 3 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine3_Invoker<const type, type>(src[0], src[1], src[2], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        cn == 4 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine4_Invoker<const type, type>(src[0], src[1], src[2], src[3], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
+    
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
+    {
+        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
+        v_dst = internal::vqsubq(v_max, v_min);
+    }
+    
+    namespace {
+    }
+    
+        if (borderType == BORDER_MODE_CONSTANT)
+        for (s32 k = 0; k < cn; ++k)
+        {
+            lanea[-cn+k] = borderValue;
+            lanea[colsn+k] = borderValue;
+            laneA[-cn+k] = borderValue;
+            laneA[colsn+k] = borderValue;
+            laneb[-cn+k] = borderValue;
+            laneb[colsn+k] = borderValue;
+            laneB[-cn+k] = borderValue;
+            laneB[colsn+k] = borderValue;
+        }
+    
+    void assertSupportedConfiguration(bool parametersSupported)
+{
+    if (!isSupportedConfiguration()) {
+        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
+        std::abort();
+    }
+    }
+    
+    namespace CAROTENE_NS {
+    }
+    
+                    tprev[1] = tcurr[1];
+                tcurr[1] = tnext[1];
+    
+    template <typename T>
+inline void inRangeCheck(const Size2D &_size,
+                         const T * srcBase, ptrdiff_t srcStride,
+                         const T * rng1Base, ptrdiff_t rng1Stride,
+                         const T * rng2Base, ptrdiff_t rng2Stride,
+                         u8 * dstBase, ptrdiff_t dstStride)
+{
+    typedef typename internal::VecTraits<T>::vec128 vec128;
+    typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+    }
+    
+    enum PSOutMode {
+  psModePS,
+  psModeEPS,
+  psModeForm,
+  psModePSOrigPageSizes
 };
     
-    struct PARA;
-    
-    // A CostFunc that takes the variance of step into account in the cost.
-int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
-  if (prev == nullptr || prev == this) {
-    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
-    return 0;
-  }
+    GBool PSTokenizer::getToken(char *buf, int size, int *length) {
+  GBool comment, backslash;
+  int c;
+  int i;
     }
     
-    enum AmbigType {
-  NOT_AMBIG,        // the ngram pair is not ambiguous
-  REPLACE_AMBIG,    // ocred ngram should always be substituted with correct
-  DEFINITE_AMBIG,   // add correct ngram to the classifier results (1-1)
-  SIMILAR_AMBIG,    // use pairwise classifier for ocred/correct pair (1-1)
-  CASE_AMBIG,       // this is a case ambiguity (1-1)
-    }
+    int StdinCacheLoader::load(const std::vector<ByteRange> &ranges, CachedFileWriter *writer)
+{
+  return 0;
+}
     
-    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#endif  // MXNET_RTC_H_
-
-    
-    #ifndef PLUGIN_CAFFE_CAFFE_COMMON_H_
-#define PLUGIN_CAFFE_CAFFE_COMMON_H_
-    
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    const auto& offset_vec = page.offset.HostVector();
+    const auto& data_vec = page.data.HostVector();
+    CHECK(offset_vec.size() != 0 && offset_vec[0] == 0);
+    CHECK_EQ(offset_vec.back(), data_vec.size());
+    fo->Write(offset_vec);
+    min_index_ = page.base_rowid;
+    fo->Write(&min_index_, sizeof(min_index_));
+    index_.data.resize(data_vec.size());
+    value_.data.resize(data_vec.size());
     }
     
     
     {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
-}  // namespace mxnet
+    {    for (const auto &batch : (*dmat)->GetRowBatches()) {
+      for (int i = 0; i < batch.Size(); i++) {
+        auto inst = batch[i];
+        for (int j = 0; i < inst.size(); i++) {
+          ASSERT_EQ(inst[j].fvalue, 1.5);
+        }
+      }
+    }
+    delete dmat;
+  }
+}
 
+    
+    #include '../helpers.h'
+    
+    
+    {    if (learner->AllowLazyCheckPoint()) {
+      rabit::LazyCheckPoint(learner.get());
+    } else {
+      rabit::CheckPoint(learner.get());
+    }
+    version += 1;
+    CHECK_EQ(version, rabit::VersionNumber());
+  }
+  // always save final round
+  if ((param.save_period == 0 || param.num_round % param.save_period != 0) &&
+      param.model_out != 'NONE' &&
+      rabit::GetRank() == 0) {
+    std::ostringstream os;
+    if (param.model_out == 'NULL') {
+      os << param.model_dir << '/'
+         << std::setfill('0') << std::setw(4)
+         << param.num_round << '.model';
+    } else {
+      os << param.model_out;
+    }
+    std::unique_ptr<dmlc::Stream> fo(
+        dmlc::Stream::Create(os.str().c_str(), 'w'));
+    learner->Save(fo.get());
+  }
+    
+    // global
+#include '../src/learner.cc'
+#include '../src/logging.cc'
+#include '../src/common/common.cc'
+#include '../src/common/host_device_vector.cc'
+#include '../src/common/hist_util.cc'
+    
+      EXPECT_ANY_THROW(xgboost::Metric::Create('error@abc', &lparam));
+  delete metric;
+    
+    TEST(Objective, DeclareUnifiedTest(LogisticRegressionGPair)) {
+  xgboost::LearnerTrainParam tparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
+  std::vector<std::pair<std::string, std::string>> args;
+  xgboost::ObjFunction * obj = xgboost::ObjFunction::Create('reg:logistic', &tparam);
+    }
     
     #pragma once
     
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
-            }
-            else if (!sampleDynamicAxes.empty())
-                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    // GetHmmData - Get the HMM definition for SE training
-// hmm - HMM definition
-// returns - true if succeed
-bool DataReader::GetHmmData(msra::asr::simplesenonehmm* hmm)
-{
-    bool bRet = true;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        bRet &= m_dataReaders[m_ioNames[i]]->GetHmmData(hmm);
-    return bRet;
-}
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Start();
-        }
-    }
-    
-    // ===================================================================
-// ComputationNetworkFromFile
-// scripting wrapper to construct ComputationNetwork from file (aka 'Load')
-// ===================================================================
-    
-            if (
-            // Test condition 1.
-            (dimsA.size() == 3 && dimsA[0] == 1 && dimsA[1] == 1) &&
-            // Test condition 2.
-            (dimsB.size() == 2 && dimsB[1] == 1) &&
-            (dimsC.size() == 2 && dimsC[1] == 1) &&
-            // Test condition 3. and condition 4.
-            (dimsB[0] == dimsC[0] && dimsB[0] == dimsA[2])
-            )
-        {
-            // for error messages
-            string dimsBstring = string(Input(1)->GetSampleLayout());
-            string dimsCstring = string(Input(2)->GetSampleLayout());
-    }
-    
-    // TODO: can this be static?
-template <class ElemType>
-void Microsoft::MSR::CNTK::UpdateRunningAverage(ComputationNode<ElemType>& newInput,
-                                                TensorView<ElemType>& runningAverage, size_t& runningCount)
-{
-    FrameRange fr(newInput.GetMBLayout());
-    // Set gaps to zero, since we are reducing in time.
-    newInput.MaskMissingValueColumnsToZero(fr);
-    }
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-    // The data is first compressed with stb_compress() to reduce source code size,
-// then encoded in Base85 to fit in a string so we can fit roughly 4 bytes of compressed data into 5 bytes of source code (suggested by @mmalex)
-// (If we used 32-bits constants it would require take 11 bytes of source code to encode 4 bytes, and be endianness dependent)
-// Note that even with compression, the output array is likely to be bigger than the binary file..
-// Load compressed TTF fonts with ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF()
-    
-    // Compatibility:
-// - std::string support is only guaranteed to work from C++11.
-//   If you try to use it pre-C++11, please share your findings (w/ info about compiler/architecture)
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
 
     
+        free(chash);
     
-    {    // Create texture sampler
-    {
-        D3D10_SAMPLER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D10_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
-        desc.ComparisonFunc = D3D10_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
-        g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
-    }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
+    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
+    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
+    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
+    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete]      = 127;
+    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
+    io.KeyMap[ImGuiKey_Space]       = ' ';
+    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
+    io.KeyMap[ImGuiKey_Escape]      = 27;
+    io.KeyMap[ImGuiKey_A]           = 'A';
+    io.KeyMap[ImGuiKey_C]           = 'C';
+    io.KeyMap[ImGuiKey_V]           = 'V';
+    io.KeyMap[ImGuiKey_X]           = 'X';
+    io.KeyMap[ImGuiKey_Y]           = 'Y';
+    io.KeyMap[ImGuiKey_Z]           = 'Z';
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        if (out_offset)
+        *out_offset = ImVec2(line_width, text_size.y + line_height);  // offset allow for the possibility of sitting after a trailing \n
+    
+    #endif // D_DHT_REGISTRY_H
+
+    
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
 }
     
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'D3D12_GPU_DESCRIPTOR_HANDLE' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
-// Issues:
-//  [ ] 64-bit only for now! (Because sizeof(ImTextureId) == sizeof(void*)). See github.com/ocornut/imgui/pull/301
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
     
-    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
-IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    #include 'common.h'
     
-      void set_max_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
-    }
-    max_delayed_write_rate_ = write_rate;
-    // update delayed_write_rate_ as well
-    delayed_write_rate_ = write_rate;
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    public:
+  DHTTaskExecutor(int numConcurrent);
+    
+    #endif // D_DHT_TASK_QUEUE_H
+
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
   }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
     
-      // Attempt to read a key using the snapshot.  This will fail since
-  // the previous write outside this txn conflicts with this read.
-  read_options.snapshot = snapshot;
-  s = txn->GetForUpdate(read_options, 'abc', &value);
-  assert(s.IsBusy());
+    void DHTTokenUpdateCommand::setTokenTracker(DHTTokenTracker* tokenTracker)
+{
+  tokenTracker_ = tokenTracker;
+}
+    
+    void DNSCache::remove(const std::string& hostname, uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  entries_.erase(target);
+}
     
     
-    {  virtual ~Checkpoint() {}
+    {  void remove(const std::string& hostname, uint16_t port);
 };
     
-      // Amount of data to build up in memory (backed by an unsorted log
-  // on disk) before converting to a sorted on-disk file.
-  //
-  // Larger values increase performance, especially during bulk loads.
-  // Up to two write buffers may be held in memory at the same time,
-  // so you may wish to adjust this parameter to control memory usage.
-  // Also, a larger write buffer will result in a longer recovery time
-  // the next time the database is opened.
-  //
-  // Default: 4MB
-  size_t write_buffer_size;
+    using json = nlohmann::json;
+    
+        // create (integer) JSON numbers
+    json j_short(n_short);
+    json j_int(n_int);
+    json j_long(n_long);
+    json j_int_least32_t(n_int_least32_t);
+    json j_uint8_t(n_uint8_t);
