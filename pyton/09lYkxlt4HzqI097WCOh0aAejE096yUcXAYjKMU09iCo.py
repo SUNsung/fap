@@ -1,192 +1,103 @@
 
         
-            HandlerClass.protocol_version = protocol
-    with ServerClass(addr, HandlerClass) as httpd:
-        host, port = httpd.socket.getsockname()[:2]
-        url_host = f'[{host}]' if ':' in host else host
-        print(
-            f'Serving HTTP on {host} port {port} '
-            f'(http://{url_host}:{port}/) ...'
-        )
-        try:
-            httpd.serve_forever()
-        except KeyboardInterrupt:
-            print('\nKeyboard interrupt received, exiting.')
-            sys.exit(0)
-    
-        def _generate_symbols(self, grammar_file, target_symbol_py_file):
-        proc = subprocess.Popen([sys.executable,
-                                 GEN_SYMBOL_FILE,
-                                 grammar_file,
-                                 target_symbol_py_file], stderr=subprocess.PIPE)
-        stderr = proc.communicate()[1]
-        return proc.returncode, stderr
-    
-    # Make a local copy of what we are going to send.
-with open('outgoing.msg', 'wb') as f:
-    f.write(bytes(msg))
-    
-    def handleToc(slides):
-    for slide in slides:
-        title = slide.getElementsByTagName('title')[0]
-        print('<p>%s</p>' % getText(title.childNodes))
-    
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
-    
-    # Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
-frame_number = 0
-    
-            if len(encodings) == 0:
-            click.echo('WARNING: No faces found in {}. Ignoring file.'.format(file))
-        else:
-            known_names.append(basename)
-            known_face_encodings.append(encodings[0])
-    
-    for face_landmarks in face_landmarks_list:
-    
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
-
-    
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-        def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
-        assert severity in self.SEVERITY_LEVELS
-        self.message = six.text_type(message)
-        self.severity = severity
-        self.url = url
-    
-            # Removing unique constraint on 'TagValue', fields ['project_id',
-        # 'environment_id', '_key', 'value']
-        db.delete_unique(u'tagstore_tagvalue', ['project_id', 'environment_id', 'key', 'value'])
-    
-        # Flag to indicate if this migration is too risky
-    # to run online and needs to be coordinated for offline
-    is_dangerous = True
-    
-            # Adding index on 'EventTag', fields ['project_id', 'key', 'value']
-        db.create_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
-    
-    from __future__ import absolute_import, print_function
+        
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
     
-def add_fpn_ResNet152_conv5_body(model):
-    return add_fpn_onto_conv_body(
-        model, ResNet.add_ResNet152_conv5_body, fpn_level_info_ResNet152_conv5
-    )
+@pytest.mark.parametrize('script, output', [
+    ('vim', invalid_operation('vim')),
+    ('apt-get', '')])
+def test_not_match(script, output):
+    assert not match(Command(script, output))
     
-    
-def add_roi_Xconv1fc_head(model, blob_in, dim_in, spatial_scale):
-    '''Add a X conv + 1fc head, as a reference if not using GroupNorm'''
-    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
-    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
-    roi_feat = model.RoIFeatureTransform(
-        blob_in,
-        'roi_feat',
-        blob_rois='rois',
-        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
-        resolution=roi_size,
-        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-    '''Handle mapping from old network building function names to new names.
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-    '''Construct minibatches for Mask R-CNN training. Handles the minibatch blobs
-that are specific to Mask R-CNN. Other blobs that are generic to RPN or
-Fast/er R-CNN are handled by their respecitive roi_data modules.
+    no_match_output = '''
+Listing... Done
 '''
     
     
-def loader_loop(roi_data_loader):
-    load_timer = Timer()
-    iters = 100
-    for i in range(iters):
-        load_timer.tic()
-        roi_data_loader.get_next_minibatch()
-        load_timer.toc()
-        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
-              i + 1, iters, load_timer.average_time))
+output = '''sshfs: OsxfuseRequirement unsatisfied!
+    
+    
+no_such_subcommand_old = '''No such subcommand
+    
+        def delete(self, session_key=None):
+        super().delete(session_key)
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
+    
+        def save(self, must_create=False):
+        '''
+        Save the current session data to the database. If 'must_create' is
+        True, raise a database error if the saving operation doesn't create a
+        new entry (as opposed to possibly updating an existing entry).
+        '''
+        if self.session_key is None:
+            return self.create()
+        data = self._get_session(no_load=must_create)
+        obj = self.create_model_instance(data)
+        using = router.db_for_write(self.model, instance=obj)
+        try:
+            with transaction.atomic(using=using):
+                obj.save(force_insert=must_create, force_update=not must_create, using=using)
+        except IntegrityError:
+            if must_create:
+                raise CreateError
+            raise
+        except DatabaseError:
+            if not must_create:
+                raise UpdateError
+            raise
+    
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
+    
+    if K.image_data_format() == 'channels_first':
+    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+    input_shape = (1, img_rows, img_cols)
+else:
+    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+    input_shape = (img_rows, img_cols, 1)
+    
+    x = Conv2DTranspose(filters=1,
+                    kernel_size=kernel_size,
+                    padding='same')(x)
+    
+    batch_size = 32
+num_classes = 10
+epochs = 200
+hidden_units = 100
+    
+    model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dropout(0.2))
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(num_classes, activation='softmax'))
+    
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
