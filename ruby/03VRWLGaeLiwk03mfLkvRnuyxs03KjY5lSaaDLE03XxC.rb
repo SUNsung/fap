@@ -1,157 +1,110 @@
 
         
-                # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
-        end
-      end
-    end
+        if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
 end
 
     
-              # Make sure we're only working with one VM if single target
-          if options[:single_target] && machines.length != 1
-            @logger.debug('Using primary machine since single target')
-            primary_name = @env.primary_machine_name
-            raise Errors::MultiVMTargetRequired if !primary_name
-            machines = [get_machine.call(primary_name)]
-          end
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
     
-            # This contains all the registered guest capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :guest_capabilities
-    
-            # This returns all the registered guest capabilities.
-        #
-        # @return [Hash]
-        def guest_capabilities
-          results = Hash.new { |h, k| h[k] = Registry.new }
-    
-      #
-  # Closes the supplied client, if valid.
-  #
-  def close_client(cli)
-    listener.close_client(cli)
-  end
-    
-    
-end
-end
-end
-
-    
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-      expect(status).to be_success
-end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
-    
-        def roles_for(names)
-      servers.roles_for(names)
-    end
-    
-          def echo?
-        (options || {}).fetch(:echo, true)
-      end
-    end
-  end
-end
-
-    
-            def set(key, value)
-          pval = @properties[key]
-          if pval.is_a?(Hash) && value.is_a?(Hash)
-            pval.merge!(value)
-          elsif pval.is_a?(Set) && value.is_a?(Set)
-            pval.merge(value)
-          elsif pval.is_a?(Array) && value.is_a?(Array)
-            pval.concat value
-          else
-            @properties[key] = value
-          end
-        end
-    
-    When /^I append gems from Appraisal Gemfile$/ do
-  File.read(ENV['BUNDLE_GEMFILE']).split(/\n/).each do |line|
-    if line =~ /^gem '(?!rails|appraisal)/
-      append_to_gemfile line.strip
-    end
-  end
-end
-    
-    When /^I reset Bundler environment variable$/ do
-  BUNDLE_ENV_VARS.each do |key|
-    ENV[key] = nil
-  end
-end
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
           }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
+        end
       end
     end
+  end
+end
+
     
-        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension. If the extension is empty, no dot is added.
-    def dotextension attachment, style_name
-      ext = extension(attachment, style_name)
-      ext.empty? ? ext : '.#{ext}'
+        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
+      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
     end
+    
+          # Returns an array of all the when branches in the `case` statement.
+      #
+      # @return [Array<WhenNode>] an array of `when` nodes
+      def when_branches
+        node_parts[1...-1]
+      end
+    
+          # The name of the defined method as a symbol.
+      #
+      # @return [Symbol] the name of the defined method
+      def method_name
+        node_parts[2]
+      end
+    
+          dir = if File.directory?(file_or_dir)
+              file_or_dir
+            else
+              File.dirname(file_or_dir)
+            end
+      @path_cache[dir] ||= ConfigLoader.configuration_file_for(dir)
+      path = @path_cache[dir]
+      @object_cache[path] ||= begin
+                                print 'For #{dir}: ' if ConfigLoader.debug?
+                                ConfigLoader.configuration_from_file(path)
+                              end
+    end
+  end
+end
+
+    
+      config.vm.define :smartos do |smartos|
+    smartos.vm.box = 'smartos-base1310-64-virtualbox-20130806.box'
+    smartos.vm.box_url = 'http://dlc-int.openindiana.org/aszeszo/vagrant/smartos-base1310-64-virtualbox-20130806.box'
+  end
+    
+    class FPM::Package::NPM < FPM::Package
+  class << self
+    include FPM::Util
+  end
+  # Flags '--foo' will be accessable  as attributes[:npm_foo]
+  option '--bin', 'NPM_EXECUTABLE',
+    'The path to the npm executable you wish to run.', :default => 'npm'
+    
+        ::Dir.mkdir(File.join(builddir, 'manifests'))
+    manifests.each do |manifest|
+      dir = File.join(builddir, 'manifests', File.dirname(manifest))
+      logger.info('manifests targeting: #{dir}')
+      ::Dir.mkdir(dir) if !File.directory?(dir)
+    
+            # dependency name prefixing is optional, if enabled, a name 'foo' will
+        # become 'python-foo' (depending on what the python_package_name_prefix
+        # is)
+        name = fix_name(name) if attributes[:python_fix_dependencies?]
+    
+        # Make one file. The installscript can unpack itself.
+    `cat #{install_script} #{payload} > #{output_path}`
+    FileUtils.chmod('+x', output_path)
+  end
+    
+      if FPM::Issues::TarWriter.has_issues_with_add_symlink?
+    # Backport Symlink Support to TarWriter
+    # https://github.com/rubygems/rubygems/blob/4a778c9c2489745e37bcc2d0a8f12c601a9c517f/lib/rubygems/package/tar_writer.rb#L239-L253
+    def add_symlink(name, target, mode)
+      check_closed
