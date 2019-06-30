@@ -1,265 +1,225 @@
 
         
-        Dictionary::Dictionary(const Dictionary& other) = default;
+        namespace internal {
+    }
     
-      if (argc > 1) {
-    napi_throw_error(env, NULL,
-                     'Wrong number of arguments, expected single argument');
-  }
+     private:
+  std::vector<TestPartResult> array_;
     
-    Promise::~Promise() {}
+    #define ASSERT_STREQ(expected, actual) \
+  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperSTREQ, expected, actual)
+#define ASSERT_STRNE(s1, s2) \
+  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperSTRNE, s1, s2)
+#define ASSERT_STRCASEEQ(expected, actual) \
+  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperSTRCASEEQ, expected, actual)
+#define ASSERT_STRCASENE(s1, s2)\
+  ASSERT_PRED_FORMAT2(::testing::internal::CmpHelperSTRCASENE, s1, s2)
     
-    #ifndef NATIVE_MATE_NATIVE_MATE_DICTIONARY_H_
-#define NATIVE_MATE_NATIVE_MATE_DICTIONARY_H_
-    
-    #include 'native_mate/dictionary.h'
-#include 'native_mate/scoped_persistent.h'
-    
-    #include 'base/bind.h'
-#include 'base/logging.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/task/post_task.h'
-#include 'content/public/browser/browser_context.h'
-#include 'content/public/browser/browser_task_traits.h'
-#include 'content/public/browser/browser_thread.h'
-#include 'content/public/browser/resource_context.h'
-#include 'crypto/nss_util.h'
-#include 'crypto/nss_util_internal.h'
-#include 'net/base/net_errors.h'
-#include 'net/cert/nss_cert_database.h'
-#include 'net/cert/x509_certificate.h'
-    
-    #if defined(OS_POSIX) && !defined(OS_ANDROID)
-#include 'base/files/scoped_temp_dir.h'
+    #if GTEST_HAS_EXCEPTIONS
+# include <stdexcept>
 #endif
     
-    #ifndef DOCQUAL_H
-#define DOCQUAL_H
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15>
+struct Templates15 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates14<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15> Tail;
+};
     
-    namespace tesseract {
+    TEST(ListenersTest, DoesNotLeak) {
+  Water* water = new Water;
+  delete water;
+}
+    
+    
+    {			PathCombine(userConEmuCfgPath, userConfigDirPath, L'ConEmu-%COMPUTERNAME%.xml');
+			ExpandEnvironmentStrings(userConEmuCfgPath, userConEmuCfgPath, sizeof(userConEmuCfgPath) / sizeof(userConEmuCfgPath[0]));
+		}
+	}
+	else if (PathFileExists(userCfgPath)) // config/user_conemu.xml exists, use it. 
+	{
+		if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
+		{
+			if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml.
+			{
+				if (!CopyFile(cfgPath, userCfgPath, FALSE))
+				{
+					MessageBox(NULL,
+						(GetLastError() == ERROR_ACCESS_DENIED)
+						? L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied.'
+						: L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!', MB_TITLE, MB_ICONSTOP);
+					exit(1);
+				}
+			}
+			else // vendor/conemu-maximus5/ConEmu.xml does not exist, copy config/user-conemu.xml to vendor/conemu-maximus5/ConEmu.xml
+			{
+				if (!CopyFile(userCfgPath, cfgPath, FALSE))
+				{
+					MessageBox(NULL,
+						(GetLastError() == ERROR_ACCESS_DENIED)
+						? L'Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml! Access Denied.'
+						: L'Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml!', MB_TITLE, MB_ICONSTOP);
+					exit(1);
+				}
+			}
+		}
+		else // '/c [path]' was specified, don't copy anything and use existing user_conemu.xml to start comemu.
+		{
+			PathCombine(userConEmuCfgPath, userConfigDirPath, L'user-ConEmu.xml');
+		}
+	}
+	else if (cfgRoot.length() == 0) // '/c [path]' was NOT specified 
+	{
+		if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
+		{
+			if (!CopyFile(cfgPath, userCfgPath, FALSE))
+			{
+				MessageBox(NULL,
+					(GetLastError() == ERROR_ACCESS_DENIED)
+					? L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied.'
+					: L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!', MB_TITLE, MB_ICONSTOP);
+				exit(1);
+			}
+			else // vendor/ConEmu.xml.default config exists, copy Cmder vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml.
+			{
+				if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
+				{
+					MessageBox(NULL,
+						(GetLastError() == ERROR_ACCESS_DENIED)
+						? L'Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied.'
+						: L'Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!', MB_TITLE, MB_ICONSTOP);
+					exit(1);
+				}
+			}
+		}
+		else {
+			if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
+			{
+				MessageBox(NULL,
+					(GetLastError() == ERROR_ACCESS_DENIED)
+					? L'Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied.'
+					: L'Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!', MB_TITLE, MB_ICONSTOP);
+				exit(1);
+			}
+		}
+	}
+	else if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
+	{
+		if (!CopyFile(cfgPath, userCfgPath, FALSE))
+		{
+			MessageBox(NULL,
+				(GetLastError() == ERROR_ACCESS_DENIED)
+				? L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied.'
+				: L'Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!', MB_TITLE, MB_ICONSTOP);
+			exit(1);
+		}
+    
+    
+    {  state->transform(x0, y0, x1, y1);
+  *x1 += tx;
+  *y1 += ty;
+  if (rotate == 90) {
+    t = *x1;
+    *x1 = -*y1;
+    *y1 = t;
+  } else if (rotate == 180) {
+    *x1 = -*x1;
+    *y1 = -*y1;
+  } else if (rotate == 270) {
+    t = *x1;
+    *x1 = *y1;
+    *y1 = -t;
+  }
+  *x1 *= xScale;
+  *y1 *= yScale;
+}
+    
+    private:
+    
+      pageObj.initDict(pageDict);
+  pageRef = pageRefA;
+    
+    #include 'goo/gtypes.h'
+#include 'goo/GooList.h'
+#include 'goo/GooString.h'
+#include 'Object.h'
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma implementation
+#endif
+    
+    Stream *Parser::makeStream(Object *dict, Guchar *fileKey,
+			   CryptAlgorithm encAlgorithm, int keyLength,
+			   int objNum, int objGen, std::set<int> *fetchOriginatorNums) {
+  Object obj;
+  BaseStream *baseStr;
+  Stream *str;
+  Guint pos, endPos, length;
     }
     
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
+      // Get stream.
+  Stream *getStream() { return lexer->getStream(); }
     
-      // Returns the average sum of squared perpendicular error from a line
-  // through mean_point() in the direction dir.
-  double rms_orth(const FCOORD &dir) const;
     
-    #ifndef TESSERACT_CCUTIL_KDPAIR_H_
-#define TESSERACT_CCUTIL_KDPAIR_H_
+    {  PDFDoc *doc;
+};
     
-    #if GTEST_HAS_DEATH_TEST
-    
-    // Defines a test.
-//
-// The first parameter is the name of the test case, and the second
-// parameter is the name of the test within the test case.
-//
-// The convention is to end the test case name with 'Test'.  For
-// example, a test case for the Foo class can be named FooTest.
-//
-// The user should put his test code between braces after using this
-// macro.  Example:
-//
-//   TEST(FooTest, InitializesCorrectly) {
-//     Foo foo;
-//     EXPECT_TRUE(foo.StatusIsOK());
-//   }
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
-    
-    #include <stdlib.h>
-#include <assert.h>
-    
-    // Copyright 2008 Google Inc.
-// All Rights Reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-      const int is_prime_size_;
-  bool* const is_prime_;
-    
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
+    Sound *Sound::parseSound(Object *obj)
+{
+  // let's try to see if this Object is a Sound, according to the PDF specs
+  // (section 9.2)
+  Stream *str = NULL;
+  // the Object must be a Stream
+  if (obj->isStream()) {
+    str = obj->getStream();
   } else {
-    return index_ == rhs.index_;
+    return NULL;
+  }
+  // the Stream must have a Dict
+  Dict *dict = str->getDict();
+  if (dict == NULL)
+    return NULL;
+  Object tmp;
+  // the Dict must have the 'R' key of type num
+  dict->lookup('R', &tmp);
+  if (tmp.isNum()) {
+    return new Sound(obj);
+  } else {
+    return NULL;
   }
 }
     
-    CreateThreadPoolFunc g_ctp_impl = CreateDefaultThreadPoolImpl;
-    
-    #include 'src/core/lib/debug/stats.h'
     
     
-    {        // Render command lists
-        int idx_offset = 0;
-        ImVec2 clip_off = draw_data->DisplayPos;
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                // User callback, registered via ImDrawList::AddCallback()
-                // (ImDrawCallback_ResetRenderState is a special callback value used by the user to request the renderer to reset render state.)
-                if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
-                    ImGui_ImplAllegro5_SetupRenderState(draw_data);
-                else
-                    pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                // Draw
-                ALLEGRO_BITMAP* texture = (ALLEGRO_BITMAP*)pcmd->TextureId;
-                al_set_clipping_rectangle(pcmd->ClipRect.x - clip_off.x, pcmd->ClipRect.y - clip_off.y, pcmd->ClipRect.z - pcmd->ClipRect.x, pcmd->ClipRect.w - pcmd->ClipRect.y);
-                al_draw_prim(&vertices[0], g_VertexDecl, texture, idx_offset, idx_offset + pcmd->ElemCount, ALLEGRO_PRIM_TRIANGLE_LIST);
-            }
-            idx_offset += pcmd->ElemCount;
-        }
+    namespace rocksdb {
     }
     
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-    struct GLFWwindow;
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-    static int stb_not_crap(int best, int dist)
-{
-    return   ((best > 2  &&  dist <= 0x00100)
-        || (best > 5  &&  dist <= 0x04000)
-        || (best > 7  &&  dist <= 0x80000));
-}
-    
-            if (ImGui::Button('Button'))                                  // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
-    
-        // Initialize Direct3D
-    if (!CreateDeviceD3D(hwnd))
-    {
-        CleanupDeviceD3D();
-        ::UnregisterClass(wc.lpszClassName, wc.hInstance);
-        return 1;
+     private:
+  void Init(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    if (lua_state_) {
+      luaL_openlibs(lua_state_);
+      for (const auto& library : libraries) {
+        luaL_openlib(lua_state_, library->Name(), library->Lib(), 0);
+        library->CustomSetup(lua_state_);
+      }
+      luaL_dostring(lua_state_, lua_script.c_str());
     }
+  }
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2019-05-29: DirectX9: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
-//  2019-04-30: DirectX9: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
-//  2019-03-29: Misc: Fixed erroneous assert in ImGui_ImplDX9_InvalidateDeviceObjects().
-//  2019-01-16: Misc: Disabled fog before drawing UI's. Fixes issue #2288.
-//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
-//  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
-//  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+    #ifndef ROCKSDB_LITE
     
-        // Chain GLFW callbacks: our callbacks will call the user's previously installed callbacks, if any.
-    g_PrevUserCallbackMousebutton = NULL;
-    g_PrevUserCallbackScroll = NULL;
-    g_PrevUserCallbackKey = NULL;
-    g_PrevUserCallbackChar = NULL;
-    if (install_callbacks)
-    {
-        g_PrevUserCallbackMousebutton = glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
-        g_PrevUserCallbackScroll = glfwSetScrollCallback(window, ImGui_ImplGlfw_ScrollCallback);
-        g_PrevUserCallbackKey = glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
-        g_PrevUserCallbackChar = glfwSetCharCallback(window, ImGui_ImplGlfw_CharCallback);
-    }
+      virtual ~OptimisticTransactionDB() {}
     
-        // Create or resize the vertex/index buffers
-    size_t vertex_size = draw_data->TotalVtxCount * sizeof(ImDrawVert);
-    size_t index_size = draw_data->TotalIdxCount * sizeof(ImDrawIdx);
-    if (rb->VertexBuffer == VK_NULL_HANDLE || rb->VertexBufferSize < vertex_size)
-        CreateOrResizeBuffer(rb->VertexBuffer, rb->VertexBufferMemory, rb->VertexBufferSize, vertex_size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
-    if (rb->IndexBuffer == VK_NULL_HANDLE || rb->IndexBufferSize < index_size)
-        CreateOrResizeBuffer(rb->IndexBuffer, rb->IndexBufferMemory, rb->IndexBufferSize, index_size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
-};
-    
-      // Lookup page cache by page identifier
-  //
-  // page_key   Page identifier
-  // buf        Buffer where the data should be copied
-  // size       Size of the page
-  virtual Status Lookup(const Slice& key, std::unique_ptr<char[]>* data,
-                        size_t* size) = 0;
-    
-    #include <memory>
-    
-    /*
- * Class:     org_rocksdb_Checkpoint
- * Method:    dispose
- * Signature: (J)V
- */
-void Java_org_rocksdb_Checkpoint_disposeInternal(JNIEnv* /*env*/,
-                                                 jobject /*jobj*/,
-                                                 jlong jhandle) {
-  auto* checkpoint = reinterpret_cast<rocksdb::Checkpoint*>(jhandle);
-  assert(checkpoint != nullptr);
-  delete checkpoint;
-}
+      // Attempt to acquire lock.  If timeout is non-negative, operation may be
+  // failed after this many microseconds.
+  // Returns OK on success,
+  //         TimedOut if timed out,
+  //         or other Status on failure.
+  // If returned status is OK, TransactionDB will eventually call UnLock().
+  virtual Status TryLockFor(int64_t timeout_time) = 0;
