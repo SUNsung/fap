@@ -1,40 +1,67 @@
 
         
-            def fragment_url_string?(str)
-      str[0] == '#'
-    end
+        module Scheduler
     
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def effective_url
-      @effective_url ||= URL.parse super
-    end
-    
-        def process_response?(response)
-      raise NotImplementedError
-    end
-    
-            css('a[id]:empty').each do |node|
-          node.next_element['id'] = node['id'] if node.next_element
-        end
-    
-      def warn_local_gems(plugins_with_path)
-    puts('Update is not supported for manually defined plugins or local .gem plugin installations, skipping: #{plugins_with_path.join(', ')}')
+      def self.get(user, key, sequence)
+    d = find_draft(user, key)
+    d.data if d && d.sequence == sequence
   end
     
-    task :spec    => 'spec:all'
-task :default => :spec
+    class ContentSecurityPolicy
+  class Builder
+    EXTENDABLE_DIRECTIVES = %i[
+      base_uri
+      object_src
+      script_src
+      worker_src
+    ].freeze
     
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+        RailsMultisite::ConnectionManagement.with_hostname(params[:hostname]) do
+      theme_ids = params[:theme_ids].split(',').map(&:to_i)
+    
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
       end
-    
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
+    end
   end
 end
+
+    
+      require 'rbconfig'
+  host_os = RbConfig::CONFIG['host_os']
+  add_filter %r{/os/mac} if host_os !~ /darwin/
+  add_filter %r{/os/linux} if host_os !~ /linux/
+    
+    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
+  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
+end
+    
+      describe '#directories' do
+    context 'without TMUXINATOR_CONFIG environment' do
+      before do
+        allow(described_class).to receive(:environment?).and_return false
+      end
+    
+    describe Tmuxinator::Doctor do
+  describe '.installed?' do
+    context 'tmux is installed' do
+      before do
+        allow(Kernel).to receive(:system) { true }
+      end
+    
+      describe '#stop' do
+    before do
+      ARGV.replace(['stop', 'foo'])
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
+    end
+    
+    describe Tmuxinator::WemuxSupport do
+  let(:klass) { Class.new }
+  let(:instance) { klass.new }
