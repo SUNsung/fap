@@ -1,133 +1,163 @@
 
         
-                SiteSetting.enable_markdown_linkify = false
-        cooked = PrettyText.markdown(md, sanitize: false)
-        cooked.strip!
-        cooked.gsub!(' class=\'lang-auto\'', '')
-        cooked.gsub!(/<span class='hashtag'>(.*)<\/span>/, '\\1')
-        # we don't care about this
-        cooked.gsub!('<blockquote>\n</blockquote>', '<blockquote></blockquote>')
-        html.gsub!('<blockquote>\n</blockquote>', '<blockquote></blockquote>')
-        html.gsub!('language-ruby', 'lang-ruby')
-        # strip out unsupported languages
-        html.gsub!(/ class='language-[;f].*'/, '')
+                result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+          })
+        end').runner.execute(:test)
     
-        cors_origins = @global_origins || []
-    cors_origins += SiteSetting.cors_origins.split('|') if SiteSetting.cors_origins.present?
-    cors_origins = cors_origins.presence
+          it 'doesn't add a use-submodules flag to command if use_submodules is set to false' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              use_submodules: false
+            )
+          end').runner.execute(:test)
     
-      def create
-    raise Discourse::NotFound unless report_collection_enabled?
+              expect(called).to be(true)
+          expect(FastlaneCore::UI).to have_received(:error).with('Exit status of command 'exit 1' was 1 instead of 0.\n')
+        end
+      end
     
-    # == Schema Information
-#
-# Table name: drafts
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer          not null
-#  draft_key  :string           not null
-#  data       :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  sequence   :integer          default(0), not null
-#  revisions  :integer          default(1), not null
-#
-# Indexes
-#
-#  index_drafts_on_user_id_and_draft_key  (user_id,draft_key)
-#
-
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
     
-        def base_url
-      @base_url || Discourse.base_url
-    end
-    attr_writer :base_url
-  end
+          def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
     
-        # this is only required for NGINX X-SendFile it seems
-    response.headers['Content-Length'] = File.size(cache_file).to_s
-    set_cache_control_headers
-    send_file(cache_file, disposition: :inline)
-  end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
         end
     
-            # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
-    
-            # This should return the state of the machine within this provider.
-        # The state must be an instance of {MachineState}. Please read the
-        # documentation of that class for more information.
-        #
-        # @return [MachineState]
-        def state
-          nil
-        end
-    
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
           end
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
+          # Returns the ID to use for the cache used for checking if an object has
+      # already been imported or not.
+      #
+      # object - The object we may want to import.
+      def id_for_already_imported_cache(object)
+        raise NotImplementedError
       end
     
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
+    module Gitlab
+  module GithubImport
+    module Representation
+      class User
+        include ToHash
+        include ExposeAttribute
+    
+            File.chmod(0, f.path)
+    
+      # This array contains name of parser events.
+  PARSER_EVENTS = PARSER_EVENT_TABLE.keys
+    
+        return Gem::RemoteFetcher.fetcher.download_to_cache(dependency) unless
+      selected
+    
+        assert_equal B(%w{ 04 06 03 }), point.to_octet_string(:uncompressed)
+    assert_equal B(%w{ 03 06 }), point.to_octet_string(:compressed)
+    assert_equal B(%w{ 07 06 03 }), point.to_octet_string(:hybrid)
+    
+          @socket.read(6).should == 'hello!'
+    end
+  end
+    
+        def humanized_literal(str)
+      str
+        .gsub(CLEAR, '@@@{CLEAR}')
+        .gsub(BOLD, '@@@{BOLD}')
+        .gsub(UNDERLINE, '@@@{UNDERLINE}')
+        .gsub(REVERSE, '@@@{REVERSE}')
+        .gsub(RED, '@@@{RED}')
+        .gsub(GREEN, '@@@{GREEN}')
+        .gsub(YELLOW, '@@@{YELLOW}')
+        .gsub(BLUE, '@@@{BLUE}')
+        .gsub(MAGENTA, '@@@{MAGENTA}')
+        .gsub(CYAN, '@@@{CYAN}')
+        .dump.gsub(/@@@/, '#')
     end
   end
 end
+
+    
+      def test_undef_w_stateless
+    with_tmpdir {
+      generate_file('t.txt', 'a\uFFFDb')
+      open('t.txt', 'w:euc-jp:utf-8', :undef => :replace) {|f|
+        assert_nothing_raised { f.write 'a\uFFFDb' }
+      }
+      assert_equal('a?b', File.read('t.txt'))
+      open('t.txt', 'w:euc-jp:utf-8', :undef => :replace, :replace => '') {|f|
+        assert_nothing_raised { f.write 'a\uFFFDb' }
+      }
+      assert_equal('ab', File.read('t.txt'))
+      open('t.txt', 'w:euc-jp:utf-8', :invalid => :replace) {|f|
+        assert_raise(Encoding::UndefinedConversionError) { f.write 'a\uFFFDb' }
+      }
+      open('t.txt', 'w:euc-jp:utf-8', :invalid => :replace, :replace => '') {|f|
+        assert_raise(Encoding::UndefinedConversionError) { f.write 'a\uFFFDb' }
+      }
+    }
+  end
+    
+          module R
+        refine C do
+          def m
+            :foo
+          end
+        end
+      end
+    
+      def test_copy_stream_socket4
+    with_bigsrc {|bigsrc, bigcontent|
+      File.open(bigsrc) {|f|
+        assert_equal(0, f.pos)
+        with_socketpair {|s1, s2|
+          t1 = Thread.new { s2.read }
+          t2 = Thread.new {
+            ret = IO.copy_stream(f, s1, nil, 100)
+            assert_equal(bigcontent.bytesize-100, ret)
+            assert_equal(0, f.pos)
+            s1.close
+          }
+          result, _ = assert_join_threads([t1, t2])
+          assert_equal(bigcontent[100..-1], result)
+        }
+      }
+    }
+  end if defined? UNIXSocket
+    
+          def warn_set_scm_is_deprecated
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure your project is compatible with future versions of Capistrano,
+remove the :scm setting and instead add these lines to your Capfile after
+`require 'capistrano/deploy'`:
+    
+          def primary
+        self if fetch(:primary)
+      end
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+          def untrusted_keys
+        keys - @trusted_keys
+      end
