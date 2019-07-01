@@ -1,178 +1,122 @@
 
         
-        
-    {        return true;
-      }
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(Net);
-};
-    
-    
-    {  DISALLOW_IMPLICIT_CONSTRUCTORS(AutoUpdater);
-};
-    
-    void URLRequestAboutJob::Start() {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
-                                weak_ptr_factory_.GetWeakPtr()));
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8>
+internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8> Values(T1 v1, T2 v2,
+    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8) {
+  return internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8>(v1, v2, v3, v4,
+      v5, v6, v7, v8);
 }
     
-    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
+    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
+// case with any set of parameters you want. Google Test defines a number
+// of functions for generating test parameters. They return what we call
+// (surprise!) parameter generators. Here is a  summary of them, which
+// are all in the testing namespace:
+//
+//
+//  Range(begin, end [, step]) - Yields values {begin, begin+step,
+//                               begin+step+step, ...}. The values do not
+//                               include end. step defaults to 1.
+//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
+//  ValuesIn(container)        - Yields values from a C-style array, an STL
+//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
+//  Bool()                     - Yields sequence {false, true}.
+//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
+//                               for the math savvy) of the values generated
+//                               by the N generators.
+//
+// For more details, see comments at the definitions of these functions below
+// in this file.
+//
+// The following statement will instantiate tests from the FooTest test case
+// each with parameter values 'meeny', 'miny', and 'moe'.
+    
+    // FilePath - a class for file and directory pathname manipulation which
+// handles platform-specific conventions (like the pathname separator).
+// Used for helper functions for naming files in a directory for xml output.
+// Except for Set methods, all methods are const or static, which provides an
+// 'immutable value object' -- useful for peace of mind.
+// A FilePath with a value ending in a path separator ('like/this/') represents
+// a directory, otherwise it is assumed to represent a file. In either case,
+// it may or may not represent an actual file or directory in the file system.
+// Names are NOT checked for syntax correctness -- no checking for illegal
+// characters, malformed paths, etc.
+    
+    
+    {    linked_ptr_internal const* p = ptr;
+    while (p->next_ != ptr) p = p->next_;
+    p->next_ = this;
+    next_ = ptr;
+  }
+    
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
+#endif
+    
+    
+    {  template <class Tuple>
+  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(6, Tuple))
+  ConstField(const Tuple& t) { return t.f6_; }
+};
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41>
+struct Types41 {
+  typedef T1 Head;
+  typedef Types40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
+};
+    
+    
+    {  // Disables compiler warning 'assignment operator could not be generated.'
+  void operator=(const PreCalculatedPrimeTable& rhs);
+};
+    
+    std::unique_ptr<php::Unit> parse_unit(php::Program& prog,
+                                      std::unique_ptr<UnitEmitter> ue);
+    
+    
+    {
+    {}}
+    
+    //////////////////////////////////////////////////////////////////////
+// Label
+//////////////////////////////////////////////////////////////////////
+    
+    #endif // HPHP_FILE_STREAM_WRAPPER_H
 
     
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view) {
-  // Set up our OLE machinery
-  ui::OSExchangeData data;
+    req::ptr<File>
+GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
+                        int /*options*/,
+                        const req::ptr<StreamContext>& /*context*/) {
+  // Can't open a glob as a file, it's meant to be opened as a directory
     }
     
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
+    #endif // incl_HPHP_OUTPUT_FILE_H_
+
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-    // Class to hold an array of bounding boxes for an output word and
-// the bounding box of the whole word.
-class BoxWord {
- public:
-  BoxWord();
-  explicit BoxWord(const BoxWord& src);
-  ~BoxWord() = default;
-    }
+    ///////////////////////////////////////////////////////////////////////////////
     
     
-    {  // Stores all the source points in the order they were given and their
-  // halfwidths, if any.
-  GenericVector<PointWidth> pts_;
-  // Stores the computed perpendicular distances of (some of) the pts_ from a
-  // given vector (assuming it goes through the origin, making it a line).
-  // Since the distances may be a subset of the input points, and get
-  // re-ordered by the nth_item function, the original point is stored
-  // along side the distance.
-  GenericVector<DistPointPair> distances_;  // Distances of points.
-  // The squared length of the vector used to compute distances_.
-  double square_length_;
-};
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
+    {}
+
     
     
-// Returns the median value of the vector, given that the values are
-// circular, with the given modulus. Values may be signed or unsigned,
-// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
-// NOTE that the array is shuffled, but the time taken is linear.
-// An assumption is made that most of the values are spread over no more than
-// half the range, but wrap-around is accounted for if the median is near
-// the wrap-around point.
-// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
-// T must be an integer or float/double type.
-template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
-  LLSQ stats;
-  T halfrange = static_cast<T>(modulus / 2);
-  int num_elements = v->size();
-  for (int i = 0; i < num_elements; ++i) {
-    stats.add((*v)[i], (*v)[i] + halfrange);
-  }
-  bool offset_needed = stats.y_variance() < stats.x_variance();
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] += halfrange;
-    }
-  }
-  int median_index = v->choose_nth_item(num_elements / 2);
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] -= halfrange;
-    }
-  }
-  return (*v)[median_index];
-}
-    
-      // Returns the index of the worst element. Time = O(n/2).
-  int IndexOfWorst() const {
-    int heap_size = heap_.size();
-    if (heap_size == 0) return -1;  // It cannot be empty!
-    }
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-    int FindFile(const InternalKeyComparator& icmp,
-             const std::vector<FileMetaData*>& files, const Slice& key) {
-  uint32_t left = 0;
-  uint32_t right = files.size();
-  while (left < right) {
-    uint32_t mid = (left + right) / 2;
-    const FileMetaData* f = files[mid];
-    if (icmp.InternalKeyComparator::Compare(f->largest.Encode(), key) < 0) {
-      // Key at 'mid.largest' is < 'target'.  Therefore all
-      // files at or before 'mid' are uninteresting.
-      left = mid + 1;
-    } else {
-      // Key at 'mid.largest' is >= 'target'.  Therefore all files
-      // after 'mid' are uninteresting.
-      right = mid;
-    }
-  }
-  return right;
-}
-    
-    void WriteBatchInternal::SetContents(WriteBatch* b, const Slice& contents) {
-  assert(contents.size() >= kHeader);
-  b->rep_.assign(contents.data(), contents.size());
-}
-    
-    
-    { private:
-  BlockHandle metaindex_handle_;
-  BlockHandle index_handle_;
-};
-    
-    
-    {    if (diff_index >= min_length) {
-      // Do not shorten if one string is a prefix of the other
-    } else {
-      uint8_t diff_byte = static_cast<uint8_t>((*start)[diff_index]);
-      if (diff_byte < static_cast<uint8_t>(0xff) &&
-          diff_byte + 1 < static_cast<uint8_t>(limit[diff_index])) {
-        (*start)[diff_index]++;
-        start->resize(diff_index + 1);
-        assert(Compare(*start, limit) < 0);
-      }
-    }
-  }
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size / 5 - 1048576);
-}
+    {}  // namespace URL
