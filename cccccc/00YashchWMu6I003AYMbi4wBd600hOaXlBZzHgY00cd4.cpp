@@ -1,177 +1,166 @@
 
         
-        
-    {
-    {
-    {
-    {}  // namespace cpp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+        wchar_t CCalcEngine::DecimalSeparator() const
+{
+    return m_decimalSeparator;
+}
 
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
+    public
+    enum class AutomationNotificationProcessing
+    {
+        ImportantAll = 0,
+        ImportantMostRecent = 1,
+        All = 2,
+        MostRecent = 3,
+        CurrentThenMostRecent = 4
+    };
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    bool Status::operator==(const Status& x) const {
-  return error_code_ == x.error_code_ &&
-      error_message_ == x.error_message_;
-}
-    
-    #include <fstream>
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-    }
-    }
-    }
-    
-    // Main entry point for Paragraph Detection Algorithm.
+    //----------------------------------------------------------------------------
 //
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
+//  ScriptSet implementation
 //
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-    ELISTIZE(PARA)
-    
-      // Return whether this model is likely to agree with the other model on most
-  // paragraphs they are marked.
-  bool Comparable(const ParagraphModel &other) const;
-    
-    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
-    
-    #include <grpc/support/port_platform.h>
-    
-    namespace grpc {
+//----------------------------------------------------------------------------
+ScriptSet::ScriptSet() {
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        bits[i] = 0;
     }
+}
     
-      // Fixed size offsets for field ID start positions during encoding.  Field
-  // data immediately follows.
-  enum FieldIdOffset {
-    kTraceIdOffset = kVersionIdSize,
-    kSpanIdOffset = kTraceIdOffset + kFieldIdSize + kTraceIdSize,
-    kTraceOptionsOffset = kSpanIdOffset + kFieldIdSize + kSpanIdSize,
-  };
-    
-    Status ProtoServerReflection::GetFileContainingExtension(
-    ServerContext* context, const ExtensionRequest* request,
-    ServerReflectionResponse* response) {
-  if (descriptor_pool_ == nullptr) {
-    return Status::CANCELLED;
-  }
+    SelectFormat&
+SelectFormat::operator=(const SelectFormat& other) {
+    if (this != &other) {
+        msgPattern = other.msgPattern;
     }
+    return *this;
+}
     
-    #endif  // GPR_APPLE
-
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
     
-    namespace grpc {
-namespace load_reporter {
-    }
-    }
+    SharedBreakIterator::SharedBreakIterator(
+        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
     
-    bool CallFuncN::initWithFunction(const std::function<void (Node *)> &func)
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    
+    {private:
+    int32_t fMax;
+    int32_t fMin;
+};
+    
+    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
 {
-    _functionN = func;
-    return true;
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    switch (fieldIndex) {
+        case UDAT_YEAR_FIELD:
+        case UDAT_MONTH_FIELD:
+        case UDAT_DATE_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+        case UDAT_STANDALONE_MONTH_FIELD:
+            return gStaticSets->fDateIgnorables;
+            
+        case UDAT_HOUR_OF_DAY1_FIELD:
+        case UDAT_HOUR_OF_DAY0_FIELD:
+        case UDAT_MINUTE_FIELD:
+        case UDAT_SECOND_FIELD:
+        case UDAT_HOUR1_FIELD:
+        case UDAT_HOUR0_FIELD:
+            return gStaticSets->fTimeIgnorables;
+            
+        default:
+            return gStaticSets->fOtherIgnorables;
+    }
 }
     
-    NS_CC_BEGIN
-//
-// singleton stuff
-//
-typedef struct _hashElement
-{
-    struct _ccArray     *actions;
-    Node                *target;
-    int                 actionIndex;
-    Action              *currentAction;
-    bool                currentActionSalvaged;
-    bool                paused;
-    UT_hash_handle      hh;
-} tHashElement;
-    
-        /** The alpha threshold.
-     * The content is drawn only where the stencil have pixel with alpha greater than the alphaThreshold.
-     * Should be a float between 0 and 1.
-     * This default to 1 (so alpha test is disabled).
-     *
-     * @return The alpha threshold value,Should be a float between 0 and 1.
-     */
-    GLfloat getAlphaThreshold() const;
-    
-    /** Set the alpha threshold. 
-     * 
-     * @param alphaThreshold The alpha threshold.
-     */
-    void setAlphaThreshold(GLfloat alphaThreshold);
-    
-    /** Inverted. If this is set to true,
-     * the stencil is inverted, so the content is drawn where the stencil is NOT drawn.
-     * This default to false.
-     *
-     * @return If the clippingNode is Inverted, it will be return true.
-     */
-    bool isInverted() const;
-    
-    /** Set the ClippingNode whether or not invert.
-     *
-     * @param inverted A bool Type,to set the ClippingNode whether or not invert.
-     */
-    void setInverted(bool inverted);
-    
-    // Define size_type appropriately to allow backward-compatibility
-// use of the old size_t interface class
-#if defined(CL_HPP_ENABLE_SIZE_T_COMPATIBILITY)
-namespace cl {
-    namespace compatibility {
-        /*! \brief class used to interface between C++ and
-        *  OpenCL C calls that require arrays of size_t values, whose
-        *  size is known statically.
-        */
-        template <int N>
-        class size_t
-        {
-        private:
-            size_type data_[N];
+    /**
+ * Implement UnicodeMatcher
+ */
+void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
+        ch = pattern.char32At(i);
+        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+        if (matcher == NULL) {
+            toUnionTo.add(ch);
+        } else {
+            matcher->addMatchSetTo(toUnionTo);
+        }
     }
-    }
+}
+    
+    
+    {  sender.Update();
+  sender.Stop();
+  EXPECT_FALSE(sender.IsRunning());
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
+    
+    TEST_F(Accelrpt68Test, reset) {
+  Accelrpt68 acc;
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
     }
     
-        public:
-        PersonIdExtractor(const float confidenceThreshold = 0.1f, const float inlierRatioThreshold = 0.5f,
-                          const float distanceThreshold = 30.f, const int numberFramesToDeletePerson = 10);
+    
+    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
+  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
+  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
+  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
+}
+    
+    // config detail: {'name': 'manual_input', 'enum': {0: 'MANUAL_INPUT_OFF', 1:
+// 'MANUAL_INPUT_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 7, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Horn_rpt_79::Manual_inputType Hornrpt79::manual_input(const std::uint8_t* bytes,
+                                                      int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    using ::apollo::drivers::canbus::Byte;
