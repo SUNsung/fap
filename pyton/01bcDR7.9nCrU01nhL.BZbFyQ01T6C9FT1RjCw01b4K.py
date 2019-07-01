@@ -1,90 +1,90 @@
 
         
-        
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
+        print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
-        def _get_session_from_db(self):
-        try:
-            return self.model.objects.get(
-                session_key=self.session_key,
-                expire_date__gt=timezone.now()
-            )
-        except (self.model.DoesNotExist, SuspiciousOperation) as e:
-            if isinstance(e, SuspiciousOperation):
-                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
-                logger.warning(str(e))
-            self._session_key = None
+        infile, outfile = args
     
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
-        else:
-            s.delete()  # Clear sessions with no data.
-        return s
+    import io
+import sys
+import re
+    
+        return ret
+    
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     
-class Session(AbstractBaseSession):
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
+    
+    
+def setup(app):
+    app.add_role('gh', github_link)
+
+    
+    
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
+    
+    
+def get_primes(n):
+    '''Return list of all primes less than n,
+    Using sieve of Eratosthenes.
     '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+    if n <= 0:
+        raise ValueError(''n' must be a positive integer.')
+    # If x is even, exclude x from list (-1):
+    sieve_size = (n // 2 - 1) if n % 2 == 0 else (n // 2)
+    sieve = [True for _ in range(sieve_size)]   # Sieve
+    primes = []      # List of Primes
+    if n >= 2:
+        primes.append(2)      # 2 is prime by default
+    for i in range(sieve_size):
+        if sieve[i]:
+            value_at_i = i*2 + 3
+            primes.append(value_at_i)
+            for j in range(i, sieve_size, value_at_i):
+                sieve[j] = False
+    return primes
+
+    
+        def pow2_factor(num):
+        '''factor n into a power of 2 times an odd number'''
+        power = 0
+        while num % 2 == 0:
+            num /= 2
+            power += 1
+        return power, num
+    
+        def random_vector():
+        import random
+        vector = [0 for _ in range(vector_length)]
+        for i in random.sample(range(vector_length), nozero_counut):
+            vector[i] = random.random()
+        return vector
     
     
-class DjangoTemplates(EngineMixin, BaseRenderer):
-    '''
-    Load Django templates from the built-in widget templates in
-    django/forms/templates and from apps' 'templates' directory.
-    '''
-    backend = DjangoTemplates
-    
-    from sklearn.datasets import make_biclusters
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralCoclustering
-from sklearn.metrics import consensus_score
-    
-    # Author: Gael Varoquaux <gael dot varoquaux at normalesup dot org>
-# License: BSD 3 clause
-    
-    fignum = 1
-titles = ['8 clusters', '3 clusters', '3 clusters, bad initialization']
-for name, est in estimators:
-    fig = plt.figure(fignum, figsize=(4, 3))
-    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-    est.fit(X)
-    labels = est.labels_
-    
-    These images how similar features are merged together using
-feature agglomeration.
-'''
-print(__doc__)
-    
-    
-try:  # SciPy >= 0.16 have face in misc
-    from scipy.misc import face
-    face = face(gray=True)
-except ImportError:
-    face = sp.face(gray=True)
-    
-    # Anisotropicly distributed data
-transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
-X_aniso = np.dot(X, transformation)
-y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
-    
-            t1 = time.time()
-        if hasattr(algorithm, 'labels_'):
-            y_pred = algorithm.labels_.astype(np.int)
-        else:
-            y_pred = algorithm.predict(X)
-    
-    # #############################################################################
-# Compute clustering with MeanShift
-    
-    # #############################################################################
-# Plot result
+class PriorityQueue:
+    def __init__(self, items=None, priorities=None):
+        '''Create a priority queue with items (list or iterable).
+        If items is not passed, create empty priority queue.'''
+        self.priority_queue_list = []
+        if items is None:
+            return
+        if priorities is None:
+            priorities = itertools.repeat(None)
+        for item, priority in zip(items, priorities):
+            self.push(item, priority=priority)
