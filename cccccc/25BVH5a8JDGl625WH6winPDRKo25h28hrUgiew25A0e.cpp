@@ -1,438 +1,202 @@
 
         
-        
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rbx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+        TEST(StatusOr, TestValueConst) {
+  const int kI = 4;
+  const StatusOr<int> thing(kI);
+  EXPECT_EQ(kI, thing.ValueOrDie());
 }
     
-    static void secp256k1_ge_globalz_set_table_gej(size_t len, secp256k1_ge *r, secp256k1_fe *globalz, const secp256k1_gej *a, const secp256k1_fe *zr) {
-    size_t i = len - 1;
-    secp256k1_fe zs;
+    namespace google {
+namespace protobuf {
+namespace util {
+    }
+    }
     }
     
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
-    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    
-    #if !defined(TINYFORMAT_USE_VARIADIC_TEMPLATES) && !defined(TINYFORMAT_NO_VARIADIC_TEMPLATES)
-#   ifdef __GXX_EXPERIMENTAL_CXX0X__
-#       define TINYFORMAT_USE_VARIADIC_TEMPLATES
-#   endif
-#endif
-    
-    /** A hasher class for RIPEMD-160. */
-class CRIPEMD160
-{
-private:
-    uint32_t s[5];
-    unsigned char buf[64];
-    uint64_t bytes;
+        if (dataset.message_name() == 'benchmarks.proto3.GoogleMessage1') {
+      message = new benchmarks::proto3::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage1') {
+      message = new benchmarks::proto2::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage2') {
+      message = new benchmarks::proto2::GoogleMessage2;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message3.GoogleMessage3') {
+      message = new benchmarks::google_message3::GoogleMessage3;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message4.GoogleMessage4') {
+      message = new benchmarks::google_message4::GoogleMessage4;
+    } else {
+      std::cerr << 'Unknown message type: ' << dataset.message_name();
+      exit(1);
     }
     
+    REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
     
-    {  bool isChild() {
-    return pid == 0;
+    op = core.CreateOperator(
+    'FindDuplicateElements',
+    ['data'],
+    ['indices'],
+)
+    
+    ```
+    
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
+    
+    
+    {} // namespace caffe2
+    
+    void CensusClientCallData::OnDoneRecvMessageCb(void* user_data,
+                                               grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  CensusChannelData* channeld =
+      reinterpret_cast<CensusChannelData*>(elem->channel_data);
+  GPR_ASSERT(calld != nullptr);
+  GPR_ASSERT(channeld != nullptr);
+  // Stream messages are no longer valid after receiving trailing metadata.
+  if ((*calld->recv_message_) != nullptr) {
+    calld->recv_message_count_++;
   }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
+}
+    
+    
+    {  TraceContextEncoding() = delete;
+  TraceContextEncoding(const TraceContextEncoding&) = delete;
+  TraceContextEncoding(TraceContextEncoding&&) = delete;
+  TraceContextEncoding operator=(const TraceContextEncoding&) = delete;
+  TraceContextEncoding operator=(TraceContextEncoding&&) = delete;
 };
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
     
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/utils/math.h'
-    
-    namespace caffe2 {
+    {    if (!status.ok()) {
+      FillErrorResponse(status, response.mutable_error_response());
     }
+    response.set_valid_host(request.host());
+    response.set_allocated_original_request(
+        new ServerReflectionRequest(request));
+    stream->Write(response);
+  }
     
-    
-    {    return 0;
-}
-    
-            ListNode* dummyHead = new ListNode(0);
-        dummyHead->next = head;
-    
-    using namespace std;
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    #include <iostream>
-#include <vector>
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    namespace CNTK
-{
-    class CompositeMinibatchSource final : public MinibatchSource
-    {
-        static const std::wstring PositionAttributeName;
-        static const std::wstring DistributedAfterSampleCountAttributeName;
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
     }
     }
     
-        template std::shared_ptr<const Matrix<float>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<double>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<half>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<char>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<short>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    #endif  // GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+
     
-        template <typename ElementType>
-    /*static*/ ValuePtr Value::CreateSequence(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/)
-    {
-        //TODO: avoid data copy.
-        std::vector<std::vector<size_t>> input = { sequenceData };
-        return Create<ElementType>(dimension, input, {sequenceStartFlag}, device, readOnly);
+    namespace {
     }
     
-    U_NAMESPACE_END
+    #include <osquery/core/database/database.h>
+#include <osquery/utils/conversions/tryto.h>
     
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        DecimalFormat *fmtToAdopt, Style *styleToAdopt, UErrorCode &status)
-        : fPreExponent(),
-          fDecimalFormat(fmtToAdopt),
-          fStyle(styleToAdopt),
-          fStaticSets(NULL) {
-    if (U_FAILURE(status)) {
-        return;
+      virtual Expected<int32_t, DatabaseError> getInt32(const std::string& domain,
+                                                    const std::string& key);
+  virtual Expected<std::string, DatabaseError> getString(
+      const std::string& domain, const std::string& key) = 0;
+    
+    Expected<int, RocksdbMigrationError> RocksdbMigration::getVersion(
+    const DatabaseHandle& db) {
+  rocksdb::ReadOptions options;
+  options.verify_checksums = true;
+  auto handle_iter = db.handles.find('configurations');
+  if (handle_iter != db.handles.end()) {
+    // Try to get new version first
+    // Version stored as string value to help analyze db by tools
+    std::string version_str;
     }
-    if (fDecimalFormat == NULL || fStyle == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
     }
-    const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
-    if (sym == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    
+    namespace osquery {
     }
-    getPreExponent(*sym, fPreExponent);
-    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
-}
     
-    
-int32_t SelectFormat::findSubMessage(const MessagePattern& pattern, int32_t partIndex,
-                                     const UnicodeString& keyword, UErrorCode& ec) {
-    if (U_FAILURE(ec)) {
-        return 0;
-    }
-    UnicodeString other(FALSE, SELECT_KEYWORD_OTHER, 5);
-    int32_t count = pattern.countParts();
-    int32_t msgStart=0;
-    // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
-    do {
-        const MessagePattern::Part& part=pattern.getPart(partIndex++);
-        const UMessagePatternPartType type=part.getType();
-        if(type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
-            break;
-        }
-        // part is an ARG_SELECTOR followed by a message
-        if(pattern.partSubstringMatches(part, keyword)) {
-            // keyword matches
-            return partIndex;
-        } else if(msgStart==0 && pattern.partSubstringMatches(part, other)) {
-            msgStart=partIndex;
-        }
-        partIndex=pattern.getLimitPartIndex(partIndex);
-    } while(++partIndex<count);
-    return msgStart;
-}
-    
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    void 
-SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                           int32_t time, TimeMode mode, UBool after, UErrorCode& status)
-{
-    setEndRule(month, after ? dayOfMonth : -dayOfMonth,
-               -dayOfWeek, time, mode, status);
-}
-    
-    int32_t
-IntDigitCountRange::pin(int32_t digitCount) const {
-    return digitCount < fMin ? fMin : (digitCount < fMax ? digitCount : fMax);
-}
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    /**
- * Implement UnicodeFunctor
- */
-UnicodeFunctor* StringReplacer::clone() const {
-    return new StringReplacer(*this);
-}
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
+      /**
+   * @brief Optionally handle snapshot query results separately from events.
+   *
+   * If a logger plugin wants to write snapshot query results (potentially
+   * large amounts of data) to a specific sink it should implement logSnapshot.
+   * Otherwise the serialized log item data will be forwarded to logString.
+   *
+   * @param s A special log item will complete results from a query.
+   * @return log status
    */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
+  virtual Status logSnapshot(const std::string& s) {
+    return logString(s);
+  }
+    
+    Status WriteBatchBase::Merge(ColumnFamilyHandle* column_family,
+                             const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
     }
+    
+    #pragma once
+    
+      static void CompactFiles(void* arg) {
+    std::unique_ptr<CompactionTask> task(
+        reinterpret_cast<CompactionTask*>(arg));
+    assert(task);
+    assert(task->db);
+    Status s = task->db->CompactFiles(
+        task->compact_options,
+        task->input_file_names,
+        task->output_level);
+    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
+    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
+      // If a compaction task with its retry_on_fail=true failed,
+      // try to schedule another compaction in case the reason
+      // is not an IO error.
+      CompactionTask* new_task = task->compactor->PickCompaction(
+          task->db, task->column_family_name);
+      task->compactor->ScheduleCompaction(new_task);
     }
+  }
+    
+    #include 'rocksdb/utilities/lua/rocks_lua_custom_library.h'
+    
+    
+    {
+    {  // Returns the approximate memory usage of different types in the input
+  // list of DBs and Cache set.  For instance, in the output map
+  // usage_by_type, usage_by_type[kMemTableTotal] will store the memory
+  // usage of all the mem-tables from all the input rocksdb instances.
+  //
+  // Note that for memory usage inside Cache class, we will
+  // only report the usage of the input 'cache_set' without
+  // including those Cache usage inside the input list 'dbs'
+  // of DBs.
+  static Status GetApproximateMemoryUsageByType(
+      const std::vector<DB*>& dbs,
+      const std::unordered_set<const Cache*> cache_set,
+      std::map<MemoryUtil::UsageType, uint64_t>* usage_by_type);
+};
+}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
+
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    maxBackgroundOperations
+ * Signature: (J)I
+ */
+jint Java_org_rocksdb_BackupableDBOptions_maxBackgroundOperations(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return static_cast<jint>(bopt->max_background_operations);
+}
