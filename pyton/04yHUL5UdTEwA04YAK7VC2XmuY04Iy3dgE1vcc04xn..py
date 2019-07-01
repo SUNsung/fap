@@ -1,98 +1,114 @@
 
         
-        new_version = {}
+            def park_vehicle(self, vehicle):
+        spot = self._find_available_spot(vehicle)
+        if spot is None:
+            return None
+        else:
+            spot.park_vehicle(vehicle)
+            return spot
     
-    try:
-    input = raw_input
-except NameError:
-    pass
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-def main():
-    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
-        template = tmplf.read()
+            self.mock_eventcollector()
     
-        out = issue_template_tmpl % {'version': locals()['__version__']}
+        def test_del_msg_failure_with_null_msg(self):
+        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
+        message = MagicMock(spec=Message)
+        message.name = 'msg_3'
+        message.to_id = self.id
+        message.del_on_recipient = False
     
-                        if not split_option[-1].startswith('-'):  # metavar
-                        option = ' '.join(split_option[:-1] + ['*%s*' % split_option[-1]])
+            self.amqp.assert_event_item(
+            {
+                'event_type': event_type,
+                'event_topic': 'quarantine',
+                'payload': {
+                    'domain': request.host,
+                    'referrer_domain': self.domain_mock(),
+                    'verified_email': context.user.email_verified,
+                    'user_id': context.user._id,
+                    'sr_name': subreddit.name,
+                    'referrer_url': request.headers.get(),
+                    'user_agent': request.user_agent,
+                    'user_agent_parsed': request.parsed_agent.to_dict(),
+                    'sr_id': subreddit._id,
+                    'user_name': context.user.name,
+                    'oauth2_client_id': context.oauth2_client._id,
+                    'oauth2_client_app_type': context.oauth2_client.app_type,
+                    'oauth2_client_name': context.oauth2_client.name,
+                    'geoip_country': context.location,
+                    'obfuscated_data': {
+                        'client_ip': request.ip,
+                        'client_ipv4_24': '1.2.3',
+                        'client_ipv4_16': '1.2',
+                    }
+                }
+            }
+        )
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-]
+        def test_image_link(self):
+        post = Link(is_self=True, selftext='''
+Some text here.
+https://example.com
+https://reddit.com/a.jpg''')
+        url = _get_scrape_url(post)
+        self.assertEqual(url, 'https://reddit.com/a.jpg')
     
-            If `sign` is incorrect, /validate call throws an HTTP 556 error
-        '''
-        logger = WarningLogger()
-        ie = IqiyiIEWithCredentials(FakeYDL({'logger': logger}))
-        ie._login()
-        self.assertTrue('unable to log in:' in logger.messages[0])
+        def test_loads(self):
+        self.assertEquals('', TestPermissionSet.loads(None).dumps())
+        self.assertEquals('', TestPermissionSet.loads('').dumps())
+        self.assertEquals('+x,+y', TestPermissionSet.loads('+x,+y').dumps())
+        self.assertEquals('+x,-y', TestPermissionSet.loads('+x,-y').dumps())
+        self.assertEquals('+all', TestPermissionSet.loads('+x,-y,+all').dumps())
+        self.assertEquals('+x,-y,+z',
+                          TestPermissionSet.loads('+x,-y,+z').dumps())
+        self.assertRaises(ValueError,
+                          TestPermissionSet.loads, '+x,-y,+z', validate=True)
+        self.assertEquals(
+            '+x,-y',
+            TestPermissionSet.loads('-all,+x,-y', validate=True).dumps())
     
+        @patch('r2.models.Subreddit.user_subreddits')
+    def test_subreddit_logged_in(self, user_subreddits):
+        user_subreddits.return_value = subscriptions
+        srname = 'test1'
+        subreddit = Subreddit(name=srname)
+        srnames = srnames_from_site(self.logged_in, subreddit)
     
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
-                return
-        return params
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'https://example.com/a.jpg')
     
-        def iter_body(self, chunk_size=1):
-        return self._orig.iter_content(chunk_size=chunk_size)
-    
-    UNICODE = FILE_CONTENT
+            for width in (108, 216, 320, 640, 960, 1080):
+            url = self.provider.resize_image(image, width)
+            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
+                width*2))
 
     
+        def test_mcreddit_detector(self):
+        user_agent = 'McReddit - Reddit Client for iOS'
+        agent_parsed = {}
+        result = McRedditDetector().detect(user_agent, agent_parsed)
+        self.assertTrue(result)
+        self.assertEqual(agent_parsed['browser']['name'],
+                         McRedditDetector.name)
+        self.assertEqual(agent_parsed['platform']['name'], 'iOS')
+        self.assertEqual(agent_parsed['app_name'],
+                         agent_parsed['browser']['name'])
     
-def test_missing_auth(httpbin):
-    r = http(
-        '--auth-type=basic',
-        'GET',
-        httpbin + '/basic-auth/user/password',
-        error_exit_ok=True
-    )
-    assert HTTP_OK not in r
-    assert '--auth required' in r.stderr
-
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-        @property
-    def cookies(self):
-        jar = RequestsCookieJar()
-        for name, cookie_dict in self['cookies'].items():
-            jar.set_cookie(create_cookie(
-                name, cookie_dict.pop('value'), **cookie_dict))
-        jar.clear_expired_cookies()
-        return jar
-    
-    
-# TODO(huay)
-def conv1d():
-    ''''''
-    
-        如果需要 reuse 推荐使用类实现的 `Dense`
-    
-    # 因为 'a', 'aa', 'aaa' 中都只含有 '<a' ，所以它们直积上都只是 '<a'
-print(model.wv['a'])
-print(model.wv['aa'])
-print(model.wv['aaa'])
-print(model.wv['<a'])
-'''
-[ 0.00226487 -0.19139008  0.17918809  0.13084619 -0.1939924 ]
-[ 0.00226487 -0.19139008  0.17918809  0.13084619 -0.1939924 ]
-[ 0.00226487 -0.19139008  0.17918809  0.13084619 -0.1939924 ]
-[ 0.00226487 -0.19139008  0.17918809  0.13084619 -0.1939924 ]
-'''
-print()
+        def test_padding_roundtrip(self):
+        from r2.lib.tracking import _unpad_message, _pad_message
+        tested = _unpad_message(_pad_message(MESSAGE))
+        self.assertEquals(MESSAGE, tested)
