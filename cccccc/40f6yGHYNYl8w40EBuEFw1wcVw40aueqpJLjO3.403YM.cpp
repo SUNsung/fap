@@ -1,155 +1,104 @@
 
         
-            template <typename V1ElemType>
-    TensorView<V1ElemType>* NDArrayView::GetWritableTensorView()
-    {
-        if (IsReadOnly())
-            InvalidArgument('NDArrayView::GetWritableTensorView: Cannot get a writable TensorView from a read-only NDArrayView.');
-    }
+        // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-            static bool IsUDF(const FunctionPtr& f);
+    #define EXPECT_THROW(statement, expected_exception) \
+  GTEST_TEST_THROW_(statement, expected_exception, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_NO_THROW(statement) \
+  GTEST_TEST_NO_THROW_(statement, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_ANY_THROW(statement) \
+  GTEST_TEST_ANY_THROW_(statement, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_THROW(statement, expected_exception) \
+  GTEST_TEST_THROW_(statement, expected_exception, GTEST_FATAL_FAILURE_)
+#define ASSERT_NO_THROW(statement) \
+  GTEST_TEST_NO_THROW_(statement, GTEST_FATAL_FAILURE_)
+#define ASSERT_ANY_THROW(statement) \
+  GTEST_TEST_ANY_THROW_(statement, GTEST_FATAL_FAILURE_)
     
-            template <typename ElementType>
-        std::pair<std::shared_ptr<const Microsoft::MSR::CNTK::Matrix<ElementType>>, std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>> PackedData()
-        {
-            if (!m_isPacked)
-                InvalidArgument('PackedValue::PackedData called on a Value object that has already been unpacked.');
-    }
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
     
-    
-    {private:
-    long long m_start;
-    long long m_end;
-};
-    
-    int32_t
-RuleBasedCollator::getSortKey(const UnicodeString &s,
-                              uint8_t *dest, int32_t capacity) const {
-    return getSortKey(s.getBuffer(), s.length(), dest, capacity);
+    // A function to convert T* into linked_ptr<T>
+// Doing e.g. make_linked_ptr(new FooBarBaz<type>(arg)) is a shorter notation
+// for linked_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
+template <typename T>
+linked_ptr<T> make_linked_ptr(T* ptr) {
+  return linked_ptr<T>(ptr);
 }
     
-    int32_t ScriptSet::countMembers() const {
-    // This bit counter is good for sparse numbers of '1's, which is
-    //  very much the case that we will usually have.
-    int32_t count = 0;
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        uint32_t x = bits[i];
-        while (x > 0) {
-            count++;
-            x &= (x - 1);    // and off the least significant one bit.
-        }
-    }
-    return count;
-}
     
-    #include 'unicode/uobject.h'
-#include 'unicode/utypes.h'
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
     
-    /**
- * Overrides TimeZone
- * Queries if the given date is in Daylight Savings Time.
- */
-UBool SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
-{
-    // This method is wasteful since it creates a new GregorianCalendar and
-    // deletes it each time it is called.  However, this is a deprecated method
-    // and provided only for Java compatibility as of 8/6/97 [LIU].
-    if (U_FAILURE(status)) return FALSE;
-    GregorianCalendar *gc = new GregorianCalendar(*this, status);
-    /* test for NULL */
-    if (gc == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return FALSE;
-    }
-    gc->setTime(date, status);
-    UBool result = gc->inDaylightTime(status);
-    delete gc;
-    return result;
-}
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    static const char *gKeywords[StandardPlural::COUNT] = {
-    'zero', 'one', 'two', 'few', 'many', 'other'
-};
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword, or OTHER
-     */
-    static Form orOtherFromString(const char *keyword) {
-        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
-    }
-    
-        // Create custom vertex declaration.
-    // Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats.
-    // We still use a custom declaration to use 'ALLEGRO_PRIM_TEX_COORD' instead of 'ALLEGRO_PRIM_TEX_COORD_PIXEL' else we can't do a reliable conversion.
-    ALLEGRO_VERTEX_ELEMENT elems[] =
-    {
-        { ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, pos) },
-        { ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, uv) },
-        { ALLEGRO_PRIM_COLOR_ATTR, 0, IM_OFFSETOF(ImDrawVertAllegro, col) },
-        { 0, 0, 0 }
-    };
-    g_VertexDecl = al_create_vertex_decl(elems, sizeof(ImDrawVertAllegro));
-    
-    static void* FreeType_Realloc(FT_Memory /*memory*/, long cur_size, long new_size, void* block)
-{
-    // Implement realloc() as we don't ask user to provide it.
-    if (block == NULL)
-        return GImFreeTypeAllocFunc((size_t)new_size, GImFreeTypeAllocatorUserData);
-    }
-    
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
-        }
-    }
-    
-        // Tooltips
-    IMGUI_API void          BeginTooltip();                                                     // begin/append a tooltip window. to create full-featured tooltip (with any kind of items).
-    IMGUI_API void          EndTooltip();
-    IMGUI_API void          SetTooltip(const char* fmt, ...) IM_FMTARGS(1);                     // set a text-only tooltip, typically use with ImGui::IsItemHovered(). override any previous call to SetTooltip().
-    IMGUI_API void          SetTooltipV(const char* fmt, va_list args) IM_FMTLIST(1);
-    
-    // Extend ImGuiTabBarFlags_
-enum ImGuiTabBarFlagsPrivate_
-{
-    ImGuiTabBarFlags_DockNode                   = 1 << 20,  // Part of a dock node [we don't use this in the master branch but it facilitate branch syncing to keep this around]
-    ImGuiTabBarFlags_IsFocused                  = 1 << 21,
-    ImGuiTabBarFlags_SaveSettings               = 1 << 22   // FIXME: Settings are handled by the docking system, this only request the tab bar to mark settings dirty when reordering tabs
-};
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
