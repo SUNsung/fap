@@ -1,157 +1,182 @@
 
         
-            def get_app_kwargs(self):
-        return dict(static_path='.')
+            with io.open(infile, encoding='utf-8') as inf:
+        readme = inf.read()
     
-        for i in range(1, num_tests + 1):
-        logging.info('running test case %d', i)
-        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
-        test_ws = yield websocket_connect(url, None, compression_options={})
-        while True:
-            message = yield test_ws.read_message()
-            if message is None:
-                break
-            test_ws.write_message(message, binary=isinstance(message, bytes))
     
-    from concurrent.futures import ThreadPoolExecutor
-from tornado import gen
-from tornado.ioloop import IOLoop
-from tornado.platform.asyncio import (
-    AsyncIOLoop,
-    to_asyncio_future,
-    AnyThreadEventLoopPolicy,
-)
-from tornado.testing import AsyncTestCase, gen_test
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-            print('Test: One element stack')
-        sorted_stack = self.get_sorted_stack(stack, [1])
-        assert_equal(sorted_stack.pop(), 1)
+        def gen_ies_md(ies):
+        for ie in ies:
+            ie_md = '**{0}**'.format(ie.IE_NAME)
+            ie_desc = getattr(ie, 'IE_DESC', None)
+            if ie_desc is False:
+                continue
+            if ie_desc is not None:
+                ie_md += ': {0}'.format(ie.IE_DESC)
+            if not ie.working():
+                ie_md += ' (Currently broken)'
+            yield ie_md
     
-    		elif current.rightChild is None:
-			if current is self.root:
-				self.root = current.rightChild
-			elif isLeft:
-				parent.lChild = current.rightChild
-			else:
-				parent.rightChild = current.rightChild
     
-    		print('Test: insert checking with post order traversal')
-		expectVal = [7, 25, 10, 38, 40, 30, 60, 80, 70, 50]
-		assert_equal(myTree.printPostOrder(), expectVal)
-		expectVal = [91, 81, 71, 61, 51, 41, 31, 21, 11, 1]
-		assert_equal(myTree2.printPostOrder(), expectVal)
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
     
-            print('Test: remove on a key that doesn't exist')
-        assert_raises(KeyError, hash_table.remove, -1)
+                    fn = os.path.join(dirpath, basename)
+                with io.open(fn, encoding='utf-8') as inf:
+                    code = inf.read()
     
-    class SJISContextAnalysis(JapaneseContextAnalysis):
-    def __init__(self):
-        super(SJISContextAnalysis, self).__init__()
-        self._charset_name = 'SHIFT_JIS'
+        By default this will get the strings from the blns.txt file
     
-    # Character Mapping Table:
-Latin2_HungarianCharToOrderMap = (
-255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
-253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
-252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
-253, 28, 40, 54, 45, 32, 50, 49, 38, 39, 53, 36, 41, 34, 35, 47,
- 46, 71, 43, 33, 37, 57, 48, 64, 68, 55, 52,253,253,253,253,253,
-253,  2, 18, 26, 17,  1, 27, 12, 20,  9, 22,  7,  6, 13,  4,  8,
- 23, 67, 10,  5,  3, 21, 19, 65, 62, 16, 11,253,253,253,253,253,
-159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,
-175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,
-191,192,193,194,195,196,197, 75,198,199,200,201,202,203,204,205,
- 79,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,
-221, 51, 81,222, 78,223,224,225,226, 44,227,228,229, 61,230,231,
-232,233,234, 58,235, 66, 59,236,237,238, 60, 69, 63,239,240,241,
- 82, 14, 74,242, 70, 80,243, 72,244, 15, 83, 77, 84, 30, 76, 85,
-245,246,247, 25, 73, 42, 24,248,249,250, 31, 56, 29,251,252,253,
-)
+        def test_printer_buttons(self):
+        '''Test buttons whose commands use printer function.'''
+        dialog = self.dialog
+        button_sources = [(dialog.py_license, license, 'license'),
+                          (dialog.py_copyright, copyright, 'copyright'),
+                          (dialog.py_credits, credits, 'credits')]
     
-        @property
-    def charset_name(self):
-        raise NotImplementedError
-    
-    EUCKR_CLS  = (
-    1,1,1,1,1,1,1,1,  # 00 - 07
-    1,1,1,1,1,1,0,0,  # 08 - 0f
-    1,1,1,1,1,1,1,1,  # 10 - 17
-    1,1,1,0,1,1,1,1,  # 18 - 1f
-    1,1,1,1,1,1,1,1,  # 20 - 27
-    1,1,1,1,1,1,1,1,  # 28 - 2f
-    1,1,1,1,1,1,1,1,  # 30 - 37
-    1,1,1,1,1,1,1,1,  # 38 - 3f
-    1,1,1,1,1,1,1,1,  # 40 - 47
-    1,1,1,1,1,1,1,1,  # 48 - 4f
-    1,1,1,1,1,1,1,1,  # 50 - 57
-    1,1,1,1,1,1,1,1,  # 58 - 5f
-    1,1,1,1,1,1,1,1,  # 60 - 67
-    1,1,1,1,1,1,1,1,  # 68 - 6f
-    1,1,1,1,1,1,1,1,  # 70 - 77
-    1,1,1,1,1,1,1,1,  # 78 - 7f
-    0,0,0,0,0,0,0,0,  # 80 - 87
-    0,0,0,0,0,0,0,0,  # 88 - 8f
-    0,0,0,0,0,0,0,0,  # 90 - 97
-    0,0,0,0,0,0,0,0,  # 98 - 9f
-    0,2,2,2,2,2,2,2,  # a0 - a7
-    2,2,2,2,2,3,3,3,  # a8 - af
-    2,2,2,2,2,2,2,2,  # b0 - b7
-    2,2,2,2,2,2,2,2,  # b8 - bf
-    2,2,2,2,2,2,2,2,  # c0 - c7
-    2,3,2,2,2,2,2,2,  # c8 - cf
-    2,2,2,2,2,2,2,2,  # d0 - d7
-    2,2,2,2,2,2,2,2,  # d8 - df
-    2,2,2,2,2,2,2,2,  # e0 - e7
-    2,2,2,2,2,2,2,2,  # e8 - ef
-    2,2,2,2,2,2,2,2,  # f0 - f7
-    2,2,2,2,2,2,2,0   # f8 - ff
-)
-    
-        @property
-    def language(self):
-        if self._name_prober:
-            return self._name_prober.language
+    def _check_arg_types(funcname, *args):
+    hasstr = hasbytes = False
+    for s in args:
+        if isinstance(s, str):
+            hasstr = True
+        elif isinstance(s, bytes):
+            hasbytes = True
         else:
-            return self._model.get('language')
-    
-        def feed(self, byte_str):
-        for i in range(len(byte_str)):
-            coding_state = self.coding_sm.next_state(byte_str[i])
-            if coding_state == MachineState.ERROR:
-                self.logger.debug('%s %s prober hit error at byte %s',
-                                  self.charset_name, self.language, i)
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                char_len = self.coding_sm.get_current_charlen()
-                if i == 0:
-                    self._last_char[1] = byte_str[0]
-                    self.context_analyzer.feed(self._last_char[2 - char_len:],
-                                               char_len)
-                    self.distribution_analyzer.feed(self._last_char, char_len)
-                else:
-                    self.context_analyzer.feed(byte_str[i + 1 - char_len:i + 3
-                                                        - char_len], char_len)
-                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
-                                                    char_len)
+            raise TypeError('%s() argument must be str or bytes, not %r' %
+                            (funcname, s.__class__.__name__)) from None
+    if hasstr and hasbytes:
+        raise TypeError('Can't mix strings and bytes in path components') from None
+
     
     
-def robot_get_obs(sim):
-    '''Returns all joint positions and velocities associated with
-    a robot.
+def is_resource(package: Package, name: str) -> bool:
+    '''True if 'name' is a resource inside 'package'.
+    
+    from email.message import EmailMessage
+from email.policy import SMTP
+    
+    def handleToc(slides):
+    for slide in slides:
+        title = slide.getElementsByTagName('title')[0]
+        print('<p>%s</p>' % getText(title.childNodes))
+    
+        # Get and print some more results
+    for i in range(len(TASKS2)):
+        print('\t', done_queue.get())
+    
+    def adapt_point(point):
+    return ('%f;%f' % (point.x, point.y)).encode('ascii')
+    
+    
+Test cyclic gc(?)
+    
+    from __future__ import absolute_import
+    
+        def forwards(self, orm):
+        # Adding model 'TagValue'
+        db.create_table(u'tagstore_tagvalue', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('value', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('data', self.gf('sentry.db.models.fields.gzippeddict.GzippedDictField')(null=True, blank=True)),
+            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+        ))
+        db.send_create_signal('tagstore', ['TagValue'])
+    
+        complete_apps = ['tagstore']
+
+    
+            # Changing field 'GroupTagValue.group_id'
+        db.alter_column(u'tagstore_grouptagvalue', 'group_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')())
+    
+        return results
+    
+            activity.update(data={
+            'version': release.version,
+        })
+
+    
+        This **does not** guarantee that the correct value is written into the cache
+    though it will correct itself in the next update window.
     '''
-    if sim.data.qpos is not None and sim.model.joint_names:
-        names = [n for n in sim.model.joint_names if n.startswith('robot')]
-        return (
-            np.array([sim.data.get_joint_qpos(name) for name in names]),
-            np.array([sim.data.get_joint_qvel(name) for name in names]),
-        )
-    return np.zeros(0), np.zeros(0)
+    cutoff_dt = timezone.now() - timedelta(seconds=cutoff)
+    # TODO(dcramer): this doesnt handle deleted options (which shouldn't be allowed)
+    for option in Option.objects.filter(last_updated__gte=cutoff_dt).iterator():
+        try:
+            opt = default_manager.lookup_key(option.key)
+            default_manager.store.set_cache(opt, option.value)
+        except UnknownOption as e:
+            logger.exception(six.text_type(e))
+
     
-        return a
+    import cv2
+import logging
+import os
+import uuid
     
-    import sys, gym, time
+    # coco (val5k)
+# INFO roidb.py: 220: 1        person: 21296
+# INFO roidb.py: 220: 2       bicycle: 628
+# INFO roidb.py: 220: 3           car: 3818
+# INFO roidb.py: 220: 4    motorcycle: 732
+# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
+# INFO roidb.py: 220: 6           bus: 564
+# INFO roidb.py: 220: 7         train: 380
+# INFO roidb.py: 220: 8         truck: 828
+    
+    
+def datasets():
+    '''Retrieve the list of available dataset names.'''
+    return _DATASETS.keys()
+    
+        # sum -> ReLU
+    # shortcut function: by default using bn; support gn
+    add_shortcut = globals()[cfg.RESNETS.SHORTCUT_FUNC]
+    sc = add_shortcut(model, prefix, blob_in, dim_in, dim_out, stride)
+    if inplace_sum:
+        s = model.net.Sum([tr, sc], tr)
+    else:
+        s = model.net.Sum([tr, sc], prefix + '_sum')
+    
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
+    
+    from detectron.core.config import cfg
+import detectron.utils.blob as blob_utils
+    
+        outputs[0].reshape(rois.shape)
+    outputs[0].data[...] = rois
+    
+        # Scale rois and format as (batch_idx, x1, y1, x2, y2)
+    sampled_rois = sampled_boxes * im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones((sampled_rois.shape[0], 1))
+    sampled_rois = np.hstack((repeated_batch_idx, sampled_rois))
+    
+        num_keypoints = gt_keypoints.shape[2]
+    sampled_keypoints = -np.ones(
+        (len(sampled_fg_rois), gt_keypoints.shape[1], num_keypoints),
+        dtype=gt_keypoints.dtype
+    )
+    for ii in range(len(sampled_fg_rois)):
+        ind = box_to_gt_ind_map[ii]
+        if ind >= 0:
+            sampled_keypoints[ii, :, :] = gt_keypoints[gt_inds[ind], :, :]
+            assert np.sum(sampled_keypoints[ii, 2, :]) > 0
