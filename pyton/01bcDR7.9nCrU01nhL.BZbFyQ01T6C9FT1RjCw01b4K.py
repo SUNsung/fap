@@ -1,90 +1,106 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        infile, outfile = args
-    
-    import io
-import sys
-import re
-    
-        return ret
-    
-    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    
-    
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
-    
-    
-def setup(app):
-    app.add_role('gh', github_link)
+        
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
     
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
+class FunctionPropertiesTest(FuncAttrsTest):
+    # Include the external setUp method that is common to all tests
+    def test_module(self):
+        self.assertEqual(self.b.__module__, __name__)
+    
+    # Are two stat buffers (obtained from stat, fstat or lstat)
+# describing the same file?
+def samestat(s1, s2):
+    '''Test whether two stat buffers reference the same file'''
+    return (s1.st_ino == s2.st_ino and
+            s1.st_dev == s2.st_dev)
+    
+        def testSeekBackwardsAcrossStreams(self):
+        self.createTempFile(streams=2)
+        with BZ2File(self.filename) as bz2f:
+            readto = len(self.TEXT) + 100
+            while readto > 0:
+                readto -= len(bz2f.read(readto))
+            bz2f.seek(-150, 1)
+            self.assertEqual(bz2f.read(), self.TEXT[100-150:] + self.TEXT)
+    
+        def persistent_id(self, obj):
+        # Instead of pickling MemoRecord as a regular class instance, we emit a
+        # persistent ID.
+        if isinstance(obj, MemoRecord):
+            # Here, our persistent ID is simply a tuple, containing a tag and a
+            # key, which refers to a specific record in the database.
+            return ('MemoRecord', obj.key)
+        else:
+            # If obj does not have a persistent ID, return None. This means obj
+            # needs to be pickled as usual.
+            return None
     
     
-def get_primes(n):
-    '''Return list of all primes less than n,
-    Using sieve of Eratosthenes.
-    '''
-    if n <= 0:
-        raise ValueError(''n' must be a positive integer.')
-    # If x is even, exclude x from list (-1):
-    sieve_size = (n // 2 - 1) if n % 2 == 0 else (n // 2)
-    sieve = [True for _ in range(sieve_size)]   # Sieve
-    primes = []      # List of Primes
-    if n >= 2:
-        primes.append(2)      # 2 is prime by default
-    for i in range(sieve_size):
-        if sieve[i]:
-            value_at_i = i*2 + 3
-            primes.append(value_at_i)
-            for j in range(i, sieve_size, value_at_i):
-                sieve[j] = False
-    return primes
+if __name__ == '__main__':
+    main()
 
     
-        def pow2_factor(num):
-        '''factor n into a power of 2 times an odd number'''
-        power = 0
-        while num % 2 == 0:
-            num /= 2
-            power += 1
-        return power, num
     
-        def random_vector():
-        import random
-        vector = [0 for _ in range(vector_length)]
-        for i in random.sample(range(vector_length), nozero_counut):
-            vector[i] = random.random()
-        return vector
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+    # register the Foo class; make `f()` and `g()` accessible via proxy
+MyManager.register('Foo1', Foo)
     
     
-class PriorityQueue:
-    def __init__(self, items=None, priorities=None):
-        '''Create a priority queue with items (list or iterable).
-        If items is not passed, create empty priority queue.'''
-        self.priority_queue_list = []
-        if items is None:
-            return
-        if priorities is None:
-            priorities = itertools.repeat(None)
-        for item, priority in zip(items, priorities):
-            self.push(item, priority=priority)
+class PackException(Exception):
+    pass
+    
+        s = pd.Series([1, 2, -1, 4])
+    s[s < 0] = inc
+    
+    
+@pytest.fixture()
+def series():
+    df = pd.DataFrame({'outer': ['a', 'a', 'a', 'b', 'b', 'b'],
+                       'inner': [1, 2, 3, 1, 2, 3],
+                       'A': np.arange(6),
+                       'B': ['one', 'one', 'two', 'two', 'one', 'one']})
+    s = df.set_index(['outer', 'inner', 'B'])['A']
+    
+    
+def test_str8():
+    header = b'\xd9'
+    data = b'x' * 32
+    b = packb(data.decode(), use_bin_type=True)
+    assert len(b) == len(data) + 2
+    assert b[0:2] == header + b'\x20'
+    assert b[2:] == data
+    assert unpackb(b) == data
+    
+    import pandas.io.msgpack as msgpack
+    
+        def setup(self):
+        self.fname = '__test__.msg'
+        N = 100000
+        C = 5
+        self.df = DataFrame(np.random.randn(N, C),
+                            columns=['float{}'.format(i) for i in range(C)],
+                            index=date_range('20000101', periods=N, freq='H'))
+        self.df['object'] = tm.makeStringIndex(N)
+        self.df.to_msgpack(self.fname)
