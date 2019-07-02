@@ -1,97 +1,180 @@
 
         
-        v8::Local<v8::Value> Converter<Dictionary>::ToV8(v8::Isolate* isolate,
-                                                 Dictionary val) {
-  return val.GetHandle();
-}
-    
-    namespace mate {
-    }
-    
-      WrappableBase* object;
-  {
-    // Don't continue if the constructor throws an exception.
-    v8::TryCatch try_catch(isolate);
-    object = internal::InvokeFactory(args, factory);
-    if (try_catch.HasCaught()) {
-      try_catch.ReThrow();
-      return;
-    }
-  }
-    
-    // Classes for generating and storing an argument pack of integer indices
-// (based on well-known 'indices trick', see: http://goo.gl/bKKojn):
-template <size_t... indices>
-struct IndicesHolder {};
-    
-    #ifndef NATIVE_MATE_NATIVE_MATE_OBJECT_TEMPLATE_BUILDER_H_
-#define NATIVE_MATE_NATIVE_MATE_OBJECT_TEMPLATE_BUILDER_H_
+            http://www.apache.org/licenses/LICENSE-2.0
     
     
-    {  *result = notification_callback.Run(parsed_command_line, current_directory)
-                ? TRUE
-                : FALSE;
-  return true;
-}
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-      desired_output_for_decode = 'ABCD__EfghI_j';
-  expected = string('\x64\x80\xC5\xA1\x0', 5);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
-    
-    void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
-  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
-                                unittest::MAP_ENUM_BAR_LITE,
-                                unittest::MAP_ENUM_BAZ_LITE>(message);
-}
-    
-    Status::Status() : error_code_(error::OK) {
-}
-    
-    
-    {
-    {
-    {}  // namespace util
-}  // namespace protobuf
-}  // namespace google
-    
-    using namespace std;
-    
-    
-    { private:
-  const EnumDescriptor* descriptor_;
-  std::vector<const EnumValueDescriptor*> base_values_;
-  std::vector<const EnumValueDescriptor*> all_values_;
-  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
-  const string name_;
+    {  // All parameters, including inputs & non-inferred attrs, required and those
+  // with defaults, except 'name'
+  std::vector<ParamNames> param_names_;
 };
     
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+    
+    {}  // namespace tensorflow
+    
+    namespace tensorflow {
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/stream_executor/host/host_timer.h'
+    
+    
+    
+    
+    {}  // namespace nw
 
     
-            D3D12_RESOURCE_BARRIER barrier = {};
-        barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-        barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-        barrier.Transition.pResource   = pTexture;
-        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-    
-    
-    {        ImGui::Render();
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
+    }
+    
+    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppGetDataPathFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwAppGetDataPathFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
+};
+    
+    class NwObjCallObjectMethodAsyncFunction : public UIThreadExtensionFunction {
+ public:
+  NwObjCallObjectMethodAsyncFunction();
+    }
+    
+    // Author: kenton@google.com (Kenton Varda)
+    
+      string str_with_null_char('ab\0c', 4);
+  EXPECT_EXIT(
+      decode_data.AddString(1, str_with_null_char, 'def'),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
+  EXPECT_EXIT(
+      decode_data.AddString(1, 'def', str_with_null_char),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
+    
+    // ----
+// Author: lar@google.com (Laramie Leavitt)
+//
+// Template metaprogramming utility functions.
+//
+// This code is compiled directly on many platforms, including client
+// platforms like Windows, Mac, and embedded systems.  Before making
+// any changes here, make sure that you're not breaking any platforms.
+//
+//
+// The names chosen here reflect those used in tr1 and the boost::mpl
+// library, there are similar operations used in the Loki library as
+// well.  I prefer the boost names for 2 reasons:
+// 1.  I think that portions of the Boost libraries are more likely to
+// be included in the c++ standard.
+// 2.  It is not impossible that some of the boost libraries will be
+// included in our own build in the future.
+// Both of these outcomes means that we may be able to directly replace
+// some of these with boost equivalents.
+//
+#ifndef GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+#define GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+    
+    #include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+    
+    int16_t word_blob_quality(WERD_RES *word, ROW *row);
+void reject_whole_page(PAGE_RES_IT &page_res_it);
+    
+    struct PARA;
+    
+    // Parses the given box file string into a page_number, utf8_str, and
+// bounding_box. Returns true on a successful parse.
+bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
+                     STRING* utf8_str, TBOX* bounding_box);
+    
+      // Computes all the cross product distances of the points perpendicular to
+  // the given direction, ignoring distances outside of the give distance range,
+  // storing the actual (signed) cross products in distances_.
+  void ComputeConstrainedDistances(const FCOORD& direction,
+                                   double min_dist, double max_dist);
+    
+    namespace tesseract {
+    }
+    
+    
+    {  return gTrue;
+}
+    
+    class PageLabelInfo {
+public:
+  PageLabelInfo(Object *tree, int numPages);
+  ~PageLabelInfo();
+  GBool labelToIndex(GooString *label, int *index);
+  GBool indexToLabel(int index, GooString *label);
+    }
+    
+      // string
+  } else if (buf1.isString() && fileKey) {
+    s = buf1.getString();
+    s2 = new GooString();
+    obj2.initNull();
+    decrypt = new DecryptStream(new MemStream(s->getCString(), 0,
+					      s->getLength(), &obj2),
+				fileKey, encAlgorithm, keyLength,
+				objNum, objGen);
+    decrypt->reset();
+    while ((c = decrypt->getChar()) != EOF) {
+      s2->append((char)c);
+    }
+    delete decrypt;
+    obj->initString(s2);
+    shift();
+    
+      // Check the document's encryption.  If the document is encrypted,
+  // this will first try <ownerPassword> and <userPassword> (in
+  // 'batch' mode), and if those fail, it will attempt to request a
+  // password from the user.  This is the high-level function that
+  // calls the lower level functions for the specific security handler
+  // (requesting a password three times, etc.).  Returns true if the
+  // document can be opened (if it's unencrypted, or if a correct
+  // password is obtained); false otherwise (encrypted and no correct
+  // password).
+  GBool checkEncryption(GooString *ownerPassword,
+			GooString *userPassword);
+    
+    
+    {};
