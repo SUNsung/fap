@@ -1,117 +1,149 @@
 
         
-        TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+        void absDiff(const Size2D &size,
+             const u16 *src0Base, ptrdiff_t src0Stride,
+             const u16 *src1Base, ptrdiff_t src1Stride,
+             u16 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u16>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace objectivec {
-namespace {
+    void add(const Size2D &size,
+         const u32 * src0Base, ptrdiff_t src0Stride,
+         const u32 * src1Base, ptrdiff_t src1Stride,
+         u32 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u32, u64>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u32, u64>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    #endif
+    
+    namespace CAROTENE_NS {
+    }
+    
+    inline void prefetch(const void *ptr, size_t offset = 32*10)
+{
+#if defined __GNUC__
+    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#elif defined _MSC_VER && defined CAROTENE_NEON
+    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#else
+    (void)ptr;
+    (void)offset;
+#endif
+}
+    
+    namespace CAROTENE_NS {
+    }
+    
+    namespace CAROTENE_NS { namespace internal {
     }
     }
+    
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
+    
+      // only define functions returning device_ptr
+  // if HostDeviceVector.h is included from a .cu file
+#ifdef __CUDACC__
+  thrust::device_ptr<T> tbegin(int device);  // NOLINT
+  thrust::device_ptr<T> tend(int device);  // NOLINT
+  thrust::device_ptr<const T> tcbegin(int device) const;  // NOLINT
+  thrust::device_ptr<const T> tcend(int device) const;  // NOLINT
+  thrust::device_ptr<const T> tbegin(int device) const {  // NOLINT
+    return tcbegin(device);
+  }
+  thrust::device_ptr<const T> tend(int device) const { return tcend(device); }  // NOLINT
+    
+    namespace xgboost {
+namespace metric {
     }
     }
+    
+    
+    {}  // namespace xgboost
+    
+    /*! \brief pruner that prunes a tree after growing finishes */
+class TreePruner: public TreeUpdater {
+ public:
+  TreePruner() {
+    syncher_.reset(TreeUpdater::Create('sync', tparam_));
+  }
+  // set training parameter
+  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+    syncher_->Init(args);
+  }
+  // update the tree, do pruning
+  void Update(HostDeviceVector<GradientPair> *gpair,
+              DMatrix *p_fmat,
+              const std::vector<RegTree*> &trees) override {
+    // rescale learning rate according to size of trees
+    float lr = param_.learning_rate;
+    param_.learning_rate = lr / trees.size();
+    for (auto tree : trees) {
+      this->DoPrune(*tree);
+    }
+    param_.learning_rate = lr;
+    syncher_->Update(gpair, p_fmat, trees);
+  }
     }
     
     
     {
-    {}  // namespace protobuf
-}  // namespace google
-
-    
-    #include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-    
-    namespace google {
-namespace protobuf {
-namespace util {
-namespace error {
-inline string CodeEnumToString(error::Code code) {
-  switch (code) {
-    case OK:
-      return 'OK';
-    case CANCELLED:
-      return 'CANCELLED';
-    case UNKNOWN:
-      return 'UNKNOWN';
-    case INVALID_ARGUMENT:
-      return 'INVALID_ARGUMENT';
-    case DEADLINE_EXCEEDED:
-      return 'DEADLINE_EXCEEDED';
-    case NOT_FOUND:
-      return 'NOT_FOUND';
-    case ALREADY_EXISTS:
-      return 'ALREADY_EXISTS';
-    case PERMISSION_DENIED:
-      return 'PERMISSION_DENIED';
-    case UNAUTHENTICATED:
-      return 'UNAUTHENTICATED';
-    case RESOURCE_EXHAUSTED:
-      return 'RESOURCE_EXHAUSTED';
-    case FAILED_PRECONDITION:
-      return 'FAILED_PRECONDITION';
-    case ABORTED:
-      return 'ABORTED';
-    case OUT_OF_RANGE:
-      return 'OUT_OF_RANGE';
-    case UNIMPLEMENTED:
-      return 'UNIMPLEMENTED';
-    case INTERNAL:
-      return 'INTERNAL';
-    case UNAVAILABLE:
-      return 'UNAVAILABLE';
-    case DATA_LOSS:
-      return 'DATA_LOSS';
+    {  }
+  {
+    auto updater = std::unique_ptr<xgboost::LinearUpdater>(
+        xgboost::LinearUpdater::Create('shotgun', &lparam));
+    EXPECT_ANY_THROW(updater->Init({{'feature_selector', 'random'}}));
   }
-    }
-    }
-    }
-    }
-    }
-    
-    using google::protobuf::io::FileInputStream;
-using google::protobuf::io::GzipInputStream;
-    
-      while (true) {
-    void* outptr;
-    int outlen;
-    bool ok;
-    do {
-      ok = out.Next(&outptr, &outlen);
-      if (!ok) {
-        break;
-      }
-    } while (outlen <= 0);
-    readlen = read(STDIN_FILENO, outptr, outlen);
-    if (readlen <= 0) {
-      out.BackUp(outlen);
-      break;
-    }
-    if (readlen < outlen) {
-      out.BackUp(outlen - readlen);
-    }
-  }
-    
-    class Proto2ToProto3Generator final : public CodeGenerator {
- public:
-  bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        if (CanGenerate(file)) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
+  delete mat;
+}
