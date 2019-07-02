@@ -1,152 +1,218 @@
 
         
-        
-    {}  // namespace
-    
-    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
- public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
+        SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
     }
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
+    double UniValue::get_real() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not a number as expected');
+    double retval;
+    if (!ParseDouble(getValStr(), &retval))
+        throw std::runtime_error('JSON double out of range');
+    return retval;
+}
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+    
+    {
+    {        : '+r'(s), '+r'(chunk), '+r'(blocks), '=r'(a), '=r'(b), '=r'(c), '=r'(d), /* e = chunk */ '=r'(f), '=r'(g), '=r'(h), '=r'(y0), '=r'(y1), '=r'(y2), '=r'(tbl), '+m'(inp_end), '+m'(inp), '+m'(xfer)
+        : 'm'(K256), 'm'(FLIP_MASK), 'm'(SHUF_00BA), 'm'(SHUF_DC00)
+        : 'cc', 'memory', 'xmm0', 'xmm1', 'xmm2', 'xmm3', 'xmm4', 'xmm5', 'xmm6', 'xmm7', 'xmm8', 'xmm9', 'xmm10', 'xmm11', 'xmm12'
+   );
+}
+}
+    
+    namespace c10d {
+namespace test {
+    }
+    }
+    
+    
+    {} // namespace
+    
+    const std::string doc = R'DOC(
+  Single-feature representation:
+  - scalar features:
+    <feature full name> T
+  - list features:
+    <feature full name>.lengths int32
+    <feature full name>.values T
+  - map features:
+    <feature full name>.lengths int32
+    <feature full name>.keys K
+    <feature full name>.values V
+    
+    </details>
+    
+    class GetCol2ImGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
+    
+    #include 'Rational.h'
+    
+    // Gets the number in memory for UI to keep it persisted and set it again to a different instance
+// of CCalcEngine. Otherwise it will get destructed with the CalcEngine
+unique_ptr<Rational> CCalcEngine::PersistedMemObject()
+{
+    return move(m_memoryValue);
+}
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetHistoryClearedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::HistoryCleared, AutomationNotificationKind::ItemRemoved, AutomationNotificationProcessing::MostRecent);
+}
+    
+    using namespace CalculatorApp::Common::Automation;
+using namespace Platform;
+using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+    
+    
+    {
+    {    private:
+        INarratorAnnouncementHost ^ m_announcementHost;
+    };
+}
 
     
-      int32_t weak_map_id_ = 0;
-    
-    void URLRequestAboutJob::Start() {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
-                                weak_ptr_factory_.GetWeakPtr()));
+    /**
+ * @brief Entry point for docker_volume_labels table.
+ */
+QueryData genVolumeLabels(QueryContext& context) {
+  return getLabels(context,
+                   'volume', // Docker object type
+                   'name', // Look for 'name' column in context
+                   'Name', // Volume primary key is 'Name'
+                   '/volumes', // All volumes URL
+                   'Volumes', // Volume array is under 'Volumes' child node
+                   true, // Supports 'filters' in query string
+                   false); // Does not supports 'all' in query string
 }
     
-      base::WeakPtrFactory<URLRequestAboutJob> weak_ptr_factory_;
+    #include <osquery/utils/system/system.h>
+#include <osquery/utils/system/time.h>
     
-    void OffscreenViewProxy::SetBitmap(const SkBitmap& bitmap) {
-  if (view_bounds_.width() == bitmap.width() &&
-      view_bounds_.height() == bitmap.height() && observer_) {
-    view_bitmap_.reset(new SkBitmap(bitmap));
-    observer_->OnProxyViewPaint(view_bounds_);
+    
+    {/**
+ * @brief Start a file carve of the given paths
+ *
+ * @return A status returning if the carves were started successfully
+ */
+Status carvePaths(const std::set<std::string>& paths);
+} // namespace osquery
+
+    
+      enum class RestoreConfigError { DatabaseError = 1 };
+  /**
+   * @brief restoreConfigBackup retrieve backed up config
+   * @return config persisted int the database
+   */
+  static Expected<std::map<std::string, std::string>,
+                  Config::RestoreConfigError>
+  restoreConfigBackup();
+    
+    
+    {  int total_packs = 0;
+  // Expect the config to have recorded a pack for the inline and non-inline.
+  get().packs([&total_packs](const Pack& pack) { total_packs++; });
+  EXPECT_EQ(total_packs, 2);
+  rf.registry('config')->remove('test');
+}
+    
+    ExpectedSuccess<DatabaseError> RocksdbDatabase::putRawBytes(
+    const std::string& domain,
+    const std::string& key,
+    const std::string& value) {
+  auto handle = getHandle(domain);
+  if (handle) {
+    std::shared_ptr<Handle> handle_ptr = handle.take();
+    return putRawBytesInternal(handle_ptr.get(), key, value);
   }
+  return handle.takeError();
 }
     
-    // The argument separating arguments intended for the relauncher process from
-// those intended for the relaunched process. '---' is chosen instead of '--'
-// because CommandLine interprets '--' as meaning 'end of switches', but
-// for many purposes, the relauncher process' CommandLine ought to interpret
-// arguments intended for the relaunched process, to get the correct settings
-// for such things as logging and the user-data-dir in case it affects crash
-// reporting.
-extern const CharType* kRelauncherArgSeparator;
     
-    namespace atom {
+    {} // namespace osquery
+
+    
+    std::map<std::string, FlagInfo> Flag::flags() {
+  std::vector<flags::CommandLineFlagInfo> info;
+  flags::GetAllFlags(&info);
     }
     
-    namespace atom {
-    }
-    
-    
-    {  ~TemporaryFile() {
-    unlink(path.c_str());
+    Status LoggerPlugin::call(const PluginRequest& request,
+                          PluginResponse& response) {
+  std::vector<StatusLogLine> intermediate_logs;
+  if (request.count('string') > 0) {
+    return this->logString(request.at('string'));
+  } else if (request.count('snapshot') > 0) {
+    return this->logSnapshot(request.at('snapshot'));
+  } else if (request.count('init') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    this->setProcessName(request.at('init'));
+    this->init(this->name(), intermediate_logs);
+    return Status(0);
+  } else if (request.count('status') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    return this->logStatus(intermediate_logs);
+  } else if (request.count('event') > 0) {
+    return this->logEvent(request.at('event'));
+  } else if (request.count('action') && request.at('action') == 'features') {
+    size_t features = 0;
+    features |= (usesLogStatus()) ? LOGGER_FEATURE_LOGSTATUS : 0;
+    features |= (usesLogEvent()) ? LOGGER_FEATURE_LOGEVENT : 0;
+    return Status(static_cast<int>(features));
+  } else {
+    return Status(1, 'Unsupported call to logger plugin');
   }
-};
+}
     
-    REGISTER_CUDA_OPERATOR(LC, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LCGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
-    
-    // Deserializing an array could give back a different ArrayKind than we need,
-// so we have to go with the slow case of calling a collection constructor.
-NEVER_INLINE
-Object createFromSerialized(CollectionType colType, APCHandle* handle) {
-  auto const col = Object::attach(collections::alloc(colType));
-  auto const arr = handle->toLocal();
-  switch (colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    static_cast<BaseVector*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    static_cast<BaseSet*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    static_cast<BaseMap*>(col.get())->init(arr);
-    break;
-  case CollectionType::Pair:
-    not_reached();
-    break;
+      /**
+   * @brief Optionally handle each published event via the logger.
+   *
+   * It is possible to skip the database representation of event subscribers
+   * and instead forward each added event to the active logger plugin.
+   */
+  virtual Status logEvent(const std::string& /*s*/) {
+    return Status(1, 'Not enabled');
   }
-  return col;
-}
     
-    
-    {private:
-  APCHandle m_handle;
-  APCHandle* m_arrayHandle;
-  CollectionType m_colType;
-};
-    
-    void Config::ParseIniString(const std::string &iniStr, IniSettingMap &ini,
-                            const bool constants_only /* = false */ ) {
-  Config::SetParsedIni(ini, iniStr, '', constants_only, true);
-}
-    
-    #include <sys/types.h>
-    
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
-    
-    #include 'hphp/util/perf-event.h'
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
-    
-    
-    {};
-    
-    
-ExtensionManager_getQueryColumns_args::~ExtensionManager_getQueryColumns_args() throw() {
-}
-    
-      bool operator < (const ExtensionManager_getQueryColumns_args & ) const;
-    
-    #include 'ExtensionManager.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-    namespace osquery {
-namespace table_tests {
-    }
-    }
-    
-    class kernelExtensions : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
+    PluginResponse tableRowsToPluginResponse(const TableRows& rows) {
+  PluginResponse result;
+  for (const auto& row : rows) {
+    result.push_back(static_cast<Row>(*row));
   }
-};
+  return result;
+}
     
-    class KernelModules : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
-    
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
+      /// Use the SQL implementation to parse a query string and return details
+  /// (name, type) about the columns.
+  virtual Status getQueryColumns(const std::string& query,
+                                 TableColumns& columns) const = 0;
