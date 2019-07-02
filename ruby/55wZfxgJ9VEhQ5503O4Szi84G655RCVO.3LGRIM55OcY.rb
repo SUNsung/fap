@@ -1,38 +1,42 @@
 
         
-          def parse(csp_string)
-    csp_string.split(';').map do |policy|
-      directive, *sources = policy.split
-      [directive, sources]
-    end.to_h
-  end
-end
-
+                # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
     
-        Extension.theme_extensions(theme_ids).each { |extension| builder << extension }
-    Extension.plugin_extensions.each { |extension| builder << extension }
-    builder << Extension.site_setting_extension
-    
-      def self.lookup(unhashed_token, opts = nil)
-    mark_seen = opts && opts[:seen]
-    
-        query
-  end
-    
-            Redis::Cache.with do |redis|
-          redis.multi do |m|
-            m.sadd(key, value)
-            m.expire(key, timeout)
-          end
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
         end
-      end
     
-          attr_reader :octokit
-    
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
+            # Called to change the hostname of the virtual machine.
+        def change_host_name(name)
+          raise BaseError, _key: :unsupported_host_name
         end
       end
     end
@@ -40,6 +44,19 @@ end
 end
 
     
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
+        end
+    
+        it 'should allow to adjust the delay' do
+      @session.accept_alert wait: 10 do
+        @session.click_link('Open slow alert')
+      end
+      expect(@session).to have_xpath('//a[@id='open-slow-alert' and @opened='true']')
+    end
+  end
+end
