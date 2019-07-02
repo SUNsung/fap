@@ -1,10 +1,92 @@
 
         
-                def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        Car = Struct.new(:color)
+    
+      #
+  # Initializes an HTTP packet header class that inherits from a Hash base
+  # class.
+  #
+  def initialize
+    self.dcase_hash = {}
+    
+      attr_accessor :client
+  attr_accessor :oseq, :iseq
+  attr_accessor :scall, :dcall
+  attr_accessor :codec, :state
+  attr_accessor :ring_start, :ring_finish
+  attr_accessor :itime
+  attr_accessor :queue
+  attr_accessor :audio_hook
+  attr_accessor :audio_buff
+  attr_accessor :time_limit
+  attr_accessor :busy
+    
+              # Encodes the start_time field
+          #
+          # @return [String]
+          def encode_start_time
+            [start_time].pack('N')
+          end
+    
+                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
+    
+              # Encodes the options field
+          #
+          # @return [OpenSSL::ASN1::BitString]
+          def encode_options
+            OpenSSL::ASN1::BitString.new([options].pack('N'))
+          end
+    
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
+    
+              # Decodes the kvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_kvno(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          def decode_asn1(input)
+            seq_values = input.value
+            self.type = decode_type(seq_values[0])
+            self.value = decode_value(seq_values[1])
+          end
+    
+        it 'generates the aspects_manage fixture', :fixture => true do
+      get :index, params: {a_id: @aspect.id}
+      save_fixture(html_for('body'), 'aspects_manage')
+    end
+    
+          it 'it doesn't call toggle_hidden_shareable' do
+        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
+        begin
+          put :update, params: {id: 42, post_id: @status.id}, format: :js
+        rescue ActiveRecord::RecordNotFound
         end
       end
     end
@@ -12,97 +94,38 @@
 end
 
     
-              new(hash)
-        end
+    Then(/^git wrapper permissions are 0700$/) do
+  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
+  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
     
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-    class ApplicationController < ActionController::Base
-end
-    
-          def expire_data_after_sign_in!
-        # session.keys will return an empty array if the session is not yet loaded.
-        # This is a bug in both Rack and Rails.
-        # A call to #empty? forces the session to be loaded.
-        session.empty?
-        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
-      end
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
-      end
-    
-          with_index_lock do
-        unlocked_reload
-      end
-    end
-    
-                    raise Errors::VMNoMatchError if vms.empty?
-              else
-                # String name, just look for a specific VM
-                vms << @env.vms[name.to_sym]
-                raise Errors::VMNotFoundError, name: name if !vms[0]
-              end
-            end
-          else
-            vms = @env.vms_ordered
-          end
-    
-              # Add the help option, which must be on every command.
-          opts.on_tail('-h', '--help', 'Print this help') do
-            safe_puts(opts.help)
-            return nil
-          end
-    
-          # Just save result, but don't write formatted output.
-      coverage_result = Coverage.result
-      SimpleCov.add_not_loaded_files(coverage_result)
-      simplecov_result = SimpleCov::Result.new(coverage_result)
-      SimpleCov::ResultMerger.store_result(simplecov_result)
-    
-      run_vagrant_command(symlinked?(TestApp.current_path, previous_release_path))
-end
-    
-    Given(/^file '(.*?)' exists in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
-  run_vagrant_command('touch #{file_shared_path}')
-end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
+    Given(/^(\d+) valid existing releases$/) do |num|
+  a_day = 86_400 # in seconds
+  offset = -(a_day * num.to_i)
+  num.to_i.times do
+    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
+    offset += a_day
   end
 end
     
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
+          def warn_add_git_to_capfile
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] Future versions of Capistrano will not load the Git SCM
+plugin by default. To silence this deprecation warning, add the following to
+your Capfile after `require 'capistrano/deploy'`:
+    
+          def set(key, value=nil, &block)
+        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
+        remember_location(key)
+        values[key] = block || value
+        trace_set(key)
+        values[key]
       end
     
-      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
+            def destroy
+          @line_item = find_line_item
+          Spree::Dependencies.cart_remove_line_item_service.constantize.call(order: @order, line_item: @line_item)
+    
+    __END__
+    
+      puts '\n== Removing old logs and tempfiles =='
+  system! 'bin/rails log:clear tmp:clear'
