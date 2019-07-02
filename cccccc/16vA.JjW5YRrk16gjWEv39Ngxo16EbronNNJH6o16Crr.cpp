@@ -1,350 +1,244 @@
 
         
-        
-    {  if (debug) {
-    const OpRegistrationData* op_reg_data;
-    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
-    if (!status.ok()) {
-      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
-    } else if (!op_reg_data->shape_inference_fn) {
-      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
-    } else if (properties.HasInputProperties(node->name())) {
-      const std::vector<OpInfo::TensorProperties>& props =
-          properties.GetInputProperties(node->name());
-      for (int i = 0; i < props.size(); ++i) {
-        const OpInfo::TensorProperties& prop = props[i];
-        if (prop.has_value()) {
-          os << '\t'
-             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
-             << ') has known value' << std::endl;
+          /// Retrieve the array of replacement types, which line up with the
+  /// generic parameters.
+  ///
+  /// Note that the types may be null, for cases where the generic parameter
+  /// is concrete but hasn't been queried yet.
+  ArrayRef<Type> getReplacementTypes() const {
+    return llvm::makeArrayRef(getTrailingObjects<Type>(),
+                              getNumReplacementTypes());
+  }
+    
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
+    
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
+    }
+    IsFirstLine = false;
+    
+    %{
+    }
+    
+    
+    
+    const char *Demangle::getNodeKindString(swift::Demangle::Node::Kind k) {
+  switch (k) {
+#define NODE(ID)                                                               \
+  case Node::Kind::ID:                                                         \
+    return #ID;
+#include 'swift/Demangling/DemangleNodes.def'
+  }
+  return 'Demangle::Node::Kind::???';
+}
+    
+    #include 'ArgsToFrontendOutputsConverter.h'
+#include 'swift/AST/DiagnosticsFrontend.h'
+#include 'swift/Basic/Defer.h'
+#include 'swift/Frontend/FrontendOptions.h'
+#include 'swift/Option/Options.h'
+#include 'swift/Parse/Lexer.h'
+#include 'swift/Strings.h'
+#include 'llvm/Option/Arg.h'
+#include 'llvm/Option/ArgList.h'
+#include 'llvm/Option/Option.h'
+#include 'llvm/Support/ErrorHandling.h'
+#include 'llvm/Support/FileSystem.h'
+#include 'llvm/Support/LineIterator.h'
+#include 'llvm/Support/Path.h'
+    
+        Transliterator::_registerFactory(UnicodeString(TRUE, ::CURR_ID, -1),
+                                     RemoveTransliterator_create, integerToken(0));
+    
+        UBool numeric = settings->isNumeric();
+    if(equalPrefixLength > 0) {
+        if((equalPrefixLength != leftLength &&
+                    data->isUnsafeBackward(left[equalPrefixLength], numeric)) ||
+                (equalPrefixLength != rightLength &&
+                    data->isUnsafeBackward(right[equalPrefixLength], numeric))) {
+            // Identical prefix: Back up to the start of a contraction or reordering sequence.
+            while(--equalPrefixLength > 0 &&
+                    data->isUnsafeBackward(left[equalPrefixLength], numeric)) {}
         }
-      }
-    }
-  }
-}
-    
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    int NPyBfloat16_Fill(void* buffer_raw, npy_intp length, void* ignored) {
-  bfloat16* const buffer = reinterpret_cast<bfloat16*>(buffer_raw);
-  const float start(buffer[0]);
-  const float delta = static_cast<float>(buffer[1]) - start;
-  for (npy_intp i = 2; i < length; ++i) {
-    buffer[i] = static_cast<bfloat16>(start + i * delta);
-  }
-  return 0;
-}
-    
-    // Register the bfloat16 numpy type.
-void RegisterNumpyBfloat16();
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
-}
-    
-      // Creates a 2d FFT plan.
-  virtual std::unique_ptr<Plan> Create2dPlan(Stream *stream, uint64 num_x,
-                                             uint64 num_y, Type type,
-                                             bool in_place_fft) = 0;
-    
-    namespace stream_executor {
-namespace host {
-    }
+        // Notes:
+        // - A longer string can compare equal to a prefix of it if only ignorables follow.
+        // - With a backward level, a longer string can compare less-than a prefix of it.
     }
     
-      // Returns the most recent value recorded for a start/stopcycle, in
-  // microseconds.
-  uint64 Microseconds() const override;
-    
-    namespace llvm {
-template<> struct DenseMapInfo<DefaultCacheKey> {
-  static inline DefaultCacheKey getEmptyKey() {
-    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
-  }
-  static inline DefaultCacheKey getTombstoneKey() {
-    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
-  }
-  static unsigned getHashValue(const DefaultCacheKey &Val) {
-    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
-    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
-  }
-  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
-    if (LHS.Key == RHS.Key)
-      return true;
-    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
-        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
-      return false;
-    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
-  }
-};
-} // namespace llvm
-    
-    /// Translate the given operator character into its mangled form.
-///
-/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
-char Mangle::translateOperatorChar(char op) {
-  switch (op) {
-    case '&': return 'a'; // 'and'
-    case '@': return 'c'; // 'commercial at sign'
-    case '/': return 'd'; // 'divide'
-    case '=': return 'e'; // 'equal'
-    case '>': return 'g'; // 'greater'
-    case '<': return 'l'; // 'less'
-    case '*': return 'm'; // 'multiply'
-    case '!': return 'n'; // 'negate'
-    case '|': return 'o'; // 'or'
-    case '+': return 'p'; // 'plus'
-    case '?': return 'q'; // 'question'
-    case '%': return 'r'; // 'remainder'
-    case '-': return 's'; // 'subtract'
-    case '~': return 't'; // 'tilde'
-    case '^': return 'x'; // 'xor'
-    case '.': return 'z'; // 'zperiod' (the z is silent)
-    default:
-      return op;
-  }
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        const Locale &locale,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
 }
     
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
-}
+    static const UChar SELECT_KEYWORD_OTHER[] = {LOW_O, LOW_T, LOW_H, LOW_E, LOW_R, 0};
     
-      /// A place to keep alive any buffers that are loaded as part of setting up
-  /// the frontend inputs.
-  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> ConfigurationFileBuffers;
-    
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
-    
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
-    
-    
-    { private:
-  // The collection of images to put in the PDF.
-  Pixa* pixa_;
-  // The fonts used to draw text captions.
-  L_Bmf* fonts_;
-};
-    
-      // Returns the direction of the fitted line as a unit vector, using the
-  // least mean squared perpendicular distance. The line runs through the
-  // mean_point, i.e. a point p on the line is given by:
-  // p = mean_point() + lambda * vector_fit() for some real number lambda.
-  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
-  // and may be negated without changing its meaning, since a line is only
-  // unique to a range of pi radians.
-  // Modernists prefer to think of this as an Eigenvalue problem, but
-  // Pearson had the simple solution in 1901.
-  //
-  // Note that this is equivalent to returning the Principal Component in PCA,
-  // or the eigenvector corresponding to the largest eigenvalue in the
-  // covariance matrix.
-  FCOORD vector_fit() const;
-    
-     private:
-  // A hole in the heap exists at hole_index, and we want to fill it with the
-  // given pair. SiftUp sifts the hole upward to the correct position and
-  // returns the destination index without actually putting pair there.
-  int SiftUp(int hole_index, const Pair& pair) {
-    int parent;
-    while (hole_index > 0 && pair < heap_[parent = ParentNode(hole_index)]) {
-      heap_[hole_index] = heap_[parent];
-      hole_index = parent;
-    }
-    return hole_index;
-  }
-    
-            friend bool operator==(Rational const& lhs, Rational const& rhs);
-        friend bool operator!=(Rational const& lhs, Rational const& rhs);
-        friend bool operator<(Rational const& lhs, Rational const& rhs);
-        friend bool operator>(Rational const& lhs, Rational const& rhs);
-        friend bool operator<=(Rational const& lhs, Rational const& rhs);
-        friend bool operator>=(Rational const& lhs, Rational const& rhs);
-    
-        ChangeConstants(m_radix, precision);
-    
-    #pragma once
-/****************************Module*Header***********************************\
-* Module Name: CalcEngine.h
-*
-* Module Description:
-*       The class definition for the Calculator's engine class CCalcEngine
-*
-* Warnings:
-*
-* Created: 17-Jan-2008
-*
-\****************************************************************************/
-    
-            static Windows::UI::Xaml::DependencyProperty ^ s_announcementProperty;
-    
-    
-    {DMLC_REGISTER_DATA_PARSER(uint32_t, real_t, dense_libsvm,
-  data::CreateDenseLibSVMParser<uint32_t __DMLC_COMMA real_t>);
-}  // namespace dmlc
+    #endif
 
     
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
- public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
+    // Called by TimeZone::createDefault(), then clone() inside a Mutex - be careful.
+SimpleTimeZone &
+SimpleTimeZone::operator=(const SimpleTimeZone &right)
+{
+    if (this != &right)
+    {
+        TimeZone::operator=(right);
+        rawOffset      = right.rawOffset;
+        startMonth     = right.startMonth;
+        startDay       = right.startDay;
+        startDayOfWeek = right.startDayOfWeek;
+        startTime      = right.startTime;
+        startTimeMode  = right.startTimeMode;
+        startMode      = right.startMode;
+        endMonth       = right.endMonth;
+        endDay         = right.endDay;
+        endDayOfWeek   = right.endDayOfWeek;
+        endTime        = right.endTime;
+        endTimeMode    = right.endTimeMode;
+        endMode        = right.endMode;
+        startYear      = right.startYear;
+        dstSavings     = right.dstSavings;
+        useDaylight    = right.useDaylight;
+        clearTransitionRules();
     }
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
-   */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
-    }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
-    }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
-  }
-    
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
-    }
-    
-    TEST(SparseColumn, Test) {
-  auto dmat = CreateDMatrix(100, 1, 0.85);
-  GHistIndexMatrix gmat;
-  gmat.Init((*dmat).get(), 256);
-  ColumnMatrix column_matrix;
-  column_matrix.Init(gmat, 0.5);
-  auto col = column_matrix.GetColumn(0);
-  ASSERT_EQ(col.Size(), gmat.index.size());
-  for (auto i = 0ull; i < col.Size(); i++) {
-    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
-              col.GetGlobalBinIdx(i));
-  }
-  delete dmat;
+    return *this;
 }
     
-    namespace xgboost {
-namespace metric {
-    }
-    }
+    UBool
+SmallIntFormatter::canFormat(
+        int32_t positiveValue, const IntDigitCountRange &range) {
+    return (positiveValue < gMaxFastInt && range.getMin() <= 4);
+}
     
-    TEST(SocketCanClientRawTest, simple_test) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    int32_t StandardPlural::indexOrNegativeFromString(const char *keyword) {
+    switch (*keyword++) {
+    case 'f':
+        if (uprv_strcmp(keyword, 'ew') == 0) {
+            return FEW;
+        }
+        break;
+    case 'm':
+        if (uprv_strcmp(keyword, 'any') == 0) {
+            return MANY;
+        }
+        break;
+    case 'o':
+        if (uprv_strcmp(keyword, 'ther') == 0) {
+            return OTHER;
+        } else if (uprv_strcmp(keyword, 'ne') == 0) {
+            return ONE;
+        }
+        break;
+    case 't':
+        if (uprv_strcmp(keyword, 'wo') == 0) {
+            return TWO;
+        }
+        break;
+    case 'z':
+        if (uprv_strcmp(keyword, 'ero') == 0) {
+            return ZERO;
+        }
+        break;
+    default:
+        break;
     }
+    return -1;
+}
     
-    #include 'modules/common/time/time.h'
-#include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+        /**
+     * Limit offset, in the match text, of the <em>rightmost</em>
+     * match.
+     */
+    int32_t matchLimit;
     
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(6, 2);
+        // TODO: Hide OS mouse cursor if ImGui is drawing it
+    // s3ePointerSetInt(S3E_POINTER_HIDE_CURSOR,(io.MouseDrawCursor ? 0 : 1));
     
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
+        // Read keyboard modifiers inputs
+    io.KeyCtrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
+    io.KeyShift = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
+    io.KeyAlt = (::GetKeyState(VK_MENU) & 0x8000) != 0;
+    io.KeySuper = false;
+    // io.KeysDown[], io.MousePos, io.MouseDown[], io.MouseWheel: filled by the WndProc handler below.
     
-      MatrixXd mat_golden(10, 10);
-  // clang-format off
-  mat_golden <<
-      6, -4,  1,  0,  0,  0,  0,  0,  0,  0,
-     -4,  6, -4,  1,  0,  0,  0,  0,  0,  0,
-      1, -4,  6, -4,  1,  0,  0,  0,  0,  0,
-      0,  1, -4,  6, -4,  1,  0,  0,  0,  0,
-      0,  0,  1, -4,  6, -4,  1,  0,  0,  0,
-      0,  0,  0,  1, -4,  6, -4,  1,  0,  0,
-      0,  0,  0,  0,  1, -4,  6, -4,  1,  0,
-      0,  0,  0,  0,  0,  1, -4,  6, -4,  1,
-      0,  0,  0,  0,  0,  0,  1, -4,  5, -2,
-      0,  0,  0,  0,  0,  0,  0,  1, -2,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
     
-    namespace apollo {
-namespace canbus {
-namespace gem {
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver.
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    #include 'imgui.h'
+#include 'imgui_impl_dx9.h'
+#include 'imgui_impl_win32.h'
+#include <d3d9.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+        // Upload vertex/index data into a single contiguous GPU buffer
+    D3D11_MAPPED_SUBRESOURCE vtx_resource, idx_resource;
+    if (ctx->Map(g_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &vtx_resource) != S_OK)
+        return;
+    if (ctx->Map(g_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &idx_resource) != S_OK)
+        return;
+    ImDrawVert* vtx_dst = (ImDrawVert*)vtx_resource.pData;
+    ImDrawIdx* idx_dst = (ImDrawIdx*)idx_resource.pData;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
     }
-    }
+    ctx->Unmap(g_pVB, 0);
+    ctx->Unmap(g_pIB, 0);
+    
+        int64_t firstScreenCssLayoutTime;
+    
+    class RenderObject;
+    
+    #include <string>
+    
+    #endif  // CORE_RENDER_ACTION_RENDER_ACTION_CREATEBODY_H_
+
+    
+    #include 'core/render/action/render_action_interface.h'
+    
+    #include <string>
+    
+    class RenderActionRemoveElement : public RenderAction {
+ public:
+  explicit RenderActionRemoveElement(const std::string &page_id,
+                                     const std::string &ref);
     }
