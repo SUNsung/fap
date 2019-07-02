@@ -1,118 +1,135 @@
 
         
-                print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+        model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu', name='features'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
     
-                gc.collect()
-            print('- benchmarking SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.01, power_t=0.25, tol=1e-3)
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-    # Learn a frontier for outlier detection with several classifiers
-xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
-xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
-for i, (clf_name, clf) in enumerate(classifiers.items()):
-    plt.figure(1)
-    clf.fit(X1)
-    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
-    Z1 = Z1.reshape(xx1.shape)
-    legend1[clf_name] = plt.contour(
-        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
-    plt.figure(2)
-    clf.fit(X2)
-    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
-    Z2 = Z2.reshape(xx2.shape)
-    legend2[clf_name] = plt.contour(
-        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
     
-    The outer product of the row and column label vectors shows a
-representation of the checkerboard structure.
+if __name__ == '__main__':
+    pytest.main([__file__])
+
     
-    # Now predict the value of the digit on the second half:
-expected = digits.target[n_samples // 2:]
-predicted = classifier.predict(data[n_samples // 2:])
+        y = np.array(y, dtype='int')
+    input_shape = y.shape
+    if input_shape and input_shape[-1] == 1 and len(input_shape) > 1:
+        input_shape = tuple(input_shape[:-1])
+    y = y.ravel()
+    if not num_classes:
+        num_classes = np.max(y) + 1
+    n = y.shape[0]
+    categorical = np.zeros((n, num_classes), dtype=dtype)
+    categorical[np.arange(n), y] = 1
+    output_shape = input_shape + (num_classes,)
+    categorical = np.reshape(categorical, output_shape)
+    return categorical
     
-    # Generate sample data
-n_samples = 1500
-np.random.seed(0)
-t = 1.5 * np.pi * (1 + 3 * np.random.rand(1, n_samples))
-x = t * np.cos(t)
-y = t * np.sin(t)
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
-    ax.w_xaxis.set_ticklabels([])
-ax.w_yaxis.set_ticklabels([])
-ax.w_zaxis.set_ticklabels([])
-ax.set_xlabel('Petal width')
-ax.set_ylabel('Sepal length')
-ax.set_zlabel('Petal length')
-ax.set_title('Ground Truth')
-ax.dist = 12
+    print('Vectorizing sequence data...')
+tokenizer = Tokenizer(num_words=max_words)
+x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
+x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
     
-    # Different variance
-X_varied, y_varied = make_blobs(n_samples=n_samples,
-                                cluster_std=[1.0, 2.5, 0.5],
-                                random_state=random_state)
-y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_varied)
     
-    Evaluate the ability of k-means initializations strategies to make
-the algorithm convergence robust as measured by the relative standard
-deviation of the inertia of the clustering (i.e. the sum of squared
-distances to the nearest cluster center).
+def create_network(n_dense=6,
+                   dense_units=16,
+                   activation='selu',
+                   dropout=AlphaDropout,
+                   dropout_rate=0.1,
+                   kernel_initializer='lecun_normal',
+                   optimizer='adam',
+                   num_classes=1,
+                   max_words=max_words):
+    '''Generic function to create a fully-connected neural network.
     
-        By default this will get the strings from the blns.txt file
     
-        # 'The specifier name is a ``dotted name'' that may resolve ... to
-    # ... a callable object which returns a TestCase ... instance'
-    def test_loadTestsFromNames__callable__TestCase_instance(self):
-        m = types.ModuleType('m')
-        testcase_1 = unittest.FunctionTestCase(lambda: None)
-        def return_TestCase():
-            return testcase_1
-        m.return_TestCase = return_TestCase
+def categorical_hinge(y_true, y_pred):
+    pos = K.sum(y_true * y_pred, axis=-1)
+    neg = K.max((1. - y_true) * y_pred, axis=-1)
+    return K.maximum(0., neg - pos + 1.)
     
-        def test_matched_bom_and_cookie_second_line(self):
-        lines = (
-            b'\xef\xbb\xbf#! something\n',
-            b'f# coding=utf-8\n',
-            b'print(something)\n',
-            b'do_something(else)\n'
+    print('Benchmarks (Note: All benchmarks are only using a single CPU core)')
+print()
+    
+    # See how far apart the test image is from the known faces
+face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
+    
+            if file.filename == '':
+            return redirect(request.url)
+    
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    
+        # Create a subprocess to capture frames
+    p.append(Process(target=capture, args=(read_frame_list,)))
+    p[0].start()
+    
+    # Find all the faces and face encodings in the unknown image
+face_locations = face_recognition.face_locations(unknown_image)
+face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
+    
+        def test_extended_properties(self):
+        print(u'John's relatives: {0}'.format(self.John.relatives))
+        self.assertDictEqual(
+            {'name': 'John', 'occupation': 'Coder', 'relatives': 'Many relatives.', 'call_count2': 0},
+            self.John.__dict__,
         )
-        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
-        self.assertEqual(encoding, 'utf-8-sig')
-        self.assertEqual(consumed_lines,
-                         [b'#! something\n', b'f# coding=utf-8\n'])
     
-        # Fetch the records to be pickled.
-    cursor.execute('SELECT * FROM memos')
-    memos = [MemoRecord(key, task) for key, task in cursor]
-    # Save the records using our custom DBPickler.
-    file = io.BytesIO()
-    DBPickler(file).dump(memos)
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time * 10), expected_execution_time)
     
-    # Now add the related image to the html part.
-with open('roasted-asparagus.jpg', 'rb') as img:
-    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
-                                     cid=asparagus_cid)
+        def test_given_standby_on_message_operator_inservice_shall_raise_exception_and_keep_in_state(cls):
+        with cls.assertRaises(UnsupportedTransition):
+            cls.hsm.on_message('operator inservice')
+        cls.assertEqual(isinstance(cls.hsm._current_state, Standby), True)
+
     
-        counter = 1
-    for part in msg.walk():
-        # multipart/* are just containers
-        if part.get_content_maintype() == 'multipart':
-            continue
-        # Applications should really sanitize the given filename so that an
-        # email message can't be used to overwrite important files
-        filename = part.get_filename()
-        if not filename:
-            ext = mimetypes.guess_extension(part.get_content_type())
-            if not ext:
-                # Use a generic bag-of-bits extension
-                ext = '.bin'
-            filename = 'part-%03d%s' % (counter, ext)
-        counter += 1
-        with open(os.path.join(args.directory, filename), 'wb') as fp:
-            fp.write(part.get_payload(decode=True))
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
-    import sqlite3
+    The Chain of responsibility is an object oriented version of the
+`if ... elif ... elif ... else ...` idiom, with the
+benefit that the condition–action blocks can be dynamically rearranged
+and reconfigured at runtime.
