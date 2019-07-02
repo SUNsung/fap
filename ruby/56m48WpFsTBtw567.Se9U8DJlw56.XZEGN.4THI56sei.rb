@@ -1,186 +1,85 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
-    
-          #
-    
-      auto_updates true
-  depends_on cask: 'homebrew/cask-versions/adobe-photoshop-lightroom600'
-    
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
-    
-    module RuboCop
-  module AST
-    # Common functionality for nodes that can be used as hash elements:
-    # `pair`, `kwsplat`
-    module HashElementNode
-      # Returns the key of this `hash` element.
-      #
-      # @note For keyword splats, this returns the whole node
-      #
-      # @return [Node] the key of the hash element
-      def key
-        node_parts[0]
-      end
-    
-          def ignored_node?(node)
-        # Same object found in array?
-        ignored_nodes.any? { |n| n.equal?(node) }
-      end
-    
-        pkg_origin = attributes[:freebsd_origin]
-    if pkg_origin == 'fpm/<name>'  # fill in default
-      pkg_origin = 'fpm/#{name}'
+          context 'clearing unsupported fields of agents' do
+    before do
+      visit new_agent_path
     end
     
-        platforms.each do |platform|
-      logger.info('Generating service manifest.', :platform => platform.class.name)
-      platform.program = command.first
-      platform.name = attributes[:pleaserun_name]
-      platform.args = command[1..-1]
-      platform.description = if attributes[:description_given?]
-        attributes[:description]
-      else
-        platform.name
-      end
-      pleaserun_attributes.each do |attribute_name|
-        attribute = 'pleaserun_#{attribute_name}'.to_sym
-        if attributes.has_key?(attribute) and not attributes[attribute].nil?
-          platform.send('#{attribute_name}=', attributes[attribute])
-        end
-      end
-    
-      def build!(params)
-    # TODO(sissel): Support these somehow, perhaps with execs and files.
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-        when 'post-install'
-        when 'pre-uninstall'
-        when 'post-uninstall'
-      end # case name
-    end # self.scripts.each
-    
-      def create_scripts
-    if script?(:after_install)
-      File.write(File.join(fpm_meta_path, 'after_install'), script(:after_install))
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
     end
   end
     
-    class FPM::RakeTask < Rake::TaskLib
-  attr_reader :options
+    describe DefaultScenarioImporter do
+  let(:user) { users(:bob) }
+  describe '.import' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      mock(DefaultScenarioImporter).seed(is_a(User))
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      DefaultScenarioImporter.import(user)
+    end
     
-    module FPM
-  module Issues
-    module TarWriter
-      # See https://github.com/rubygems/rubygems/issues/1608
-      def self.has_issue_1608?
-        name, prefix = nil,nil
-        io = StringIO.new
-        ::Gem::Package::TarWriter.new(io) do |tw|
-          name, prefix = tw.split_name('/123456789'*9 + '/1234567890') # abs name 101 chars long
-        end
-        return prefix.empty?
-      end
+      describe '#jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('\\u003c/script\\u003e')
+    end
     
-      describe '#hook_on_project_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_start' }
+      describe '#helpers' do
+    it 'should return the correct request header' do
+      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
     end
-  end
-  describe '#hook_on_project_first_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_first_start' }
-    end
-  end
-  describe '#hook_on_project_restart' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_restart' }
-    end
-  end
-  describe '#hook_on_project_exit' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_exit' }
-    end
-  end
-  describe '#hook_on_project_stop' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_stop' }
+    
+        it 'should raise error when response has an error' do
+      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
     end
   end
 end
 
     
-        def pre_window
-      params = if rbenv?
-                 'rbenv shell #{yaml['rbenv']}'
-               elsif rvm?
-                 'rvm use #{yaml['rvm']}'
-               elsif pre_tab?
-                 yaml['pre_tab']
-               else
-                 yaml['pre_window']
-               end
-      parsed_parameters(params)
+        def initialize
+      @entries = []
+      @index = Set.new
+      @types = Hash.new { |hash, key| hash[key] = Type.new key }
     end
     
-        def self.register(view_hash)
-      view_hash.each do |view_key, view_class|
-        super view_key, view_class
-        add_writer(view_key)
-        send '#{view_key}=', view_class
-      end
-    end
+        def terminal_width
+      return @terminal_width if defined? @terminal_width
     
-          # Override the default to_s to include a closing form tag
-      def to_s
-        content + closing_form_tag
+            css('*[layout]').remove_attr('layout')
+        css('*[layout-xs]').remove_attr('layout-xs')
+        css('*[flex]').remove_attr('flex')
+        css('*[flex-xs]').remove_attr('flex-xs')
+        css('*[ng-class]').remove_attr('ng-class')
+        css('*[align]').remove_attr('align')
+        css('h1, h2, h3').remove_attr('class')
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
     
-          # Return the set of batch actions that should be displayed
-      def batch_actions_to_display
-        @batch_actions.select do |batch_action|
-          call_method_or_proc_on(self, batch_action.display_if_block)
+            # Removes reset_password token
+        def clear_reset_password_token
+          self.reset_password_token = nil
+          self.reset_password_sent_at = nil
         end
-      end
     
+          module ClassMethods
+        Devise::Models.config(self, :timeout_in)
       end
+    end
+  end
 end
-
-    
-        def self.config
-      {
-        path: ActiveAdmin.application.default_namespace || '/',
-        controllers: ActiveAdmin::Devise.controllers,
-        path_names: { sign_in: 'login', sign_out: 'logout' },
-        sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
-      }
-    end
-    
-        it { is_expected.to eq('') }
-    
-          def check_extension_whitelist!(new_file)
-        extension = new_file.extension.to_s
-        if extension_whitelist && !whitelisted_extension?(extension)
-          raise CarrierWave::IntegrityError, I18n.translate(:'errors.messages.extension_whitelist_error', extension: new_file.extension.inspect, allowed_types: Array(extension_whitelist).join(', '))
-        end
-      end
