@@ -1,123 +1,130 @@
 
         
-            for trials in range(5):
-        a = random.randrange(2, num - 1)
-        v = pow(a, s, num)
-        if v != 1:
-            i = 0
-            while v != (num - 1):
-                if i == t - 1:
-                    return False
-                else:
-                    i = i + 1
-                    v = (v ** 2) % num
-    return True
+        
+def load_data(label_mode='fine'):
+    '''Loads CIFAR100 dataset.
     
-                if new_key is None:
-                break
-    
-        def solve_sub_array(self):
-        rear = [int(self.array[0])]*len(self.array)
-        sum_value = [int(self.array[0])]*len(self.array)
-        for i in range(1, len(self.array)):
-            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
-            rear[i] = max(sum_value[i], rear[i-1])
-        return rear[len(self.array)-1]
-    
-    	s = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22, \
-		5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20, \
-		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23, \
-		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21 ]
-    
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
 
     
-        return res
+    # Add any extra paths that contain custom files (such as robots.txt or
+# .htaccess) here, relative to this directory. These files are copied
+# directly to the root of the documentation.
+#html_extra_path = []
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
+    
+UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
+'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
+    
+    
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
+    
+        # Display the results
+    for top, right, bottom, left in face_locations:
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
+    
+        # Bail out when the video file ends
+    if not ret:
+        break
+    
+            self.assertEqual(result.exit_code, 0)
+        self.assertTrue(target_string in result.output)
+    
+        if not app.config.edit_on_github_project:
+        warnings.warn('edit_on_github_project not specified')
+        return
+    if not doctree:
+        warnings.warn('doctree is None')
+        return
+    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
+    show_url = get_github_url(app, 'blob', path)
+    edit_url = get_github_url(app, 'edit', path)
+    
+    
+def __meters_to_kilometers(meters: float) -> float:
+    '''Convert meters to kilometers.'''
+    return meters * 0.001
+
+    
+        return set_ip_to_mock
+
+    
+    
+def linear_dense(x, n_unit, name=None, reuse=None):
+    '''线性全连接层
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_unit]
+    
+    
+def multi_highway_dense(x, n_layer, act_fn=relu, carry_bias=-1.0, name=None):
+    '''多层 highway_dense
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_input]
     '''
-    assert isinstance(u_string, str)
+    name = name or 'highway_dense'
+    for i in range(n_layer):
+        x = highway_dense(x, act_fn=act_fn, carry_bias=carry_bias, name='{}-{}'.format(name, i))
+    
+            # 得到 S 后，下面的操作就与 `attention_flow_self` 一样了
+    
+    
+def get_wb(shape,
+           w_initializer=truncated_normal,
+           b_initializer=zeros,
+           w_regularizer=l2_regularizer,
+           b_regularizer=None,  # 一般不对偏置做权重惩罚，可能会导致欠拟合
+           name=None):
+    ''''''
+    name = '' if name is None else name + '_'
+    W = tf.get_variable(name + 'W', shape=shape,
+                        dtype=tf_float, initializer=w_initializer, regularizer=w_regularizer)
+    b = tf.get_variable(name + 'b', shape=shape[-1:],
+                        dtype=tf_float, initializer=b_initializer, regularizer=b_regularizer)
+    return W, b
+    
+                with open('htmlout.html', 'w') as out:
+                out.write(header)
+    
+    
+class TagKeyNotFound(Exception):
+    pass
+    
+    from django.db import models
+from django.utils import timezone
+    
+            # Adding model 'GroupTagKey'
+        db.create_table(u'tagstore_grouptagkey', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key_id')),
+            ('values_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+        ))
+        db.send_create_signal('tagstore', ['GroupTagKey'])
+    
+        This is currenlty only used for ``in_next_release`` resolutions.
+    '''
     try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
-    
-        def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
-    
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
-    
-    # TODO: response is the only one
-    
-        with server as (host, port):
-        url = 'http://{}:{}/path/to/thing/#view=edit&token=hunter2'.format(host, port)
-        r = requests.get(url)
-        raw_request = r.content
-    
-        def prepare_request(self, request):
-        '''Constructs a :class:`PreparedRequest <PreparedRequest>` for
-        transmission and returns it. The :class:`PreparedRequest` has settings
-        merged from the :class:`Request <Request>` instance and those of the
-        :class:`Session`.
-    
-    # The language of the text. It defaults to the language option
-# or 'en' if the language is not set.
-# epub_language = ''
-    
-            def close(self):
-            # Probably worth making idempotent too!
-            ...
-            closer.unregister(self._id)
-    
-            if self.done is not None and not self.done and self.steps > 0:
-            raise error.Error('Tried to reset environment which is not done. While the monitor is active for {}, you cannot call reset() unless the episode is over.'.format(self.env_id))
-    
-        def gas(self, gas):
-        'control: rear wheel drive'
-        gas = np.clip(gas, 0, 1)
-        for w in self.wheels[2:4]:
-            diff = gas - w.gas
-            if diff > 0.1: diff = 0.1  # gradually increase, but stop immediately
-            w.gas += diff
-    
-      # Implements linear decay of the learning rate.
-  learning_rate = tf.train.polynomial_decay(
-      learning_rate,
-      global_step,
-      num_train_steps,
-      end_learning_rate=0.0,
-      power=1.0,
-      cycle=False)
-    
-      logits = tf.reshape(logits, [batch_size, seq_length, 2])
-  logits = tf.transpose(logits, [2, 0, 1])
+        release = Release.objects.get_from_cache(
+            id=release_id,
+        )
+    except Release.DoesNotExist:
+        return
