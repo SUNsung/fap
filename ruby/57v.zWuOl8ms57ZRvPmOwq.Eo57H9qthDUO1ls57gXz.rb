@@ -1,30 +1,75 @@
 
         
-        # These drivers are only used for testing driver switching.
-# They don't actually need to process javascript so use RackTest
+        require 'benchmark/ips'
+require 'jekyll'
+require 'json'
     
-      context 'with custom selector' do
-    it 'should use the custom selector' do
-      Capybara.add_selector(:level) do
-        xpath { |num| './/*[@id='ancestor#{num}']' }
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
+    
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
+        end
       end
-      el = @session.find(:css, '#child')
-      expect(el.ancestor(:level, 1)[:id]).to eq 'ancestor1'
-      expect(el.ancestor(:level, 3)[:id]).to eq 'ancestor3'
-    end
-  end
-    
-        it 'doesn't find invisible elements when `true`' do
-      expect do
-        @session.find_by_id('hidden_via_ancestor', visible: true)
-      end.to raise_error(Capybara::ElementNotFound)
     end
   end
 end
 
     
-      context 'aria_label attribute with Capybara.enable_aria_label' do
-    it 'should find when true' do
-      Capybara.enable_aria_label = true
-      expect(@session.find_link('Go to simple')[:href]).to match %r{/with_simple_html$}
-    end
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
+    
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
+    
+          def preference_field_tag(name, value, options)
+        case options[:type]
+        when :integer
+          text_field_tag(name, value, preference_field_options(options))
+        when :boolean
+          hidden_field_tag(name, 0, id: '#{name}_hidden') +
+            check_box_tag(name, 1, value, preference_field_options(options))
+        when :string
+          text_field_tag(name, value, preference_field_options(options))
+        when :password
+          password_field_tag(name, value, preference_field_options(options))
+        when :text
+          text_area_tag(name, value, preference_field_options(options))
+        else
+          text_field_tag(name, value, preference_field_options(options))
+        end
+      end
+    
+        sh 'gem build spree.gemspec'
+    mv 'spree-#{version}.gem', pkgdir
+  end
+    
+            def mine
+          if current_api_user.persisted?
+            @orders = current_api_user.orders.reverse_chronological.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          else
+            render 'spree/api/errors/unauthorized', status: :unauthorized
+          end
+        end
+    
+          @@product_attributes = [
+        :id, :name, :description, :price, :display_price, :available_on,
+        :slug, :meta_description, :meta_keywords, :shipping_category_id,
+        :taxon_ids, :total_on_hand
+      ]
+    
+      def create?
+    !user_is_banned? && !user_is_comment_banned?
+  end
