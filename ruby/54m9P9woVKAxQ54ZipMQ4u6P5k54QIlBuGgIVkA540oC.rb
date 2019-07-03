@@ -1,67 +1,105 @@
 
         
-              expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
-    end
-  end
+          def self.stats
+    s = HashWithIndifferentAccess.new({})
     
-      after :each do
-    @scheduler.shutdown(:wait)
-    
-        it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('Received <$.content.text.*> from <$.content.name> .') }.
-        to raise_error('JSONPath '$.content.text.*' is too complex, please check your migration.')
-    end
-  end
-    
-        it 'should generate the correct specific tracking url' do
-      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
+        def later(desc = nil, db = RailsMultisite::ConnectionManagement.current_db, &blk)
+      if @async
+        start_thread if !@thread&.alive? && !@paused
+        @queue << [db, blk, desc]
+      else
+        blk.call
+      end
     end
     
-    require 'open-uri'
-require 'json'
-require 'strscan'
-require 'forwardable'
-require 'term/ansicolor'
-require 'fileutils'
-    
-      def test_font_helper_with_suffix_sharp
-    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
-  end
-    
-        def each(&block)
-      @cookies.each(&block)
+        def extendable?(directive)
+      EXTENDABLE_DIRECTIVES.include?(directive)
     end
     
-    module Grape
-  module DSL
-    module Helpers
-      extend ActiveSupport::Concern
-      include Grape::DSL::Configuration
+      context 'with a theme' do
+    let!(:theme) {
+      Fabricate(:theme).tap do |t|
+        settings = <<~YML
+          extend_content_security_policy:
+            type: list
+            default: 'script-src: from-theme.com'
+        YML
+        t.set_field(target: :settings, name: :yaml, value: settings)
+        t.save!
+      end
+    }
     
-    Before do |scenario|
-  scenario.source_tag_names.each do |tag|
-    driver_name = tag.sub(/^@/, '').to_sym
-    Capybara.current_driver = driver_name if Capybara.drivers.key?(driver_name)
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+          it 'succeeds' do
+        expect { @controller.send(:reset_authentication_token) }.to_not raise_error
+      end
+    end
+    
+          it 'it doesn't call toggle_hidden_shareable' do
+        expect(@controller.current_user).not_to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
+        begin
+          put :update, params: {id: 42, post_id: @status.id}, format: :js
+        rescue ActiveRecord::RecordNotFound
+        end
+      end
+    end
   end
 end
 
     
-      it 'should match correctly normalized title' do
-    uri = Addressable::URI.parse('/with_title')
-    uri.query_values = { title: ' &nbsp; with space &nbsp;title   ' }
-    @session.visit(uri.to_s)
-    @session.assert_title('  with space  title')
-    expect { @session.assert_title('with space title') }.to raise_error(Capybara::ExpectationNotMet)
+        def generate_new_liquid(link)
+      Liquid::Template.register_tag('jsfiddle', JSFiddleTag)
+      Liquid::Template.parse('{% jsfiddle #{link} %}')
+    end
+    
+      def user_is_comment_banned?
+    user.has_role? :comment_banned
   end
     
-        it 'should find disabled buttons when :all' do
-      expect(@session.find_button('Disabled button', disabled: :all).value).to eq('Disabled button')
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
+    
+          expect('.size-both').to have_ruleset(rule)
     end
   end
     
-      it 'should be false if the given link is on the page' do
-    expect(@session).not_to have_no_link('foo')
-    expect(@session).not_to have_no_link('awesome title')
-    expect(@session).not_to have_no_link('A link', href: '/with_simple_html')
+      def failed_class_counts(queue = params[:queue])
+    classes = Hash.new(0)
+    Resque::Failure.each(0, Resque::Failure.count(queue), queue) do |_, item|
+      class_name = item['payload']['class'] if item['payload']
+      class_name ||= 'nil'
+      classes[class_name] += 1
+    end
+    classes
   end
+    
+      task :install => [:about, :download, :make] do
+    bin_dir = '/usr/bin'
+    conf_dir = '/etc'
+    
+              it 'raises an integrity error' do
+            is_expected.to raise_error(CarrierWave::IntegrityError)
+          end
+        end
+    
+          context 'with cached file' do
+        before { uploader.cache!(test_file) }
+    
+          def check_size!(new_file)
+        size = new_file.size
+        expected_size_range = size_range
+        if expected_size_range.is_a?(::Range)
+          if size < expected_size_range.min
+            raise CarrierWave::IntegrityError, I18n.translate(:'errors.messages.min_size_error', :min_size => ActiveSupport::NumberHelper.number_to_human_size(expected_size_range.min))
+          elsif size > expected_size_range.max
+            raise CarrierWave::IntegrityError, I18n.translate(:'errors.messages.max_size_error', :max_size => ActiveSupport::NumberHelper.number_to_human_size(expected_size_range.max))
+          end
+        end
+      end
