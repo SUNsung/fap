@@ -1,49 +1,34 @@
-        def initialize(argv)
-          @pod_name = argv.shift_argument
-          @short_output = argv.flag?('short')
-          super
-        end
-    
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
-      end
-    
-          def show_revert
-        !@message
-      end
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
-      end
-    
-          attr_reader :page, :page_num, :allow_editing
-    
-          def sidebar_format
-        has_sidebar && @sidebar.format.to_s
-      end
-    
-    # Commit file to wiki, overwriting previous versions of that file
-def commit_test_file(wiki, dir, filename, ext, content)
-  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
-  committer.add_to_index(dir, filename, ext, content, true)
-    committer.after_commit do |committer, sha|
-      wiki.clear_cache
-      committer.update_working_dir(dir, filename, ext)
-    end
-  committer.commit
-end
 
+        
+                def initialize(symbol)
+          @symbol = symbol.to_sym
+        end
     
-        assert body.include?('<span class='username'>Charles Pence</span>'), '/latest_changes should include the Author Charles Pence'
-    assert body.include?('a8ad3c0'), '/latest_changes should include the :latest_changes_count commit'
-    assert !body.include?('60f12f4'), '/latest_changes should not include more than latest_changes_count commits'
-    assert body.include?('<a href='Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e'>Data-Two.csv</a>'), '/latest_changes include links to modified files in #{body}'
-    assert body.include?('<a href='Hobbit/874f597a5659b4c3b153674ea04e406ff393975e'>Hobbit.md</a>'), '/latest_changes should include links to modified pages in #{body}'
+              @scrolls.each do |scroll|
+            feed.entry(scroll, :url => '/otherstuff/' + scroll.to_param.to_s, :updated => Time.utc(2007, 1, scroll.id)) do |entry|
+              entry.title(scroll.title)
+              entry.content(scroll.body, :type => 'html')
+    
+            # Sentinel value denoting that a value has not been set.
+        UNSET_VALUE = Object.new
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-color: #0f0; ' +
+                'border-right-color: #ff0; ' +
+                'border-left-color: #00f;'
+      bad_rule = 'border-bottom-color: null;'
+    
+      context 'called with four widths' do
+    it 'applies different widths to all sides' do
+      rule = 'border-width: 7px 8px 9px 10px'
+    
+          expect('.padding-all').to have_rule(rule)
+    end
   end
