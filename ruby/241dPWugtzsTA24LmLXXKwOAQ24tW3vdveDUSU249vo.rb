@@ -1,123 +1,83 @@
 
         
-        SUITE.each do |key, text|
-  Benchmark.ips do |x|
-    x.report('regex-check   - #{key}') { check_with_regex(text) }
-    x.report('builtin-check - #{key}') { check_with_builtin(text) }
-    x.compare!
-  end
-end
-# ------------------------------------------------------------------------
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
-    
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
-    
-                  EM.start_server(
-                opts['host'],
-                opts['livereload_port'],
-                HttpAwareConnection,
-                opts
-              ) do |ws|
-                handle_websockets_event(ws)
-              end
-    
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
+              it 'creates a new user' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: '12345678'
+        click_on 'Create User'
+        expect(page).to have_text('User 'usertest' was successfully created.')
+        expect(page).to have_text('test@test.com')
       end
     
-      def self.redis_key(req_type, time = Time.now.utc)
-    'app_req_#{req_type}#{time.strftime('%Y%m%d')}'
+        it 'does not send previously configured receivers when the current agent does not support them' do
+      select_agent_type('Website Agent scrapes')
+      sleep 0.5
+      select2('ZKCD', from: 'Receivers')
+      select_agent_type('Email Agent')
+      fill_in(:agent_name, with: 'No receivers')
+      click_on 'Save'
+      expect(page).to have_content('No receivers')
+      agent = Agent.find_by(name: 'No receivers')
+      expect(agent.receivers).to eq([])
+    end
+  end
+end
+
+    
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+    
+        it 'accepts objects as well as strings' do
+      log = AgentLog.log_for_agent(agents(:jane_website_agent), events(:bob_website_agent_event).payload)
+      expect(log.message).to include(''title'=>'foo'')
+    end
   end
     
-        it 'rejects invalid directives and ones that are not allowed to be extended' do
-      builder << {
-        invalid_src: ['invalid'],
-      }
-    
-        result
-  end
-    
-              extension[directive] ||= []
-          extension[directive] << source
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
         end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
       end
+    
+      desc 'Build all spree gems'
+  task :build do
+    pkgdir = File.expand_path('../pkg', __FILE__)
+    FileUtils.mkdir_p pkgdir
+    
+            def update
+          authorize! :update, @order, order_token
+    
+          @@adjustment_attributes = [
+        :id, :source_type, :source_id, :adjustable_type, :adjustable_id,
+        :originator_type, :originator_id, :amount, :label, :mandatory,
+        :locked, :eligible, :created_at, :updated_at
+      ]
+    
+        def _send_target(e)
+      _send_keys(tmux_window_and_pane_target, e)
     end
+    
+        def initialize(window_yaml, index, project)
+      first_key = window_yaml.keys.first
+    
+    describe Tmuxinator::Hooks::Project do
+  let(:project) { FactoryBot.build(:project) }
+    
+      if pane_base_index = options.fetch(:pane_base_index) { 1 }
+    standard_options << 'pane-base-index #{pane_base_index}'
   end
-end
-
     
-          global_setting(:s3_cdn_url, 'https://s3-cdn.com')
+          def default_project(name)
+        '#{directory}/#{name}.yml'
+      end
     
-        def log_file_info(s)
-      puts '    #{magenta s}'
+          Hash[settings]
     end
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
-    
-          @left_diff_line_number = nil
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
-    
-    context 'Frontend Unicode support' do
-  include Rack::Test::Methods
-    
-      if cfg = options[:config]
-    # If the path begins with a '/' it will be considered an absolute path,
-    # otherwise it will be relative to the CWD
-    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
-    require cfg
-  end
-    
-    # external
-require 'github/markup'
-require 'sanitize'
