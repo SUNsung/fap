@@ -1,76 +1,109 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
+        log_file = os.path.join(data_path, 'ipv6_tunnel.log')
+    
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
+    
+    
+class ParserRuleReturnScope(RuleReturnScope):
+    '''
+    Rules that return more than a single value must return an object
+    containing all the values.  Besides the properties defined in
+    RuleLabelScope.predefinedRulePropertiesScope there may be user-defined
+    return values.  This class simply defines the minimum properties that
+    are always defined and methods to access the others that might be
+    available depending on output option such as template and tree.
+    
+            if args:
+            if 'gui' in conf and conf['gui']:
+                # Enter GUI mode.
+                from .gui import gui_main
+                gui_main(*args, **conf)
             else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+                # Enter console mode.
+                from .console import console_main
+                console_main(*args, **conf)
+    
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+            link_list = self.get_streams_by_id(account_number, video_id)
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+    # looks that flickr won't return urls for all sizes
+# we required in 'extras field without a acceptable header
+dummy_header = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
+}
+def get_content_headered(url):
+    return get_content(url, dummy_header)
+    
+    __all__ = ['giphy_download']
     
     
-def get_setting_name_and_refid(node):
-    '''Extract setting name from directive index node'''
-    entry_type, info, refid = node['entries'][0][:3]
-    return info.replace('; setting', ''), refid
+def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    room_id_pattern = r'huomao.com/(\d+)'
+    room_id = match1(url, room_id_pattern)
+    html = get_content(get_mobile_room_url(room_id))
     
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
+    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+# old pattern /uuid.shtml
+# now it could be #uuid
+    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
+    if id:
+        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
     
-            if opts.nolog:
-            self.settings.set('LOG_ENABLED', False, priority='cmdline')
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
     
-        def long_desc(self):
-        return ('Edit a spider using the editor defined in the EDITOR environment'
-                ' variable or else the EDITOR setting')
+        @classmethod
+    # pylint: disable=arguments-differ,too-many-arguments
+    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
+        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
+        # jwk field if kid is not provided.
+        include_jwk = kid is None
+        return super(JWS, cls).sign(payload, key=key, alg=alg,
+                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
+                                    nonce=nonce, url=url, kid=kid,
+                                    include_jwk=include_jwk)
+
     
-            try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
+        # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
     
     
-    class ScrapyClientTLSOptions(ClientTLSOptions):
-        '''
-        SSL Client connection creator ignoring certificate verification errors
-        (for genuinely invalid certificates or bugs in verification code).
     
-            self.factory.noPage(\
-                defer.TimeoutError('Getting %s took longer than %s seconds.' % \
-                (self.factory.url, self.factory.timeout)))
     
-    def send_raw_msg(self, msgType, content, toUserName):
-    url = '%s/webwxsendmsg' % self.loginInfo['url']
-    data = {
-        'BaseRequest': self.loginInfo['BaseRequest'],
-        'Msg': {
-            'Type': msgType,
-            'Content': content,
-            'FromUserName': self.storageClass.userName,
-            'ToUserName': (toUserName if toUserName else self.storageClass.userName),
-            'LocalID': int(time.time() * 1e4),
-            'ClientMsgId': int(time.time() * 1e4),
-            },
-        'Scene': 0, }
-    headers = { 'ContentType': 'application/json; charset=UTF-8', 'User-Agent' : config.USER_AGENT }
-    r = self.s.post(url, headers=headers,
-        data=json.dumps(data, ensure_ascii=False).encode('utf8'))
-    return ReturnValue(rawResponse=r)
+def __meters_to_miles(meters: float) -> float:
+    '''Convert meters to miles.'''
+    return meters * 0.000621371
