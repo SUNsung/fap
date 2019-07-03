@@ -1,250 +1,184 @@
 
         
-          void Compute(OpKernelContext* context) override {
-    // Output a scalar string.
-    Tensor* output_tensor = nullptr;
-    OP_REQUIRES_OK(context,
-                   context->allocate_output(0, TensorShape(), &output_tensor));
-    auto output = output_tensor->scalar<string>();
+          // get rid of the array and index
+  if (mode == psModeForm || inType3Char || preload) {
+    if (!inlineImg) writePS('pop ');
+    writePS('pop pop\n');
     }
     
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
+      // Reserve room for terminating '\0'
+  size--;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {}  // namespace tensorflow
+    #endif /* PAGE_TRANSITION_H */
 
     
-        http://www.apache.org/licenses/LICENSE-2.0
     
-      // Synchronize with spinlocks.
-  static const unsigned kScheduleSpin = 0x02;
-  // Synchronize with spinlocks that also call CPU yield instructions.
-  static const unsigned kScheduleYield = 0x04;
-  // Synchronize with a 'synchronization primitive' (e.g. mutex).
-  static const unsigned kScheduleBlockingSync = 0x08;
-    
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
-#define TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
-  }
-}
-}  // namespace data
-}  // namespace xgboost
-    
-    // Finally register the objective function.
-// After it succeeds you can try use xgboost with objective=mylogistic
-XGBOOST_REGISTER_OBJECTIVE(MyLogistic, 'mylogistic')
-.describe('User defined logistic regression plugin')
-.set_body([]() { return new MyLogistic(); });
-    
-    
-    {
-    {XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
-.describe('Raw binary data format.')
-.set_body([]() {
-    return new SparsePageRawFormat();
-  });
-}  // namespace data
-}  // namespace xgboost
-
-    
-      void UpdatePredictionCache(
-      const gbm::GBTreeModel& model,
-      std::vector<std::unique_ptr<TreeUpdater>>* updaters,
-      int num_new_trees) override {
-    int old_ntree = model.trees.size() - num_new_trees;
-    // update cache entry
-    for (auto& kv : cache_) {
-      PredictionCacheEntry& e = kv.second;
-    }
-    }
-    
-        // Create texture
-    int flags = al_get_new_bitmap_flags();
-    int fmt = al_get_new_bitmap_format();
-    al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP|ALLEGRO_MIN_LINEAR|ALLEGRO_MAG_LINEAR);
-    al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
-    ALLEGRO_BITMAP* img = al_create_bitmap(width, height);
-    al_set_new_bitmap_flags(flags);
-    al_set_new_bitmap_format(fmt);
-    if (!img)
-        return false;
-    
-    
-    {    return true;
-}
-    
-    
-    {        // Setup the debug report callback
-        VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
-        debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-        debug_report_ci.pfnCallback = debug_report;
-        debug_report_ci.pUserData = NULL;
-        err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
-        check_vk_result(err);
-#else
-        // Create Vulkan Instance without any debug feature
-        err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
-        check_vk_result(err);
-        IM_UNUSED(g_DebugReport);
-#endif
-    }
-    
-    #pragma once
-    
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-      virtual std::string toString() const CXX11_OVERRIDE;
-    
-      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
-                        const unsigned char* key) const;
-    
-    namespace aria2 {
-    }
-    
-    #include <vector>
-#include <memory>
-    
-    namespace aria2 {
-    }
-    
-    #include 'common.h'
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port) const
-{
-  return generateToken(infoHash, ipaddr, port, secret_[0]);
-}
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
-
-    
-    #include <inttypes.h>
-#include <sys/types.h>
-#include <stdio.h>
-    
-    // Simple implementation of SlicePart variants of Put().  Child classes
-// can override these method with more performant solutions if they choose.
-Status WriteBatchBase::Put(ColumnFamilyHandle* column_family,
-                           const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
-    }
-    
-    
-    {}  // namespace rocksdb
-    
-    
-    {  return 0;
-}
-
-    
-      // Read a key in this transaction
-  s = txn->Get(read_options, 'abc', &value);
-  assert(s.IsNotFound());
-    
-    #include <string>
-    
-    
-    {  virtual ~Checkpoint() {}
+    {  GBool mono;
+  GBool gray;
+  GBool transparency;
+  GBool gdi;
+  PSLevel level;		// PostScript level (1, 2, separation)
+  GBool level1PSBug;		// gTrue if it uses a feature not supported in PSOutputDev
 };
     
-    namespace rocksdb {
-    }
+    #include <config.h>
     
-    class OptimisticTransactionDB : public StackableDB {
- public:
-  // Open an OptimisticTransactionDB similar to DB::Open().
-  static Status Open(const Options& options, const std::string& dbname,
-                     OptimisticTransactionDB** dbptr);
-    }
+      GBool isReverseVideo() { return reverseVideo; }
+  void setReverseVideo(GBool reverseVideoA) { reverseVideo = reverseVideoA; }
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    maxBackgroundOperations
- * Signature: (J)I
- */
-jint Java_org_rocksdb_BackupableDBOptions_maxBackgroundOperations(
-    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return static_cast<jint>(bopt->max_background_operations);
+    
+    
+    public:
+    
+    void ScientificNumberFormatter::getPreExponent(
+        const DecimalFormatSymbols &dfs, UnicodeString &preExponent) {
+    preExponent.append(dfs.getConstSymbol(
+            DecimalFormatSymbols::kExponentMultiplicationSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kOneDigitSymbol));
+    preExponent.append(dfs.getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol));
 }
     
-    typedef struct node_t
-{
-    int pri;
-    int val;
-} node_t;
     
-        inline void del(const std::string &key)
+    {        return handlePrev(offset, status);
+    }
+    
+    // SharedBreakIterator encapsulates a shared BreakIterator. Because
+// BreakIterator has mutable semantics, clients must ensure that all uses
+// of a particular shared BreakIterator is protected by the same mutex
+// ensuring that only one thread at a time gets access to that shared
+// BreakIterator. Clients can accomplish this by creating a mutex for all
+// uses of break iterator within a particular class. Then objects of that
+// class may then freely share break iterators among themselves. However,
+// these shared break iterators must never be exposed outside of that class.
+class U_I18N_API SharedBreakIterator : public SharedObject {
+public:
+    SharedBreakIterator(BreakIterator *biToAdopt);
+    virtual ~SharedBreakIterator();
+    }
+    
+    
+IntDigitCountRange::IntDigitCountRange(int32_t min, int32_t max) {
+    fMin = min < 0 ? 0 : min;
+    fMax = max < fMin ? fMin : max;
+}
+    
+    /* Initialize the fields we use to disambiguate ambiguous years. Separate
+ * so we can call it from readObject().
+ */
+void SimpleDateFormat::initializeDefaultCentury()
+{
+  if(fCalendar) {
+    fHaveDefaultCentury = fCalendar->haveDefaultCentury();
+    if(fHaveDefaultCentury) {
+      fDefaultCenturyStart = fCalendar->defaultCenturyStart();
+      fDefaultCenturyStartYear = fCalendar->defaultCenturyStartYear();
+    } else {
+      fDefaultCenturyStart = DBL_MIN;
+      fDefaultCenturyStartYear = -1;
+    }
+  }
+}
+    
+        /**
+     * Implement UnicodeMatcher
+     * Returns TRUE if this matcher will match a character c, where c
+     * & 0xFF == v, at offset, in the forward direction (with limit >
+     * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     * @param v    the given value
+     * @return     TRUE if this matcher will match a character c, 
+     *             where c & 0xFF == v
+     */
+    virtual UBool matchesIndexValue(uint8_t v) const;
+    
+            static const size_t s_serializationVersion = 0;
+    
+            const NDShape& Shape() const override { return m_unpackedShape; }
+        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
+        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
+        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
+        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
+    
+        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
+    // function waits until mutex is released
+    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
+    bool Acquire(bool wait)
     {
-        auto iter = cache_map.find(key);
-        if (iter == cache_map.end())
-        {
-            return;
-        }
+        mode_t mask = umask(0);
     }
     
-    TEST(hashmap, integer)
+    void DataReader::CopyMBLayoutTo(MBLayoutPtr pMBLayout)
 {
-    swHashMap *ht = swHashMap_new(16, free);
-    swFdInfo *pkt, *tmp;
-    int i;
-    swFdInfo *lists[MAP_SIZE];
+    // BUGBUG: This copies all data reader's layout info on top of each other, keeping only the last one; likely not what was intended.
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->CopyMBLayoutTo(pMBLayout);
+}
+    
+    using namespace std;
+    
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+}
+    
+    
+    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_dist_rms(
+          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
+      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
+      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
+      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
+      obs->set_longitude_accel_rms(
+          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
+      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
+      obs->set_oritation_angle_rms(
+          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
+      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
+      obs->set_meas_state(meas_state(bytes, length));
+      break;
     }
+  }
+}
     
-        for (j = 0; j < task_n; j++)
-    {
-        ret = sock->read(sock, &recv_pkg, sizeof(recv_pkg));
-        ASSERT_FALSE(ret < 0);
+      MatrixXd mat_golden(10, 10);
+  // clang-format off
+  mat_golden <<
+    0.2,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0, 0.2,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0, 0.2,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0, 0.2,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0, 0.2,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0, 0.2,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0, 0.2,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0, 0.2,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0, 0.2,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0, 0.2;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    const PolynomialXd& Spline1dSeg::spline_func() const { return spline_func_; }
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+    
+    // config detail: {'name': 'usr_can_read_errors', 'offset': 0.0,
+// 'precision': 1.0, 'len': 16, 'is_signed_var': False, 'physical_range':
+// '[0|65535]', 'bit': 55, 'type': 'int', 'order': 'motorola', 'physical_unit':
+// ''}
+int Globalrpt6a::usr_can_read_errors(const std::uint8_t* bytes,
+                                     int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 8);
     }
-    
-            pid_t pid = fork();
-        ASSERT_NE(pid, -1);
-    
-    }
-TEST(os_signal, swSignalfd_set)
-{
-    int ret;
-    sigset_t curset;
-    
-        serv.dispatch_mode = 2;
-//	serv.open_tcp_keepalive = 1;
