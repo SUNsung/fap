@@ -1,57 +1,112 @@
 
         
-        #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+        // Ignore first non-switch arg if it's not a standalone package.
+    bool ignore_arg = !package->self_extract();
+    for (unsigned i = 1; i < argv.size(); ++i) {
+      if (ignore_arg && argv[i] == args[0]) {
+        ignore_arg = false;
+        continue;
+      }
+    }
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
+};
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    
+    {  bool isChild() {
+    return pid == 0;
+  }
+};
+    
+    // TODO: Write gradient for this when needed
+GRADIENT_NOT_IMPLEMENTED_YET(Floor);
+    
+    REGISTER_CUDA_OPERATOR(LC2D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC2DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
+    
+      /**
+   * @brief Set the data_ shared_ptr to point to the SyncedMemory holding the
+   *        data_ of Blob other -- useful in Layer%s which simply perform a copy
+   *        in their Forward pass.
+   *
+   * This deallocates the SyncedMemory holding this Blob's data_, as
+   * shared_ptr calls its destructor when reset with the '=' operator.
+   */
+  void ShareData(const Blob& other);
+  /**
+   * @brief Set the diff_ shared_ptr to point to the SyncedMemory holding the
+   *        diff_ of Blob other -- useful in Layer%s which simply perform a copy
+   *        in their Forward pass.
+   *
+   * This deallocates the SyncedMemory holding this Blob's diff_, as
+   * shared_ptr calls its destructor when reset with the '=' operator.
+   */
+  void ShareDiff(const Blob& other);
+    
+    #endif  // CAFFE_FILLER_HPP_
 
     
-    using namespace swift;
-    
-      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
-    if (classifyTypedef(subTypedef->getDecl()))
-      return forTypedef(subTypedef->getDecl());
-    return forInvalid();
+      /**
+   * Called by the parent Layer's SetUp to check that the number of bottom
+   * and top Blobs provided as input match the expected numbers specified by
+   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
+   */
+  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
+                               const vector<Blob<Dtype>*>& top) {
+    if (ExactNumBottomBlobs() >= 0) {
+      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
+          << type() << ' Layer takes ' << ExactNumBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MinBottomBlobs() >= 0) {
+      CHECK_LE(MinBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at least ' << MinBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MaxBottomBlobs() >= 0) {
+      CHECK_GE(MaxBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at most ' << MaxBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (ExactNumTopBlobs() >= 0) {
+      CHECK_EQ(ExactNumTopBlobs(), top.size())
+          << type() << ' Layer produces ' << ExactNumTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MinTopBlobs() >= 0) {
+      CHECK_LE(MinTopBlobs(), top.size())
+          << type() << ' Layer produces at least ' << MinTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MaxTopBlobs() >= 0) {
+      CHECK_GE(MaxTopBlobs(), top.size())
+          << type() << ' Layer produces at most ' << MaxTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (EqualNumBottomTopBlobs()) {
+      CHECK_EQ(bottom.size(), top.size())
+          << type() << ' Layer produces one top blob as output for each '
+          << 'bottom blob input.';
+    }
   }
     
-    static bool isValidUnicodeScalar(uint32_t S) {
-  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
-  // ASCII characters.
-  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
-}
-    
-    void LinkJobAction::anchor() {}
-    
-      /**
-   * Caffe's thread local state will be initialized using the current
-   * thread values, e.g. device id, solver index etc. The random seed
-   * is initialized using caffe_rng_rand.
-   */
-  void StartInternalThread();
-    
-      /**
-   * @brief Given the bottom blobs, compute the top blobs and the loss.
-   *
-   * @param bottom
-   *     the input blobs, whose data fields store the input data for this layer
-   * @param top
-   *     the preshaped output blobs, whose data fields will store this layers'
-   *     outputs
-   * \return The total loss from the layer.
-   *
-   * The Forward wrapper calls the relevant device wrapper function
-   * (Forward_cpu or Forward_gpu) to compute the top blob values given the
-   * bottom blobs.  If the layer has any non-zero loss_weights, the wrapper
-   * then computes and returns the loss.
-   *
-   * Your layer should implement Forward_cpu and (optionally) Forward_gpu.
-   */
-  inline Dtype Forward(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
+    template <typename Dtype>
+class LayerRegistry {
+ public:
+  typedef shared_ptr<Layer<Dtype> > (*Creator)(const LayerParameter&);
+  typedef std::map<string, Creator> CreatorRegistry;
+    }
     
     /**
  * @brief Computes @f$ y = |x| @f$
@@ -72,52 +127,14 @@ class AbsValLayer : public NeuronLayer<Dtype> {
       const vector<Blob<Dtype>*>& top);
     }
     
-      int num_kernels_im2col_;
-  int num_kernels_col2im_;
-  int conv_out_channels_;
-  int conv_in_channels_;
-  int conv_out_spatial_dim_;
-  int kernel_dim_;
-  int col_offset_;
-  int output_offset_;
-    
-    
-    {  Blob<Dtype> transformed_data_;
-};
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
     /**
- * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
- *        'broadcast' to match the shape of the former. Equivalent to tiling
- *        the latter Blob, then computing the elementwise sum.
- *
- * The second input may be omitted, in which case it's learned as a parameter
- * of the layer. Note: in case bias and scaling are desired, both operations can
- * be handled by `ScaleLayer` configured with `bias_term: true`.
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
  */
 template <typename Dtype>
-class BiasLayer : public Layer<Dtype> {
+class BaseConvolutionLayer : public Layer<Dtype> {
  public:
-  explicit BiasLayer(const LayerParameter& param)
+  explicit BaseConvolutionLayer(const LayerParameter& param)
       : Layer<Dtype>(param) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
@@ -125,380 +142,178 @@ class BiasLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top);
     }
     
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #include <vector>
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     #include 'caffe/blob.hpp'
 #include 'caffe/layer.hpp'
 #include 'caffe/proto/caffe.pb.h'
     
-      // algorithms for forward and backwards convolutions
-  cudnnConvolutionFwdAlgo_t *fwd_algo_;
-  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
-  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
-    }
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
+};
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    // Range() returns generators providing sequences of values in a range.
-//
-// Synopsis:
-// Range(start, end)
-//   - returns a generator producing a sequence of values {start, start+1,
-//     start+2, ..., }.
-// Range(start, end, step)
-//   - returns a generator producing a sequence of values {start, start+step,
-//     start+step+step, ..., }.
-// Notes:
-//   * The generated sequences never include end. For example, Range(1, 5)
-//     returns a generator producing a sequence {1, 2, 3, 4}. Range(1, 9, 2)
-//     returns a generator producing {1, 3, 5, 7}.
-//   * start and end must have the same type. That type may be any integral or
-//     floating-point type or a user defined type satisfying these conditions:
-//     * It must be assignable (have operator=() defined).
-//     * It must have operator+() (operator+(int-compatible type) for
-//       two-operand version).
-//     * It must have operator<() defined.
-//     Elements in the resulting sequences will also have that type.
-//   * Condition start < end must be satisfied in order for resulting sequences
-//     to contain any elements.
-//
-template <typename T, typename IncrementT>
-internal::ParamGenerator<T> Range(T start, T end, IncrementT step) {
-  return internal::ParamGenerator<T>(
-      new internal::RangeGenerator<T, IncrementT>(start, end, step));
+    bool b2Triangle::IsInside(float32 _x, float32 _y){
+	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
+	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
+	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
+	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
+		
+		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
+		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
+		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		
+		float32 dot00 = vx0*vx0+vy0*vy0;
+		float32 dot01 = vx0*vx1+vy0*vy1;
+		float32 dot02 = vx0*vx2+vy0*vy2;
+		float32 dot11 = vx1*vx1+vy1*vy1;
+		float32 dot12 = vx1*vx2+vy1*vy2;
+		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		
+		return ((u>=0)&&(v>=0)&&(u+v<=1));    
 }
     
-    // The tests from the instantiation above will have these names:
-//
-//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
-//
-// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
-// in the given test case, whether their definitions come before or
-// AFTER the INSTANTIATE_TEST_CASE_P statement.
-//
-// Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after main() has started.
-// This allows the user on one hand, to adjust generator parameters in order
-// to dynamically determine a set of tests to run and on the other hand,
-// give the user a chance to inspect the generated tests with Google Test
-// reflection API before RUN_ALL_TESTS() is executed.
-//
-// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
-// for more examples.
-//
-// In the future, we plan to publish the API for defining new parameter
-// generators. But for now this interface remains part of the internal
-// implementation and is subject to change.
-//
-//
-// A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
-// values. Inheriting from TestWithParam<T> satisfies that requirement because
-// TestWithParam<T> inherits from both Test and WithParamInterface. In more
-// complicated hierarchies, however, it is occasionally useful to inherit
-// separately from Test and WithParamInterface. For example:
+    		SetSourcePixels();
     
-    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ALL_THREADS, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    // Depending on the platform, different string classes are available.
-// On Linux, in addition to ::std::string, Google also makes use of
-// class ::string, which has the same interface as ::std::string, but
-// has a different implementation.
-//
-// The user can define GTEST_HAS_GLOBAL_STRING to 1 to indicate that
-// ::string is available AND is a distinct type to ::std::string, or
-// define it to 0 to indicate otherwise.
-//
-// If the user's ::std::string and ::string are the same class due to
-// aliasing, he should define GTEST_HAS_GLOBAL_STRING to 0.
-//
-// If the user doesn't define GTEST_HAS_GLOBAL_STRING, it is defined
-// heuristically.
-    
-    namespace testing {
-namespace internal {
-    }
+    namespace Etc
+{
+	// ----------------------------------------------------------------------------------------------------
+	//
+	const float Block4x4Encoding::LUMA_WEIGHT = 3.0f;
+	const float Block4x4Encoding::CHROMA_BLUE_WEIGHT = 0.5f;
     }
     
+    #include 'vpx_dsp/vpx_dsp_common.h'
     
-    {  return clone;
+    void opus_fft_neon(const kiss_fft_state *st,
+                   const kiss_fft_cpx *fin,
+                   kiss_fft_cpx *fout);
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b), 'r'(a)
+  );
+  return res<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
+    
+    /** Divide a 32-bit value by a 16-bit value. Result fits in 16 bits */
+#define DIV32_16(a,b) ((opus_val16)(((opus_val32)(a))/((opus_val16)(b))))
+    
+    /*Constants used by the entropy encoder/decoder.*/
+    
+    /* (a32 * (b32 >> 16)) >> 16 */
+#undef silk_SMULWT
+static OPUS_INLINE opus_int32 silk_SMULWT_armv4(opus_int32 a, opus_int32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#silk_SMULWT\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(a), 'r'(b&~0xFFFF)
+  );
+  return rd_hi;
+}
+#define silk_SMULWT(a, b) (silk_SMULWT_armv4(a, b))
+    
+    // Return the includes needed for generated mock file.
+grpc::string GetMockIncludes(grpc_generator::File *file,
+                             const Parameters &params);
+    
+    // Return the source of the generated service file.
+grpc::string GenerateServiceSource(grpc_generator::File* file,
+                                   const grpc_generator::Service* service,
+                                   grpc_java_generator::Parameters* parameters);
+    
+    
+    {  if (status.ok()) {
+    auto resp = response.GetRoot()->id();
+    std::cout << 'RPC response: ' << resp->str() << std::endl;
+  } else {
+    std::cout << 'RPC failed' << std::endl;
+  }
 }
     
     
-// A simple string class.
-class MyString {
- private:
-  const char* c_string_;
-  const MyString& operator=(const MyString& rhs);
+    {  // Deserialize by pulling the
+  static grpc::Status Deserialize(grpc_byte_buffer *buffer,
+                                  flatbuffers::grpc::Message<T> *msg) {
+    if (!buffer) {
+      return ::grpc::Status(::grpc::StatusCode::INTERNAL, 'No payload');
     }
-    
-        int32_t     op;                    // Operation from the compiled pattern, split into
-    int32_t     opType;                //    the opcode
-    int32_t     opValue;               //    and the operand value.
-    
-        Transliterator::_registerFactory(UnicodeString(TRUE, ::CURR_ID, -1),
-                                     RemoveTransliterator_create, integerToken(0));
-    
-    const char *
-RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode)) {
-        return NULL;
-    }
-    const Locale *result;
-    switch(type) {
-    case ULOC_ACTUAL_LOCALE:
-        result = actualLocaleIsSameAsValid ? &validLocale : &tailoring->actualLocale;
-        break;
-    case ULOC_VALID_LOCALE:
-        result = &validLocale;
-        break;
-    case ULOC_REQUESTED_LOCALE:
-    default:
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-    if(result->isBogus()) { return NULL; }
-    const char *id = result->getName();
-    return id[0] == 0 ? 'root' : id;
-}
-    
-    ScriptSet &ScriptSet::reset(UScriptCode script, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return *this;
-    }
-    uint32_t index = script / 32;
-    uint32_t bit   = 1 << (script & 31);
-    bits[index] &= ~bit;
-    return *this;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    
-    {    }
-    else if (U_SUCCESS(status))
-    {
-        status = U_MISSING_RESOURCE_ERROR;
-    }
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or a negative value
-     */
-    static int32_t indexOrNegativeFromString(const char *keyword);
-    
-    /**
- * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
- * and return the pointer.
- */
-UnicodeMatcher* StringMatcher::toMatcher() const {
-  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
-  UnicodeMatcher *nonconst_base = static_cast<UnicodeMatcher *>(nonconst_this);
-  
-  return nonconst_base;
-}
-    
-    void Assembler::srad(const Reg64& ra, const Reg64& rs, const Reg64& rb,
-                     bool rc) {
-  EmitXForm(31, rn(rs), rn(ra), rn(rb), 794, rc);
-}
-    
-    #include 'hphp/runtime/base/apc-object.h'
-#include 'hphp/runtime/base/apc-array.h'
-#include 'hphp/runtime/base/apc-stats.h'
-#include 'hphp/runtime/base/object-data.h'
-#include 'hphp/runtime/base/type-object.h'
-#include 'hphp/runtime/ext/apc/ext_apc.h'
-#include 'hphp/runtime/base/collections.h'
-#include 'hphp/runtime/ext/collections/ext_collections-map.h'
-#include 'hphp/runtime/ext/collections/ext_collections-set.h'
-#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
-#include 'hphp/runtime/base/data-walker.h'
-    
-    void Config::ReplaceIncludesWithIni(const std::string& original_ini_filename,
-                                    const std::string& iniStr,
-                                    std::string& with_includes) {
-  std::istringstream iss(iniStr);
-  std::string line;
-  while (std::getline(iss, line)) {
-    // Handle cases like
-    //   #include           ''
-    //   ##includefoo barbaz'myconfig.ini' how weird is that
-    // Anything that is not a syntactically correct #include 'file' after
-    // this pre-processing, will be treated as an ini comment and processed
-    // as such in the ini parser
-    auto pos = line.find_first_not_of(' ');
-    if (pos == std::string::npos ||
-        line.compare(pos, strlen('#include'), '#include') != 0) {
-      // treat as normal ini line, including comment that doesn't start with
-      // #include
-      with_includes += line + '\n';
-      continue;
-    }
-    pos += strlen('#include');
-    auto start = line.find_first_not_of(' ', pos);
-    auto end = line.find_last_not_of(' ');
-    if ((start == std::string::npos || line[start] != ''') ||
-        (end == start || line[end] != ''')) {
-      with_includes += line + '\n'; // treat as normal comment
-      continue;
-    }
-    std::string file = line.substr(start + 1, end - start - 1);
-    const std::string logger_file = file;
-    boost::filesystem::path p(file);
-    if (!p.is_absolute()) {
-      boost::filesystem::path opath(original_ini_filename);
-      p = opath.parent_path()/p;
-    }
-    if (boost::filesystem::exists(p)) {
-      std::ifstream ifs(p.string());
-      const std::string contents((std::istreambuf_iterator<char>(ifs)),
-                                 std::istreambuf_iterator<char>());
-      Config::ReplaceIncludesWithIni(p.string(), contents, with_includes);
+    // Check if this is a single uncompressed slice.
+    if ((buffer->type == GRPC_BB_RAW) &&
+        (buffer->data.raw.compression == GRPC_COMPRESS_NONE) &&
+        (buffer->data.raw.slice_buffer.count == 1)) {
+      // If it is, then we can reference the `grpc_slice` directly.
+      grpc_slice slice = buffer->data.raw.slice_buffer.slices[0];
+      // We wrap a `Message<T>` around the slice, incrementing the refcount.
+      *msg = flatbuffers::grpc::Message<T>(slice, true);
     } else {
-      Logger::Warning('ini include file %s not found', logger_file.c_str());
+      // Otherwise, we need to use `grpc_byte_buffer_reader_readall` to read
+      // `buffer` into a single contiguous `grpc_slice`. The gRPC reader gives
+      // us back a new slice with the refcount already incremented.
+      grpc_byte_buffer_reader reader;
+      grpc_byte_buffer_reader_init(&reader, buffer);
+      grpc_slice slice = grpc_byte_buffer_reader_readall(&reader);
+      grpc_byte_buffer_reader_destroy(&reader);
+      // We wrap a `Message<T>` around the slice, but dont increment refcount
+      *msg = flatbuffers::grpc::Message<T>(slice, false);
     }
+    grpc_byte_buffer_destroy(buffer);
+#if FLATBUFFERS_GRPC_DISABLE_AUTO_VERIFICATION
+    return ::grpc::Status::OK;
+#else
+    if (msg->Verify()) {
+      return ::grpc::Status::OK;
+    } else {
+      return ::grpc::Status(::grpc::StatusCode::INTERNAL,
+                            'Message verification failed');
+    }
+#endif
   }
+};
+    
+      void Warn(const std::string &warn, bool show_exe_name = true) const;
+    
+    template <typename T, typename V>
+inline void vector_emplace_back(std::vector<T> *vector, V &&data) {
+  #if defined(FLATBUFFERS_CPP98_STL)
+    vector->push_back(data);
+  #else
+    vector->emplace_back(std::forward<V>(data));
+  #endif  // defined(FLATBUFFERS_CPP98_STL)
 }
-    
-    
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
-    }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
-    
-    #endif
-
-    
-    template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done) {
-  if (LIKELY(map.numSubMaps() == 1) ||
-      done.load(std::memory_order_relaxed) ||
-      done.exchange(true, std::memory_order_relaxed)) {
-    return;
-  }
-    }
-    
-    #include 'hphp/util/struct-log.h'
-    
-    /**
- * A request-local wrapper for the three standard files:
- * STDIN, STDOUT, and STDERR.
- */
-struct BuiltinFiles final : RequestEventHandler {
-  static const Variant& GetSTDIN();
-  static const Variant& GetSTDOUT();
-  static const Variant& GetSTDERR();
-    }
-    
-        int i;
-    for (i = 0; i < SIZE - 1; i++)
-    {
-        int pri = swoole_system_random(10000, 99999);
-        ns = (node_t*) malloc(sizeof(node_t));
-        ns->val = i;
-        ns->pri = pri;
-        swHeap_push(pq, pri, ns);
-        _map[i] = pri;
-    }
-    
-    #endif /* !__HIREDIS_QT_H__ */
-
-    
-        public slots:
-        void run();
-    
-        inline void del(const std::string &key)
-    {
-        auto iter = cache_map.find(key);
-        if (iter == cache_map.end())
-        {
-            return;
-        }
-    }
