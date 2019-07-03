@@ -1,168 +1,170 @@
 
         
-          void Transform(const Datum& datum, Dtype* transformed_data);
-  // Tranformation parameters
-  TransformationParameter param_;
-    
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
+          // If the requirement itself is non-generic, the synthetic signature
+  // is that of the conformance context.
+  if (!covariantSelf &&
+      reqSig->getGenericParams().size() == 1 &&
+      reqSig->getRequirements().size() == 1) {
+    syntheticSignature = conformanceDC->getGenericSignatureOfContext();
+    if (syntheticSignature) {
+      syntheticSignature = syntheticSignature->getCanonicalSignature();
+      syntheticEnvironment =
+        syntheticSignature->createGenericEnvironment();
     }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
+    }
+    
+      /// Retrieve the array of replacement types, which line up with the
+  /// generic parameters.
+  ///
+  /// Note that the types may be null, for cases where the generic parameter
+  /// is concrete but hasn't been queried yet.
+  ArrayRef<Type> getReplacementTypes() const {
+    return llvm::makeArrayRef(getTrailingObjects<Type>(),
+                              getNumReplacementTypes());
   }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-        // Make sure that the dictionary contains all required keys, and if it does, return version value
-    // from the dictionary.
-    template <typename T>
-    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
-    { 
-        const auto& version = GetVersion(dict);
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
     }
+    IsFirstLine = false;
     
-            static const size_t s_serializationVersion = 0;
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-    #include 'Basics.h'
-#include 'ScriptableObjects.h'
-    
-        /**
-     * Returns TRUE if this object is equal to rhs.
-     */
-    UBool equals(const SignificantDigitInterval &rhs) const {
-        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
-    }
-    
-        switch (patternCharIndex) {
-    case UDAT_ERA_FIELD:
-        if (isChineseCalendar) {
-            if (!gotNumber) {
-                return -start;
-            }
-            cal.set(UCAL_ERA, value);
-            return pos.getIndex();
-        }
-        if (count == 5) {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, NULL, cal);
-        } else if (count == 4) {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, NULL, cal);
-        } else {
-            ps = matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, NULL, cal);
-        }
-    }
+      static CFPointeeInfo forVoid() {
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = nullptr;
+    return info;
+  }
     
     
-U_NAMESPACE_END
-    
-    // set the key to a 'bogus' or invalid state
-CollationKey&
-CollationKey::setToBogus()
-{
-    fFlagAndLength &= 0x80000000;
-    fHashCode = kBogusHashCode;
-    }
-    
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword
-     */
-    static Form fromString(const UnicodeString &keyword, UErrorCode &errorCode) {
-        return static_cast<Form>(indexFromString(keyword, errorCode));
-    }
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-    // Remove the debug report callback
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkDestroyDebugReportCallbackEXT');
-    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
-#endif // IMGUI_VULKAN_DEBUG_REPORT
-    
-        // Bind pipeline and descriptor sets:
-    {
-        vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_Pipeline);
-        VkDescriptorSet desc_set[1] = { g_DescriptorSet };
-        vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_PipelineLayout, 0, 1, desc_set, 0, NULL);
-    }
-    
-                // Blit from temporary buffer to final texture
-            size_t blit_src_stride = (size_t)src_glyph.Info.Width;
-            size_t blit_dst_stride = (size_t)atlas->TexWidth;
-            unsigned char* blit_src = src_glyph.BitmapData;
-            unsigned char* blit_dst = atlas->TexPixelsAlpha8 + (ty * blit_dst_stride) + tx;
-            for (int y = info.Height; y > 0; y--, blit_dst += blit_dst_stride, blit_src += blit_src_stride)
-                memcpy(blit_dst, blit_src, blit_src_stride);
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-    ////////////////////           compressor         ///////////////////////
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Setup display size (every frame to accommodate for window resizing)
-    int w, h;
-    int display_w, display_h;
-    glfwGetWindowSize(g_Window, &w, &h);
-    glfwGetFramebufferSize(g_Window, &display_w, &display_h);
-    io.DisplaySize = ImVec2((float)w, (float)h);
-    if (w > 0 && h > 0)
-        io.DisplayFramebufferScale = ImVec2((float)display_w / w, (float)display_h / h);
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-      void showBuckets() const;
-    
-    
-    {} // namespace aria2
-
-    
-    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
-{
-  factory_ = factory;
+    {  return encodePunycode(InputCodePoints, OutPunycode);
 }
     
-      void setRoutingTable(DHTRoutingTable* routingTable);
+    #endif
+
     
-    namespace aria2 {
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
     }
     
-    DNSCache::~DNSCache() = default;
     
-        CacheEntry& operator=(const CacheEntry& c);
+    {}  // namespace leveldb
     
     
-    {    std::cout << null << '\n';
-    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
+    {  // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+};
+    
+    #endif  // STORAGE_LEVELDB_DB_MEMTABLE_H_
+
+    
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options, uint64_t file_number,
+             uint64_t file_size, const Slice& k, void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+    class LEVELDB_EXPORT Status {
+ public:
+  // Create a success status.
+  Status() noexcept : state_(nullptr) {}
+  ~Status() { delete[] state_; }
+    }
+    
+      explicit Table(Rep* rep) : rep_(rep) {}
+    
+      ~WriteBatch();
+    
+    
+    {  const char* data_;
+  size_t size_;
+  uint32_t restart_offset_;  // Offset in data_ of restart array
+  bool owned_;               // Block owns data_[]
+};
+    
+    namespace leveldb {
+    }
+    
+    
+    {  // Open test file some number above the sum of the two limits to force
+  // leveldb::WindowsEnv to switch from mapping the file into memory
+  // to basic file reading.
+  const int kNumFiles = kMMapLimit + 5;
+  leveldb::RandomAccessFile* files[kNumFiles] = {0};
+  for (int i = 0; i < kNumFiles; i++) {
+    ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
+  }
+  char scratch;
+  Slice read_result;
+  for (int i = 0; i < kNumFiles; i++) {
+    ASSERT_OK(files[i]->Read(i, 1, &read_result, &scratch));
+    ASSERT_EQ(kFileData[i], read_result[0]);
+  }
+  for (int i = 0; i < kNumFiles; i++) {
+    delete files[i];
+  }
+  ASSERT_OK(env_->DeleteFile(test_file));
+}
+    
+          cbw.Write(buffer.data(), input.begin(), input.end());
+    
+    void SimpleCSRSource::Clear() {
+  page_.Clear();
+  this->info.Clear();
+}
+    
+      TestObservers(int * _status): status_(_status) {}
+    
+      const xgboost::MetaInfo& info = dmat->Info();
+  const std::vector<uint64_t> expected_qids{1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3};
+  const std::vector<xgboost::bst_uint> expected_group_ptr{0, 4, 8, 12};
+  CHECK(info.qids_ == expected_qids);
+  CHECK(info.group_ptr_ == expected_group_ptr);
+  CHECK_GE(info.kVersion, info.kVersionQidAdded);
+    
+    // implementing configure.
+template<typename PairIter>
+inline void ObjFunction::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
+    
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+        virtual bool OutputUsedInComputingInputNodesGradients() const override
+    {
+        // The DiagTimesNode does not require its output value for computing
+        // the gradients of its input nodes
+        return false;
+    }
+    
+        // compute forward backward algorithm
+    void ForwardPropS(Matrix<ElemType>& alpha, Matrix<ElemType>& backtrace, Matrix<ElemType>& functionValues, const Matrix<ElemType>& pos_scores, const Matrix<ElemType>& pair_scores, const size_t stt, const size_t stp)
+    {
+        // to-do, each slice is for one sentence
+        // to-do, number of slices correspond to number of frames
+        // this implementation only supports one sentence per minibatch
+    }
+    
+    template <class ElemType>
+EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
+    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
+{
+    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
 }
