@@ -1,191 +1,198 @@
 
         
-        apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
-Usage: apt-get [options] command
-       apt-get [options] install|remove pkg1 [pkg2 ...]
-       apt-get [options] source pkg1 [pkg2 ...]
+            lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
+    
+    	if len(sys.argv) == 1:
+		try:
+			n = int(raw_input('Enter a number: '))
+			print(partition(n))
+		except ValueError:
+			print('Please enter a number.')
+	else:
+		try:
+			n = int(sys.argv[1])
+			print(partition(n))
+		except ValueError:
+			print('Please pass a number.')
+    
+    def longestSub(ARRAY): 			#This function is recursive
+	
+	ARRAY_LENGTH = len(ARRAY)
+	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
+		return ARRAY
+								#Else
+	PIVOT=ARRAY[0]
+	isFound=False
+	i=1
+	LONGEST_SUB=[]
+	while(not isFound and i<ARRAY_LENGTH):
+		if (ARRAY[i] < PIVOT):
+			isFound=True
+			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
+			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
+			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+				LONGEST_SUB = TEMPORARY_ARRAY
+		else:
+			i+=1
     
     
-Invalid choice: 'scn', maybe you meant:
+if __name__ == '__main__':
+    whole_array = input('please input some numbers:')
+    array = SubArray(whole_array)
+    re = array.solve_sub_array()
+    print(('the results is:', re))
     
     
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+def b_expo(a, b):
+    res = 0
+    while b > 0:
+        if b&1:
+            res += a
+    
+        freqOrder = []
+    for freqPair in freqPairs:
+        freqOrder.append(freqPair[1])
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+    
+        def _print_response(self, response, opts):
+        if opts.headers:
+            self._print_headers(response.request.headers, b'>')
+            print('>')
+            self._print_headers(response.headers, b'<')
+        else:
+            self._print_bytes(response.body)
+    
+        requires_project = False
+    default_settings = {'LOG_ENABLED': False,
+                        'SPIDER_LOADER_WARN_ONLY': True}
+    
+            self._download_http = httpdownloadhandler(settings).download_request
     
     
-class DjangoTemplates(EngineMixin, BaseRenderer):
-    '''
-    Load Django templates from the built-in widget templates in
-    django/forms/templates and from apps' 'templates' directory.
-    '''
-    backend = DjangoTemplates
-    
-        '''
-    if isinstance(kernel_size, int):
-        kernel_size = [kernel_size] * 2
-    if isinstance(strides, int):
-        strides = [strides] * 4
+class DefaultHeadersMiddleware(object):
     
     
-# # Test
-# def attention_flow_2(h, u, T=None, J=None, d=None, name=None, reuse=None):
-#     '''Attention Flow Match Layer
-#     Input shape:
-#         h: [N, T, d]  # 原文中的 shape 为 [N, T, 2d], 因为经过了 bi-LSTM, 维度扩了一倍
-#         u: [N, J, d]
-#     Output shape:
-#         [N, T, 4d]
-# 
-#     Args:
-#         h: context encoding     shape: [N, T, d]
-#         u: question encoding    shape: [N, J, d]
-#         T(int): context length
-#         J(int): question length
-#         d(int): features size
-#         name(str):
-#         reuse(bool):
-# 
-#     Returns:
-# 
-#     '''
-#     print('Test')
-#     d = d or int(h.get_shape()[-1])
-#     T = T or int(h.get_shape()[-2])
-#     J = J or int(u.get_shape()[-2])
-# 
-#     with tf.variable_scope(name or 'attention_flow', reuse=reuse):
-#         h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])
-#         u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])
-#         hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
-#         h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
-#         W_s = get_w([3 * d, 1])  # [3d, 1]
-# 
-#         # similarity matrix
-#         # S = tf.reshape(tf.einsum('ntjd,do->ntjo', h_u_hu, W_s), [-1, T, J])
-#         # 以上操作等价于
-#         S = tf.reshape(tf.matmul(tf.reshape(h_u_hu, [-1, 3 * d]), W_s), [-1, T, J])
-# 
-#         # 得到 S 后，下面的操作就与 `attention_flow_self` 一样了
-# 
-#         # u_tilde(u~): context to question attended query vectors
-#         u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
-# 
-#         # h_tilde(h~): question to context attended query vectors
-#         b = tf.reduce_max(S, axis=2)  # [N, T]
-#         b = softmax(b, axis=-1)  # [N, T]
-#         b = tf.expand_dims(b, axis=1)  # [N, 1, T]
-#         h_tilde = tf.matmul(b, h)  # [N, 1, d]
-#         h_tilde = tf.tile(h_tilde, [1, T, 1])  # [N, T, d]
-# 
-#         g = tf.concat([h, u_tilde, h * u_tilde, h * h_tilde], axis=-1)  # [N, T, 4d]
-# 
-#     return g
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
+    
+        if temperature_unit != ha_unit:
+        temperature = convert_temperature(
+            temperature, temperature_unit, ha_unit)
+    
+        meters = value
+    
+    
+class GroupTagValueNotFound(Exception):
+    pass
 
     
-    import six
+            # Deleting model 'GroupTagKey'
+        db.delete_table(u'tagstore_grouptagkey')
     
-            backlogged, size = None, 0
-        from sentry.monitoring.queues import backend
-        if backend is not None:
-            size = backend.get_size('default')
-            backlogged = size > 0
+    import logging
     
-        def forwards(self, orm):
-        # Adding model 'TagValue'
-        db.create_table(u'tagstore_tagvalue', (
-            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
-            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
-            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['tagstore.TagKey'], db_column='key_id')),
-            ('value', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('data', self.gf('sentry.db.models.fields.gzippeddict.GzippedDictField')(null=True, blank=True)),
-            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
-            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
-                null=True, db_index=True)),
-            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
-                null=True, db_index=True)),
-        ))
-        db.send_create_signal('tagstore', ['TagValue'])
-    
-            # Changing field 'TagKey.environment_id'
-        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(null=True))
-    
-        models = {
-        'tagstore.eventtag': {
-            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
-            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
-        },
-        'tagstore.grouptagkey': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.grouptagvalue': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagkey': {
-            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
-            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagvalue': {
-            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-    
-        min_project_id = 0
-    max_project_id = Project.objects.aggregate(x=Max('id'))['x'] or 0
-    step = 1000
-    while min_project_id < max_project_id:
-        queryset = Group.objects.filter(
-            last_seen__gte=now - timedelta(days=1),
-            project__gte=min_project_id,
-            project__lt=min_project_id + step,
-            platform__isnull=False,
-        ).values_list('platform', 'project_id').distinct()
-    
-    import sentry
+    logger = logging.getLogger('sentry.scheduler')
     
     
-@instrumented_task(
-    name='sentry.tasks.process_buffer.process_pending',
-    queue='buffers.process_pending',
-)
-def process_pending(partition=None):
-    '''
-    Process pending buffers.
-    '''
-    from sentry import buffer
-    from sentry.app import locks
+class BufferFull(UnpackException):
+    pass
+    
+    
+def fetch(version):
+    base = 'http://wheels.scipy.org'
+    tree = html.parse(base)
+    root = tree.getroot()
+    
+    
+@pytest.mark.parametrize('key_strs,groupers', [
+    ('inner',  # Index name
+     pd.Grouper(level='inner')
+     ),
+    (['inner'],  # List of index name
+     [pd.Grouper(level='inner')]
+     ),
+    (['B', 'inner'],  # Column and index
+     ['B', pd.Grouper(level='inner')]
+     ),
+    (['inner', 'B'],  # Index and column
+     [pd.Grouper(level='inner'), 'B'])])
+def test_grouper_index_level_as_string(frame, key_strs, groupers):
+    result = frame.groupby(key_strs).mean()
+    expected = frame.groupby(groupers).mean()
+    assert_frame_equal(result, expected)
+    
+        if seed_nans:
+        frame.loc[1::11, '1st'] = np.nan
+        frame.loc[3::17, '2nd'] = np.nan
+        frame.loc[7::19, '3rd'] = np.nan
+        frame.loc[8::19, '3rd'] = np.nan
+        frame.loc[9::19, '3rd'] = np.nan
+    
+        drop_right = [n for n in right_levels if n not in right_on]
+    if drop_right:
+        df_right = df_right.reset_index(drop_right, drop=True)
+    
+    
+def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
+    return (ChineseTokenizer() | LowercaseFilter() |
+            StopFilter(stoplist=stoplist, minsize=minsize) |
+            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+
+    
+    
+class TextRank(KeywordExtractor):
+    
+    
+def viterbi(obs, states, start_p, trans_p, emit_p):
+    V = [{}]  # tabular
+    mem_path = [{}]
+    all_states = trans_p.keys()
+    for y in states.get(obs[0], all_states):  # init
+        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
+        mem_path[0][y] = ''
+    for t in xrange(1, len(obs)):
+        V.append({})
+        mem_path.append({})
+        #prev_states = get_top_states(V[t-1])
+        prev_states = [
+            x for x in mem_path[t - 1].keys() if len(trans_p[x]) > 0]
+    
+    print('='*40)
+print('3. 关键词提取')
+print('-'*40)
+print(' TF-IDF')
+print('-'*40)
+    
+    if withWeight is True:
+    for tag in tags:
+        print('tag: %s\t\t weight: %f' % (tag[0],tag[1]))
+else:
+    print(','.join(tags))
+
+    
+    for f_name in glob.glob(pattern):
+    with open(f_name) as f:
+        print('read file:', f_name)
+        for line in f: #one line as a document
+            words = ' '.join(jieba.cut(line))
+            docs.append(words)
