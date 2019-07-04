@@ -1,173 +1,237 @@
 
         
-        bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
-}
-    
-    			for (unsigned int uiBlockPixelV = 0; uiBlockPixelV < Block4x4::ROWS; uiBlockPixelV++)
-			{
-				unsigned int uiSourcePixelV = m_uiSourceV + uiBlockPixelV;
+        napi_value Print(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value args[1];
+  napi_status status;
     }
     
-    		Data data;
+      v8::Local<v8::ObjectTemplate> Build();
     
-    #endif /* FASTLZ_H */
-
-    
-    #ifndef FIXED_ARMv4_H
-#define FIXED_ARMv4_H
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right (round-to-nearest). Results fits in 32 bits */
-#if OPUS_FAST_INT64
-#define MULT16_32_P16(a,b) ((opus_val32)PSHR((opus_int64)((opus_val16)(a))*(b),16))
-#else
-#define MULT16_32_P16(a,b) ADD32(MULT16_16((a),SHR((b),16)), PSHR(MULT16_16SU((a),((b)&0x0000ffff)),16))
-#endif
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    
-    {}  // namespace leveldb
-    
-      void Build(int n) {
-    std::string key_space, value_space;
-    WriteBatch batch;
-    for (int i = 0; i < n; i++) {
-      // if ((i % 100) == 0) fprintf(stderr, '@ %d of %d\n', i, n);
-      Slice key = Key(i, &key_space);
-      batch.Clear();
-      batch.Put(key, Value(i, &value_space));
-      WriteOptions options;
-      // Corrupt() doesn't work without this sync on windows; stat reports 0 for
-      // the file size.
-      if (i == n - 1) {
-        options.sync = true;
-      }
-      ASSERT_OK(db_->Write(options, &batch));
+    namespace mate {
     }
+    
+    
+    {    // |wrapper| may be empty in some extreme cases, e.g., when
+    // Object.prototype.constructor is overwritten.
+    v8::Local<v8::Object> wrapper;
+    if (!templ->InstanceTemplate()
+             ->NewInstance(isolate->GetCurrentContext())
+             .ToLocal(&wrapper)) {
+      // The current wrappable object will be no longer managed by V8. Delete
+      // this now.
+      delete this;
+      return;
+    }
+    InitWith(isolate, wrapper);
   }
     
-     private:
-  // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2
-  };
+      // Helper class for linux specific messages.  LinuxWatcher is ref counted
+  // because it posts messages between threads.
+  class LinuxWatcher;
+  scoped_refptr<LinuxWatcher> watcher_;
+  int sock_;
+  bool listen_on_ready_ = false;
+#endif
     
-      // Returns an estimate of the number of bytes of data in use by this
-  // data structure. It is safe to call when MemTable is being modified.
-  size_t ApproximateMemoryUsage();
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
     
-      // Moves to the next entry in the source.  After this call, Valid() is
-  // true iff the iterator was not positioned at the last entry in the source.
-  // REQUIRES: Valid()
-  virtual void Next() = 0;
     
-      // Size of the file generated so far.  If invoked after a successful
-  // Finish() call, returns the size of the final generated file.
-  uint64_t FileSize() const;
-    
-    #ifndef STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
-#define STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
-    
-    void MetaInfo::SaveBinary(dmlc::Stream *fo) const {
-  int32_t version = kVersion;
-  fo->Write(&version, sizeof(version));
-  fo->Write(&num_row_, sizeof(num_row_));
-  fo->Write(&num_col_, sizeof(num_col_));
-  fo->Write(&num_nonzero_, sizeof(num_nonzero_));
-  fo->Write(labels_.HostVector());
-  fo->Write(group_ptr_);
-  fo->Write(qids_);
-  fo->Write(weights_.HostVector());
-  fo->Write(root_index_);
-  fo->Write(base_margin_.HostVector());
+    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
+    /* Fail if the secret key is invalid. */
+    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
+        unsigned char nonce32[32];
+        unsigned int count = 0;
+        secp256k1_scalar_set_b32(&msg, msg32, NULL);
+        while (1) {
+            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
+            if (!ret) {
+                break;
+            }
+            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
+            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
+                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
+                    break;
+                }
+            }
+            count++;
+        }
+        memset(nonce32, 0, 32);
+        secp256k1_scalar_clear(&msg);
+        secp256k1_scalar_clear(&non);
+        secp256k1_scalar_clear(&sec);
+    }
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
+    } else {
+        memset(signature, 0, sizeof(*signature));
+    }
+    return ret;
 }
     
-    class ColumnMatrix;
+    #ifndef BITCOIN_BECH32_H
+#define BITCOIN_BECH32_H
+    
+    #include <stdint.h>
+#include <stdlib.h>
+    
+    #include <stdint.h>
+#include <string>
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+#include 'port/port.h'
+    
+      // Successful parses
+  static struct {
+    const char* fname;
+    uint64_t number;
+    FileType type;
+  } cases[] = {
+    { '100.log',            100,   kLogFile },
+    { '0.log',              0,     kLogFile },
+    { '0.sst',              0,     kTableFile },
+    { '0.ldb',              0,     kTableFile },
+    { 'CURRENT',            0,     kCurrentFile },
+    { 'LOCK',               0,     kDBLockFile },
+    { 'MANIFEST-2',         2,     kDescriptorFile },
+    { 'MANIFEST-7',         7,     kDescriptorFile },
+    { 'LOG',                0,     kInfoLogFile },
+    { 'LOG.old',            0,     kInfoLogFile },
+    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
+  };
+  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+    std::string f = cases[i].fname;
+    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
+    ASSERT_EQ(cases[i].type, type) << f;
+    ASSERT_EQ(cases[i].number, number) << f;
+  }
+    
+        template std::shared_ptr<const Matrix<float>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    template std::shared_ptr<const Matrix<double>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    template std::shared_ptr<const Matrix<half>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    template std::shared_ptr<const Matrix<char>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    template std::shared_ptr<const Matrix<short>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+    
+    #include <cassert>
+#include <string>
+    
+    using namespace std;
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+        void Start();
+    void Stop();
+    void Restart();
+    
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
+    
+                // check with expected values
+            Value().TransferFromDeviceToDevice(m_deviceId, CPUDEVICE, true);
+            if (!ISCLOSE(Value()(0, 0), 1.0, EPSILON) ||
+                !ISCLOSE(Value()(0, 1), 2.0, EPSILON) ||
+                !ISCLOSE(Value()(1, 1), 2.0, EPSILON))
+                throw('LSTMNode forward computation error');
+    
+    template <class ElemType>
+EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
+    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
+{
+    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+}
+    
+        template <class ElemType>
+    void OptimizedMemoryAllocationFunc()
+    {
+        vector<MemRequestInfo<ElemType>>& memInfoVec = GetMemRequestInfoVec<ElemType>();
+        if (memInfoVec.empty())
+            return; 
+    }
+    
+    QueryData execute_query(std::string query) {
+  auto instance = SQLiteDBManager::get();
+  QueryData rows;
+  Status status = queryInternal(query, rows, instance);
+  EXPECT_TRUE(status.ok()) << 'Query execution failed with error: '
+                           << boost::io::quoted(status.what());
+  return rows;
+}
+    
+      fpack.platform_ = 'freebsd';
+  if (isPlatform(PlatformType::TYPE_FREEBSD)) {
+    EXPECT_TRUE(fpack.checkPlatform());
+  } else {
+    EXPECT_FALSE(fpack.checkPlatform());
+  }
+    
+      Expected<std::string, DatabaseError> getRawBytes(const std::string& domain,
+                                                   const std::string& key);
+  ExpectedSuccess<DatabaseError> putRawBytes(const std::string& domain,
+                                             const std::string& key,
+                                             const std::string& value);
+    
+    int Flag::createAlias(const std::string& alias, const FlagDetail& flag) {
+  instance().aliases_.insert(std::make_pair(alias, flag));
+  return 0;
+}
+    
+    #include 'plugin.h'
+    
+    /**
+ * @brief The request part of a plugin (registry item's) call.
+ *
+ * To use a plugin use Registry::call with a request and response.
+ * The request portion is usually simple and normally includes an 'action'
+ * key where the value is the action you want to perform on the plugin.
+ * Refer to the registry's documentation for the actions supported by
+ * each of its plugins.
+ */
+using PluginRequest = std::map<std::string, std::string>;
+    
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
+ public:
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
+  }
+    }
     
     
     { protected:
-  /*! \brief internal base score of the model */
-  bst_float base_score_;
-  /*! \brief objective function */
-  std::unique_ptr<ObjFunction> obj_;
-  /*! \brief The gradient booster used by the model*/
-  std::unique_ptr<GradientBooster> gbm_;
-  /*! \brief The evaluation metrics used to evaluate the model. */
-  std::vector<std::unique_ptr<Metric> > metrics_;
-  /*! \brief Training parameter. */
-  LearnerTrainParam tparam_;
+  // To Create an OptimisticTransactionDB, call Open()
+  explicit OptimisticTransactionDB(DB* db) : StackableDB(db) {}
 };
     
-      static GPUDistribution Granular(GPUSet devices, int granularity) {
-    return GPUDistribution(devices, granularity, 0, std::vector<size_t>());
-  }
     
-      /**
-   * \struct  PredictionCacheEntry
-   *
-   * \brief Contains pointer to input matrix and associated cached predictions.
-   */
-  struct PredictionCacheEntry {
-    std::shared_ptr<DMatrix> data;
-    std::vector<bst_float> predictions;
-  };
-    
-      if (pzErrMsg != nullptr) {
-    *pzErrMsg = nullptr;
-  }
-    
-    struct TestMessage {
-  int a_;
-  int b_;
-  char c_;
-  char d_;
+    {  // Unblocks all threads waiting on *this.
+  virtual void NotifyAll() = 0;
 };
     
-    // Sanity check integration test for iokit_registry
-// Spec file: specs/darwin/iokit_registry.table
-    
-    // Sanity check integration test for kernel_info
-// Spec file: specs/kernel_info.table
-    
-    class kernelPanics : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
+    #include 'include/org_rocksdb_Checkpoint.h'
+#include 'rocksdb/db.h'
+#include 'rocksdb/utilities/checkpoint.h'
+#include 'rocksjni/portal.h'
+/*
+ * Class:     org_rocksdb_Checkpoint
+ * Method:    newCheckpoint
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_Checkpoint_newCheckpoint(JNIEnv* /*env*/,
+                                                jclass /*jclazz*/,
+                                                jlong jdb_handle) {
+  auto* db = reinterpret_cast<rocksdb::DB*>(jdb_handle);
+  rocksdb::Checkpoint* checkpoint;
+  rocksdb::Checkpoint::Create(db, &checkpoint);
+  return reinterpret_cast<jlong>(checkpoint);
+}
