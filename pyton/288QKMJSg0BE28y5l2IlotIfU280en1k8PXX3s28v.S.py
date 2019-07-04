@@ -1,100 +1,183 @@
 
         
-            def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
-    
-        def add_user(self, user_id, name, pass_hash):
-        pass
-    
-        def __init__(self, timestamp, seller, amount):
-        self.timestamp = timestamp
-        self.seller = seller
-        self.amount = amount
-    
-        def __init__(self, key, value):
-        self.key = key
-        self.value = value
-    
-    
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
-    
-    from django.forms.utils import flatatt, pretty_name
-from django.forms.widgets import Textarea, TextInput
-from django.utils.functional import cached_property
-from django.utils.html import conditional_escape, format_html, html_safe
-from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy as _
-    
-    
-class TemplatesSetting(BaseRenderer):
-    '''
-    Load templates using template.loader.get_template() which is configured
-    based on settings.TEMPLATES.
-    '''
-    def get_template(self, template_name):
-        return get_template(template_name)
+        
+if __name__ == '__main__':
+    main()
 
     
-            # remove old cert first
-        xlog.info('Removing old cert in database $HOME/.pki/nssdb')
-        cmd_line = 'certutil -L -d sql:$HOME/.pki/nssdb |grep 'GoAgent' && certutil -d sql:$HOME/.pki/nssdb -D -n '%s' ' % ( common_name)
-        os.system(cmd_line)
+        def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
     
-    import os
-import warnings
+    site_info = 'CNTV.com'
+download = cntv_download
+download_playlist = playlist_not_supported('cntv')
+
     
-        elif bump_type == 'dev':
-        # Convert 0.67.3 to 0.67.4.dev0
-        # Convert 0.67.3.b5 to 0.67.4.dev0
-        # Convert 0.67.3.dev0 to 0.67.3.dev1
-        if version.is_devrelease:
-            to_change['dev'] = ('dev', version.dev + 1)
+    def fetch_photo_url_list(url, size):
+    for pattern in url_patterns:
+        # FIXME: fix multiple matching since the match group is dropped
+        if match1(url, pattern[0]):
+            return fetch_photo_url_list_impl(url, size, *pattern[1:])
+    raise NotImplementedError('Flickr extractor is not supported for %s.' % url)
+    
+        if not info_only:
+        download_url_ffmpeg(m3u8_url, title, 'm3u8', None, output_dir=output_dir, merge=merge)
+    
+        filename = '%s.%s' % (title, ext)
+    filepath = os.path.join(output_dir, filename)
+    if not force and os.path.exists(filepath):
+        print('Skipping {}: file already exists\n'.format(filepath))
+        return
+    bar = SimpleProgressBar(total_size, 1)
+    print('Downloading %s ...' % tr(filename))
+    url_save_icourses(url, filepath, bar, total_size, headers=headers, **kwargs)
+    bar.done()
+    
+        def extract(self, **kwargs):
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            i = kwargs['stream_id']
+            if 'size' not in self.streams[i]:
+                self.streams[i]['size'] = urls_size(self.streams[i]['src'])
+    
+            mp3 = match1(content, r'name='filename'\s*value='([^']+\.mp3)'')
+        if mp3: mp3 = 'http://res.infoq.com/downloads/mp3downloads/%s' % mp3
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
+    
+    # Open the input movie file
+input_movie = cv2.VideoCapture('hamilton_clip.mp4')
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
+# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
+# 你可以参考这个教程配制你的树莓派：
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
+    :return: a dlib `rect` object
+    '''
+    return dlib.rectangle(css[3], css[0], css[1], css[2])
+    
+                # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
+    
+            encoding, consumed_lines = detect_encoding(self.get_readline(()))
+        self.assertEqual(encoding, 'utf-8')
+        self.assertEqual(consumed_lines, [])
+    
+        @classmethod
+    def tearDownClass(cls):
+        del cls.dialog
+        cls.root.update_idletasks()
+        cls.root.destroy()
+        del cls.root
+    
+    
+# Return the longest prefix of all list elements.
+def commonprefix(m):
+    'Given a list of pathnames, returns the longest common leading component'
+    if not m: return ''
+    # Some people pass in a list of pathname parts to operate in an OS-agnostic
+    # fashion; don't try to translate in that case as that's an abuse of the
+    # API and they are already doing what they need to be OS-agnostic and so
+    # they most likely won't be using an os.PathLike object in the sublists.
+    if not isinstance(m[0], (list, tuple)):
+        m = tuple(map(os.fspath, m))
+    s1 = min(m)
+    s2 = max(m)
+    for i, c in enumerate(s1):
+        if c != s2[i]:
+            return s1[:i]
+    return s1
+    
+        If a name, the module is imported.  If the passed or imported module
+    object is not a package, raise an exception.
+    '''
+    if hasattr(package, '__spec__'):
+        if package.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(
+                package.__spec__.name))
         else:
-            to_change['pre'] = ('dev', 0)
-            to_change['release'] = _bump_release(version.release, 'minor')
+            return package
+    else:
+        module = import_module(package)
+        if module.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(package))
+        else:
+            return module
     
-            return ws
     
-        def set_stop_words(self, stop_words_path):
-        abs_path = _get_abs_path(stop_words_path)
-        if not os.path.isfile(abs_path):
-            raise Exception('jieba: file does not exist: ' + abs_path)
-        content = open(abs_path, 'rb').read().decode('utf-8')
-        for line in content.splitlines():
-            self.stop_words.add(line)
+class DBUnpickler(pickle.Unpickler):
     
-            for i, char in enumerate(sentence):
-            pos = pos_list[i][0]
-            if pos == 'B':
-                begin = i
-            elif pos == 'E':
-                yield pair(sentence[begin:i + 1], pos_list[i][1])
-                nexti = i + 1
-            elif pos == 'S':
-                yield pair(char, pos_list[i][1])
-                nexti = i + 1
-        if nexti < len(sentence):
-            yield pair(sentence[nexti:], pos_list[nexti][1])
+    # Add the html version.  This converts the message into a multipart/alternative
+# container, with the original text message as the first part and the new html
+# message as the second part.
+asparagus_cid = make_msgid()
+msg.add_alternative('''\
+<html>
+  <head></head>
+  <body>
+    <p>Salut!</p>
+    <p>Cela ressemble à un excellent
+        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
+            recipie
+        </a> déjeuner.
+    </p>
+    <img src='cid:{asparagus_cid}' />
+  </body>
+</html>
+'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
+# note that we needed to peel the <> off the msgid for use in the html.
     
-    print('-'*40)
-print(' 搜索模式')
-print('-'*40)
-    
-    insert(val): Inserts an item val to the set if not already present.
-remove(val): Removes an item val from the set if present.
-getRandom: Returns a random element from current set of elements.
-Each element must have the same probability of being returned.
-'''
-    
-            if x == 1 or x == n - 1:
-            return False
+    DB_FILE = 'mydb'
