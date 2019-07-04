@@ -1,264 +1,244 @@
 
         
-        void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
+        #if defined(__APPLE__)
+#include 'Darwin/Cache-Mac.cpp'
+#else
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
+    }
+    
+      std::size_t capacity = End - Allocated;
+  std::size_t requiredCapacity = capacity + needed;
+  do {
+    capacity = 2 * capacity + 16;
+  } while (capacity < requiredCapacity);
+    
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+#endif
+    
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
+    }
     
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {  bool isTypedef() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
+  }
+  const clang::TypedefNameDecl *getTypedef() const {
+    assert(isTypedef());
+    return Decl.get<const clang::TypedefNameDecl *>();
+  }
 };
     
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of SigmoidLayer.
- */
-template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
- public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
-    }
-    
-    
-    {        b2Triangle* triangulated = new b2Triangle[p->nVertices - 2];
-		int32 nTri;
-        if (p->IsCCW()) {
-			//printf('It is ccw \n');
-			b2Polygon tempP;
-			tempP.Set(*p);
-			ReversePolygon(tempP.x, tempP.y, tempP.nVertices);
-			nTri = TriangulatePolygon(tempP.x, tempP.y, tempP.nVertices, triangulated);
-			//ReversePolygon(p->x, p->y, p->nVertices); //reset orientation
-		} else {
-			//printf('It is not ccw \n');
-			nTri = TriangulatePolygon(p->x, p->y, p->nVertices, triangulated);
-		}
-		if (nTri < 1) {
-            //Still no luck?  Oh well...
-            delete[] triangulated;
-            return -1;
-        }
-        int32 nPolys = PolygonizeTriangles(triangulated, nTri, results, maxPolys);
-        delete[] triangulated;
-        return nPolys;
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
 }
     
-    		static const unsigned int BYTES_PER_BLOCK = 8;
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
     
-    #if defined(HAVE_ARM_NE10)
+    //------------------------------------------------------------------------
+// Page
+//------------------------------------------------------------------------
     
-    #define silk_ADD_LSHIFT(a, b, shift)        ((a) + silk_LSHIFT((b), (shift)))               /* shift >= 0 */
-#define silk_ADD_LSHIFT32(a, b, shift)      silk_ADD32((a), silk_LSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_ADD_LSHIFT_uint(a, b, shift)   ((a) + silk_LSHIFT_uint((b), (shift)))          /* shift >= 0 */
-#define silk_ADD_RSHIFT(a, b, shift)        ((a) + silk_RSHIFT((b), (shift)))               /* shift >= 0 */
-#define silk_ADD_RSHIFT32(a, b, shift)      silk_ADD32((a), silk_RSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_ADD_RSHIFT_uint(a, b, shift)   ((a) + silk_RSHIFT_uint((b), (shift)))          /* shift >= 0 */
-#define silk_SUB_LSHIFT32(a, b, shift)      silk_SUB32((a), silk_LSHIFT32((b), (shift)))    /* shift >= 0 */
-#define silk_SUB_RSHIFT32(a, b, shift)      silk_SUB32((a), silk_RSHIFT32((b), (shift)))    /* shift >= 0 */
+      if (obj->dictLookup('V', &tmp)->isInt()) {
+    volume = tmp.getInt();
+  }
+  tmp.free();
     
-    /* (a32 * (b32 >> 16)) >> 16 */
-#undef silk_SMULWT
-static OPUS_INLINE opus_int32 silk_SMULWT_armv5e(opus_int32 a, opus_int32 b)
+      ExternalSecurityHandler(PDFDoc *docA, Object *encryptDictA,
+			  XpdfSecurityHandler *xshA);
+  virtual ~ExternalSecurityHandler();
+    
+    Sound::~Sound()
 {
-  int res;
-  __asm__(
-      '#silk_SMULWT\n\t'
-      'smulwt %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
+  delete fileName;
+  streamObj->free();
+  delete streamObj;
 }
-#define silk_SMULWT(a, b) (silk_SMULWT_armv5e(a, b))
     
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
+      int numRetry_;
     
-    #ifndef STORAGE_LEVELDB_UTIL_HASH_H_
-#define STORAGE_LEVELDB_UTIL_HASH_H_
     
-      WritableFile* dest_;
-  int block_offset_;  // Current offset in block
-    
-    #include <algorithm>
-#include <string>
-    
-      // Write index block
-  if (ok()) {
-    if (r->pending_index_entry) {
-      r->options.comparator->FindShortSuccessor(&r->last_key);
-      std::string handle_encoding;
-      r->pending_handle.EncodeTo(&handle_encoding);
-      r->index_block.Add(r->last_key, Slice(handle_encoding));
-      r->pending_index_entry = false;
+    {  const int clen = bittorrent::getCompactLength(family_);
+  // nodes
+  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
+                                                             eoi = nodes_.end();
+       i != eoi; ++i) {
+    const std::shared_ptr<DHTNode>& node = *i;
+    // Write IP address + port in Compact IP-address/port info form.
+    unsigned char compactPeer[COMPACT_LEN_IPV6];
+    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
+                                             node->getPort());
+    if (compactlen != clen) {
+      memset(compactPeer, 0, clen);
     }
-    WriteBlock(&r->index_block, &index_block_handle);
+    uint8_t clen1 = clen;
+    // 1byte compact peer format length
+    WRITE_CHECK(fp, &clen1, sizeof(clen1));
+    // 7bytes reserved
+    WRITE_CHECK(fp, zero, 7);
+    // clen bytes compact peer
+    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
+    // 24-clen bytes reserved
+    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
+    // 20bytes: node ID
+    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
+    // 4bytes reserved
+    WRITE_CHECK(fp, zero, 4);
   }
+  if (fp.close() == EOF) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  if (!File(filenameTemp).renameTo(filename)) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  A2_LOG_INFO('DHT routing table was saved successfully');
+}
     
-      // Array of new[] allocated memory blocks
-  std::vector<char*> blocks_;
+    #include 'common.h'
     
-      // Count number of filters that significantly exceed the false positive rate
-  int mediocre_filters = 0;
-  int good_filters = 0;
-    
-    TEST(EnvTest, RunMany) {
-  std::atomic<int> last_id(0);
+    namespace aria2 {
     }
     
     
-    {
-    {      if (!_splitpath_s(find_data.cFileName, nullptr, 0, nullptr, 0, base_name,
-                        ARRAYSIZE(base_name), ext, ARRAYSIZE(ext))) {
-        result->emplace_back(std::string(base_name) + ext);
+    {  void updateTokenSecret();
+};
+    
+    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+
+    
+        bool add(const std::string& addr);
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
+    } else {
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
       }
-    } while (::FindNextFileA(dir_handle, &find_data));
-    DWORD last_error = ::GetLastError();
-    ::FindClose(dir_handle);
-    if (last_error != ERROR_NO_MORE_FILES) {
-      return WindowsError(dir, last_error);
     }
-    return Status::OK();
   }
+    
+      // Initialize pointer options for each column family
+  for (size_t i = 0; i < loaded_cf_descs.size(); ++i) {
+    auto* loaded_bbt_opt = reinterpret_cast<BlockBasedTableOptions*>(
+        loaded_cf_descs[0].options.table_factory->GetOptions());
+    // Expect the same as BlockBasedTableOptions will be loaded form file.
+    assert(loaded_bbt_opt->block_size == bbt_opts.block_size);
+    // However, block_cache needs to be manually initialized as documented
+    // in rocksdb/utilities/options_util.h.
+    loaded_bbt_opt->block_cache = cache;
+  }
+  // In addition, as pointer options are initialized with default value,
+  // we need to properly initialized all the pointer options if non-defalut
+  // values are used before calling DB::Open().
+  assert(loaded_cf_descs[0].options.compaction_filter == nullptr);
+  loaded_cf_descs[0].options.compaction_filter = compaction_filter.get();
+    
+      PinnableSlice pinnable_val;
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
+  assert(s.IsNotFound());
+  // Reset PinnableSlice after each use and before each reuse
+  pinnable_val.Reset();
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+  assert(pinnable_val == 'value');
+  pinnable_val.Reset();
+  // The Slice pointed by pinnable_val is not valid after this point
     
     
     {
-    {}  // namespace obj
-}  // namespace xgboost
+    {}  // namespace experimental
+}  // namespace rocksdb
+
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
-    }
+      // Instead of creating a snapshot, take ownership of the input snapshot.
+  ManagedSnapshot(DB* db, const Snapshot* _snapshot);
     
-    #include <vector>
-#include <utility>
-#include <string>
-#include <functional>
-#include <memory>
+      // Comparator used to define the order of keys in the table.
+  // Default: a comparator that uses lexicographic byte-wise ordering
+  //
+  // REQUIRES: The client must ensure that the comparator supplied
+  // here has the same name and orders keys *exactly* the same as the
+  // comparator provided to previous open calls on the same DB.
+  const Comparator* comparator;
     
-    namespace xgboost {
-struct LearnerTrainParam : public dmlc::Parameter<LearnerTrainParam> {
-  // stored random seed
-  int seed;
-  // whether seed the PRNG each iteration
-  bool seed_per_iteration;
-  // data split mode, can be row, col, or none.
-  DataSplitMode dsplit;
-  // tree construction method
-  TreeMethod tree_method;
-  // number of threads to use if OpenMP is enabled
-  // if equals 0, use system default
-  int nthread;
-  // flag to disable default metric
-  int disable_default_eval_metric;
-  // primary device.
-  int gpu_id;
-  // number of devices to use, -1 implies using all available devices.
-  int n_gpus;
-    }
-    }
-    
-      GpuIdType const n_devices_visible = AllVisible().Size();
-  if (n_devices_visible == 0 || n_gpus == 0 || n_rows == 0) {
-    LOG(DEBUG) << 'Runing on CPU.';
-    return Empty();
-  }
-    
-    
-    {} // namespace ppc64_asm
-    
-    PlainDirectory::~PlainDirectory() {
-  close();
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    callbackTriggerIntervalSize
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_BackupableDBOptions_callbackTriggerIntervalSize(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return static_cast<jlong>(bopt->callback_trigger_interval_size);
 }
-    
-    template<typename F>
-void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
-                        int64_t rate, F fillCols) {
-  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
-  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
-  if (!StructuredLog::coinflip(effectiveRate)) return;
-    }
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
-}
-    
-    private:
-  bool m_get;
-  bool m_ignoreErrors;
-  const char* m_method;
-  Array m_headers;
-  String m_postData;
-  int m_maxRedirect;
-  int m_timeout;
-  std::string m_error;
-  StringBuffer m_response;
-  Array m_responseHeaders;
