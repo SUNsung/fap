@@ -1,133 +1,68 @@
 
         
-            def _targets_request(self, targets):
-        '''Formats each target for the request'''
-        targets_request = []
-        for target in targets:
-            target_request = {
-                'Id': target['id'],
-                'Arn': target['arn']
-            }
-            if 'input' in target:
-                target_request['Input'] = target['input']
-            if 'input_path' in target:
-                target_request['InputPath'] = target['input_path']
-            if 'role_arn' in target:
-                target_request['RoleArn'] = target['role_arn']
-            if 'ecs_parameters' in target:
-                target_request['EcsParameters'] = {}
-                ecs_parameters = target['ecs_parameters']
-                if 'task_definition_arn' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskDefinitionArn'] = ecs_parameters['task_definition_arn']
-                if 'task_count' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskCount'] = ecs_parameters['task_count']
-            targets_request.append(target_request)
-        return targets_request
-    
-        module.exit_json(changed=changed,
-                     snapshot_id=snapshot.id,
-                     volume_id=snapshot.volume_id,
-                     volume_size=snapshot.volume_size,
-                     tags=snapshot.tags.copy())
-    
-        this_module = sys.modules[__name__]
-    
-    ## List all Subscriptions for a Topic in a project
-- gcpubsub_facts:
-    view: subscriptions
-    topic: my-topic
-    state: list
-'''
-    
-                    _remove_firewall_rule(module,
-                                      oneandone_conn,
-                                      firewall_policy['id'],
-                                      rule_id)
-            _check_mode(module, chk_changed)
-            firewall_policy = get_firewall_policy(oneandone_conn, firewall_policy['id'], True)
-            changed = True
-    
-        result = dict(changed=False, rules_purged=0)
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-            # If feature is already in good state, just exit
-        if (re.search('Disabled features:.* %s[ \n]' % self.feature_name, out) and self.state == 'absent') or \
-                (re.search('Enabled features:.* %s[ \n]' % self.feature_name, out) and self.state == 'present'):
-            self.module.exit_json(changed=False)
-    
-        # Handle multiple log files
-    logs = p['path'].split(',')
-    logs = filter(None, logs)
-    
-    ---
-- name: test contains operator
-  enos_command:
-    commands:
-      - show version
-      - show system memory
-    wait_for:
-      - 'result[0] contains 'Lenovo''
-      - 'result[1] contains 'MemFree''
-    provider: '{{ cli }}'
-  register: result
+            HEART = 0
+    DIAMOND = 1
+    CLUBS = 2
+    SPADE = 3
     
     
-def read_text(package: Package,
-              resource: Resource,
-              encoding: str = 'utf-8',
-              errors: str = 'strict') -> str:
-    '''Return the decoded string of the resource.
+class State(Enum):
+    unvisited = 0
+    visited = 1
+    
+        @property
+    def origin_req_host(self):
+        return self.get_origin_req_host()
+    
+        return {
+        'platform': platform_info,
+        'implementation': implementation_info,
+        'system_ssl': system_ssl_info,
+        'using_pyopenssl': pyopenssl is not None,
+        'pyOpenSSL': pyopenssl_info,
+        'urllib3': urllib3_info,
+        'chardet': chardet_info,
+        'cryptography': cryptography_info,
+        'idna': idna_info,
+        'requests': {
+            'version': requests_version,
+        },
+    }
     
     
-def main():
-    parser = ArgumentParser(description='''\
-Send the contents of a directory as a MIME message.
-Unless the -o option is given, the email is sent by forwarding to your local
-SMTP server, which then does the normal delivery process.  Your local machine
-must be running an SMTP server.
-''')
-    parser.add_argument('-d', '--directory',
-                        help='''Mail the contents of the specified directory,
-                        otherwise use the current directory.  Only the regular
-                        files in the directory are sent, and we don't recurse to
-                        subdirectories.''')
-    parser.add_argument('-o', '--output',
-                        metavar='FILE',
-                        help='''Print the composed message to FILE instead of
-                        sending the message to the SMTP server.''')
-    parser.add_argument('-s', '--sender', required=True,
-                        help='The value of the From: header (required)')
-    parser.add_argument('-r', '--recipient', required=True,
-                        action='append', metavar='RECIPIENT',
-                        default=[], dest='recipients',
-                        help='A To: header value (at least one required)')
-    args = parser.parse_args()
-    directory = args.directory
-    if not directory:
-        directory = '.'
-    # Create the message
-    msg = EmailMessage()
-    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
-    msg['To'] = ', '.join(args.recipients)
-    msg['From'] = args.sender
-    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
-    
-    cur.close()
-con.close()
-
-    
-    
-def reset_mocap_welds(sim):
-    '''Resets the mocap welds that we use for actuation.
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
     '''
-    if sim.model.nmocap > 0 and sim.model.eq_data is not None:
-        for i in range(sim.model.eq_data.shape[0]):
-            if sim.model.eq_type[i] == mujoco_py.const.EQ_WELD:
-                sim.model.eq_data[i, :] = np.array(
-                    [0., 0., 0., 1., 0., 0., 0.])
-    sim.forward()
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-        def register(self, closeable):
-        '''Registers an object with a 'close' method.
+        close_server = threading.Event()
+    server = Server(response_handler, wait_to_close_event=close_server)
+    
+    
+class TestSuperLen:
+    
+                        new_fields.append(
+                        (field.decode('utf-8') if isinstance(field, bytes) else field,
+                         v.encode('utf-8') if isinstance(v, str) else v))
+    
+    import josepy as jose
+    
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
+    
+    
+def im_conv_body_only(model, im, target_scale, target_max_size):
+    '''Runs `model.conv_body_net` on the given image `im`.'''
+    im_blob, im_scale, _im_info = blob_utils.get_image_blob(
+        im, target_scale, target_max_size
+    )
+    workspace.FeedBlob(core.ScopedName('data'), im_blob)
+    workspace.RunNet(model.conv_body_net.Proto().name)
+    return im_scale
