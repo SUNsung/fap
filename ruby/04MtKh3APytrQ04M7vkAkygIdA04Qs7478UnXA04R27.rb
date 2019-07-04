@@ -1,26 +1,31 @@
 
         
-                yield Page.new(collection, page)
-    
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
-    
-          # project - An instance of `Project`.
-      # object - The object to look up or set a database ID for.
-      def initialize(project, object)
-        @project = project
-        @object = object
+              # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
       end
     
-            def labels?
-          label_names && label_names.any?
-        end
+    Capybara.javascript_driver = :javascript_test
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+        it 'allows finding elements and checking if they are disabled' do
+      expect(string.find('//form/input[@name='bleh']')).to be_disabled
+      expect(string.find('//form/input[@name='meh']')).not_to be_disabled
+    end
     
-        config.cache_store = :null_store
+        it 'should allow to adjust the delay' do
+      @session.accept_alert wait: 10 do
+        @session.click_link('Open slow alert')
+      end
+      expect(@session).to have_xpath('//a[@id='open-slow-alert' and @opened='true']')
+    end
   end
+end
+
+    
+        it 'raises if passed an invalid value' do
+      expect { @session.find_link(download: 37) }.to raise_error ArgumentError
+    end
+  end
+end
