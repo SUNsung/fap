@@ -1,194 +1,295 @@
 
         
-        /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
-    
-    /*!
- * \brief Iterator that normalize a image.
- *  It also applies a few augmention before normalization.
- */
-class ImageDetNormalizeIter : public IIterator<DataInst> {
- public:
-  explicit ImageDetNormalizeIter(IIterator<DataInst> *base)
-      : base_(base), meanfile_ready_(false) {
-  }
-    }
-    
-      /*!
-  * \brief Issues dequantize operation to be scheduled by the engine
-  * Decompresses `from` into `to` using current parameters of `type` and `threshold`
-  * \param from the ndarray containing quantized data
-  * \param to the target ndarray which contains final dequantized data
-  * \param priority Priority of the action.
-  */
-  void Dequantize(const mxnet::NDArray &from, mxnet::NDArray *to, const int priority);
-    
-    )code' ADD_FILELINE)
-.set_attr<FCompute>('FCompute<cpu>', DivSqrtDimForward_<cpu>)
-.set_attr<nnvm::FGradient>('FGradient', ElemwiseGradUseNone{'_contrib_div_sqrt_dim'});
-    
-    
-    {
-    {}  // namespace op
-}  // namespace mxnet
+        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
 
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
-  return new IdentityAttachKLSparseRegOp<cpu>(param);
-}
-    }
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    /*!
- * \brief concat CSRNDArray on the first dimension.
- */
-struct concat_csr_first_dim {
-  /*!
-   * \param i              the i-th row of the input ndarray
-   * \param out_idx        output csr ndarray column indices
-   * \param out_data       output csr ndarray data
-   * \param out_indptr     output csr ndarray row index pointer
-   * \param in_idx         input csr ndarray column indices
-   * \param in_data        input csr ndarray data
-   * \param in_indptr      input csr ndarray row index pointer
-   * \param indptr_offset  offset for ouput ndarray row index pointer
-   * \param idx_offset     offset for ouput ndarray column indices
-   */
-  template<typename DType, typename RType, typename IType>
-  MSHADOW_XINLINE static void Map(int i, const OpReqType req,
-                                  DType* out_data, const DType* in_data,
-                                  RType* out_indptr, const RType* in_indptr,
-                                  IType* out_idx, const IType* in_idx,
-                                  const nnvm::dim_t indptr_offset,
-                                  const nnvm::dim_t idx_offset) {
-    if (i == 0) out_indptr[0] = 0;
-    out_indptr[i+1+indptr_offset] = in_indptr[i+1] + idx_offset;
-    for (nnvm::dim_t j = in_indptr[i]; j < in_indptr[i+1]; ++j) {
-      KERNEL_ASSIGN(out_idx[j+idx_offset], req, in_idx[j]);
-      KERNEL_ASSIGN(out_data[j+idx_offset], req, in_data[j]);
-    }
-  }
+    struct PyDecrefDeleter {
+  void operator()(PyObject* p) const { Py_DECREF(p); }
 };
     
     
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
+
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
+    secp256k1_scalar r, s;
+    int recid;
     }
+    
+        BOOST_CHECK(!obj.exists('nyuknyuknyuk'));
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
+
+    
+    namespace sha256_sse4
+{
+void Transform(uint32_t* s, const unsigned char* chunk, size_t blocks)
+{
+    static const uint32_t K256 alignas(16) [] = {
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
+        0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+        0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
+        0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+        0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+        0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3,
+        0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
+        0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+        0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+    };
+    static const uint32_t FLIP_MASK alignas(16) [] = {0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f};
+    static const uint32_t SHUF_00BA alignas(16) [] = {0x03020100, 0x0b0a0908, 0xffffffff, 0xffffffff};
+    static const uint32_t SHUF_DC00 alignas(16) [] = {0xffffffff, 0xffffffff, 0x03020100, 0x0b0a0908};
+    uint32_t a, b, c, d, f, g, h, y0, y1, y2;
+    uint64_t tbl;
+    uint64_t inp_end, inp;
+    uint32_t xfer alignas(16) [4];
+    }
+    }
+    
+      // sstable/log Sync() calls return an error.
+  port::AtomicPointer data_sync_error_;
+    
+    std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
+}
+    
+    inline ValueType ExtractValueType(const Slice& internal_key) {
+  assert(internal_key.size() >= 8);
+  const size_t n = internal_key.size();
+  uint64_t num = DecodeFixed64(internal_key.data() + n - 8);
+  unsigned char c = num & 0xff;
+  return static_cast<ValueType>(c);
+}
+    
+    Status FaultInjectionTestEnv::DeleteFile(const std::string& f) {
+  Status s = EnvWrapper::DeleteFile(f);
+  ASSERT_OK(s);
+  if (s.ok()) {
+    UntrackFile(f);
   }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
+  return s;
+}
     
-    IMPLEMENT_RESOURCE_ALLOCATION(PlainDirectory)
+      fname = TableFileName('bar', 200);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(200, number);
+  ASSERT_EQ(kTableFile, type);
     
-    #endif // HPHP_FILE_STREAM_WRAPPER_H
-
+        Rational Pow(Rational const& base, Rational const& pow);
+    Rational Root(Rational const& base, Rational const& root);
+    Rational Fact(Rational const& rat);
+    Rational Mod(Rational const& a, Rational const& b);
     
-    #include 'hphp/runtime/base/glob-stream-wrapper.h'
+    #include <vector>
+#include 'Ratpack/ratpak.h'
     
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
-  int64_t readImpl(char *buffer, int64_t length) override;
-  int getc() override;
-  int64_t writeImpl(const char *buffer, int64_t length) override;
-  bool seek(int64_t offset, int whence = SEEK_SET) override;
-  int64_t tell() override;
-  bool eof() override;
-  bool rewind() override;
-  bool flush() override;
-  bool truncate(int64_t size) override;
+        class CalculatorHistory : public IHistoryDisplay
+    {
+    public:
+        CalculatorHistory(const size_t maxSize);
+        unsigned int AddToHistory(
+            _In_ std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> const& spTokens,
+            _In_ std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> const& spCommands,
+            std::wstring_view result);
+        std::vector<std::shared_ptr<HISTORYITEM>> const& GetHistory();
+        std::shared_ptr<HISTORYITEM> const& GetHistoryItem(unsigned int uIdx);
+        void ClearHistory();
+        unsigned int AddItem(_In_ std::shared_ptr<HISTORYITEM> const& spHistoryItem);
+        bool RemoveItem(unsigned int uIdx);
+        size_t MaxHistorySize() const
+        {
+            return m_maxHistorySize;
+        }
+        ~CalculatorHistory(void);
+    }
+    
+    namespace CalculatorApp::Common::Automation
+{
+    namespace CalculatorActivityIds
+    {
+        StringReference DisplayUpdated(L'DisplayUpdated');
+        StringReference MaxDigitsReached(L'MaxDigitsReached');
+        StringReference MemoryCleared(L'MemoryCleared');
+        StringReference MemoryItemChanged(L'MemorySlotChanged');
+        StringReference MemoryItemAdded(L'MemorySlotAdded');
+        StringReference HistoryCleared(L'HistoryCleared');
+        StringReference CategoryNameChanged(L'CategoryNameChanged');
+        StringReference UpdateCurrencyRates(L'UpdateCurrencyRates');
+        StringReference DisplayCopied(L'DisplayCopied');
+        StringReference OpenParenthesisCountChanged(L'OpenParenthesisCountChanged');
+        StringReference NoParenthesisAdded(L'NoParenthesisAdded');
+    }
+}
+    
+    void
+FixedSortKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t /*n*/, int32_t length) {
+    // buffer_ != NULL && bytes != NULL && n > 0 && appended_ > capacity_
+    // Fill the buffer completely.
+    int32_t available = capacity_ - length;
+    if (available > 0) {
+        uprv_memcpy(buffer_ + length, bytes, available);
+    }
+}
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
+            const Locale &locale, UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new SuperscriptStyle(),
+            status);
+}
+    
+        UBool operator == (const ScriptSet &other) const;
+    ScriptSet & operator = (const ScriptSet &other);
+    
+    UBool
+SelectFormat::operator!=(const Format& other) const {
+    return  !operator==(other);
+}
+    
+    class Calendar;
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+        /**
+     * Make this instance have no limit on significant digits.
+     */
+    void clear() {
+        fMin = 0;
+        fMax = INT32_MAX;
+    }
+    
+    /*
+ * Lazy transition rules initializer
+ *
+ *    Note On the removal of UMTX_CHECK from checkTransitionRules():
+ *
+ *         It would be faster to have a UInitOnce as part of a SimpleTimeZone object,
+ *         which would avoid needing to lock a mutex to check the initialization state.
+ *         But we can't easily because simpletz.h is a public header, and including
+ *         a UInitOnce as a member of SimpleTimeZone would publicly expose internal ICU headers.
+ *
+ *         Alternatively we could have a pointer to a UInitOnce in the SimpleTimeZone object,
+ *         allocate it in the constructors. This would be a more intrusive change, but doable
+ *         if performance turns out to be an issue.
+ */
+static UMutex gLock = U_MUTEX_INITIALIZER;
     
     
-    {}
-
+    {    // Always emit at least '0'
+    if (digits == 0) {
+        return appendTo.append((UChar) 0x30);
+    }
+    return appendTo.append(gDigits, ((smallPositiveValue  + 1) << 2) - digits, digits);
+}
     
-    using json = nlohmann::json;
+    U_NAMESPACE_END
     
     
-    // ============
-    // string types
-    // ============
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    #include 'unicode/utypes.h'
+    
+    /**
+ * Implement UnicodeReplacer
+ */
+void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<output.length(); i+=U16_LENGTH(ch)) {
+    ch = output.char32At(i);
+    UnicodeReplacer* r = data->lookupReplacer(ch);
+    if (r == NULL) {
+        toUnionTo.add(ch);
+    } else {
+        r->addReplacementSetTo(toUnionTo);
+    }
+    }
+}
     
     namespace apollo {
 namespace drivers {
 namespace canbus {
+namespace can {
     }
     }
     }
+    }
     
-    #include 'glog/logging.h'
-    
-    
-    {  double ret = x * OBJECT_RCS_RES + OBJECT_RCS_MIN;
-  return ret;
+    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  auto obs = conti_radar->add_contiobs();
+  obs->set_clusterortrack(true);
+  obs->set_obstacle_id(obstacle_id(bytes, length));
+  obs->set_longitude_dist(longitude_dist(bytes, length));
+  obs->set_lateral_dist(lateral_dist(bytes, length));
+  obs->set_longitude_vel(longitude_vel(bytes, length));
+  obs->set_lateral_vel(lateral_vel(bytes, length));
+  obs->set_rcs(rcs(bytes, length));
+  obs->set_dynprop(dynprop(bytes, length));
+  double timestamp = apollo::common::time::Clock::NowInSeconds();
+  auto header = obs->mutable_header();
+  header->CopyFrom(conti_radar->header());
+  header->set_timestamp_sec(timestamp);
 }
     
-    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
-                          ContiRadar* conti_radar) const {
-  auto state = conti_radar->mutable_radar_state();
-  state->set_max_distance(max_dist(bytes, length));
-  state->set_output_type(output_type(bytes, length));
-  state->set_rcs_threshold(rcs_threshold(bytes, length));
-  state->set_radar_power(radar_power(bytes, length));
-  state->set_send_quality(send_quality(bytes, length));
-  state->set_send_ext_info(send_ext_info(bytes, length));
-}
-    
-    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
-    
-      MatrixXd mat_golden = MatrixXd::Identity(10, 10) * 10.0;
-  EXPECT_EQ(mat, mat_golden);
-    
-    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateSecondOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
-  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
-}
-    
-    // config detail: {'name': 'angular_speed', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
-// 'bit': 39, 'type': 'double', 'order': 'motorola', 'physical_unit': 'rev/s'}
-double Brakemotorrpt271::angular_speed(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 4);
+    int ObjectExtendedInfo60D::object_id(const std::uint8_t* bytes,
+                                     int32_t length) const {
+  Byte t0(bytes);
   int32_t x = t0.get_byte(0, 8);
     }
+    
+    #include 'gtest/gtest.h'
+    
+      Byte t3(bytes + 7);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
     namespace apollo {
 namespace canbus {
@@ -196,60 +297,3 @@ namespace gem {
     }
     }
     }
-    
-    
-    {
-    {
-    {
-    {  Horn_rpt_79::Manual_inputType ret =
-      static_cast<Horn_rpt_79::Manual_inputType>(x);
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
-    
-    OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
-{
-    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
-    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
-    {
-        obitCamera->autorelease();
-        return obitCamera;
-    }
-    
-    delete obitCamera;
-    return nullptr;
-}
-    
-        /** Gets an action given its tag an a target.
-     *
-     * @param tag       The action's tag.
-     * @param target    A certain target.
-     * @return  The Action the with the given tag.
-     */
-    virtual Action* getActionByTag(int tag, const Node *target) const;
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
-};
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    /// @endcond
-#endif  // __CC_FRAMEWORK_COMPONENT_H__
-
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    #include <string>
-#include 'base/ccTypes.h'
-#include 'base/ccUTF8.h'
