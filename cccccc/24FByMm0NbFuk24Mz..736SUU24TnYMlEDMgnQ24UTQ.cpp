@@ -1,132 +1,247 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_INTERNAL_H_
+        
+    {}  // end namespace tensorflow
 
     
-      Safe_PyObjectPtr numpy_str = make_safe(MakePyString('numpy'));
-  if (!numpy_str) {
-    return false;
-  }
-  Safe_PyObjectPtr numpy = make_safe(PyImport_Import(numpy_str.get()));
-  if (!numpy) {
-    return false;
-  }
     
-    #include <functional>
+    {}  // namespace tensorflow
     
-    namespace tensorflow {
-    }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    namespace stream_executor {
-namespace host {
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
-    
-      void makeBox(double hDPI, double vDPI, int rotate,
-	       GBool useMediaBox, GBool upsideDown,
-	       double sliceX, double sliceY, double sliceW, double sliceH,
-	       PDFRectangle *box, GBool *crop);
-    
-      // get alignment
-  if (dict->lookup('Dm', &obj)->isName()) {
-    const char *dm = obj.getName();
-    
-    if (strcmp('H', dm) == 0)
-      alignment = transitionHorizontal;
-    else if (strcmp('V', dm) == 0)
-      alignment = transitionVertical;
-  }
-  obj.free();
-    
-      // Get direction
-  PageTransitionDirection getDirection() { return direction; }
-    
-    Object *Parser::getObj(Object *obj, Guchar *fileKey,
-		       CryptAlgorithm encAlgorithm, int keyLength,
-		       int objNum, int objGen, std::set<int> *fetchOriginatorNums) {
-  char *key;
-  Stream *str;
-  Object obj2;
-  int num;
-  DecryptStream *decrypt;
-  GooString *s, *s2;
-  int c;
-    }
-    
-    //------------------------------------------------------------------------
-// Parser
-//------------------------------------------------------------------------
-    
-    #endif
-
-    
-    size_t StdinCacheLoader::init(GooString *dummy, CachedFile *cachedFile)
-{
-  size_t read, size = 0;
-  char buf[CachedFileChunkSize];
-    }
-    
-    #include 'StdinPDFDocBuilder.h'
-#include 'CachedFile.h'
-#include 'StdinCachedFile.h'
-    
-    Status WriteBatchBase::Merge(const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
-    }
-    
-    class MyMerge : public rocksdb::MergeOperator {
- public:
-  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override {
-    merge_out->new_value.clear();
-    if (merge_in.existing_value != nullptr) {
-      merge_out->new_value.assign(merge_in.existing_value->data(),
-                                  merge_in.existing_value->size());
-    }
-    for (const rocksdb::Slice& m : merge_in.operand_list) {
-      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
-      // the compaction filter filters out bad values
-      assert(m.ToString() != 'bad');
-      merge_out->new_value.assign(m.data(), m.size());
-    }
-    return true;
+    string TryFindKernelClass(const string& serialized_node_def) {
+  tensorflow::NodeDef node_def;
+  if (!node_def.ParseFromString(serialized_node_def)) {
+    LOG(WARNING) << 'Error parsing node_def';
+    return '';
   }
     }
     
-      // Control over blocks (user data is stored in a set of blocks, and
-  // a block is the unit of reading from disk).
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    restoreRateLimit
- * Signature: (J)J
- */
-jlong Java_org_rocksdb_BackupableDBOptions_restoreRateLimit(JNIEnv* /*env*/,
-                                                            jobject /*jobj*/,
-                                                            jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return bopt->restore_rate_limit;
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #ifndef TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
+#define TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_TIMER_H_
+    
+    // This enum represents potential configurations of L1/shared memory when
+// running a particular kernel. These values represent user preference, and
+// the runtime is not required to respect these choices.
+enum class KernelCacheConfig {
+  // Indicates no preference for device L1/shared memory configuration.
+  kNoPreference,
+    }
+    
+      DefaultCacheKey CKey(Key, &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    if (Entry->second == Value)
+      return;
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
+  }
+    
+    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
+  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
+                                 const_cast<void*>(Key), Value_out);
+  return Ret == 0;
 }
+    
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+}
+    
+    %# Ignore the following admonition; it applies to the resulting .cpp file only
+//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+    
+    StringRef importer::getCFTypeName(
+            const clang::TypedefNameDecl *decl) {
+  if (auto pointee = CFPointeeInfo::classifyTypedef(decl)) {
+    auto name = decl->getName();
+    if (pointee.isRecord() || pointee.isTypedef())
+      if (name.endswith(SWIFT_CFTYPE_SUFFIX))
+        return name.drop_back(strlen(SWIFT_CFTYPE_SUFFIX));
+    }
+    }
+    
+    char Mangle::getStandardTypeSubst(StringRef TypeName) {
+#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
+  if (TypeName == #TYPENAME) {                       \
+    return #MANGLING[0];                             \
+  }
+    }
+    
+      /// Returns the newly set-up FrontendInputsAndOutputs, as well as a set of
+  /// any unused primary files (those that do not correspond to an input).
+  std::pair<FrontendInputsAndOutputs, std::set<StringRef>>
+  createInputFilesConsumingPrimaries(std::set<StringRef> primaryFiles);
+    
+    namespace swift {
+    }
+    
+    MeasureDouble RpcClientReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all response messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    namespace grpc {
+    }
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
+    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    ThreadPoolInterface* CreateDefaultThreadPoolImpl() {
+  int cores = gpr_cpu_num_cores();
+  if (!cores) cores = 4;
+  return new DynamicThreadPool(cores);
+}
+    
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+        string precision = config(L'precision', 'float');
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+    
+    {
+    {        if (isFinalValidationPass)
+            if (!(Input(1)->GetSampleMatrixNumRows() == Input(2)->GetSampleMatrixNumRows() && // position dependent and pair scores have same number of labels
+                  Input(0)->GetSampleMatrixNumRows() == Input(1)->GetSampleMatrixNumRows() &&
+                  Input(0)->GetSampleMatrixNumCols() == Input(1)->GetSampleMatrixNumCols() && // position dependent and pair scores have the same observation numbers
+                  Input(2)->GetSampleMatrixNumCols() == Input(2)->GetSampleMatrixNumRows()))
+            {
+                LogicError('The Matrix<ElemType>  dimension in the SequenceDecoderNode operation does not match.');
+            }
+        // BUGBUG: No SetDims()?
+        m_sampleLayout = TensorShape();
+    }
+};
+    
+    public:
+    // this constructor is always run (all other constructors call this one)
+    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name) :
+        Base(deviceId, name)
+    {
+        SetLearningRateMultiplier(1.0f); // enable normal learning by default
+        MarkValueNonSharable();
+        m_initString = L'fromValue'; // default init is with 0; typically overwritten
+        m_initValue = 0;
+        m_regMultiplier = 1.0f; // enable reg in update by default
+    }
+    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name, const TensorShape& shape) :
+        LearnableParameter(deviceId, name)
+    {
+        InitShape(shape);
+        LazyInitParameters();
+    }
+    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name, size_t rows, size_t cols) :
+        LearnableParameter(deviceId, name, TensorShape(rows, cols))
+    {
+    }
+    LearnableParameter(const ScriptableObjects::IConfigRecordPtr configp);
+    
+            // ensure enough storage
+        m_transposedOutput->Resize(this->Value().GetNumRows(), m_transposedInput->GetNumCols());
+    
+      std::atomic<int> total_stopped_;
+  std::atomic<int> total_delayed_;
+  std::atomic<int> total_compaction_pressure_;
+  uint64_t bytes_left_;
+  uint64_t last_refill_time_;
+  // write rate set when initialization or by `DBImpl::SetDBOptions`
+  uint64_t max_delayed_write_rate_;
+  // current write rate
+  uint64_t delayed_write_rate_;
+    
+    #endif  // ROCKSDB_LITE
+
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+      // Instead of creating a snapshot, take ownership of the input snapshot.
+  ManagedSnapshot(DB* db, const Snapshot* _snapshot);
+    
+    class DB;
+    
+    #pragma once
+// lua headers
+extern 'C' {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+    
+    
+    {
+    {  // Returns the approximate memory usage of different types in the input
+  // list of DBs and Cache set.  For instance, in the output map
+  // usage_by_type, usage_by_type[kMemTableTotal] will store the memory
+  // usage of all the mem-tables from all the input rocksdb instances.
+  //
+  // Note that for memory usage inside Cache class, we will
+  // only report the usage of the input 'cache_set' without
+  // including those Cache usage inside the input list 'dbs'
+  // of DBs.
+  static Status GetApproximateMemoryUsageByType(
+      const std::vector<DB*>& dbs,
+      const std::unordered_set<const Cache*> cache_set,
+      std::map<MemoryUtil::UsageType, uint64_t>* usage_by_type);
+};
+}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
+
+    
+    // TransactionDBMutex and TransactionDBCondVar APIs allows applications to
+// implement custom mutexes and condition variables to be used by a
+// TransactionDB when locking keys.
+//
+// To open a TransactionDB with a custom TransactionDBMutexFactory, set
+// TransactionDBOptions.custom_mutex_factory.
