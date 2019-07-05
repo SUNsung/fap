@@ -1,110 +1,126 @@
 
         
-                def preload_pipeline_warnings
-          # This preloads the number of warnings for every pipeline, ensuring
-          # that Ci::Pipeline#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.number_of_warnings
+            def fragment_url_string?(str)
+      str[0] == '#'
+    end
+    
+        def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
+    
+            css('h1 + code').each do |node|
+          node.before('<p></p>')
+          while node.next_element.name == 'code'
+            node.previous_element << ' '
+            node.previous_element << node.next_element
+          end
+          node.previous_element.prepend_child(node)
         end
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
+        # Scrub the high bits out of the call IDs
+    src_call ^= 0x8000 if (src_call & 0x8000 != 0)
+    dst_call ^= 0x8000 if (dst_call & 0x8000 != 0)
     
-            def create_labels
-          time = Time.zone.now
-          rows = []
-          target_id = find_target_id
+              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new(elems)
     
-            def labels?
-          label_names && label_names.any?
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
+    
+              # Decodes the sname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
         end
-    
-    module Gitlab
-  module GithubImport
-    module Representation
-      class User
-        include ToHash
-        include ExposeAttribute
-    
-          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
-      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
-    
-        validate_target_file
-    LogStash::Bundler.invoke!({:package => true, :all => true})
-    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
-    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
       end
     end
   end
 end
-
     
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
-      end
-    
-          def error_message_on(object, method, _options = {})
-        object = convert_to_model(object)
-        obj = object.respond_to?(:errors) ? object : instance_variable_get('@#{object}')
-    
-            def index
-          @products = if params[:ids]
-                        product_scope.where(id: params[:ids].split(',').flatten)
-                      else
-                        product_scope.ransack(params[:q]).result
-                      end
-    
-              def payment_methods
-            render_serialized_payload { serialize_payment_methods(spree_current_order.available_payment_methods) }
-          end
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
-      end
-    end
-  end
-    
-      # Used on the blog index to split posts on the <!--more--> marker
-  def excerpt(input)
-    if input.index(/<!--\s*more\s*-->/i)
-      input.split(/<!--\s*more\s*-->/i)[0]
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
     else
-      input
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
     end
   end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
     end
+    
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
+      # adds one not mutual contact
+      bob.share_with(FactoryGirl.create(:person), @aspect)
+    
+      describe '#destroy' do
+    let(:post) { FactoryGirl.create(:status_message) }
+    
+      describe '#create' do
+    it 'redirects to /stream for a non-mobile user' do
+      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
+      expect(response).to be_redirect
+      expect(response.location).to match /^#{stream_url}\??$/
+    end
+    
+          get_web_content(redirected_url)
+    end
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
