@@ -1,151 +1,127 @@
 
         
-                else:
-            colision_resolution = self._colision_resolution(key, data)
-            if colision_resolution is not None:
-                self._set_value(colision_resolution, data)
-            else:
-                self.rehashing()
-                self.insert_data(data)
+        
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
     
-            if state == 'absent':
-            if exists:
-                conn.delete_cache_subnet_group(group_name)
-                changed = True
-        else:
-            if not exists:
-                new_group = conn.create_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
-            else:
-                changed_group = conn.modify_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-            elif desired_state == 'disabled':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be put in disabled state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.OFFLINE]:
-                if one.host.status(host.ID, HOST_STATUS.DISABLED):
-                    self.wait_for_host_state(host, [HOST_STATES.DISABLED])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not disable host')
-            elif current_state in [HOST_STATES.DISABLED]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to disable' % current_state_name)
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    # Ensure rule is absent
-- ipa_hbacrule:
-    name: rule_to_be_deleted
-    state: absent
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-'''
-    
-        # get the attributes
-    model_handle = model.get('mh')
+        def test_module_exec(self):
+        if sys.version_info >= (2, 7):  # Python 2.6 doesn't support package execution
+            subprocess.check_call([sys.executable, '-m', 'youtube_dl', '--version'], cwd=rootDir, stdout=_DEV_NULL)
     
     
-# ===========================================
-# Module execution.
-#
-    
-    
-def collect_scrapy_settings_refs(app, doctree):
-    env = app.builder.env
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
-        else:
-            request.meta['handle_httpstatus_all'] = True
-    
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
-    
-            self.crawler_process.crawl(spidercls, **opts.spargs)
-        self.crawler_process.start()
-    
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
+if __name__ == '__main__':
+    unittest.main()
 
     
-        def process_response(self, request, response, spider):
-        if request.meta.get('dont_merge_cookies', False):
-            return response
+        def test_calc(self):
+        jsi = JSInterpreter('function x4(a){return 2*a+1;}')
+        self.assertEqual(jsi.call_function('x4', 3), 7)
     
-        def _is_tar(self, response):
-        archive = BytesIO(response.body)
-        try:
-            tar_file = tarfile.open(name=mktemp(), fileobj=archive)
-        except tarfile.ReadError:
+        def test_secondary_proxy_https(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
             return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('https://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
+    
+        1. Single argument: Passed straight through to :func:`dumps`.
+    2. Multiple arguments: Converted to an array before being passed to
+       :func:`dumps`.
+    3. Multiple keyword arguments: Converted to a dict before being passed to
+       :func:`dumps`.
+    4. Both args and kwargs: Behavior undefined and will throw an exception.
     
     
-def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsPreProc_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
-                   ContentsOfTestFile( 'php_syntax' ) ),
-               has_items( 'skip', 'function' ) )
+class PassList(JSONTag):
+    __slots__ = ()
     
-            print('None input')
-        assert_raises(TypeError, insertion_sort.sort, None)
+        def set_ip_to_mock(value):
+        nonlocal ip_to_mock
+        ip_to_mock = value
     
-            print('Two or more elements')
-        data = [5, 1, 7, 2, 6, -3, 5, 7, -1]
-        assert_equal(merge_sort.sort(data), sorted(data))
+        c = model.Conv(
+        blob_in,
+        prefix + '_branch1',
+        dim_in,
+        dim_out,
+        kernel=1,
+        stride=stride,
+        no_bias=1
+    )
+    return model.AffineChannel(c, prefix + '_branch1_bn', dim=dim_out)
     
-    
-def main():
-    test = TestQueueFromStacks()
-    test.test_queue_from_stacks()
-    
-    
-def main():
-    test = TestSortStack()
-    test.test_sort_stack(MyStack())
-    test.test_sort_stack(MyStackSimplified())
-    
-    
-class TestStack(object):
-    
-    		if current.leftChild is None and current.rightChild is None:
-			if current is self.root:
-				self.root = None
-			elif isLeft:
-				parent.leftChild = None
-			else:
-				parent.rightChild = None
+        if upsample_heatmap:
+        # Increase heatmap output size via bilinear upsampling
+        blob_out = model.BilinearInterpolation(
+            blob_out, 'kps_score', cfg.KRCNN.NUM_KEYPOINTS,
+            cfg.KRCNN.NUM_KEYPOINTS, cfg.KRCNN.UP_SCALE
+        )
     
     
-		print('Test: insert checking with pre order traversal')
-		expectVal = [50, 30, 10, 7, 25, 40, 38, 70, 60, 80]
-		assert_equal(myTree.printPreOrder(), expectVal)
-		expectVal = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
-		assert_equal(myTree2.printPreOrder(), expectVal)
+def add_fpn_retinanet_outputs(model, blobs_in, dim_in, spatial_scales):
+    '''RetinaNet head. For classification and box regression, we can chose to
+    have the same conv tower or a separate tower. 'bl_feat_list' stores the list
+    of feature blobs for bbox prediction. These blobs can be shared cls feature
+    blobs if we share the tower or else are independent blobs.
+    '''
+    dim_out = dim_in
+    k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    A = len(cfg.RETINANET.ASPECT_RATIOS) * cfg.RETINANET.SCALES_PER_OCTAVE
     
-        def __len__(self):
-        return len(self.array)
+    
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--num-batches', dest='num_batches',
+        help='Number of minibatches to run',
+        default=200, type=int)
+    parser.add_argument(
+        '--sleep', dest='sleep_time',
+        help='Seconds sleep to emulate a network running',
+        default=0.1, type=float)
+    parser.add_argument(
+        '--cfg', dest='cfg_file', help='optional config file', default=None,
+        type=str)
+    parser.add_argument(
+        '--x-factor', dest='x_factor', help='simulates x-factor more GPUs',
+        default=1, type=int)
+    parser.add_argument(
+        '--profiler', dest='profiler', help='profile minibatch load time',
+        action='store_true')
+    parser.add_argument(
+        'opts', help='See detectron/core/config.py for all options', default=None,
+        nargs=argparse.REMAINDER)
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+    args = parser.parse_args()
+    return args
+    
+    from caffe2.proto import caffe2_pb2
+from caffe2.python import core
+from caffe2.python import gradient_checker
+from caffe2.python import workspace
