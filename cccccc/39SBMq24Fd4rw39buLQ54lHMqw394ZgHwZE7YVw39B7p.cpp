@@ -1,86 +1,92 @@
 
         
-        #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-#include 'ReaderShim.h'
-#include 'DataReader.h'
+        #pragma once
     
-      /**
-   * @brief Helper to access config parsers via the registry
-   *
-   * This may return a nullptr if an exception is thrown attempting to retrieve
-   * the requested config parser.
-   *
-   * @param parser is the string name of the parser that you want
-   *
-   * @return a shared pointer to the config parser plugin
-   */
-  static const std::shared_ptr<ConfigParserPlugin> getParser(
-      const std::string& parser);
+    unordered_map<wstring, wstring> CCalcEngine::s_engineStrings;
     
-    Expected<int32_t, DatabaseError> Database::getInt32Or(
-    const std::string& domain,
-    const std::string& key,
-    const int32_t default_value) {
-  auto result = getInt32(domain, key);
-  if (!result && result.getError() == DatabaseError::KeyNotFound) {
-    return default_value;
-  }
-  return result;
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
+    
+    namespace CalculatorApp::Common::Automation
+{
+    // These enum types are copied from the types available in
+    // Windows::UI::Xaml::Automation::Peers in the RS3 SDK.
+    // When this app switches to min version RS3, these custom
+    // enums should be removed and the Windows types should be used
+    // instead.
+    // TODO - MSFT 12735088
+public
+    enum class AutomationNotificationKind
+    {
+        ItemAdded = 0,
+        ItemRemoved = 1,
+        ActionCompleted = 2,
+        ActionAborted = 3,
+        Other = 4
+    };
+    }
+    
+            // Inner state of the underlying reader.
+        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
+        // when the reader state is restored after the first StartEpoch call.
+        Internal::Optional<Dictionary> m_state;
+    
+            state.Save(tempCheckpointFile);
+    
+    template <typename TVector>
+inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
+{
+    foreach_index(currentLocation, v)
+    {
+        // Pick a random location and swap with current one
+        const size_t randomLocation = RandMT(0, v.size(), rng);
+        std::swap(v[currentLocation], v[randomLocation]);
+    }
 }
     
+        bool UnitTest()
+    {
+        try
+        {
+            size_t nInput = 2;
+            size_t nHidden = 3;
+            size_t nOutput = 3;
+    }
+    }
     
-    {  for (auto& line : doc.GetArray()) {
-    log.push_back({
-        static_cast<StatusLogSeverity>(line['s'].GetInt()),
-        line['f'].GetString(),
-        line['i'].GetUint64(),
-        line['m'].GetString(),
-        line['c'].GetString(),
-        line['u'].GetUint64(),
-        line['h'].GetString(),
-    });
-  }
-}
+    /**
+@brief FlipY3D action.
+@details This action is used for flipping the target node on the y axis.
+*/
+class CC_DLL FlipY3D : public FlipX3D
+{
+public:
+    /**
+    @brief Create the action with duration.
+    @param duration Specify the duration of the FlipY3D action. It's a value in seconds.
+    @return If the creation success, return a pointer of FlipY3D action; otherwise, return nil.
+    */
+    static FlipY3D* create(float duration);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
     
-    {} // namespace osquery
+NS_CC_END
 
     
-      /// The plugin may perform some tear down, release, not required.
-  virtual void tearDown() {}
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    GTEST_TEST(InMemoryDatabaseTest, test_keys_search) {
-  auto db = std::make_unique<InMemoryDatabase>('test');
-  ASSERT_FALSE(db->open().isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_1', 1).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_2', 2).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_3', 3).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_1', 4).isError());
-  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_2', 5).isError());
-  auto result_all = db->getKeys(kPersistentSettings);
-  EXPECT_TRUE(result_all);
-  EXPECT_EQ((*result_all).size(), 5);
-  auto result_some = db->getKeys(kPersistentSettings, 'key');
-  EXPECT_TRUE(result_some);
-  EXPECT_EQ((*result_some).size(), 3);
-}
-    
-    using json = nlohmann::json;
-    
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
+    NS_CC_END
