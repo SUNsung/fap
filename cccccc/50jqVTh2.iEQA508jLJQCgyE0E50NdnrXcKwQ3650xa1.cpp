@@ -1,101 +1,123 @@
 
         
-        
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
+        namespace caffe2 {
+    }
+    
+    // ##########################################################
+    
+    ```
+    
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+      // Fills in the x-height range accepted by the given unichar_id in blob
+  // coordinates, given its bounding box in the usual baseline-normalized
+  // coordinates, with some initial crude x-height estimate (such as word
+  // size) and this denoting the transformation that was used.
+  // Also returns the amount the character must have shifted up or down.
+  void XHeightRange(int unichar_id, const UNICHARSET& unicharset,
+                    const TBOX& bbox,
+                    float* min_xht,
+                    float* max_xht,
+                    float* yshift) const;
+    
+     private:
+    
+    #endif  // MXNET_KVSTORE_GRADIENT_COMPRESSION_INL_H_
+
+    
+    /*!
+ * \brief Async functor object
+ *  calling argument of the function.
+ */
+class TVMFunctor {
+ public:
+  // constructor
+  explicit TVMFunctor(PackedFunc func, PackedFunc fset_stream)
+      : func_(func), fset_stream_(fset_stream) {}
+    }
+    
+    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#include <vector>
+#include './lrn-inl.h'
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
+  return new IdentityAttachKLSparseRegOp<cpu>(param);
+}
+    }
+    }
+    
+      void Backward(const OpContext &ctx, const TBlob &out_grad,
+                const std::vector<OpReqType> &req,
+                const std::vector<TBlob> &in_grad) {
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(in_grad.size(), static_cast<size_t>(size_));
+    int axis = CheckAxis(dimension_, out_grad.ndim());
+    Stream<xpu> *s = ctx.get_stream<xpu>();
+    std::vector<Tensor<xpu, 3, DType> > grad_in(size_);
+    Tensor<xpu, 3, DType> grad;
+    size_t leading = 1, trailing = 1;
+    for (int i = 0; i < axis; ++i) {
+      leading *= out_grad.shape_[i];
+    }
+    for (int i = axis + 1; i < out_grad.ndim(); ++i) {
+      trailing *= out_grad.shape_[i];
+    }
+    size_t mid = out_grad.shape_[axis];
+    Shape<3> oshape = Shape3(leading, mid, trailing);
+    grad = out_grad.get_with_shape<xpu, 3, DType>(oshape, s);
+    }
+    
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
+ public:
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
+  }
+    }
+    
+      const char* Name() const override { return 'MyFilter'; }
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
 };
     
-    #include <ctype.h>
-#include <float.h>
-#include <string.h>
-#include <iomanip>
-#include <limits>
-#include <set>
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_)};
-    return ValuesIn(array);
-  }
-    
-      // Compares two C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike strcasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CaseInsensitiveCStringEquals(const char* lhs,
-                                           const char* rhs);
-    
-        for (int i = 2; i*i <= n; i++) {
-      // n is divisible by an integer other than 1 and itself.
-      if ((n % i) == 0) return false;
-    }
-    
-      // Constructs a MyString by cloning a 0-terminated C string.
-  explicit MyString(const char* a_c_string) : c_string_(NULL) {
-    Set(a_c_string);
-  }
-    
-      // D'tor.  Clears the queue.
-  ~Queue() { Clear(); }
-    
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplAllegro5_Init(display);
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
-
-    
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-    static void ImGui_ImplGlfw_UpdateMouseCursor()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange) || glfwGetInputMode(g_Window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
-        return;
-    }
-    
-    
-    {    // Restore modified GL state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    backupDir
+ * Signature: (J)Ljava/lang/String;
+ */
+jstring Java_org_rocksdb_BackupableDBOptions_backupDir(JNIEnv* env,
+                                                       jobject /*jopt*/,
+                                                       jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return env->NewStringUTF(bopt->backup_dir.c_str());
 }
