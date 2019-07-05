@@ -1,137 +1,137 @@
 
         
-        filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-        flags = [opt.get_opt_string() for opt in opts]
-    
-        def test_cbc_decrypt(self):
-        data = bytes_to_intlist(
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
-        )
-        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
-        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
-    
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+            for batch_idx, es_idx in enumerate(trial_batches(E_to_process,
+                                                     hps.batch_size)):
+      print('Running trial batch %d with %d trials' % (batch_idx+1,
+                                                       len(es_idx)))
+      data_bxtxd, ext_input_bxtxi = self.get_batch(data_extxd,
+                                                   ext_input_extxi,
+                                                   batch_size=batch_size,
+                                                   example_idxs=es_idx)
+      model_values = self.eval_model_runs_batch(data_name, data_bxtxd,
+                                                ext_input_bxtxi,
+                                                do_eval_cost=True,
+                                                do_average_batch=False)
     
     
-if __name__ == '__main__':
-    unittest.main()
+# OVERFITTING
+# Dropout is done on the input data, on controller inputs (from
+# encoder), on outputs from generator to factors.
+flags.DEFINE_float('keep_prob', KEEP_PROB, 'Dropout keep probability.')
+# It appears that the system will happily fit spikes (blessing or
+# curse, depending).  You may not want this.  Jittering the spikes a
+# bit will help (-/+ bin size, as specified here).
+flags.DEFINE_integer('temporal_spike_jitter_width',
+                     TEMPORAL_SPIKE_JITTER_WIDTH,
+                     'Shuffle spikes around this window.')
+    
+      # Turn rates, noisy_data, and input into numpy arrays.
+  rates_train = nparray_and_transpose(rates_train)
+  rates_valid = nparray_and_transpose(rates_valid)
+  noisy_data_train = nparray_and_transpose(noisy_data_train)
+  noisy_data_valid = nparray_and_transpose(noisy_data_valid)
+  input_train = nparray_and_transpose(input_train)
+  inputs_valid = nparray_and_transpose(inputs_valid)
+    
+    # pick which RNN is used on each trial
+rnn_to_use = rng.randint(2, size=E)
+ext_input = np.repeat(np.expand_dims(rnn_to_use, axis=1), ntimesteps, axis=1)
+ext_input = np.expand_dims(ext_input, axis=2)  # these are 'a's' in the paper
+    
+      if len(dataset_dict) == 0:
+    raise ValueError('Failed to load any datasets, are you sure that the '
+                     ''--data_dir' and '--data_filename_stem' flag values '
+                     'are correct?')
+    
+      # Output variables only for the Generator.  Discriminator output biases
+  # will begin randomly initialized.
+  if model == 'gen':
+    softmax_b = [
+        v for v in tf.trainable_variables() if v.op.name == 'gen/rnn/softmax_b'
+    ][0]
+    
+          # Now calculate the attention-weighted vector.
+      alignments = tf.expand_dims(alignments, 2)
+      context_vector = tf.reduce_sum(alignments * values, [1])
+      context_vector.set_shape([None, num_units])
+    
+          predictions = tf.transpose(predictions, [1, 0, 2])
+      return tf.squeeze(predictions, axis=2)
 
     
-                    mapping = KBaseMapping(base=int(base))
-                sym_to_name = {}
-                for no in range(int(size), 0, -1):
-                    no_in_base = mapping.mapping(no)
-                    val = names[no] if no < len(names) and names[no] else no_in_base
-                    sym_to_name[no_in_base] = val
+        def __call__(self, y_true, y_pred):
+        return (self.mse_fraction * losses.mse(y_true, y_pred) +
+                (1 - self.mse_fraction) * losses.mae(y_true, y_pred))
     
-    # Add any paths that contain custom static files (such as style sheets)
-# here, relative to this directory. They are copied after the builtin
-# static files, so a file named 'default.css' will overwrite the builtin
-# 'default.css'.
-html_static_path = ['_static']
-    
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    
-    # See how far apart the test image is from the known faces
-face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        # Arguments
+        y: class vector to be converted into a matrix
+            (integers from 0 to num_classes).
+        num_classes: total number of classes.
+        dtype: The data type expected by the input, as a string
+            (`float32`, `float64`, `int32`...)
     
     
-@click.command()
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
-@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
-def main(image_to_check, cpus, model):
-    # Multi-core processing only supported on Python 3.4 or greater
-    if (sys.version_info < (3, 4)) and cpus != 1:
-        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
-        cpus = 1
+def mean_squared_logarithmic_error(y_true, y_pred):
+    first_log = K.log(K.clip(y_pred, K.epsilon(), None) + 1.)
+    second_log = K.log(K.clip(y_true, K.epsilon(), None) + 1.)
+    return K.mean(K.square(first_log - second_log), axis=-1)
     
-    # Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    'Barack Obama',
-    'Joe Biden'
-]
+        return inner
     
-    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-# See http://pillow.readthedocs.io/ for more about PIL/Pillow
-pil_image = Image.fromarray(unknown_image)
-# Create a Pillow ImageDraw Draw instance to draw with
-draw = ImageDraw.Draw(pil_image)
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
-            # Changing field 'Environment.organization_id'
-        db.alter_column(
-            'sentry_environment',
-            'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
-        )
+    import idna
+import urllib3
+import chardet
     
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        db.commit_transaction()
-        try:
-            self._forwards(orm)
-        except Exception:
-            # Explicitly resume the transaction because
-            # South is going to try and roll it back, but when
-            # it can't find one, it'll error itself, masking
-            # the actual exception being raised
-            #
-            # See https://github.com/getsentry/sentry/issues/5035
-            db.start_transaction()
-            raise
-        db.start_transaction()
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
     
-            # Adding field 'ApiKey.scope_list'
-        db.add_column(
-            'sentry_apikey',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
+    _codes = {
+    }
     
-            # Adding field 'ReleaseFile.dist'
-        db.add_column(
-            'sentry_releasefile',
-            'dist',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.Distribution'], null=True
-            ),
-            keep_default=False
-        )
+            :rtype: dict
+        '''
+        # Gather clues from the surrounding environment.
+        if self.trust_env:
+            # Set environment's proxies.
+            no_proxy = proxies.get('no_proxy') if proxies is not None else None
+            env_proxies = get_environ_proxies(url, no_proxy=no_proxy)
+            for (k, v) in env_proxies.items():
+                proxies.setdefault(k, v)
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
+        return lambda_facts
+    
+            if state == 'absent' and user in heroku_collaborator_list:
+            if not module.check_mode:
+                heroku_app.remove_collaborator(user)
+            affected_apps += [app]
+            result_state = True
+        elif state == 'present' and user not in heroku_collaborator_list:
+            if not module.check_mode:
+                heroku_app.add_collaborator(user_id_or_email=user, silent=module.params['suppress_invitation'])
+            affected_apps += [app]
+            result_state = True
+    
+        gateway = vca.get_gateway(vdc_name, gateway_name)
+    if not gateway:
+        module.fail_json(msg='Not able to find the gateway %s, please check '
+                             'the gateway_name param' % gateway_name)
