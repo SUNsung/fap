@@ -1,180 +1,169 @@
 
         
-        TEST(ObjCHelper, TextFormatDecodeData_RawStrings) {
-  TextFormatDecodeData decode_data;
-    }
-    
-    void MapLiteTestUtil::SetMapFields(unittest::TestMapLite* message) {
-  MapTestUtilImpl::SetMapFields<unittest::MapEnumLite,
-                                unittest::MAP_ENUM_BAR_LITE,
-                                unittest::MAP_ENUM_BAZ_LITE>(message);
-}
-    
-    TEST(ByteSourceTest, CopyToStringByteSink) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  string str;
-  StringByteSink sink(&str);
-  source.CopyTo(&sink, data.size());
-  EXPECT_EQ(data, str);
-}
-    
-    template<typename A>
-struct type_equals_<A, A> : public true_ {
-};
-    
-    using google::protobuf::io::FileInputStream;
-using google::protobuf::io::GzipInputStream;
+            Rational result{ prat };
+    destroyrat(prat);
     
     
     {
-    {    reflection->MutableUnknownFields(message)->Clear();
+    {    private:
+        int32_t m_sign;
+        int32_t m_exp;
+        std::vector<uint32_t> m_mantissa;
+    };
+}
+
+    
+    #include 'Rational.h'
+    
+        for (unsigned int i = 0; i < nCommands; i++)
+    {
+        m_commands->GetAt(i, &nOpCode);
+        if (nOpCode == IDC_PNT)
+        {
+            m_token.append(wstring{ decimalSymbol });
+        }
+        else if (nOpCode == IDC_EXP)
+        {
+            m_token.append(&chExp);
+            int nextOpCode;
+            m_commands->GetAt(i + 1, &nextOpCode);
+            if (nextOpCode != IDC_SIGN)
+            {
+                m_token.append(&chPlus);
+            }
+        }
+        else if (nOpCode == IDC_SIGN)
+        {
+            m_token.append(&chNegate);
+        }
+        else
+        {
+            wstring num = to_wstring(nOpCode - IDC_0);
+            m_token.append(num);
+        }
+    }
+    
+    void NarratorNotifier::RegisterDependencyProperties()
+{
+    s_announcementProperty = DependencyProperty::Register(
+        L'Announcement',              // The name of the dependency property.
+        NarratorAnnouncement::typeid, // The type of the dependency property.
+        NarratorNotifier::typeid,     // The owner of the dependency property.
+        ref new PropertyMetadata(
+            nullptr, // Default value of the dependency property.
+            ref new PropertyChangedCallback(OnAnnouncementChanged)));
+}
+    
+    CC_CONSTRUCTOR_ACCESS:
+    Ripple3D() {}
+    virtual ~Ripple3D() {}
+    
+    protected:
+    float _to;
+    float _from;
+    
+    #endif /* __CCACTIONTWEEN_H__ */
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCAnimationCache.h'
+#include '2d/CCSpriteFrameCache.h'
+#include 'platform/CCFileUtils.h'
+    
+    bool ConnectionsManager::importConnections(const QString& path) {
+  if (loadConnectionsConfigFromFile(path, true)) {
+    return true;
   }
- private:
-  virtual bool ShouldBeClear(const FieldDescriptor *field) = 0;
-};
-    
-        std::cerr << 'Generating ' << input_file
-        << ' to ' << output_file << std::endl;
-    benchmarks::BenchmarkDataset dataset;
-    Message* message;
-    std::string dataset_payload = ReadFile(input_file);
-    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
-      << 'Can' t parse data file ' << input_file;
-    
-        for (int i = 0; i < dataset.payload_size(); i++) {
-      message->ParseFromString(dataset.payload(i));
-      Proto3DataStripper stripper;
-      stripper.StripMessage(message);
-      dataset.set_payload(i, message->SerializeAsString());
-    }
-    
-      virtual bool Generate(const FileDescriptor* file,
-                        const string& parameter,
-                        GeneratorContext* context,
-                        string* error) const {
-    FileDescriptorProto new_file;
-    file->CopyTo(&new_file);
-    SchemaGroupStripper::StripFile(file, &new_file);
-    }
-    
-      // Optional:  Delete all global objects allocated by libprotobuf.
-  google::protobuf::ShutdownProtobufLibrary();
+  return false;
+}
     
     
     { private:
-  const EnumDescriptor* descriptor_;
-  std::vector<const EnumValueDescriptor*> base_values_;
-  std::vector<const EnumValueDescriptor*> all_values_;
-  std::set<const EnumValueDescriptor*> alias_values_to_skip_;
-  const string name_;
+  QString m_configPath;
+  QList<QSharedPointer<RedisClient::Connection>> m_connections;
+  QHash<QSharedPointer<RedisClient::Connection>,
+        QSharedPointer<ConnectionsTree::TreeItem>>
+      m_connectionMapping;
+  QSharedPointer<Events> m_events;
 };
+
     
-    const AuthProperty AuthPropertyIterator::operator*() {
-  return std::pair<grpc::string_ref, grpc::string_ref>(
-      property_->name,
-      grpc::string_ref(property_->value, property_->value_length));
+    #ifdef LINUX_SIGNALS
+#include <sigwatch.h>
+#endif
+    
+    SortFilterProxyModel::SortFilterProxyModel(QObject *parent) : QSortFilterProxyModel(parent), m_complete(false)
+{
 }
     
-    class CensusChannelData : public ChannelData {
- public:
-  grpc_error* Init(grpc_channel_element* elem,
-                   grpc_channel_element_args* args) override;
-};
+      Q_INVOKABLE virtual void init();
     
     
     {
-    {   private:
-    const grpc::string name_;
-    const int value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
-}
-    
-    namespace grpc {
-namespace load_reporter {
-    }
-    }
-    
-    LoadRecordKey::LoadRecordKey(const grpc::string& client_ip_and_token,
-                             grpc::string user_id)
-    : user_id_(std::move(user_id)) {
-  GPR_ASSERT(client_ip_and_token.size() >= 2);
-  int ip_hex_size;
-  GPR_ASSERT(sscanf(client_ip_and_token.substr(0, 2).c_str(), '%d',
-                    &ip_hex_size) == 1);
-  GPR_ASSERT(ip_hex_size == 0 || ip_hex_size == kIpv4AddressLength ||
-             ip_hex_size == kIpv6AddressLength);
-  size_t cur_pos = 2;
-  client_ip_hex_ = client_ip_and_token.substr(cur_pos, ip_hex_size);
-  cur_pos += ip_hex_size;
-  if (client_ip_and_token.size() - cur_pos < kLbIdLength) {
-    lb_id_ = kInvalidLbId;
-    lb_tag_ = '';
-  } else {
-    lb_id_ = client_ip_and_token.substr(cur_pos, kLbIdLength);
-    lb_tag_ = client_ip_and_token.substr(cur_pos + kLbIdLength);
-  }
-}
-    
-    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
-  memset(core, 0, sizeof(*core));
-  for (const auto& m : proto.metrics()) {
-    switch (m.value_case()) {
-      case Metric::VALUE_NOT_SET:
-        break;
-      case Metric::kCount:
-        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
-          if (m.name() == grpc_stats_counter_name[i]) {
-            core->counters[i] = m.count();
-            break;
-          }
+    {
+    {            QString replace = QString('\\x%1%2').arg(num.size() == 1 ? '0': '').arg(num);
+            val.replace(index, 1, replace);
+            index += replace.size();
         }
-        break;
-      case Metric::kHistogram:
-        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
-          if (m.name() == grpc_stats_histogram_name[i]) {
-            const auto& h = m.histogram();
-            bool valid = true;
-            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              if (grpc_stats_histo_bucket_boundaries[i][j] !=
-                  h.buckets(j).start()) {
-                valid = false;
-              }
-            }
-            if (!valid) {
-              gpr_log(GPR_ERROR,
-                      'Found histogram %s but shape is different from proto',
-                      m.name().c_str());
-            }
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              core->histograms[grpc_stats_histo_start[i] + j] =
-                  h.buckets(j).count();
-            }
-          }
-        }
-        break;
     }
-  }
+    return val;
 }
     
-    #include <vector>
-#include 'Ratpack/ratpak.h'
+    #include <QtCore/QObject>
+#include <QtNetwork/QNetworkAccessManager>
     
-    shared_ptr<HISTORYITEM> const& CalculatorHistory::GetHistoryItem(_In_ unsigned int uIdx)
-{
-    assert(uIdx >= 0 && uIdx < m_historyItems.size());
-    return m_historyItems.at(uIdx);
+    
+    {}  // namespace
+
+    
+    #ifdef _MSC_VER
+# pragma warning(pop)
+#endif
+    
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
+    
+      // EXPECT_EQ() evaluates its arguments exactly once, so they
+  // can have side effects.
+    
+    template<typename... ARGS>
+inline void logw(const char* tag, const char* msg, ARGS... args) noexcept {
+  log(ANDROID_LOG_WARN, tag, msg, args...);
 }
     
-    wstring COpndCommand::GetString(uint32_t radix, int32_t precision)
-{
-    wstring result{};
-    }
+    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
     
-        static std::vector<uint32_t> DigitGroupingStringToGroupingVector(std::wstring_view groupingString);
-    std::wstring GroupDigits(std::wstring_view delimiter, std::vector<uint32_t> const& grouping, std::wstring_view displayString, bool isNumNegative = false);
     
-    // returns a new rat structure with the acos of x->p/x->q
-extern void acosrat(_Inout_ PRAT* px, uint32_t radix, int32_t precision);
+    {}
+
+    
+    template<typename Target>
+inline ElementProxy<Target>::ElementProxy::operator const local_ref<T> () const {
+  return target_->getElement(idx_);
+}
+    
+    template<typename T>
+inline void JStaticField<T>::set(jclass jcls, T value) noexcept {
+  internal::getEnv()->SetStaticObjectField(jcls, field_id_, value);
+}
+    
+      JNativeRunnable(std::function<void()>&& runnable) : runnable_(std::move(runnable)) {}
+    
+    /// Allocator that handles weak global references
+class FBEXPORT WeakGlobalReferenceAllocator {
+ public:
+  jobject newReference(jobject original) const;
+  void deleteReference(jobject reference) const noexcept;
+  bool verifyReference(jobject reference) const noexcept;
+};
