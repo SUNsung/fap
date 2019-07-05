@@ -1,273 +1,936 @@
 
         
-          auto* message2_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+        struct DefaultCache {
+  llvm::sys::Mutex Mux;
+  CacheImpl::CallBacks CBs;
+  llvm::DenseMap<DefaultCacheKey, void *> Entries;
+    }
     
-      string str_with_null_char('ab\0c', 4);
-  EXPECT_EXIT(
-      decode_data.AddString(1, str_with_null_char, 'def'),
-      ::testing::KilledBySignal(SIGABRT),
-      'error: got a null char in a string for making TextFormat data, input:');
-  EXPECT_EXIT(
-      decode_data.AddString(1, 'def', str_with_null_char),
-      ::testing::KilledBySignal(SIGABRT),
-      'error: got a null char in a string for making TextFormat data, input:');
+    VERB(abbreviate)
+VERB(accept)
+VERB(activate)
+VERB(add)
+VERB(adjust)
+VERB(admire)
+VERB(admit)
+VERB(advise)
+VERB(afford)
+VERB(agree)
+VERB(alert)
+VERB(allow)
+VERB(alter)
+VERB(amuse)
+VERB(analyse)
+VERB(analyze)
+VERB(animate)
+VERB(announce)
+VERB(annoy)
+VERB(answer)
+VERB(apologise)
+VERB(appear)
+VERB(append)
+VERB(applaud)
+VERB(apply)
+VERB(apportion)
+VERB(appreciate)
+VERB(approve)
+VERB(argue)
+VERB(arrange)
+VERB(arrest)
+VERB(arrive)
+VERB(ask)
+VERB(assign)
+VERB(attach)
+VERB(attack)
+VERB(attempt)
+VERB(attend)
+VERB(attract)
+VERB(avoid)
+VERB(awake)
+VERB(back)
+VERB(bake)
+VERB(balance)
+VERB(ban)
+VERB(bang)
+VERB(bare)
+VERB(bat)
+VERB(bathe)
+VERB(battle)
+VERB(be)
+VERB(beat)
+VERB(become)
+VERB(beg)
+VERB(begin)
+VERB(behave)
+VERB(belong)
+VERB(bend)
+VERB(bet)
+VERB(bid)
+VERB(bite)
+VERB(bleach)
+VERB(bless)
+VERB(blind)
+VERB(blink)
+VERB(blot)
+VERB(blow)
+VERB(blush)
+VERB(boast)
+VERB(boil)
+VERB(bolt)
+VERB(bomb)
+VERB(book)
+VERB(bore)
+VERB(borrow)
+VERB(bounce)
+VERB(bow)
+VERB(box)
+VERB(brake)
+VERB(branch)
+VERB(break)
+VERB(breathe)
+VERB(bring)
+VERB(broadcast)
+VERB(bruise)
+VERB(brush)
+VERB(bubble)
+VERB(build)
+VERB(bump)
+VERB(burn)
+VERB(bury)
+VERB(buy)
+VERB(buzz)
+VERB(calculate)
+VERB(call)
+VERB(camp)
+VERB(cancel)
+VERB(capture)
+VERB(care)
+VERB(carry)
+VERB(carve)
+VERB(cast)
+VERB(catch)
+VERB(cause)
+VERB(center)
+VERB(challenge)
+VERB(change)
+VERB(charge)
+VERB(chase)
+VERB(cheat)
+VERB(check)
+VERB(cheer)
+VERB(chew)
+VERB(choke)
+VERB(choose)
+VERB(chop)
+VERB(claim)
+VERB(clap)
+VERB(clean)
+VERB(clear)
+VERB(click)
+VERB(close)
+VERB(coach)
+VERB(coil)
+VERB(collect)
+VERB(collapse)
+VERB(colour)
+VERB(comb)
+VERB(come)
+VERB(command)
+VERB(commit)
+VERB(communicate)
+VERB(compare)
+VERB(compete)
+VERB(complain)
+VERB(complete)
+VERB(concentrate)
+VERB(concern)
+VERB(confess)
+VERB(confuse)
+VERB(connect)
+VERB(consider)
+VERB(consist)
+VERB(contain)
+VERB(contains)
+VERB(continue)
+VERB(convert)
+VERB(copy)
+VERB(correct)
+VERB(cough)
+VERB(cost)
+VERB(count)
+VERB(cover)
+VERB(crack)
+VERB(crash)
+VERB(crawl)
+VERB(cross)
+VERB(crush)
+VERB(cry)
+VERB(cure)
+VERB(curl)
+VERB(curve)
+VERB(customize)
+VERB(cut)
+VERB(cycle)
+VERB(dam)
+VERB(damage)
+VERB(dance)
+VERB(dare)
+VERB(decay)
+VERB(deceive)
+VERB(decide)
+VERB(decode)
+VERB(decorate)
+VERB(defer)
+VERB(define)
+VERB(delay)
+VERB(delete)
+VERB(delight)
+VERB(deliver)
+VERB(depend)
+VERB(describe)
+VERB(deselect)
+VERB(desert)
+VERB(deserve)
+VERB(destroy)
+VERB(detach)
+VERB(detect)
+VERB(develop)
+VERB(dig)
+VERB(dim)
+VERB(disagree)
+VERB(disappear)
+VERB(disapprove)
+VERB(disarm)
+VERB(discover)
+VERB(dislike)
+VERB(dismiss)
+VERB(display)
+VERB(divide)
+VERB(do)
+VERB(double)
+VERB(doubt)
+VERB(drag)
+VERB(drain)
+VERB(draw)
+VERB(dream)
+VERB(dress)
+VERB(drink)
+VERB(drip)
+VERB(drive)
+VERB(drop)
+VERB(drown)
+VERB(drum)
+VERB(dry)
+VERB(duplicate)
+VERB(dust)
+VERB(earn)
+VERB(eat)
+VERB(echo)
+VERB(edit)
+VERB(educate)
+VERB(embarrass)
+VERB(employ)
+VERB(empty)
+VERB(enable)
+VERB(encode)
+VERB(encourage)
+VERB(end)
+VERB(enjoy)
+VERB(enter)
+VERB(entertain)
+VERB(enumerate)
+VERB(enqueue)
+VERB(escape)
+VERB(examine)
+VERB(excite)
+VERB(excuse)
+VERB(execute)
+VERB(exercise)
+VERB(exist)
+VERB(expand)
+VERB(expect)
+VERB(explain)
+VERB(explode)
+VERB(export)
+VERB(extend)
+VERB(face)
+VERB(fade)
+VERB(fail)
+VERB(fancy)
+VERB(fasten)
+VERB(fax)
+VERB(fear)
+VERB(feel)
+VERB(fence)
+VERB(fetch)
+VERB(fight)
+VERB(fill)
+VERB(film)
+VERB(find)
+VERB(finish)
+VERB(fire)
+VERB(fit)
+VERB(fix)
+VERB(flap)
+VERB(flash)
+VERB(flatten)
+VERB(flip)
+VERB(float)
+VERB(flood)
+VERB(flow)
+VERB(flower)
+VERB(fly)
+VERB(focus)
+VERB(fold)
+VERB(follow)
+VERB(fool)
+VERB(force)
+VERB(forget)
+VERB(forgive)
+VERB(form)
+VERB(found)
+VERB(freeze)
+VERB(frighten)
+VERB(fry)
+VERB(gain)
+VERB(gather)
+VERB(gaze)
+VERB(generate)
+VERB(get)
+VERB(give)
+VERB(glow)
+VERB(glue)
+VERB(go)
+VERB(grab)
+VERB(grate)
+VERB(grease)
+VERB(greet)
+VERB(grin)
+VERB(grip)
+VERB(groan)
+VERB(grow)
+VERB(guarantee)
+VERB(guard)
+VERB(guess)
+VERB(guide)
+VERB(hammer)
+VERB(hand)
+VERB(handle)
+VERB(hang)
+VERB(happen)
+VERB(harass)
+VERB(harm)
+VERB(hate)
+VERB(haunt)
+VERB(head)
+VERB(heal)
+VERB(heap)
+VERB(hear)
+VERB(heat)
+VERB(help)
+VERB(hide)
+VERB(highlight)
+VERB(hit)
+VERB(hold)
+VERB(hook)
+VERB(hop)
+VERB(hope)
+VERB(hover)
+VERB(hug)
+VERB(hum)
+VERB(hunt)
+VERB(hurry)
+VERB(hurt)
+VERB(identify)
+VERB(ignore)
+VERB(imagine)
+VERB(import)
+VERB(impress)
+VERB(improve)
+VERB(include)
+VERB(increase)
+VERB(influence)
+VERB(inform)
+VERB(inject)
+VERB(injure)
+VERB(insert)
+VERB(instruct)
+VERB(intend)
+VERB(interest)
+VERB(interfere)
+VERB(interrupt)
+VERB(intersect)
+VERB(intersects)
+VERB(introduce)
+VERB(invent)
+VERB(invite)
+VERB(irritate)
+VERB(itch)
+VERB(jail)
+VERB(jam)
+VERB(jog)
+VERB(join)
+VERB(joke)
+VERB(judge)
+VERB(juggle)
+VERB(jump)
+VERB(keep)
+VERB(kick)
+VERB(kill)
+VERB(kiss)
+VERB(kneel)
+VERB(knit)
+VERB(knock)
+VERB(knot)
+VERB(know)
+VERB(label)
+VERB(land)
+VERB(last)
+VERB(laugh)
+VERB(launch)
+VERB(lay)
+VERB(lead)
+VERB(learn)
+VERB(leave)
+VERB(lend)
+VERB(let)
+VERB(level)
+VERB(license)
+VERB(lick)
+VERB(lie)
+VERB(lighten)
+VERB(like)
+VERB(listen)
+VERB(live)
+VERB(load)
+VERB(localize)
+VERB(lock)
+VERB(long)
+VERB(look)
+VERB(lose)
+VERB(love)
+VERB(maintain)
+VERB(make)
+VERB(man)
+VERB(manage)
+VERB(march)
+VERB(mark)
+VERB(marry)
+VERB(match)
+VERB(mate)
+VERB(matter)
+VERB(mean)
+VERB(measure)
+VERB(meddle)
+VERB(meet)
+VERB(melt)
+VERB(memorise)
+VERB(mend)
+VERB(merge)
+VERB(mess)
+VERB(milk)
+VERB(mine)
+VERB(miss)
+VERB(minus)
+VERB(mix)
+VERB(moan)
+VERB(moor)
+VERB(mourn)
+VERB(move)
+VERB(muddle)
+VERB(mug)
+VERB(multiply)
+VERB(murder)
+VERB(nail)
+VERB(nest)
+VERB(nod)
+VERB(normalize)
+VERB(note)
+VERB(notice)
+VERB(notify)
+VERB(number)
+VERB(obey)
+VERB(observe)
+VERB(obtain)
+VERB(occur)
+VERB(offend)
+VERB(offer)
+VERB(open)
+VERB(order)
+VERB(overflow)
+VERB(owe)
+VERB(own)
+VERB(pack)
+VERB(paddle)
+VERB(paint)
+VERB(park)
+VERB(part)
+VERB(pass)
+VERB(paste)
+VERB(pat)
+VERB(pause)
+VERB(pay)
+VERB(peck)
+VERB(pedal)
+VERB(peel)
+VERB(peep)
+VERB(perform)
+VERB(permit)
+VERB(phone)
+VERB(pick)
+VERB(pinch)
+VERB(pine)
+VERB(place)
+VERB(plan)
+VERB(plant)
+VERB(play)
+VERB(please)
+VERB(plug)
+VERB(poke)
+VERB(polish)
+VERB(pop)
+VERB(possess)
+VERB(post)
+VERB(pour)
+VERB(practice)
+VERB(practise)
+VERB(pray)
+VERB(preach)
+VERB(precede)
+VERB(prefer)
+VERB(preload)
+VERB(prepare)
+VERB(prepend)
+VERB(present)
+VERB(preserve)
+VERB(press)
+VERB(pretend)
+VERB(prevent)
+VERB(prick)
+VERB(print)
+VERB(produce)
+VERB(program)
+VERB(promise)
+VERB(protect)
+VERB(provide)
+VERB(pull)
+VERB(pump)
+VERB(punch)
+VERB(puncture)
+VERB(punish)
+VERB(push)
+VERB(put)
+VERB(question)
+VERB(queue)
+VERB(race)
+VERB(radiate)
+VERB(rain)
+VERB(raise)
+VERB(reach)
+VERB(read)
+VERB(realise)
+VERB(receive)
+VERB(recognise)
+VERB(record)
+VERB(reduce)
+VERB(reflect)
+VERB(refuse)
+VERB(register)
+VERB(regret)
+VERB(reign)
+VERB(reject)
+VERB(rejoice)
+VERB(relax)
+VERB(release)
+VERB(rely)
+VERB(remain)
+VERB(remember)
+VERB(remind)
+VERB(remove)
+VERB(repair)
+VERB(repeat)
+VERB(replace)
+VERB(reply)
+VERB(report)
+VERB(request)
+VERB(require)
+VERB(resize)
+VERB(rescue)
+VERB(resolve)
+VERB(retain)
+VERB(retire)
+VERB(return)
+VERB(reverse)
+VERB(review)
+VERB(rhyme)
+VERB(ride)
+VERB(ring)
+VERB(rinse)
+VERB(rise)
+VERB(risk)
+VERB(rob)
+VERB(rock)
+VERB(roll)
+VERB(rot)
+VERB(rub)
+VERB(ruin)
+VERB(rule)
+VERB(run)
+VERB(rush)
+VERB(sack)
+VERB(sail)
+VERB(satisfy)
+VERB(save)
+VERB(saw)
+VERB(say)
+VERB(scale)
+VERB(scare)
+VERB(scatter)
+VERB(scold)
+VERB(scorch)
+VERB(scrape)
+VERB(scratch)
+VERB(scream)
+VERB(screw)
+VERB(scribble)
+VERB(scroll)
+VERB(scrub)
+VERB(seal)
+VERB(search)
+VERB(see)
+VERB(select)
+VERB(sell)
+VERB(send)
+VERB(separate)
+VERB(serve)
+VERB(settle)
+VERB(shade)
+VERB(share)
+VERB(shave)
+VERB(shelter)
+VERB(shiver)
+VERB(shock)
+VERB(shop)
+VERB(show)
+VERB(shrug)
+VERB(shut)
+VERB(sigh)
+VERB(sign)
+VERB(signal)
+VERB(sin)
+VERB(sing)
+VERB(sip)
+VERB(sit)
+VERB(ski)
+VERB(skip)
+VERB(slap)
+VERB(sleep)
+VERB(slip)
+VERB(slow)
+VERB(smash)
+VERB(smell)
+VERB(smile)
+VERB(smoke)
+VERB(snatch)
+VERB(sneeze)
+VERB(sniff)
+VERB(snore)
+VERB(snow)
+VERB(soak)
+VERB(soothe)
+VERB(sound)
+VERB(spare)
+VERB(spark)
+VERB(sparkle)
+VERB(speak)
+VERB(spell)
+VERB(spend)
+VERB(spill)
+VERB(spoil)
+VERB(spot)
+VERB(spray)
+VERB(sprout)
+VERB(squash)
+VERB(squeak)
+VERB(squeal)
+VERB(squeeze)
+VERB(stain)
+VERB(stamp)
+VERB(stand)
+VERB(standardise)
+VERB(standardize)
+VERB(stare)
+VERB(start)
+VERB(stay)
+VERB(steer)
+VERB(step)
+VERB(stir)
+VERB(stitch)
+VERB(stop)
+VERB(store)
+VERB(strap)
+VERB(strengthen)
+VERB(stretch)
+VERB(strip)
+VERB(stroke)
+VERB(stuff)
+VERB(subtract)
+VERB(succeed)
+VERB(suck)
+VERB(suffer)
+VERB(suggest)
+VERB(suit)
+VERB(supply)
+VERB(support)
+VERB(suppose)
+VERB(suppress)
+VERB(surprise)
+VERB(surround)
+VERB(suspect)
+VERB(suspend)
+VERB(swim)
+VERB(switch)
+VERB(take)
+VERB(talk)
+VERB(tame)
+VERB(tap)
+VERB(taste)
+VERB(teach)
+VERB(tear)
+VERB(tease)
+VERB(telephone)
+VERB(tell)
+VERB(tempt)
+VERB(terrify)
+VERB(test)
+VERB(thank)
+VERB(thaw)
+VERB(think)
+VERB(throw)
+VERB(tick)
+VERB(tickle)
+VERB(tie)
+VERB(time)
+VERB(tip)
+VERB(tire)
+VERB(toggle)
+VERB(touch)
+VERB(tour)
+VERB(tow)
+VERB(trace)
+VERB(trade)
+VERB(train)
+VERB(translate)
+VERB(transform)
+VERB(transport)
+VERB(trap)
+VERB(travel)
+VERB(traverse)
+VERB(treat)
+VERB(tremble)
+VERB(trick)
+VERB(trip)
+VERB(trot)
+VERB(trouble)
+VERB(truncate)
+VERB(trust)
+VERB(try)
+VERB(tug)
+VERB(tumble)
+VERB(turn)
+VERB(twist)
+VERB(understand)
+VERB(undress)
+VERB(unfasten)
+VERB(union)
+VERB(unite)
+VERB(unload)
+VERB(unlock)
+VERB(unpack)
+VERB(untidy)
+VERB(up)
+VERB(update)
+VERB(use)
+VERB(validate)
+VERB(vanish)
+VERB(visit)
+VERB(wail)
+VERB(wait)
+VERB(wake)
+VERB(walk)
+VERB(wander)
+VERB(want)
+VERB(warm)
+VERB(warn)
+VERB(wash)
+VERB(waste)
+VERB(watch)
+VERB(water)
+VERB(wave)
+VERB(wear)
+VERB(weigh)
+VERB(welcome)
+VERB(whine)
+VERB(whip)
+VERB(whirl)
+VERB(whisper)
+VERB(whistle)
+VERB(win)
+VERB(wink)
+VERB(wipe)
+VERB(wish)
+VERB(wobble)
+VERB(wonder)
+VERB(work)
+VERB(worry)
+VERB(wrap)
+VERB(wreck)
+VERB(wrestle)
+VERB(wriggle)
+VERB(write)
+VERB(yawn)
+VERB(yell)
+VERB(zip)
+VERB(zoom)
     
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
+    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
+                                               ArrayRef<unsigned char> key) {
+  out << '\'';
+  for (auto byte : key) {
+    if (byte < 16) out << '0';
+    out.write_hex(byte);
+  }
+  out << '\'';
+}
+
     
-    TEST(StatusOr, TestAssignmentStatusOk) {
-  const int kI = 4;
-  StatusOr<int> source(kI);
-  StatusOr<int> target;
-  target = source;
-  EXPECT_EQ(source.status(), target.status());
-  EXPECT_EQ(source.ValueOrDie(), target.ValueOrDie());
+    bool ArgsToFrontendInputsConverter::readInputFilesFromCommandLine() {
+  bool hadDuplicates = false;
+  for (const Arg *A :
+       Args.filtered(options::OPT_INPUT, options::OPT_primary_file)) {
+    hadDuplicates = addFile(A->getValue()) || hadDuplicates;
+  }
+  return false; // FIXME: Don't bail out for duplicates, too many tests depend
+  // on it.
 }
     
+    public:
+  ArgsToFrontendInputsConverter(DiagnosticEngine &diags,
+                                const llvm::opt::ArgList &args);
     
-// Abbreviations: true_type and false_type are structs that represent boolean
-// true and false values. Also define the boost::mpl versions of those names,
-// true_ and false_.
-typedef integral_constant<bool, true>  true_type;
-typedef integral_constant<bool, false> false_type;
-typedef true_type  true_;
-typedef false_type false_;
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
     
-    int main(int argc, const char** argv) {
-  FileInputStream fin(STDIN_FILENO);
-  GzipInputStream in(&fin);
-    }
-    
-    #include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-    
-    int main(int argc, char *argv[]) {
-  if (argc % 2 == 0 || argc == 1) {
-    std::cerr << 'Usage: [input_files] [output_file_names] where ' <<
-        'input_files are one to one mapping to output_file_names.' <<
-        std::endl;
-    return 1;
-  }
-    }
-    
-    class Proto2ToProto3Generator final : public CodeGenerator {
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
  public:
-  bool GenerateAll(const std::vector<const FileDescriptor*>& files,
-                           const string& parameter,
-                           GeneratorContext* context,
-                           string* error) const {
-    for (int i = 0; i < files.size(); i++) {
-      for (auto file : files) {
-        if (CanGenerate(file)) {
-          Generate(file, parameter, context, error);
-          break;
-        }
-      }
-    }
-    }
-    }
-    
-    #include <string>
-#include <set>
-#include <vector>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/io/printer.h>
-    
-    
-#ifdef __cplusplus
-class GLUnurbs;
-class GLUquadric;
-class GLUtesselator;
-#else
-typedef struct GLUnurbs GLUnurbs;
-typedef struct GLUquadric GLUquadric;
-typedef struct GLUtesselator GLUtesselator;
-#endif
-    
-      // crop box
-  if (readBox(dict, 'CropBox', &cropBox)) {
-    haveCropBox = gTrue;
-  }
-  if (!haveCropBox) {
-    cropBox = mediaBox;
-  }
-    
-    
-    {  return gFalse;
-}
-    
-      // Was the Page Transition created successfully?
-  GBool isOk() { return ok; }
-    
-      // Does this device use upside-down coordinates?
-  // (Upside-down means (0,0) is the top left corner of the page.)
-  virtual GBool upsideDown() { return gTrue; }
-    
-    #endif
-
-    
-      embeddedStream->reset();
-    
-    int StdinCacheLoader::load(const std::vector<ByteRange> &ranges, CachedFileWriter *writer)
-{
-  return 0;
-}
-    
-    void CCalcEngine::InitChopNumbers()
-{
-    // these rat numbers are set only once and then never change regardless of
-    // base or precision changes
-    assert(m_chopNumbers.size() >= 4);
-    m_chopNumbers[0] = Rational{ rat_qword };
-    m_chopNumbers[1] = Rational{ rat_dword };
-    m_chopNumbers[2] = Rational{ rat_word };
-    m_chopNumbers[3] = Rational{ rat_byte };
-    }
-    
-    // try to load weight information from file, if exists
-inline bool MetaTryLoadFloatInfo(const std::string& fname,
-                                 std::vector<bst_float>* data) {
-  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
-  if (fi == nullptr) return false;
-  dmlc::istream is(fi.get());
-  data->clear();
-  bst_float value;
-  while (is >> value) {
-    data->push_back(value);
-  }
-  return true;
-}
-    
-      offset = {0, 1, 4};
-  for (size_t i = 0; i < offset.back(); ++i) {
-    data.emplace_back(Entry(i, 0.1f));
-  }
-    
-    #if defined(_OPENMP)
-  const auto nthread = static_cast<bst_omp_uint>(this->nthread_);  // NOLINT
-#endif  // defined(_OPENMP)
-  tree::GradStats* p_self = self.data();
-  tree::GradStats* p_sibling = sibling.data();
-  tree::GradStats* p_parent = parent.data();
-    
-    TEST(SparseColumn, Test) {
-  auto dmat = CreateDMatrix(100, 1, 0.85);
-  GHistIndexMatrix gmat;
-  gmat.Init((*dmat).get(), 256);
-  ColumnMatrix column_matrix;
-  column_matrix.Init(gmat, 0.5);
-  auto col = column_matrix.GetColumn(0);
-  ASSERT_EQ(col.Size(), gmat.index.size());
-  for (auto i = 0ull; i < col.Size(); i++) {
-    EXPECT_EQ(gmat.index[gmat.row_ptr[col.GetRowIdx(i)]],
-              col.GetGlobalBinIdx(i));
-  }
-  delete dmat;
-}
-    
-            valueData = cpuArrayView->DataBuffer<ValueType>();
-    
-    #pragma once
-    
-    // base class that we can catch, independent of the type parameter
-struct /*interface*/ IExceptionWithCallStackBase
-{
-    virtual const char * CallStack() const = 0;
-    virtual ~IExceptionWithCallStackBase() noexcept = default;
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
 };
     
-    template <typename TVector>
-inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
-{
-    foreach_index(currentLocation, v)
-    {
-        // Pick a random location and swap with current one
-        const size_t randomLocation = RandMT(0, v.size(), rng);
-        std::swap(v[currentLocation], v[randomLocation]);
-    }
-}
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
+    {    const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+    const typename ParamGenerator<T1>::iterator begin1_;
+    const typename ParamGenerator<T1>::iterator end1_;
+    typename ParamGenerator<T1>::iterator current1_;
+    const typename ParamGenerator<T2>::iterator begin2_;
+    const typename ParamGenerator<T2>::iterator end2_;
+    typename ParamGenerator<T2>::iterator current2_;
+    ParamType current_value_;
+  };  // class CartesianProductGenerator2::Iterator
     
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
     
-    {};
-    
-    //---------------------------------------------------------------------
-//
-//   pattern
-//
-//---------------------------------------------------------------------
-UnicodeString RegexPattern::pattern() const {
-    if (fPatternString != NULL) {
-        return *fPatternString;
-    } else if (fPattern == NULL) {
-        return UnicodeString();
-    } else {
-        UErrorCode status = U_ZERO_ERROR;
-        int64_t nativeLen = utext_nativeLength(fPattern);
-        int32_t len16 = utext_extract(fPattern, 0, nativeLen, NULL, 0, &status); // buffer overflow error
-        UnicodeString result;
-    }
-    }
-    
-    U_NAMESPACE_END
-    
-    class U_I18N_API SharedCalendar : public SharedObject {
-public:
-    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
-    virtual ~SharedCalendar();
-    const Calendar *get() const { return ptr; }
-    const Calendar *operator->() const { return ptr; }
-    const Calendar &operator*() const { return *ptr; }
-private:
-    Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
-};
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif // incl_HPHP_DEBUGGABLE_H_
-
-    
-      // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
-    
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    // QueueNode is a node in a Queue, which consists of an element of
+// type E and a pointer to the next node.
+template <typename E>  // E is the element type
+class QueueNode {
+  friend class Queue<E>;
     }
     
-    int main() {
-  DB* db;
-  Options options;
-  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
-  options.IncreaseParallelism();
-  options.OptimizeLevelStyleCompaction();
-  // create the DB if it's not already present
-  options.create_if_missing = true;
+    
+    {       dword(b_formater.instruction);
+   }
+    
+    #ifndef HPHP_DATA_STREAM_WRAPPER_H
+#define HPHP_DATA_STREAM_WRAPPER_H
+    
+      // only accept paths with the glob:// prefix
+  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
+    return nullptr;
+  }
+    
+    #ifndef incl_HPHP_PIPE_H_
+#define incl_HPHP_PIPE_H_
+    
+    namespace URL {
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * We define a 'server object' as the part of URL without domain name:
+ *
+ *   http://facebook.com/foo?x=1       server object is '/foo?x=1'
+ *   http://facebook.com/foo/bar?x=1   server object is '/foo/bar?x=1'
+ */
+const char *getServerObject(const char* url);
     }
     
-      const Snapshot* snapshot = txn->GetSnapshot();
+      // create column family
+  ColumnFamilyHandle* cf;
+  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
+  assert(s.ok());
     
-    class Cache;
-class Comparator;
-class Env;
-class FilterPolicy;
-class Logger;
-struct Options;
-class Snapshot;
+      // Set a new snapshot in the transaction
+  txn->SetSnapshot();
+  read_options.snapshot = db->GetSnapshot();
+    
+      // Return stats as map of {string, double} per-tier
+  //
+  // Persistent cache can be initialized as a tier of caches. The stats are per
+  // tire top-down
+  virtual StatsType Stats() = 0;
+    
+    namespace rocksdb {
+namespace lua {
+class LuaStateWrapper {
+ public:
+  explicit LuaStateWrapper(const std::string& lua_script) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, {});
+  }
+  LuaStateWrapper(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, libraries);
+  }
+  lua_State* GetLuaState() const { return lua_state_; }
+  ~LuaStateWrapper() { lua_close(lua_state_); }
+    }
+    }
+    }
