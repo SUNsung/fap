@@ -1,224 +1,113 @@
 
         
-            def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
+        
+@functools.lru_cache()
+def get_hstore_oids(connection_alias):
+    '''Return hstore and hstore array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute(
+            'SELECT t.oid, typarray '
+            'FROM pg_type t '
+            'JOIN pg_namespace ns ON typnamespace = ns.oid '
+            'WHERE typname = 'hstore''
+        )
+        oids = []
+        array_oids = []
+        for row in cursor:
+            oids.append(row[0])
+            array_oids.append(row[1])
+        return tuple(oids), tuple(array_oids)
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-        def get_person(self, person_id):
-        person_server = self.lookup[person_id]
-        return person_server.people[person_id]
-    
-        # First, reshape path_freq to the same shape of distributions
-    self.path_freq = tf.tile(tf.expand_dims(self.path_counts, -1),
-                             [1, self.hparams.num_classes])
-    
-      if bidx is not None:
-    data_nxt = data_bxtxn[bidx,:,:].T
-    params_nxt = model_vals['output_dist_params'][bidx,:,:].T
-  else:
-    data_nxt = np.mean(data_bxtxn, axis=0).T
-    params_nxt = np.mean(model_vals['output_dist_params'], axis=0).T
-  if output_dist == 'poisson':
-    means_nxt = params_nxt
-  elif output_dist == 'gaussian': # (means+vars) x time
-    means_nxt = np.vsplit(params_nxt,2)[0] # get means
-  else:
-    assert 'NIY'
-    
-      Args:
-    x_k - k -dimensional list of arguments to log_sum_exp.
-    
-      def _load_random_shard(self):
-    '''Randomly select a file and read it.'''
-    return self._load_shard(random.choice(self._all_shards))
-    
-      # Question is correctly answered only if
-  # all predictions of the same question_id is correct
-  num_correct_answer = 0
-  previous_qid = None
-  correctly_answered = False
-  for predict, qid in zip(prediction_correctness, question_ids):
-    if qid != previous_qid:
-      previous_qid = qid
-      num_correct_answer += int(correctly_answered)
-      correctly_answered = True
-    correctly_answered = correctly_answered and predict
-  num_correct_answer += int(correctly_answered)
-    
-    EOS_INDEX = 88892
+        @cached_property
+    def model(self):
+        return self.get_model_class()
     
     
-def create_gen_train_op(hparams, learning_rate, gen_loss, global_step, mode):
-  '''Create Generator train op.'''
-  del hparams
-  with tf.name_scope('train_generator'):
-    if FLAGS.generator_optimizer == 'sgd':
-      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-    elif FLAGS.generator_optimizer == 'adam':
-      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
-    else:
-      raise NotImplementedError
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    print('Optimizing Generator vars.')
-    for v in gen_vars:
-      print(v)
-    if mode == 'MINIMIZE':
-      gen_grads = tf.gradients(gen_loss, gen_vars)
-    elif mode == 'MAXIMIZE':
-      gen_grads = tf.gradients(-gen_loss, gen_vars)
-    else:
-      raise ValueError('Must be one of 'MINIMIZE' or 'MAXIMIZE'')
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_train_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_train_op, gen_grads_clipped, gen_vars
-    
-        im_results = np.vstack([cls_boxes[j] for j in range(1, num_classes)])
-    boxes = im_results[:, :-1]
-    scores = im_results[:, -1]
-    return scores, boxes, cls_boxes
-    
-        os.environ['CITYSCAPES_DATASET'] = get_raw_dir(json_dataset.name)
-    os.environ['CITYSCAPES_RESULTS'] = output_dir
-    
-    
-def evaluate_boxes(
-    json_dataset,
-    all_boxes,
-    output_dir,
-    use_salt=True,
-    cleanup=True,
-    use_matlab=False
-):
-    salt = '_{}'.format(str(uuid.uuid4())) if use_salt else ''
-    filenames = _write_voc_results_files(json_dataset, all_boxes, salt)
-    _do_python_eval(json_dataset, salt, output_dir)
-    if use_matlab:
-        _do_matlab_eval(json_dataset, salt, output_dir)
-    if cleanup:
-        for filename in filenames:
-            shutil.copy(filename, output_dir)
-            os.remove(filename)
-    return None
-    
-    ... -> RoI ----\                               /-> box cls output -> cls loss
-                -> RoIFeatureXform -> box head
-... -> Feature /                               \-> box reg output -> reg loss
-       Map
-    
-    
-def add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale):
-    '''Add RPN outputs to a single scale model (i.e., no FPN).'''
-    anchors = generate_anchors(
-        stride=1. / spatial_scale,
-        sizes=cfg.RPN.SIZES,
-        aspect_ratios=cfg.RPN.ASPECT_RATIOS
-    )
-    num_anchors = anchors.shape[0]
-    dim_out = dim_in
-    # RPN hidden representation
-    model.Conv(
-        blob_in,
-        'conv_rpn',
-        dim_in,
-        dim_out,
-        kernel=3,
-        pad=1,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    model.Relu('conv_rpn', 'conv_rpn')
-    # Proposal classification scores
-    model.Conv(
-        'conv_rpn',
-        'rpn_cls_logits',
-        dim_in,
-        num_anchors,
-        kernel=1,
-        pad=0,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    # Proposal bbox regression deltas
-    model.Conv(
-        'conv_rpn',
-        'rpn_bbox_pred',
-        dim_in,
-        4 * num_anchors,
-        kernel=1,
-        pad=0,
-        stride=1,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    
-        shape = (sampled_fg_rois.shape[0] * cfg.KRCNN.NUM_KEYPOINTS, 1)
-    heats = heats.reshape(shape)
-    weights = weights.reshape(shape)
-    
-        return mask_targets
-
-    
-    
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
+class Session(AbstractBaseSession):
     '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
-        )
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
+    
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
     else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-            if check_grad:
-            gc = gradient_checker.GradientChecker(
-                stepsize=0.1,
-                threshold=0.001,
-                device_option=core.DeviceOption(caffe2_pb2.CUDA, 0)
-            )
-    
-          # We set up a fake response.
-      with patch( 'ycm.client.base_request._JsonFromFuture',
-                  side_effect = response_method ):
-        yield
+        For example, ``headers['content-encoding']`` will return the
+    value of a ``'Content-Encoding'`` response header, regardless
+    of how the header name was originally stored.
     
     
-def _assert_accepts( filter, text ):
-  _assert_accept_equals( filter, text, True )
+class CookieConflictError(RuntimeError):
+    '''There are two cookies that meet the criteria specified in the cookie jar.
+    Use .get and .set and include domain and path args in order to be more specific.
+    '''
     
-                f = _base.Future()
-            w = _WorkItem(f, fn, args, kwargs)
+            assert r.status_code == 200
+        headers, body = raw_request.split(b'\r\n\r\n', 1)
+        status_line, headers = headers.split(b'\r\n', 1)
     
-    try:
-    import queue
-except ImportError:
-    import Queue as queue
+            # if the server thread fails to finish, the test suite will hang
+        # and get killed by the jenkins timeout.
     
-            self.assertFalse(f6.cancel())
-        self.assertEqual(f6._state, FINISHED)
+        # Client Error.
+    400: ('bad_request', 'bad'),
+    401: ('unauthorized',),
+    402: ('payment_required', 'payment'),
+    403: ('forbidden',),
+    404: ('not_found', '-o-'),
+    405: ('method_not_allowed', 'not_allowed'),
+    406: ('not_acceptable',),
+    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
+    408: ('request_timeout', 'timeout'),
+    409: ('conflict',),
+    410: ('gone',),
+    411: ('length_required',),
+    412: ('precondition_failed', 'precondition'),
+    413: ('request_entity_too_large',),
+    414: ('request_uri_too_large',),
+    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
+    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
+    417: ('expectation_failed',),
+    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
+    421: ('misdirected_request',),
+    422: ('unprocessable_entity', 'unprocessable'),
+    423: ('locked',),
+    424: ('failed_dependency', 'dependency'),
+    425: ('unordered_collection', 'unordered'),
+    426: ('upgrade_required', 'upgrade'),
+    428: ('precondition_required', 'precondition'),
+    429: ('too_many_requests', 'too_many'),
+    431: ('header_fields_too_large', 'fields_too_large'),
+    444: ('no_response', 'none'),
+    449: ('retry_with', 'retry'),
+    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
+    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
+    499: ('client_closed_request',),
+    
+        all_layers = model.get_all_encoder_layers()
+    
+      class BertModelTester(object):
+    
+        self.learning_rate = learning_rate
+    self.weight_decay_rate = weight_decay_rate
+    self.beta_1 = beta_1
+    self.beta_2 = beta_2
+    self.epsilon = epsilon
+    self.exclude_from_weight_decay = exclude_from_weight_decay
+    
+    flags = tf.flags
+    
+    flags = tf.flags
