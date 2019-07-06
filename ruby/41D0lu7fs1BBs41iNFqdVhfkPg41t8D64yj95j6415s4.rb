@@ -1,124 +1,212 @@
 
         
-        protected
+          def self.increment!(type, opts = nil)
+    perform_increment!(redis_key(type), opts)
+  end
     
-    
-# Codecs
-IAX_CODEC_G711_MULAW  = 0x00000004
-IAX_CODEC_G711_ALAW   = 0x00000008
-IAX_CODEC_LINEAR_PCM  = 0x00000040
-    
+        def pause
+      stop!
+      @paused = true
     end
-end
-end
+    
+          if period_type == :all
+        DB.exec <<~SQL
+          UPDATE user_stats s
+          SET likes_given         = d.likes_given,
+              likes_received      = d.likes_received,
+              topic_count         = d.topic_count,
+              post_count          = d.post_count
+    
+      def parse(csp_string)
+    csp_string.split(';').map do |policy|
+      directive, *sources = policy.split
+      [directive, sources]
+    end.to_h
+  end
 end
 
     
-              # Encodes the components field
-          #
-          # @return [String]
-          def encode_components
-            encoded = ''
-    
-                checksum = cipher[0, 16]
-            data = cipher[16, cipher.length - 1]
-    
-              # Encodes the authenticator field
-          #
-          # @return [String]
-          def encode_authenticator
-            authenticator.encode
-          end
-        end
-      end
+        @omniauth.before_request_phase do |env|
+      # If the user is trying to reconnect to an existing account, store in session
+      request = ActionDispatch::Request.new(env)
+      request.session[:auth_reconnect] = !!request.params['reconnect']
     end
   end
+    
+      def self.languages
+    langs = Dir.glob(HIGHLIGHTJS_DIR + 'languages/*.js').map do |path|
+      File.basename(path)[0..-8]
+    end
+    
+        def theme_extensions(theme_ids)
+      key = 'theme_extensions_#{Theme.transform_ids(theme_ids).join(',')}'
+      cache[key] ||= find_theme_extensions(theme_ids)
+    end
+    
+          return response unless html_response?(headers)
+      ContentSecurityPolicy.base_url = request.host_with_port if Rails.env.development?
+    
+        cache_time && last_modified && last_modified <= cache_time
+  end
+    
+    =begin
+      +------+-----------+-----------------------------------------+
+      | Hex  | Name      | Description                             |
+      +------+-----------+-----------------------------------------+
+      | 0x01 | NEW       | Initiate a new call                     |
+      |      |           |                                         |
+      | 0x02 | PING      | Ping request                            |
+      |      |           |                                         |
+      | 0x03 | PONG      | Ping or poke reply                      |
+      |      |           |                                         |
+      | 0x04 | ACK       | Explicit acknowledgment                 |
+      |      |           |                                         |
+      | 0x05 | HANGUP    | Initiate call tear-down                 |
+      |      |           |                                         |
+      | 0x06 | REJECT    | Reject a call                           |
+      |      |           |                                         |
+      | 0x07 | ACCEPT    | Accept a call                           |
+      |      |           |                                         |
+      | 0x08 | AUTHREQ   | Authentication request                  |
+      |      |           |                                         |
+      | 0x09 | AUTHREP   | Authentication reply                    |
+      |      |           |                                         |
+      | 0x0a | INVAL     | Invalid message                         |
+      |      |           |                                         |
+      | 0x0b | LAGRQ     | Lag request                             |
+      |      |           |                                         |
+      | 0x0c | LAGRP     | Lag reply                               |
+      |      |           |                                         |
+      | 0x0d | REGREQ    | Registration request                    |
+      |      |           |                                         |
+      | 0x0e | REGAUTH   | Registration authentication             |
+      |      |           |                                         |
+      | 0x0f | REGACK    | Registration acknowledgement            |
+      |      |           |                                         |
+      | 0x10 | REGREJ    | Registration reject                     |
+      |      |           |                                         |
+      | 0x11 | REGREL    | Registration release                    |
+      |      |           |                                         |
+      | 0x12 | VNAK      | Video/Voice retransmit request          |
+      |      |           |                                         |
+      | 0x13 | DPREQ     | Dialplan request                        |
+      |      |           |                                         |
+      | 0x14 | DPREP     | Dialplan reply                          |
+      |      |           |                                         |
+      | 0x15 | DIAL      | Dial                                    |
+      |      |           |                                         |
+      | 0x16 | TXREQ     | Transfer request                        |
+      |      |           |                                         |
+      | 0x17 | TXCNT     | Transfer connect                        |
+      |      |           |                                         |
+      | 0x18 | TXACC     | Transfer accept                         |
+      |      |           |                                         |
+      | 0x19 | TXREADY   | Transfer ready                          |
+      |      |           |                                         |
+      | 0x1a | TXREL     | Transfer release                        |
+      |      |           |                                         |
+      | 0x1b | TXREJ     | Transfer reject                         |
+      |      |           |                                         |
+      | 0x1c | QUELCH    | Halt audio/video [media] transmission   |
+      |      |           |                                         |
+      | 0x1d | UNQUELCH  | Resume audio/video [media] transmission |
+      |      |           |                                         |
+      | 0x1e | POKE      | Poke request                            |
+      |      |           |                                         |
+      | 0x1f | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x20 | MWI       | Message waiting indication              |
+      |      |           |                                         |
+      | 0x21 | UNSUPPORT | Unsupported message                     |
+      |      |           |                                         |
+      | 0x22 | TRANSFER  | Remote transfer request                 |
+      |      |           |                                         |
+      | 0x23 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x24 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x25 | Reserved  | Reserved for future use                 |
+      +------+-----------+-----------------------------------------+
+=end
+    
+    require 'rex/proto/ipmi/utils'
+    
+        head + [data.length].pack('v') + data
+  end
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+              # Decodes the key from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [EncryptionKey]
+          def decode_key(input)
+            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
+          end
+    
+              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_pvno(input)
+            input.value[0].value.to_i
+          end
+    
+    puts '\nUnable to find an RSS feed for the following blogs:'
+puts '==================================================='
+unavailable.each do |b|
+  puts '#{b.name} | #{b.web_url}'
+end
+puts '==================================================='
+
+    
+    Then(/^the task is successful$/) do
+  expect(@success).to be true
 end
     
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            seq_values = input.value
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
     
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+          def resolve
+        return if scm_name.nil?
+        set(:scm, :git) if using_default_scm?
     
-              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'LastRequest encoding not supported'
-          end
-    
-        def self.clear
-      instance.clear
-    end
-    
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
-      else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+          # Register a validation rule for the given key.
+      def validate(key, &validator)
+        vs = (validators[key] || [])
+        vs << validator
+        validators[key] = vs
       end
+    
+          # Keys that have been set, but which have never been fetched.
+      def unused_keys
+        keys - fetched_keys
+      end
+    
+      config.vm.define 'debian7' do |debian7|
+    debian7.vm.box = 'puppetlabs/centos-7.0-64-puppet'
+  end
+    
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
+    
+    
+    
+        unless safesystem(*args)
+      raise 'Command failed while creating payload tar: #{args}'
     end
-    
-          # Parse through mail to get the from/sender headers
-      mail = Mail.new(raw_message.split('\r\n\r\n', 2).first)
-      from_headers = {'from' => mail.from, 'sender' => mail.sender}
-      authenticated_domain = identity.server.find_authenticated_domain_from_headers(from_headers)
-    
-      expansion(:inspection) {
-    {
-      :inspected => o.inspected == 1 ? true : false,
-      :spam => o.spam == 1 ? true : false,
-      :spam_score => o.spam_score.to_f,
-      :threat => o.threat == 1 ? true : false,
-      :threat_details => o.threat_details
-    }
-  }
-    
-      def create
-    @address_endpoint = @server.address_endpoints.build(safe_params)
-    if @address_endpoint.save
-      flash[:notice] = params[:return_notice] if params[:return_notice].present?
-      redirect_to_with_json [:return_to, [organization, @server, :address_endpoints]]
-    else
-      render_form_errors 'new', @address_endpoint
-    end
-  end
-    
-      def render_form_errors(action_name, object)
-    respond_to do |wants|
-      wants.html { render action_name }
-      wants.json { render :json => {:form_errors => object.errors.full_messages}, :status => 422 }
-    end
-  end
-    
-      def setup
-    unless @domain.verified?
-      redirect_to [:verify, organization, @server, @domain], :alert => 'You can't set up DNS for this domain until it has been verified.'
-    end
-  end
-    
-      def index
-    @routes = @server.routes.order(:name).includes(:domain, :endpoint).to_a
-  end
-    
-      def index
-    @smtp_endpoints = @server.smtp_endpoints.order(:name).to_a
-  end
-    
-      def new
-    @track_domain = @server.track_domains.build
-  end
-    
-      def new
-    @organization_user = organization.organization_users.build
+    payload_tar
   end
