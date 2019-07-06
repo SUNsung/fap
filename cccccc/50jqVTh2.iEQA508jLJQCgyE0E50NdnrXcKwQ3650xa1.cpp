@@ -1,123 +1,192 @@
 
         
-        namespace caffe2 {
+        /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
     
-    // ##########################################################
+    #include <QDialog>
     
-    ```
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
     
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
+    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
     
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
-    .Output(
-        0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
-    
-    struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
-    }
-    
-      // Fills in the x-height range accepted by the given unichar_id in blob
-  // coordinates, given its bounding box in the usual baseline-normalized
-  // coordinates, with some initial crude x-height estimate (such as word
-  // size) and this denoting the transformation that was used.
-  // Also returns the amount the character must have shifted up or down.
-  void XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                    const TBOX& bbox,
-                    float* min_xht,
-                    float* max_xht,
-                    float* yshift) const;
-    
-     private:
-    
-    #endif  // MXNET_KVSTORE_GRADIENT_COMPRESSION_INL_H_
-
-    
-    /*!
- * \brief Async functor object
- *  calling argument of the function.
- */
-class TVMFunctor {
- public:
-  // constructor
-  explicit TVMFunctor(PackedFunc func, PackedFunc fset_stream)
-      : func_(func), fset_stream_(fset_stream) {}
-    }
-    
-    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
-#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
+    #include <stdint.h>
+#include <string>
 #include <vector>
-#include './lrn-inl.h'
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
-  return new IdentityAttachKLSparseRegOp<cpu>(param);
+    TEST(DBTest, CompactionsGenerateMultipleFiles) {
+  Options options = CurrentOptions();
+  options.write_buffer_size = 100000000;        // Large write buffer
+  Reopen(&options);
+    }
+    
+    static std::string MakeFileName(const std::string& name, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return name + buf;
 }
-    }
-    }
     
-      void Backward(const OpContext &ctx, const TBlob &out_grad,
-                const std::vector<OpReqType> &req,
-                const std::vector<TBlob> &in_grad) {
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    CHECK_EQ(in_grad.size(), static_cast<size_t>(size_));
-    int axis = CheckAxis(dimension_, out_grad.ndim());
-    Stream<xpu> *s = ctx.get_stream<xpu>();
-    std::vector<Tensor<xpu, 3, DType> > grad_in(size_);
-    Tensor<xpu, 3, DType> grad;
-    size_t leading = 1, trailing = 1;
-    for (int i = 0; i < axis; ++i) {
-      leading *= out_grad.shape_[i];
-    }
-    for (int i = axis + 1; i < out_grad.ndim(); ++i) {
-      trailing *= out_grad.shape_[i];
-    }
-    size_t mid = out_grad.shape_[axis];
-    Shape<3> oshape = Shape3(leading, mid, trailing);
-    grad = out_grad.get_with_shape<xpu, 3, DType>(oshape, s);
-    }
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    // A simple compaction algorithm that always compacts everything
-// to the highest level whenever possible.
-class FullCompactor : public Compactor {
- public:
-  explicit FullCompactor(const Options options) : options_(options) {
-    compact_options_.compression = options_.compression;
-    compact_options_.output_file_size_limit =
-        options_.target_file_size_base;
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+    
+    void MapLiteTestUtil::SetArenaMapFields(unittest::TestArenaMapLite* message) {
+  MapTestUtilImpl::SetArenaMapFields<unittest::MapEnumLite,
+                                     unittest::MAP_ENUM_BAR_LITE,
+                                     unittest::MAP_ENUM_BAZ_LITE>(message);
+}
+    
+    class Proto3DataStripper : public DataStripper {
+ private:
+  virtual bool ShouldBeClear(const FieldDescriptor *field) {
+    return field->type() == FieldDescriptor::TYPE_GROUP ||
+           field->is_extension();
   }
-    }
-    
-      const char* Name() const override { return 'MyFilter'; }
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
 };
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    backupDir
- * Signature: (J)Ljava/lang/String;
- */
-jstring Java_org_rocksdb_BackupableDBOptions_backupDir(JNIEnv* env,
-                                                       jobject /*jopt*/,
-                                                       jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return env->NewStringUTF(bopt->backup_dir.c_str());
+     private:
+  static bool IsMessageSet(const Descriptor *descriptor) {
+    if (descriptor != nullptr
+        && descriptor->options().message_set_wire_format()) {
+      return true;
+    }
+    return false;
+  }
+    
+    
+    {
+    {
+    {      switch (phone_number.type()) {
+        case tutorial::Person::MOBILE:
+          cout << '  Mobile phone #: ';
+          break;
+        case tutorial::Person::HOME:
+          cout << '  Home phone #: ';
+          break;
+        case tutorial::Person::WORK:
+          cout << '  Work phone #: ';
+          break;
+        default:
+          cout << '  Unknown phone #: ';
+          break;
+      }
+      cout << phone_number.number() << endl;
+    }
+    if (person.has_last_updated()) {
+      cout << '  Updated: ' << TimeUtil::ToString(person.last_updated()) << endl;
+    }
+  }
 }
+    
+    Missing features (represented by empty ranges) filled with default_value.
+    
+    namespace caffe2 {
+    }
+    
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+    namespace b2ConvexDecomp {
+    }
+    
+    #undef silk_SUB_SAT32
+static OPUS_INLINE opus_int32 silk_SUB_SAT32_armv5e(opus_int32 a, opus_int32 b)
+{
+  int res;
+  __asm__(
+      '#silk_SUB_SAT32\n\t'
+      'qsub %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(a), 'r'(b)
+  );
+  return res;
+}
+#define silk_SUB_SAT32(a, b) (silk_SUB_SAT32_armv5e(a, b))
+    
+      virtual bool Next(void) {
+    // MxNet iterator is expected to return CPU-accessible memory
+    if (::caffe::Caffe::mode() != ::caffe::Caffe::CPU) {
+      ::caffe::Caffe::set_mode(::caffe::Caffe::CPU);
+      CHECK_EQ(::caffe::Caffe::mode(), ::caffe::Caffe::CPU);
+    }
+    caffe_data_layer_->Forward(bottom_, top_);
+    CHECK_GT(batch_size_, 0) << 'batch size must be greater than zero';
+    CHECK_EQ(out_.batch_size, batch_size_) << 'Internal Error: batch size mismatch';
+    }
+    
+     protected:
+  /*! \brief prefetcher parameters */
+  PrefetcherParam param_;
+  /*! \brief backend thread */
+  dmlc::ThreadedIter<DataBatch> iter;
+  /*! \brief internal batch loader */
+  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+    
+    #if MXNET_USE_DIST_KVSTORE
+#include './kvstore_dist.h'
+std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
+#endif  // MXNET_USE_DIST_KVSTORE
+#if MXNET_USE_NCCL
+#include './kvstore_nccl.h'
+#endif  // MXNET_USE_NCCL
+    
+    template<typename xpu, typename OP>
+void EvalMatChooseRowElem_(const TBlob &lhs, const TBlob &rhs,
+                           TBlob *ret, RunContext ctx) {
+  using namespace mshadow::expr;
+  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
+  // TODO(eric): support mixed type choose, i.e. int index and float rhs.
+  CHECK_EQ(ret->type_flag_, mshadow::default_type_flag)
+    << 'mat_choose_row_element only support float32 as input/output';
+  CHECK_EQ(rhs.type_flag_, mshadow::default_type_flag)
+    << 'mat_choose_row_element only support float32 as input/output';
+  CHECK_EQ(lhs.type_flag_, mshadow::default_type_flag)
+    << 'mat_choose_row_element only support float32 as input/output';
+  ret->get<xpu, 1, real_t>(s)
+      = mat_choose_row_element(lhs.get<xpu, 2, real_t>(s),
+                               rhs.get<xpu, 1, real_t>(s));
+}
+    
+       out = data / sqrt(data.shape[-1])
+    
+    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
+.describe(R'code(
