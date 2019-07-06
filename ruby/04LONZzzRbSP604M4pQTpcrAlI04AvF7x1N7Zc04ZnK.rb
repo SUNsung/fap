@@ -1,135 +1,172 @@
 
         
-          def test_vi_paste_next
-    input_keys('abcde\C-[3h')
-    assert_line('abcde')
-    assert_byte_pointer_size('a')
-    assert_cursor(1)
-    assert_cursor_max(5)
-    input_keys('p')
-    assert_line('abcde')
-    assert_byte_pointer_size('a')
-    assert_cursor(1)
-    assert_cursor_max(5)
-    input_keys('d$')
-    assert_line('a')
-    assert_byte_pointer_size('')
-    assert_cursor(0)
-    assert_cursor_max(1)
-    input_keys('p')
-    assert_line('abcde')
-    assert_byte_pointer_size('abcd')
-    assert_cursor(4)
-    assert_cursor_max(5)
-    input_keys('2p')
-    assert_line('abcdebcdebcde')
-    assert_byte_pointer_size('abcdebcdebcd')
-    assert_cursor(12)
-    assert_cursor_max(13)
+            # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+    else
+      respond_with(resource)
+    end
   end
     
-    class Vec
-  def initialize(x, y, z)
-    @x = x
-    @y = y
-    @z = z
-  end
-    
-    FIRST     = -> l { LEFT[RIGHT[l]] }
-IF        = -> b { b }
-LEFT      = -> p { p[-> x { -> y { x } } ] }
-RIGHT     = -> p { p[-> x { -> y { y } } ] }
-IS_EMPTY  = LEFT
-REST      = -> l { RIGHT[RIGHT[l]] }
-    
-    Given(/^a stage file named (.+)$/) do |filename|
-  TestApp.write_local_stage_file(filename)
+    Devise.setup do |config|
+  require 'devise/orm/active_record'
+  config.secret_key = 'secret_key_base'
 end
     
-          class Properties
-        def initialize
-          @properties = {}
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
+    
+          def rememberable_value
+        if respond_to?(:remember_token)
+          remember_token
+        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
+          salt
+        else
+          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
+            'In order to use rememberable, you must ensure a password is always set ' \
+            'or have a remember_token column in your model or implement your own ' \
+            'rememberable_value in the model with custom logic.'
+        end
+      end
+    
+            # Executes a command on the remote machine with administrative
+        # privileges. See {#execute} for documentation, as the API is the
+        # same.
+        #
+        # @see #execute
+        def sudo(command, opts=nil)
         end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
           end
         end
-        block_given? ? nil : rps
-      end
     
-    set_if_empty :default_env, {}
-set_if_empty :keep_releases, 5
+            # This returns all the registered configuration classes that were
+        # marked as 'upgrade safe.'
+        #
+        # @return [Hash]
+        def config_upgrade_safe
+          result = {}
     
-          attr_reader :page, :name
+              results
+        end
     
-          def title
-        @page.title
-      end
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
+        end
     
-          # Returns page content without title if it was extracted.
-      #
-      def content_without_page_header(content)
-        doc = build_document(content)
-          if @h1_title
-            title = find_header_node(doc)
-            title.remove unless title.empty?
-          end
-        # .inner_html will cause href escaping on UTF-8
-        doc.css('div#gollum-root').children.to_xml(@@to_xml)
-      end
-    end
+        AIR_APPLICATION_INSTALLER =
+      '/Applications/Utilities/Adobe AIR Application Installer.app/Contents/MacOS/Adobe AIR Application Installer'
+    
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
-
     
-    context 'Precious::Views::LatestChanges' do
-  include Rack::Test::Methods
-  
-  def app
-    Precious::App
-  end
-  
-  setup do
-    @path = cloned_testpath('examples/lotr.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
-  end
-    
-        @view = Precious::Views::Page.new
-    @view.instance_variable_set :@page, page
-    @view.instance_variable_set :@content, page.formatted_data
-    @view.instance_variable_set :@h1_title, true
-    
-          ws  = WorkSpace.new(binding)
-      irb = Irb.new(ws)
-    
-        it 'accepts jsfiddle link with a / at the end' do
-      jsfiddle_link = 'http://jsfiddle.net/link2twenty/v2kx9jcd/'
-      expect do
-        generate_new_liquid(jsfiddle_link)
-      end.not_to raise_error
-    end
-    
-      def permitted_attributes_for_preview
-    %i[body_markdown]
-  end
-    
-          it 'unmutes the parent comment if already muted' do
-        sign_in original_commenter
-        parent_comment_by_og.update(receive_notifications: false)
-        patch '/comment_mutes/#{parent_comment_by_og.id}', params: { comment: { receive_notifications: 'true' } }
-        expect(parent_comment_by_og.reload.receive_notifications).to eq true
+          it 'doesn't post' do
+        expect(alice).not_to receive(:like!)
+        post :create, params: like_hash
+        expect(response.code).to eq('422')
       end
     end
+    
+        it 'should redirect back in the html version if it has > 0 notifications' do
+      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
+      get :read_all, params: {type: 'liked'}, format: :html
+      expect(response).to redirect_to(notifications_path)
+    end
+    
+          it 'should not create the participation' do
+        post :create, params: {post_id: @post.id}
+        expect(alice.participations.where(:target_id => @post.id)).not_to exist
+        expect(response.code).to eq('403')
+      end
+    end
+  end
