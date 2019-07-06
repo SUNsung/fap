@@ -1,101 +1,117 @@
 
         
-        
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'git help')
+            OPERATOR = 0
+    SUPERVISOR = 1
+    DIRECTOR = 2
+    
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
     
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
+class HashTable(object):
     
-        return _set_text
+            # Adding unique constraint on 'TagValue', fields ['project_id',
+        # 'environment_id', '_key', 'value']
+        db.create_unique(u'tagstore_tagvalue', ['project_id', 'environment_id', 'key', 'value'])
     
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
+        def backwards(self, orm):
+        # Adding model 'TagKey'
+        db.create_table(u'tagstore_tagkey', (
+            ('status', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('values_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('key', self.gf('django.db.models.fields.CharField')(max_length=32)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('tagstore', ['TagKey'])
     
-    You can download from:
-  https://osxfuse.github.io/
-Error: An unsatisfied requirement failed this build.'''
+        for resolution in resolution_list:
+        try:
+            activity = Activity.objects.filter(
+                group=resolution.group_id,
+                type=Activity.SET_RESOLVED_IN_RELEASE,
+                ident=resolution.id,
+            ).order_by('-datetime')[0]
+        except IndexError:
+            continue
     
-    parametrize_script = pytest.mark.parametrize('script, fixed', [
-    ('tar xvf {}', 'mkdir -p {dir} && tar xvf {filename} -C {dir}'),
-    ('tar -xvf {}', 'mkdir -p {dir} && tar -xvf {filename} -C {dir}'),
-    ('tar --extract -f {}', 'mkdir -p {dir} && tar --extract -f {filename} -C {dir}')])
+    from sentry.models import Option
+from sentry.options import default_manager
+from sentry.options.manager import UnknownOption
+from sentry.tasks.base import instrumented_task
     
-        @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
+    from __future__ import absolute_import
     
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+            for job in job_list:
+            logger.debug('Sending scheduled job %s with payload %r', job.name, job.payload)
+            app.send_task(job.name, kwargs=job.payload)
+            job.delete()
+
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+        To extract all the way down to the ndarray, pass ``extract_numpy=True``.
     
-    # def test_unicode_url_verbose(self):
-#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
-#     assert HTTP_OK in r
+        def time_add_overflow_arr_mask_nan(self):
+        checked_add_with_arr(self.arr, self.arr_mixed, arr_mask=self.arr_nan_1)
     
-        # Round in the units appropriate
-    if precision == PRECISION_HALVES:
-        temperature = round(temperature * 2) / 2.0
-    elif precision == PRECISION_TENTHS:
-        temperature = round(temperature, 1)
-    # Integer as a fall back (PRECISION_WHOLE)
+        def time_series_constructor(self, data_fmt, with_index, dtype):
+        Series(self.data, index=self.index)
+    
+    def _prepare_file(fileDir, file_=None):
+    fileDict = {}
+    if file_:
+        if hasattr(file_, 'read'):
+            file_ = file_.read()
+        else:
+            return ReturnValue({'BaseResponse': {
+                'ErrMsg': 'file_ param should be opened file',
+                'Ret': -1005, }})
     else:
-        temperature = round(temperature)
+        if not utils.check_file(fileDir):
+            return ReturnValue({'BaseResponse': {
+                'ErrMsg': 'No file found in specific dir',
+                'Ret': -1002, }})
+        with open(fileDir, 'rb') as f:
+            file_ = f.read()
+    fileDict['fileSize'] = len(file_)
+    fileDict['fileMd5'] = hashlib.md5(file_).hexdigest()
+    fileDict['file_'] = io.BytesIO(file_)
+    return fileDict
     
+    from mitmproxy import log
+from mitmproxy import ctx
     
-def parametric_relu(x, channel_shared=False, alpha_init=constant(0.), name='parametric_relu', reuse=None):
-    '''参数化 ReLU
+        def send(self, message):
+        if isinstance(message, list):
+            message = b''.join(message)
+        self.wfile.write(message)
+        self.wfile.flush()
     
-        Examples:
-        l2_regularizer = l2(0.01)
-        tf.get_variable(..., regularizer=l2_regularizer, ...)
+        class ImageData(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self.lzw_min_code_size = self._io.read_u1()
+            self.subblocks = self._root.Subblocks(self._io, self, self._root)
+    
+        '''
+    Return true if the continuation bit is set in the byte
     '''
+    def checkContinuationBit(self, byteval):
+        continuationBitmask = 0x80
+        return (continuationBitmask & byteval) != 0
+    
+        def take(self):
+        '''
+        Scripts or other parties make 'take' a reply out of a normal flow.
+        For example, intercepted flows are taken out so that the connection thread does not proceed.
+        '''
+        if self.state != 'start':
+            raise exceptions.ControlException(
+                'Reply is {}, but expected it to be start.'.format(self.state)
+            )
+        self._state = 'taken'
+    
+    '''
+import unittest
