@@ -1,19 +1,99 @@
 
         
-        sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
-from youtube_dl.utils import shell_quote
+                loss = self.__train_single_batch__(session, batch_instances)
+        losses.append(loss)
     
-    import io
-import optparse
-import re
+        # Intuitively, shuffle spike occurances, 0 or 1, but since we have counts,
+    # Do it over and over again up to the max count.
+    for mc in range(1,max_counts+1):
+      idxs = np.nonzero(data_bxtxd >= mc)
     
-    module_contents = [
-    module_template + '\n' + getsource(InfoExtractor.suitable) + '\n',
-    'class LazyLoadSearchExtractor(LazyLoadExtractor):\n    pass\n']
+      # Sample neuron subsets.  The assumption is the PC axes of the RNN
+  # are not unit aligned, so sampling units is adequate to sample all
+  # the high-variance PCs.
+  P_sxn = np.eye(S,N)
+  for m in range(n):
+    P_sxn = np.roll(P_sxn, S, axis=1)
     
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+      if use_json:
+    the_file = open(data_fname,'w')
+    json.dump(data_dict, the_file)
+    the_file.close()
+  else:
+    try:
+      with h5py.File(data_fname, 'w') as hf:
+        for k, v in data_dict.items():
+          clean_k = k.replace('/', '_')
+          if clean_k is not k:
+            print('Warning: saving variable with name: ', k, ' as ', clean_k)
+          else:
+            print('Saving variable with name: ', clean_k)
+          hf.create_dataset(clean_k, data=v, compression=compression)
+    except IOError:
+      print('Cannot open %s for writing.', data_fname)
+      raise
+    
+    
+def convert_and_zip(id_to_word, sequences, predictions):
+  '''Helper function for printing or logging.  Retrieves list of sequences
+  and predictions and zips them together.
+  '''
+  indices = convert_to_indices(sequences)
+    
+      Returns:
+    values:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.baseline_method == 'critic':
+    if FLAGS.discriminator_model == 'seq2seq_vd':
+      values = critic_vd.critic_seq2seq_vd_derivative(
+          hparams, sequence, is_training, reuse=reuse)
+    else:
+      raise NotImplementedError
+  else:
+    raise NotImplementedError
+  return values
+
+    
+    
+def construct_ngrams_dict(ngrams_list):
+  '''Construct a ngram dictionary which maps an ngram tuple to the number
+  of times it appears in the text.'''
+  counts = {}
+    
+      # Attention score function
+  attention_score_fn = _create_attention_score_fn('attention_score', num_units,
+                                                  attention_option, reuse)
+  # Attention construction function
+  attention_construct_fn = _create_attention_construct_fn(
+      'attention_construct', num_units, attention_score_fn, reuse)
+    
+          predictions = tf.transpose(predictions, [1, 0, 2])
+      return tf.squeeze(predictions, axis=2)
+
+    
+    password = key
+new_key = aes_encrypt(password, key_expansion(password))
+r = openssl_encode('aes-128-ctr', new_key, iv)
+print('aes_decrypt_text 16')
+print(repr(r))
+    
+        bug_text = re.search(
+        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
+    dev_text = re.search(
+        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
+        readme).group(1)
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    with io.open(lazy_extractors_filename, 'wt', encoding='utf-8') as f:
+    f.write(module_src)
+
     
     
 def build_completion(opt_parser):
@@ -22,218 +102,134 @@ def build_completion(opt_parser):
     opts_file = [opt for opt in opts if opt.metavar == 'FILE']
     opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
     
-            jsi = JSInterpreter('''
-        function f() {
-            var x = '/*';
-            var y = 1 /* comment */ + 2;
-            return y;
-        }
-        ''')
-        self.assertEqual(jsi.call_function('f'), 3)
-    
-        def test_proxy_https(self):
-        params = self._check_params(['primary_proxy', 'primary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL({
-            'proxy': params['primary_proxy']
-        })
-        self.assertEqual(
-            ydl.urlopen('https://yt-dl.org/ip').read().decode('utf-8'),
-            params['primary_server_ip'])
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+from youtube_dl.version import __version__
+version = __version__
+# The full version, including alpha/beta/rc tags.
+release = version
     
     
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
-        plt.subplots_adjust(hspace=.30)
-    
-    # Split data in train set and test set
-n_samples = X.shape[0]
-X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
-X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
-print('test data sparsity: %f' % sparsity_ratio(X_test))
-    
-        in_exercise_region = False
-    
-    plt.show()
-
-    
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
-    
-        ax.scatter(X[:, 3], X[:, 0], X[:, 2],
-               c=labels.astype(np.float), edgecolor='k')
-    
-    '''
-=========================================================
-Vector Quantization Example
-=========================================================
-    
-    import time
-import warnings
-    
-        def reset_appid(self):
-        # called by web_control
-        with self.lock:
-            self.working_appid_list = list()
-            for appid in self.config.GAE_APPIDS:
-                if not appid:
-                    self.config.GAE_APPIDS.remove(appid)
-                    continue
-                self.working_appid_list.append(appid)
-            self.not_exist_appids = []
-            self.out_of_quota_appids = []
-        self.last_reset_time = time.time()
-    
-            # change the status,
-        # web_control /cert_import_status will return True, else return False
-        # launcher will wait ready to open browser and check update
-        # config.cert_import_ready = True
-    
-                try:
-                res = self.check_ip.check_ip(ip)
-            except Exception as e:
-                xlog.warn('check except:%r', e)
-                continue
-    
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
+    from __future__ import unicode_literals
     
     
-class Log(object):
-    def __init__(self):
-        self.fd = open(log_file, 'a')
+if __name__ == '__main__':
+    main()
     
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
+    
+        for prime in lowPrimes:
+        if (num % prime) == 0:
+            return False
+    
+    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
+	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
+	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+		return TEMPORARY_ARRAY
+	else:
+		return LONGEST_SUB
+    
+            '''
+        this section is to check that the inputs conform to our dimensionality constraints
         '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        if X.ndim != 1:
+            print('Error: Input data set must be one dimensional')
+            return
+        if len(X) != len(y):
+            print('Error: X and y have different lengths')
+            return
+        if y.ndim != 1:
+            print('Error: Data set labels must be one dimensional')
+            return
     
-                else:
-                if isinstance(self.input, CharStream):
-                    self.c = self.input.LT(1)
-                    self.line = self.input.line
-                    self.charPositionInLine = self.input.charPositionInLine
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
     
-            if self.input is None:
-            return None
-        
-        return self.input.substring(self.start, self.stop)
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--headers', dest='headers', action='store_true', \
+            help='print response HTTP headers instead of body')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+            creatorForNetloc() is the same as BrowserLikePolicyForHTTPS
+        except this context factory allows setting the TLS/SSL method to use.
     
-    from xml.etree import cElementTree as ET
-from copy import copy
-from ..common import *
-#----------------------------------------------------------------------
-def ckplayer_get_info_by_xml(ckinfo):
-    '''str->dict
-    Information for CKPlayer API content.'''
-    e = ET.XML(ckinfo)
-    video_dict = {'title': '',
-                  #'duration': 0,
-                  'links': [],
-                  'size': 0,
-                  'flashvars': '',}
-    dictified = dictify(e)['ckplayer']
-    if 'info' in dictified:
-        if '_text' in dictified['info'][0]['title'][0]:  #title
-            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
+        # TODO: It would be better if we had unit tests for each
+    # method in addition to the following end-to-end test
+    def test_end_to_end(self):
+        print('Test: Empty stack')
+        stack = Stack()
+        assert_equal(stack.peek(), None)
+        assert_equal(stack.pop(), None)
     
-            elif re.search(r'i\.imgur\.com/', self.url):
-            # direct image
-            _, container, size = url_info(self.url)
-            self.streams = {
-                'original': {
-                    'src': [self.url],
-                    'size': size,
-                    'container': container
-                }
-            }
-            self.title = r1(r'i\.imgur\.com/([^./]*)', self.url)
+            # 检查梯度
+        epsilon = 10e-4
+        for fc in self.layers:
+            for i in range(fc.W.shape[0]):
+                for j in range(fc.W.shape[1]):
+                    fc.W[i,j] += epsilon
+                    output = self.predict(sample_feature)
+                    err1 = self.loss(sample_label, output)
+                    fc.W[i,j] -= 2*epsilon
+                    output = self.predict(sample_feature)
+                    err2 = self.loss(sample_label, output)
+                    expect_grad = (err1 - err2) / (2 * epsilon)
+                    fc.W[i,j] += epsilon
+                    print('weights(%d,%d): expected - actural %.4e - %.4e' % (
+                        i, j, expect_grad, fc.W_grad[i,j]))
     
-    from ..common import *
-from ..extractor import VideoExtractor
-    
-      Args:
-    filename: The name of the current file.
-    clean_lines: A CleansedLines instance containing the file.
-    linenum: The number of the line to check.
-    error: The function to call with any errors found.
-  '''
-  line = clean_lines.elided[linenum]
-    
-    def stripped(line):
-    # Remove well-formed html tags, fixing mistakes by legitimate users
-    sline = TAG_REGEX.sub('', line)
-    sline = re.sub('[()\[\]#*]', ' ', line)
-    return sline
-    
-            # Changing field 'TagKey.environment_id'
-        db.alter_column(u'tagstore_tagkey', 'environment_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedBigIntegerField')(null=True))
-    
-        poll_again = _HandlePollResponse( response, diagnostics_handler )
-    if poll_again:
-      self._SendRequest()
-      return True
+            # 保存全部delta值
+        self.delta_h_list[k-1] = delta_h_prev
+        self.delta_f_list[k] = delta_f
+        self.delta_i_list[k] = delta_i
+        self.delta_o_list[k] = delta_o
+        self.delta_ct_list[k] = delta_ct
     
     
-@YouCompleteMeInstance()
-@patch( 'ycm.client.base_request._logger', autospec = True )
-@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
-def SendCompletionRequest_ErrorFromServer_test( ycm,
-                                                post_vim_message,
-                                                logger ):
-  current_buffer = VimBuffer( 'buffer' )
-  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-    with MockCompletionRequest( ServerError( 'Server error' ) ):
-      ycm.SendCompletionRequest()
-      ok_( ycm.CompletionRequestReady() )
-      response = ycm.GetCompletionResponse()
-      logger.exception.assert_called_with( 'Error while handling server '
-                                           'response' )
-      post_vim_message.assert_has_exact_calls( [
-        call( 'Server error', truncate = True )
-      ] )
-      assert_that(
-        response,
-        has_entries( {
-          'completions': empty(),
-          'completion_start_column': -1
-        } )
-      )
-
+# 从文本中构建矩阵，加载文本文件，然后处理
+def loadDataSet(fileName):  # 通用函数，用来解析以 tab 键分隔的 floats（浮点数）
+    dataSet = []
+    fr = open(fileName)
+    for line in fr.readlines():
+        curLine = line.strip().split('\t')
+        fltLine = map(float, curLine)  # 映射所有的元素为 float（浮点数）类型
+        dataSet.append(fltLine)
+    return dataSet
     
-    # Output file base name for HTML help builder.
-htmlhelp_basename = 'futuresdoc'
+        Args:
+        dataMat   原数据集矩阵
+        topNfeat  应用的N个特征
+    Returns:
+        lowDDataMat  降维后数据集
+        reconMat     新的数据集空间
+    '''
+    
+    
+# recommend()函数，就是推荐引擎，它默认调用standEst()函数，产生了最高的N个推荐结果。
+# 如果不指定N的大小，则默认值为3。该函数另外的参数还包括相似度计算方法和估计方法
+def recommend(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
+    '''svdEst( )
