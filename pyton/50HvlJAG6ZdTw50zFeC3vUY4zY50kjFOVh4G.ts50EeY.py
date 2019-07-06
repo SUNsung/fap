@@ -1,242 +1,221 @@
 
         
-            def ensure_disabled(self):
-        '''Ensures the rule and targets are present, but disabled, and synced'''
-        self.ensure_present(enabled=False)
+            def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
     
-        updates = list()
-    additions = list()
-    deletions = list()
+        def __init__(self, license_plate):
+        super(Bus, self).__init__(VehicleSize.LARGE, license_plate, spot_size=5)
     
+        def __init__(self, key, value):
+        self.key = key
+        self.value = value
     
-class DNSZoneIPAClient(IPAClient):
-    def __init__(self, module, host, port, protocol):
-        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
+        def __init__(self, db):
+        self.db = db
+        pass
     
-    
-DOCUMENTATION = '''
----
-module: bigpanda
-author: 'Hagai Kariti (@hkariti)'
-short_description: Notify BigPanda about deployments
-version_added: '1.8'
-description:
-   - Notify BigPanda when deployments start and end (successfully or not). Returns a deployment object containing all the parameters for future module calls.
-options:
-  component:
-    description:
-      - 'The name of the component being deployed. Ex: billing'
-    required: true
-    aliases: ['name']
-  version:
-    description:
-      - The deployment version.
-    required: true
-  token:
-    description:
-      - API token.
-    required: true
-  state:
-    description:
-      - State of the deployment.
-    required: true
-    choices: ['started', 'finished', 'failed']
-  hosts:
-    description:
-      - Name of affected host name. Can be a list.
-    required: false
-    default: machine's hostname
-    aliases: ['host']
-  env:
-    description:
-      - The environment name, typically 'production', 'staging', etc.
-    required: false
-  owner:
-    description:
-      - The person responsible for the deployment.
-    required: false
-  description:
-    description:
-      - Free text description of the deployment.
-    required: false
-  url:
-    description:
-      - Base URL of the API server.
-    required: False
-    default: https://api.bigpanda.io
-  validate_certs:
-    description:
-      - If C(no), SSL certificates for the target url will not be validated. This should only be used
-        on personally controlled sites using self-signed certificates.
-    required: false
-    default: 'yes'
-    type: bool
-    
-        namespace = dict(ca='http://www.ca.com/spectrum/restful/schema/response')
-    
-        module = AnsibleModule(
-        argument_spec=dict(
-            key=dict(required=True),
-            event=dict(required=True, choices=['deploy', 'annotation']),
-            msg=dict(),
-            revision_id=dict(),
-            annotated_by=dict(default='Ansible'),
-            level=dict(default='INFO', choices=['INFO', 'WARN', 'ERROR']),
-            instance_id=dict(),
-            event_epoch=dict(),
-            deployed_by=dict(default='Ansible'),
-            deployed_to=dict(),
-            repository=dict(),
-        ),
-        supports_check_mode=True
-    )
-    
-    import numpy as np
-import gc
-from time import time
-from collections import defaultdict
-import matplotlib.pyplot as plt
-from sklearn.datasets import fetch_lfw_people
-from sklearn.decomposition import IncrementalPCA, PCA
-    
-        try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
-    
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
-    
-    plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
-                     np.sort(model.column_labels_) + 1),
-            cmap=plt.cm.Blues)
-plt.title('Checkerboard structure of rearranged data')
-    
-    # Import datasets, classifiers and performance metrics
-from sklearn import datasets, svm, metrics
-    
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
-    elif sys.platform == 'darwin':
-        darwin_lib = os.path.abspath( os.path.join(python_path, 'lib', 'darwin'))
-        sys.path.append(darwin_lib)
-        extra_lib = '/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'
-        sys.path.append(extra_lib)
+    # TODO: ensure that history changes.
+
     
     
-def report_fail(ip):
-    if '.' in ip:
-        IPv4.report_fail()
-    else:
-        IPv6.report_fail()
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-        m = re.match(r'(\d+)\.(\d+)(\.(\d+))?(b(\d+))?', version_str)
-    if m is None:
-        raise ValueError('Bad version string %r' % version_str)
+    dynamodb                                 | dynamodbstreams
+ec2                                      | ecr
     
-    MIN_TOKEN_TYPE = UP+1
-	
-INVALID_TOKEN_TYPE = 0
+    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
+parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
+    ('foo{}', 'foo{}', 'foo{}'),
+    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
     
-            Terence implemented packed table initializers, because Java has a
-        size restriction on .class files and the lookup tables can grow
-        pretty large. The generated JavaLexer.java of the Java.g example
-        would be about 15MB with uncompressed array initializers.
     
-        filenames = []
-    for (dirpath, dnames, fnames) in os.walk(path):
-        for fname in fnames:
-            if fname.endswith('.md'):
-                filenames.append(os.sep.join([dirpath, fname]))
+class UnaccentExtension(CreateExtension):
     
-    if args.quiet:
-    jieba.setLogLevel(60)
-if args.pos:
-    import jieba.posseg
-    posdelim = args.pos
-    def cutfunc(sentence, _, HMM=True):
-        for w, f in jieba.posseg.cut(sentence, HMM):
-            yield w + posdelim + f
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
+    
+        def create(self):
+        # Because a cache can fail silently (e.g. memcache), we don't know if
+        # we are failing to create a new session because of a key collision or
+        # because the cache is missing. So we try for a (large) number of times
+        # and then raise an exception. That's the risk you shoulder if using
+        # cache backing.
+        for i in range(10000):
+            self._session_key = self._get_new_session_key()
+            try:
+                self.save(must_create=True)
+            except CreateError:
+                continue
+            self.modified = True
+            return
+        raise RuntimeError(
+            'Unable to create a new session key. '
+            'It is likely that the cache is unavailable.')
+    
+        @classmethod
+    def get_model_class(cls):
+        # Avoids a circular import and allows importing SessionStore when
+        # django.contrib.sessions is not in INSTALLED_APPS.
+        from django.contrib.sessions.models import Session
+        return Session
+    
+        The headers and data are separated by a blank line.
+    
+            loader = unittest.TestLoader()
+        loader.sortTestMethodsUsing = reversed_cmp
+    
+    NAME_MAPPING.update({
+    ('__builtin__', 'basestring'): ('builtins', 'str'),
+    ('exceptions', 'StandardError'): ('builtins', 'Exception'),
+    ('UserDict', 'UserDict'): ('collections', 'UserDict'),
+    ('socket', '_socketobject'): ('socket', 'SocketType'),
+})
+    
+    
+def getctime(filename):
+    '''Return the metadata change time of a file, reported by os.stat().'''
+    return os.stat(filename).st_ctime
+    
+    
+Package = Union[str, ModuleType]
+Resource = Union[str, os.PathLike]
+    
+    import os
+import email
+import mimetypes
+    
+    def plus(a, b):
+    time.sleep(0.5 * random.random())
+    return a + b
+    
+    con = sqlite3.connect(':memory:')
+con.isolation_level = None
+cur = con.cursor()
+    
+    cur.execute('insert into test(p) values (?)', (p,))
+cur.execute('select p from test')
+print('with declared types:', cur.fetchone()[0])
+cur.close()
+con.close()
+    
+        To extract all the way down to the ndarray, pass ``extract_numpy=True``.
+    
+    from pandas import Series
+from pandas.util.testing import assert_almost_equal, assert_series_equal
+    
+    
+from .pandas_vb_common import setup  # noqa: F401
+
+    
+    
+  def Start( self ):
+    self.PostDataToHandler( {},
+                            'shutdown',
+                            TIMEOUT_SECONDS,
+                            display_message = False )
+    
+      AddToGroupMap( 'Conditional', statement_group )
+  AddToGroupMap( 'Repeat'     , statement_group )
+  AddToGroupMap( 'Label'      , statement_group )
+  AddToGroupMap( 'Operator'   , statement_group )
+  AddToGroupMap( 'Keyword'    , statement_group )
+  AddToGroupMap( 'Exception'  , statement_group )
+    
+        Args:
+        max_workers: The maximum number of threads that can be used to
+            execute the given calls.
+    '''
+    self._max_workers = max_workers
+    self._work_queue = queue.Queue()
+    self._threads = set()
+    self._shutdown = False
+    self._shutdown_lock = threading.Lock()
+    
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+    
+                if work_item.future.set_running_or_notify_cancel():
+                call_queue.put(_CallItem(work_id,
+                                         work_item.fn,
+                                         work_item.args,
+                                         work_item.kwargs),
+                               block=True)
+            else:
+                del pending_work_items[work_id]
+                continue
+    
+    def main():
+    for name, fn in [('sequential',
+                      functools.partial(download_urls_sequential, URLS)),
+                     ('processes',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ProcessPoolExecutor(10))),
+                     ('threads',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ThreadPoolExecutor(10)))]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        url_map = fn()
+        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
+                         (time.time() - start, len(url_map), len(URLS)))
+    
+    if PY2:
+    text_type = unicode
+    string_types = (str, unicode)
+    
+    if opt.topK is None:
+    topK = 10
 else:
-    cutfunc = jieba.cut
+    topK = int(opt.topK)
     
-        def textrank(self, sentence, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'), withFlag=False):
-        '''
-        Extract keywords from sentence using TextRank algorithm.
-        Parameter:
-            - topK: return how many top keywords. `None` for all possible words.
-            - withWeight: if True, return a list of (word, weight);
-                          if False, return a list of words.
-            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v'].
-                        if the POS of w is not in this list, it will be filtered.
-            - withFlag: if True, return a list of pair(word, weight) like posseg.cut
-                        if False, return a list of words
-        '''
-        self.pos_filt = frozenset(allowPOS)
-        g = UndirectWeightedGraph()
-        cm = defaultdict(int)
-        words = tuple(self.tokenizer.cut(sentence))
-        for i, wp in enumerate(words):
-            if self.pairfilter(wp):
-                for j in xrange(i + 1, i + self.span):
-                    if j >= len(words):
-                        break
-                    if not self.pairfilter(words[j]):
-                        continue
-                    if allowPOS and withFlag:
-                        cm[(wp, words[j])] += 1
-                    else:
-                        cm[(wp.word, words[j].word)] += 1
+    for topic_idx, topic in enumerate(nmf.components_):
+    print('Topic #%d:' % topic_idx)
+    print(' '.join([feature_names[i]
+                    for i in topic.argsort()[:-n_top_words - 1:-1]]))
+    print('')
+
     
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-opt, args = parser.parse_args()
-    
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-opt, args = parser.parse_args()
-    
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-parser.add_option('-w', dest='withWeight')
-opt, args = parser.parse_args()
-    
-    n_topic = 10
-n_top_words = 25
-    
-        def testPosseg_NOHMM(self):
-        import jieba.posseg as pseg
+        def testSetDictionary(self):
+        jieba.set_dictionary('foobar.txt')
         for content in test_contents:
-            result = pseg.cut(content,HMM=False)
-            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = jieba.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test SetDictionary Generator error'
             result = list(result)
-            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
-            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
-        print('testPosseg_NOHMM', file=sys.stderr)
+            assert isinstance(result, list), 'Test SetDictionary error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testSetDictionary', file=sys.stderr)
     
-    import jieba
     
-    log_f = open('1.log','w')
-log_f.write(' / '.join(map(str, words)))
