@@ -1,107 +1,119 @@
 
         
-                message = '#{tag} (fastlane)'
-        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
-      end
+          attr_accessor :relevances
+  def relevances_attributes=(attributes); end
+end
     
-          it 'handles the extension parameter correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb')
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.rb')
-      end
+        when IAX_TYPE_CONTROL
+      case stype
+      when IAX_CTRL_HANGUP
+        dprint('HANGUP')
+        self.client.send_ack(self)
+        self.state = :hangup
     
-          it 'works with single quote in rule name' do
-        rule = 'CoveredSwitchStatementsDon'tNeedDefault'
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              enable_rules: [\'#{rule}\'],
-              disable_rules: [\'#{rule}\']
-            )
-          end').runner.execute(:test)
+              # Encodes the renew_time field
+          #
+          # @return [String]
+          def encode_renew_time
+            [renew_till].pack('N')
+          end
     
-    # test monkey patched method on both (simulated) OSes
-describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
-  describe 'on Windows' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+              # Decodes the key from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [EncryptionKey]
+          def decode_key(input)
+            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
+          end
+    
+        def zero?() false end
+    def finite?() false end
+    def infinite?() d.nonzero? end
+    def nan?() d.zero? end
+    
+        def inspect # :nodoc:
+      '#<%s:%d %s>' % [self.class.name, @bitlen, hexdigest]
     end
-    
-    MESSAGE
   end
-    
-            warden.logout(scope)
-        warden.clear_strategies_cache!(scope: scope)
-        instance_variable_set(:'@current_#{scope}', nil)
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
-      end
-    
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-        def execute
-      temp_path = generate_temporary_path
-      packet_gem = Paquet::Gem.new(temp_path, LogStash::Environment::CACHE_PATH)
-    
-    shared_examples 'logstash list' do |logstash|
-  describe 'logstash-plugin list on #{logstash.hostname}' do
-    before(:all) do
-      logstash.install({:version => LOGSTASH_VERSION})
-    end
-    
-            it 'successfully processes' do
-          uploader_class.process :convert => 'jpg'
-          uploader.process!
-        end
-    
-    require 'rspec'
-require 'carrierwave'
-require 'webmock/cucumber'
-    
-          private
-      def interpolate_paperclip_path(path)
-        mappings.each_pair.inject(path) do |agg, pair|
-          agg.gsub(':#{pair[0]}') { pair[1].call(self, self.paperclip_style).to_s }
-        end
-      end
-    end # Paperclip
-  end # Compatibility
-end # CarrierWave
+end
 
     
-      describe '.some_class_method' do
-    it 'does something' do
-      # ...
+    # for https://github.com/ruby/etc
+srcdir = File.expand_path('..', __FILE__)
+if !File.exist?('#{srcdir}/depend')
+  %x[#{RbConfig.ruby} #{srcdir}/mkconstants.rb -o #{srcdir}/constdefs.h]
+end
+    
+      default_value = nil if default_value == 'nil'
+    
+      # Sets the last +Error+ of the current executing +Thread+ to +error+
+  def self.last_error= error
+    Thread.current[:__DL2_LAST_ERROR__] = error
+    Thread.current[:__FIDDLE_LAST_ERROR__] = error
+  end
+    
+          def lines
+        lines = []
+        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
+          lines << { :line  => line,
+                     :class => line_class(line),
+                     :ldln  => left_diff_line_number(0, line),
+                     :rdln  => right_diff_line_number(0, line) }
+        end if @diff
+        lines
+      end
+    
+          def next_link
+        label = 'Next &raquo;'
+        if @versions.size == Gollum::Page.per_page
+          link = '/history/#{@page.name}?page=#{@page_num+1}'
+          %(<a href='#{link}' hotkey='l'>#{label}</a>)
+        else
+          %(<span class='disabled'>#{label}</span>)
+        end
+      end
     end
   end
+end
+
+    
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+        class MapGollum
+      def initialize(base_path)
+        @mg = Rack::Builder.new do
+          
+          map '/#{base_path}' do
+            run Precious::App
+          end
+          map '/' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          map '/*' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          
+        end
+      end
+    
+      s.test_files = s.files.select { |path| path =~ /^test\/test_.*\.rb/ }
+end
+
+    
+          def main_sidebar_classes
+        if cookies['sidebar-minimized'] == 'true'
+          'col-3 col-md-2 sidebar'
+        else
+          'p-0 col-3 col-md-2 sidebar'
+        end
+      end
+    
+            def show
+          expires_in 15.minutes, public: true
+          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
+          headers['Surrogate-Key'] = 'product_id=1'
+          respond_with(@product)
+        end
