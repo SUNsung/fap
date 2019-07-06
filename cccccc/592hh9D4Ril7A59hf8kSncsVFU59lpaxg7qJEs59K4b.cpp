@@ -1,409 +1,274 @@
 
         
-        REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
+        # define TEST_P(test_case_name, test_name) \
+  class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) \
+      : public test_case_name { \
+   public: \
+    GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {} \
+    virtual void TestBody(); \
+   private: \
+    static int AddToRegistry() { \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestPattern(\
+                  #test_case_name, \
+                  #test_name, \
+                  new ::testing::internal::TestMetaFactory< \
+                      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>()); \
+      return 0; \
+    } \
+    static int gtest_registering_dummy_; \
+    GTEST_DISALLOW_COPY_AND_ASSIGN_(\
+        GTEST_TEST_CLASS_NAME_(test_case_name, test_name)); \
+  }; \
+  int GTEST_TEST_CLASS_NAME_(test_case_name, \
+                             test_name)::gtest_registering_dummy_ = \
+      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::AddToRegistry(); \
+  void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
     
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
+    # define TYPED_TEST_P(CaseName, TestName) \
+  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
+  template <typename gtest_TypeParam_> \
+  class TestName : public CaseName<gtest_TypeParam_> { \
+   private: \
+    typedef CaseName<gtest_TypeParam_> TestFixture; \
+    typedef gtest_TypeParam_ TypeParam; \
+    virtual void TestBody(); \
+  }; \
+  static bool gtest_##TestName##_defined_ GTEST_ATTRIBUTE_UNUSED_ = \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).AddTestName(\
+          __FILE__, __LINE__, #CaseName, #TestName); \
+  } \
+  template <typename gtest_TypeParam_> \
+  void GTEST_CASE_NAMESPACE_(CaseName)::TestName<gtest_TypeParam_>::TestBody()
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
+      FilePath& operator=(const FilePath& rhs) {
+    Set(rhs);
+    return *this;
+  }
     
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
+    
+    {
+    {}  // namespace internal
+}  // namespace testing
+    
+    inline tuple<> make_tuple() { return tuple<>(); }
+    
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
+
+    
+    #include 'sample2.h'
+#include 'gtest/gtest.h'
+    
+      // Applies a function/functor on each element of the queue, and
+  // returns the result in a new queue.  The original queue is not
+  // affected.
+  template <typename F>
+  Queue* Map(F function) const {
+    Queue* new_queue = new Queue();
+    for (const QueueNode<E>* node = head_; node != NULL; node = node->next_) {
+      new_queue->Enqueue(function(node->element()));
+    }
+    }
+    
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
+}
+    
+      Status GetFileContainingExtension(
+      ServerContext* context,
+      const reflection::v1alpha::ExtensionRequest* request,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    using grpc::core::Bucket;
+using grpc::core::Histogram;
+using grpc::core::Metric;
+using grpc::core::Stats;
+    
+    
+    {}  // namespace grpc
+    
+    
+    {}  // namespace grpc
+
+    
+    RemoveTransliterator::~RemoveTransliterator() {}
+    
+        printf('%4d   %08x    %-15s  ', index, op, opNames[pinnedType]);
+    switch (type) {
+    case URX_NOP:
+    case URX_DOTANY:
+    case URX_DOTANY_ALL:
+    case URX_FAIL:
+    case URX_CARET:
+    case URX_DOLLAR:
+    case URX_BACKSLASH_G:
+    case URX_BACKSLASH_X:
+    case URX_END:
+    case URX_DOLLAR_M:
+    case URX_CARET_M:
+        // Types with no operand field of interest.
+        break;
+    }
+    
+    //-------------------------------------------------------------------------------
+//
+//  ScriptSet - A bit set representing a set of scripts.
+//
+//              This class was originally used exclusively with script sets appearing
+//              as part of the spoof check whole script confusable binary data. Its
+//              use has since become more general, but the continued use to wrap
+//              prebuilt binary data does constrain the design.
+//
+//-------------------------------------------------------------------------------
+class U_I18N_API ScriptSet: public UMemory {
+  public:
+    ScriptSet();
+    ScriptSet(const ScriptSet &other);
+    ~ScriptSet();
+    }
+    
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
 };
     
-    REGISTER_CUDA_OPERATOR(LC, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LCGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
     
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
     
-      /**
-   * @brief Given the top blob error gradients, compute the bottom blob error
-   *        gradients.
-   *
-   * @param top
-   *     the output blobs, whose diff fields store the gradient of the error
-   *     with respect to themselves
-   * @param propagate_down
-   *     a vector with equal length to bottom, with each index indicating
-   *     whether to propagate the error gradients down to the bottom blob at
-   *     the corresponding index
-   * @param bottom
-   *     the input blobs, whose diff fields will store the gradient of the error
-   *     with respect to themselves after Backward is run
-   *
-   * The Backward wrapper calls the relevant device wrapper function
-   * (Backward_cpu or Backward_gpu) to compute the bottom blob diffs given the
-   * top blob diffs.
-   *
-   * Your layer should implement Backward_cpu and (optionally) Backward_gpu.
-   */
-  inline void Backward(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down,
-      const vector<Blob<Dtype>*>& bottom);
-    
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    #include <vector>
-    
-    namespace caffe {
+    {
+    {
+    {
+    {                const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
+            }
+        }
+        umtx_unlock(&LOCK);
     }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    return fTimeZoneFormat;
+}
     
     /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ * Implement UnicodeFunctor
  */
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+void StringMatcher::setData(const TransliterationRuleData* d) {
+    data = d;
+    int32_t i = 0;
+    while (i<pattern.length()) {
+        UChar32 c = pattern.char32At(i);
+        UnicodeFunctor* f = data->lookup(c);
+        if (f != NULL) {
+            f->setData(data);
+        }
+        i += U16_LENGTH(c);
     }
+}
     
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+    
+    {    return outLen;
+}
+    
+        // TODO: Hide OS mouse cursor if ImGui is drawing it
+    // s3ePointerSetInt(S3E_POINTER_HIDE_CURSOR,(io.MouseDrawCursor ? 0 : 1));
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
 
     
+    #pragma once
     
-    {}  // namespace caffe
+        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
+    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
+    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
+    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
+    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete]      = 127;
+    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
+    io.KeyMap[ImGuiKey_Space]       = ' ';
+    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
+    io.KeyMap[ImGuiKey_Escape]      = 27;
+    io.KeyMap[ImGuiKey_A]           = 'A';
+    io.KeyMap[ImGuiKey_C]           = 'C';
+    io.KeyMap[ImGuiKey_V]           = 'V';
+    io.KeyMap[ImGuiKey_X]           = 'X';
+    io.KeyMap[ImGuiKey_Y]           = 'Y';
+    io.KeyMap[ImGuiKey_Z]           = 'Z';
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    // Win32 message handler
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+    }
     
-            friend Rational operator&(Rational lhs, Rational const& rhs);
-        friend Rational operator|(Rational lhs, Rational const& rhs);
-        friend Rational operator^(Rational lhs, Rational const& rhs);
-    
-    
-    {    if (m_curOperandIndex < static_cast<int>(m_operandIndices.size()))
+        // Create the blending setup
     {
-        m_operandIndices[m_curOperandIndex++] = ich;
+        D3D10_BLEND_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.AlphaToCoverageEnable = false;
+        desc.BlendEnable[0] = true;
+        desc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+        desc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.BlendOp = D3D10_BLEND_OP_ADD;
+        desc.SrcBlendAlpha = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.DestBlendAlpha = D3D10_BLEND_ZERO;
+        desc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+        desc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+        g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
     }
-}
     
-    vector<shared_ptr<HISTORYITEM>> const& CalculatorHistory::GetHistory()
+            src_tmp.Rects = &buf_rects[buf_rects_out_n];
+        buf_rects_out_n += src_tmp.GlyphsCount;
+    
+    // Functions
+bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
 {
-    return m_historyItems;
-}
-    
-        // Remove zeros
-    bool fDigitsFound = false;
-    int trimIdx = 0;
-    for (unsigned int i = 0; i < m_token.size(); i++)
-    {
-        if (m_token.at(i) != chZero)
-        {
-            if (m_token.at(i) == decimalSymbol)
-            {
-                trimIdx = i - 1;
-            }
-            else
-            {
-                trimIdx = i;
-            }
-            fDigitsFound = true;
-            break;
-        }
+    // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendRendererName = 'imgui_impl_opengl3';
+#if IMGUI_IMPL_OPENGL_HAS_DRAW_WITH_BASE_VERTEX
+    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
+#endif
     }
-    
-            // IIterable<Object^>
-         // Not implemented
-        virtual Windows::Foundation::Collections::IIterator<Platform::Object^>^ First() = Windows::Foundation::Collections::IIterable<Platform::Object^>::First
-            {
-                throw ref new Platform::NotImplementedException();
-            }
-    
-            static NarratorAnnouncement ^ GetMemoryClearedAnnouncement(Platform::String ^ announcement);
-        static NarratorAnnouncement ^ GetMemoryItemChangedAnnouncement(Platform::String ^ announcement);
-        static NarratorAnnouncement ^ GetMemoryItemAddedAnnouncement(Platform::String ^ announcement);
-    
-    
-    {
-    {        // For now reusing the shim to allow prefetch.
-        // Please only use a subset of the shim interface that includes
-        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
-        // Shim will be deleted in the future versions.
-        std::shared_ptr<ReaderShim<float>> m_shim;
-        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
-    };
-}
-
-    
-        std::wstring NDArrayView::AsString() const
-    {
-        wstringstream wss;
-        std::wstring device = DeviceKindName(m_device.Type());
-        wss << L'NDArrayView(' << m_viewShape.AsString() << L', ' << device << L')';
-        return wss.str();
-    }
-    
-                m_samples.second += samples;
-            m_updates.second++;
-            m_totalUpdates++;
-            
-            if (ShouldWriteUpdate(m_updates.second))
-            {
-                // Time to output the accumulated updates.
-                // Note that we take snapshot of the accumulated loss/metric only when we want to write.
-                // We do it this way on purpose, since accumulated loss/metric may be stored on a GPU
-                // and we want to minimize the number of GPU->CPU data transfers.
-                if (accumulatedLoss)
-                {
-                    m_loss.second = accumulatedLoss->AsScalar<double>();
-                }
-    }
-    
-            static bool IsUDF(const FunctionPtr& f);
-    
-                    auto numColsPerSample = fullyDefinedSampleShape.SubShape(ShapeRowColSplitPoint(fullyDefinedSampleShape, isDataSparse, /*noDynamicAxes =*/ false)).TotalSize();
-                std::vector<SparseIndexType> colStarts;
-                std::vector<SparseIndexType> rowIndices;
-                std::vector<char> nonZeroValues;
-                for (size_t i = 0; i < numSequences; ++i)
-                {
-                    switch (dataType)
-                    {
-                    case DataType::Float:
-                        AppendSparseSequenceData<float>(sequences[i], colStarts, rowIndices, nonZeroValues, maxSequenceLength * numColsPerSample);
-                        break;
-                    case DataType::Double:
-                        AppendSparseSequenceData<double>(sequences[i], colStarts, rowIndices, nonZeroValues, maxSequenceLength * numColsPerSample);
-                        break;
-                    default:
-                        NOT_IMPLEMENTED;
-                    }
-                }
-    
-            const NDShape& Shape() const override { return m_unpackedShape; }
-        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
-        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
-        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
-        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-    // StartMinibatchLoop - Startup a minibatch loop
-//  mbSize - [in] size of the minibatch (number of frames, etc.)
-//  epoch - [in] epoch number for this loop
-//  requestedEpochSamples - [in] number of samples to randomize, defaults to requestDataSize which uses the number of samples there are in the dataset
-void DataReader::StartMinibatchLoop(size_t mbSize, size_t epoch, size_t requestedEpochSamples)
-{
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        m_dataReaders[m_ioNames[i]]->StartMinibatchLoop(mbSize, epoch, requestedEpochSamples);
-}
-    
-    public:
-    virtual const std::wstring GetRequestedDynamicAxis() const { return m_dynamicAxisNodeName; }
-    
-    // This constructor helps with BrainScript integration
-template<class ElemType>
-OptimizedRNNStackNode<ElemType>::OptimizedRNNStackNode(const ScriptableObjects::IConfigRecordPtr configp)
-    : Base(configp->Get(L'deviceId'), L'<placeholder>'), 
-    m_rnnAttributes(configp->Get(L'bidirectional'), configp->Get(L'numLayers'), configp->Get(L'hiddenDims'), configp->Get(L'recurrentOp'), configp->Get(L'axis')),
-    m_BackwardDataCalledYet(false)
-{
-    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
-}
-    
-    namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-    
-    {}
-    
-    void Label::branchFar(Assembler& a,
-                  BranchConditions bc,
-                  LinkReg lr,
-                  ImmType immt,
-                  bool immMayChange) {
-  // Marking current address for patchAbsolute
-  addJump(&a);
-    }
-    
-    
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
-    }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
-    
-      // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
-    
-    #include 'hphp/runtime/base/url.h'
-#include 'hphp/util/assertions.h'
-    
-    static void ImGui_ImplDX10_SetupRenderState(ImDrawData* draw_data, ID3D10Device* ctx)
-{
-    // Setup viewport
-    D3D10_VIEWPORT vp;
-    memset(&vp, 0, sizeof(D3D10_VIEWPORT));
-    vp.Width = (UINT)draw_data->DisplaySize.x;
-    vp.Height = (UINT)draw_data->DisplaySize.y;
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = vp.TopLeftY = 0;
-    ctx->RSSetViewports(1, &vp);
-    }
-    
-    static void ImGui_ImplOpenGL2_SetupRenderState(ImDrawData* draw_data, int fb_width, int fb_height)
-{
-    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_SCISSOR_TEST);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-    
-        ImRect bb(pos, pos + ImVec2(g.FontSize, g.FontSize) + g.Style.FramePadding * 2.0f);
-    ItemAdd(bb, id);
-    bool hovered, held;
-    bool pressed = ButtonBehavior(bb, id, &hovered, &held, ImGuiButtonFlags_None);
-    
-      // Store the path to our archive for later exfiltration
-  archivePath_ = carveDir_ / fs::path(kCarveNamePrefix + carveGuid_ + '.tar');
-  compressPath_ =
-      carveDir_ / fs::path(kCarveNamePrefix + carveGuid_ + '.tar.zst');
-    
-      /*
-   * @brief the uri used to begin POSTing carve data
-   *
-   * This endpoint should negotiate the details of the carve, as well
-   * as give the client a session id used to continue POSTing the data.
-   */
-  std::string startUri_;
-    
-    JSON getExamplePacksConfig() {
-  std::string content;
-  auto const filepath = getTestConfigDirectory() / 'test_inline_pack.conf';
-  auto status = readFile(filepath, content);
-  EXPECT_TRUE(status.ok())
-      << 'Could not read file: ' << boost::io::quoted(filepath.string())
-      << ', because: ' << status.what();
-  JSON doc = JSON::newObject();
-  doc.fromString(content);
-  return doc;
-}
-    
-    ExpectedSuccess<DatabaseError> RocksdbDatabase::putStringsUnsafe(
-    const std::string& domain,
-    const std::vector<std::pair<std::string, std::string>>& data) {
-  auto handle = getHandle(domain);
-  if (handle) {
-    std::shared_ptr<Handle> handle_ptr = handle.take();
-    rocksdb::WriteBatch batch;
-    }
-    }
-    
-      rj::Document doc;
-  if (doc.Parse(request.at('log').c_str()).HasParseError()) {
-    return;
-  }
-    
-    #include 'plugin.h'
