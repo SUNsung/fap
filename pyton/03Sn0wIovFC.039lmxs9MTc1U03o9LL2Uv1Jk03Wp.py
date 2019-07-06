@@ -1,109 +1,152 @@
 
         
-            # We support multiple output distributions, for example Poisson, and also
-    # Gaussian. In these two cases respectively, there are one and two
-    # parameters (rates vs. mean and variance).  So the output_dist_params
-    # tensor will variable sizes via tf.concat and tf.split, along the 1st
-    # dimension. So in the case of gaussian, for example, it'll be
-    # batch x (D+D), where each D dims is the mean, and then variances,
-    # respectively. For a distribution with 3 parameters, it would be
-    # batch x (D+D+D).
-    self.output_dist_params = dist_params = [None] * num_steps
-    self.log_p_xgz_b = log_p_xgz_b = 0.0  # log P(x|z)
-    for t in range(num_steps):
-      # Controller
-      if co_dim > 0:
-        # Build inputs for controller
-        tlag = t - hps.controller_input_lag
-        if tlag < 0:
-          con_in_f_t = tf.zeros_like(ci_enc_fwd[0])
-        else:
-          con_in_f_t = ci_enc_fwd[tlag]
-        if hps.do_causal_controller:
-          # If controller is causal (wrt to data generation process), then it
-          # cannot see future data.  Thus, excluding ci_enc_rev[t] is obvious.
-          # Less obvious is the need to exclude factors[t-1].  This arises
-          # because information flows from g0 through factors to the controller
-          # input.  The g0 encoding is backwards, so we must necessarily exclude
-          # the factors in order to keep the controller input purely from a
-          # forward encoding (however unlikely it is that
-          # g0->factors->controller channel might actually be used in this way).
-          con_in_list_t = [con_in_f_t]
-        else:
-          tlag_rev = t + hps.controller_input_lag
-          if tlag_rev >= num_steps:
-            # better than zeros
-            con_in_r_t = tf.zeros_like(ci_enc_rev[0])
-          else:
-            con_in_r_t = ci_enc_rev[tlag_rev]
-          con_in_list_t = [con_in_f_t, con_in_r_t]
+            def score(self):
+        min_over = sys.MAXSIZE
+        max_under = -sys.MAXSIZE
+        for score in self.possible_scores():
+            if self.BLACKJACK < score < min_over:
+                min_over = score
+            elif max_under < score <= self.BLACKJACK:
+                max_under = score
+        return max_under if max_under != -sys.MAXSIZE else min_over
     
-      if input_magnitude > 0.0:
-    # time of 'hits' randomly chosen between [1/4 and 3/4] of total time
-    input_times = rng.choice(int(ntime_steps/2), size=[E]) + int(ntime_steps/4)
-  else:
-    input_times = None
+        def __init__(self, chat_id):
+        self.chat_id = chat_id
+        self.users = []
+        self.messages = []
+    
+            (2016-01, shopping), 125
+        (2016-01, gas), 50
+        '''
+        total = sum(values)
+        self.handle_budget_notifications(key, total)
+        yield key, sum(values)
+    
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
     
-class CharsVocabulary(Vocabulary):
-  '''Vocabulary containing character-level information.'''
+@pytest.mark.parametrize('command, packages, which', [
+    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
+     [], None),
+    (Command('vim', ''), [], None),
+    (Command('', ''), [], None),
+    (Command('vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim'),
+    (Command('sudo vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim')])
+def test_not_match(mocker, command, packages, which):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-      def add_single_model(self, model_name='lm1'):
-    '''Add a single model into the current ensemble.'''
-    # Create single LM
-    single_lm = SingleRecurrentLanguageModel(self.vocab, model_name)
-    
-    
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
-    
-      samples = []
-  for sequence_id in xrange(min(len(arr), max_num_to_print)):
-    buffer_str = ' '.join(
-        [str(id_to_word[index]) for index in arr[sequence_id, :]])
-    samples.append(buffer_str)
-  return samples
-    
-    from models import bidirectional_zaremba
-from models import cnn
-from models import critic_vd
-from models import feedforward
-from models import rnn
-from models import rnn_nas
-from models import rnn_vd
-from models import rnn_zaremba
-from models import seq2seq
-from models import seq2seq_nas
-from models import seq2seq_vd
-from models import seq2seq_zaremba
-    
-        return res
+        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
+    assert new_command == 'sudo apt upgrade'
+
     
     
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-    from requests.structures import CaseInsensitiveDict, LookupDict
+        def state_forwards(self, app_label, state):
+        pass
     
-            assert server.handler_results[0] == first_request
-        assert server.handler_results[1] == second_request
     
-            try:
-            _netrc = netrc(netrc_path).authenticators(host)
-            if _netrc:
-                # Return with login / password
-                login_i = (0 if _netrc[0] else 1)
-                return (_netrc[login_i], _netrc[2])
-        except (NetrcParseError, IOError):
-            # If there was a parsing error or a permissions issue reading the file,
-            # we'll just skip netrc auth unless explicitly asked to raise errors.
-            if raise_errors:
-                raise
+@functools.lru_cache()
+def get_hstore_oids(connection_alias):
+    '''Return hstore and hstore array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute(
+            'SELECT t.oid, typarray '
+            'FROM pg_type t '
+            'JOIN pg_namespace ns ON typnamespace = ns.oid '
+            'WHERE typname = 'hstore''
+        )
+        oids = []
+        array_oids = []
+        for row in cursor:
+            oids.append(row[0])
+            array_oids.append(row[1])
+        return tuple(oids), tuple(array_oids)
     
-        # By using the 'with' statement we are sure the session is closed, thus we
-    # avoid leaving sockets open which can trigger a ResourceWarning in some
-    # cases, and look like a memory leak in others.
-    with sessions.Session() as session:
-        return session.request(method=method, url=url, **kwargs)
+        def __init__(self, keys, strict=False, messages=None):
+        self.keys = set(keys)
+        self.strict = strict
+        if messages is not None:
+            self.messages = {**self.messages, **messages}
+    
+        lastmod = None
+    all_sites_lastmod = True
+    urls = []
+    for site in maps:
+        try:
+            if callable(site):
+                site = site()
+            urls.extend(site.get_urls(page=page, site=req_site,
+                                      protocol=req_protocol))
+            if all_sites_lastmod:
+                site_lastmod = getattr(site, 'latest_lastmod', None)
+                if site_lastmod is not None:
+                    site_lastmod = (
+                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
+                        else site_lastmod.timetuple()
+                    )
+                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
+                else:
+                    all_sites_lastmod = False
+        except EmptyPage:
+            raise Http404('Page %s empty' % page)
+        except PageNotAnInteger:
+            raise Http404('No page '%s'' % page)
+    response = TemplateResponse(request, template_name, {'urlset': urls},
+                                content_type=content_type)
+    if all_sites_lastmod and lastmod is not None:
+        # if lastmod is defined for all sites, set header so as
+        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
+        response['Last-Modified'] = http_date(timegm(lastmod))
+    return response
+
+    
+        def as_hidden(self, attrs=None, **kwargs):
+        '''
+        Return a string of HTML for representing this as an <input type='hidden'>.
+        '''
+        return self.as_widget(self.field.hidden_widget(), attrs, **kwargs)
+    
+    
+def train_and_evaluate():
+    last_error_ratio = 1.0
+    epoch = 0
+    train_data_set, train_labels = transpose(get_training_data_set())
+    test_data_set, test_labels = transpose(get_test_data_set())
+    network = Network([784, 100, 10])
+    while True:
+        epoch += 1
+        network.train(train_labels, train_data_set, 0.01, 1)
+        print('%s epoch %d finished, loss %f' % (now(), epoch, 
+            network.loss(train_labels[-1], network.predict(train_data_set[-1]))))
+        if epoch % 2 == 0:
+            error_ratio = evaluate(network, test_data_set, test_labels)
+            print('%s after epoch %d, error ratio is %f' % (now(), epoch, error_ratio))
+            if error_ratio > last_error_ratio:
+                break
+            else:
+                last_error_ratio = error_ratio
