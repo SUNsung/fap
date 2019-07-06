@@ -1,291 +1,314 @@
 
         
-            for (recid = 0; recid < 4; recid++) {
-        int i;
-        int recid2;
-        /* (4,4) encoded in DER. */
-        unsigned char sigbder[8] = {0x30, 0x06, 0x02, 0x01, 0x04, 0x02, 0x01, 0x04};
-        unsigned char sigcder_zr[7] = {0x30, 0x05, 0x02, 0x00, 0x02, 0x01, 0x01};
-        unsigned char sigcder_zs[7] = {0x30, 0x05, 0x02, 0x01, 0x01, 0x02, 0x00};
-        unsigned char sigbderalt1[39] = {
-            0x30, 0x25, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
-        };
-        unsigned char sigbderalt2[39] = {
-            0x30, 0x25, 0x02, 0x01, 0x04, 0x02, 0x20, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-        };
-        unsigned char sigbderalt3[40] = {
-            0x30, 0x26, 0x02, 0x21, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
-        };
-        unsigned char sigbderalt4[40] = {
-            0x30, 0x26, 0x02, 0x01, 0x04, 0x02, 0x21, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-        };
-        /* (order + r,4) encoded in DER. */
-        unsigned char sigbderlong[40] = {
-            0x30, 0x26, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF,
-            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-            0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xBA, 0xAE, 0xDC,
-            0xE6, 0xAF, 0x48, 0xA0, 0x3B, 0xBF, 0xD2, 0x5E,
-            0x8C, 0xD0, 0x36, 0x41, 0x45, 0x02, 0x01, 0x04
-        };
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 1);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 1);
-        for (recid2 = 0; recid2 < 4; recid2++) {
-            secp256k1_pubkey pubkey2b;
-            CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid2) == 1);
-            CHECK(secp256k1_ecdsa_recover(ctx, &pubkey2b, &rsig, msg32) == 1);
-            /* Verifying with (order + r,4) should always fail. */
-            CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderlong, sizeof(sigbderlong)) == 1);
-            CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
-        }
-        /* DER parsing tests. */
-        /* Zero length r/s. */
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zr, sizeof(sigcder_zr)) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zs, sizeof(sigcder_zs)) == 0);
-        /* Leading zeros. */
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt1, sizeof(sigbderalt1)) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt2, sizeof(sigbderalt2)) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 0);
-        sigbderalt3[4] = 1;
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
-        sigbderalt4[7] = 1;
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
-        /* Damage signature. */
-        sigbder[7]++;
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
-        sigbder[7]--;
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, 6) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder) - 1) == 0);
-        for(i = 0; i < 8; i++) {
-            int c;
-            unsigned char orig = sigbder[i];
-            /*Try every single-byte change.*/
-            for (c = 0; c < 256; c++) {
-                if (c == orig ) {
-                    continue;
-                }
-                sigbder[i] = c;
-                CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 0 || secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
-            }
-            sigbder[i] = orig;
-        }
+        // hidden_ops should be a list of Op names that should get a leading _
+// in the output. Prints the output to stdout.
+// Optional fourth argument is the name of the original C++ source file
+// where the ops' REGISTER_OP() calls reside.
+void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
+                    const std::vector<string>& hidden_ops, bool require_shapes,
+                    const string& source_file_name = '');
+    
+    #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
+    
+      void Compute(OpKernelContext* context) override {
+    // Output a scalar string.
+    Tensor* output_tensor = nullptr;
+    OP_REQUIRES_OK(context,
+                   context->allocate_output(0, TensorShape(), &output_tensor));
+    auto output = output_tensor->scalar<string>();
     }
     
-        strKey = 'first';
-    strVal = 'John';
-    BOOST_CHECK(obj.pushKV(strKey, strVal));
-    
-    
-    {} // namespace bech32
-    
-    #endif // BITCOIN_CRYPTO_RIPEMD160_H
-
-    
-      virtual void ReleaseSnapshot(const Snapshot* snapshot) {
-    delete reinterpret_cast<const ModelSnapshot*>(snapshot);
+    void NPyBfloat16_CopySwap(void* dst, void* src, int swap, void* arr) {
+  if (!src) {
+    return;
   }
-  virtual Status Write(const WriteOptions& options, WriteBatch* batch) {
-    class Handler : public WriteBatch::Handler {
-     public:
-      KVMap* map_;
-      virtual void Put(const Slice& key, const Slice& value) {
-        (*map_)[key.ToString()] = value.ToString();
-      }
-      virtual void Delete(const Slice& key) {
-        map_->erase(key.ToString());
-      }
+  memcpy(dst, src, sizeof(uint16_t));
+  if (swap) {
+    ByteSwap16(dst);
+  }
+}
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // Creates a 2d FFT plan with scratch allocator.
+  virtual std::unique_ptr<Plan> Create2dPlanWithScratchAllocator(
+      Stream *stream, uint64 num_x, uint64 num_y, Type type, bool in_place_fft,
+      ScratchAllocator *scratch_allocator) = 0;
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {    struct KeypointStore {
+        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
+        virtual ~KeypointStore() {};
     };
-    Handler handler;
-    handler.map_ = &map_;
-    return batch->Iterate(&handler);
-  }
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
 }
     
-    void FaultInjectionTestEnv::UntrackFile(const std::string& f) {
-  MutexLock l(&mutex_);
-  db_file_state_.erase(f);
-  new_files_since_last_dir_sync_.erase(f);
-}
+        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
+                     uint8x16_t & v_dst) const
+    {
+        uint16x8_t v_src0_p = vmovl_u8(vget_low_u8(v_src0));
+        uint16x8_t v_src1_p = vmovl_u8(vget_low_u8(v_src1));
+        float32x4_t v_dst0f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src1_p))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src0_p))));
+        float32x4_t v_dst1f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src1_p))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src0_p))));
+        uint16x8_t v_dst0 = vcombine_u16(vmovn_u32(vcvtq_u32_f32(v_dst0f)),
+                                         vmovn_u32(vcvtq_u32_f32(v_dst1f)));
+    }
     
-    bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
-}
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
     
-    		inline Block4x4Encoding * GetEncoding(void)
-		{
-			return m_pencoding;
-		}
-    
-    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
-static const tran_high_t sinpi_1_9 = 5283;
-static const tran_high_t sinpi_2_9 = 9929;
-static const tran_high_t sinpi_3_9 = 13377;
-static const tran_high_t sinpi_4_9 = 15212;
-    
-    void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed);
-void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed);
-void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution);
-    
-    namespace HPHP { namespace HHBBC {
+        inline void operator()(const u8* src, s16* dstx, s16* dsty, ptrdiff_t width)
+    {
+        uint8x8_t l = vtbl1_u8(vld1_u8(src - lookLeft), vfmask);
+        ptrdiff_t i = 0;
+        for (; i < width - 8 + lookRight; i += 8)
+        {
+            internal::prefetch(src + i);
+            uint8x8_t l18u = vld1_u8(src + i + 1);
     }
     }
     
-    namespace HPHP {
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
+{
+    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
+    size_t len = _len + startMargin + endMargin;
+    if( (size_t)p < len )
+        return _p;
+    else if( borderType == BORDER_MODE_REPLICATE )
+        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
+    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
+    {
+        s32 delta = borderType == BORDER_MODE_REFLECT101;
+        if( len == 1 )
+            return 0;
+        do
+        {
+            if( p < 0 )
+                p = -p - 1 + delta;
+            else
+                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
+        }
+        while( (size_t)p >= len );
+    }
+    else if( borderType == BORDER_MODE_WRAP )
+    {
+        if( p < 0 )
+            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
+        if( p >= (ptrdiff_t)len )
+            p %= (ptrdiff_t)len;
+    }
+    else if( borderType == BORDER_MODE_CONSTANT )
+        p = -1;
+    else
+        internal::assertSupportedConfiguration(false);
+    return p - (ptrdiff_t)startMargin;
+}
+    
+                uint32x4_t vlx1 = vmvnq_u32(vequ1);
+    
+    f64 dotProduct(const Size2D &_size,
+               const s8 * src0Base, ptrdiff_t src0Stride,
+               const s8 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
     }
     
     
-    {///////////////////////////////////////////////////////////////////////////////
+    {    minLocCount >>= 1;
+    maxLocCount >>= 1;
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)minVal;
+    (void)minLocPtr;
+    (void)minLocCount;
+    (void)minLocCapacity;
+    (void)maxVal;
+    (void)maxLocPtr;
+    (void)maxLocCount;
+    (void)maxLocCapacity;
+#endif
 }
+    
+    
+    {            vec128 v_src = vld1q(src + js);
+            vec128 v_dst = vrev64q(v_src);
+            v_dst = vcombine(vget_high(v_dst), vget_low(v_dst));
+            vst1q(dst + jd - step_base, v_dst);
+        }
+        for (; js < roiw_tail; js += step_tail, jd -= step_tail)
+        {
+            vec64 v_src = vld1(src + js);
+            vst1(dst + jd - step_tail, vrev64(v_src));
+        }
+    
+    
+    {
+    {
+    {
+    {                vst1_s16(dst + x, ls);
+            }
+            break;
+        }
+        for (s32 h = 0; h < cn; ++h)
+        {
+            s32* ln = lane + h;
+            s16* dt = dst + h;
+            for (size_t k = x; k < colsn; k += cn)
+            {
+                dt[k] = (s16)((ln[k-2*cn] + ln[k+2*cn] + 4*(ln[k-cn] + ln[k+cn]) + 6*ln[k] + (1<<7))>>8);
+            }
+        }
+    }
+#else
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)borderValue;
+    (void)borderMargin;
+#endif
+}
+    
+    inline uint8x8_t vqtbl1_u8 (uint8x16_t a, uint8x8_t b)
+{
+#ifdef __aarch64__
+    // AArch64 supports this natively
+    return ::vqtbl1_u8(a, b);
+#else
+    union { uint8x16_t v; uint8x8x2_t w; } u = { a };
+    return vtbl2_u8(u.w, b);
+#endif
+}
+    
+        // output changed array
+    std::cout << object << '\n';
+    
+        // out_of_range.403
+    try
+    {
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        if (!q.value.HasMember('interval')) {
+      query.interval = FLAGS_schedule_default_interval;
+    } else {
+      query.interval = JSON::valueToSize(q.value['interval']);
+    }
+    
+    
+    {  rf.registry('config_parser')->remove('placebo');
+}
+    
+    
+    {  EXPECT_EQ(pack_count, 1U);
+  c.reset();
+}
+    
+    std::map<std::string, std::string> getTestConfigMap(const std::string& file) {
+  std::string content;
+  auto const filepath = getTestConfigDirectory() / file;
+  auto status = readFile(filepath, content);
+  EXPECT_TRUE(status.ok())
+      << 'Could not read file: ' << boost::io::quoted(filepath.string())
+      << ', because: ' << status.what();
+  std::map<std::string, std::string> config;
+  config['awesome'] = content;
+  return config;
+}
+    
+    
+    {} // namespace osquery
 
     
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+    template <typename T>
+Expected<T, DatabaseError> InMemoryDatabase::getValue(const std::string& domain,
+                                                      const std::string& key) {
+  debug_only::verifyTrue(is_open_, 'database is not open');
+  if (!is_open_) {
+    return createError(DatabaseError::DbIsNotOpen) << 'Database is closed';
+  }
+  auto storage_iter = storage_.find(domain);
+  if (storage_iter == storage_.end()) {
+    return domainNotFoundError(domain);
+  }
+  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
+  auto result = storage_iter->second->get(key);
+  if (result) {
+    DataType value = result.take();
+    if (value.type() == typeid(T)) {
+      return boost::get<T>(value);
+    } else {
+      auto error = createError(DatabaseError::KeyNotFound)
+                   << 'Requested wrong type for: ' << domain << ':' << key
+                   << ' stored type: ' << value.type().name()
+                   << ' requested type '
+                   << boost::core::demangle(typeid(T).name());
+      LOG(ERROR) << error.getMessage();
+      debug_only::fail(error.getMessage().c_str());
+      return std::move(error);
     }
-    
-        // create an array from std::list
-    std::list<bool> c_list {true, true, false, true};
-    json j_list(c_list);
-    
-    void Action::step(float /*dt*/)
-{
-    CCLOG('[Action step]. override me');
+  }
+  return result.takeError();
 }
     
-    FlipX3D* FlipX3D::clone() const
-{
-    // no copy constructor    
-    auto a = new (std::nothrow) FlipX3D();
-    a->initWithSize(_gridSize, _duration);
-    a->autorelease();
-    return a;
+      // This method bypass type validation and will silently update value
+  // even if type was changed (e.g int->string)
+  ExpectedSuccess<DatabaseError> putStringsUnsafe(
+      const std::string& domain,
+      const std::vector<std::pair<std::string, std::string>>& data) override;
+    
+    ExpectedSuccess<DatabaseError> RocksdbDatabase::putRawBytes(
+    const std::string& domain,
+    const std::string& key,
+    const std::string& value) {
+  auto handle = getHandle(domain);
+  if (handle) {
+    std::shared_ptr<Handle> handle_ptr = handle.take();
+    return putRawBytesInternal(handle_ptr.get(), key, value);
+  }
+  return handle.takeError();
 }
-    
-    
-    {     actionAllocWithHashElement(element);
- 
-     CCASSERT(! ccArrayContainsObject(element->actions, action), 'action already be added!');
-     ccArrayAppendObject(element->actions, action);
- 
-     action->startWithTarget(target);
-}
-    
-        /** Resumes the target. All queued actions will be resumed.
-     *
-     * @param target    A certain target.
-     */
-    virtual void resumeTarget(Node *target);
-    
-    /** Pauses all running actions, returning a list of targets whose actions were paused.
-     *
-     * @return  A list of targets whose actions were paused.
-     */
-    virtual Vector<Node*> pauseAllRunningActions();
-    
-    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
-     *
-     * @param targetsToResume   A set of targets need to be resumed.
-     */
-    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
-    
-    /** Main loop of ActionManager.
-     * @param dt    In seconds.
-     */
-    virtual void update(float dt);
-    
-protected:
-    // declared in ActionManager.m
-    
-        /**
-     * @brief Initializes the action with a duration, a 'from' percentage and a 'to' percentage.
-     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
-     * @param fromPercentage Specify the source percentage.
-     * @param toPercentage Specify the destination percentage.
-     * @return If the creation success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, float fromPercentage, float toPercentage);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    class CC_DLL ComponentContainer
-{
-protected:
-    /**
-     * @js ctor
-     */
-    ComponentContainer(Node* node);
-    
-public:
-    /**
-     * @js NA
-     * @lua NA
-     */
-    ~ComponentContainer();
-    
-	/**
-     * @js getComponent
-     */
-	Component* get(const std::string& name) const;
-    }
