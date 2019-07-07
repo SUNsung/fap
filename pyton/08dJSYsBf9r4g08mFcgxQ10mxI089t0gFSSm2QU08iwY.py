@@ -1,215 +1,292 @@
 
         
-            def get(self, query):
-        '''Get the stored query result from the cache.
-    
-            (2016-01, shopping), 25
-        (2016-01, shopping), 100
-        (2016-01, gas), 50
-        '''
-        timestamp, category, amount = line.split('\t')
-        period = self. extract_year_month(timestamp)
-        if period == self.current_year_month():
-            yield (period, category), amount
-    
-    
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
-    
-        def save(self, must_create=False):
-        if self.session_key is None:
-            return self.create()
-        if must_create:
-            func = self._cache.add
-        elif self._cache.get(self.cache_key) is not None:
-            func = self._cache.set
-        else:
-            raise UpdateError
-        result = func(self.cache_key,
-                      self._get_session(no_load=must_create),
-                      self.get_expiry_age())
-        if must_create and not result:
-            raise CreateError
-    
-        lastmod = None
-    all_sites_lastmod = True
-    urls = []
-    for site in maps:
-        try:
-            if callable(site):
-                site = site()
-            urls.extend(site.get_urls(page=page, site=req_site,
-                                      protocol=req_protocol))
-            if all_sites_lastmod:
-                site_lastmod = getattr(site, 'latest_lastmod', None)
-                if site_lastmod is not None:
-                    site_lastmod = (
-                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
-                        else site_lastmod.timetuple()
-                    )
-                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
-                else:
-                    all_sites_lastmod = False
-        except EmptyPage:
-            raise Http404('Page %s empty' % page)
-        except PageNotAnInteger:
-            raise Http404('No page '%s'' % page)
-    response = TemplateResponse(request, template_name, {'urlset': urls},
-                                content_type=content_type)
-    if all_sites_lastmod and lastmod is not None:
-        # if lastmod is defined for all sites, set header so as
-        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
-        response['Last-Modified'] = http_date(timegm(lastmod))
-    return response
+        
+parser = youtube_dl.parseOpts()[0]
+build_completion(parser)
 
     
-        References:
-        tflearn.prelu
-    '''
-    if channel_shared:
-        alpha_shape = get_shape(x)[-1:]
-    else:
-        alpha_shape = [1]
+    try:
+    input = raw_input
+except NameError:
+    pass
     
-        with tf.variable_scope(name or 'conv2d', reuse=reuse):
-        W, b = get_wb(kernel_shape)
+        infile, outfile = args
     
-    # 如果一个 ngram 都没找到，gensim 会报错
-#   其实可以返回一个 0 向量的，它内部实际上是从一个 0 向量开始累加的；
-#   但返回时做了一个判断——如果依然是 0 向量，则报错
-# print(model.wv['z'])
-r'''
-Traceback (most recent call last):
-  File 'D:/OneDrive/workspace/github/DL-Notes-for-Interview/code/工具库/gensim/FastText.py', line 53, in <module>
-    print(model.wv['z'])
-  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 336, in __getitem__
-    return self.get_vector(entities)
-  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 454, in get_vector
-    return self.word_vec(word)
-  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 1989, in word_vec
-    raise KeyError('all ngrams for word %s absent from model' % word)
-KeyError: 'all ngrams for word z absent from model'
-'''
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
-        Returns:
-        pred_masks (ndarray): R x K x M x M array of class specific soft masks
-            output by the network (must be processed by segm_results to convert
-            into hard masks in the original image coordinate space)
-    '''
-    M = cfg.MRCNN.RESOLUTION
-    if boxes.shape[0] == 0:
-        pred_masks = np.zeros((0, M, M), np.float32)
-        return pred_masks
+        outfile, = args
+    
+        fileopts = []
+    for opt in opts_file:
+        if opt._short_opts:
+            fileopts.extend(opt._short_opts)
+        if opt._long_opts:
+            fileopts.extend(opt._long_opts)
     
     
-def filter_for_training(roidb):
-    '''Remove roidb entries that have no usable RoIs based on config settings.
-    '''
-    def is_valid(entry):
-        # Valid images have:
-        #   (1) At least one foreground RoI OR
-        #   (2) At least one background RoI
-        overlaps = entry['max_overlaps']
-        # find boxes with sufficient overlap
-        fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
-        # image is only valid if such boxes exist
-        valid = len(fg_inds) > 0 or len(bg_inds) > 0
-        if cfg.MODEL.KEYPOINTS_ON:
-            # If we're training for keypoints, exclude images with no keypoints
-            valid = valid and entry['has_visible_keypoints']
-        return valid
+from test.helper import FakeYDL
+from youtube_dl.cache import Cache
     
+        auth.login()
+    response = client.get('/')
+    assert b'test title' in response.data
+    assert b'by test on 2018-01-01' in response.data
+    assert b'test\nbody' in response.data
+    assert b'href='/1/update'' in response.data
     
-def _write_voc_results_files(json_dataset, all_boxes, salt):
-    filenames = []
-    image_set_path = voc_info(json_dataset)['image_set_path']
-    assert os.path.exists(image_set_path), \
-        'Image set path does not exist: {}'.format(image_set_path)
-    with open(image_set_path, 'r') as f:
-        image_index = [x.strip() for x in f.readlines()]
-    # Sanity check that order of images in json dataset matches order in the
-    # image set
-    roidb = json_dataset.get_roidb()
-    for i, entry in enumerate(roidb):
-        index = os.path.splitext(os.path.split(entry['image'])[1])[0]
-        assert index == image_index[i]
-    for cls_ind, cls in enumerate(json_dataset.classes):
-        if cls == '__background__':
-            continue
-        logger.info('Writing VOC results for: {}'.format(cls))
-        filename = _get_voc_results_file_template(json_dataset,
-                                                  salt).format(cls)
-        filenames.append(filename)
-        assert len(all_boxes[cls_ind]) == len(image_index)
-        with open(filename, 'wt') as f:
-            for im_ind, index in enumerate(image_index):
-                dets = all_boxes[cls_ind][im_ind]
-                if type(dets) == list:
-                    assert len(dets) == 0, \
-                        'dets should be numpy.ndarray or empty list'
-                    continue
-                # the VOCdevkit expects 1-based indices
-                for k in range(dets.shape[0]):
-                    f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
-                            format(index, dets[k, -1],
-                                   dets[k, 0] + 1, dets[k, 1] + 1,
-                                   dets[k, 2] + 1, dets[k, 3] + 1))
-    return filenames
-    
-        k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
-    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
-    assert len(blobs_in) == k_max - k_min + 1
-    for lvl in range(k_min, k_max + 1):
-        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
-        sc = spatial_scales[k_max - lvl]  # in reversed order
-        slvl = str(lvl)
-    
-    
-def keypoint_rcnn_frozen_features(model):
-    logger.warn('Deprecated: use `TRAIN.FREEZE_CONV_BODY: True` instead')
-    return build_generic_detection_model(
-        model,
-        get_func(cfg.MODEL.CONV_BODY),
-        add_roi_box_head_func=get_func(cfg.FAST_RCNN.ROI_BOX_HEAD),
-        add_roi_keypoint_head_func=get_func(cfg.KRCNN.ROI_KEYPOINTS_HEAD),
-        freeze_conv_body=True
-    )
-    
-    
-_RENAME = {
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
-    # Removed head_builder module in favor of the more specific fast_rcnn name
-    'head_builder.add_roi_2mlp_head':
-        'fast_rcnn_heads.add_roi_2mlp_head',
+    # Available datasets
+_DATASETS = {
+    'cityscapes_fine_instanceonly_seg_train': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_train.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_val': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        # use filtered validation as there is an issue converting contours
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_filtered_gtFine_val.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_test': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_test.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_train2014.json'
+    },
+    'coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_val2014.json'
+    },
+    'coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_minival2014.json'
+    },
+    'coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json'
+    },
+    'coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'coco_2017_test': {  # 2017 test uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_2017_test-dev': {  # 2017 test-dev uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_stuff_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_train.json'
+    },
+    'coco_stuff_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_val.json'
+    },
+    'keypoints_coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_train2014.json'
+    },
+    'keypoints_coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_val2014.json'
+    },
+    'keypoints_coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_minival2014.json'
+    },
+    'keypoints_coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_valminusminival2014.json'
+    },
+    'keypoints_coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'keypoints_coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'voc_2007_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_test': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_test.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2012_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    },
+    'voc_2012_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    }
 }
     
-        if not model.train or cfg.MODEL.FASTER_RCNN:
-        # Proposals are needed during:
-        #  1) inference (== not model.train) for RPN only and Faster R-CNN
-        #  OR
-        #  2) training for Faster R-CNN
-        # Otherwise (== training for RPN only), proposals are not needed
-        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
-        model.GenerateProposals(
-            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
-            ['rpn_rois', 'rpn_roi_probs'],
-            anchors=anchors,
-            spatial_scale=spatial_scale
+        # Histogram of ground-truth objects
+    gt_hist = np.zeros((len(classes)), dtype=np.int)
+    for entry in roidb:
+        gt_inds = np.where(
+            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
+        gt_classes = entry['gt_classes'][gt_inds]
+        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
+    logger.debug('Ground-truth class histogram:')
+    for i, v in enumerate(gt_hist):
+        logger.debug(
+            '{:d}{:s}: {:d}'.format(
+                i, classes[i].rjust(char_len), v))
+    logger.debug('-' * char_len)
+    logger.debug(
+        '{:s}: {:d}'.format(
+            'total'.rjust(char_len), np.sum(gt_hist)))
+
+    
+    ... -> RoI ----\
+                -> RoIFeatureXform -> keypoint head -> keypoint output -> loss
+... -> Feature /
+       Map
+    
+    
+def add_single_gpu_param_update_ops(model, gpu_id):
+    # Learning rate of 0 is a dummy value to be set properly at the
+    # start of training
+    lr = model.param_init_net.ConstantFill(
+        [], 'lr', shape=[1], value=0.0
+    )
+    one = model.param_init_net.ConstantFill(
+        [], 'one', shape=[1], value=1.0
+    )
+    wd = model.param_init_net.ConstantFill(
+        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    )
+    # weight decay of GroupNorm's parameters
+    wd_gn = model.param_init_net.ConstantFill(
+        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
+    )
+    for param in model.TrainableParams(gpu_id=gpu_id):
+        logger.debug('param ' + str(param) + ' will be updated')
+        param_grad = model.param_to_grad[param]
+        # Initialize momentum vector
+        param_momentum = model.param_init_net.ConstantFill(
+            [param], param + '_momentum', value=0.0
         )
+        if param in model.biases:
+            # Special treatment for biases (mainly to match historical impl.
+            # details):
+            # (1) Do not apply weight decay
+            # (2) Use a 2x higher learning rate
+            model.Scale(param_grad, param_grad, scale=2.0)
+        elif param in model.gn_params:
+            # Special treatment for GroupNorm's parameters
+            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
+        elif cfg.SOLVER.WEIGHT_DECAY > 0:
+            # Apply weight decay to non-bias weights
+            model.WeightedSum([param_grad, one, param, wd], param_grad)
+        # Update param_grad and param_momentum in place
+        model.net.MomentumSGDUpdate(
+            [param_grad, param_momentum, lr, param],
+            [param_grad, param_momentum, param],
+            momentum=cfg.SOLVER.MOMENTUM
+        )
+
+    
+    
+def add_keypoint_rcnn_blobs(
+    blobs, roidb, fg_rois_per_image, fg_inds, im_scale, batch_idx
+):
+    '''Add Mask R-CNN keypoint specific blobs to the given blobs dictionary.'''
+    # Note: gt_inds must match how they're computed in
+    # datasets.json_dataset._merge_proposal_boxes_into_roidb
+    gt_inds = np.where(roidb['gt_classes'] > 0)[0]
+    max_overlaps = roidb['max_overlaps']
+    gt_keypoints = roidb['gt_keypoints']
+    
+        for i in range(masks.shape[0]):
+        cls = int(mask_class_labels[i])
+        start = M**2 * cls
+        end = start + M**2
+        # Ignore background instance
+        # (only happens when there is no fg samples in an image)
+        if cls > 0:
+            mask_targets[i, start:end] = masks[i, :]
