@@ -1,432 +1,306 @@
 
         
-        class GetCol2ImGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
+        // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
+// BUILD file.
+    
+    // An example Op.
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
+// pointer to the pyobj in a buffer to be dereferenced later when we're actually
+// holding the GIL. Data and len are ignored.
+void DelayedNumpyDecref(void* data, size_t len, void* obj);
+    
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
   }
-};
-REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
     
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
-    
-    REGISTER_CUDA_OPERATOR(LC2D, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LC2DGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
-    
-    
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
-};
-    
-      // Deletes all the boxes stored in BoxWord.
-  void DeleteAllBoxes();
-    
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
+      // Constructs an or-d together set of device options.
+  explicit DeviceOptions(unsigned flags) : flags_(flags) {
+    CHECK((flags & kMask) == flags);
   }
-    
-    #ifndef TESSERACT_CCSTRUCT_DETLINEFIT_H_
-#define TESSERACT_CCSTRUCT_DETLINEFIT_H_
-    
-    #ifndef TESSERACT_CCSTRUCT_LINLSQ_H_
-#define TESSERACT_CCSTRUCT_LINLSQ_H_
-    
-        void setrej_tess_failure();  //Tess generated blank
-    void setrej_small_xht();  //Small xht char/wd
-    void setrej_edge_char();  //Close to image edge
-    void setrej_1Il_conflict();  //Initial reject map
-    void setrej_postNN_1Il();  //1Il after NN
-    void setrej_rej_cblob();  //Insert duff blob
-    void setrej_mm_reject();  //Matrix matcher
-                                 //Odd repeated char
-    void setrej_bad_repetition();
-    void setrej_poor_match();  //Failed Rays heuristic
-                                 //TEMP reject_word
-    void setrej_not_tess_accepted();
-                                 //TEMP reject_word
-    void setrej_contains_blanks();
-    void setrej_bad_permuter();  //POTENTIAL reject_word
-    void setrej_hyphen();  //PostNN dubious hyph or .
-    void setrej_dubious();  //PostNN dubious limit
-    void setrej_no_alphanums();  //TEMP reject_word
-    void setrej_mostly_rej();  //TEMP reject_word
-    void setrej_xht_fixup();  //xht fixup
-    void setrej_bad_quality();  //TEMP reject_word
-    void setrej_doc_rej();  //TEMP reject_word
-    void setrej_block_rej();  //TEMP reject_word
-    void setrej_row_rej();  //TEMP reject_word
-    void setrej_unlv_rej();  //TEMP reject_word
-    void setrej_nn_accept();  //NN Flipped a char
-    void setrej_hyphen_accept();  //Good aspect ratio
-    void setrej_mm_accept();  //Matrix matcher
-                                 //Quality flip a char
-    void setrej_quality_accept();
-                                 //Accept all except blank
-    void setrej_minimal_rej_accept();
-    
-      // Fills in two ambiguity tables (replaceable and dangerous) with information
-  // read from the ambigs file. An ambiguity table is an array of lists.
-  // The array is indexed by a class id. Each entry in the table provides
-  // a list of potential ambiguities which can start with the corresponding
-  // character. For example the ambiguity 'rn -> m', would be located in the
-  // table at index of unicharset.unichar_to_id('r').
-  // In 1-1 ambiguities (e.g. s -> S, 1 -> I) are recorded in
-  // one_to_one_definite_ambigs_. This vector is also indexed by the class id
-  // of the wrong part of the ambiguity and each entry contains a vector of
-  // unichar ids that are ambiguous to it.
-  // encoder_set is used to encode the ambiguity strings, undisturbed by new
-  // unichar_ids that may be created by adding the ambigs.
-  void LoadUnicharAmbigs(const UNICHARSET& encoder_set,
-                         TFile *ambigs_file, int debug_level,
-                         bool use_ambigs_for_adaption, UNICHARSET *unicharset);
-    
-    //Check for edge crossings
-bool b2Polygon::IsSimple() {
-	for (int32 i=0; i<nVertices; ++i){
-		int32 iplus = (i+1 > nVertices-1)?0:i+1;
-		b2Vec2 a1(x[i],y[i]);
-		b2Vec2 a2(x[iplus],y[iplus]);
-		for (int32 j=i+1; j<nVertices; ++j){
-			int32 jplus = (j+1 > nVertices-1)?0:j+1;
-			b2Vec2 b1(x[j],y[j]);
-			b2Vec2 b2(x[jplus],y[jplus]);
-			if (intersect(a1,a2,b1,b2)){
-				return false;
-			}
-		}
-	}
-	return true;
-}
-    
-    /*
-     * Tries to add a triangle to the polygon. Returns null if it can't connect
-     * properly, otherwise returns a pointer to the new Polygon. Assumes bitwise
-     * equality of joined vertex positions.
-	 *
-	 * Remember to delete the pointer afterwards.
-	 * Todo: Make this return a b2Polygon instead
-	 * of a pointer to a heap-allocated one.
-	 *
-	 * For internal use.
-     */
-b2Polygon* b2Polygon::Add(b2Triangle& t) {
-        // First, find vertices that connect
-        int32 firstP = -1;
-        int32 firstT = -1;
-        int32 secondP = -1;
-        int32 secondT = -1;
-        for (int32 i = 0; i < nVertices; i++) {
-            if (t.x[0] == x[i] && t.y[0] == y[i]) {
-                if (firstP == -1) {
-                    firstP = i;
-                    firstT = 0;
-                }
-                else {
-                    secondP = i;
-                    secondT = 0;
-                }
-            }
-            else if (t.x[1] == x[i] && t.y[1] == y[i]) {
-                if (firstP == -1) {
-                    firstP = i;
-                    firstT = 1;
-                }
-                else {
-                    secondP = i;
-                    secondT = 1;
-                }
-            }
-            else if (t.x[2] == x[i] && t.y[2] == y[i]) {
-                if (firstP == -1) {
-                    firstP = i;
-                    firstT = 2;
-                }
-                else {
-                    secondP = i;
-                    secondT = 2;
-                }
-            }
-            else {
-            }
-        }
-        // Fix ordering if first should be last vertex of poly
-        if (firstP == 0 && secondP == nVertices - 1) {
-            firstP = nVertices - 1;
-            secondP = 0;
-        }
-		
-        // Didn't find it
-        if (secondP == -1) {
-		    return NULL;
-		}
-		
-        // Find tip index on triangle
-        int32 tipT = 0;
-        if (tipT == firstT || tipT == secondT)
-            tipT = 1;
-        if (tipT == firstT || tipT == secondT)
-            tipT = 2;
-		
-        float32* newx = new float[nVertices + 1];
-        float32* newy = new float[nVertices + 1];
-        int32 currOut = 0;
-        for (int32 i = 0; i < nVertices; i++) {
-            newx[currOut] = x[i];
-            newy[currOut] = y[i];
-            if (i == firstP) {
-                ++currOut;
-                newx[currOut] = t.x[tipT];
-                newy[currOut] = t.y[tipT];
-            }
-            ++currOut;
-        }
-        b2Polygon* result = new b2Polygon(newx, newy, nVertices+1);
-        delete[] newx;
-        delete[] newy;
-        return result;
-}
-	
-    /**
-     * Adds this polygon to a PolyDef.
-     */
-#if 0
-void b2Polygon::AddTo(b2FixtureDef& pd) {
-	if (nVertices < 3) return;
-	
-	b2Assert(nVertices <= b2_maxPolygonVertices);
-	
-	b2Vec2* vecs = GetVertexVecs();
-	b2Vec2* vecsToAdd = new b2Vec2[nVertices];
-    }
-    
-    void b2Triangle::Set(const b2Triangle& toMe) {
-	for (int32 i=0; i<3; ++i) {
-		x[i] = toMe.x[i];
-		y[i] = toMe.y[i];
-	}
-}
-    
-    		Block4x4Encoding(void);
-		//virtual ~Block4x4Encoding(void) =0;
-		virtual ~Block4x4Encoding(void) {}
-		virtual void InitFromSource(Block4x4 *a_pblockParent,
-									ColorFloatRGBA *a_pafrgbaSource,
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_A8
-	// Encoding bits for the A portion of RGBA8
-	// ################################################################################
-    
-    
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q15
-static OPUS_INLINE opus_val32 MAC16_32_Q15_armv5e(opus_val32 c, opus_val16 a,
- opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MAC16_32_Q15\n\t'
-      'smlawb %0, %1, %2, %3;\n'
-      : '=r'(res)
-      : 'r'(b<<1), 'r'(a), 'r'(c)
-  );
-  return res;
-}
-#define MAC16_32_Q15(c, a, b) (MAC16_32_Q15_armv5e(c, a, b))
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    /* a32 + (opus_int32)((opus_int16)(b32)) * (opus_int32)((opus_int16)(c32)) output have to be 32bit int */
-#undef silk_SMLABB
-static OPUS_INLINE opus_int32 silk_SMLABB_armv5e(opus_int32 a, opus_int32 b,
- opus_int32 c)
-{
-  int res;
-  __asm__(
-      '#silk_SMLABB\n\t'
-      'smlabb %0, %1, %2, %3\n\t'
-      : '=r'(res)
-      : '%r'(b), 'r'(c), 'r'(a)
-  );
-  return res;
-}
-#define silk_SMLABB(a, b, c) (silk_SMLABB_armv5e(a, b, c))
-    
-    namespace mxnet {
-namespace rtc {
-    }
-    }
-    
-    #include <dmlc/base.h>
-#include <dmlc/thread_group.h>
-#include <cstddef>
-#include <vector>
-#include <list>
-#include <thread>
-#include <utility>
-#include 'mxnet/base.h'
-    
-        std::uniform_real_distribution<float> rand_uniform(0, 1);
-    std::bernoulli_distribution coin_flip(0.5);
-    mshadow::Tensor<cpu, 3> data = src.data[0].get<cpu, 3, real_t>();
-    
-      virtual ~GradientCompression() {}
-    
-    // C callback that can be used by TVM to extract
-// the WrapAsyncCall function.
-extern 'C' MXNET_DLL int MXTVMBridge(TVMFunctionHandle pregister) {
-  using tvm::runtime::PackedFunc;
-  const PackedFunc& fregister =
-      *static_cast<PackedFunc*>(pregister);
-  fregister('WrapAsyncCall', PackedFunc(mxnet::WrapAsyncCall));
-  return 0;
-}
-
-    
-    /*!
- * \brief Moore-Penrose pseudoinverse of the Khatri-Rao product
- *
- * Given input matrices A_1, ..., A_n, of shape (l_1, k), ..., (l_n, k) respectively, the pseudoinverse of the Khatri-Rao product is
- *
- *   pinv(A_1 khatri-rao A_2 khatri-rao ... khatri-rao A_n) =
- *     ((A_1^T A_1) hadamard-dot ... hadamard-dot (A_n^T A_n))
- *     (A_1 khatri-rao ... khatri-rao A_n)^T
- *
- * As the first term of the r.h.s is a square matrix, the result is always of the same shape as the transpose of the Khatri-Rao product of the input matrices. The input argument ts_arr could contain the original input matrices, or transposed ones.
- *
- * \param out result matrix
- * \param ts_arr vector of input matrices
- * \param input_transposed if every input matrices is transposed
- */
-template <typename DType>
-inline void inv_khatri_rao
-  (Tensor<cpu, 2, DType> out,
-  const std::vector<Tensor<cpu, 2, DType> > &ts_arr,
-  bool input_transposed = false) {
-  CHECK_GE(ts_arr.size(), 1) << 'Input tensor array must be non-empty';
-    }
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file crop.cc
- * \brief
- * \author Wei Wu
-*/
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file cudnn_spatial_transformer-inl.h
- * \brief
- * \author Wei Wu
-*/
-#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(NativeOpParam param) {
-  return new NativeOp<cpu>(param);
-}
-    }
-    }
     
     
     {
-    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
-      if (index == 1) {
-        var->attrs.dict['__init__'] = '[\'zero\', {}]';
-      }
-    });
-}  // namespace op
-}  // namespace mxnet
+    {}  // namespace host
+}  // namespace stream_executor
     
-      int NextFeature(int iteration, const gbm::GBLinearModel &model,
-                  int group_idx, const std::vector<GradientPair> &gpair,
-                  DMatrix *p_fmat, float alpha, float lambda) override {
-    // k-th selected feature for a group
-    auto k = counter_[group_idx]++;
-    // stop after either reaching top-K or going through all the features in a group
-    if (k >= top_k_ || counter_[group_idx] == model.param.num_feature) return -1;
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-     private:
-  // try to prune off current leaf
-  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
-    if (tree[nid].IsRoot()) return npruned;
-    int pid = tree[nid].Parent();
-    RTreeNodeStat &s = tree.Stat(pid);
-    ++s.leaf_child_cnt;
-    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
-      // need to be pruned
-      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
-      // tail recursion
-      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
-    } else {
-      return npruned;
+      // Indicates a preference for more shared memory than L1 cache.
+  kPreferShared,
+    
+    public:
+    explicit OpenURIDialog(QWidget *parent);
+    ~OpenURIDialog();
+    
+    
+    {    Lock& lock;
+    Lock templock;
+};
+    
+    
+    {    /* On the first run, return 0 to force a second run */
+    if (counter == 0) {
+        memset(nonce32, 0, 32);
+        return 1;
     }
+    /* On the second run, return an overflow to force a third run */
+    if (counter == 1) {
+        memset(nonce32, 0xff, 32);
+        return 1;
+    }
+    /* On the next run, return a valid nonce, but flip a coin as to whether or not to fail signing. */
+    memset(nonce32, 1, 32);
+    return secp256k1_rand_bits(1);
+}
+    
+    
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
+}
+}
+    
+    // Bech32 is a string encoding format used in newer address types.
+// The output consists of a human-readable part (alphanumeric), a
+// separator character (1), and a base32 data section, the last
+// 6 characters of which are a checksum.
+//
+// For more information, see BIP 173.
+    
+    TEST(DBTest, FilesDeletedAfterCompaction) {
+  ASSERT_OK(Put('foo', 'v2'));
+  Compact('a', 'z');
+  const int num_files = CountFiles();
+  for (int i = 0; i < 10; i++) {
+    ASSERT_OK(Put('foo', 'v2'));
+    Compact('a', 'z');
   }
-  /*! \brief do pruning of a tree */
-  inline void DoPrune(RegTree &tree) { // NOLINT(*)
-    int npruned = 0;
-    // initialize auxiliary statistics
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      tree.Stat(nid).leaf_child_cnt = 0;
+  ASSERT_EQ(CountFiles(), num_files);
+}
+    
+    // A comparator for internal keys that uses a specified comparator for
+// the user key portion and breaks ties by decreasing sequence number.
+class InternalKeyComparator : public Comparator {
+ private:
+  const Comparator* user_comparator_;
+ public:
+  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
+  virtual const char* Name() const;
+  virtual int Compare(const Slice& a, const Slice& b) const;
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const;
+  virtual void FindShortSuccessor(std::string* key) const;
     }
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      if (tree[nid].IsLeaf()) {
-        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
-      }
-    }
-    LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
-              << tree.NumExtraNodes() << ' extra nodes, ' << npruned
-              << ' pruned nodes, max_depth=' << tree.MaxDepth();
+    
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
+}
+    
+    // Get RenderView from current js context (only works under window context).
+content::RenderView* GetCurrentRenderView();
+content::RenderView* GetEnteredRenderView();
+    
+      ~EventListener() override;
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
+  }
+}
+    
+    void NwDesktopCaptureMonitor::OnSourceRemoved(DesktopMediaList* list, int index) {
+    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceRemoved::Create(index);
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN, 
+      nwapi::nw__screen::OnSourceRemoved::kEventName,
+      std::move(args));
   }
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
+    
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5, typename Generator6,
+    typename Generator7, typename Generator8, typename Generator9>
+internal::CartesianProductHolder9<Generator1, Generator2, Generator3,
+    Generator4, Generator5, Generator6, Generator7, Generator8,
+    Generator9> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5, const Generator6& g6,
+        const Generator7& g7, const Generator8& g8, const Generator9& g9) {
+  return internal::CartesianProductHolder9<Generator1, Generator2, Generator3,
+      Generator4, Generator5, Generator6, Generator7, Generator8, Generator9>(
+      g1, g2, g3, g4, g5, g6, g7, g8, g9);
+}
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
+                on_failure)
+    
+    #if GTEST_HAS_DEATH_TEST
+    
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
+    
+    namespace internal {
     }
+    
+    // Implementation #1 calculates the primes on-the-fly.
+class OnTheFlyPrimeTable : public PrimeTable {
+ public:
+  virtual bool IsPrime(int n) const {
+    if (n <= 1) return false;
     }
     }
     
-      x <<= 3;
-  x |= t;
     
-      x <<= 5;
-  x |= t;
+// Tests IsPrime()
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+    
+    void SetCreateThreadPool(CreateThreadPoolFunc func) { g_ctp_impl = func; }
+    
+    namespace grpc {
+namespace load_reporter {
+    }
+    }
+    
+    namespace grpc {
+    }
+    
+    system_clock::time_point Timespec2Timepoint(gpr_timespec t) {
+  if (gpr_time_cmp(t, gpr_inf_future(t.clock_type)) == 0) {
+    return system_clock::time_point::max();
+  }
+  t = gpr_convert_clock_type(t, GPR_CLOCK_REALTIME);
+  system_clock::time_point tp;
+  tp += duration_cast<system_clock::time_point::duration>(seconds(t.tv_sec));
+  tp +=
+      duration_cast<system_clock::time_point::duration>(nanoseconds(t.tv_nsec));
+  return tp;
+}
+    
+    #include <algorithm>
+#include 'Header Files/Number.h'
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetDisplayUpdatedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::DisplayUpdated, AutomationNotificationKind::Other, AutomationNotificationProcessing::ImportantMostRecent);
+}
+    
+    #include 'PageTransition.h'
+    
+    
+    {private:
+  
+  PageTransitionType type;           // transition style
+  int duration;                      // duration of the effect in seconds
+  PageTransitionAlignment alignment; // dimension of the effect
+  PageTransitionDirection direction; // direction of motion
+  int angle;                         // direction in degrees
+  double scale;                      // scale
+  GBool rectangular;                 // is the area to be flown in rectangular?
+  GBool ok;                          // set if created successfully
+};
+    
+    MediaRendition::MediaRendition(Object* obj) {
+  Object tmp, tmp2;
+  GBool hasClip = gFalse;
+    }
+    
+      Sound *copy();
+    
+    // based in GfxState.cc
+    
+    #include <vector>
+    
+    TEST(ByteTest, ByteToString) {
+  unsigned char value = 0x34;
+  EXPECT_EQ('34', Byte::byte_to_hex(value));
+  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
+  uint32_t int_value = 0xE13A;
+  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+}
+    
+    #include 'glog/logging.h'
+    
+      std::vector<uint32_t> index_list;
+  std::vector<double> pos_list;
+  for (int i = 0; i < 8; i += 2) {
+    index_list.push_back(i);
+    pos_list.push_back(i * 2);
+  }
+    
+    
+    {
+    {  } else {
+    for (uint32_t r = 3; r < num_params; ++r) {
+      for (uint32_t c = 3; c < num_params; ++c) {
+        (*term_matrix)(r, c) = x_pow[r + c - 5];
+      }
+    }
+    (*term_matrix).block(0, 0, num_params, 3) =
+        Eigen::MatrixXd::Zero(num_params, 3);
+    (*term_matrix).block(0, 0, 3, num_params) =
+        Eigen::MatrixXd::Zero(3, num_params);
+  }
+}
     
     // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
 // 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
@@ -435,5 +309,16 @@ namespace canbus {
 Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
     const std::uint8_t* bytes, int32_t length) const {
   Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 1);
+    }
+    
+    // config detail: {'name': 'pacmod_status', 'enum': {0:
+// 'PACMOD_STATUS_CONTROL_DISABLED', 1: 'PACMOD_STATUS_CONTROL_ENABLED'},
+// 'precision': 1.0, 'len': 1, 'is_signed_var': False, 'offset': 0.0,
+// 'physical_range': '[0|1]', 'bit': 0, 'type': 'enum', 'order': 'motorola',
+// 'physical_unit': ''}
+Global_rpt_6a::Pacmod_statusType Globalrpt6a::pacmod_status(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 0);
   int32_t x = t0.get_byte(0, 1);
     }
