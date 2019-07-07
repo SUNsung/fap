@@ -1,183 +1,194 @@
 
         
-          // Methods used during initialization, see the comment at the top of the .cc
-  // file for details.
-  static void DidGetCertDBOnUIThread(net::NSSCertDatabase* cert_db,
-                                     bool is_user_db_available,
-                                     const CreationCallback& callback);
-  static void DidGetCertDBOnIOThread(const CreationCallback& callback,
-                                     net::NSSCertDatabase* cert_db);
-  static void GetCertDBOnIOThread(content::ResourceContext* context,
-                                  const CreationCallback& callback);
-    
-    template <>
-struct Converter<v8::Local<v8::String>> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   v8::Local<v8::String> val);
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     v8::Local<v8::String>* out);
-};
-    
-      template <typename T>
-  bool SetHidden(const base::StringPiece& key, T val) {
-    v8::Local<v8::Value> v8_value;
-    if (!TryConvertToV8(isolate_, val, &v8_value))
-      return false;
-    v8::Local<v8::Context> context = isolate_->GetCurrentContext();
-    v8::Local<v8::Private> privateKey =
-        v8::Private::ForApi(isolate_, StringToV8(isolate_, key));
-    v8::Maybe<bool> result =
-        GetHandle()->SetPrivate(context, privateKey, v8_value);
-    return !result.IsNothing() && result.FromJust();
-  }
-    
-     private:
-  ObjectTemplateBuilder& SetImpl(const base::StringPiece& name,
-                                 v8::Local<v8::Data> val);
-  ObjectTemplateBuilder& SetPropertyImpl(
-      const base::StringPiece& name,
-      v8::Local<v8::FunctionTemplate> getter,
-      v8::Local<v8::FunctionTemplate> setter);
-    
-    
-    {  static bool FromV8(v8::Isolate* isolate, v8::Local<v8::Value> val, T** out) {
-    *out = static_cast<T*>(
-        static_cast<WrappableBase*>(internal::FromV8Impl(isolate, val)));
-    return *out != nullptr;
-  }
-};
-    
-    // static
-void CertificateManagerModel::DidGetCertDBOnUIThread(
-    net::NSSCertDatabase* cert_db,
-    bool is_user_db_available,
-    const CreationCallback& callback) {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+        namespace tensorflow {
     }
     
-      // Stored delegate methods.
-  base::RepeatingCallback<bool(v8::Local<v8::Value>, int)> is_checked_;
-  base::RepeatingCallback<bool(v8::Local<v8::Value>, int)> is_enabled_;
-  base::RepeatingCallback<bool(v8::Local<v8::Value>, int)> is_visible_;
-  base::RepeatingCallback<bool(v8::Local<v8::Value>, int)> works_when_hidden_;
-  base::RepeatingCallback<v8::Local<v8::Value>(v8::Local<v8::Value>, int, bool)>
-      get_accelerator_;
-  base::RepeatingCallback<bool(v8::Local<v8::Value>, int)>
-      should_register_accelerator_;
-  base::RepeatingCallback<void(v8::Local<v8::Value>, v8::Local<v8::Value>, int)>
-      execute_command_;
-  base::RepeatingCallback<void(v8::Local<v8::Value>)> menu_will_show_;
-    
-      // Marks this activity object as inactive without invalidating it.
-  void ResignCurrentActivity();
-    
-        /** Colorize an icon (given filename) with the text color */
-    QIcon TextColorIcon(const QString& filename) const;
-    
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
-    }
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
+    int NPyBfloat16_SetItem(PyObject* item, void* data, void* arr) {
+  bfloat16 x;
+  if (!AsBfloat16(item, &x)) return -1;
+  memcpy(data, &x, sizeof(bfloat16));
+  return 0;
 }
     
-    // A helper class useful for DBImpl::Get()
-class LookupKey {
- public:
-  // Initialize *this for looking up user_key at a snapshot with
-  // the specified sequence number.
-  LookupKey(const Slice& user_key, SequenceNumber sequence);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // This enum represents potential configurations of L1/shared memory when
+// running a particular kernel. These values represent user preference, and
+// the runtime is not required to respect these choices.
+enum class KernelCacheConfig {
+  // Indicates no preference for device L1/shared memory configuration.
+  kNoPreference,
     }
     
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
-    
-    #include 'tesseractclass.h'
-#ifdef _OPENMP
-#include <omp.h>
-#endif  // _OPENMP
-    
-    bool ParagraphModel::ValidFirstLine(int lmargin, int lindent,
-                                    int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
-    
-      // Get the value of the top (smallest, defined by operator< ) element.
-  const Pair& PeekTop() const {
-    return heap_[0];
-  }
-  // Get the value of the worst (largest, defined by operator< ) element.
-  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
-    
-    class QRSequenceGenerator {
- public:
-  // Object is initialized with the size of the output range.
-  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
-    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
-  }
-    }
-    
-      const dmlc::RowBlock<IndexType>& Value() const override {
-    return out_;
-  }
-    
-    
-    {  {
-    auto lparam = xgboost::CreateEmptyGenericParam(1, -1);
-    xgboost::Metric * metric = xgboost::Metric::Create('rmse', &lparam);
-    ASSERT_STREQ(metric->Name(), 'rmse');
-    EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-    EXPECT_NEAR(GetMetricEval(metric,
-                              {0.1f, 0.9f, 0.1f, 0.9f},
-                              {  0,   0,   1,   1}),
-                0.6403f, 0.001f);
-    delete metric;
-  }
-}
+    // The API reference of abi::__cxa_demangle() can be found in
+// libstdc++'s manual.
+// https://gcc.gnu.org/onlinedocs/libstdc++/libstdc++-html-USERS-4.3/a01696.html
+string Demangle(const char *mangled) {
+  string demangled;
+  int status = 0;
+  char *result = nullptr;
+#if HAS_CXA_DEMANGLE
+  result = abi::__cxa_demangle(mangled, nullptr, nullptr, &status);
 #endif
-
+  if (status == 0 && result != nullptr) {  // Demangling succeeded.
+    demangled.append(result);
+    free(result);
+  }
+  return demangled;
+}
     
-      ConfigureUpdaters({cfg.begin(), cfg.cend()});
+    		typedef struct
+		{
+			unsigned red2 : 4;
+			unsigned red1 : 4;
+			//
+			unsigned green2 : 4;
+			unsigned green1 : 4;
+			//
+			unsigned blue2 : 4;
+			unsigned blue1 : 4;
+			//
+			unsigned flip : 1;
+			unsigned diff : 1;
+			unsigned cw2 : 3;
+			unsigned cw1 : 3;
+			//
+			unsigned int selectors;
+		} Individual;
+    
+    #define CLIPPER_VERSION '6.4.2'
+    
+    #define PSHR32(a,shift) (celt_mips--,SHR32(ADD32((a),(((opus_val32)(1)<<((shift))>>1))),shift))
+#define VSHR32(a, shift) (((shift)>0) ? SHR32(a, shift) : SHL32(a, -(shift)))
+    
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
+  }
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+      explicit UrlFile(const char *method = 'GET', const Array& headers = null_array,
+                   const String& postData = null_string,
+                   int maxRedirect = HttpClient::defaultMaxRedirect,
+                   int timeout = -1, bool ignoreErrors = false);
+    
+    #include <folly/Hash.h>
+    
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
+    
+    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
+    
+    
+    {  SocketCanClientRaw socket_can_client;
+  EXPECT_TRUE(socket_can_client.Init(param));
+  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(socket_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  socket_can_client.Stop();
+}
+    
+    void ClusterQualityInfo702::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  int id = target_id(bytes, length);
+  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == id) {
+      auto conti_obs = conti_radar->mutable_contiobs(i);
+      conti_obs->set_longitude_dist_rms(
+          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
+      conti_obs->set_lateral_dist_rms(
+          LINEAR_RMS[lateral_dist_rms(bytes, length)]);
+      conti_obs->set_longitude_vel_rms(
+          LINEAR_RMS[longitude_vel_rms(bytes, length)]);
+      conti_obs->set_lateral_vel_rms(
+          LINEAR_RMS[lateral_vel_rms(bytes, length)]);
+      conti_obs->set_probexist(PROBOFEXIST[pdh0(bytes, length)]);
+      switch (invalid_state(bytes, length)) {
+        case 0x01:
+        case 0x02:
+        case 0x03:
+        case 0x06:
+        case 0x07:
+        case 0x0E:
+          conti_obs->set_probexist(PROBOFEXIST[0]);
+        default:
+          break;
+      }
+      switch (ambig_state(bytes, length)) {
+        case 0x00:
+        case 0x01:
+        case 0x02:
+          conti_obs->set_probexist(PROBOFEXIST[0]);
+        default:
+          break;
+      }
+    }
+  }
+}
+    
+    #include 'glog/logging.h'
+    
+    #include 'glog/logging.h'
+    
+    namespace apollo {
+namespace localization {
+namespace msf {
+    }
+    }
+    }
+    
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+     0,  1, -1,  0,  0,  0,  0,  0,  0,  0,
+     0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
+     0,  0,  1, -1,  0,  0,  0,  0,  0,  0,
+     0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
+     0,  0,  0,  1, -1,  0,  0,  0,  0,  0,
+     0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
+     0,  0,  0,  0,  1, -1,  0,  0,  0,  0,
+     0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
+     0,  0,  0,  0,  0,  1, -1,  0,  0,  0,
+     0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
+     0,  0,  0,  0,  0,  0,  1, -1,  0,  0,
+     0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
+     0,  0,  0,  0,  0,  0,  0,  1, -1,  0,
+     0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
+     0,  0,  0,  0,  0,  0,  0,  0,  1, -1,
+     0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
+  SetSplineFunc(PolynomialXd(params));
+}
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
