@@ -1,274 +1,382 @@
 
         
-        # define TEST_P(test_case_name, test_name) \
-  class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) \
-      : public test_case_name { \
-   public: \
-    GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {} \
-    virtual void TestBody(); \
-   private: \
-    static int AddToRegistry() { \
-      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
-          GetTestCasePatternHolder<test_case_name>(\
-              #test_case_name, __FILE__, __LINE__)->AddTestPattern(\
-                  #test_case_name, \
-                  #test_name, \
-                  new ::testing::internal::TestMetaFactory< \
-                      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>()); \
-      return 0; \
-    } \
-    static int gtest_registering_dummy_; \
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-        GTEST_TEST_CLASS_NAME_(test_case_name, test_name)); \
-  }; \
-  int GTEST_TEST_CLASS_NAME_(test_case_name, \
-                             test_name)::gtest_registering_dummy_ = \
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::AddToRegistry(); \
-  void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
     
-    # define TYPED_TEST_P(CaseName, TestName) \
-  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
-  template <typename gtest_TypeParam_> \
-  class TestName : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  static bool gtest_##TestName##_defined_ GTEST_ATTRIBUTE_UNUSED_ = \
-      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).AddTestName(\
-          __FILE__, __LINE__, #CaseName, #TestName); \
-  } \
-  template <typename gtest_TypeParam_> \
-  void GTEST_CASE_NAMESPACE_(CaseName)::TestName<gtest_TypeParam_>::TestBody()
+    #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
     
-      FilePath& operator=(const FilePath& rhs) {
-    Set(rhs);
-    return *this;
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
+ public:
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
+    }
+    
+    void absDiff(const Size2D &size,
+             const u16 *src0Base, ptrdiff_t src0Stride,
+             const u16 *src1Base, ptrdiff_t src1Stride,
+             u16 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u16>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s32, u8, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vcvt.f32.s32 q4, q2                                     \n\t'
+            'vcvt.f32.s32 q5, q3                                     \n\t'
+            'vmul.f32 q6, q4, q0                                     \n\t'
+            'vmul.f32 q7, q5, q0                                     \n\t'
+            'vadd.f32 q8, q6, q1                                     \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vcvt.s32.f32 q10, q8                                    \n\t'
+            'vcvt.s32.f32 q11, q9                                    \n\t'
+            'vqmovun.s32 d24, q10                                    \n\t'
+            'vqmovun.s32 d25, q11                                    \n\t'
+            'vqmovn.u16  d26, q12                                    \n\t'
+            'vst1.8 {d26}, [%[dst]]                                  \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
+        );
+    }
+})
+#else
+CVTS_FUNC(s32, u8, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
+        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
+        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
+        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
+        vst1_u8(_dst + i, vRes);
+    }
+})
+#endif
+    
+                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[5]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[4]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[3]);
+    
+    f64 dotProduct(const Size2D &_size,
+               const s8 * src0Base, ptrdiff_t src0Stride,
+               const s8 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    }
+    
+    void makeOffsets(ptrdiff_t pixel[], ptrdiff_t row_stride)
+{
+    pixel[0] = 0 + row_stride * 3;
+    pixel[1] = 1 + row_stride * 3;
+    pixel[2] = 2 + row_stride * 2;
+    pixel[3] = 3 + row_stride * 1;
+    pixel[4] = 3 + row_stride * 0;
+    pixel[5] = 3 + row_stride * -1;
+    pixel[6] = 2 + row_stride * -2;
+    pixel[7] = 1 + row_stride * -3;
+    pixel[8] = 0 + row_stride * -3;
+    pixel[9] = -1 + row_stride * -3;
+    pixel[10] = -2 + row_stride * -2;
+    pixel[11] = -3 + row_stride * -1;
+    pixel[12] = -3 + row_stride * 0;
+    pixel[13] = -3 + row_stride * 1;
+    pixel[14] = -2 + row_stride * 2;
+    pixel[15] = -1 + row_stride * 3;
+}
+    
+      Table(const Table&) = delete;
+  Table& operator=(const Table&) = delete;
+    
+    #include <cstddef>
+#include <cstdlib>
+#include <sstream>
+#include <limits>
+#include <map>
+#include <set>
+#include <typeinfo>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <utility>
+    
+    /*!
+ * \brief Thread pool.
+ */
+class ThreadPool {
+ public:
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
+    }
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
+      }
+    }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
+    }
+    
+      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
+    const auto& inode = idx[nid];
+    if (inode.source->op() != ewise_plus_op) continue;
+    int sid = storage_id[idx.entry_id(inode.inputs[0])];
+    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
+    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
+    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
+    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
+    if (ref_count[eid_rhs] != 1) continue;
+    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
+    // TODO(haibin) support inplace addto for Dynamic Storage
+    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
+    CHECK_NE(storage_id[eid_rhs], sid);
+    storage_id[eid_rhs] = sid;
+    addto_entry[eid_rhs] = 1;
+    storage_inplace_index[eid_rhs] = -1;
+    skip_plus_node[nid] = 1;
   }
     
-    
-    {
-    {}  // namespace internal
-}  // namespace testing
-    
-    inline tuple<> make_tuple() { return tuple<>(); }
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    #include 'sample2.h'
-#include 'gtest/gtest.h'
-    
-      // Applies a function/functor on each element of the queue, and
-  // returns the result in a new queue.  The original queue is not
-  // affected.
-  template <typename F>
-  Queue* Map(F function) const {
-    Queue* new_queue = new Queue();
-    for (const QueueNode<E>* node = head_; node != NULL; node = node->next_) {
-      new_queue->Enqueue(function(node->element()));
-    }
+      /*! \brief internal next function, inlined for fater processing. */
+  inline bool Next_(void) {
+    if (!base_->Next()) return false;
+    const DataInst &src = base_->Value();
+    this->SetOutImg(src);
+    out_.data.resize(2);
+    out_.data[0] = outimg_;
+    out_.data[1] = src.data[1];
+    out_.index = src.index;
+    out_.extra_data = src.extra_data;
+    return true;
+  }
+  /*!
+   * \brief Set the output image, after augmentation and normalization.
+   * \param src The source image.
+   */
+  inline void SetOutImg(const DataInst &src) {
+    using namespace mshadow::expr;  // NOLINT(*)
     }
     
-    void ProtoServerReflection::FillErrorResponse(const Status& status,
-                                              ErrorResponse* error_response) {
-  error_response->set_error_code(status.error_code());
-  error_response->set_error_message(status.error_message());
-}
-    
-      Status GetFileContainingExtension(
-      ServerContext* context,
-      const reflection::v1alpha::ExtensionRequest* request,
-      reflection::v1alpha::ServerReflectionResponse* response);
-    
-    using grpc::core::Bucket;
-using grpc::core::Histogram;
-using grpc::core::Metric;
-using grpc::core::Stats;
-    
-    
-    {}  // namespace grpc
-    
-    
-    {}  // namespace grpc
-
-    
-    RemoveTransliterator::~RemoveTransliterator() {}
-    
-        printf('%4d   %08x    %-15s  ', index, op, opNames[pinnedType]);
-    switch (type) {
-    case URX_NOP:
-    case URX_DOTANY:
-    case URX_DOTANY_ALL:
-    case URX_FAIL:
-    case URX_CARET:
-    case URX_DOLLAR:
-    case URX_BACKSLASH_G:
-    case URX_BACKSLASH_X:
-    case URX_END:
-    case URX_DOLLAR_M:
-    case URX_CARET_M:
-        // Types with no operand field of interest.
-        break;
-    }
-    
-    //-------------------------------------------------------------------------------
-//
-//  ScriptSet - A bit set representing a set of scripts.
-//
-//              This class was originally used exclusively with script sets appearing
-//              as part of the spoof check whole script confusable binary data. Its
-//              use has since become more general, but the continued use to wrap
-//              prebuilt binary data does constrain the design.
-//
-//-------------------------------------------------------------------------------
-class U_I18N_API ScriptSet: public UMemory {
-  public:
-    ScriptSet();
-    ScriptSet(const ScriptSet &other);
-    ~ScriptSet();
-    }
-    
-    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
-#define __SHARED_DATEFORMATSYMBOLS_H__
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-    
-    {
-    {
-    {
-    {                const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
-            }
-        }
-        umtx_unlock(&LOCK);
-    }
-    return fTimeZoneFormat;
-}
-    
-    /**
- * Implement UnicodeFunctor
+    /*!
+ *  Copyright (c) 2018 by Contributors
+ * \file transformer.cc
+ * \brief CPU implementation of the operators used in Transformer
  */
-void StringMatcher::setData(const TransliterationRuleData* d) {
-    data = d;
-    int32_t i = 0;
-    while (i<pattern.length()) {
-        UChar32 c = pattern.char32At(i);
-        UnicodeFunctor* f = data->lookup(c);
-        if (f != NULL) {
-            f->setData(data);
-        }
-        i += U16_LENGTH(c);
+#include <mxnet/base.h>
+#include './transformer-inl.h'
+#include '../tensor/elemwise_unary_op.h'
+    
+      virtual void Forward(const OpContext &ctx,
+                       const std::vector<TBlob> &in_data,
+                       const std::vector<OpReqType> &req,
+                       const std::vector<TBlob> &out_data,
+                       const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_EQ(req[bs::kOut], kWriteTo);
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
     }
+    
+    namespace mxnet {
+namespace op {
+template<typename DType>
+class CuDNNLocalResponseNormOp : public Operator {
+ public:
+  explicit CuDNNLocalResponseNormOp(LRNParam param) {
+    param_ = param;
+    init_cudnn_ = false;
+    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
+  }
+    }
+    }
+    }
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_spatial_transformer-inl.h
+ * \brief
+ * \author Wei Wu
+*/
+#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+    
+    Operator* NativeOpProp::CreateOperator(Context ctx) const {
+  DO_BIND_DISPATCH(CreateOp, param_);
+}
+    
+    DMLC_REGISTER_PARAMETER(NDArrayOpParam);
+    
+    
+    {
+    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
+.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
+    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
+      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
+      if (index == 1) {
+        var->attrs.dict['__init__'] = '[\'zero\', {}]';
+      }
+    });
+}  // namespace op
+}  // namespace mxnet
+    
+      const dmlc::RowBlock<IndexType>& Value() const override {
+    return out_;
+  }
+    
+    namespace php {
+    }
+    
+    void Assembler::bctrl() {
+  // The concept of a conditional call is not existent for upper layers.
+  // Therefore no bcctrl is defined despite being possible.
+  // Only bctrl is defined.
+  BranchParams bp(BranchConditions::Always);
+  EmitXLForm(19, bp.bo(), bp.bi(), (0 /*bh*/ & 0x3), 528, 1);
+}
+    
+      void EmitXX2Form(const uint8_t op,
+                   const RegNumber t,
+                   const uint8_t uim,
+                   const RegNumber b,
+                   const uint16_t xo,
+                   const bool bx,
+                   const bool tx)  {
+    XX2_form_t xx2_formater {{
+      tx,
+      bx,
+      xo,
+      static_cast<uint32_t>(b),
+      static_cast<uint32_t>(uim & 0x3),
+      static_cast<uint32_t>(t),
+      op
+    }};
+    dword(xx2_formater.instruction);
+  }
+    
+    void ArrayDirectory::rewind() {
+  m_it.rewind();
 }
     
     
-    {    return outLen;
-}
-    
-        // TODO: Hide OS mouse cursor if ImGui is drawing it
-    // s3ePointerSetInt(S3E_POINTER_HIDE_CURSOR,(io.MouseDrawCursor ? 0 : 1));
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+    {}
 
     
-    #pragma once
+      void onReceived(const DHTPingReplyMessage* message);
     
-        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
-    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
-    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]      = 127;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
-    io.KeyMap[ImGuiKey_Space]       = ' ';
-    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    io.KeyMap[ImGuiKey_A]           = 'A';
-    io.KeyMap[ImGuiKey_C]           = 'C';
-    io.KeyMap[ImGuiKey_V]           = 'V';
-    io.KeyMap[ImGuiKey_X]           = 'X';
-    io.KeyMap[ImGuiKey_Y]           = 'Y';
-    io.KeyMap[ImGuiKey_Z]           = 'Z';
+      virtual ~DHTResponseMessage();
     
-    // Win32 message handler
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+    DHTRoutingTable::~DHTRoutingTable() = default;
+    
+    class DHTRoutingTable {
+private:
+  std::shared_ptr<DHTNode> localNode_;
+    }
+    
+    #include 'common.h'
+    
+      virtual std::shared_ptr<DHTTask>
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) = 0;
+    
+      DHTMessageDispatcher* dispatcher_;
+    
+    bool DHTTokenTracker::validateToken(const std::string& token,
+                                    const unsigned char* infoHash,
+                                    const std::string& ipaddr,
+                                    uint16_t port) const
 {
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
+  for (auto& elem : secret_) {
+    if (generateToken(infoHash, ipaddr, port, elem) == token) {
+      return true;
     }
+  }
+  return false;
+}
     
-        // Create the blending setup
-    {
-        D3D10_BLEND_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.AlphaToCoverageEnable = false;
-        desc.BlendEnable[0] = true;
-        desc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
-        desc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
-        desc.BlendOp = D3D10_BLEND_OP_ADD;
-        desc.SrcBlendAlpha = D3D10_BLEND_INV_SRC_ALPHA;
-        desc.DestBlendAlpha = D3D10_BLEND_ZERO;
-        desc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
-        desc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
-        g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
-    }
+    public:
+  DHTTokenTracker();
     
-            src_tmp.Rects = &buf_rects[buf_rects_out_n];
-        buf_rects_out_n += src_tmp.GlyphsCount;
+    void DHTUnknownMessage::doReceivedAction() {}
     
-    // Functions
-bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
-{
-    // Setup back-end capabilities flags
-    ImGuiIO& io = ImGui::GetIO();
-    io.BackendRendererName = 'imgui_impl_opengl3';
-#if IMGUI_IMPL_OPENGL_HAS_DRAW_WITH_BASE_VERTEX
-    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
-#endif
-    }
+        const std::string& getGoodAddr() const;
