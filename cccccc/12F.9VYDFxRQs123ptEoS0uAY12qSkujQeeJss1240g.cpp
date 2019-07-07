@@ -1,240 +1,130 @@
 
         
-        #include 'base/basictypes.h'
-#include '../dispatcher_host.h'
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
+        namespace base {
+class DictionaryValue;
+class ListValue;
 }
     
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
+    class NwAppCloseAllWindowsFunction : public UIThreadExtensionFunction {
+ public:
+  NwAppCloseAllWindowsFunction() {}
     }
     
-      for(auto* item: menu_items_) {
-    item->RemoveKeys();
-  }
+    class NwObjCallObjectMethodAsyncFunction : public UIThreadExtensionFunction {
+ public:
+  NwObjCallObjectMethodAsyncFunction();
+    }
     
-    MenuItem::MenuItem(int id,
-                   const base::WeakPtr<ObjectManager>& object_manager,
-                   const base::DictionaryValue& option,
-                   const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id) {
-  Create(option);
+      private:
+    ~NwScreenDisplayObserver() override;
+    // gfx::DisplayObserver implementation.
+    void OnDisplayMetricsChanged(const display::Display& display, uint32_t changed_metrics) override;
+    void OnDisplayAdded(const display::Display& new_display) override;
+    void OnDisplayRemoved(const display::Display& old_display) override;
+    
+      // implement nw.Screen.isMonitorStarted()
+  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenIsMonitorStartedFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
+                                                        grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
+    FilterTrailingMetadata(calld->recv_trailing_metadata_,
+                           &calld->elapsed_time_);
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
+                   GRPC_ERROR_REF(error));
 }
     
-     protected:
-  ~NwClipboardSetListSyncFunction() override;
+    // Deserialize incoming server stats. Returns the number of bytes deserialized.
+size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
+                              uint64_t* server_elapsed_time);
+    
+    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerServerLatency();
+::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
+    
+    // TODO: This may not be needed. Check to see if opencensus requires
+// a trailing server response.
+// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
+// rpc server stats messages. Rpc server stats consists of a uint64_t time
+// value (server latency in nanoseconds).
+class RpcServerStatsEncoding {
+ public:
+  // Size of encoded RPC server stats.
+  static constexpr size_t kRpcServerStatsSize = 10;
+  // Error value.
+  static constexpr size_t kEncodeDecodeFailure = 0;
+    }
+    
+    void ProtoServerReflection::FillFileDescriptorResponse(
+    const protobuf::FileDescriptor* file_desc,
+    ServerReflectionResponse* response,
+    std::unordered_set<grpc::string>* seen_files) {
+  if (seen_files->find(file_desc->name()) != seen_files->end()) {
+    return;
+  }
+  seen_files->insert(file_desc->name());
+    }
+    
+    #ifdef GPR_APPLE
+    
+    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
+    
+    namespace grpc {
+    }
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
     
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodSyncFunction);
-};
-    
-    
-    {    DISALLOW_COPY_AND_ASSIGN(NwScreenDisplayObserver);
-  };
-    
-    #endif //NW_SRC_API_NW_SCREEN_API_H_
+    {} // namespace aria2
 
     
-    			image.m_bVerboseOutput = a_bVerboseOutput;
-			image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
-    
-    namespace Etc
+    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
 {
-	class Block4x4EncodingBits;
-    }
-    
-    		case Image::Format::RGB8A1:
-		case Image::Format::SRGB8A1:
-			switch (m_sourcealphamix)
-			{
-			case SourceAlphaMix::OPAQUE:
-				m_pencoding = new Block4x4Encoding_RGB8A1_Opaque;
-				break;
-    }
-    
-    #define C_SUBFROM( res , a)\
-    do {(res).r = ADD32((res).r,(a).r);  (res).i = SUB32((res).i,(a).i); \
-    }while(0)
-    
-    #define MULT16_16_P13(a,b) (SHR(ADD32(4096,MULT16_16((a),(b))),13))
-#define MULT16_16_P14(a,b) (SHR(ADD32(8192,MULT16_16((a),(b))),14))
-#define MULT16_16_P15(a,b) (SHR(ADD32(16384,MULT16_16((a),(b))),15))
-    
-    /* a32 + (opus_int32)((opus_int16)(b32)) * (c32 >> 16) */
-#undef silk_SMLABT
-static OPUS_INLINE opus_int32 silk_SMLABT_armv5e(opus_int32 a, opus_int32 b,
- opus_int32 c)
+  getBucketFor(node)->dropNode(node);
+}
+/*
+  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
+  {
+  getBucketFor(node)->moveToHead(node);
+  }
+*/
+void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
 {
-  int res;
-  __asm__(
-      '#silk_SMLABT\n\t'
-      'smlabt %0, %1, %2, %3\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(c), 'r'(a)
-  );
-  return res;
+  getBucketFor(node)->moveToTail(node);
 }
-#define silk_SMLABT(a, b, c) (silk_SMLABT_armv5e(a, b, c))
-    
-    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
-                                               UBool /*isIncremental*/) const {
-    // Our caller (filteredTransliterate) has already narrowed us
-    // to an unfiltered run.  Delete it.
-    UnicodeString empty;
-    text.handleReplaceBetween(index.start, index.limit, empty);
-    int32_t len = index.limit - index.start;
-    index.contextLimit -= len;
-    index.limit -= len;
-}
-U_NAMESPACE_END
     
     
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
+    {} // namespace aria2
+
+    
+    
+    {  size_t getQueueSize() const { return queue_.size(); }
 };
     
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
     
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
+    const std::string DHTUnknownMessage::UNKNOWN('unknown');
     
-};
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or a negative value
-     */
-    static int32_t indexOrNegativeFromString(const UnicodeString &keyword);
-    
-    
-void FreeListCategory::RepairFreeList(Heap* heap) {
-  FreeSpace n = top();
-  while (!n.is_null()) {
-    MapWordSlot map_location = n.map_slot();
-    // We can't use .is_null() here because *map_location returns an
-    // Object (for which 'is null' is not defined, as it would be
-    // indistinguishable from 'is Smi(0)'). Only HeapObject has 'is_null()'.
-    if (map_location.contains_value(kNullAddress)) {
-      map_location.store(ReadOnlyRoots(heap).free_space_map());
-    } else {
-      DCHECK(map_location.contains_value(
-          ReadOnlyRoots(heap).free_space_map().ptr()));
-    }
-    n = n->next();
-  }
-}
-    
-      inline Address UnmarkDeletionAddress(Address address) {
-    return address & ~kDeletionTag;
-  }
-    
-    bool Sweeper::SweepSpaceIncrementallyFromTask(AllocationSpace identity) {
-  if (Page* page = GetSweepingPageSafe(identity)) {
-    ParallelSweepPage(page, identity);
-  }
-  return sweeping_list_[GetSweepSpaceIndex(identity)].empty();
-}
-    
-    void Assembler::fild_d(Operand adr) {
-  EnsureSpace ensure_space(this);
-  EMIT(0xDF);
-  emit_operand(ebp, adr);
-}
-    
-    static const ByteMnemonic zero_operands_instr[] = {
-  {0xC3, 'ret', UNSET_OP_ORDER},
-  {0xC9, 'leave', UNSET_OP_ORDER},
-  {0x90, 'nop', UNSET_OP_ORDER},
-  {0xF4, 'hlt', UNSET_OP_ORDER},
-  {0xCC, 'int3', UNSET_OP_ORDER},
-  {0x60, 'pushad', UNSET_OP_ORDER},
-  {0x61, 'popad', UNSET_OP_ORDER},
-  {0x9C, 'pushfd', UNSET_OP_ORDER},
-  {0x9D, 'popfd', UNSET_OP_ORDER},
-  {0x9E, 'sahf', UNSET_OP_ORDER},
-  {0x99, 'cdq', UNSET_OP_ORDER},
-  {0x9B, 'fwait', UNSET_OP_ORDER},
-  {0xFC, 'cld', UNSET_OP_ORDER},
-  {0xAB, 'stos', UNSET_OP_ORDER},
-  {-1, '', UNSET_OP_ORDER}
-};
-    
-    // The ExtraArg1Register not part of the real JS calling convention and is
-// mostly there to simplify consistent interface descriptor definitions across
-// platforms. Note that on ia32 it aliases kJavaScriptCallCodeStartRegister.
-constexpr Register kJavaScriptCallExtraArg1Register = ecx;
-    
-    #define SSSE3_INSTRUCTION_LIST(V) \
-  V(phaddd, 66, 0F, 38, 02)       \
-  V(phaddw, 66, 0F, 38, 01)       \
-  V(pshufb, 66, 0F, 38, 00)       \
-  V(psignb, 66, 0F, 38, 08)       \
-  V(psignw, 66, 0F, 38, 09)       \
-  V(psignd, 66, 0F, 38, 0A)
-    
-    
-    {
-    {    BIND(&end);
-    return var_result.value();
-  };
-  auto floatFunction = [=](Node* lhs, Node* rhs) {
-    return Float64Sub(lhs, rhs);
-  };
-  return Generate_BinaryOperationWithFeedback(
-      context, lhs, rhs, slot_id, feedback_vector, smiFunction, floatFunction,
-      Operation::kSubtract, rhs_is_smi);
-}
-    
-    class RenderActionAddEvent : public RenderAction {
- public:
-  explicit RenderActionAddEvent(const std::string &page_id,
-                                const std::string &ref,
-                                const std::string &event);
-    }
-    
-    class RenderActionCreateFinish : public RenderAction {
- public:
-  explicit RenderActionCreateFinish(const std::string &page_id);
-    }
-    
-        /**
-     *  unicode to utf8 convertor with zero dependency inspired by java sdk character source
-     * */
-    void utf16_convert_to_utf8_string(uint16_t *utf16, int length, std::string& utf8);
-    void utf16_convert_to_utf8_quote_string(uint16_t *utf16, int length, std::string& utf8);
-    /**
-     * return byte count in utf8, buffer size should can contains convert values
-     * */
-    int utf16_convert_to_utf8_cstr(uint16_t *utf16, int length, char* buffer);
-    int utf16_convert_to_utf8_quote_cstr(uint16_t *utf16, int length, char* buffer);
+        // add values
+    auto res1 = object.emplace('three', 3);
+    null.emplace('A', 'a');
+    null.emplace('B', 'b');
