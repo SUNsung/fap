@@ -1,34 +1,37 @@
 
         
-                def initialize(symbol)
-          @symbol = symbol.to_sym
-        end
-    
-              @scrolls.each do |scroll|
-            feed.entry(scroll, :url => '/otherstuff/' + scroll.to_param.to_s, :updated => Time.utc(2007, 1, scroll.id)) do |entry|
-              entry.title(scroll.title)
-              entry.content(scroll.body, :type => 'html')
-    
-            # Sentinel value denoting that a value has not been set.
-        UNSET_VALUE = Object.new
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-color: #0f0; ' +
-                'border-right-color: #ff0; ' +
-                'border-left-color: #00f;'
-      bad_rule = 'border-bottom-color: null;'
-    
-      context 'called with four widths' do
-    it 'applies different widths to all sides' do
-      rule = 'border-width: 7px 8px 9px 10px'
-    
-          expect('.padding-all').to have_rule(rule)
+            def root_url
+      @root_url ||= root_path? ? URL.parse(File.join(base_url.to_s, root_path)) : base_url.normalize
     end
+    
+        def format_path(path)
+      path.to_s.remove File.join(File.expand_path('.'), '')
+    end
+    
+            css('pre.no-bg-with-indent').each do |node|
+          node.content = '  ' + node.content.gsub('\n', '\n  ')
+        end
+    
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
+        end
+    
+          # Returns an array of all available failure queues
+      def self.queues
+        []
+      end
+    
+        # Alias of `find`
+    def self.attach(worker_id)
+      find(worker_id)
+    end
+    
+      def assert_exception_caught(result)
+    refute_nil result
+    assert !result.start_with?('Finished Normally'), 'Job Finished normally.  (sleep parameter to LongRunningJob not long enough?)'
+    assert result.start_with?('Caught TermException'), 'TermException exception not raised in child.'
   end
