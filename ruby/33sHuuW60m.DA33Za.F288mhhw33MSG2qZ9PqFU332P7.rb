@@ -1,165 +1,171 @@
 
         
-            if res[1] == IAX_SUBTYPE_REGREJ
-      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
-      dprint('REGREJ: #{reason}')
-      return
-    end
-    
-    # Supported
-IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
-    
-              private
-    
-              # Rex::Proto::Kerberos::Model::EncKdcResponse encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'EncKdcResponse encoding not supported'
-          end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KRB-ERROR (response error)
-        # message definition.
-        class KrbError < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of a protocol message
-          attr_accessor :msg_type
-          # @!attribute ctime
-          #   @return [Time] The current time of the client's host
-          attr_accessor :ctime
-          # @!attribute cusec
-          #   @return [Integer] The microseconds part of the client timestamp
-          attr_accessor :cusec
-          # @!attribute stime
-          #   @return [Time] The current time of the server
-          attr_accessor :stime
-          # @!attribute susec
-          #   @return [Integer] The microseconds part of the server timestamp
-          attr_accessor :susec
-          # @!attribute error_code
-          #   @return [Integer] The error request returned by kerberos or the server when a request fails
-          attr_accessor :error_code
-          # @!attribute crealm
-          #   @return [String] The realm part of the client's principal identifier
-          attr_accessor :crealm
-          # @!attribute cname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
-          attr_accessor :cname
-          # @!attribute realm
-          #   @return [String] The realm part of the server's principal identifier
-          attr_accessor :realm
-          # @!attribute sname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
-          attr_accessor :sname
-          # @!attribute e_data
-          #   @return [String] additional data about the error (ASN.1 encoded data)
-          attr_accessor :e_data
-    
-              # Encodes a Rex::Proto::Kerberos::Model::PreAuthData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type], 1, :CONTEXT_SPECIFIC)
-            value_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_value], 2, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([type_asn1, value_asn1])
-    
-      def test_transform_keys
-    x = @cls[a: 1, b: 2, c: 3]
-    y = x.transform_keys {|k| :'#{k}!' }
-    assert_equal({a: 1, b: 2, c: 3}, x)
-    assert_equal({a!: 1, b!: 2, c!: 3}, y)
-    
-          def dispatch_seq(token, expr, str, in_symbol:)
-        if token == :on_parse_error or token == :compile_error
-          TOKEN_SEQ_EXPRS[token][0]
-        elsif in_symbol
-          [YELLOW]
-        elsif TOKEN_KEYWORDS.fetch(token, []).include?(str)
-          [CYAN, BOLD]
-        elsif (seq, exprs = TOKEN_SEQ_EXPRS[token]; (expr & (exprs || 0)) != 0)
-          seq
+                action_completed(@program[:name], status: FastlaneCore::ActionCompletionStatus::SUCCESS)
+        return return_value
+      rescue Commander::Runner::InvalidCommandError => e
+        # calling `abort` makes it likely that tests stop without failing, so
+        # we'll disable that during tests.
+        if FastlaneCore::Helper.test?
+          raise e
         else
-          nil
+          abort('#{e}. Use --help for more information')
         end
+      rescue Interrupt => e
+        # We catch it so that the stack trace is hidden by default when using ctrl + c
+        if FastlaneCore::Globals.verbose?
+          raise e
+        else
+          action_completed(@program[:name], status: FastlaneCore::ActionCompletionStatus::INTERRUPTED, exception: e)
+          abort('\nCancelled... use --verbose to show the stack trace')
+        end
+      rescue \
+        OptionParser::InvalidOption,
+        OptionParser::InvalidArgument,
+        OptionParser::MissingArgument => e
+        # calling `abort` makes it likely that tests stop without failing, so
+        # we'll disable that during tests.
+        if FastlaneCore::Helper.test?
+          raise e
+        else
+          if self.active_command.name == 'help' && @default_command == :help # need to access directly via @
+            # This is a special case, for example for pilot
+            # when the user runs `fastlane pilot -u user@google.com`
+            # This would be confusing, as the user probably wanted to use `pilot list`
+            # or some other command. Because `-u` isn't available for the `pilot --help`
+            # command it would show this very confusing error message otherwise
+            abort('Please ensure to use one of the available commands (#{self.commands.keys.join(', ')})'.red)
+          else
+            # This would print something like
+            #
+            #   invalid option: -u
+            #
+            abort(e.to_s)
+          end
+        end
+      rescue FastlaneCore::Interface::FastlaneCommonException => e # these are exceptions that we dont count as crashes
+        display_user_error!(e, e.to_s)
+      rescue FastlaneCore::Interface::FastlaneError => e # user_error!
+        rescue_fastlane_error(e)
+      rescue Errno::ENOENT => e
+        rescue_file_error(e)
+      rescue Faraday::SSLError, OpenSSL::SSL::SSLError => e # SSL issues are very common
+        handle_ssl_error!(e)
+      rescue Faraday::ConnectionFailed => e
+        rescue_connection_failed_error(e)
+      rescue => e # high chance this is actually FastlaneCore::Interface::FastlaneCrash, but can be anything else
+        rescue_unknown_error(e)
+      ensure
+        FastlaneCore.session.finalize_session
       end
     end
     
-      def intersect(ray, isect)
-    d = -@p.vdot(@n)
-    v = ray.dir.vdot(@n)
-    v0 = v
-    if v < 0.0 then
-      v0 = -v
-    end
-    if v0 < 1.0e-17 then
-      return
-    end
+          it 'handles the exclude_dirs parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle')
+      end
     
-    def to_string(s)
-  to_array(s).map { |c| to_char(c) }.join
-end
-    
-      def broadcast_params
-    params.permit(:title, :processed_html, :type_of, :sent)
-    # left out body_markdown and processed_html attributes
-    #   until we decide we're using them
+          self.default_value
+    end
   end
 end
 
     
-        # Manifest Filename
-    manifest_fn = build_path('#{name}.p5m')
-    
-      # Default specfile generator just makes one specfile, whatever that is for
-  # this package.
-  def generate_specfile(builddir)
-    paths = []
-    logger.info('PWD: #{File.join(builddir, unpack_data_to)}')
-    fileroot = File.join(builddir, unpack_data_to)
-    Dir.chdir(fileroot) do
-      Find.find('.') do |p|
-        next if p == '.'
-        paths << p
+            it 'sets up metadata folder in fastlane folder' do
+          expect(options[:metadata_path]).to eq('./fastlane/metadata')
+        end
       end
-    end
-    logger.info(paths[-1])
-    manifests = %w{package.pp package/remove.pp}
     
-      def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -p}.chomp
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
     end
-    # 'all' is a valid arch according to
-    # http://www.bolthole.com/solaris/makeapackage.html
     
-      if base_index = options.fetch(:base_index) { 1 }
-    standard_options << 'base-index #{base_index}'
+      it 'should run scheduled agents' do
+    mock(Agent).run_schedule('every_1h')
+    mock.instance_of(IO).puts('Queuing schedule for every_1h')
+    @scheduler.send(:run_schedule, 'every_1h')
   end
     
-          def create_project(project_options = {})
-        # Strings provided to --attach are coerced into booleans by Thor.
-        # 'f' and 'false' will result in `:attach` being `false` and any other
-        # string or the empty flag will result in `:attach` being `true`.
-        # If the flag is not present, `:attach` will be `nil`.
-        attach = detach = false
-        attach = true if project_options[:attach] == true
-        detach = true if project_options[:attach] == false
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
     
-        it 'deletes the configuration directory(s)' do
-      allow(Tmuxinator::Config).to receive(:directories) \
-        { [Tmuxinator::Config.xdg, Tmuxinator::Config.home] }
-      expect(FileUtils).to receive(:remove_dir).once.
-        with(Tmuxinator::Config.xdg)
-      expect(FileUtils).to receive(:remove_dir).once.
-        with(Tmuxinator::Config.home)
-      expect(FileUtils).to receive(:remove_dir).never
-      capture_io { cli.start }
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
     end
+  end
+    
+          spec['version'] = Bootstrap::VERSION
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+        <div id='rack'>
+      <h3 id='env-info'>Rack ENV</h3>
+      <table class='req'>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
+         <tr>
+           <td><%=h key %></td>
+           <td class='code'><div><%=h val %></div></td>
+         </tr>
+         <% } %>
+      </table>
+      <div class='clear'></div>
+    </div> <!-- /RACK ENV -->
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+      it 'should allow changing report only' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
+      run DummyApp
+    end
+    
+        it 'adds the correct Set-Cookie header' do
+      get '/some/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
