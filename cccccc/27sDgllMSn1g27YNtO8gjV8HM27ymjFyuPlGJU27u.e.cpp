@@ -1,144 +1,204 @@
 
         
-            template CNTK_API const TensorView<float>* NDArrayView::GetTensorView<float>() const;
-    template CNTK_API const TensorView<double>* NDArrayView::GetTensorView<double>() const;
-    template CNTK_API const TensorView<half>* NDArrayView::GetTensorView<half>() const;
-    template CNTK_API const TensorView<char>* NDArrayView::GetTensorView<char>() const;
-    template CNTK_API const TensorView<short>* NDArrayView::GetTensorView<short>() const;
-    
-    namespace CNTK
-{
-    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
-    {
-        auto matrixDims = GetMatrixDimensions(viewShape);
-        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
-    }
-    }
-    
-            void Reset()
-        {
-            m_loss = { 0.0, 0.0 };
-            m_metric = { 0.0, 0.0 };
-            m_samples = { 0, 0 };
-            m_updates = { 0, 0 };
-            m_lastResetTime = std::chrono::high_resolution_clock::now();
-        }
-    
-            const NDShape& Shape() const override { return m_unpackedShape; }
-        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
-        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
-        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
-        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
-    
-    
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
+        // Bool() allows generating tests with parameters in a set of (false, true).
+//
+// Synopsis:
+// Bool()
+//   - returns a generator producing sequences with elements {false, true}.
+//
+// It is useful when testing code that depends on Boolean flags. Combinations
+// of multiple flags can be tested when several Bool()'s are combined using
+// Combine() function.
+//
+// In the following example all tests in the test case FlagDependentTest
+// will be instantiated twice with parameters false and true.
+//
+// class FlagDependentTest : public testing::TestWithParam<bool> {
+//   virtual void SetUp() {
+//     external_flag = GetParam();
+//   }
+// }
+// INSTANTIATE_TEST_CASE_P(BoolSequence, FlagDependentTest, Bool());
+//
+inline internal::ParamGenerator<bool> Bool() {
+  return Values(false, true);
 }
-
     
-    class Clock
-{
-public:
-    static long long GetTimeStamp();
-    static long long GetTicksPerSecond();
+      // Returns the number of TestPartResult objects in the array.
+  int size() const;
+    
+    // Now the tricky part: you need to register all test patterns before
+// you can instantiate them.  The first argument of the macro is the
+// test case name; the rest are the names of the tests in this test
+// case.
+REGISTER_TYPED_TEST_CASE_P(FooTest,
+                           DoesBlah, HasPropertyA);
+    
+     private:
+  // A string containing a description of the outcome of the last death test.
+  static std::string last_death_test_message_;
+    
+      // Returns true if pathname describes an absolute path.
+  bool IsAbsolutePath() const;
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
+    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41, GTEST_TEMPLATE_ T42,
+    GTEST_TEMPLATE_ T43, GTEST_TEMPLATE_ T44, GTEST_TEMPLATE_ T45>
+struct Templates45 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates44<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
+      T43, T44, T45> Tail;
 };
     
-        shapeY = shapeX;
-    shapeY.SwapDimsInPlace(1, 2);
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
     
-        io.KeyMap[ImGuiKey_Tab] = s3eKeyTab;                     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
-    io.KeyMap[ImGuiKey_LeftArrow] = s3eKeyLeft;
-    io.KeyMap[ImGuiKey_RightArrow] = s3eKeyRight;
-    io.KeyMap[ImGuiKey_UpArrow] = s3eKeyUp;
-    io.KeyMap[ImGuiKey_DownArrow] = s3eKeyDown;
-    io.KeyMap[ImGuiKey_PageUp] = s3eKeyPageUp;
-    io.KeyMap[ImGuiKey_PageDown] = s3eKeyPageDown;
-    io.KeyMap[ImGuiKey_Home] = s3eKeyHome;
-    io.KeyMap[ImGuiKey_End] = s3eKeyEnd;
-    io.KeyMap[ImGuiKey_Insert] = s3eKeyInsert;
-    io.KeyMap[ImGuiKey_Delete] = s3eKeyDelete;
-    io.KeyMap[ImGuiKey_Backspace] = s3eKeyBackspace;
-    io.KeyMap[ImGuiKey_Space] = s3eKeySpace;
-    io.KeyMap[ImGuiKey_Enter] = s3eKeyEnter;
-    io.KeyMap[ImGuiKey_Escape] = s3eKeyEsc;
-    io.KeyMap[ImGuiKey_A] = s3eKeyA;
-    io.KeyMap[ImGuiKey_C] = s3eKeyC;
-    io.KeyMap[ImGuiKey_V] = s3eKeyV;
-    io.KeyMap[ImGuiKey_X] = s3eKeyX;
-    io.KeyMap[ImGuiKey_Y] = s3eKeyY;
-    io.KeyMap[ImGuiKey_Z] = s3eKeyZ;
+       void EmitMForm(const uint8_t op,
+                  const RegNumber rs,
+                  const RegNumber ra,
+                  const RegNumber rb,
+                  const uint8_t mb,
+                  const uint8_t me,
+                  const bool rc = 0) {
+    }
     
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+    String ArrayDirectory::path() {
+  if (!m_it) {
+    return empty_string();
+  }
+    }
+    
+    #include 'hphp/runtime/base/perf-warning-inl.h'
+    
+    #include 'hphp/runtime/base/url.h'
+#include 'hphp/util/assertions.h'
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+      virtual void startup() = 0;
+    
+    
+    {} // namespace aria2
 
     
-            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
+    
+    namespace aria2 {
     }
     
-    ////////////////////           compressor         ///////////////////////
+    DNSCache::AddrEntry::AddrEntry(const AddrEntry& c) = default;
     
-    bool ImGui::InputTextMultiline(const char* label, std::string* str, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
+        CacheEntry& operator=(const CacheEntry& c);
+    
+    
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
+}
+    
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
+    
+    double ClusterGeneralInfo701::lateral_vel(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(0, 6);
     }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     
-    {        D3DCompile(pixelShader, strlen(pixelShader), NULL, NULL, NULL, 'main', 'ps_4_0', 0, 0, &g_pPixelShaderBlob, NULL);
-        if (g_pPixelShaderBlob == NULL)  // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreatePixelShader((DWORD*)g_pPixelShaderBlob->GetBufferPointer(), g_pPixelShaderBlob->GetBufferSize(), &g_pPixelShader) != S_OK)
-            return false;
-    }
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
     
-    #if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#elif defined(IMGUI_IMPL_OPENGL_ES3)
-#if (defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV))
-#include <OpenGLES/ES3/gl.h>  // Use GL ES 3
-#else
-#include <GLES3/gl3.h>  // Use GL ES 3
-#endif
-#else
-// About Desktop OpenGL function loaders:
-//  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
-//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
-//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include <GL/gl3w.h>    // Needs to be initialized with gl3wInit() in user's code
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>    // Needs to be initialized with glewInit() in user's code
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>  // Needs to be initialized with gladLoadGL() in user's code
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
-#endif
+    #include 'glog/logging.h'
+    
+    #include 'glog/logging.h'
+    
+    void Globalrpt6a::Parse(const std::uint8_t* bytes, int32_t length,
+                        ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_pacmod_status(
+      pacmod_status(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_override_status(
+      override_status(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_veh_can_timeout(
+      veh_can_timeout(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_str_can_timeout(
+      str_can_timeout(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_brk_can_timeout(
+      brk_can_timeout(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_usr_can_timeout(
+      usr_can_timeout(bytes, length));
+  chassis->mutable_gem()->mutable_global_rpt_6a()->set_usr_can_read_errors(
+      usr_can_read_errors(bytes, length));
+}
