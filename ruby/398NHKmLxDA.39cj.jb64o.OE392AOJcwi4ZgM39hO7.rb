@@ -1,115 +1,141 @@
 
         
-              it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
-      end
-    
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
+            def action_completed(action_name, status: nil, exception: nil)
+      # https://github.com/fastlane/fastlane/issues/11913
+      # if exception.nil? || exception.fastlane_should_report_metrics?
+      #   action_completion_context = FastlaneCore::ActionCompletionContext.context_for_action_name(action_name, args: ARGV, status: status)
+      #   FastlaneCore.session.action_completed(completion_context: action_completion_context)
+      # end
     end
     
-            subject.file = StringIO.new(invalid_data)
-        expect(subject).not_to be_valid
-        expect(subject.errors[:base]).to include('The provided data does not appear to be a valid Scenario.')
+          def self.details
+        list = <<-LIST.markdown_list
+          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
+          `lane` is the name of the current fastlane lane
+          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
+          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
+          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
+        LIST
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            grouping: 'grouping',
+            build_number: 'build_number',
+            prefix: 'prefix',
+          })
+        end').runner.execute(:test)
+    
+            context 'when command is bootstrap' do
+          let(:command) { 'bootstrap' }
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
     
-          it 'loads all workers' do
-        workers = @agent_runner.send(:load_workers)
-        expect(workers).to be_a(Hash)
-        expect(workers.keys).to eq(['HuginnScheduler', 'DelayedJobWorker'])
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+          # If the record is persisted, remove the remember token (but only if
+      # it exists), and save the record without validations.
+      def forget_me!
+        return unless persisted?
+        self.remember_token = nil if respond_to?(:remember_token)
+        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
+        save(validate: false)
       end
     
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
+    SimpleCov.start do
+  coverage_dir File.expand_path('../test/coverage', File.realpath(__FILE__))
+  root File.expand_path('..', File.realpath(__FILE__))
+    
+        def to_f
+      return 0 if @d == 0
+      if @d > 0
+        Float::INFINITY
+      else
+        -Float::INFINITY
+      end
     end
+    
+    require 'mkmf'
+require File.expand_path('../../digest_conf', __FILE__)
+    
+    # non-standard
+_SC_PHYS_PAGES
+_SC_AVPHYS_PAGES
+_SC_NPROCESSORS_CONF
+_SC_NPROCESSORS_ONLN
+_SC_CPUSET_SIZE
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+        initialize_with { Tmuxinator::Project.new(file) }
   end
     
-        private
-    
-        <div id='cookies'>
-      <h3 id='cookie-info'>COOKIES</h3>
-      <% unless req.cookies.empty? %>
-        <table class='req'>
-          <tr>
-            <th>Variable</th>
-            <th>Value</th>
-          </tr>
-          <% req.cookies.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-          <% } %>
-        </table>
-      <% else %>
-        <p class='no-data'>No cookie data.</p>
-      <% end %>
-      <div class='clear'></div>
-    </div> <!-- /COOKIES -->
-    
-              react_and_close(env, body) or [status, headers, body]
-        else
-          [status, headers, body]
-        end
+      describe '#base_index' do
+    context 'when pane_base_index is 1 and base_index is unset' do
+      before do
+        allow(project).to receive_messages(get_pane_base_index: '1')
+        allow(project).to receive_messages(get_base_index: nil)
       end
     
-        def validate_plugins!
-      @plugins_to_package.each do |plugin_name|
-        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
-          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
-        end
+        class << self
+      # The directory (created if needed) in which to store new projects
+      def directory
+        return environment if environment?
+        return xdg if xdg?
+        return home if home?
+        # No project directory specified or existant, default to XDG:
+        FileUtils::mkdir_p(xdg)
+        xdg
       end
+    
+      describe '#start(custom_name)' do
+    before do
+      ARGV.replace(['start', 'foo', 'bar'])
+      allow(Tmuxinator::Config).to receive_messages(validate: project)
+      allow(Tmuxinator::Config).to receive_messages(version: 1.9)
+      allow(Kernel).to receive(:exec)
     end
     
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-          def has_sidebar
-        if @sidebar
-          @sidebar.formatted_data.strip.empty? ? false : true
-        else
-          @sidebar = (@page.sidebar || false)
-          !!@sidebar
-        end
-      end
-    
-        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
-    
-    
-    
-    desc 'Build and install'
-task :install => :build do
-  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
-end
-    
-      if base_path.nil?
-    Precious::App.run!(options)
-  else
-    require 'rack'
+      before { instance.extend Tmuxinator::WemuxSupport }
