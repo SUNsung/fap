@@ -1,69 +1,72 @@
 
         
-                      next env.machine(entry.name.to_sym, entry.provider.to_sym)
-            end
+        class Api::Web::SettingsController < Api::Web::BaseController
+  respond_to :json
     
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
+      def export_filename
+    '#{controller_name}.csv'
+  end
+end
+
     
-            # This returns all the config classes for the various pushes.
-        #
-        # @return [Registry]
-        def push_configs
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:push])
-            end
-          end
-        end
-    
-            # This should return an action callable for the given name.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Object] A callable action sequence object, whether it
-        #   is a proc, object, etc.
-        def action(name)
-          nil
-        end
-    
-      # Configure an appender that will write log events to STDOUT. A colorized
-  # pattern layout is used to format the log events into strings before
-  # writing.
-  Logging.appenders.stdout('stdout',
-                           auto_flushing: true,
-                           layout:        Logging.layouts.pattern(
-                             pattern:      pattern,
-                             color_scheme: 'bright'
-                           )
-                          ) if config.log_to.include? 'stdout'
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
+      def set_locale
+    I18n.locale = default_locale
+    I18n.locale = current_user.locale if user_signed_in?
+  rescue I18n::InvalidLocale
+    I18n.locale = default_locale
   end
     
-        reversible(&method(:up_down))
+      def rate_limited_request?
+    !request.env['rack.attack.throttle_data'].nil?
   end
     
-      describe '#update' do
-    it 'marks a notification as read if it gets no other information' do
-      note = FactoryGirl.create(:notification)
-      expect(Notification).to receive(:where).and_return([note])
-      expect(note).to receive(:set_read_state).with(true)
-      get :update, params: {id: note.id}, format: :json
+    module SessionTrackingConcern
+  extend ActiveSupport::Concern
+    
+      included do
+    before_action :set_user_activity
+  end
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+  end
+end
+    
+          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
+      save_fixture(response.body, 'aspects_manage_contacts_json')
     end
+    
+          it 'should remove participation' do
+        delete :destroy, params: {post_id: post.id}
+        expect(alice.participations.where(:target_id => post.id)).not_to exist
+        expect(response.code).to eq('200')
+      end
+    end
+    
+    def ask(message, valid_options)
+  if valid_options
+    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
+  else
+    answer = get_stdin(message)
+  end
+  answer
+end
+    
+    
+  # Adds some extra filters used during the category creation process.
+  module Filters
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
