@@ -1,226 +1,345 @@
 
         
-                for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            internal::prefetch(dst + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vld1q_s16(dst + j), v_dst1 = vld1q_s16(dst + j + 8);
-            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-    }
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
     
-    void Canny3x3L1(const Size2D &size,
-                const u8 * srcBase, ptrdiff_t srcStride,
-                u8 * dstBase, ptrdiff_t dstStride,
-                f64 low_thresh, f64 high_thresh,
-                Margin borderMargin)
-{
-    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
-#ifdef CAROTENE_NEON
-    Canny3x3<false, false>(size, 1,
-                           srcBase, srcStride,
-                           dstBase, dstStride,
-                           NULL, 0,
-                           NULL, 0,
-                           low_thresh, high_thresh,
-                           borderMargin);
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)low_thresh;
-    (void)high_thresh;
-    (void)borderMargin;
-#endif
-}
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
-    
-                    for (; j < roiw16; j += 16)
-                {
-                    internal::prefetch(src + j);
-                    int16x8_t v_src0 = vld1q_s16(src + j), v_src1 = vld1q_s16(src + j + 8);
-                    uint8x16_t v_dst = vcombine_u8(vmovn_u16(vcltq_s16(v_src0, v_zero)),
-                                                   vmovn_u16(vcltq_s16(v_src1, v_zero)));
-                    vst1q_u8(dst + j, v_dst);
-                }
-                for (; j < roiw8; j += 8)
-                {
-                    int16x8_t v_src = vld1q_s16(src + j);
-                    vst1_u8(dst + j, vmovn_u16(vcltq_s16(v_src, v_zero)));
-                }
-    
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
-    
-    
-    {        for (; i < size.width; i++)
-            result += (src[i] != 0)?1:0;
-        if (result < 0)//saturate in case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-    }
-    return result;
-#else
-    (void)_size;
-    (void)srcBase;
-    (void)srcStride;
-    
-                for( ; i <= lim; i += 4 )
-            {
-                internal::prefetch(src0 + i);
-                internal::prefetch(src1 + i);
-                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
-            }
-    
-    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
-inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
-inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
-    
-        for( ptrdiff_t y = 0; y < rows; y++ )
-    {
-        const u8* v0 = 0;
-        const u8* v1 = 0;
-        const u8* v2 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8* v3 = 0;
-        const u8* v4 = 0;
-        // make border
-        if (border == BORDER_MODE_REPLICATE) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : 0);
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 0 ? rows-1 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 0 ? rows-1 : 0);
-        } else if (border == BORDER_MODE_REFLECT) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : rows > 1 ? 1-y : 0);
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 0 ? rows-1 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 1 ? 2*rows-(y+3) : 0);
-        } else if (border == BORDER_MODE_REFLECT101) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : rows > 2-y ? 2-y : 0); ///check
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : rows > 1 ? 1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 1 ? rows-2 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 2 ? 2*rows-(y+4) : 0);///bad if rows=2 y=1   rows - 4 + (2,1)
-        } else if (border == BORDER_MODE_CONSTANT) {
-            v0 = y > 1 ? internal::getRowPtr(srcBase, srcStride, y-2) : tmp;
-            v1 = y > 0 ? internal::getRowPtr(srcBase, srcStride, y-1) : tmp;
-            v3 = y < rows-1 ? internal::getRowPtr(srcBase, srcStride, y+1) : tmp;
-            v4 = y < rows-2 ? internal::getRowPtr(srcBase, srcStride, y+2) : tmp;
-        }
-        s16* drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
-    
-    {        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                // FIXME: Not honoring ClipRect fields.
-                CIwMaterial* pCurrentMaterial = IW_GX_ALLOC_MATERIAL();
-                pCurrentMaterial->SetShadeMode(CIwMaterial::SHADE_FLAT);
-                pCurrentMaterial->SetCullMode(CIwMaterial::CULL_NONE);
-                pCurrentMaterial->SetFiltering(false);
-                pCurrentMaterial->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
-                pCurrentMaterial->SetDepthWriteMode(CIwMaterial::DEPTH_WRITE_NORMAL);
-                pCurrentMaterial->SetAlphaTestMode(CIwMaterial::ALPHATEST_DISABLED);
-                pCurrentMaterial->SetTexture((CIwTexture*)pcmd->TextureId);
-                IwGxSetMaterial(pCurrentMaterial);
-                IwGxDrawPrims(IW_GX_TRI_LIST, (uint16*)idx_buffer, pcmd->ElemCount);
-            }
-            idx_buffer += pcmd->ElemCount;
-        }
-        IwGxFlush();
-    }
-    
-    
-    {    return stb__out - out;
-}
+    #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
 
     
-    // Set default OpenGL3 loader to be gl3w
-#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
-#endif
     
-    // Issues:
-//  [ ] Platform: GLUT is unable to distinguish e.g. Backspace from CTRL+H or TAB from CTRL+I
-//  [ ] Platform: Missing mouse cursor shape/visibility support.
-//  [ ] Platform: Missing clipboard support (not supported by Glut).
-//  [ ] Platform: Missing gamepad support.
+    {    CRIPEMD160();
+    CRIPEMD160& Write(const unsigned char* data, size_t len);
+    void Finalize(unsigned char hash[OUTPUT_SIZE]);
+    CRIPEMD160& Reset();
+};
     
-        // Setup Platform/Renderer bindings
-    ImGui_ImplWin32_Init(hwnd);
-    ImGui_ImplDX10_Init(g_pd3dDevice);
+    #ifdef USE_OPENCV
+  /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Mat.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<cv::Mat> & mat_vector,
+                Blob<Dtype>* transformed_blob);
     
     
-    {    // Setup orthographic projection matrix
-    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayPos is (0,0) for single viewport apps.
-    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
-    {
-        float L = draw_data->DisplayPos.x + 0.5f;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
-        float T = draw_data->DisplayPos.y + 0.5f;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
-        D3DMATRIX mat_identity = { { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } } };
-        D3DMATRIX mat_projection =
-        { { {
-            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
-            0.0f,         0.0f,         0.5f,  0.0f,
-            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f
-        } } };
-        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
     }
+    return layer_types_str;
+  }
+};
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
+    }
+  }
+    
+    
+    {  // Best available image.
+  Pix* pix_;
+  // True if the source image is white-on-black.
+  bool inverse_;
+  // Block the word came from. If not null, block->re_rotation() takes the
+  // 'untransformed' coordinates even further back to the original image.
+  // Used only on the first DENORM in a chain.
+  const BLOCK* block_;
+  // Rotation to apply between translation to the origin and scaling.
+  const FCOORD* rotation_;
+  // Previous transformation in a chain.
+  const DENORM* predecessor_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding x-coord. Owned by the DENORM.
+  GenericVector<float>* x_map_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding y-coord. Owned by the DENORM.
+  GenericVector<float>* y_map_;
+  // x-coordinate to be mapped to final_xshift_ in the result.
+  float x_origin_;
+  // y-coordinate to be mapped to final_yshift_ in the result.
+  float y_origin_;
+  // Scale factors for x and y coords. Applied to pre-rotation system.
+  float x_scale_;
+  float y_scale_;
+  // Destination coords of the x_origin_ and y_origin_.
+  float final_xshift_;
+  float final_yshift_;
+};
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
+    
+      // Functions to navigate the tree. Unlike the original implementation, we
+  // store the root at index 0.
+  int ParentNode(int index) const {
+    return (index + 1) / 2 - 1;
+  }
+  int LeftChild(int index) const {
+    return index * 2 + 1;
+  }
+    
+    // A useful base class to facilitate the common operation of sorting a vector
+// of owned pointer data using a separate key. This class owns its data pointer,
+// deleting it when it has finished with it, and providing copy constructor and
+// operator= that have move semantics so that the data does not get copied and
+// only a single instance of KDPtrPair holds a specific data pointer.
+template <typename Key, typename Data>
+class KDPtrPair {
+ public:
+  KDPtrPair() : data_(nullptr) {}
+  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
+  // Copy constructor steals the pointer from src and nulls it in src, thereby
+  // moving the (single) ownership of the data.
+  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
+    src.data_ = nullptr;
+  }
+  // Destructor deletes data, assuming it is the sole owner.
+  ~KDPtrPair() {
+    delete this->data_;
+    this->data_ = nullptr;
+  }
+  // Operator= steals the pointer from src and nulls it in src, thereby
+  // moving the (single) ownership of the data.
+  void operator=(KDPtrPair& src) {
+    delete this->data_;
+    this->data_ = src.data_;
+    src.data_ = nullptr;
+    this->key_ = src.key_;
+  }
+    }
+    
+      size_t BytesRead() const override {
+    return parser_->BytesRead();
+  }
+    
+    class LambdaRankObjMAP : public LambdaRankObj {
+ protected:
+  struct MAPStats {
+    /*! \brief the accumulated precision */
+    float ap_acc;
+    /*!
+     * \brief the accumulated precision,
+     *   assuming a positive instance is missing
+     */
+    float ap_acc_miss;
+    /*!
+     * \brief the accumulated precision,
+     * assuming that one more positive instance is inserted ahead
+     */
+    float ap_acc_add;
+    /* \brief the accumulated positive instance count */
+    float hits;
+    MAPStats() = default;
+    MAPStats(float ap_acc, float ap_acc_miss, float ap_acc_add, float hits)
+        : ap_acc(ap_acc), ap_acc_miss(ap_acc_miss), ap_acc_add(ap_acc_add), hits(hits) {}
+  };
+  /*!
+   * \brief Obtain the delta MAP if trying to switch the positions of instances in index1 or index2
+   *        in sorted triples
+   * \param sorted_list the list containing entry information
+   * \param index1,index2 the instances switched
+   * \param map_stats a vector containing the accumulated precisions for each position in a list
+   */
+  inline bst_float GetLambdaMAP(const std::vector<ListEntry> &sorted_list,
+                                int index1, int index2,
+                                std::vector<MAPStats> *p_map_stats) {
+    std::vector<MAPStats> &map_stats = *p_map_stats;
+    if (index1 == index2 || map_stats[map_stats.size() - 1].hits == 0) {
+      return 0.0f;
+    }
+    if (index1 > index2) std::swap(index1, index2);
+    bst_float original = map_stats[index2].ap_acc;
+    if (index1 != 0) original -= map_stats[index1 - 1].ap_acc;
+    bst_float changed = 0;
+    bst_float label1 = sorted_list[index1].label > 0.0f ? 1.0f : 0.0f;
+    bst_float label2 = sorted_list[index2].label > 0.0f ? 1.0f : 0.0f;
+    if (label1 == label2) {
+      return 0.0;
+    } else if (label1 < label2) {
+      changed += map_stats[index2 - 1].ap_acc_add - map_stats[index1].ap_acc_add;
+      changed += (map_stats[index1].hits + 1.0f) / (index1 + 1);
+    } else {
+      changed += map_stats[index2 - 1].ap_acc_miss - map_stats[index1].ap_acc_miss;
+      changed += map_stats[index2].hits / (index2 + 1);
+    }
+    bst_float ans = (changed - original) / (map_stats[map_stats.size() - 1].hits);
+    if (ans < 0) ans = -ans;
+    return ans;
+  }
+  /*
+   * \brief obtain preprocessing results for calculating delta MAP
+   * \param sorted_list the list containing entry information
+   * \param map_stats a vector containing the accumulated precisions for each position in a list
+   */
+  inline void GetMAPStats(const std::vector<ListEntry> &sorted_list,
+                          std::vector<MAPStats> *p_map_acc) {
+    std::vector<MAPStats> &map_acc = *p_map_acc;
+    map_acc.resize(sorted_list.size());
+    bst_float hit = 0, acc1 = 0, acc2 = 0, acc3 = 0;
+    for (size_t i = 1; i <= sorted_list.size(); ++i) {
+      if (sorted_list[i - 1].label > 0.0f) {
+        hit++;
+        acc1 += hit / i;
+        acc2 += (hit - 1) / i;
+        acc3 += (hit + 1) / i;
+      }
+      map_acc[i - 1] = MAPStats(acc1, acc2, acc3, hit);
+    }
+  }
+  void GetLambdaWeight(const std::vector<ListEntry> &sorted_list,
+                       std::vector<LambdaPair> *io_pairs) override {
+    std::vector<LambdaPair> &pairs = *io_pairs;
+    std::vector<MAPStats> map_stats;
+    GetMAPStats(sorted_list, &map_stats);
+    for (auto & pair : pairs) {
+      pair.weight *=
+          GetLambdaMAP(sorted_list, pair.pos_index,
+                       pair.neg_index, &map_stats);
+    }
+  }
+};
+    
+    
+    {
+    {    // size, size_types
+    {
+      float* arr = new float[16];
+      Span<float> s (arr, 16);
+      SPAN_ASSERT_TRUE(s.size() == 16, status_);
+      SPAN_ASSERT_TRUE(s.size_bytes() == 16 * sizeof(float), status_);
+      delete [] arr;
+    }
+  }
+};
+    
+      std::string key, value;
+  // 1. Empty lines or comments
+  ASSERT_FALSE(parser.ParseKeyValuePair('# Mary had a little lamb',
+                                        &key, &value));
+  ASSERT_FALSE(parser.ParseKeyValuePair('#tree_method = gpu_hist',
+                                        &key, &value));
+  ASSERT_FALSE(parser.ParseKeyValuePair(
+                 '# minimum sum of instance weight(hessian) needed in a child',
+                 &key, &value));
+  ASSERT_FALSE(parser.ParseKeyValuePair('', &key, &value));
+    
+    // global
+#include '../src/learner.cc'
+#include '../src/logging.cc'
+#include '../src/common/common.cc'
+#include '../src/common/host_device_vector.cc'
+#include '../src/common/hist_util.cc'
+    
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
+ public:
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
+    }
+    
+      /*! \return the default evaluation metric for the objective */
+  virtual const char* DefaultEvalMetric() const = 0;
+  // the following functions are optional, most of time default implementation is good enough
+  /*!
+   * \brief transform prediction values, this is only called when Prediction is called
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void PredTransform(HostDeviceVector<bst_float> *io_preds) {}
+    
+    TEST(Metric, DeclareUnifiedTest(RMSLE)) {
+  auto lparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
+  xgboost::Metric * metric = xgboost::Metric::Create('rmsle', &lparam);
+  metric->Configure({});
+  ASSERT_STREQ(metric->Name(), 'rmsle');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.2f, 0.4f, 0.8f, 1.6f},
+                            {1.0f, 1.0f, 1.0f, 1.0f, 1.0f}), 0.40632, 1e-4);
+  delete metric;
 }
     
-    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
-{
-    // Update buttons
-    ImGuiIO& io = ImGui::GetIO();
-    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-    {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
-    }
+    TEST(Objective, DeclareUnifiedTest(TweedieRegressionBasic)) {
+  xgboost::LearnerTrainParam lparam = xgboost::CreateEmptyGenericParam(0, NGPUS);
+  std::vector<std::pair<std::string, std::string>> args;
+  xgboost::ObjFunction * obj = xgboost::ObjFunction::Create('reg:tweedie', &lparam);
     }
     
-    #ifndef STB_RECT_PACK_IMPLEMENTATION        // in case the user already have an implementation in the _same_ compilation unit (e.g. unity builds)
-#define STBRP_ASSERT(x)    IM_ASSERT(x)
-#define STBRP_STATIC
-#define STB_RECT_PACK_IMPLEMENTATION
-#include 'imstb_rectpack.h'
-#endif
-    
-    class DelayWriteToken : public WriteControllerToken {
- public:
-  explicit DelayWriteToken(WriteController* controller)
-      : WriteControllerToken(controller) {}
-  virtual ~DelayWriteToken();
-};
-    
-    using namespace rocksdb;
-    
-    
-    {  const char* Name() const override { return 'MyMerge'; }
-};
+    void GBTree::InitUpdater() {
+  if (updaters_.size() != 0) return;
+  std::string tval = tparam_.updater_seq;
+  std::vector<std::string> ups = common::Split(tval, ',');
+  for (const std::string& pstr : ups) {
+    std::unique_ptr<TreeUpdater> up(TreeUpdater::Create(pstr.c_str(), learner_param_));
+    up->Init(this->cfg_);
+    updaters_.push_back(std::move(up));
+  }
+}
