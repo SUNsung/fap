@@ -1,130 +1,125 @@
 
         
-                # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Environment] env Vagrant::Environment object of the
-        #   environment that this configuration has been loaded into. This
-        #   gives you convenient access to things like the the root path
-        #   and so on.
-        # @param [ErrorRecorder] errors
-        def validate(env, errors)
-        end
+            ret = [
+      ['crypto', 'CRYPTO_malloc'],
+      ['ssl', 'SSL_new']
+    ].all? do |base, func|
+      result = false
+      libs = ['lib#{base}-[0-9][0-9]', 'lib#{base}-[0-9][0-9][0-9]']
+      libs = Dir.glob(libs.map{|l| libpath.map{|d| File.join(d, l + '.*')}}.flatten).map{|path| File.basename(path, '.*')}.uniq
+      libs.each do |lib|
+        result = have_library(lib, func)
+        break if result
       end
+      result
     end
+    return ret if ret
   end
-end
-
-    
-            include Vagrant::Util
-    
-    module Vagrant
-  module Plugin
-    module V1
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
-    
-            # Defines additional communicators to be available. Communicators
-        # should be returned by a block passed to this method. This is done
-        # to ensure that the class is lazy loaded, so if your class inherits
-        # from or uses any Vagrant internals specific to Vagrant 1.0, then
-        # the plugin can still be defined without breaking anything in future
-        # versions of Vagrant.
-        #
-        # @param [String] name Communicator name.
-        def self.communicator(name=UNSET_VALUE, &block)
-          data[:communicator] ||= Registry.new
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
-        end
-    
-            # Helper method that will set a value if a value is given, or otherwise
-        # return the already set value.
-        #
-        # @param [Symbol] key Key for the data
-        # @param [Object] value Value to store.
-        # @return [Object] Stored value.
-        def self.get_or_set(key, value=UNSET_VALUE)
-          # If no value is to be set, then return the value we have already set
-          return data[key] if value.eql?(UNSET_VALUE)
-    
-            # This method is called if the underlying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
-        end
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
-    end
-    
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-          def safe?(env)
-        %w[GET HEAD OPTIONS TRACE].include? env['REQUEST_METHOD']
-      end
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-    Given /^I run a rails generator to generate a '([^']*)' scaffold with '([^']*)'$/ do |model_name, attributes|
-  step %[I successfully run `rails generate scaffold #{model_name} #{attributes}`]
+  return false
 end
     
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
-    end
+      # Sets the last +Error+ of the current executing +Thread+ to +error+
+  def self.last_error= error
+    Thread.current[:__DL2_LAST_ERROR__] = error
+    Thread.current[:__FIDDLE_LAST_ERROR__] = error
+  end
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
+        # Given a String of C type +ty+, returns the corresponding Fiddle constant.
+    #
+    # +ty+ can also accept an Array of C type Strings, and will be returned in
+    # a corresponding Array.
+    #
+    # If Hash +tymap+ is provided, +ty+ is expected to be the key, and the
+    # value will be the C type to be looked up.
+    #
+    # Example:
+    #   require 'fiddle/import'
+    #
+    #   include Fiddle::CParser
+    #     #=> Object
+    #
+    #   parse_ctype('int')
+    #     #=> Fiddle::TYPE_INT
+    #
+    #   parse_ctype('double diff')
+    #     #=> Fiddle::TYPE_DOUBLE
+    #
+    #   parse_ctype('unsigned char byte')
+    #     #=> -Fiddle::TYPE_CHAR
+    #
+    #   parse_ctype('const char* const argv[]')
+    #     #=> -Fiddle::TYPE_VOIDP
+    #
+    def parse_ctype(ty, tymap=nil)
+      tymap ||= {}
+      case ty
+      when Array
+        return [parse_ctype(ty[0], tymap), ty[1]]
+      when 'void'
+        return TYPE_VOID
+      when /^(?:(?:signed\s+)?long\s+long(?:\s+int\s+)?|int64_t)(?:\s+\w+)?$/
+        if( defined?(TYPE_LONG_LONG) )
+          return TYPE_LONG_LONG
+        else
+          raise(RuntimeError, 'unsupported type: #{ty}')
         end
+      when /^(?:unsigned\s+long\s+long(?:\s+int\s+)?|uint64_t)(?:\s+\w+)?$/
+        if( defined?(TYPE_LONG_LONG) )
+          return -TYPE_LONG_LONG
+        else
+          raise(RuntimeError, 'unsupported type: #{ty}')
+        end
+      when /^(?:signed\s+)?long(?:\s+int\s+)?(?:\s+\w+)?$/
+        return TYPE_LONG
+      when /^unsigned\s+long(?:\s+int\s+)?(?:\s+\w+)?$/
+        return -TYPE_LONG
+      when /^(?:signed\s+)?int(?:\s+\w+)?$/
+        return TYPE_INT
+      when /^(?:unsigned\s+int|uint)(?:\s+\w+)?$/
+        return -TYPE_INT
+      when /^(?:signed\s+)?short(?:\s+int\s+)?(?:\s+\w+)?$/
+        return TYPE_SHORT
+      when /^unsigned\s+short(?:\s+int\s+)?(?:\s+\w+)?$/
+        return -TYPE_SHORT
+      when /^(?:signed\s+)?char(?:\s+\w+)?$/
+        return TYPE_CHAR
+      when /^unsigned\s+char(?:\s+\w+)?$/
+        return  -TYPE_CHAR
+      when /^float(?:\s+\w+)?$/
+        return TYPE_FLOAT
+      when /^double(?:\s+\w+)?$/
+        return TYPE_DOUBLE
+      when /^size_t(?:\s+\w+)?$/
+        return TYPE_SIZE_T
+      when /^ssize_t(?:\s+\w+)?$/
+        return TYPE_SSIZE_T
+      when /^ptrdiff_t(?:\s+\w+)?$/
+        return TYPE_PTRDIFF_T
+      when /^intptr_t(?:\s+\w+)?$/
+        return TYPE_INTPTR_T
+      when /^uintptr_t(?:\s+\w+)?$/
+        return TYPE_UINTPTR_T
+      when /\*/, /\[[\s\d]*\]/
+        return TYPE_VOIDP
       else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+        ty = ty.split(' ', 2)[0]
+        if( tymap[ty] )
+          return parse_ctype(tymap[ty], tymap)
+        else
+          raise(DLError, 'unknown type: #{ty}')
+        end
       end
     end
     
-        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension. If the extension is empty, no dot is added.
-    def dotextension attachment, style_name
-      ext = extension(attachment, style_name)
-      ext.empty? ? ext : '.#{ext}'
-    end
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+    Liquid::Template.register_tag('config_tag', ConfigTag)
+    
+        settings['prefix'] = staging_path(attributes[:prefix])
+    FileUtils.mkdir_p(settings['prefix'])
+    
+        # Execute the transmogrification on the manifest
+    pkg_mogrify = safesystemout('pkgmogrify', manifest_fn)
+    File.write(build_path('#{name}.p5m.2'), pkg_mogrify)
+    safesystem('cp', build_path('#{name}.p5m.2'), manifest_fn)
