@@ -1,76 +1,180 @@
 
         
-            with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+            # validate function_name if present
+    function_name = module.params['function_name']
+    if function_name:
+        if not re.search(r'^[\w\-:]+$', function_name):
+            module.fail_json(
+                msg='Function name {0} is invalid. Names must contain only alphanumeric characters and hyphens.'.format(function_name)
+            )
+        if len(function_name) > 64:
+            module.fail_json(msg='Function name '{0}' exceeds 64 character limit'.format(function_name))
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(readme)
+        if not module.check_mode and (additions > 0 or deletions > 0):
+        task = gateway.save_services_configuration()
+        vca.block_until_completed(task)
     
+        module = AnsibleModule(
+        argument_spec=dict(
+            token=dict(required=True, no_log=True),
+            environment=dict(required=True),
+            user=dict(required=False),
+            repo=dict(required=False),
+            revision=dict(required=False),
+            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
+            validate_certs=dict(default='yes', type='bool'),
+        ),
+        supports_check_mode=True
+    )
     
-class YoutubeDL(youtube_dl.YoutubeDL):
-    def __init__(self, *args, **kwargs):
-        self.to_stderr = self.to_screen
-        self.processed_info_dicts = []
-        super(YoutubeDL, self).__init__(*args, **kwargs)
+    RETURN = '''# '''
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    notes:
+    - Requires the LogEntries agent which can be installed following the instructions at logentries.com
+'''
+EXAMPLES = '''
+# Track nginx logs
+- logentries:
+    path: /var/log/nginx/access.log
+    state: present
+    name: nginx-access-log
+    
+        namespace = dict(ca='http://www.ca.com/spectrum/restful/schema/response')
+    error = root.find('ca:error', namespace).text
     
         def __init__(self):
-        self.name = 'btree_gist'
-    
-    
-@functools.lru_cache()
-def get_hstore_oids(connection_alias):
-    '''Return hstore and hstore array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute(
-            'SELECT t.oid, typarray '
-            'FROM pg_type t '
-            'JOIN pg_namespace ns ON typnamespace = ns.oid '
-            'WHERE typname = 'hstore''
+        ca_certs = os.path.join(current_path, 'cacert.pem')
+        openssl_context = SSLContext(
+            logger, ca_certs=ca_certs,
+            cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
+                           '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
         )
-        oids = []
-        array_oids = []
-        for row in cursor:
-            oids.append(row[0])
-            array_oids.append(row[1])
-        return tuple(oids), tuple(array_oids)
+        host_manager = HostManagerBase()
+        connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
+                                         debug=True)
+        self.check_ip = CheckIp(logger, config, connect_creator)
+    
+        try:
+        # hide console in MS windows
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
     
     
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
+
     
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+        def test_default_decoder(self):
+        from acme.fields import RFC3339Field
+        self.assertEqual(
+            self.decoded, RFC3339Field.default_decoder(self.encoded))
     
-        @cached_property
-    def model(self):
-        return self.get_model_class()
+    .. code-block:: ini
+   :name: credentials.ini
+   :caption: Example credentials file:
     
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
+        Test that invoked textview has text from source.
     '''
-    objects = SessionManager()
+    @classmethod
+    def setUpClass(cls):
+        requires('gui')
+        cls.root = Tk()
+        cls.root.withdraw()
+        cls.dialog = About(cls.root, 'About IDLE', _utest=True)
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+        def compare_files(self, file1, file2):
+        with open(file1) as fp:
+            lines1 = fp.readlines()
+        with open(file2) as fp:
+            lines2 = fp.readlines()
+        self.assertEqual(lines1, lines2)
+    
+        def test_fileobj(self):
+        with self.open(BytesIO(self.DATA), 'r') as f:
+            self.assertEqual(f.read(), self.TEXT)
+        with self.open(BytesIO(self.DATA), 'rb') as f:
+            self.assertEqual(f.read(), self.TEXT)
+        text = self.TEXT.decode('ascii')
+        with self.open(BytesIO(self.DATA), 'rt') as f:
+            self.assertEqual(f.read(), text)
+    
+    <slide><title>Another demo slide</title>
+<point>It is important</point>
+<point>To have more than</point>
+<point>one slide</point>
+</slide>
+</slideshow>
+'''
+    
+    con.commit()
+    
+    >>> import custom2
+>>> c1 = custom2.Custom('jim', 'fulton', 42)
+>>> c1.first
+'jim'
+>>> c1.last
+'fulton'
+>>> c1.number
+42
+>>> c1.name()
+'jim fulton'
+>>> c1.first = 'will'
+>>> c1.name()
+'will fulton'
+>>> c1.last = 'tell'
+>>> c1.name()
+'will tell'
+>>> del c1.first
+>>> c1.name()
+Traceback (most recent call last):
+...
+AttributeError: first
+>>> c1.first
+Traceback (most recent call last):
+...
+AttributeError: first
+>>> c1.first = 'drew'
+>>> c1.first
+'drew'
+>>> del c1.number
+Traceback (most recent call last):
+...
+TypeError: can't delete numeric/char attribute
+>>> c1.number=2
+>>> c1.number
+2
+>>> c1.first = 42
+>>> c1.name()
+'42 tell'
+>>> c2 = custom2.Custom()
+>>> c2.name()
+' '
+>>> c2.first
+''
+>>> c2.last
+''
+>>> del c2.first
+>>> c2.first
+Traceback (most recent call last):
+...
+AttributeError: first
+>>> c2.first
+Traceback (most recent call last):
+...
+AttributeError: first
+>>> c2.name()
+Traceback (most recent call last):
+  File '<stdin>', line 1, in ?
+AttributeError: first
+>>> c2.number
+0
+>>> n3 = custom2.Custom('jim', 'fulton', 'waaa')
+Traceback (most recent call last):
+  File '<stdin>', line 1, in ?
+TypeError: an integer is required (got type str)
+>>> del c1
+>>> del c2
+    
+    import os
+import sys
+import codecs
+import re
