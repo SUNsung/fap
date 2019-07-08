@@ -1,135 +1,231 @@
 
         
-        
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
+        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
     
-    batch_size = 128
-num_classes = 5
-epochs = 5
     
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
+    
+    # General information about the project.
+project = u'youtube-dl'
+copyright = u'2014, Ricardo Garcia Gonzalez'
+    
+        def test_subtitles_in_page(self):
+        self.url = 'http://www.democracynow.org/2015/7/3/this_flag_comes_down_today_bree'
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['en']))
+        self.assertEqual(md5(subtitles['en']), 'acaca989e24a9e45a6719c9b3d60815c')
+    
+        # Raises
+        ValueError: in case of invalid `label_mode`.
+    '''
+    if label_mode not in ['fine', 'coarse']:
+        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
+    
+        with gzip.open(paths[0], 'rb') as lbpath:
+        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loss = MSE_MAE_loss(0.3)
+        inputs = keras.layers.Input((2,))
+        outputs = keras.layers.Dense(1, name='model_output')(inputs)
+        model = keras.models.Model(inputs, outputs)
+        model.compile(optimizer='sgd', loss={'model_output': loss})
+        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
+        model.save(model_filename)
+    
+    Denoising is one of the classic applications of autoencoders.
+The denoising process removes unwanted noise that corrupted the
+true signal.
+    
+    print('Vectorizing sequence data...')
+tokenizer = Tokenizer(num_words=max_words)
+x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
+x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+    
+def deserialize(name, custom_objects=None):
+    return deserialize_keras_object(name,
+                                    module_objects=globals(),
+                                    custom_objects=custom_objects,
+                                    printable_module_name='loss function')
+    
+            headers.insert(0, request_line)
+        headers = '\r\n'.join(headers).strip()
+    
+    
+class Conversion(object):
+    
+    
+def get_stream_type(env, args):
+    '''Pick the right stream type based on `env` and `args`.
+    Wrap it in a partial with the type-specific args so that
+    we don't need to think what stream we are dealing with.
+    
+        # If both `auth_parse` and `prompt_password` are set to `True`,
+    # and the value of `-a` lacks the password part,
+    # then the user will be prompted to type the password in.
+    prompt_password = True
+    
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
 
     
-    
-def hinge(y_true, y_pred):
-    return K.mean(K.maximum(1. - y_true * y_pred, 0.), axis=-1)
-    
-    First, we fix a training set and increase the number of
-samples. Then we plot the computation time as function of
-the number of samples.
-    
-                gc.collect()
-            print('- benchmarking LassoLars')
-            clf = LassoLars(alpha=alpha, fit_intercept=False,
-                            normalize=False, precompute=precompute)
-            tstart = time()
-            clf.fit(X, Y)
-            lars_lasso_results.append(time() - tstart)
-    
-    # Split data in train set and test set
-n_samples = X.shape[0]
-X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
-X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
-print('test data sparsity: %f' % sparsity_ratio(X_test))
-    
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
-    
-    This example shows the effect of imposing a connectivity graph to capture
-local structure in the data. The graph is simply the graph of 20 nearest
-neighbors.
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
     
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
     
-    # Anisotropicly distributed data
-random_state = 170
-X, y = datasets.make_blobs(n_samples=n_samples, random_state=random_state)
-transformation = [[0.6, -0.6], [-0.4, 0.8]]
-X_aniso = np.dot(X, transformation)
-aniso = (X_aniso, y)
     
-    We want to compare the performance of the MiniBatchKMeans and KMeans:
-the MiniBatchKMeans is faster, but gives slightly different results (see
-:ref:`mini_batch_kmeans`).
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
     
+        def test_request_body_from_file_by_path(self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert FILE_CONTENT in r, r
+        assert ''Content-Type': 'text/plain'' in r
+    
+    
+class LookupDict(dict):
+    '''Dictionary lookup object.'''
+    
+            self.host = host
+        self.port = port
+        self.requests_to_handle = requests_to_handle
+    
+    # ---------
+# Specifics
+# ---------
+    
+    import sys
+    
+            with server as address:
+            sock1 = socket.socket()
+            sock2 = socket.socket()
+    
+        def __getstate__(self):
+        # Consume everything; accessing the content attribute makes
+        # sure the content has been fully read.
+        if not self._content_consumed:
+            self.content
+    
+    - oneandone_firewall_policy:
+    auth_token: oneandone_private_api_key
+    firewall_policy: ansible-firewall-policy-updated
+    remove_rules:
+     - rule_id #1
+     - rule_id #2
+     - ...
+    wait: true
+    wait_timeout: 500
+    state: update
+    
+                # the cluster
+            if host.CLUSTER_ID != self.get_parameter('cluster_id'):
+                if one.cluster.addhost(self.get_parameter('cluster_id'), host.ID):
+                    result['changed'] = True
+                else:
+                    self.fail(msg='failed to update the host cluster')
+    
+    
+def protocol_to_type(protocol):
     try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+        protocols = ProtocolsType()
+        setattr(protocols, protocol, True)
+        return protocols
+    except AttributeError:
+        raise VcaError('The value in protocol is not valid')
+    
+        def role_mod(self, name, item):
+        return self._post_json(method='role_mod', name=name, item=item)
     
     
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod(optionflags=doctest.ELLIPSIS)
+    main()
 
     
-            # simple test to validate param value
-        if param in self._static_method_choices.keys():
-            self.param = param
-        else:
-            raise ValueError('Invalid Value for Param: {0}'.format(param))
     
-    Request receiver in simple form keeps a reference to a single successor.
-As a variation some receivers may be capable of sending requests out
-in several directions, forming a `tree of responsibility`.
+class Icinga2FeatureHelper:
+    def __init__(self, module):
+        self.module = module
+        self._icinga2 = module.get_bin_path('icinga2', True)
+        self.feature_name = self.module.params['name']
+        self.state = self.module.params['state']
     
-        def get_confidence(self):
-        r = 0.01
-        if self._total_seqs > 0:
-            r = ((1.0 * self._seq_counters[SequenceLikelihood.POSITIVE]) /
-                 self._total_seqs / self._model['typical_positive_ratio'])
-            r = r * self._freq_char / self._total_char
-            if r >= 1.0:
-                r = 0.99
-        return r
-
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-            if self.state == ProbingState.DETECTING:
-            if (self.context_analyzer.got_enough_data() and
-               (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
-                self._state = ProbingState.FOUND_IT
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
     
-        MINIMUM_THRESHOLD = 0.20
-    HIGH_BYTE_DETECTOR = re.compile(b'[\x80-\xFF]')
-    ESC_DETECTOR = re.compile(b'(\033|~{)')
-    WIN_BYTE_DETECTOR = re.compile(b'[\x80-\x9F]')
-    ISO_WIN_MAP = {'iso-8859-1': 'Windows-1252',
-                   'iso-8859-2': 'Windows-1250',
-                   'iso-8859-5': 'Windows-1251',
-                   'iso-8859-6': 'Windows-1256',
-                   'iso-8859-7': 'Windows-1253',
-                   'iso-8859-8': 'Windows-1255',
-                   'iso-8859-9': 'Windows-1254',
-                   'iso-8859-13': 'Windows-1257'}
-    }
+            html = get_content(api_url)
+        self.tree = ET.ElementTree(ET.fromstring(html))
+    
+    from ..common import *
+    
+        def prepare(self, **kwargs):
+        if re.search(r'imgur\.com/a/', self.url):
+            # album
+            content = get_content(self.url)
+            album = match1(content, r'album\s*:\s*({.*}),') or \
+                    match1(content, r'image\s*:\s*({.*}),')
+            album = json.loads(album)
+            count = album['album_images']['count']
+            images = album['album_images']['images']
+            ext = images[0]['ext']
+            self.streams = {
+                'original': {
+                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
+                            for i in images],
+                    'size': sum([i['size'] for i in images]),
+                    'container': ext[1:]
+                },
+                'thumbnail': {
+                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
+                            for i in images],
+                    'container': 'jpg'
+                }
+            }
+            self.title = album['title']
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
