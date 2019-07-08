@@ -1,292 +1,253 @@
 
         
-        void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
+            typedef int8_t   s8;
+    typedef uint8_t  u8;
+    typedef int16_t  s16;
+    typedef uint16_t u16;
+    typedef int32_t  s32;
+    typedef uint32_t u32;
+    typedef float    f32;
+    typedef int64_t  s64;
+    typedef uint64_t u64;
+    typedef double   f64;
     
-    /**
- * @brief An interface for the units of computation which can be composed into a
- *        Net.
- *
- * Layer%s must implement a Forward function, in which they take their input
- * (bottom) Blob%s (if any) and compute their output Blob%s (if any).
- * They may also implement a Backward function, in which they compute the error
- * gradients with respect to their input Blob%s, given the error gradients with
- * their output Blob%s.
- */
-template <typename Dtype>
-class Layer {
- public:
-  /**
-   * You should not implement your own constructor. Any set up code should go
-   * to SetUp(), where the dimensions of the bottom blobs are provided to the
-   * layer.
-   */
-  explicit Layer(const LayerParameter& param)
-    : layer_param_(param) {
-      // Set phase and copy blobs (if there are any).
-      phase_ = param.phase();
-      if (layer_param_.blobs_size() > 0) {
-        blobs_.resize(layer_param_.blobs_size());
-        for (int i = 0; i < layer_param_.blobs_size(); ++i) {
-          blobs_[i].reset(new Blob<Dtype>());
-          blobs_[i]->FromProto(layer_param_.blobs(i));
+            const f32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const f32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
+        const f32* ln2 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+    
+    
+    {            v_y = vld2q_u8(srcy + syj + 32);
+            v_dst.val[0] = vld1q_u8(srcu + sj + 16);
+            v_dst.val[1] = v_y.val[0];
+            v_dst.val[2] = vld1q_u8(srcv + sj + 16);
+            v_dst.val[3] = v_y.val[1];
+            vst4q_u8(dst + dj + 64, v_dst);
         }
-      }
-    }
-  virtual ~Layer() {}
-    }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ x @f$, a Blob with values in
-   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
-   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
-   *      label @f$ \hat{l}_n @f$ given by its maximal index:
-   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels @f$ l @f$, an integer-valued Blob with values
-   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
-   *      indicating the correct class label among the @f$ K @f$ classes
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      the computed accuracy: @f$
-   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
-   *      @f$, where @f$
-   *      \delta\{\mathrm{condition}\} = \left\{
-   *         \begin{array}{lr}
-   *            1 & \mbox{if condition} \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MinTopBlobs() const { return 1; }
-  virtual inline bool EqualNumBottomTopBlobs() const { return true; }
-    
-     protected:
-  virtual void InternalThreadEntry();
-  virtual void load_batch(Batch<Dtype>* batch) = 0;
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
 #endif
     
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
-
+                for (; j < size.width; j++)
+            {
+                dst[j] = internal::saturate_cast<u8>((src[j] >> shift));
+            }
+        }
+        else // CONVERT_POLICY_WRAP
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src + j);
+                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
+                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
+                int8x16_t v_dst = vcombine_s8(vmovn_s16(v_src0),
+                                              vmovn_s16(v_src1));
+                vst1q_u8(dst + j, vreinterpretq_u8_s8(v_dst));
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
+                vst1_u8(dst + j, vreinterpret_u8_s8(vmovn_s16(v_src)));
+            }
     
-    #include 'src/cpp/ext/filters/census/context.h'
+            x -= 8;
+        if (x == width)
+            --x;
     
-    #include 'src/cpp/ext/filters/census/measures.h'
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H */
-
-    
-    #include <grpcpp/grpcpp.h>
-#include 'src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h'
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
+                for (; i <= lim; i += 16)
+            {
+                internal::prefetch(src0 + i);
+                internal::prefetch(src1 + i);
     }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
     
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+                if(!x) {
+                tcurr = tnext;
+                tc = tcnext;
+    }
     
-    #include <grpc/support/port_platform.h>
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-    template <typename Dtype>
-class LayerRegistry {
+    void MapLiteTestUtil::ModifyMapFields(unittest::TestMapLite* message) {
+  MapTestUtilImpl::ModifyMapFields<unittest::MapEnumLite,
+                                   unittest::MAP_ENUM_FOO_LITE>(message);
+}
+    
+    TEST(ByteSourceTest, LimitByteSource) {
+  StringPiece data('Hello world!');
+  MockByteSource source(data, 3);
+  LimitByteSource limit_source(&source, 6);
+  EXPECT_EQ(6, limit_source.Available());
+  limit_source.Skip(1);
+  EXPECT_EQ(5, limit_source.Available());
+    }
+    
+    TEST(StatusOr, TestPointerAssignmentStatusOKConverting) {
+  Derived derived;
+  StatusOr<Derived*> source(&derived);
+  StatusOr<Base2*>   target;
+  target = source;
+  EXPECT_EQ(source.status(), target.status());
+  EXPECT_EQ(static_cast<const Base2*>(source.ValueOrDie()),
+            target.ValueOrDie());
+}
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
+  }
+}
+    
+    std::string ReadFile(const std::string& name) {
+  std::ifstream file(name.c_str());
+  GOOGLE_CHECK(file.is_open()) << 'Couldn't find file ''
+      << name
+      << '', please make sure you are running this command from the benchmarks'
+      << ' directory.\n';
+  return std::string((std::istreambuf_iterator<char>(file)),
+                     std::istreambuf_iterator<char>());
+}
+    
+        if (dataset.message_name() == 'benchmarks.proto3.GoogleMessage1') {
+      message = new benchmarks::proto3::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage1') {
+      message = new benchmarks::proto2::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage2') {
+      message = new benchmarks::proto2::GoogleMessage2;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message3.GoogleMessage3') {
+      message = new benchmarks::google_message3::GoogleMessage3;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message4.GoogleMessage4') {
+      message = new benchmarks::google_message4::GoogleMessage4;
+    } else {
+      std::cerr << 'Unknown message type: ' << dataset.message_name();
+      exit(1);
+    }
+    
+    
+    {  int total_added_;
+};
+    
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+     private:
+  // Simple struct to hold an ICOORD point and a halfwidth representing half
+  // the 'width' (supposedly approximately parallel to the direction of the
+  // line) of each point, such that distant points can be discarded when they
+  // overlap nearer points. (Think i dot and other diacritics or noise.)
+  struct PointWidth {
+    PointWidth() : pt(ICOORD(0, 0)), halfwidth(0) {}
+    PointWidth(const ICOORD& pt0, int halfwidth0)
+      : pt(pt0), halfwidth(halfwidth0) {}
+    }
+    
+    struct PARA : public ELIST_LINK {
  public:
-  static ::caffe::Layer<Dtype> * CreateLayer(const ::caffe::LayerParameter& param) {
-    ::caffe::shared_ptr< ::caffe::Layer<Dtype> > ptr =
-      ::caffe::LayerRegistry<Dtype>::CreateLayer(param);
-    // avoid caffe::layer destructor, which deletes the weights layer owns
-    new ::caffe::shared_ptr< ::caffe::Layer<Dtype> >(ptr);
-    return ptr.get();
-  }
-};
+  PARA() : model(nullptr), is_list_item(false),
+           is_very_first_or_continuation(false), has_drop_cap(false) {}
+    }
     
-    #include <cstddef>
-#include <cstdlib>
-#include <sstream>
-#include <limits>
-#include <map>
-#include <set>
-#include <typeinfo>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <utility>
+    #ifndef           REJCTMAP_H
+#define           REJCTMAP_H
     
-    
-    {
-    {
-    {  /*!
-   * \brief Worker threads.
-   */
-  std::vector<std::thread> worker_threads_;
-  /*!
-   * \brief Startup synchronization objects
-   */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
-  /*!
-   * \brief Disallow default construction.
-   */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
-};
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
+    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
 
     
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file iter_prefetcher.h
- * \brief define a prefetcher using threaditer to keep k batch fetched
- */
-#ifndef MXNET_IO_ITER_PREFETCHER_H_
-#define MXNET_IO_ITER_PREFETCHER_H_
+    namespace leveldb {
+    }
     
-    template<typename xpu>
-void Quantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                              const float threshold) {
-  mxnet::op::mxnet_op::Kernel<quantize_2bit, xpu>
-    ::Launch(s,
-            inputs[2].Size(),         // compressed array size
-            inputs[0].Size(),         // original size
-            inputs[2].dptr<float>(),  // compressed array
-            inputs[0].dptr<float>(),  // original array
-            inputs[1].dptr<float>(),  // residual array
-            -1 *threshold,            // negative threshold
-            threshold);               // positive threshold
+    struct Options;
+    
+    inline char* Arena::Allocate(size_t bytes) {
+  // The semantics of what to return are a bit messy if we allow
+  // 0-byte allocations, so we disallow them here (we don't need
+  // them for our internal use).
+  assert(bytes > 0);
+  if (bytes <= alloc_bytes_remaining_) {
+    char* result = alloc_ptr_;
+    alloc_ptr_ += bytes;
+    alloc_bytes_remaining_ -= bytes;
+    return result;
+  }
+  return AllocateFallback(bytes);
 }
     
-    KVStore* KVStore::Create(const char *type_name) {
-  std::string tname = type_name;
-  std::transform(tname.begin(), tname.end(), tname.begin(), ::tolower);
-  KVStore* kv = nullptr;
-  bool use_device_comm = false;
-  auto has = [tname](const std::string& pattern) {
-    return tname.find(pattern) != std::string::npos;
-  };
-  if (has('device')) {
-    use_device_comm = true;
-  }
+    
+    {  // Read all data using a sequence of randomly sized reads.
+  SequentialFile* sequential_file;
+  ASSERT_OK(env_->NewSequentialFile(test_file_name, &sequential_file));
+  std::string read_result;
+  std::string scratch;
+  while (read_result.size() < data.size()) {
+    int len = std::min<int>(rnd.Skewed(18), data.size() - read_result.size());
+    scratch.resize(std::max(len, 1));  // at least 1 so &scratch[0] is legal
+    Slice read;
+    ASSERT_OK(sequential_file->Read(len, &read, &scratch[0]));
+    if (len > 0) {
+      ASSERT_GT(read.size(), 0);
     }
-    
-      for (auto& blob : in_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(0);
+    ASSERT_LE(read.size(), len);
+    read_result.append(read.data(), read.size());
   }
-  for (auto& blob : out_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(1);
-  }
-  for (auto& blob : in_grad) {
-    NDArray* nd = new NDArray(blob, ndctx.dev_id);
-    ptrs.push_back(reinterpret_cast<void*>(nd));
-    ndvar.push_back(nd->var());
-    tags.push_back(2);
-  }
-  std::sort(ndvar.begin(), ndvar.end());
-  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
-  for (auto& blob : out_grad) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(3);
-  }
-    
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    ObjectQualityInfo60C::ObjectQualityInfo60C() {}
-const uint32_t ObjectQualityInfo60C::ID = 0x60C;
-    
-    
-    { protected:
-  SpeedLimit speed_limit_;
-};
-    
-    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    // config detail: {'name': 'torque_output', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': True, 'physical_range':
-// '[-2147483.648|2147483.647]', 'bit': 7, 'type': 'double', 'order':
-// 'motorola', 'physical_unit': 'N-m'}
-double Brakemotorrpt372::torque_output(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {  double ret = x * 0.001000;
-  return ret;
+  ASSERT_EQ(read_result, data);
+  delete sequential_file;
 }
     
-    // config detail: {'name': 'commanded_value', 'enum': {0: 'COMMANDED_VALUE_OFF',
-// 1: 'COMMANDED_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 15, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Commanded_valueType Hornrpt79::commanded_value(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 8);
+    static const int kMMapLimit = 4;
+    
+    
+    {    NDMaskPtr NDMask::Alias() const
+    {
+        return MakeSharedObject<NDMask>(this->Shape(), new Matrix<char>(GetMatrix()->AsReference()));
+    }
+}
+
+    
+        inline size_t GetVersion(const Dictionary& dict)
+    {
+        if (!dict.Contains(versionKey))
+             LogicError('Required key '%ls' is not found in the dictionary.', versionKey.c_str());
+    }
+    
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
+    
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
     }
