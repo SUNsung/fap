@@ -1,314 +1,270 @@
 
         
-                float32x4_t v_dst0f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src1))), v_beta),
-                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src0))));
-        float32x4_t v_dst1f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src1))), v_beta),
-                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src0))));
-        uint16x8_t _v_dst = vcombine_u16(vmovn_u32(vcvtq_u32_f32(v_dst0f)),
-                                        vmovn_u32(vcvtq_u32_f32(v_dst1f)));
+        REGISTER_OP('Add').Doc(R'doc(
+An op to test that duplicate registrations don't override previously
+registered ops.
+)doc');
     
-        void operator() (const typename VecTraits<f32>::vec64 & v_src0,
-                     const typename VecTraits<f32>::vec64 & v_src1,
-                     typename VecTraits<f32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vmla_f32(vget_low(vgamma), v_src0, vget_low(valpha));
-        v_dst = vmla_f32(vs1, v_src1, vget_low(vbeta));
-    }
-    
-            norml = vmlal_s16(norml, vget_low_s16(vy), vget_low_s16(vy));
-        normh = vmlal_s16(normh, vget_high_s16(vx), vget_high_s16(vx));
-    
-    void combineYUYV(const Size2D &size,
-                 const u8 * srcyBase, ptrdiff_t srcyStride,
-                 const u8 * srcuBase, ptrdiff_t srcuStride,
-                 const u8 * srcvBase, ptrdiff_t srcvStride,
-                 u8 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC1(u16, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.u16 q3, d4                                       \n\t'
-            'vmovl.u16 q4, d5                                       \n\t'
-            'vcvt.f32.u32 q5, q3                                    \n\t'
-            'vcvt.f32.u32 q6, q4                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vmul.f32 q8, q6, q0                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vadd.f32 q10, q8, q1                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vcvt.s32.f32 q12, q10                                  \n\t'
-            'vqmovun.s32 d26, q11                                   \n\t'
-            'vqmovun.s32 d27, q12                                   \n\t'
-            'vst1.16 {d26-d27}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-              'w' (vshift), 'w' (vscale)
-            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27'
-        );
-    }
-})
-#else
-CVTS_FUNC1(u16, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        uint16x8_t vline = vld1q_u16(_src + i);
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
-        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
-        vst1q_u16(_dst + i, vcombine_u16(vRes1, vRes2));
-    }
-})
-#endif
-    
-                // make shift
-            prevx[0] = currx[0];
-            currx[0] = nextx[0];
-    
-            if(i + 8 <= size.width)
-        {
-            uint8x8_t vs1 = vld1_u8(src0 + i);
-            uint8x8_t vs2 = vld1_u8(src1 + i);
-    }
-    
-                uint32x4_t ln042 = vmlaq_u32(ln04, lane2, vc6u32);
-            uint32x4_t lsw = vmlaq_u32(ln042, ln13, vc4u32);
-    
-                uint8x8_t el8shr0 = vld1_u8(src + j);
-            uint8x8_t el8shr1 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 8));
-            uint8x8_t el8shr2 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 16));
-            uint8x8_t el8shr3 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 24));
-    
-                        tprev1 = vextq_s16(tnext1, tnext1, 6);
-                    tprev1 = vsetq_lane_s16(vgetq_lane_s16(tprev1, 2),tprev1, 0);
-                    tprev1 = vsetq_lane_s16(vgetq_lane_s16(tprev1, 2),tprev1, 1);
-                } else if (border == BORDER_MODE_REFLECT) {
-                    tpprev1 = vextq_s16(tnext2, tnext2, 7);
-                    tpprev1 = vsetq_lane_s16(vgetq_lane_s16(tpprev1, 1),tpprev1, 0);
-    
-    
-    {} // namespace caffe2
-
-    
-    </details>
-    
-    #include 'caffe2/utils/math.h'
-    
-    Example 1:
-  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-  RANGES = [
-    [
-      [2, 4],
-      [0, 2],
-    ],
-    [
-      [0, 0],
-      [6, 2],
-    ]
-  ]
-  lengths = [4, 2]
-  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
-  OUTPUT[1] = [[1, 2], [7, 8]]
-    
-    
-    {} // namespace caffe2
-
-    
-    
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
-    
-    /*
- * True if line from a0->a1 intersects b0->b1
- */
-bool intersect(const b2Vec2& a0, const b2Vec2& a1,
-			   const b2Vec2& b0, const b2Vec2& b1) {
-	b2Vec2 myVec(0.0f,0.0f);
-	return intersect(a0, a1, b0, b1, myVec);
-}
-    
-    #include 'EtcConfig.h'
-#include 'EtcImage.h'
-#include 'EtcColor.h'
-#include 'EtcErrorMetric.h'
-#include <memory>
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// calculate the error between the source pixel and the decoded pixel
-	// the error amount is base on the error metric
-	//
-	float Block4x4Encoding::CalcPixelError(ColorFloatRGBA a_frgbaDecodedColor, float a_fDecodedAlpha,
-											ColorFloatRGBA a_frgbaSourcePixel)
-	{
-    }
-    
-    		inline ColorFloatRGBA * GetDecodedColors(void)
-		{
-			return m_afrgbaDecodedColors;
-		}
-    
-    		typedef struct
-		{
-			signed dred2 : 3;
-			unsigned red1 : 5;
-			//
-			signed dgreen2 : 3;
-			unsigned green1 : 5;
-			//
-			signed dblue2 : 3;
-			unsigned blue1 : 5;
-			//
-			unsigned flip : 1;
-			unsigned diff : 1;
-			unsigned cw2 : 3;
-			unsigned cw1 : 3;
-			//
-			unsigned int selectors;
-		} Differential;
-    
-    		m_mode = MODE_ETC1;
-		m_boolDiff = m_pencodingbitsRGB8->individual.diff;
-		m_boolFlip = m_pencodingbitsRGB8->individual.flip;
-		if (m_boolDiff)
-		{
-			int iR2 = (int)(m_pencodingbitsRGB8->differential.red1 + m_pencodingbitsRGB8->differential.dred2);
-			if (iR2 < 0)
-			{
-				iR2 = 0;
-			}
-			else if (iR2 > 31)
-			{
-				iR2 = 31;
-			}
-    }
-    
-    void SimplifyPolygon(const Path &in_poly, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
-void SimplifyPolygons(const Paths &in_polys, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
-void SimplifyPolygons(Paths &polys, PolyFillType fillType = pftEvenOdd);
-    
-    int fastlz_compress(const void* input, int length, void* output);
-    
-    #define MULT16_16_Q11_32(a,b)     ((a)*(b))
-#define MULT16_16_Q11(a,b)     ((a)*(b))
-#define MULT16_16_Q13(a,b)     ((a)*(b))
-#define MULT16_16_Q14(a,b)     ((a)*(b))
-#define MULT16_16_Q15(a,b)     ((a)*(b))
-#define MULT16_16_P15(a,b)     ((a)*(b))
-#define MULT16_16_P13(a,b)     ((a)*(b))
-#define MULT16_16_P14(a,b)     ((a)*(b))
-#define MULT16_32_P16(a,b)     ((a)*(b))
-    
-    #include 'TimeA2.h'
-    
-    std::pair<std::vector<std::unique_ptr<Command>>,
-          std::vector<std::unique_ptr<Command>>>
-DHTSetup::setup(DownloadEngine* e, int family)
-{
-  std::vector<std::unique_ptr<Command>> tempCommands;
-  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
-  if ((family != AF_INET && family != AF_INET6) ||
-      (family == AF_INET && DHTRegistry::isInitialized()) ||
-      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
-    return {};
-  }
-  try {
-    // load routing table and localnode id here
-    std::shared_ptr<DHTNode> localNode;
-    }
-    }
-    
-    
-    {} // namespace aria2
-    
-    class DHTTokenUpdateCommand : public TimeBasedCommand {
-private:
-  DHTTokenTracker* tokenTracker_;
-    }
-    
-    void DHTUnknownMessage::doReceivedAction() {}
-    
-    #include <iostream>
-#include <cassert>
-    
-    #include <iostream>
-#include <vector>
-    
-    using namespace std;
-    
-    
-    {
-    {
-    {            if(cur != NULL){
-                stack.push(cur);
-                cur = cur->left;
-            }
-            else {
-                cur = stack.top();
-                stack.pop();
-                res.push_back(cur->val);
-                cur = cur->right;
-            }
-        }
-        return res;
-    }
+    // Representation of a Python bfloat16 object.
+struct PyBfloat16 {
+  PyObject_HEAD;  // Python object header
+  bfloat16 value;
 };
     
-            queue<pair<TreeNode*,int>> q;
-        q.push(make_pair(root, 0));
+    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
+// will be deleted by TFE_DeleteTensorHandle.
+using Safe_TFE_TensorHandlePtr =
+    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
+Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
     
-    using namespace std;
     
-            stack<TreeNode*> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-            while(cur != NULL){
-                res.push_back(cur->val);
-                stack.push(cur);
-                cur = cur->left;
-            }
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
+  }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include <string>
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
+    }
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
+    
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+    Status ProtoServerReflection::GetFileContainingSymbol(
+    ServerContext* context, const grpc::string& symbol,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
+    }
+    
+      void FillErrorResponse(const Status& status,
+                         reflection::v1alpha::ErrorResponse* error_response);
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
+    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    #endif  // GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
+
+    
+    typedef struct _option
+{
+	std::wstring name;
+	bool hasVal;
+	std::wstring value;
+	bool set;
+} option;
+    
+    #endif  // STORAGE_LEVELDB_UTIL_ENV_POSIX_TEST_HELPER_H_
+
+    
+    TEST(CorruptionTest, NewFileErrorDuringWrite) {
+  // Do enough writing to force minor compaction
+  env_.writable_file_error_ = true;
+  const int num = 3 + (Options().write_buffer_size / kValueSize);
+  std::string value_storage;
+  Status s;
+  for (int i = 0; s.ok() && i < num; i++) {
+    WriteBatch batch;
+    batch.Put('a', Value(100, &value_storage));
+    s = db_->Write(WriteOptions(), &batch);
+  }
+  ASSERT_TRUE(!s.ok());
+  ASSERT_GE(env_.num_writable_file_errors_, 1);
+  env_.writable_file_error_ = false;
+  Reopen();
+}
+    
+    class Writer {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
+    }
+    
+      Status(const Status& rhs);
+  Status& operator=(const Status& rhs);
+    
+    
+    {}  // namespace leveldb
+    
+      // Write metaindex block
+  if (ok()) {
+    BlockBuilder meta_index_block(&r->options);
+    if (r->filter_block != nullptr) {
+      // Add mapping from 'filter.Name' to location of filter data
+      std::string key = 'filter.';
+      key.append(r->options.filter_policy->Name());
+      std::string handle_encoding;
+      filter_block_handle.EncodeTo(&handle_encoding);
+      meta_index_block.Add(key, handle_encoding);
+    }
+    }
+    
+    
+    {  Env* env_;
+};
+    
+    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+    
+    
+    { private:
+  // the chunk split of the data, by number of elements
+  std::vector<bst_uint> raw_chunks_;
+  // the encoded chunk, by number of bytes
+  std::vector<bst_uint> encoded_chunks_;
+  // output buffer of compression.
+  std::vector<std::string> out_buffer_;
+  // input buffer of data.
+  std::string in_buffer_;
+};
+    
+      const std::string tmp_binfile = tempdir.path + '/csr_source.binary';
+  dmat->SaveToLocalFile(tmp_binfile);
+  xgboost::DMatrix * dmat_read = xgboost::DMatrix::Load(tmp_binfile, true, false);
+    
+    
+    {  delete obj;
+}
+    
+    // implementation of inline functions.
+inline void Learner::Predict(const SparsePage::Inst& inst,
+                             bool output_margin,
+                             HostDeviceVector<bst_float>* out_preds,
+                             unsigned ntree_limit) const {
+  gbm_->PredictInstance(inst, &out_preds->HostVector(), ntree_limit);
+  if (!output_margin) {
+    obj_->PredTransform(out_preds);
+  }
+}
+    
+    
+    {    friend
+    void getCallback(redisAsyncContext *, void *, void *);
+};
+    
+            auto iter = cache_map.find(key);
+        if (iter != cache_map.end())
+        {
+            iter->second->second.first = expire_time;
+            iter->second->second.second = val;
+            cache_list.splice(cache_list.begin(), cache_list, iter->second);
+            return;
+        }
+    
+        int i;
+    for (i = 0; i < WRITE_N; i++)
+    {
+        size = 10000 + rand() % 90000;
+    }
+    
+    
+    {    ASSERT_GT(cid, 0);
+    Coroutine::get_by_cid(cid)->resume();
+    ASSERT_EQ(cid, _cid);
+}
+
+    
+        virtual void onStart();
+    virtual void onShutdown() {};
+    virtual void onWorkerStart(int worker_id);
+    virtual void onWorkerStop(int worker_id) {}
+    virtual void onPipeMessage(int src_worker_id, const DataBuffer &) {}
+    virtual void onReceive(int fd, const DataBuffer &data);
+    virtual void onConnect(int fd);
+    virtual void onClose(int fd);
+    virtual void onPacket(const DataBuffer &data, ClientInfo &clientInfo);
+    
+    #ifdef SW_NO_USE_ASM_CONTEXT
+#ifdef HAVE_BOOST_CONTEXT
+#define USE_BOOST_CONTEXT 1
+#include <boost/context/all.hpp>
+#else
+#define USE_UCONTEXT 1
+#include <ucontext.h>
+#endif
+#else
+#include 'asm_context.h'
+#endif
+    
+    static string get_suffix(const char* filename)
+{
+    string filename_s(filename);
+    return filename_s.substr(filename_s.find_last_of('.') + 1);
+}
+    
+            /**
+         * Add your information about what your class does and their inputs/outputs.
+         * @param output is the modified cv::Mat.
+         * @param input is the input cv::Mat.
+         * @return If it is not void, add returning information here.
+         */
+        void doSomething(cv::Mat& output, const cv::Mat& input);
+    
+    #endif // OPENPOSE_TRACKING_PERSON_TRACKER_HPP
