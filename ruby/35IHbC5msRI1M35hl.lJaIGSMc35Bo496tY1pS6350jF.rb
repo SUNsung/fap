@@ -1,46 +1,82 @@
-# This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
-    
-      private
-    
-        after :each do
-      logstash.uninstall
+
+        
+            def root_path
+      context[:root_path]
     end
     
-        it 'joins array using ;' do
-      expect(project.send('hook_#{hook_name}')).
-        to eq('echo 'on hook'; echo 'another command here'')
+        attr_reader :filters
+    
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
     end
+    
+        def request_options
+      options = { params: self.class.params, headers: self.class.headers }
+      options[:accept_encoding] = 'gzip' if self.class.force_gzip
+      options
+    end
+    
+          str.truncate(max_length).ljust(max_length) << tag.to_s
+    end
+    
+      add_filter %r{^/build.rb$}
+  add_filter %r{^/config.rb$}
+  add_filter %r{^/constants.rb$}
+  add_filter %r{^/postinstall.rb$}
+  add_filter %r{^/test.rb$}
+  add_filter %r{^/compat/}
+  add_filter %r{^/dev-cmd/tests.rb$}
+  add_filter %r{^/test/}
+  add_filter %r{^/vendor/}
+    
+        mkdir_p page_dir
+    file = '#{page_dir}/#{filename}.#{extension}'
+    if File.exist?(file)
+      abort('rake aborted!') if ask('#{file} already exists. Do you want to overwrite?', ['y', 'n']) == 'n'
+    end
+    puts 'Creating new page: #{file}'
+    open(file, 'w') do |page|
+      page.puts '---'
+      page.puts 'layout: page'
+      page.puts 'title: \'#{title}\''
+      page.puts 'date: #{Time.now.strftime('%Y-%m-%d %H:%M')}'
+      page.puts 'comments: true'
+      page.puts 'sharing: true'
+      page.puts 'footer: true'
+      page.puts '---'
+    end
+  else
+    puts 'Syntax error: #{args.filename} contains unsupported characters'
   end
 end
     
-      describe '#validate!' do
-    it 'should raise if there are no windows defined' do
-      nowindows_project = FactoryBot.build(:nowindows_project)
-      expect do
-        nowindows_project.validate!
-      end.to raise_error RuntimeError, %r{should.include.some.windows}
-    end
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
     
-              it 'creates a project file' do
-            capture_io { cli.start }
-            expect(file.string).to_not be_empty
-            # make sure the output is valid YAML
-            expect { YAML.parse file.string }.to_not raise_error
-          end
+      factory :project_with_force_detach, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load('spec/fixtures/detach.yml') }
+    end
+    initialize_with { Tmuxinator::Project.new(file, force_detach: true) }
+  end
+    
+        context 'synchronization is 'after'' do
+      let(:synchronize) { 'after' }
+    
+    Then /^I should see a table with id '([^']*)'$/ do |dom_id|
+  page.find('table##{dom_id}')
+end
+
+    
         end
-    
-        def kill
-      self.class.render_template(Tmuxinator::Config.stop_template, binding)
-    end
-    
-          expect(instance.render).to match %r{wemux.ls.2>\/dev\/null}
-    end
   end
-    
-    module ActiveAdmin
-  module BatchActions
-    
-      end
 end
+
+    
+        class RegistrationsController < ::Devise::RegistrationsController
+      include ::ActiveAdmin::Devise::Controller
+    end
