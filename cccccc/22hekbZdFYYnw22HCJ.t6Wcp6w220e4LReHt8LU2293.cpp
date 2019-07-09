@@ -1,132 +1,250 @@
 
         
-        // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
+          // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
     
-    #endif  // CONTENT_NW_SRC_API_APP_APP_H_
-    
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      if (!item->enable_shortcut_)
-    return false;
+      int num_spatial_axes_;
+  int bottom_dim_;
+  int top_dim_;
     
-    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+    namespace caffe {
+    }
     
-    void Menu::Destroy() {
-}
+    #include <vector>
     
-    #include 'base/logging.h'
-#include 'base/strings/string_util.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
+    namespace caffe {
+    }
     
-     protected:
-  ~NwObjCallObjectMethodSyncFunction() override;
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
     
-    typedef GLUnurbs GLUnurbsObj;
-typedef GLUquadric GLUquadricObj;
-typedef GLUtesselator GLUtesselatorObj;
-typedef GLUtesselator GLUtriangulatorObj;
-    
-    #ifndef PSTOKENIZER_H
-#define PSTOKENIZER_H
-    
-    
-    {  PDFRectangle() { x1 = y1 = x2 = y2 = 0; }
-  PDFRectangle(double x1A, double y1A, double x2A, double y2A)
-    { x1 = x1A; y1 = y1A; x2 = x2A; y2 = y2A; }
-  GBool isValid() { return x1 != 0 || y1 != 0 || x2 != 0 || y2 != 0; }
-  void clipTo(PDFRectangle *rect);
-};
-    
-    
-    {  // get rectangular
-  if (dict->lookup('B', &obj)->isBool()) {
-    rectangular = obj.getBool();
-  }
-  obj.free();
-}
-    
-    
-    {private:
-  
-  PageTransitionType type;           // transition style
-  int duration;                      // duration of the effect in seconds
-  PageTransitionAlignment alignment; // dimension of the effect
-  PageTransitionDirection direction; // direction of motion
-  int angle;                         // direction in degrees
-  double scale;                      // scale
-  GBool rectangular;                 // is the area to be flown in rectangular?
-  GBool ok;                          // set if created successfully
-};
-    
-      XRef *xref;			// the xref table for this PDF file
-  Lexer *lexer;			// input stream
-  GBool allowStreams;		// parse stream objects?
-  Object buf1, buf2;		// next two tokens
-  int inlineImg;		// set when inline image data is encountered
-    
-    #endif
+    #endif  // CAFFE_CONCAT_LAYER_HPP_
 
     
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    {
-    {
-    {	// FIXME: ignore CT if D is a form XObject
-	if (tmp2.dictLookup('CT', &obj1)->isString()) {
-	  contentType = obj1.getString()->copy();
-	}
-	obj1.free();
-      } else if (!strcmp(tmp.getName(), 'MCS')) { // media clip data
-        // TODO
-      }
-    } else {
-      error (-1, 'Invalid Media Clip');
-      ok = gFalse;
+    template <typename Dtype>
+class CropLayer : public Layer<Dtype> {
+ public:
+  explicit CropLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
-    tmp.free();
-  }
-  tmp2.free();
     
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    {
-    {}}
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
     
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
+    static float Plot_ArrayGetter(void* data, int idx)
+{
+    ImGuiPlotArrayGetterData* plot_data = (ImGuiPlotArrayGetterData*)data;
+    const float v = *(const float*)(const void*)((const unsigned char*)plot_data->Values + (size_t)idx * plot_data->Stride);
+    return v;
 }
     
-        // out_of_range.403
-    try
-    {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
+        // stream signature
+    stb_out(0x57); stb_out(0xbc);
+    stb_out2(0);
+    
+    void ImGui_ImplGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
+}
+    
+    void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
+    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
+        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
+    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
+    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
+    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
+    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
+    if (g_fence) { g_fence->Release(); g_fence = NULL; }
+    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+}
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (g_PrevUserCallbackMousebutton != NULL)
+        g_PrevUserCallbackMousebutton(window, button, action, mods);
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    /// Database prefix used to directly access and manipulate our carver entries
+const std::string kCarverDBPrefix = 'carves.';
+    
+    /// The name of the executing query within the single-threaded schedule.
+extern const std::string kExecutingQuery;
+    
+    namespace osquery {
     }
+    
+      /**
+   * @brief Attach a table at runtime.
+   *
+   * The SQL implementation plugin may need to manage how virtual tables are
+   * attached at run time. In the case of SQLite where a single DB object is
+   * managed, tables are enumerated and attached during initialization.
+   */
+  virtual Status attach(const std::string& /*name*/) {
+    return Status::success();
+  }
+    
+    DelayWriteToken::~DelayWriteToken() {
+  controller_->total_delayed_--;
+  assert(controller_->total_delayed_.load() >= 0);
+}
+    
+    
+    {  return 0;
+}
+
+    
+      {
+    std::string string_val;
+    // If it cannot pin the value, it copies the value to its internal buffer.
+    // The intenral buffer could be set during construction.
+    PinnableSlice pinnable_val(&string_val);
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+    // If the value is not pinned, the internal buffer must have the value.
+    assert(pinnable_val.IsPinned() || string_val == 'value');
+  }
+    
+      // Commit transaction
+  s = txn->Commit();
+  assert(s.ok());
+  delete txn;
+    
+    
+    {// Factor method to create a new persistent cache
+Status NewPersistentCache(Env* const env, const std::string& path,
+                          const uint64_t size,
+                          const std::shared_ptr<Logger>& log,
+                          const bool optimized_for_nvm,
+                          std::shared_ptr<PersistentCache>* cache);
+}  // namespace rocksdb
+
+    
+    enum CompressionType : unsigned char;
+    
+     private:
+  void Init(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    if (lua_state_) {
+      luaL_openlibs(lua_state_);
+      for (const auto& library : libraries) {
+        luaL_openlib(lua_state_, library->Name(), library->Lib(), 0);
+        library->CustomSetup(lua_state_);
+      }
+      luaL_dostring(lua_state_, lua_script.c_str());
+    }
+  }
+    
+    /*
+ * Class:     org_rocksdb_Checkpoint
+ * Method:    dispose
+ * Signature: (J)V
+ */
+void Java_org_rocksdb_Checkpoint_disposeInternal(JNIEnv* /*env*/,
+                                                 jobject /*jobj*/,
+                                                 jlong jhandle) {
+  auto* checkpoint = reinterpret_cast<rocksdb::Checkpoint*>(jhandle);
+  assert(checkpoint != nullptr);
+  delete checkpoint;
+}
