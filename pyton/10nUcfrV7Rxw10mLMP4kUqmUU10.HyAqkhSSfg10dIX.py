@@ -1,92 +1,161 @@
 
         
         
-class ScrapyCommand(object):
+def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)  # select large prime number.
+    e_1 = primitiveRoot(p)  # one primitive root on modulo p.
+    d = random.randrange(3, p)  # private_key -> have to be greater than 2 for safety.
+    e_2 = cryptoMath.findModInverse(pow(e_1, d, p), p)
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
     
-            sfile = sys.modules[spidercls.__module__].__file__
-        sfile = sfile.replace('.pyc', '.py')
-        self.exitcode = os.system('%s '%s'' % (editor, sfile))
-
-    
-        def _print_response(self, response, opts):
-        if opts.headers:
-            self._print_headers(response.request.headers, b'>')
-            print('>')
-            self._print_headers(response.headers, b'<')
-        else:
-            self._print_bytes(response.body)
-    
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
-    
-            dfd.addBoth(lambda _: logger.info('Spider closed (%(reason)s)',
-                                          {'reason': reason},
-                                          extra={'spider': spider}))
-    
-            backlogged, size = None, 0
-        from sentry.monitoring.queues import backend
-        if backend is not None:
-            size = backend.get_size('default')
-            backlogged = size > 0
-    
-            # Removing index on 'EventTag', fields ['environment_id', 'key', 'value']
-        db.delete_index(u'tagstore_eventtag', ['environment_id', 'key_id', 'value_id'])
+        def solve_sub_array(self):
+        rear = [int(self.array[0])]*len(self.array)
+        sum_value = [int(self.array[0])]*len(self.array)
+        for i in range(1, len(self.array)):
+            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
+            rear[i] = max(sum_value[i], rear[i-1])
+        return rear[len(self.array)-1]
     
     
-class Migration(SchemaMigration):
+def b_expo(a, b):
+    res = 0
+    while b > 0:
+        if b&1:
+            res += a
     
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
-from __future__ import absolute_import
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
+    
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
+    
+        stream_id_pattern = r'id='html_stream' value='(\w+)''
+    stream_id = match1(html, stream_id_pattern)
+    
+    __all__ = ['icourses_download', 'icourses_playlist_download']
+    
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    
+    class Imgur(VideoExtractor):
+    name = 'Imgur'
+    
+        >>> extract_array([1, 2, 3])
+    [1, 2, 3]
     
     
-@instrumented_task(name='sentry.tasks.activity.send_activity_notifications',
-                   queue='activity.notify')
-def send_activity_notifications(activity_id):
-    from sentry.models import Activity
+def test_iloc():
+    s = Series(np.random.randn(10), index=list(range(0, 20, 2)))
+    
+        result = df.to_html(index=False)
+    for i in ['foo', 'bar', 'car', 'bike']:
+        assert i not in result
+    # must be the same result as normal index
+    assert result == expected_without_index
+    
+    from ycm.client.base_request import BaseRequest, BuildRequestData
+    
+    
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
+    
+      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
+                        'kind' : 'WARNING' } )
+  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
+                        'kind' : 'ERROR' } )
+  _assert_accepts( f, { 'text' : 'This burrito WILL be shown',
+                        'kind' : 'ERROR' } )
+    
+    
+class FakeFuture( object ):
+  '''A fake version of a future response object, just about suitable for
+  mocking a server response as generated by PostDataToHandlerAsync.
+  Not usually used directly. See MockAsyncServerResponse* methods'''
+  def __init__( self, done, response = None, exception = None ):
+    self._done = done
+    
+        # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
