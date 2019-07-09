@@ -1,135 +1,139 @@
 
         
-              unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
     end
     
-        def to_json
-      JSON.generate(as_json)
+          def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
+        end
+      end
     end
   end
 end
 
     
-        def mime_type
-      headers['Content-Type'] || 'text/plain'
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
     end
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
+    class Api::Web::SettingsController < Api::Web::BaseController
+  respond_to :json
     
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
-    
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
-  end
-    
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
-    
-          # the per_page_dropdown is used on index pages like orders, products, promotions etc.
-      # this method generates the select_tag
-      def per_page_dropdown
-        # there is a config setting for admin_products_per_page, only for the orders page
-        if @products && per_page_default = Spree::Config.admin_products_per_page
-          per_page_options = []
-          5.times do |amount|
-            per_page_options << (amount + 1) * Spree::Config.admin_products_per_page
-          end
-        else
-          per_page_default = Spree::Config.admin_orders_per_page
-          per_page_options = %w{15 30 45 60}
-        end
-    
-            def create
-          authorize! :create, Spree::Order
-          if can?(:admin, Spree::Order)
-            order_user = if @current_user_roles.include?('admin') && order_params[:user_id]
-                           Spree.user_class.find(order_params[:user_id])
-                         else
-                           current_api_user
-                         end
-    
-    Vagrant.configure('2') do |config|
-  # All Vagrant configuration is done here. The most common configuration
-  # options are documented and commented below. For a complete reference,
-  # please see the online documentation at vagrantup.com.
-    
-              checksums.keys.each do |path|
-            add_path(tar, '/' + path, File.join(staging_path, path))
-          end
-        end
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
-  end # def output
+  end
     
-        # Licenses could include more than one.
-    # Speaking of just taking the first entry of the field:
-    # A crude thing to do, but I suppose it's better than nothing.
-    # -- Daniel Haskin, 3/24/2015
-    self.license = control['license'][0] || self.license
+      def load_export
+    @export = Export.new(current_account)
+  end
     
-        if attributes[:pear_php_dir]
-      logger.info('Setting php_dir', :php_dir => attributes[:pear_php_dir])
-      safesystem('pear', '-c', config, 'config-set', 'php_dir', '#{staging_path(installroot)}/#{attributes[:pear_php_dir]}')
+      included do
+    before_action :set_session_activity
+  end
+    
+      # Enable Rack::Cache to put a simple HTTP cache in front of your application
+  # Add `rack-cache` to your Gemfile before enabling this.
+  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
+  # config.action_dispatch.rack_cache = true
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+    post '/msg' do
+  SinatraWorker.perform_async params[:msg]
+  redirect to('/')
+end
+    
+      # In the development environment your application's code is reloaded on
+  # every request. This slows down response time but is perfect for development
+  # since you don't have to restart the web server when you make code changes.
+  config.cache_classes = false
+    
+      # Disable serving static files from the `/public` folder by default since
+  # Apache or NGINX already handles this.
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+    
+          it 'joins array using ;' do
+        expect(pre).to eq('mysql.server start; memcached -d')
+      end
+    end
+  end
+    
+            expect(described_class.directories).to eq \
+          ['XDG', 'HOME']
+      end
     end
     
-      def output(output_path)
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-          safesystem('cp', path, './preinstall')
-          File.chmod(0755, './preinstall')
-        when 'post-install'
-          safesystem('cp', path, './postinstall')
-          File.chmod(0755, './postinstall')
-        when 'pre-uninstall'
-          raise FPM::InvalidPackageConfiguration.new(
-            'pre-uninstall is not supported by Solaris packages'
-          )
-        when 'post-uninstall'
-          raise FPM::InvalidPackageConfiguration.new(
-            'post-uninstall is not supported by Solaris packages'
-          )
-      end # case name
-    end # self.scripts.each
+          # Remove any escape sequences added by `shellescape` in Project#name.
+      # Escapes can result in: 'ArgumentError: invalid multibyte character'
+      # when attempting to match `name` against `sessions`.
+      # Please see issue #564.
+      unescaped_name = name.shellsplit.join('')
+    
+      describe '#render' do
+    it 'renders the template' do
+      expect(File).to receive(:read).at_least(:once) { 'wemux ls 2>/dev/null' }
