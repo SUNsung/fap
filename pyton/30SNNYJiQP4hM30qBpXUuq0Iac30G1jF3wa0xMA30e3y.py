@@ -1,110 +1,92 @@
 
         
-        batch_size = 128
-num_classes = 10
-epochs = 12
-log_dir = './logs'
-    
-        with gzip.open(paths[0], 'rb') as lbpath:
-        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
-    
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
-    
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
-    ```
-    '''
-    
-    arxiv:1504.00941v2 [cs.NE] 7 Apr 2015
-http://arxiv.org/pdf/1504.00941v2.pdf
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = reuters.load_data(num_words=max_words,
-                                                         test_split=0.2)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
+                return view(**kwargs)
     
     
-class HTTPMessage(object):
-    '''Abstract class for HTTP messages.'''
+@pytest.mark.parametrize('path', ('/create', '/1/update'))
+def test_create_update_validate(client, auth, path):
+    auth.login()
+    response = client.post(path, data={'title': '', 'body': ''})
+    assert b'Title is required.' in response.data
     
-    import requests.auth
+            def to_url(self, value):
+            base_to_url = super(ListConverter, self).to_url
+            return ','.join(base_to_url(x) for x in value)
     
+            idx = 0
+        while True:
+            url = urls[idx % len(urls)]
+            yield Request(url, dont_filter=True)
+            idx += 1
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
     
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
+        default_settings = {
+        'LOG_LEVEL': 'INFO',
+        'LOGSTATS_INTERVAL': 1,
+        'CLOSESPIDER_TIMEOUT': 10,
+    }
+    
+        def short_desc(self):
+        return 'Edit spider'
+    
+        requires_project = False
+    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
+    
+        def load(self, loader):
+        loader.add_option(
+            'rfile', typing.Optional[str], None,
+            'Read flows from file.'
         )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        loader.add_option(
+            'readfile_filter', typing.Optional[str], None,
+            'Read only matching flows.'
+        )
     
+        @command.command('replay.server.file')
+    def load_file(self, path: mitmproxy.types.Path) -> None:
+        try:
+            flows = io.read_flows_from_paths([path])
+        except exceptions.FlowReadException as e:
+            raise exceptions.CommandError(str(e))
+        self.load_flows(flows)
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
+        def configure(self, updated):
+        if 'stickycookie' in updated:
+            if ctx.options.stickycookie:
+                flt = flowfilter.parse(ctx.options.stickycookie)
+                if not flt:
+                    raise exceptions.OptionsError(
+                        'stickycookie: invalid filter expression: %s' % ctx.options.stickycookie
+                    )
+                self.flt = flt
+            else:
+                self.flt = None
     
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+            if log.log_tier(ctx.options.termlog_verbosity) >= log.log_tier(e.level):
+            click.secho(
+                e.msg,
+                file=outfile,
+                fg=dict(error='red', warn='yellow',
+                        alert='magenta').get(e.level),
+                dim=(e.level == 'debug'),
+                err=(e.level == 'error')
+            )
 
     
-    from httpie import __version__
-from httpie.compat import is_windows
-    
-            credentials = {'username': None, 'password': None}
-        try:
-            # New style
-            plugin.raw_auth = auth['raw_auth']
-        except KeyError:
-            # Old style
-            credentials = {
-                'username': auth['username'],
-                'password': auth['password'],
-            }
-        else:
-            if plugin.auth_parse:
-                from httpie.input import parse_auth
-                parsed = parse_auth(plugin.raw_auth)
-                credentials = {
-                    'username': parsed.key,
-                    'password': parsed.value,
-                }
+        def push(self, item, priority=None):
+        '''Push the item in the priority queue.
+        if priority is not given, priority is set to the value of item.
+        '''
+        priority = item if priority is None else priority
+        node = PriorityQueueNode(item, priority)
+        for index, current in enumerate(self.priority_queue_list):
+            if current.priority < node.priority:
+                self.priority_queue_list.insert(index, node)
+                return
+        # when traversed complete queue
+        self.priority_queue_list.append(node)
