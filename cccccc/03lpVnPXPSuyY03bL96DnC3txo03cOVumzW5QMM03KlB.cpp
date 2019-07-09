@@ -1,198 +1,243 @@
 
         
-        bool CacheImpl::remove(const void *Key) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
-    }
-    
-    #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
-    
-      Begin -= needed;
-    
-    swift::unicode::GraphemeClusterBreakProperty
-swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
-  // FIXME: replace linear search with a trie lookup.
-    }
-    
-    
-    {    // Must be 'const' or nothing.
-    clang::Qualifiers quals = pointee.getQualifiers();
-    bool isConst = quals.hasConst();
-    quals.removeConst();
-    if (quals.empty()) {
-      if (auto record = pointee->getAs<clang::RecordType>()) {
-        auto recordDecl = record->getDecl();
-        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return forRecord(isConst, record->getDecl());
-        }
-      } else if (pointee->isVoidType()) {
-        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return isConst ? forConstVoid() : forVoid();
-        }
-      }
+          if (conformanceSig) {
+    for (auto &rawReq : conformanceSig->getRequirements()) {
+      if (auto req = rawReq.subst(conformanceToSyntheticTypeFn,
+                                  conformanceToSyntheticConformanceFn))
+        builder.addRequirement(*req, source, nullptr);
     }
   }
     
-    
-void ClangDiagnosticConsumer::HandleDiagnostic(
-    clang::DiagnosticsEngine::Level clangDiagLevel,
-    const clang::Diagnostic &clangDiag) {
-  // Handle the module-not-found diagnostic specially if it's a top-level module
-  // we're looking for.
-  if (clangDiag.getID() == clang::diag::err_module_not_found &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    return;
-  }
-    }
-    
-    
-    {  return encodeToUTF8(OutCodePoints, OutUTF8);
+    void CacheImpl::releaseValue(void *Value) {
+  cache_release_value(static_cast<cache_t*>(Impl), Value);
 }
     
-    const char *Action::getClassName(Kind AC) {
-  switch (AC) {
-  case Kind::Input:  return 'input';
-  case Kind::CompileJob:  return 'compile';
-  case Kind::InterpretJob:  return 'interpret';
-  case Kind::BackendJob:  return 'backend';
-  case Kind::MergeModuleJob:  return 'merge-module';
-  case Kind::ModuleWrapJob:  return 'modulewrap';
-  case Kind::AutolinkExtractJob:  return 'swift-autolink-extract';
-  case Kind::REPLJob:  return 'repl';
-  case Kind::LinkJob:  return 'link';
-  case Kind::GenerateDSYMJob:  return 'generate-dSYM';
-  case Kind::VerifyDebugInfoJob:  return 'verify-debug-info';
-  case Kind::GeneratePCHJob:  return 'generate-pch';
-  }
+    #ifndef VERB
+#  define VERB(Word)
+#endif
+    
+    
+    {  return forInvalid();
+}
+    
+    std::pair<FrontendInputsAndOutputs, std::set<StringRef>>
+ArgsToFrontendInputsConverter::createInputFilesConsumingPrimaries(
+    std::set<StringRef> primaryFiles) {
+  bool hasAnyPrimaryFiles = !primaryFiles.empty();
     }
     
-      /// Produces a FrontendInputsAndOutputs object with the inputs populated from
-  /// the arguments the converter was initialized with.
-  ///
-  /// \param buffers If present, buffers read in the processing of the frontend
-  /// inputs will be saved here. These should only be used for debugging
-  /// purposes.
-  Optional<FrontendInputsAndOutputs> convert(
-      SmallVectorImpl<std::unique_ptr<llvm::MemoryBuffer>> *buffers);
+    #define PARALLEL_CORE 0
+#if PARALLEL_CORE
     
-        base::win::ShortcutProperties props;
-    base::string16 appID;
-    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
-      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
-    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
-    props.set_app_id(appID);
-    
-    #include <map>
+    #include 'common.hpp'
+#include 'vtransform.hpp'
     
     
     {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
+    {        for (; x < size.width; ++x)
+        {
+            op(src0 + x, src1 + x, dst + x);
+        }
     }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
 }
     
-    #endif  // CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-
-    
-      ui::KeyboardCode keyval = ui::VKEY_UNKNOWN;
-    
-    
-    {}
-    
-    
-    {} // namespace extensions
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVT_FUNC(u16, s16, 8,
+     register uint16x8_t v32767 asm ('q4') = vmovq_n_u16(0x7FFF);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
+             'vmin.u16 q1, q0, q4                                    \n\t'
+             'vst1.16 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i + 0),
+               'w' (v32767)
+             : 'd0','d1','d2','d3'
+         );
+     }
+})
+#else
+CVT_FUNC(u16, s16, 8,
+     uint16x8_t v32767 = vmovq_n_u16(0x7FFF);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         uint16x8_t vline_u16 = vld1q_u16(_src + i);
+         vline_u16 = vminq_u16(vline_u16, v32767);
+         vst1q_s16((_dst + i), vreinterpretq_s16_u16(vline_u16));
+     }
+})
 #endif
+    
+    
+    {        for (; i < size.width; ++i)
+            result += src0[i] * src1[i];
+    }
+    return result;
+#else
+    (void)_size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    
+    #include 'common.hpp'
+    
+    
+    {  EXPECT_EQ(expected, decode_data.Data());
+}
+    
+    
+    {
+    {
+    {}  // namespace util
+}  // namespace protobuf
+}  // namespace google
 
     
-      protected:
-    ~NwScreenStopMonitorFunction() override {}
-    DECLARE_EXTENSION_FUNCTION('nw.Screen.stopMonitor', UNKNOWN)
-    
-            for (; j < roiw32; j += 32)
-        {
-            internal::prefetch(src0 + j);
-            internal::prefetch(src1 + j);
-            uint8x16_t v_src00 = vld1q_u8(src0 + j), v_src01 = vld1q_u8(src0 + j + 16);
-            uint8x16_t v_src10 = vld1q_u8(src1 + j), v_src11 = vld1q_u8(src1 + j + 16);
-            vst1q_u16(dst + j, vaddl_u8(vget_low_u8(v_src00), vget_low_u8(v_src10)));
-            vst1q_u16(dst + j + 8, vaddl_u8(vget_high_u8(v_src00), vget_high_u8(v_src10)));
-            vst1q_u16(dst + j + 16, vaddl_u8(vget_low_u8(v_src01), vget_low_u8(v_src11)));
-            vst1q_u16(dst + j + 24, vaddl_u8(vget_high_u8(v_src01), vget_high_u8(v_src11)));
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src0 = vld1_u8(src0 + j);
-            uint8x8_t v_src1 = vld1_u8(src1 + j);
-            vst1q_u16(dst + j, vaddl_u8(v_src0, v_src1));
-        }
-    
-            for (; dj < roiw8; sj += 24, dj += 8)
-        {
-            uint8x8x3_t v_src = vld3_u8(src + sj);
-            vst1_u8(dst + dj, v_src.val[coi]);
-        }
-    
-    #ifndef CAROTENE_SRC_COMMON_HPP
-#define CAROTENE_SRC_COMMON_HPP
-    
-    
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    void convolution(const Size2D &size,
-                 const u8 * srcBase, ptrdiff_t srcStride,
-                 u8 * dstBase, ptrdiff_t dstStride,
-                 BORDER_MODE border, u8 borderValue,
-                 const Size2D & ksize, s16 * kernelBase, u32 scale)
-{
-    internal::assertSupportedConfiguration(isConvolutionSupported(size, ksize, border));
-#ifdef CAROTENE_NEON
-    const uint8x8_t v_zero_u8 = vdup_n_u8(0);
-    const uint8x8_t v_border = vdup_n_u8(borderValue);
-    const int32x4_t v_zero_s32 = vdupq_n_s32(0);
-    }
-    
-    template <typename T>
-void flip3(const Size2D & size,
-           const void * srcBase, ptrdiff_t srcStride,
-           void * dstBase, ptrdiff_t dstStride,
-           FLIP_MODE flipMode)
-{
-    using namespace internal;
-    }
-    
-    inline float32x4_t vrecpq_f32(float32x4_t val)
-{
-    float32x4_t reciprocal = vrecpeq_f32(val);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
-    return reciprocal;
+    TEST(StatusOr, TestPointerAssignmentStatusOk) {
+  const int kI = 0;
+  StatusOr<const int*> source(&kI);
+  StatusOr<const int*> target;
+  target = source;
+  EXPECT_EQ(source.status(), target.status());
+  EXPECT_EQ(source.ValueOrDie(), target.ValueOrDie());
 }
+    
+    #endif  // GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+
+    
+    class DataStripper {
+ public:
+  void StripMessage(Message *message) {
+    std::vector<const FieldDescriptor*> set_fields;
+    const Reflection* reflection = message->GetReflection();
+    reflection->ListFields(*message, &set_fields);
+    }
+    }
+    
+      void ScrubFile(FileDescriptorProto *file) {
+    for (int i = 0; i < file->enum_type_size(); i++) {
+      ScrubEnum(file->mutable_enum_type(i));
+    }
+    for (int i = 0; i < file->mutable_message_type()->size(); i++) {
+      ScrubMessage(file->mutable_message_type(i));
+    }
+  }
+    
+      EnumGenerator(const EnumGenerator&) = delete;
+  EnumGenerator& operator=(const EnumGenerator&) = delete;
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+    class Block {
+ public:
+  // Initialize the block with the specified contents.
+  explicit Block(const BlockContents& contents);
+    }
+    
+    char* Arena::AllocateNewBlock(size_t block_bytes) {
+  char* result = new char[block_bytes];
+  blocks_.push_back(result);
+  memory_usage_.fetch_add(block_bytes + sizeof(char*),
+                          std::memory_order_relaxed);
+  return result;
+}
+    
+                // Implemented methods
+            virtual Platform::Object ^ GetAt(unsigned int index) = Windows::Foundation::Collections::IVector<Platform::Object ^>::GetAt
+            {
+                return m_source->GetAt(index);
+            }
+    
+    
+    {    AutomationProperties::SetName(m_host, announcement->Announcement);
+    AutomationPeer ^ peer = FrameworkElementAutomationPeer::FromElement(m_host);
+    if (peer != nullptr)
+    {
+        peer->RaiseAutomationEvent(AutomationEvents::LiveRegionChanged);
+    }
+}
+
+    
+    NarratorAnnouncement ^ CalculatorAnnouncement::GetDisplayUpdatedAnnouncement(String ^ announcement)
+{
+    return ref new NarratorAnnouncement(
+        announcement, CalculatorActivityIds::DisplayUpdated, AutomationNotificationKind::Other, AutomationNotificationProcessing::ImportantMostRecent);
+}
+    
+    void NarratorNotifier::OnAnnouncementChanged(_In_ DependencyObject ^ dependencyObject, _In_ DependencyPropertyChangedEventArgs ^ e)
+{
+    auto instance = safe_cast<NarratorNotifier ^>(dependencyObject);
+    if (instance != nullptr)
+    {
+        instance->Announce(safe_cast<NarratorAnnouncement ^>(e->NewValue));
+    }
+}
+
+    
+    
+    {} // namespace aria2
+
+    
+      std::shared_ptr<DHTBucket> getBucketFor(const unsigned char* nodeID) const;
+    
+    
+    {  void deserialize(const std::string& filename);
+};
+    
+    #endif // D_DHT_SETUP_H
+
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+      unsigned char secret_[2][SECRET_SIZE];
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    #include <string>
+#include <set>
+#include <algorithm>
+#include <vector>
+    
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
+    
+        // create a JSON number from number_unsigned_t
+    json::number_integer_t value_unsigned_t = 17;
+    json j_unsigned_t(value_unsigned_t);
