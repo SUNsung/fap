@@ -1,87 +1,55 @@
 
         
-        /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
+        
+    {  return 0;
+}
     
-        XGBOOST_DEVICE bool operator==(const Iterator &other) const {
-      return i_ >= other.i_;
-    }
-    XGBOOST_DEVICE bool operator!=(const Iterator &other) const {
-      return i_ < other.i_;
-    }
+    void ReversePolygon(float32* x, float32* y, int n);
     
-    namespace xgboost {
-namespace metric {
-    }
-    }
+    #ifndef B2_TRIANGLE_H
+#define B2_TRIANGLE_H
     
-    bool Channel::close()
+    	struct RawImage
+	{
+		int uiExtendedWidth;
+		int uiExtendedHeight;
+		unsigned int uiEncodingBitsBytes;
+		std::shared_ptr<unsigned char> paucEncodingBits;
+	};
+    
+    // Constants and Macros used by all idct/dct functions
+#define DCT_CONST_BITS 14
+#define DCT_CONST_ROUNDING  (1 << (DCT_CONST_BITS - 1))
+    
+      The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+    
+      All rights reserved.
+    
+    /* a32 + (b32 * (c32 >> 16)) >> 16 */
+#undef silk_SMLAWT
+#define silk_SMLAWT(a, b, c) ((a) + silk_SMULWT(b, c))
+    
+            friend Rational operator<<(Rational lhs, Rational const& rhs);
+        friend Rational operator>>(Rational lhs, Rational const& rhs);
+    
+    void CBinaryCommand::Accept(_In_ ISerializeCommandVisitor& commandVisitor)
 {
-    if (closed)
-    {
-        return false;
-    }
-    swTraceLog(SW_TRACE_CHANNEL, 'channel closed');
-    closed = true;
-    while (!producer_queue.empty())
-    {
-        Coroutine *co = pop_coroutine(PRODUCER);
-        co->resume();
-    }
-    while (!consumer_queue.empty())
-    {
-        Coroutine *co = pop_coroutine(CONSUMER);
-        co->resume();
-    }
-    return true;
+    commandVisitor.Visit(*this);
 }
-
     
-    //	swSignal_add(SIGINT, user_signal);
-    
-    
-    {    private:
-        redisAsyncContext * m_ctx;
-        QSocketNotifier * m_read;
-        QSocketNotifier * m_write;
-};
-    
-        pid_t server_pid = create_server();
-    
-            if (pid == 0)
-        {
-            exit(0);
-        }
-    
-    
+        // out_of_range.403
+    try
     {
-    {protected:
-    swServer serv;
-    vector<swListenPort *> ports;
-    string host;
-    int port;
-    int mode;
-    int events;
-};
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    void SortFilterProxyModel::setSortOrder(Qt::SortOrder order)
+{
+    QSortFilterProxyModel::sort(0, order);
 }
-
-    
-        unlink(sock1_path);
-    unlink(sock2_path);
-    
-        swSignalfd_init();
-    swSignal_add(SIGUSR1,sig_usr1);
-    swSignalfd_setup(SwooleG.main_reactor);
-    
-        /**
-     * 协程2
-     */
-    Coroutine::create([](void *arg)
-    {
-        G_a.x = 100;
-        G_a.y = nullptr;
-    });
