@@ -1,100 +1,138 @@
 
         
-            # Then we cluster the lines together as blocks
-    # Each block represents a collection of lines that should be sorted
-    # This was done by assuming only links ([...](...)) are meant to be sorted
-    # Clustering is done by indentation
-    blocks = []
-    last_indent = None
-    for line in read_me:
-        s_line = line.lstrip()
-        indent = len(line) - len(s_line)
+            def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
     
-        def setUp(self):
-        from acme.fields import Resource
-        self.field = Resource('x')
+        def __init__(self, session_key=None):
+        self._cache = caches[settings.SESSION_CACHE_ALIAS]
+        super().__init__(session_key)
     
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
     
-            '''
-        super(AugeasConfigurator, self).rollback_checkpoints(rollback)
-        self.aug.load()
-
+@html_safe
+class BoundWidget:
+    '''
+    A container class used for iterating over widgets. This is useful for
+    widgets that have choices. For example, the following can be used in a
+    template:
     
-       # Cloudflare API credentials used by Certbot
-   dns_cloudflare_email = cloudflare@example.com
-   dns_cloudflare_api_key = 0123456789abcdef0123456789abcdef01234567
+    result = jieba.tokenize('永和服装饰品有限公司')
+for tk in result:
+    print('word %s\t\t start: %d \t\t end:%d' % (tk[0],tk[1],tk[2]))
     
-    ========================================  =====================================
-``--dns-cloudxns-credentials``            CloudXNS credentials_ INI file.
-                                          (Required)
-``--dns-cloudxns-propagation-seconds``    The number of seconds to wait for DNS
-                                          to propagate before asking the ACME
-                                          server to verify the DNS record.
-                                          (Default: 30)
-========================================  =====================================
+    tags = jieba.analyse.extract_tags(content, topK=topK)
     
-    site_info = 'CKPlayer General'
-download = ckplayer_download
-download_playlist = playlist_not_supported('ckplayer')
-
+    jieba.analyse.set_stop_words('../extra_dict/stop_words.txt')
+jieba.analyse.set_idf_path('../extra_dict/idf.txt.big');
     
-    from ..common import *
-import json
+        def testTokenize(self):
+        for content in test_contents:
+            result = jieba.tokenize(content)
+            assert isinstance(result, types.GeneratorType), 'Test Tokenize Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Tokenize error on content: %s' % content
+            for tk in result:
+                print('word %s\t\t start: %d \t\t end:%d' % (tk[0],tk[1],tk[2]), file=sys.stderr)
+        print('testTokenize', file=sys.stderr)
     
-            if self.api_data['ssl'] != 'true':
-            self.enc_mode = False
-            common_args.update(dict(h=h, r=r))
-        else:
-            self.enc_mode = True
-            common_args['p'] = self.__class__.ENCRYPT_MOD_VER
-        self.common_args = common_args
-        return self.update_url(received)
+    t2 = time.time()
+tm_cost = t2-t1
     
-        def prepare(self, **kwargs):
-        if re.search(r'imgur\.com/a/', self.url):
-            # album
-            content = get_content(self.url)
-            album = match1(content, r'album\s*:\s*({.*}),') or \
-                    match1(content, r'image\s*:\s*({.*}),')
-            album = json.loads(album)
-            count = album['album_images']['count']
-            images = album['album_images']['images']
-            ext = images[0]['ext']
-            self.streams = {
-                'original': {
-                    'src': ['http://i.imgur.com/%s%s' % (i['hash'], ext)
-                            for i in images],
-                    'size': sum([i['size'] for i in images]),
-                    'container': ext[1:]
-                },
-                'thumbnail': {
-                    'src': ['http://i.imgur.com/%ss%s' % (i['hash'], '.jpg')
-                            for i in images],
-                    'container': 'jpg'
-                }
-            }
-            self.title = album['title']
+        def tearDown(self):
+        try:
+            shutil.rmtree(self.path)
+        except OSError:
+            # Windows disallows deleting files that are in use by
+            # another process, and even though we've waited for our
+            # child process below, it appears that its lock on these
+            # files is not guaranteed to be released by this point.
+            # Sleep and try again (once).
+            time.sleep(1)
+            shutil.rmtree(self.path)
     
-    Cela ressemble à un excellent recipie[1] déjeuner.
+        @gen_test
+    def test_async_await(self):
+        class Object(object):
+            def __init__(self):
+                self.executor = futures.thread.ThreadPoolExecutor(1)
     
-            assert i == 9
-        print('\tGot ZeroDivisionError as expected from IMapIterator.next()')
-        print()
+            # raise if we found matches, but not the correct number
+        if nmatches != expected_num:
+            raise AssertionError('Expected %d event, got %d of %r' % (
+                expected_num, nmatches, expected_data,
+            ))
     
-    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
-cur.execute('insert into people (name_last, age) values ('Putin',     51)')
+        # Safari 5.x prelude escape
+    def test_escape_prelude(self):
+        testcase = u'*[foo=bar{}*{color:blue}]{color:red;}'
+        self.assertInvalid(testcase)
     
-            print('Two or more elements')
-        data = [5, 1, 7, 2, 6, -3, 5, 7, -10]
-        assert_equal(func(data), sorted(data))
+        @patch('r2.lib.promote.get_nsfw_collections_srnames')
+    def test_remove_nsfw_collection_srnames_on_frontpage(self, get_nsfw_collections_srnames):
+        get_nsfw_collections_srnames.return_value = set(nsfw_collection.sr_names)
+        srname = 'test1'
+        subreddit = Subreddit(name=srname)
+        Subreddit.user_subreddits = MagicMock(return_value=[
+            Subreddit(name=nice_srname),
+            Subreddit(name=questionably_nsfw),
+        ])
     
-            print('Test: remove on a key that doesn't exist')
-        assert_raises(KeyError, hash_table.remove, -1)
+        def test_mcreddit_detector(self):
+        user_agent = 'McReddit - Reddit Client for iOS'
+        agent_parsed = {}
+        result = McRedditDetector().detect(user_agent, agent_parsed)
+        self.assertTrue(result)
+        self.assertEqual(agent_parsed['browser']['name'],
+                         McRedditDetector.name)
+        self.assertEqual(agent_parsed['platform']['name'], 'iOS')
+        self.assertEqual(agent_parsed['app_name'],
+                         agent_parsed['browser']['name'])
+    
+        def test_signing(self):
+        epoch_time = 1234567890
+        header = self.make_sig_header(
+            '{'user': 'reddit', 'password': 'hunter2'}',
+            epoch=epoch_time,
+        )
+        self.assertEqual(
+            header,
+            '1:test:1:1234567890:'
+            '0fc3d90d83ac7433a5376c17f2aea9b470c368740c91c513e819e3a4980349de'
+        )
+    
+            for i in xrange(1, 4):
+            for j in xrange(i):
+                csb.record(str(i), j + 1)
+        self.assertEquals(
+            set([('1', '1|c'),
+                 ('2', '3|c'),
+                 ('3', '6|c')]),
+            set(csb.flush()))
+    
+        def test_integer_query_params(self):
+        u = UrlParser('http://example.com/?page=1234')
+        u2 = UrlParser('http://example.com/')
+        u2.update_query(page=1234)
+        self.assertEquals(u, u2)
