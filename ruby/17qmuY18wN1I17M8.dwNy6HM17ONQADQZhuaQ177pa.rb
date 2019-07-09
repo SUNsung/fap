@@ -1,128 +1,91 @@
 
         
-          if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
-    end
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-              expect(gon['preloads'][:mentioned_person][:name]).to eq(alice.person.name)
-          expect(gon['preloads'][:mentioned_person][:handle]).to eq(alice.person.diaspora_handle)
+        module Devise
+  module Controllers
+    # Provide sign in and sign out functionality.
+    # Included by default in all controllers.
+    module SignInOut
+      # Return true if the given scope is signed in session. If no scope given, return
+      # true if any scope is signed in. This will run authentication hooks, which may
+      # cause exceptions to be thrown from this method; if you simply want to check
+      # if a scope has already previously been authenticated without running
+      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
+      def signed_in?(scope=nil)
+        [scope || Devise.mappings.keys].flatten.any? do |_scope|
+          warden.authenticate?(scope: _scope)
         end
       end
-    end
     
-    Given(/^a custom task to generate a file$/) do
-  TestApp.copy_task_to_test_app('spec/support/tasks/database.rake')
-end
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
     
-        def install_plugin(plugin, load_hooks: true, load_immediately: false)
-      installer.install(plugin,
-                        load_hooks: load_hooks,
-                        load_immediately: load_immediately)
-    end
-    
-            if Rake::Task.task_defined?('deploy:set_current_revision')
-          before 'deploy:set_current_revision',
-                 '#{scm_name}:set_current_revision'
-        end
-      end
-      # rubocop:enable Style/GuardClause
-    
-          def roles_for(names)
-        options = extract_options(names)
-        s = Filter.new(:role, names).filter(servers_by_key.values)
-        s.select { |server| server.select?(options) }
-      end
-    
-      # fetch data
-  fields = {
-    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
-    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
-    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
-  }
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
-      end
-    end
-  end
-end
-
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
+              if recoverable.persisted?
+            if recoverable.reset_password_period_valid?
+              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
+            else
+              recoverable.errors.add(:reset_password_token, :expired)
+            end
           end
+    
+    require 'devise/strategies/rememberable'
+require 'devise/hooks/rememberable'
+require 'devise/hooks/forgetable'
+    
+    # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
+# is to ensure that people can’t use malicious code from pod specifications.
+#
+# It does this by creating a ‘seatbelt’ profile on the fly and executing the
+# given command through `/usr/bin/sandbox-exec`. This profile format is an
+# undocumented format, which uses TinyScheme to implement its DSL.
+#
+# Even though it uses a undocumented format, it’s actually very self-explanatory.
+# Because we use a whitelist approach, `(deny default)`, any action that is
+# denied is logged to `/var/log/system.log`. So tailing that should provide
+# enough information on steps that need to be take to get something to work.
+#
+# For more information see:
+#
+# * https://github.com/CocoaPods/CocoaPods/issues/939
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
+# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
+# * `$ man sandbox-exec`
+# * `$ ls /usr/share/sandbox`
+    
+            def print_version
+          output_pipe.puts 'version: '#{Pod::VERSION}''
         end
-        bad_cookies.empty?
-      end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
+            # Run the command
+        #
+        # @todo Part of this logic needs to be ported to cocoapods-core so web
+        #       services can validate the repo.
+        #
+        # @todo add UI.print and enable print statements again.
+        #
+        def run
+          sources = if @name
+                      if File.exist?(@name)
+                        [Source.new(Pathname(@name))]
+                      else
+                        config.sources_manager.sources([@name])
+                      end
+                    else
+                      config.sources_manager.all
+                    end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-      context 'with custom session key' do
-    it 'denies requests with duplicate session cookies' do
-      mock_app do
-        use Rack::Protection::CookieTossing, :session_key => '_session'
-        run DummyApp
-      end
+            def run
+          query = @use_regex ? @query : Regexp.escape(@query)
+          filepath = if @show_all
+                       specs = get_path_of_spec(query, @show_all).split(/\n/)
+                       index = UI.choose_from_array(specs, 'Which spec would you like to print [1-#{specs.count}]? ')
+                       specs[index]
+                     else
+                       get_path_of_spec(query)
+                     end
