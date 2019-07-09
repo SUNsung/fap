@@ -1,226 +1,144 @@
 
         
-            it 'respects an environment variable that specifies a path or URL to a different scenario' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
-    end
+                attr_reader :symbol
     
-          it 'loads only the workers specified in the :only option' do
-        agent_runner = AgentRunner.new(only: HuginnScheduler)
-        workers = agent_runner.send(:load_workers)
-        expect(workers.keys).to eq(['HuginnScheduler'])
-        agent_runner.stop
-      end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
-    end
-    
-            return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
-    
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        def blank?
-      body.blank?
-    end
-    
-        include Instrumentable
-    
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
+              # Add the help option, which must be on every command.
+          opts.on_tail('-h', '--help', 'Print this help') do
+            safe_puts(opts.help)
+            return nil
           end
+    
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
         end
     
-            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
-          node.css('> li > h3').each do |h3|
-            next if h3.content.present?
-            h3.content = h3.next_element.content
-            h3.next_element.remove
-          end
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
         end
-      end
-    end
-  end
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
+        end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
+    
+      it { expect(subject.tmux_window_and_pane_target).to eql 'foo:0.1' }
 end
 
     
-        # Extract each header value pair
-    header.split(/\r\n/mn).each { |str|
-      if (md = str.match(/^(.+?)\s*:\s*(.+?)\s*$/))
-        if (self[md[1]])
-          self[md[1]] << ', ' + md[2]
-        else
-          self[md[1]] = md[2]
-        end
-      end
-    }
-  end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
-        class Principal < Element
-          # @!attribute name_type
-          #   @return [Integer]
-          attr_accessor :name_type
-          # @!attribute realm
-          #   @return [String]
-          attr_accessor :realm
-          # @!attribute components
-          #   @return [Array<String>]
-          attr_accessor :components
-    
-              # Encodes the start_time field
-          #
-          # @return [String]
-          def encode_start_time
-            [start_time].pack('N')
-          end
-    
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
+        context 'with deprecations' do
+      it 'still gets the list of windows' do
+        expect(project_with_deprecations.windows).to_not be_empty
       end
     end
   end
-end
     
-              # Decodes the type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
+      match do
+    result = is_pane
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KDC-REQ (response) data
-        # definition
-        class KdcResponse < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of a protocol message
-          attr_accessor :msg_type
-          # @!attribute crealm
-          #   @return [String] The realm part of the client's principal identifier
-          attr_accessor :crealm
-          # @!attribute cname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
-          attr_accessor :cname
-          # @!attribute ticket
-          #   @return [Rex::Proto::Kerberos::Model::Ticket] The issued ticket
-          attr_accessor :ticket
-          # @!attribute enc_part
-          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] The encrypted part of the response
-          attr_accessor :enc_part
+      expansion(:html_body) { o.html_body }
     
-              # Decodes a Rex::Proto::Kerberos::Model::KrbError
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 0
-                self.pvno = decode_pvno(val)
-              when 1
-                self.msg_type = decode_msg_type(val)
-              when 2
-                self.ctime = decode_ctime(val)
-              when 3
-                self.cusec = decode_cusec(val)
-              when 4
-                self.stime = decode_stime(val)
-              when 5
-                self.susec = decode_susec(val)
-              when 6
-                self.error_code = decode_error_code(val)
-              when 7
-                self.crealm = decode_crealm(val)
-              when 8
-                self.cname = decode_cname(val)
-              when 9
-                self.realm = decode_realm(val)
-              when 10
-                self.sname = decode_sname(val)
-              when 12
-                self.e_data = decode_e_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
+        if @domain.save
+      if @domain.verified?
+        redirect_to_with_json [:setup, organization, @server, @domain]
+      else
+        redirect_to_with_json [:verify, organization, @server, @domain]
+      end
+    else
+      render_form_errors 'new', @domain
+    end
+  end
+    
+                if qs[:after]
+              begin
+                options[:where][:timestamp][:greater_than] = get_time_from_string(qs[:after]).to_f
+              rescue TimeUndetermined => e
+                flash.now[:alert] = 'Couldn't determine time for after from '#{qs[:after]}''
               end
             end
           end
+        end
+      else
+        session['msg_query_#{@server.id}_#{scope}'] = nil
+      end
+    end
     
-              # Decodes a Rex::Proto::Kerberos::Model::PreAuthData
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
+      private
     
-              def render_order(result)
-            if result.success?
-              render_serialized_payload { serialized_current_order }
-            else
-              render_error_payload(result.error)
-            end
-          end
+      def create
+    @track_domain = @server.track_domains.build(params.require(:track_domain).permit(:name, :domain_id, :track_loads, :track_clicks, :excluded_click_domains, :ssl_enabled))
+    if @track_domain.save
+      redirect_to_with_json [:return_to, [organization, @server, :track_domains]]
+    else
+      render_form_errors 'new', @track_domain
+    end
+  end
     
-            self.line_item_options = []
+      def create
+    @organization_user = organization.organization_users.build(params.require(:organization_user).permit(:email_address, :admin, :all_servers))
+    if @organization_user.save
+      AppMailer.user_invite(@organization_user.user, organization).deliver
+      redirect_to_with_json [organization, :users], :notice => 'An invitation will be sent to #{@organization_user.user.email_address} which will allow them to access your organization.'
+    else
+      render_form_errors 'new', @organization_user
+    end
+  end
     
-      # Map of what scripts are named.
-  SCRIPT_MAP = {
-    :before_install     => 'preinstall',
-    :after_install      => 'postinstall',
-  } unless defined?(SCRIPT_MAP)
+      def format_delivery_details(server, text)
+    text.gsub!(/\<msg\:(\d+)\>/) do
+      id = $1.to_i
+      link_to('message ##{id}', organization_server_message_path(server.organization, server, id), :class => 'u-link')
+    end
+    text.html_safe
+  end
     
-        # Generate a package manifest.
-    pkg_generate = safesystemout('pkgsend', 'generate', '#{staging_path}')
-    File.write(build_path('#{name}.p5m.1'), pkg_generate)
+          # This module extends user defined helpers
+      # to provide some API-specific functionality.
+      module BaseHelper
+        attr_accessor :api
+        def params(name, &block)
+          @named_params ||= {}
+          @named_params[name] = block
+        end
     
-          # Capture the output, which will be JSON metadata describing this python
-      # package. See fpm/lib/fpm/package/pyfpm/get_metadata.py for more
-      # details.
-      logger.info('fetching package metadata', :setup_cmd => setup_cmd)
-    
-        safesystem('tar', *args)
-    
-    require 'fpm/util/tar_writer'
+            def error_formatter(format, options)
+          formatter = if options.is_a?(Hash) && options.key?(:with)
+                        options[:with]
+                      else
+                        options
+                      end
