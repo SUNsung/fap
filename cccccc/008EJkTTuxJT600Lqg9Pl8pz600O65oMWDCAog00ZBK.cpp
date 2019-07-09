@@ -1,186 +1,330 @@
 
         
-        
-    {}  // namespace mate
+        #ifndef BITCOIN_QT_NETWORKSTYLE_H
+#define BITCOIN_QT_NETWORKSTYLE_H
+    
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
+    }
+    
+    %define	MOVDQ movdqu ;; assume buffers not aligned 
+    
+    // Maximum level to which a new compacted memtable is pushed if it
+// does not create overlap.  We try to push to level 2 to avoid the
+// relatively expensive level 0=>1 compactions and to avoid some
+// expensive manifest file operations.  We do not push all the way to
+// the largest level since that can generate a lot of wasted disk
+// space if the same key space is being repeatedly overwritten.
+static const int kMaxMemCompactLevel = 2;
+    
+    // Return the name of the current file.  This file contains the name
+// of the current manifest file.  The result will be prefixed with
+// 'dbname'.
+extern std::string CurrentFileName(const std::string& dbname);
+    
+      fname = LockFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kDBLockFile, type);
+    
+    template <typename Dtype>
+inline void Layer<Dtype>::Backward(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  switch (Caffe::mode()) {
+  case Caffe::CPU:
+    Backward_cpu(top, propagate_down, bottom);
+    break;
+  case Caffe::GPU:
+    Backward_gpu(top, propagate_down, bottom);
+    break;
+  default:
+    LOG(FATAL) << 'Unknown caffe mode.';
+  }
+}
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual inline const char* type() const { return 'ArgMax'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
+  }
+#else
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
+  }
+    
+    // Functions producing parameter generators.
+//
+// Google Test uses these generators to produce parameters for value-
+// parameterized tests. When a parameterized test case is instantiated
+// with a particular generator, Google Test creates and runs tests
+// for each element in the sequence produced by the generator.
+//
+// In the following sample, tests from test case FooTest are instantiated
+// each three times with parameter values 3, 5, and 8:
+//
+// class FooTest : public TestWithParam<int> { ... };
+//
+// TEST_P(FooTest, TestThis) {
+// }
+// TEST_P(FooTest, TestThat) {
+// }
+// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
+//
+    
+    // UniversalPrintArray(begin, len, os) prints an array of 'len'
+// elements, starting at address 'begin'.
+template <typename T>
+void UniversalPrintArray(const T* begin, size_t len, ::std::ostream* os) {
+  if (len == 0) {
+    *os << '{}';
+  } else {
+    *os << '{ ';
+    const size_t kThreshold = 18;
+    const size_t kChunkSize = 8;
+    // If the array has more than kThreshold elements, we'll have to
+    // omit some details by printing only the first and the last
+    // kChunkSize elements.
+    // TODO(wan@google.com): let the user control the threshold using a flag.
+    if (len <= kThreshold) {
+      PrintRawArrayTo(begin, len, os);
+    } else {
+      PrintRawArrayTo(begin, kChunkSize, os);
+      *os << ', ..., ';
+      PrintRawArrayTo(begin + len - kChunkSize, kChunkSize, os);
+    }
+    *os << ' }';
+  }
+}
+// This overload prints a (const) char array compactly.
+GTEST_API_ void UniversalPrintArray(
+    const char* begin, size_t len, ::std::ostream* os);
+    
+      // Sets the elapsed time.
+  void set_elapsed_time(TimeInMillis elapsed) { elapsed_time_ = elapsed; }
+    
+    #include <grpcpp/security/auth_context.h>
+    
+    #include <grpc/support/cpu.h>
+    
+    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
 
     
-    PersistentDictionary::~PersistentDictionary() {}
-    
-      status = napi_get_cb_info(env, info, &argc, args, NULL, NULL);
-  if (status != napi_ok)
-    return NULL;
-    
-    namespace mate {
-    }
-    
-      template <typename T>
-  bool Get(const base::StringPiece& key, T* out) const {
-    // Check for existence before getting, otherwise this method will always
-    // returns true when T == v8::Local<v8::Value>.
-    v8::Local<v8::Context> context = isolate_->GetCurrentContext();
-    v8::Local<v8::String> v8_key = StringToV8(isolate_, key);
-    if (!internal::IsTrue(GetHandle()->Has(context, v8_key)))
-      return false;
-    }
-    
-    namespace mate {
-    }
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
     
     
     {
     {}  // namespace load_reporter
 }  // namespace grpc
-
     
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size / 5 - 1048576);
-}
-    
-    
-    {  KeyComparator comparator_;
-  int refs_;
-  Arena arena_;
-  Table table_;
-};
-    
-    #include 'db/dbformat.h'
-#include 'leveldb/cache.h'
-#include 'leveldb/table.h'
-#include 'port/port.h'
-    
-    // A Table is a sorted map from strings to strings.  Tables are
-// immutable and persistent.  A Table may be safely accessed from
-// multiple threads without external synchronization.
-class LEVELDB_EXPORT Table {
- public:
-  // Attempt to open the table that is stored in bytes [0..file_size)
-  // of 'file', and read the metadata entries necessary to allow
-  // retrieving data from the table.
-  //
-  // If successful, returns ok and sets '*table' to the newly opened
-  // table.  The client should delete '*table' when no longer needed.
-  // If there was an error while initializing the table, sets '*table'
-  // to nullptr and returns a non-ok status.  Does not take ownership of
-  // '*source', but the client must ensure that 'source' remains live
-  // for the duration of the returned table's lifetime.
-  //
-  // *file must remain live while this Table is in use.
-  static Status Open(const Options& options, RandomAccessFile* file,
-                     uint64_t file_size, Table** table);
-    }
-    
-    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
-#define STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
-    
-      void StartBlock(uint64_t block_offset);
-  void AddKey(const Slice& key);
-  Slice Finish();
-    
-    char* Arena::AllocateAligned(size_t bytes) {
-  const int align = (sizeof(void*) > 8) ? sizeof(void*) : 8;
-  static_assert((align & (align - 1)) == 0,
-                'Pointer size should be a power of 2');
-  size_t current_mod = reinterpret_cast<uintptr_t>(alloc_ptr_) & (align - 1);
-  size_t slop = (current_mod == 0 ? 0 : align - current_mod);
-  size_t needed = bytes + slop;
-  char* result;
-  if (needed <= alloc_bytes_remaining_) {
-    result = alloc_ptr_ + slop;
-    alloc_ptr_ += needed;
-    alloc_bytes_remaining_ -= needed;
-  } else {
-    // AllocateFallback always returned aligned memory
-    result = AllocateFallback(bytes);
-  }
-  assert((reinterpret_cast<uintptr_t>(result) & (align - 1)) == 0);
-  return result;
-}
-    
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    }
-    
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-void WaitForLastSubmittedFrame();
-FrameContext* WaitForNextFrameResources();
-void ResizeSwapChain(HWND hWnd, int width, int height);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    
-    bool    ImGui_ImplDX10_Init(ID3D10Device* device)
-{
-    // Setup back-end capabilities flags
-    ImGuiIO& io = ImGui::GetIO();
-    io.BackendRendererName = 'imgui_impl_dx10';
-    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
-    }
-    
-    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
-{
-    // Update buttons
-    ImGuiIO& io = ImGui::GetIO();
-    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-    {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
-    }
-    }
-    
-    
-    {        IM_ASSERT(wd->Frames == NULL);
-        wd->Frames = (ImGui_ImplVulkanH_Frame*)IM_ALLOC(sizeof(ImGui_ImplVulkanH_Frame) * wd->ImageCount);
-        wd->FrameSemaphores = (ImGui_ImplVulkanH_FrameSemaphores*)IM_ALLOC(sizeof(ImGui_ImplVulkanH_FrameSemaphores) * wd->ImageCount);
-        memset(wd->Frames, 0, sizeof(wd->Frames[0]) * wd->ImageCount);
-        memset(wd->FrameSemaphores, 0, sizeof(wd->FrameSemaphores[0]) * wd->ImageCount);
-        for (uint32_t i = 0; i < wd->ImageCount; i++)
-            wd->Frames[i].Backbuffer = backbuffers[i];
-    }
-    if (old_swapchain)
-        vkDestroySwapchainKHR(device, old_swapchain, allocator);
-    
-    public:
-    static const char DEFAULT_NAMESPACE_SEPARATOR = ':';
-    static const char DEFAULT_KEYS_GLOB_PATTERN = '*';
-    static const bool DEFAULT_LUA_KEYS_LOADING = false;
-    static const uint DEFAULT_DB_SCAN_LIMIT = 20;
-    
-    
-    {  try {
-    m_connection->connect(false);
-  } catch (RedisClient::Connection::Exception&) {
-    emit error(QCoreApplication::translate(
-        'RDM', 'Invalid Connection. Check connection settings.'));
+    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
+                          gpr_timespec* to) {
+  high_resolution_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == high_resolution_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
     return;
   }
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
 }
     
-      virtual QString getName() const = 0;
+      NSDictionary *flagNames = @{
+#define GRPC_XMACRO_ITEM(methodName, FlagName) \
+    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
+#include 'GRXReachabilityFlagNames.xmacro.h'
+#undef GRPC_XMACRO_ITEM
+  };
     
-    QHash<int, QByteArray> TabViewModel::roleNames() const {
-  QHash<int, QByteArray> roles;
-  roles[tabIndex] = 'tabIndex';
-  roles[tabName] = 'tabName';
-  return roles;
+    //--------------------------------------------------------------------------------
+//
+//  inputText()
+//
+//--------------------------------------------------------------------------------
+UText *RegexMatcher::inputText() const {
+    return fInputText;
 }
     
-      QHash<int, QByteArray> roleNames() const override;
+    void
+RuleBasedCollator::setFastLatinOptions(CollationSettings &ownedSettings) const {
+    ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
+            data, ownedSettings,
+            ownedSettings.fastLatinPrimaries, UPRV_LENGTHOF(ownedSettings.fastLatinPrimaries));
+}
+    
+    //-------------------------------------------------------------------------------
+//
+//  ScriptSet - A bit set representing a set of scripts.
+//
+//              This class was originally used exclusively with script sets appearing
+//              as part of the spoof check whole script confusable binary data. Its
+//              use has since become more general, but the continued use to wrap
+//              prebuilt binary data does constrain the design.
+//
+//-------------------------------------------------------------------------------
+class U_I18N_API ScriptSet: public UMemory {
+  public:
+    ScriptSet();
+    ScriptSet(const ScriptSet &other);
+    ~ScriptSet();
+    }
+    
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
+}
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
+    
+    
+    {    handler.addAttribute(fgPatternIndexToDateFormatField[patternCharIndex], beginOffset, appendTo.length());
+}
+    
+        // Freeze all the sets
+    fDateIgnorables->freeze();
+    fTimeIgnorables->freeze();
+    fOtherIgnorables->freeze();
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    FOLLY_SDT_DEFINE_SEMAPHORE(folly, test_semaphore_local)
+    
+    [[noreturn]] void exception_wrapper::onNoExceptionError(
+    char const* const name) {
+  std::ios_base::Init ioinit_; // ensure std::cerr is alive
+  std::cerr << 'Cannot use `' << name
+            << '` with an empty folly::exception_wrapper' << std::endl;
+  std::terminate();
+}
+    
+    #include <boost/regex/pending/unicode_iterator.hpp>
+    
+    TEST_F(SparseByteSetTest, each) {
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_TRUE(s.add(c));
+    EXPECT_TRUE(s.contains(c));
+  }
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_FALSE(s.add(c));
+    EXPECT_TRUE(s.contains(c));
+  }
+}
+    
+    
+    {
+    { private:
+  AtForkList() {
+#if FOLLY_HAVE_PTHREAD_ATFORK
+    int ret = pthread_atfork(
+        &AtForkList::prepare, &AtForkList::parent, &AtForkList::child);
+    if (ret != 0) {
+      throw_exception<std::system_error>(
+          ret, std::generic_category(), 'pthread_atfork failed');
+    }
+#elif !__ANDROID__ && !defined(_MSC_VER)
+// pthread_atfork is not part of the Android NDK at least as of n9d. If
+// something is trying to call native fork() directly at all with Android's
+// process management model, this is probably the least of the problems.
+//
+// But otherwise, this is a problem.
+#warning pthread_atfork unavailable
+#endif
+  }
+};
+} // namespace
+    
+    inline std::string familyNameStr(sa_family_t family) {
+  switch (family) {
+    case AF_INET:
+      return 'AF_INET';
+    case AF_INET6:
+      return 'AF_INET6';
+    case AF_UNSPEC:
+      return 'AF_UNSPEC';
+    case AF_UNIX:
+      return 'AF_UNIX';
+    default:
+      return familyNameStrDefault(family);
+  }
+}
