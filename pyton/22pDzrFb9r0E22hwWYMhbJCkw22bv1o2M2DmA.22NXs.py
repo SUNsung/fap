@@ -1,224 +1,250 @@
 
         
-        # the data, split between train and test sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+            def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+    from mrjob.job import MRJob
+    
+            (foo, p1), 2
+        (bar, p1), 3
+        (foo, p2), 3
+        (bar, p3), 10
+        (foo, p4), 1
+        '''
+        yield key, sum(values)
+    
+        def get_person(self, person_id):
+        person_server = self.lookup[person_id]
+        return person_server.people[person_id]
     
     
-def test_cce_one_hot():
-    y_a = K.variable(np.random.randint(0, 7, (5, 6)))
-    y_b = K.variable(np.random.random((5, 6, 7)))
-    objective_output = losses.sparse_categorical_crossentropy(y_a, y_b)
-    assert K.eval(objective_output).shape == (5, 6)
+class Node(object):
     
-        # Arguments
-        x: Numpy array to normalize.
-        axis: axis along which to normalize.
-        order: Normalization order (e.g. 2 for L2 norm).
-    
-        available_devices = _get_available_devices()
-    available_devices = [_normalize_device_name(name)
-                         for name in available_devices]
-    if not gpus:
-        # Using all visible GPUs when not specifying `gpus`
-        # e.g. CUDA_VISIBLE_DEVICES=0,2 python keras_mgpu.py
-        gpus = len([x for x in available_devices if 'gpu' in x])
-    
-    import tensorflow as tf
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
 
     
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
+    r = openssl_encode('aes-128-cbc', key, iv)
+print('aes_cbc_decrypt')
+print(repr(r))
+    
+    versions_info['versions'][version] = new_version
+versions_info['latest'] = version
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        with pytest.raises(AssertionError):
-        conv_utils.conv_output_length(32, 5, 'diagonal', 2)
+    import io
+import optparse
+import os.path
+import re
     
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
+    # The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
     
-        # Round in the units appropriate
-    if precision == PRECISION_HALVES:
-        temperature = round(temperature * 2) / 2.0
-    elif precision == PRECISION_TENTHS:
-        temperature = round(temperature, 1)
-    # Integer as a fall back (PRECISION_WHOLE)
-    else:
-        temperature = round(temperature)
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
-        if not isinstance(value, Number):
-        raise TypeError('{} is not of numeric type'.format(value))
-    
-        assert bump_version(Version('0.56.3'), 'dev') == Version('0.57.0.dev0')
-    assert bump_version(Version('0.56.0b3'), 'dev') == Version('0.57.0.dev0')
-    assert bump_version(Version('0.56.0.dev0'), 'dev') == \
-        Version('0.56.0.dev1')
-    
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
-    
-        data = Data()
-    
-    *Where is the pattern used practically?
-The Grok framework uses decorators to add functionalities to methods,
-like permissions or subscription to an event:
-http://grok.zope.org/doc/current/reference/decorators.html
-    
-        item_type = 'product'
-    
-        def test_c_observers_shall_be_detachable(cls):
-        cls.s.detach(cls.dec_obs)
-        # hex viewer shall be remaining if dec viewer is detached first
-        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.detach(cls.hex_obs)
-        cls.assertEqual(len(cls.s._observers), 0)
-    
-        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        cls.assertEqual(len(pro.subscribers), 0)
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
-    
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time * 10), expected_execution_time)
-    
-        def setUp(cls):
-        cls.hsm._current_state = Standby(cls.hsm)
-    
-        if cfg.MODEL.MASK_ON and boxes.shape[0] > 0:
-        timers['im_detect_mask'].tic()
-        if cfg.TEST.MASK_AUG.ENABLED:
-            masks = im_detect_mask_aug(model, im, boxes)
-        else:
-            masks = im_detect_mask(model, im_scale, boxes)
-        timers['im_detect_mask'].toc()
-    
-        # Load the Cityscapes eval script *after* setting the required env vars,
-    # since the script reads their values into global variables (at load time).
-    import cityscapesscripts.evaluation.evalInstanceLevelSemanticLabeling \
-        as cityscapes_eval
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
     
-def add_single_gpu_param_update_ops(model, gpu_id):
-    # Learning rate of 0 is a dummy value to be set properly at the
-    # start of training
-    lr = model.param_init_net.ConstantFill(
-        [], 'lr', shape=[1], value=0.0
+class TestJSInterpreter(unittest.TestCase):
+    def test_basic(self):
+        jsi = JSInterpreter('function x(){;}')
+        self.assertEqual(jsi.call_function('x'), None)
+    
+    
+class TestUnicodeLiterals(unittest.TestCase):
+    def test_all_files(self):
+        for dirpath, dirnames, filenames in os.walk(rootDir):
+            for ignore_dir in IGNORED_DIRS:
+                if ignore_dir in dirnames:
+                    # If we remove the directory from dirnames os.walk won't
+                    # recurse into it
+                    dirnames.remove(ignore_dir)
+            for basename in filenames:
+                if not basename.endswith('.py'):
+                    continue
+                if basename in IGNORED_FILES:
+                    continue
+    
+    
+class UnrewindableBodyError(RequestException):
+    '''Requests encountered an error when trying to rewind a body'''
+    
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    
+                if isinstance(e.reason, _ProxyError):
+                raise ProxyError(e, request=request)
+    
+        def items(self):
+        '''Dict-like items() that returns a list of name-value tuples from the
+        jar. Allows client-code to call ``dict(RequestsCookieJar)`` and get a
+        vanilla python dict of key value pairs.
+    
+    try:
+    from urllib3.contrib import pyopenssl
+except ImportError:
+    pyopenssl = None
+    OpenSSL = None
+    cryptography = None
+else:
+    import OpenSSL
+    import cryptography
+    
+    This module provides the capabilities for the Requests hooks system.
+    
+        text_200 = (b'HTTP/1.1 200 OK\r\n'
+                b'Content-Length: 0\r\n\r\n')
+    
+        # Client Error.
+    400: ('bad_request', 'bad'),
+    401: ('unauthorized',),
+    402: ('payment_required', 'payment'),
+    403: ('forbidden',),
+    404: ('not_found', '-o-'),
+    405: ('method_not_allowed', 'not_allowed'),
+    406: ('not_acceptable',),
+    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
+    408: ('request_timeout', 'timeout'),
+    409: ('conflict',),
+    410: ('gone',),
+    411: ('length_required',),
+    412: ('precondition_failed', 'precondition'),
+    413: ('request_entity_too_large',),
+    414: ('request_uri_too_large',),
+    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
+    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
+    417: ('expectation_failed',),
+    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
+    421: ('misdirected_request',),
+    422: ('unprocessable_entity', 'unprocessable'),
+    423: ('locked',),
+    424: ('failed_dependency', 'dependency'),
+    425: ('unordered_collection', 'unordered'),
+    426: ('upgrade_required', 'upgrade'),
+    428: ('precondition_required', 'precondition'),
+    429: ('too_many_requests', 'too_many'),
+    431: ('header_fields_too_large', 'fields_too_large'),
+    444: ('no_response', 'none'),
+    449: ('retry_with', 'retry'),
+    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
+    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
+    499: ('client_closed_request',),
+    
+            certfile = os.path.join(CertUtil.ca_certdir, commonname + '.crt')
+        with open(certfile, 'wb') as fp:
+            fp.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert))
+            if CertUtil.cert_publickey is None:
+                fp.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, pkey))
+        return certfile
+    
+                        mte = MismatchedTokenException(c, self.input)
+                    self.recover(mte)
+                    raise mte
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': True,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found and loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
     )
-    one = model.param_init_net.ConstantFill(
-        [], 'one', shape=[1], value=1.0
-    )
-    wd = model.param_init_net.ConstantFill(
-        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
-    )
-    # weight decay of GroupNorm's parameters
-    wd_gn = model.param_init_net.ConstantFill(
-        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
-    )
-    for param in model.TrainableParams(gpu_id=gpu_id):
-        logger.debug('param ' + str(param) + ' will be updated')
-        param_grad = model.param_to_grad[param]
-        # Initialize momentum vector
-        param_momentum = model.param_init_net.ConstantFill(
-            [param], param + '_momentum', value=0.0
-        )
-        if param in model.biases:
-            # Special treatment for biases (mainly to match historical impl.
-            # details):
-            # (1) Do not apply weight decay
-            # (2) Use a 2x higher learning rate
-            model.Scale(param_grad, param_grad, scale=2.0)
-        elif param in model.gn_params:
-            # Special treatment for GroupNorm's parameters
-            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
-        elif cfg.SOLVER.WEIGHT_DECAY > 0:
-            # Apply weight decay to non-bias weights
-            model.WeightedSum([param_grad, one, param, wd], param_grad)
-        # Update param_grad and param_momentum in place
-        model.net.MomentumSGDUpdate(
-            [param_grad, param_momentum, lr, param],
-            [param_grad, param_momentum, param],
-            momentum=cfg.SOLVER.MOMENTUM
-        )
+  )
+    
+    
+def ContentsOfTestFile( test_file ):
+  dir_of_script = os.path.dirname( os.path.abspath( __file__ ) )
+  full_path_to_test_file = os.path.join( dir_of_script, 'testdata', test_file )
+  return ReadFile( full_path_to_test_file )
+    
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+    
+        def test_cancelled(self):
+        self.assertFalse(PENDING_FUTURE.cancelled())
+        self.assertFalse(RUNNING_FUTURE.cancelled())
+        self.assertTrue(CANCELLED_FUTURE.cancelled())
+        self.assertTrue(CANCELLED_AND_NOTIFIED_FUTURE.cancelled())
+        self.assertFalse(EXCEPTION_FUTURE.cancelled())
+        self.assertFalse(SUCCESSFUL_FUTURE.cancelled())
+    
+    # choose a random port to avoid colliding with TIME_WAIT sockets left over
+# from previous runs.
+define('min_port', type=int, default=8000)
+define('max_port', type=int, default=9000)
+    
+    
+if __name__ == '__main__':
+    main()
 
     
     
-def add_single_scale_rpn_losses(model):
-    '''Add losses for a single scale RPN model (i.e., no FPN).'''
-    # Spatially narrow the full-sized RPN label arrays to match the feature map
-    # shape
-    model.net.SpatialNarrowAs(
-        ['rpn_labels_int32_wide', 'rpn_cls_logits'], 'rpn_labels_int32'
-    )
-    for key in ('targets', 'inside_weights', 'outside_weights'):
-        model.net.SpatialNarrowAs(
-            ['rpn_bbox_' + key + '_wide', 'rpn_bbox_pred'], 'rpn_bbox_' + key
-        )
-    loss_rpn_cls = model.net.SigmoidCrossEntropyLoss(
-        ['rpn_cls_logits', 'rpn_labels_int32'],
-        'loss_rpn_cls',
-        scale=model.GetLossScale()
-    )
-    loss_rpn_bbox = model.net.SmoothL1Loss(
-        [
-            'rpn_bbox_pred', 'rpn_bbox_targets', 'rpn_bbox_inside_weights',
-            'rpn_bbox_outside_weights'
-        ],
-        'loss_rpn_bbox',
-        beta=1. / 9.,
-        scale=model.GetLossScale()
-    )
-    loss_gradients = blob_utils.get_loss_gradients(
-        model, [loss_rpn_cls, loss_rpn_bbox]
-    )
-    model.AddLosses(['loss_rpn_cls', 'loss_rpn_bbox'])
-    return loss_gradients
-
+class AnyThreadEventLoopPolicy(asyncio.DefaultEventLoopPolicy):  # type: ignore
+    '''Event loop policy that allows loop creation on any thread.
     
-    import logging
-import numpy as np
-import numpy.random as npr
+    For each function or class described in `tornado.platform.interface`,
+the appropriate platform-specific implementation exists in this module.
+Most code that needs access to this functionality should do e.g.::
+    
+    print('Starting')
+sys.stdout.flush()
+if 'TESTAPP_STARTED' not in os.environ:
+    os.environ['TESTAPP_STARTED'] = '1'
+    # Simulate an internal autoreload (one not caused
+    # by the wrapper).
+    tornado.autoreload._reload()
+else:
+    # Exit directly so autoreload doesn't catch it.
+    os._exit(0)
+'''
+    
+            class Delegate(HTTPMessageDelegate):
+            def headers_received(self, start_line, headers):
+                test.code = start_line.code
