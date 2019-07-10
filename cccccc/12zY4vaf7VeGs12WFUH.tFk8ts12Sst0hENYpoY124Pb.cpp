@@ -1,729 +1,188 @@
 
         
-        REGISTER_OP('ShapelessOp');
+        //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
     
-    
-    {  if (debug) {
-    const OpRegistrationData* op_reg_data;
-    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
-    if (!status.ok()) {
-      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
-    } else if (!op_reg_data->shape_inference_fn) {
-      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
-    } else if (properties.HasInputProperties(node->name())) {
-      const std::vector<OpInfo::TensorProperties>& props =
-          properties.GetInputProperties(node->name());
-      for (int i = 0; i < props.size(); ++i) {
-        const OpInfo::TensorProperties& prop = props[i];
-        if (prop.has_value()) {
-          os << '\t'
-             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
-             << ') has known value' << std::endl;
-        }
-      }
-    }
+    void Page::displaySlice(OutputDev *out, double hDPI, double vDPI,
+			int rotate, GBool useMediaBox, GBool crop,
+			int sliceX, int sliceY, int sliceW, int sliceH,
+			GBool printing, Catalog *catalog,
+			GBool (*abortCheckCbk)(void *data),
+			void *abortCheckCbkData,
+                        GBool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
+                        void *annotDisplayDecideCbkData) {
+  Gfx *gfx;
+  Object obj;
+  Annots *annotList;
+  int i;
+  
+  if (!out->checkPageSlice(this, hDPI, vDPI, rotate, useMediaBox, crop,
+			   sliceX, sliceY, sliceW, sliceH,
+			   printing, catalog,
+			   abortCheckCbk, abortCheckCbkData)) {
+    return;
   }
-}
-    
-    #include 'tensorflow/stream_executor/host/host_platform_id.h'
-    
-    
-    {
-    {}  // namespace host
-}  // namespace stream_executor
-    
-    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ALL_THREADS, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Expands to the namespace name that the type-parameterized tests for
-// the given type-parameterized test case are defined in.  The exact
-// name of the namespace is subject to change without notice.
-# define GTEST_CASE_NAMESPACE_(TestCaseName) \
-  gtest_case_##TestCaseName##_
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT2.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT2_(pred_format, v1, v2, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, v1, v2), \
-                on_failure)
-    
-      template <GTEST_9_TYPENAMES_(U)>
-  tuple(const GTEST_9_TUPLE_(U)& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_),
-      f3_(t.f3_), f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_), f8_(t.f8_) {}
-    
-    
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
-  }
-    
-    
-//--------------------------------------------------------------------------
-//
-//   Copy Constructor        Note:  This is a rather inefficient implementation,
-//                                  but it probably doesn't matter.
-//
-//--------------------------------------------------------------------------
-RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
-    init();
-    *this = other;
-}
-    
-    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
-            DecimalFormat *fmtToAdopt, UErrorCode &status) {
-    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
-}
-    
-    
-ScriptSet &ScriptSet::resetAll() {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] = 0;
     }
-    return *this;
+    
+    #include 'PageTransition.h'
+    
+    PopplerCacheItem *PopplerCache::lookup(const PopplerCacheKey &key)
+{
+  if (lastValidCacheIndex < 0)
+    return 0;
+    }
+    
+    class PopplerObjectCache
+{
+  public:
+    PopplerObjectCache (int cacheSizeA, XRef *xrefA);
+    ~PopplerObjectCache();
+    }
+    
+      //----- text drawing
+  virtual void beginStringOp(GfxState *state);
+  virtual void endStringOp(GfxState *state);
+  virtual GBool beginType3Char(GfxState *state, double x, double y,
+			       double dx, double dy,
+			       CharCode code, Unicode *u, int uLen);
+  virtual void endType3Char(GfxState *state);
+    
+      // parse from a 'Media Play Parameters' dictionary
+  void parseMediaPlayParameters(Object* playObj);
+  // parse from a 'Media Screen Parameters' dictionary
+  void parseMediaScreenParameters(Object* screenObj);
+    
+    void *StandardSecurityHandler::makeAuthData(GooString *ownerPassword,
+					    GooString *userPassword) {
+  return new StandardAuthData(ownerPassword ? ownerPassword->copy()
+			                    : (GooString *)NULL,
+			      userPassword ? userPassword->copy()
+			                   : (GooString *)NULL);
 }
     
-    class U_I18N_API SharedCalendar : public SharedObject {
-public:
-    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
-    virtual ~SharedCalendar();
-    const Calendar *get() const { return ptr; }
-    const Calendar *operator->() const { return ptr; }
-    const Calendar &operator*() const { return *ptr; }
-private:
-    Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
+      // Create authorization data for the specified owner and user
+  // passwords.  If the security handler doesn't support 'batch' mode,
+  // this function should return NULL.
+  virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword) = 0;
+    
+    //------------------------------------------------------------------------
+    
+    struct SplashOutImageData {
+  ImageStream *imgStr;
+  GfxImageColorMap *colorMap;
+  SplashColorPtr lookup;
+  int *maskColors;
+  SplashColorMode colorMode;
+  int width, height, y;
 };
     
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
+      CachedFileWriter writer = CachedFileWriter (cachedFile, NULL);
+  do {
+    read = fread(buf, 1, CachedFileChunkSize, stdin);
+    (writer.write) (buf, CachedFileChunkSize);
+    size += read;
+  }
+  while (read == CachedFileChunkSize);
     
-        static const int32_t gDigitCount[] = {
-        1,1,1,1,1,1,1,1,
-        1,1,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4};
+    class StdinCacheLoader : public CachedFileLoader {
+    }
     
-    SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
-                                   const UnicodeString& override,
-                                   const Locale& locale,
-                                   UErrorCode& status)
-:   fPattern(pattern),
-    fLocale(locale),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    PDFDoc *
+StdinPDFDocBuilder::buildPDFDoc(const GooString &uri, GooString *ownerPassword,
+                                    GooString *userPassword, void *guiDataA)
 {
+  Object obj;
     }
     
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
-     */
-    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+
     
-        /**
-     * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
-     * and return the pointer.
-     * @return the UnicodeReplacer pointer.
-     */
-    virtual UnicodeReplacer* toReplacer() const;
+    #include <dmlc/base.h>
+#include <dmlc/thread_group.h>
+#include <cstddef>
+#include <vector>
+#include <list>
+#include <thread>
+#include <utility>
+#include 'mxnet/base.h'
     
-    
-    {    return outLen;
-}
-    
-        // print values
-    std::cout << object << '\n';
-    std::cout << null << '\n';
-    
-    struct CompactionIterationStats {
-  // Compaction statistics
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_NE(req[bs::kData], kWriteInplace);
+    CHECK_NE(req[bs::kGrid], kWriteInplace);
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    CHECK_EQ(out_grad.size(), 1U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> gdata = in_grad[bs::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> ggrid = in_grad[bs::kGrid].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grad = out_grad[bs::kOut].get<gpu, 4, DType>(s);
     }
     
-    bool WriteController::IsStopped() const {
-  return total_stopped_.load(std::memory_order_relaxed) > 0;
-}
-// This is inside DB mutex, so we can't sleep and need to minimize
-// frequency to get time.
-// If it turns out to be a performance issue, we can redesign the thread
-// synchronization model here.
-// The function trust caller will sleep micros returned.
-uint64_t WriteController::GetDelay(Env* env, uint64_t num_bytes) {
-  if (total_stopped_.load(std::memory_order_relaxed) > 0) {
-    return 0;
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    CHECK_EQ(out_grad.size(), 1U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> grad = out_grad[st::kOut].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> ddata = in_grad[st::kData].get<gpu, 4, DType>(s);
+    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
+    Shape<4> grid_shape = Shape4(grad.size(0), grad.size(2), grad.size(3), 2);
+    Tensor<gpu, 3, DType> dloc = in_grad[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
+    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
+                    .get_with_shape<gpu, 4, DType>(grid_shape, s);
+    // do not use out_grad[st::kGridSrc], because dgrid is a intermediate tensor, and not include in
+    // DeclareBackwardDependency, another, we can we reuse grid for inplace operator
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    typename DataType<DType>::ScaleType alpha_dgrid = 1.0f;
+    typename DataType<DType>::ScaleType beta_dgrid = 0.0f;
+    CUDNN_CALL(cudnnSpatialTfSamplerBackward(s->dnn_handle_,
+                                             st_desc_,
+                                             &alpha,
+                                             in_desc_,
+                                             data.dptr_,
+                                             &beta,
+                                             in_desc_/*reuse in_desc_*/,
+                                             ddata.dptr_/*output*/,
+                                             &alpha_dgrid,
+                                             out_desc_/*reuse out_desc_*/,
+                                             grad.dptr_,
+                                             grid.dptr_,
+                                             &beta_dgrid,
+                                             grid.dptr_));
+    if (param_.transform_type == st::kAffine) {
+      CUDNN_CALL(cudnnSpatialTfGridGeneratorBackward(s->dnn_handle_,
+                                                     st_desc_,
+                                                     grid.dptr_,
+                                                     dloc.dptr_/*out*/));
+    }
   }
-  if (total_delayed_.load(std::memory_order_relaxed) == 0) {
-    return 0;
-  }
-    }
-    
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
-    
-    
-    {    std::vector<std::string> input_file_names;
-    for (auto level : cf_meta.levels) {
-      for (auto file : level.files) {
-        if (file.being_compacted) {
-          return nullptr;
-        }
-        input_file_names.push_back(file.name);
-      }
-    }
-    return new CompactionTask(
-        db, this, cf_name, input_file_names,
-        options_.num_levels - 1, compact_options_, false);
-  }
-    
-    #include <string>
-    
-      // Approximate size of user data packed per block.  Note that the
-  // block size specified here corresponds to uncompressed data.  The
-  // actual size of the unit read from disk may be smaller if
-  // compression is enabled.  This parameter can be changed dynamically.
-  //
-  // Default: 4K
-  size_t block_size;
-    
-    #pragma once
-// lua headers
-extern 'C' {
-#include <lauxlib.h>
-#include <lua.h>
-#include <lualib.h>
-}
-    
-      // Block current thread until condition variable is notified by a call to
-  // Notify() or NotifyAll().  Wait() will be called with mutex locked.
-  // Returns OK if notified.
-  // Returns non-OK if TransactionDB should stop waiting and fail the operation.
-  // May return OK spuriously even if not notified.
-  virtual Status Wait(std::shared_ptr<TransactionDBMutex> mutex) = 0;
