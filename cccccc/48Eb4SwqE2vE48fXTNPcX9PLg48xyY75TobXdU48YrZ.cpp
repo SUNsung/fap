@@ -1,418 +1,393 @@
 
         
-        void accumulateWeighted(const Size2D &size,
-                        const u8 *srcBase, ptrdiff_t srcStride,
-                        u8 *dstBase, ptrdiff_t dstStride,
-                        f32 alpha)
-{
-    if (alpha == 0.0f)
-        return;
-    if (alpha == 1.0f)
-    {
-        for (size_t i = 0; i < size.height; ++i)
-        {
-            const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-            u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-            std::memcpy(dst, src, sizeof(u8) * size.width);
-        }
-        return;
-    }
-    }
+        // The browser want to open a file.
+IPC_MESSAGE_CONTROL1(ShellViewMsg_Open,
+                     std::string /* file name */)
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(f32, u8, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)((1 << 16)*alpha));
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)((1 << 16)*beta));
-    register uint32x4_t  vmask  asm ('q2') = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d6-d7}, [%[src1]]                              \n\t'
-            'vld1.32 {d8-d9}, [%[src2]]                              \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vmul.f32 q6, q4, q0                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vadd.f32 q8, q6, q1                                     \n\t'
-            'vcvt.u32.f32 q9, q7                                     \n\t'
-            'vcvt.u32.f32 q10, q8                                    \n\t'
-            'vbic q11, q2, q6                                        \n\t'
-            'vbic q12, q2, q7                                        \n\t'
-            'vshr.u32 q13, q11, #16                                  \n\t'
-            'vshr.u32 q14, q12, #16                                  \n\t'
-            'vqsub.u32 q7, q9, q13                                   \n\t'
-            'vqsub.u32 q8, q10, q14                                  \n\t'
-            'vqrshrn.u32 d22, q7, #16                                \n\t'
-            'vqrshrn.u32 d23, q8, #16                                \n\t'
-            'vqmovn.u16 d30, q11                                     \n\t'
-            'vst1.8 {d30}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vscale), 'w' (vshift), 'w' (vmask)
-            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30'
-        );
-    }
-})
-#else
-CVTS_FUNC(f32, u8, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)((1 << 16)*alpha));
-    float32x4_t vshift = vdupq_n_f32((f32)((1 << 16)*beta));
-    uint32x4_t  vmask  = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-    }
-    }
+    #include 'content/nw/src/api/base/base.h'
     
-            int32x2_t vs2 = vqneg_s32(vqadd_s32(vget_low_s32(vs), vget_high_s32(vs)));
     
-                uint32x4_t v_mask0 = vorrq_u32(vceqq_u32(v_src0, v_maxval4), vceqq_u32(v_src0, v_minval4));
-            uint32x4_t v_mask1 = vorrq_u32(vceqq_u32(v_src1, v_maxval4), vceqq_u32(v_src1, v_minval4));
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
+}
     
-    #if GTEST_OS_SYMBIAN
-  // Streams a value (either a pointer or not) to this object.
-  template <typename T>
-  inline Message& operator <<(const T& value) {
-    StreamHelper(typename internal::is_pointer<T>::type(), value);
-    return *this;
-  }
-#else
-  // Streams a non-pointer value to this object.
-  template <typename T>
-  inline Message& operator <<(const T& val) {
-    // Some libraries overload << for STL containers.  These
-    // overloads are defined in the global namespace instead of ::std.
-    //
-    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-    // overloads are visible in either the std namespace or the global
-    // namespace, but not other namespaces, including the testing
-    // namespace which Google Test's Message class is in.
-    //
-    // To allow STL containers (and other types that has a << operator
-    // defined in the global namespace) to be used in Google Test
-    // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
-    // overloads of << defined in the global namespace and those
-    // visible via Koenig lookup are both exposed in this function.
-    using ::operator <<;
-    *ss_ << val;
-    return *this;
-  }
     
-    #endif  // 0
+    {}  // namespace nwapi
+
     
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
-    #if !GTEST_DONT_DEFINE_ASSERT_GE
-# define ASSERT_GE(val1, val2) GTEST_ASSERT_GE(val1, val2)
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+    void MenuItem::Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh) {
+  if (method == 'SetLabel') {
+    std::string label;
+    arguments.GetString(0, &label);
+    SetLabel(label);
+  } else if (method == 'SetIcon') {
+    std::string icon;
+    arguments.GetString(0, &icon);
+    SetIcon(icon);
+  } else if (method == 'SetIconIsTemplate') {
+    bool isTemplate;
+    arguments.GetBoolean(0, &isTemplate);
+    SetIconIsTemplate(isTemplate);
+  } else if (method == 'SetTooltip') {
+    std::string tooltip;
+    arguments.GetString(0, &tooltip);
+    SetTooltip(tooltip);
+  } else if (method == 'SetEnabled') {
+    bool enabled = true;
+    arguments.GetBoolean(0, &enabled);
+    SetEnabled(enabled);
+  } else if (method == 'SetChecked') {
+    bool checked = false;
+    arguments.GetBoolean(0, &checked);
+    SetChecked(checked);
+  } else if (method == 'SetSubmenu') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
+#if defined(OS_MACOSX)
+  } else if (method == 'SetKey') {
+    std::string key;
+    arguments.GetString(0, &key);
+    SetKey(key);
+  } else if (method == 'SetModifiers') {
+    std::string mod;
+    arguments.GetString(0, &mod);
+    SetModifiers(mod);
 #endif
-    
-    template <GTEST_3_TYPENAMES_(T)>
-inline GTEST_3_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2) {
-  return GTEST_3_TUPLE_(T)(f0, f1, f2);
-}
-    
-    
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
-}
-
-    
-    #ifndef GTEST_SAMPLES_SAMPLE2_H_
-#define GTEST_SAMPLES_SAMPLE2_H_
-    
-    #ifndef GTEST_SAMPLES_SAMPLE3_INL_H_
-#define GTEST_SAMPLES_SAMPLE3_INL_H_
-    
-    
-    {
-    {
-    {				if (PathFileExists(szArgList[i]))
-				{
-					cmderOptions.cmderStart = szArgList[i];
-					i++;
-				}
-				else
-				{
-					MessageBox(NULL, L'Unrecognized parameter.\n\nValid options:\n\n    /c [CMDER User Root Path]\n\n    /task [ConEmu Task Name]\n\n    [/start [Start in Path] | [Start in Path]]\n\n    /single\n\n    /m\n\n    /x [ConEmu extra arguments]\n\nor\n\n    /register [USER | ALL]\n\nor\n\n    /unregister [USER | ALL]\n', MB_TITLE, MB_OK);
-					cmderOptions.error = true;
-				}
-			}
-			else
-			{
-				MessageBox(NULL, L'Unrecognized parameter.\n\nValid options:\n\n    /c [CMDER User Root Path]\n\n    /task [ConEmu Task Name]\n\n    [/start [Start in Path] | [Start in Path]]\n\n    /single\n\n    /m\n\n    /x [ConEmu extra arguments]\n\nor\n\n    /register [USER | ALL]\n\nor\n\n    /unregister [USER | ALL]\n', MB_TITLE, MB_OK);
-				cmderOptions.error = true;
-			}
-		}
-	}
-    
-    
-    {        resStream << ((radix == 10) ? L'e' : L'^');
-        resStream << (m_exponent.IsNegative() ? L'-' : L'+');
-        resStream << (m_exponent.IsEmpty() ? L'0' : m_exponent.value);
-    }
-    
-        switch (opCode)
-    {
-    case IDC_INV:
-    case IDC_FE:
-    case IDC_MCLEAR:
-    case IDC_BACK:
-    case IDC_EXP:
-    case IDC_STORE:
-    case IDC_MPLUS:
-    case IDC_MMINUS:
-        return true;
-    }
-    
-    class COpndCommand final : public IOpndCommand
-{
-public:
-    COpndCommand(std::shared_ptr<CalculatorVector<int>> const& commands, bool fNegative, bool fDecimal, bool fSciFmt);
-    void Initialize(CalcEngine::Rational const& rat);
-    }
-    
-    class IOperatorCommand : public IExpressionCommand
-{
-public:
-    virtual void SetCommand(int command) = 0;
-};
-    
-    #include <array>
-#include 'ICalcDisplay.h'
-#include 'IHistoryDisplay.h'
-#include 'Rational.h'
-    
-        // Find the best 'A' for convergence to the required precision.
-    a = i32torat(radix);
-    lograt(&a, precision);
-    mulrat(&a, ratprec, precision);
-    
-    
-    {    destroyrat(tmp);
-}
-    
-    void subrat(PRAT* pa, PRAT b, int32_t precision)
-    
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
-    }
-    
-    template <typename Dtype>
-void Deleter(::caffe::Layer<Dtype> *ptr) {
-}
-    
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
-    }
-    
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
- */
-class ImageAugmenter {
- public:
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
-   */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
-    }
-    }
-    
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file iter_normalize.h
- * \brief Iterator that subtracts mean and do a few augmentations.
- */
-#ifndef MXNET_IO_ITER_NORMALIZE_H_
-#define MXNET_IO_ITER_NORMALIZE_H_
-    
-    // true implementation
-template<typename xpu, typename OP>
-void EvalBinary_(const TBlob &lhs, const TBlob &rhs,
-                 TBlob *ret, RunContext ctx) {
-  using namespace mshadow::expr;
-  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
-  CHECK_EQ(ret->type_flag_, lhs.type_flag_)
-    << 'Only support input/output with the same data type';
-  CHECK_EQ(ret->type_flag_, rhs.type_flag_)
-    << 'Only support input/output with the same data type';
-  MSHADOW_TYPE_SWITCH(ret->type_flag_, DType, {
-    ret->FlatTo2D<xpu, DType>(s)
-      = F<typename OP::mshadow_op>(lhs.FlatTo2D<xpu, DType>(s),
-                                   rhs.FlatTo2D<xpu, DType>(s));
-  });
-}
-    
-    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
-.describe('Apply a sparse regularization to the output a sigmoid activation function.')
-.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
-.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    void ClusterQualityInfo702::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  int id = target_id(bytes, length);
-  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == id) {
-      auto conti_obs = conti_radar->mutable_contiobs(i);
-      conti_obs->set_longitude_dist_rms(
-          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
-      conti_obs->set_lateral_dist_rms(
-          LINEAR_RMS[lateral_dist_rms(bytes, length)]);
-      conti_obs->set_longitude_vel_rms(
-          LINEAR_RMS[longitude_vel_rms(bytes, length)]);
-      conti_obs->set_lateral_vel_rms(
-          LINEAR_RMS[lateral_vel_rms(bytes, length)]);
-      conti_obs->set_probexist(PROBOFEXIST[pdh0(bytes, length)]);
-      switch (invalid_state(bytes, length)) {
-        case 0x01:
-        case 0x02:
-        case 0x03:
-        case 0x06:
-        case 0x07:
-        case 0x0E:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
-      switch (ambig_state(bytes, length)) {
-        case 0x00:
-        case 0x01:
-        case 0x02:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
-    }
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
   }
 }
     
-    ObjectGeneralInfo60B::ObjectGeneralInfo60B() {}
-const uint32_t ObjectGeneralInfo60B::ID = 0x60B;
-    
-    int ObjectQualityInfo60C::lateral_vel_rms(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 1);
+      inline int offset(const vector<int>& indices) const {
+    CHECK_LE(indices.size(), num_axes());
+    int offset = 0;
+    for (int i = 0; i < num_axes(); ++i) {
+      offset *= shape(i);
+      if (indices.size() > i) {
+        CHECK_GE(indices[i], 0);
+        CHECK_LT(indices[i], shape(i));
+        offset += indices[i];
+      }
     }
-    
-    void SplineSegKernel::IntegratedTermMatrix(const uint32_t num_params,
-                                           const double x,
-                                           const std::string& type,
-                                           Eigen::MatrixXd* term_matrix) const {
-  if (term_matrix->rows() != term_matrix->cols() ||
-      term_matrix->rows() != static_cast<int>(num_params)) {
-    term_matrix->resize(num_params, num_params);
+    return offset;
   }
+  /**
+   * @brief Copy from a source Blob.
+   *
+   * @param source the Blob to copy from
+   * @param copy_diff if false, copy the data; if true, copy the diff
+   * @param reshape if false, require this Blob to be pre-shaped to the shape
+   *        of other (and die otherwise); if true, Reshape this Blob to other's
+   *        shape if necessary
+   */
+  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
+      bool reshape = false);
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    
+    
+    namespace caffe {
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
+    }
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
     
     
     {
-    {
-    {}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    {}  // namespace data
+}  // namespace xgboost
 
     
-    using ::apollo::drivers::canbus::Byte;
+      dmlc::TemporaryDirectory tempdir;
+  const std::string tmp_file = tempdir.path + '/metainfo.binary';
+  dmlc::Stream* fs = dmlc::Stream::Create(tmp_file.c_str(), 'w');
+  info.SaveBinary(fs);
+  delete fs;
     
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
+ public:
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
+    }
     
-    #include 'gtest/gtest.h'
+      EXPECT_FALSE(devices.Contains(1));
+    
+      // init thread buffers
+  inline void InitThreadTemp(int nthread) {
+    int prev_thread_temp_size = thread_temp_.size();
+    if (prev_thread_temp_size < nthread) {
+      thread_temp_.resize(nthread, RegTree::FVec());
+      for (int i = prev_thread_temp_size; i < nthread; ++i) {
+        thread_temp_[i].Init(model_.param.num_feature);
+      }
+    }
+  }
     
     
-    {  Horn_rpt_79::Commanded_valueType ret =
-      static_cast<Horn_rpt_79::Commanded_valueType>(x);
+    { protected:
+  /*! \brief internal base score of the model */
+  bst_float base_score_;
+  /*! \brief objective function */
+  std::unique_ptr<ObjFunction> obj_;
+  /*! \brief The gradient booster used by the model*/
+  std::unique_ptr<GradientBooster> gbm_;
+  /*! \brief The evaluation metrics used to evaluate the model. */
+  std::vector<std::unique_ptr<Metric> > metrics_;
+  /*! \brief Training parameter. */
+  LearnerTrainParam tparam_;
+};
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    
+    {    return 0;
+}
+
+    
+    void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt() && 'Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().');
+    }
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplAllegro5_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized
+    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
+        return;
+    }
+    
+        // Store our identifier
+    io.Fonts->TexID = (ImTextureID)g_FontTexture;
+    
+    #pragma once
+    
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
+}
+    
+      ~DHTRoutingTableSerializer();
+    
+    #endif // D_DHT_TASK_FACTORY_H
+
+    
+    void DHTTaskFactoryImpl::setMessageDispatcher(DHTMessageDispatcher* dispatcher)
+{
+  dispatcher_ = dispatcher;
+}
+    
+    
+    {  void setTimeout(std::chrono::seconds timeout)
+  {
+    timeout_ = std::move(timeout);
+  }
+};
+    
+    namespace aria2 {
+    }
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port) const
+{
+  return generateToken(infoHash, ipaddr, port, secret_[0]);
+}
+    
+    const std::string DHTUnknownMessage::E('e');
+    
+    
+    {  double ret = x * OBJECT_WIDTH_RES;
   return ret;
+}
+    
+        auto it_lower = std::lower_bound(
+        speed_limit_.speed_limit_points().begin(),
+        speed_limit_.speed_limit_points().end(), s,
+        [](const std::pair<double, double>& point, const double curr_s) {
+          return point.first < curr_s;
+        });
+    
+      kernel.AddReferenceLineKernelMatrix(index_list, pos_list, 10.0);
+    
+    Eigen::MatrixXd SplineSegKernel::NthDerivativeKernel(
+    const uint32_t n, const uint32_t num_params, const double accumulated_x) {
+  if (n == 1) {
+    return DerivativeKernel(num_params, accumulated_x);
+  } else if (n == 2) {
+    return SecondOrderDerivativeKernel(num_params, accumulated_x);
+  } else if (n == 3) {
+    return ThirdOrderDerivativeKernel(num_params, accumulated_x);
+  } else {
+    return Eigen::MatrixXd::Zero(num_params, num_params);
+  }
+}
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+      x <<= 0;
+  x >>= 0;
+    
+    
+    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
+  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
+  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
+  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
 }
