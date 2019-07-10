@@ -1,305 +1,171 @@
 
         
-        #include <gtest/gtest.h>
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    using google::protobuf::util::Proto3DataStripper;
+    #include <Python.h>
     
-      {
-    // Write the new address book back to disk.
-    fstream output(argv[1], ios::out | ios::trunc | ios::binary);
-    if (!address_book.SerializeToOstream(&output)) {
-      cerr << 'Failed to write address book.' << endl;
-      return -1;
-    }
-  }
-    
-      EnumGenerator(const EnumGenerator&) = delete;
-  EnumGenerator& operator=(const EnumGenerator&) = delete;
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H */
-
-    
-    #include <grpc/support/port_platform.h>
-    
-    namespace grpc {
-namespace {
-    }
-    }
-    
-    #include <mach/mach.h>
-    
-    void ProtoToCoreStats(const grpc::core::Stats& proto, grpc_stats_data* core) {
-  memset(core, 0, sizeof(*core));
-  for (const auto& m : proto.metrics()) {
-    switch (m.value_case()) {
-      case Metric::VALUE_NOT_SET:
-        break;
-      case Metric::kCount:
-        for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
-          if (m.name() == grpc_stats_counter_name[i]) {
-            core->counters[i] = m.count();
-            break;
-          }
-        }
-        break;
-      case Metric::kHistogram:
-        for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
-          if (m.name() == grpc_stats_histogram_name[i]) {
-            const auto& h = m.histogram();
-            bool valid = true;
-            if (grpc_stats_histo_buckets[i] != h.buckets_size()) valid = false;
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              if (grpc_stats_histo_bucket_boundaries[i][j] !=
-                  h.buckets(j).start()) {
-                valid = false;
-              }
-            }
-            if (!valid) {
-              gpr_log(GPR_ERROR,
-                      'Found histogram %s but shape is different from proto',
-                      m.name().c_str());
-            }
-            for (int j = 0; valid && j < h.buckets_size(); j++) {
-              core->histograms[grpc_stats_histo_start[i] + j] =
-                  h.buckets(j).count();
-            }
-          }
-        }
-        break;
-    }
-  }
-}
-    
-    namespace leveldb {
-    }
-    
-    template <typename Key, class Comparator>
-typename SkipList<Key, Comparator>::Node* SkipList<Key, Comparator>::FindLast()
-    const {
-  Node* x = head_;
-  int level = GetMaxHeight() - 1;
-  while (true) {
-    Node* next = x->Next(level);
-    if (next == nullptr) {
-      if (level == 0) {
-        return x;
-      } else {
-        // Switch to next list
-        level--;
-      }
-    } else {
-      x = next;
-    }
-  }
-}
-    
-      // Recover the last saved descriptor from persistent storage.
-  Status Recover(bool* save_manifest);
-    
-      // The size of the database changes caused by this batch.
+      // Creates a batched FFT plan with scratch allocator.
   //
-  // This number is tied to implementation details, and may change across
-  // releases. It is intended for LevelDB usage metrics.
-  size_t ApproximateSize() const;
+  // stream:          The GPU stream in which the FFT runs.
+  // rank:            Dimensionality of the transform (1, 2, or 3).
+  // elem_count:      Array of size rank, describing the size of each dimension.
+  // input_embed, output_embed:
+  //                  Pointer of size rank that indicates the storage dimensions
+  //                  of the input/output data in memory. If set to null_ptr all
+  //                  other advanced data layout parameters are ignored.
+  // input_stride:    Indicates the distance (number of elements; same below)
+  //                  between two successive input elements.
+  // input_distance:  Indicates the distance between the first element of two
+  //                  consecutive signals in a batch of the input data.
+  // output_stride:   Indicates the distance between two successive output
+  //                  elements.
+  // output_distance: Indicates the distance between the first element of two
+  //                  consecutive signals in a batch of the output data.
+  virtual std::unique_ptr<Plan> CreateBatchedPlanWithScratchAllocator(
+      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,
+      uint64 input_stride, uint64 input_distance, uint64 *output_embed,
+      uint64 output_stride, uint64 output_distance, Type type,
+      bool in_place_fft, int batch_count,
+      ScratchAllocator *scratch_allocator) = 0;
     
-    std::string GetWindowsErrorMessage(DWORD error_code) {
-  std::string message;
-  char* error_text = nullptr;
-  // Use MBCS version of FormatMessage to match return value.
-  size_t error_text_size = ::FormatMessageA(
-      FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER |
-          FORMAT_MESSAGE_IGNORE_INSERTS,
-      nullptr, error_code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-      reinterpret_cast<char*>(&error_text), 0, nullptr);
-  if (!error_text) {
-    return message;
-  }
-  message.assign(error_text, error_text_size);
-  ::LocalFree(error_text);
-  return message;
+    PLATFORM_DEFINE_ID(kHostPlatformId);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include <condition_variable>
+#include <mutex>
+#include <string>
+#include <system_error>
+#include <vector>
+    
+    #include 'caffe2/operators/glu_op.h'
+    
+    
+    {} // namespace caffe2
+    
+    REGISTER_CUDA_OPERATOR(LC3D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC3DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
+    
+    
+    {template<typename IndexType, typename DType = real_t>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
+ public:
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
+    }
+    
+    #if defined(__CUDACC__)
+    
+    
+    {
+    {}  // namespace obj
+}  // namespace xgboost
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    
+    {  mutable int count_ = 0;
+  mutable int merge_count_ = 0;
+};
+    
+    std::string kDBPath = '/tmp/rocksdb_simple_example';
+    
+    // Abstract handle to particular state of a DB.
+// A Snapshot is an immutable object and can therefore be safely
+// accessed from multiple threads without any external synchronization.
+//
+// To Create a Snapshot, call DB::GetSnapshot().
+// To Destroy a Snapshot, call DB::ReleaseSnapshot(snapshot).
+class Snapshot {
+ public:
+  // returns Snapshot's sequence number
+  virtual SequenceNumber GetSequenceNumber() const = 0;
+    }
+    
+      // Builds an openable snapshot of RocksDB on the same disk, which
+  // accepts an output directory on the same disk, and under the directory
+  // (1) hard-linked SST files pointing to existing live SST files
+  // SST files will be copied if output directory is on a different filesystem
+  // (2) a copied manifest files and other files
+  // The directory should not already exist and will be created by this API.
+  // The directory will be an absolute path
+  // log_size_for_flush: if the total log file size is equal or larger than
+  // this value, then a flush is triggered for all the column families. The
+  // default value is 0, which means flush is always triggered. If you move
+  // away from the default, the checkpoint may not contain up-to-date data
+  // if WAL writing is not always enabled.
+  // Flush will always trigger if it is 2PC.
+  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
+                                  uint64_t log_size_for_flush = 0);
+    
+    #include 'rocksdb/utilities/lua/rocks_lua_custom_library.h'
+    
+    
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
 }
     
+    using ::apollo::canbus::ChassisDetail;
     
+    #include 'gtest/gtest.h'
     
-    namespace php {
+    double ObjectGeneralInfo60B::longitude_dist(const std::uint8_t* bytes,
+                                            int32_t length) const {
+  Byte t0(bytes + 1);
+  int32_t x = t0.get_byte(0, 8);
     }
     
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
+    const PolynomialXd& Spline1dSeg::Derivative() const { return derivative_; }
     
-    namespace HPHP {
-    }
     
-    #include 'hphp/util/stack-trace.h'
-    
-    namespace HPHP {
-    }
-    
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-        std::unique_ptr<DHTMessageFactory> messageFactory;
-    
-    std::string DHTResponseMessage::toString() const
-{
-  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
-             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
-             getRemoteNode()->getIPAddress().c_str(),
-             getRemoteNode()->getPort(),
-             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
-             util::torrentPercentEncode(getVersion()).c_str(),
-             toStringOptional().c_str());
+    {
+    {
+    {
+    {  double ret = x * 0.001000;
+  return ret;
 }
-    
-      Time serializedTime_;
-    
-    
-    {
-    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
-                                                   : PREF_DHT_ENTRY_POINT_HOST6;
-    if (!e->getOption()->get(prefEntryPointHost).empty()) {
-      {
-        PrefPtr prefEntryPointPort = family == AF_INET
-                                         ? PREF_DHT_ENTRY_POINT_PORT
-                                         : PREF_DHT_ENTRY_POINT_PORT6;
-        std::pair<std::string, uint16_t> addr(
-            e->getOption()->get(prefEntryPointHost),
-            e->getOption()->getAsInt(prefEntryPointPort));
-        std::vector<std::pair<std::string, uint16_t>> entryPoints;
-        entryPoints.push_back(addr);
-        auto command = make_unique<DHTEntryPointNameResolveCommand>(
-            e->newCUID(), e, family, entryPoints);
-        command->setBootstrapEnabled(true);
-        command->setTaskQueue(taskQueue.get());
-        command->setTaskFactory(taskFactory.get());
-        command->setRoutingTable(routingTable.get());
-        command->setLocalNode(localNode);
-        tempCommands.push_back(std::move(command));
-      }
-    }
-    else {
-      A2_LOG_INFO('No DHT entry point specified.');
-    }
-    {
-      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
-      command->setMessageDispatcher(dispatcher.get());
-      command->setMessageReceiver(receiver.get());
-      command->setTaskQueue(taskQueue.get());
-      command->setReadCheckSocket(connection->getSocket());
-      command->setConnection(std::move(connection));
-      command->setUDPTrackerClient(udpTrackerClient);
-      tempRoutineCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTTokenUpdateCommand>(
-          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
-      command->setTokenTracker(tokenTracker.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTBucketRefreshCommand>(
-          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
-      command->setTaskQueue(taskQueue.get());
-      command->setRoutingTable(routingTable.get());
-      command->setTaskFactory(taskFactory.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTPeerAnnounceCommand>(
-          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
-      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command =
-          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
-      command->setLocalNode(localNode);
-      command->setRoutingTable(routingTable.get());
-      tempCommands.push_back(std::move(command));
-    }
-    // add deserialized nodes to routing table
-    auto& desnodes = deserializer.getNodes();
-    for (auto& node : desnodes) {
-      routingTable->addNode(node);
-    }
-    if (!desnodes.empty()) {
-      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
-          taskFactory->createBucketRefreshTask());
-      task->setForceRefresh(true);
-      taskQueue->addPeriodicTask1(task);
-    }
-    // assign them into DHTRegistry
-    if (family == AF_INET) {
-      DHTRegistry::getMutableData().localNode = localNode;
-      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData().messageFactory = std::move(factory);
-      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
-      DHTRegistry::setInitialized(true);
-    }
-    else {
-      DHTRegistry::getMutableData6().localNode = localNode;
-      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData6().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
-      DHTRegistry::setInitialized6(true);
-    }
-    if (e->getBtRegistry()->getUdpPort() == 0) {
-      // We assign port last so that no exception gets in the way
-      e->getBtRegistry()->setUdpPort(port);
-    }
-  }
-  catch (RecoverableException& ex) {
-    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
-                        ' DHT is disabled.'),
-                    ex);
-    tempCommands.clear();
-    tempRoutineCommands.clear();
-    if (family == AF_INET) {
-      DHTRegistry::clearData();
-      e->getBtRegistry()->setUDPTrackerClient(
-          std::shared_ptr<UDPTrackerClient>{});
-    }
-    else {
-      DHTRegistry::clearData6();
-    }
-  }
-  return std::make_pair(std::move(tempCommands),
-                        std::move(tempRoutineCommands));
-}
-    
-    #include 'common.h'
-    
-    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
-{
-  factory_ = factory;
-}
-    
-      virtual ~DHTTaskFactoryImpl();
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
-{
-  immediateTaskQueue_.addTask(task);
-}
-    
-    const std::string DHTUnknownMessage::UNKNOWN('unknown');
-    
-    namespace aria2 {
-    }
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
