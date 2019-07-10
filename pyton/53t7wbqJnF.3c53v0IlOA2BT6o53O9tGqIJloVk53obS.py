@@ -1,128 +1,40 @@
 
         
-            with open(FISH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    filled_template = template.replace('{{commands}}', '\n'.join(commands))
-    with open(FISH_COMPLETION_FILE, 'w') as f:
-        f.write(filled_template)
+            # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
     
-        out = bug_text + dev_text
+    Two consequences of imposing a connectivity can be seen. First clustering
+with a connectivity matrix is much faster.
     
-    import io
-import optparse
-import os
-import sys
+        noise = random_state.normal(
+        scale=scale, size=(n_samples_per_center, centers.shape[1]))
     
+    import numpy as np
+from sklearn.cluster import MeanShift, estimate_bandwidth
+from sklearn.datasets.samples_generator import make_blobs
     
-if __name__ == '__main__':
-    unittest.main()
-
-    
-        def test_socks5(self):
-        self.assertTrue(isinstance(self._get_ip('socks5'), compat_str))
-    
-        # TODO: decoder should check that nonce is in the protected header
-    
-            self.vhost1 = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
-    
-    import urllib
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-            for i in self.tree.iterfind('video/quality'):
-            quality = i.attrib ['value']
-            url = i[0].attrib['playurl']
-            self.stream_types.append({'id': quality,
-                                      'video_profile': i.attrib ['desp']})
-            self.streams[quality] = {'url': url,
-                                     'video_profile': i.attrib ['desp']}
-            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
-    
-    #----------------------------------------------------------------------
-def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
-    #Info XML
-    video_info = ckplayer_get_info_by_xml(ckinfo)
-    
-    try:
-        title = kwargs['title']
-    except:
-        title = ''
-    type_ = ''
-    size = 0
-    
-    if len(video_info['links']) > 0:  #has link
-        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
-    
-    if 'size' in video_info:
-        size = int(video_info['size'])
-    else:
-        for i in video_info['links'][1:]:  #save 1st one
-            size += url_info(i)[2]
-    
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
-    
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
-    
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
-    
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
-    
-    def flickr_download_main(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    urls = None
-    size = 'o' # works for collections only
-    title = None
-    if 'stream_id' in kwargs:
-        size = kwargs['stream_id']
-    if match1(url, pattern_url_single_photo):
-        url, title = get_single_photo_url(url)
-        urls = [url]
-    else:
-        urls, title = fetch_photo_url_list(url, size)
-    index = 0
-    for url in urls:
-        mime, ext, size = url_info(url)
-        print_info('Flickr.com', title, mime, size)
-        if not info_only:
-            suffix = '[%d]' % index
-            download_urls([url], title + suffix, ext, False, output_dir, None, False, False)
-            index = index + 1
-    
-                    moz_ec_name = search_dict(sym_to_name, 'mozEcName')
-                push = search_dict(sym_to_name, 'push')
-                patt = '{}\.{}\('(.+?)'\)'.format(moz_ec_name, push)
-                ec_list = re.findall(patt, code)
-                [magic_list.append(sym_to_name[ec]) for ec in ec_list]
-        return magic_list
-    
-        html = get_content(url)
-    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
-    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
-    if id is None:
-        video_pattern = r''vid'\s*:\s*' + uuid_pattern
-        id = match1(html, video_pattern)
-    assert id, 'can't find video info'
-    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    # MiniBatchKMeans
+ax = fig.add_subplot(1, 3, 2)
+for k, col in zip(range(n_clusters), colors):
+    my_members = mbk_means_labels == order[k]
+    cluster_center = mbk_means_cluster_centers[order[k]]
+    ax.plot(X[my_members, 0], X[my_members, 1], 'w',
+            markerfacecolor=col, marker='.')
+    ax.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
+            markeredgecolor='k', markersize=6)
+ax.set_title('MiniBatchKMeans')
+ax.set_xticks(())
+ax.set_yticks(())
+plt.text(-3.5, 1.8, 'train time: %.2fs\ninertia: %f' %
+         (t_mini_batch, mbk.inertia_))
