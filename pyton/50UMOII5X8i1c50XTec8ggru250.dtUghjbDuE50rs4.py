@@ -1,165 +1,107 @@
 
         
-            def approve_friend_request(self, friend_id):
-        pass
-    
-        def mapper(self, _, line):
-        yield line, 1
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-    
-class CaseInsensitiveDict(MutableMapping):
-    '''A case-insensitive ``dict``-like object.
-    
-        @possible_keys
-    def test_getitem(self, key):
-        assert self.case_insensitive_dict[key] == 'application/json'
-    
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
+            def __init__(self):
+        self.name = 'unaccent'
 
     
-            ('hTTp://u:p@Some.Host/path', 'socks5://some.host.proxy', all_proxies),
-        ('hTTp://u:p@Other.Host/path', 'socks5://http.proxy', all_proxies),
-        ('hTTp:///path', 'socks5://http.proxy', all_proxies),
-        ('hTTps://Other.Host', 'socks5://http.proxy', all_proxies),
+        try:
+        oids, array_oids = get_hstore_oids(connection.alias)
+        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
+    except ProgrammingError:
+        # Hstore is not available on the database.
+        #
+        # If someone tries to create an hstore field it will error there.
+        # This is necessary as someone may be using PSQL without extensions
+        # installed but be using other features of contrib.postgres.
+        #
+        # This is also needed in order to create the connection in order to
+        # install the hstore extension.
+        pass
     
-        def test_http_error(self):
-        error = requests.exceptions.HTTPError()
-        assert not error.response
-        response = requests.Response()
-        error = requests.exceptions.HTTPError(response=response)
-        assert error.response == response
-        error = requests.exceptions.HTTPError('message', response=response)
-        assert str(error) == 'message'
-        assert error.response == response
-    
-    
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
     
     
-def score(y_test, y_pred, case):
-    r2 = r2_score(y_test, y_pred)
-    print('r^2 on test data (%s) : %f' % (case, r2))
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
     
+        That is, your objects should:
     
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
+    def _int_list_from_bigint(bigint):
+    # Special case 0
+    if bigint < 0:
+        raise error.Error('Seed must be non-negative, not {}'.format(bigint))
+    elif bigint == 0:
+        return [0]
     
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
+        existing = rollout_dict.get(spec.id)
+    if existing:
+        differs = False
+        for key, new_hash in rollout.items():
+            differs = differs or existing[key] != new_hash
+        if not differs:
+            logger.debug('Hashes match with existing for {}'.format(spec.id))
+            return False
+        else:
+            logger.warn('Got new hash for {}. Overwriting.'.format(spec.id))
     
-    Second, when using a connectivity matrix, single, average and complete
-linkage are unstable and tend to create a few clusters that grow very
-quickly. Indeed, average and complete linkage fight this percolation behavior
-by considering all the distances between two clusters when merging them (
-while single linkage exaggerates the behaviour by considering only the
-shortest distance between clusters). The connectivity graph breaks this
-mechanism for average and complete linkage, making them resemble the more
-brittle single linkage. This effect is more pronounced for very sparse graphs
-(try decreasing the number of neighbors in kneighbors_graph) and with
-complete linkage. In particular, having a very small number of neighbors in
-the graph, imposes a geometry that is close to that of single linkage,
-which is well known to have this percolation instability. '''
-# Authors: Gael Varoquaux, Nelle Varoquaux
-# License: BSD 3 clause
+    if not hasattr(env.action_space, 'n'):
+    raise Exception('Keyboard agent only supports discrete action spaces')
+ACTIONS = env.action_space.n
+SKIP_CONTROL = 0    # Use previous control decision SKIP_CONTROL times, that's how you
+                    # can test what skip is still usable.
     
+                if abs(force) > friction_limit:
+                f_force /= force
+                p_force /= force
+                force = friction_limit  # Correct physics here
+                f_force *= force
+                p_force *= force
     
-#----------------------------------------------------------------------
-# Visualize the clustering
-def plot_clustering(X_red, labels, title=None):
-    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
-    X_red = (X_red - x_min) / (x_max - x_min)
+    Number of connections from one IP is limited.
+We have nothing against scripting and automated queries.
+Even the opposite, we encourage them. But there are some
+connection limits that even we can't handle.
+Currently the limits are quite restrictive, but they will be relaxed
+in the future.
     
-                s_width, s_height = widget.winfo_screenwidth(), widget.winfo_screenheight()
+    class Fosdem(CommandAdapter):
     
-        def __call__(self, shape, dtype='float32'):  # tf needs partition_info=None
-        shape = list(shape)
-        if self.scale == 1:
-            return self.initializer(shape)
-        new_shape = shape[:3] + [shape[3] // (self.scale ** 2)]
-        if type(self.initializer) is dict:
-            self.initializer = initializers.deserialize(self.initializer)
-        var_x = self.initializer(new_shape, dtype)
-        var_x = tf.transpose(var_x, perm=[2, 0, 1, 3])
-        var_x = tf.image.resize_nearest_neighbor(
-                         var_x,
-                         size=(shape[0] * self.scale, shape[1] * self.scale),
-                         align_corners=True)
-        var_x = tf.space_to_depth(var_x, block_size=self.scale, data_format='NHWC')
-        var_x = tf.transpose(var_x, perm=[1, 2, 0, 3])
-        return var_x
+            return ['git', 'clone', cls._repository_url, local_repository_dir]
     
-        def build_gui(self, debug_console):
-        ''' Build the GUI '''
-        logger.debug('Building GUI')
-        self.title('Faceswap.py')
-        self.tk.call('wm', 'iconphoto', self._w, get_images().icons['favicon'])
-        self.configure(menu=MainMenuBar(self))
+        def _starting_page(self, query):
+        number_of_pages = self._rosetta_get_list(query)
+        answer = (
+            '# %s pages available\n'
+            '# use /:list to list'
+        ) % number_of_pages
+        return answer
     
-        @staticmethod
-    def update_kwargs(kwargs):
-        ''' Set the default kernel initializer to he_uniform() '''
-        kwargs['kernel_initializer'] = kwargs.get('kernel_initializer', he_uniform())
-        return kwargs
+            search_order = ['common', 'linux', 'osx', 'sunos', 'windows']
+        local_rep = self.local_repository_location()
+        ext = self._cheatsheet_files_extension
     
+        >>> print(_get_nested({'a.b': 10, 'a':{'b': 20}}, 'a.b'))
+    10
+    >>> print(_get_nested({'a': {'b': 20}}, 'a.b'))
+    20
+    >>> print(_get_nested({'a': {'b': {'c': 30}}}, 'a.b.c'))
+    30
+    '''
     
-def build_config(contents, **kwargs):
-    return load(build_config_details(contents, **kwargs))
-    
-    import pytest
-    
-    
-def patch_find_executable(side_effect):
-    return mock.patch(
-        'compose.cli.errors.find_executable',
-        autospec=True,
-        side_effect=side_effect)
-    
-        def test_format_info(self):
-        output = self.formatter.format(make_log_record(logging.INFO))
-        assert output == MESSAGE
-    
-    from compose.utils import unquote_path
-    
-        def test_no_end_separator(self):
-        def reader():
-            yield b'abc\n'
-            yield b'def\n'
-            yield b'ghi'
+    def visualize(answer_data, request_options):
+    '''
+    Renders `answer_data` as ANSI output.
+    '''
+    answers = answer_data['answers']
+    return _visualize(answers, request_options, search_mode=bool(answer_data['keyword']))
