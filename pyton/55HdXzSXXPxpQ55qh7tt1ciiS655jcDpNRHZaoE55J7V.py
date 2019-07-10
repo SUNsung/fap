@@ -1,143 +1,129 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
+            '''
+    is_windows = is_windows
+    config_dir = DEFAULT_CONFIG_DIR
+    stdin = sys.stdin
+    stdin_isatty = stdin.isatty()
+    stdin_encoding = None
+    stdout = sys.stdout
+    stdout_isatty = stdout.isatty()
+    stdout_encoding = None
+    stderr = sys.stderr
+    stderr_isatty = stderr.isatty()
+    colors = 256
+    if not is_windows:
+        if curses:
+            try:
+                curses.setupterm()
+                colors = curses.tigetnum('colors')
+            except curses.error:
+                pass
+    else:
+        # noinspection PyUnresolvedReferences
+        import colorama.initialise
+        stdout = colorama.initialise.wrap_stream(
+            stdout, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        stderr = colorama.initialise.wrap_stream(
+            stderr, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        del colorama
     
-    # We must be able to import youtube_dl
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        def __init__(self, chunk_size=CHUNK_SIZE, **kwargs):
+        super(RawStream, self).__init__(**kwargs)
+        self.chunk_size = chunk_size
     
-    import io
-import sys
-import re
+        http://docs.python-requests.org/en/latest/user/advanced/#transport-adapters
     
+        def test_request_body_from_file_by_path(self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert FILE_CONTENT in r, r
+        assert ''Content-Type': 'text/plain'' in r
     
-def _download_restricted(url, filename, age):
-    ''' Returns true if the file has been downloaded '''
-    
-    
-from test.helper import FakeYDL
-from youtube_dl.cache import Cache
-    
-                        try_num += 1
-                else:
-                    break
-    
-            dfd.addBoth(lambda _: self.scraper.close_spider(spider))
-        dfd.addErrback(log_failure('Scraper close failure'))
-    
-    
-def test_5():
-    for o in [1 << 16, (1 << 32) - 1, -((1 << 15) + 1), -(1 << 31)]:
-        check(5, o)
-    
-    
-def testSignedInt():
-    check(b'\x99\xd0\x00\xd0\x80\xd0\xff\xd1\x00\x00\xd1\x80\x00'
-          b'\xd1\xff\xff\xd2\x00\x00\x00\x00\xd2\x80\x00\x00\x00'
-          b'\xd2\xff\xff\xff\xff', (0,
-                                    -128,
-                                    -1,
-                                    0,
-                                    -32768,
-                                    -1,
-                                    0,
-                                    -2147483648,
-                                    -1, ))
-    
-    
-fig = plt.figure(figsize=(6, 1.25))
-    
-        expected = pd.Series([1, 2, inc, 4])
-    tm.assert_series_equal(s, expected)
-
-    
-        read_count = 0
-    for idx, o in enumerate(unpacker):
-        assert type(o) == bytes
-        assert o == gen_binary_data(idx)
-        read_count += 1
-    
-        for filename in filenames:
-        fd = codecs.open(filename, mode='r', encoding='utf-8')
-        for line in fd.readlines():
-            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
-            for ref in refs:
-                if ref not in urls:
-                    urls.append(ref)
-    
-        if not self._response_future.done():
-      # Nothing yet...
-      return True
-    
-      AddToGroupMap( 'Include'  , preproc_group )
-  AddToGroupMap( 'Define'   , preproc_group )
-  AddToGroupMap( 'Macro'    , preproc_group )
-  AddToGroupMap( 'PreCondit', preproc_group )
-    
-    
-def FormatDebugInfoResponse_NoExtraConf_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': False,
-    'path': None
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'No extra configuration file found\n'
-    )
-  )
-    
-      f = _CreateFilterForTypes( opts, [ 'java', 'xml' ] )
-    
-            fs = [self.submit(fn, *args) for args in zip(*iterables)]
-    
-    URLS = ['http://www.google.com/',
-        'http://www.apple.com/',
-        'http://www.ibm.com',
-        'http://www.thisurlprobablydoesnotexist.com',
-        'http://www.slashdot.org/',
-        'http://www.python.org/',
-        'http://www.bing.com/',
-        'http://www.facebook.com/',
-        'http://www.yahoo.com/',
-        'http://www.youtube.com/',
-        'http://www.blogger.com/']
-    
-    # If false, no module index is generated.
-#latex_use_modindex = True
-
-    
-        def dump(self):
-        print('W: %s\nb:%s' % (self.W, self.b))
-    
-    '''
-    mapper 接受原始的输入并产生中间值传递给 reducer。
-    很多的mapper是并行执行的，所以需要将这些mapper的输出合并成一个值。
-    即：将中间的 key/value 对进行组合。
-'''
-    
-        def mapper(self, _, line):
-        if False:
-            yield  # I'm a generator!
-    
-    
-if __name__ == '__main__':
-    MRWordCountUtility.run()
-
-    
-                fpatt: a string specifying a filter pattern.
-            rex: a regular expression, as string.
-            s: the replacement string
+        def update_headers(self, request_headers):
         '''
-        if 'replacements' in updated:
-            lst = []
-            for rep in ctx.options.replacements:
-                fpatt, rex, s = parse_hook(rep)
+        Update the session headers with the request ones while ignoring
+        certain name prefixes.
     
-            self.blocks = []
-        while True:
-            _ = self._root.Block(self._io, self, self._root)
-            self.blocks.append(_)
-            if  ((self._io.is_eof()) or (_.block_type == self._root.BlockType.end_of_file)) :
-                break
+        # gcc extensions.
+    # Note: std::hash is their hash, ::hash is our hash
+    ('<hash_map>', ('hash_map', 'hash_multimap',)),
+    ('<hash_set>', ('hash_set', 'hash_multiset',)),
+    ('<slist>', ('slist',)),
+    )
+    
+    def resolve_filename(f):
+    try:
+        return f.name
+    except AttributeError:
+        return repr(f)
+
+    
+        def __call__(self, text, **kargs):
+        words = jieba.tokenize(text, mode='search')
+        token = Token()
+        for (w, start_pos, stop_pos) in words:
+            if not accepted_chars.match(w) and len(w) <= 1:
+                continue
+            token.original = token.text = w
+            token.pos = start_pos
+            token.startchar = start_pos
+            token.endchar = stop_pos
+            yield token
+    
+        def extract_tags(self, sentence, topK=20, withWeight=False, allowPOS=(), withFlag=False):
+        '''
+        Extract keywords from sentence using TF-IDF algorithm.
+        Parameter:
+            - topK: return how many top keywords. `None` for all possible words.
+            - withWeight: if True, return a list of (word, weight);
+                          if False, return a list of words.
+            - allowPOS: the allowed POS list eg. ['ns', 'n', 'vn', 'v','nr'].
+                        if the POS of w is not in this list,it will be filtered.
+            - withFlag: only work with allowPOS is not empty.
+                        if True, return a list of pair(word, weight) like posseg.cut
+                        if False, return a list of words
+        '''
+        if allowPOS:
+            allowPOS = frozenset(allowPOS)
+            words = self.postokenizer.cut(sentence)
+        else:
+            words = self.tokenizer.cut(sentence)
+        freq = {}
+        for w in words:
+            if allowPOS:
+                if w.flag not in allowPOS:
+                    continue
+                elif not withFlag:
+                    w = w.word
+            wc = w.word if allowPOS and withFlag else w
+            if len(wc.strip()) < 2 or wc.lower() in self.stop_words:
+                continue
+            freq[w] = freq.get(w, 0.0) + 1.0
+        total = sum(freq.values())
+        for k in freq:
+            kw = k.word if allowPOS and withFlag else k
+            freq[k] *= self.idf_freq.get(kw, self.median_idf) / total
+    
+    Force_Split_Words = set([])
+def load_model():
+    start_p = pickle.load(get_module_res('finalseg', PROB_START_P))
+    trans_p = pickle.load(get_module_res('finalseg', PROB_TRANS_P))
+    emit_p = pickle.load(get_module_res('finalseg', PROB_EMIT_P))
+    return start_p, trans_p, emit_p
+    
+    tags = jieba.analyse.extract_tags(content, topK=topK)
+    
+    file_name = args[0]
+    
+    for f_name in glob.glob(pattern):
+    with open(f_name) as f:
+        print('read file:', f_name)
+        for line in f: #one line as a document
+            words = ' '.join(jieba.cut(line))
+            docs.append(words)
