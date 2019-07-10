@@ -1,77 +1,102 @@
 
         
-            context 'updating existing users' do
-      it 'follows the edit link' do
-        visit admin_users_path
-        click_on('bob')
-        expect(page).to have_text('Edit User')
-      end
+                  @registered.each do |plugin|
+            plugin.components.host_capabilities.each do |host, caps|
+              results[host].merge!(caps)
+            end
+          end
     
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-        end
+              # Register a new provisioner class only if a name was given
+          data[:provisioners].register(name.to_sym, &block) if name != UNSET_VALUE
     
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+          result
+    end
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
   end
-    
-      # Check if there is no signed in user before doing the sign out.
-  #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
-    
-            # Attempt to find a user by its reset_password_token to reset its
-        # password. If a user is found and token is still valid, reset its password and automatically
-        # try saving the record. If not user is found, returns a new user
-        # containing an error in reset_password_token attribute.
-        # Attributes must contain reset_password_token, password and confirmation
-        def reset_password_by_token(attributes={})
-          original_token       = attributes[:reset_password_token]
-          reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
-    
-          def rememberable_value
-        if respond_to?(:remember_token)
-          remember_token
-        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
-          salt
-        else
-          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
-            'In order to use rememberable, you must ensure a password is always set ' \
-            'or have a remember_token column in your model or implement your own ' \
-            'rememberable_value in the model with custom logic.'
-        end
-      end
-    
-    require 'devise/hooks/timeoutable'
-    
-    test_check 'call'
-def aaa(a, b=100, *rest)
-  res = [a, b]
-  res += rest if rest
-  return res
 end
     
-            def delta(first, second, alignment = :left)
-          case alignment
-          when :left
-            first.column - second.column
-          when :right
-            first.last_column - second.last_column
-          else
-            0
-          end
+          servers.add_role(name, hosts, options)
+    end
+    
+          def response
+        return @response if defined? @response
+    
+          def servers_by_key
+        @servers_by_key ||= {}
+      end
+    
+          def trusted_keys
+        @trusted_keys.dup
+      end
+    
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
+    
+        def last?
+      index == tab.panes.length - 1
+    end
+    
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
+    end
+  end
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
+    end
+  end
+end
+
+    
+      def is_pane
+    @actual.is_a? Tmuxinator::Pane
+  end
+end
+
+    
+    FactoryBot.find_definitions
+    
+            it 'returns two panes in an Array' do
+          expect(window.panes).to match [
+            a_pane.with(index: 0).and_commands('vim'),
+            a_pane.with(index: 1).and_commands(command1, command2)
+          ]
         end
+      end
+    end
+  end
     
-      <a href='/'>Refresh page</a>
+        context 'unsupported version' do
+      before do
+        allow($stdin).to receive_messages(getc: 'y')
+        allow(Tmuxinator::TmuxVersion).to receive(:supported?).and_return(false)
+      end
     
-      puts '\n== Preparing database =='
-  system! 'bin/rails db:setup'
+    
+    {    ..........................................................
+    __________________________________________________________
+  }
