@@ -1,388 +1,291 @@
 
         
-        
-    {}  // namespace nwapi
+        #endif // BITCOIN_CRYPTO_RIPEMD160_H
 
     
+    /*
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Copyright (c) 2012, Intel Corporation 
+; 
+; All rights reserved. 
+; 
+; Redistribution and use in source and binary forms, with or without
+; modification, are permitted provided that the following conditions are
+; met: 
+; 
+; * Redistributions of source code must retain the above copyright
+;   notice, this list of conditions and the following disclaimer.  
+; 
+; * Redistributions in binary form must reproduce the above copyright
+;   notice, this list of conditions and the following disclaimer in the
+;   documentation and/or other materials provided with the
+;   distribution. 
+; 
+; * Neither the name of the Intel Corporation nor the names of its
+;   contributors may be used to endorse or promote products derived from
+;   this software without specific prior written permission. 
+; 
+; 
+; THIS SOFTWARE IS PROVIDED BY INTEL CORPORATION 'AS IS' AND ANY
+; EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+; PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL CORPORATION OR
+; CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+; EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+; PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+; LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Example YASM command lines:
+; Windows:  yasm -Xvc -f x64 -rnasm -pnasm -o sha256_sse4.obj -g cv8 sha256_sse4.asm
+; Linux:    yasm -f x64 -f elf64 -X gnu -g dwarf2 -D LINUX -o sha256_sse4.o sha256_sse4.asm
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; This code is described in an Intel White-Paper:
+; 'Fast SHA-256 Implementations on Intel Architecture Processors'
+;
+; To find it, surf to http://www.intel.com/p/en_US/embedded 
+; and search for that title.
+; The paper is expected to be released roughly at the end of April, 2012
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; This code schedules 1 blocks at a time, with 4 lanes per block
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
-    {}  // namespace nwapi
+    #define TEGRA_ADD(src1, sz1, src2, sz2, dst, sz, w, h) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::add(CAROTENE_NS::Size2D(w, h), \
+                     src1, sz1, \
+                     src2, sz2, \
+                     dst, sz, \
+                     CAROTENE_NS::CONVERT_POLICY_SATURATE), /*Original addition use saturated operator*/ \
+                                                            /*so use the same from CAROTENE*/ \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vabd(v_src0, v_src1);
     }
+    
+    template <int shift>
+void accumulateSquareConst(const Size2D &size,
+                           const u8 *srcBase, ptrdiff_t srcStride,
+                           s16 *dstBase, ptrdiff_t dstStride)
+{
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  is_menu_modified_ = true;
-  menu_delegate_.reset(new MenuDelegate(object_manager()));
-  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
+    {    func(size, srcBase, srcStride, dstBase, dstStride);
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)shift;
+#endif
+}
+    
+            uint32x4_t el4h = vaddq_u32(el8shr01l, el8shr01h);
+    
+    inline float32x4_t vsqrtq_f32(float32x4_t val)
+{
+    return vrecpq_f32(vrsqrtq_f32(val));
+}
+    
+    namespace caffe2 {
     }
     
-    namespace extensions {
-NwAppQuitFunction::NwAppQuitFunction() {
-    }
-    }
+    REGISTER_CPU_OPERATOR(
+    MergeSingleListFeatureTensors,
+    MergeSingleListFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleListFeatureTensors)
+    .SetDoc(
+        'Merge given single-feature tensors with list features into one '
+        'multi-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
+    .NumOutputs(4)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_values', '.values')
+    .Input(2, 'in1_presence', '.presence')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values.lengths')
+    .Output(3, 'out_values_values', '.values.values')
+    .Arg('feature_ids', 'feature ids');
     
-    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
  public:
-  NwAppGetDataPathFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwAppGetDataPathFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
-}
+    // Two predicate classes that can be used in {ASSERT,EXPECT}_EXIT*:
     
-      // Called when |old_display| has been removed.
-  void NwScreenDisplayObserver::OnDisplayRemoved(const display::Display& old_display) {
-    std::unique_ptr<base::ListValue> args =
-      nwapi::nw__screen::OnDisplayRemoved::Create(*ConvertGfxDisplay(old_display));
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN,
-      nwapi::nw__screen::OnDisplayRemoved::kEventName,
-      std::move(args));
-  }
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+#define GTEST_PRED5_(pred, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred5Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             #v3, \
+                                             #v4, \
+                                             #v5, \
+                                             pred, \
+                                             v1, \
+                                             v2, \
+                                             v3, \
+                                             v4, \
+                                             v5), on_failure)
     
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
+      // Waits for the death test to finish and returns its status.
+  virtual int Wait() = 0;
+    
+    // Adapts a native array to a read-only STL-style container.  Instead
+// of the complete STL container concept, this adaptor only implements
+// members useful for Google Mock's container matchers.  New members
+// should be added as needed.  To simplify the implementation, we only
+// support Element being a raw type (i.e. having no top-level const or
+// reference modifier).  It's the client's responsibility to satisfy
+// this requirement.  Element can be an array type itself (hence
+// multi-dimensional arrays are supported).
+template <typename Element>
+class NativeArray {
+ public:
+  // STL-style container typedefs.
+  typedef Element value_type;
+  typedef Element* iterator;
+  typedef const Element* const_iterator;
     }
     
+      // Many linked_ptr operations may change p.link_ for some linked_ptr
+  // variable p in the same circle as this object.  Therefore we need
+  // to prevent two such operations from occurring concurrently.
+  //
+  // Note that different types of linked_ptr objects can coexist in a
+  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
+  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
+  // protect all linked_ptr objects.  This can create serious
+  // contention in production code, but is acceptable in a testing
+  // framework.
     
-    {  // Moving to a message on the arena should lead to a copy.
-  *message2_on_arena = std::move(message1);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(message1);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
-}
-    
-    
-    {
-    {
-    {}  // namespace io
-}  // namespace protobuf
-}  // namespace google
-
-    
-    
-    {  {
-    string str;
-    StringByteSink sink(&str);
-    source.CopyTo(&sink, source.Available());
-    EXPECT_EQ('world!', str);
-    EXPECT_EQ(0, source.Available());
+      template <GTEST_1_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_1_TUPLE_(U)& t) {
+    return CopyFrom(t);
   }
-}
     
-    TEST(StatusOr, TestPointerDefaultCtor) {
-  StatusOr<int*> thing;
-  EXPECT_FALSE(thing.ok());
-  EXPECT_EQ(Status::UNKNOWN, thing.status());
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace internal
-}  // namespace protobuf
-}  // namespace google
-
-    
-    class Proto3DataStripper : public DataStripper {
- private:
-  virtual bool ShouldBeClear(const FieldDescriptor *field) {
-    return field->type() == FieldDescriptor::TYPE_GROUP ||
-           field->is_extension();
-  }
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20>
+struct Templates20 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates19<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20> Tail;
 };
     
-        std::cerr << 'Generating ' << input_file
-        << ' to ' << output_file << std::endl;
-    benchmarks::BenchmarkDataset dataset;
-    Message* message;
-    std::string dataset_payload = ReadFile(input_file);
-    GOOGLE_CHECK(dataset.ParseFromString(dataset_payload))
-      << 'Can' t parse data file ' << input_file;
+        Rational Pow(Rational const& base, Rational const& pow);
+    Rational Root(Rational const& base, Rational const& root);
+    Rational Fact(Rational const& rat);
+    Rational Mod(Rational const& a, Rational const& b);
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-    }
-    }
-    }
-    
-      bool Generate(const FileDescriptor* file,
-                        const string& parameter,
-                        GeneratorContext* context,
-                        string* error) const {
-    FileDescriptorProto new_file;
-    file->CopyTo(&new_file);
-    SchemaGroupStripper::StripFile(file, &new_file);
-    }
-    
-    #include <string>
-#include <set>
-#include <vector>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/io/printer.h>
-    
-    
-    {  // Schedule the given callback for execution.
-  virtual void Add(const std::function<void()>& callback) = 0;
-};
-    
-      // rotate
-  dict->lookup('Rotate', &obj1);
-  if (obj1.isInt()) {
-    rotate = obj1.getInt();
-  }
-  obj1.free();
-  while (rotate < 0) {
-    rotate += 360;
-  }
-  while (rotate >= 360) {
-    rotate -= 360;
-  }
-    
-      // get direction
-  if (dict->lookup('M', &obj)->isName()) {
-    const char *m = obj.getName();
-    
-    if (strcmp('I', m) == 0)
-      direction = transitionInward;
-    else if (strcmp('O', m) == 0)
-      direction = transitionOutward;
-  }
-  obj.free();
-    
-    Object *Parser::getObj(Object *obj, Guchar *fileKey,
-           CryptAlgorithm encAlgorithm, int keyLength,
-           int objNum, int objGen) {
-  std::set<int> fetchOriginatorNums;
-  return getObj(obj, fileKey, encAlgorithm, keyLength, objNum, objGen, &fetchOriginatorNums);
-}
-    
-    #ifdef USE_GCC_PRAGMAS
-#pragma interface
-#endif
-    
-      // duration parsing
-  // duration's default value is set to 0, which means : intrinsinc media duration
-  if (obj->dictLookup('D', &tmp)->isDict()) {
-    Object oname, ddict, tmp2;
-    if (tmp.dictLookup('S', &oname)->isName()) {
-      char* name = oname.getName();
-      if (!strcmp(name, 'F'))
-	duration = -1; // infinity
-      else if (!strcmp(name, 'T')) {
-	if (tmp.dictLookup('T', &ddict)->isDict()) {
-	  if (ddict.dictLookup('V', &tmp2)->isNum()) {
-	    duration = Gulong(tmp2.getNum());
-	  }
-	  tmp2.free();
-	}
-	ddict.free();
-      }
-    }
-    oname.free();
-  }
-  tmp.free();
-    
-    
-    {  for (i = 0; i < splashColorModeNComps[cm]; ++i) {
-#ifdef SPLASH_CMYK
-    if (cm == splashModeCMYK8)
+        struct HISTORYITEMVECTOR
     {
-      blend[i] = dest[i] < src[i] ? 255 - (src[i] - dest[i]) : 255 - (dest[i] - src[i]);
-    }
-    else
-#endif
-    {
-      blend[i] = dest[i] < src[i] ? src[i] - dest[i] : dest[i] - src[i];
-    }
-  }
-}
+        std::shared_ptr<CalculatorVector<std::pair<std::wstring, int>>> spTokens;
+        std::shared_ptr<CalculatorVector<std::shared_ptr<IExpressionCommand>>> spCommands;
+        std::wstring expression;
+        std::wstring result;
+    };
     
-      virtual GBool isStatic() { return gFalse; }
+            void Clear();
+        bool TryToggleSign(bool isIntegerMode, std::wstring_view maxNumStr);
+        bool TryAddDigit(unsigned int value, uint32_t radix, bool isIntegerMode, std::wstring_view maxNumStr, int32_t wordBitWidth, int maxDigits);
+        bool TryAddDecimalPt();
+        bool HasDecimalPt();
+        bool TryBeginExponent();
+        void Backspace();
+        void SetDecimalSymbol(wchar_t decSymbol);
+        std::wstring ToString(uint32_t radix);
+        Rational ToRational(uint32_t radix, int32_t precision);
     
-        if (regionStart>regionLimit || regionStart<0 || regionLimit<0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
     
-        if(result == CollationFastLatin::BAIL_OUT_RESULT) {
-        if(settings->dontCheckFCD()) {
-            UTF8CollationIterator leftIter(data, numeric, left, equalPrefixLength, leftLength);
-            UTF8CollationIterator rightIter(data, numeric, right, equalPrefixLength, rightLength);
-            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
-        } else {
-            FCDUTF8CollationIterator leftIter(data, numeric, left, equalPrefixLength, leftLength);
-            FCDUTF8CollationIterator rightIter(data, numeric, right, equalPrefixLength, rightLength);
-            result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
-        }
-    }
-    if(result != UCOL_EQUAL || settings->getStrength() < UCOL_IDENTICAL || U_FAILURE(errorCode)) {
-        return (UCollationResult)result;
-    }
+    {            Windows::UI::Xaml::Interop::IBindableVector ^ m_source;
+            int m_currentPosition;
+            event WF::EventHandler<Platform::Object ^> ^ m_currentChanged;
+            event Windows::UI::Xaml::Data::CurrentChangingEventHandler ^ m_currentChanging;
+            event Windows::Foundation::Collections::VectorChangedEventHandler<Platform::Object ^> ^ m_vectorChanged;
+        };
     
-    void SearchIterator::setMatchNotFound() 
+    INarratorAnnouncementHost ^ LiveRegionHost::MakeHost()
 {
-    setMatchStart(USEARCH_DONE);
-    setMatchLength(0);
-    UErrorCode status = U_ZERO_ERROR;
-    // by default no errors should be returned here since offsets are within 
-    // range.
-    if (m_search_->isForwardSearching) {
-        setOffset(m_search_->textLength, status);
-    }
-    else {
-        setOffset(0, status);
-    }
+    return ref new LiveRegionHost();
 }
     
-    #if !UCONFIG_NO_BREAK_ITERATION
+      /**
+   * /brief Customize set method for LayerParameter
+   * /tparam value string of caffe's layer configuration
+   * */
+  virtual void Set(void *head, const std::string &value) const {
+    caffe::NetParameter net_param;
+    if (!ReadProtoFromTextContent(value, &net_param))
+      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    }
     
-    void
-SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                           int32_t time, TimeMode mode, UErrorCode& status)
-{
-    endMonth     = (int8_t)month;
-    endDay       = (int8_t)dayOfWeekInMonth;
-    endDayOfWeek = (int8_t)dayOfWeek;
-    endTime      = time;
-    endTimeMode  = mode;
-    decodeEndRule(status);
-    transitionRulesInitialized = FALSE;
+    #if MXNET_USE_DIST_KVSTORE
+#include './kvstore_dist.h'
+std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
+#endif  // MXNET_USE_DIST_KVSTORE
+#if MXNET_USE_NCCL
+#include './kvstore_nccl.h'
+#endif  // MXNET_USE_NCCL
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(IdentityAttachKLSparseRegParam param) {
+  return new IdentityAttachKLSparseRegOp<cpu>(param);
 }
-    
-    U_NAMESPACE_BEGIN
-    
-    
-    {    return *this;
-}
-    
-        std::unique_ptr<DHTMessageFactory> messageFactory;
-    
-    class DHTNode;
-class DHTBucket;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTBucketTreeNode;
-    
-    
-    {} // namespace aria2
-
-    
-        receiver->setMessageFactory(factory.get());
-    receiver->setRoutingTable(routingTable.get());
-    
-    namespace aria2 {
-    }
-    
-      DHTTokenTracker(const unsigned char* initialSecret);
-    
-    class DHTTokenTracker;
-    
-    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
-    
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = ((rand() % 19999) + 1) * 37;
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_GT(ret, 0);
-        lists.insert(key);
-    }
-    
-        friend
-    void RedisQtDelRead(void * adapter) {
-        RedisQtAdapter * a = static_cast<RedisQtAdapter *>(adapter);
-        a->delRead();
-    }
-    
-        private:
-        const char * m_value;
-        redisAsyncContext * m_ctx;
-        RedisQtAdapter m_adapter;
-    
-    protected:
-    size_t capacity = 1;
-    bool closed = false;
-    std::list<Coroutine *> producer_queue;
-    std::list<Coroutine *> consumer_queue;
-    std::queue<void *> data_queue;
-    
-        tmp = (swFdInfo *) swHashMap_find_int(ht, 37 * 8);
-    ASSERT_NE((void* )tmp, nullptr);
-    
-        pid_t server_pid = create_server();
-    
-    
-    {    ASSERT_GT(cid, 0);
-    Coroutine::get_by_cid(cid)->resume();
-    ASSERT_EQ(cid, _cid);
-}
-
-    
-    void swReactor_defer_task_destroy(swReactor *reactor)
-{
-    list<defer_task *> *tasks = (list<defer_task *> *) reactor->defer_tasks;
-    delete tasks;
-}
-    
-    class MyServer : public Server
-{
-public:
-    MyServer(string _host, int _port, int _mode = SW_MODE_PROCESS, int _type = SW_SOCK_TCP) :
-            Server(_host, _port, _mode, _type)
-    {
-        serv.worker_num = 4;
-        serv.task_worker_num = 2;
     }
     }
     
-        ret = swPipeBase_create(&p, 1);
-    ASSERT_EQ(ret, 0);
-    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
-    ASSERT_GT(ret, 0);
+     public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    
+    namespace xgboost {
+namespace metric {
+    }
+    }
+    
+    #include '../common/host_device_vector.h'
+    
+      obj->Configure(args);
+  CheckObjFunction(obj,
+		   {1.0f, 0.0f, 2.0f, 2.0f, 0.0f, 1.0f}, // preds
+		   {1.0f, 0.0f},	       // labels
+		   {1.0f, 1.0f},	       // weights
+		   {0.24f, -0.91f, 0.66f, -0.33f, 0.09f, 0.24f}, // grad
+		   {0.36f, 0.16f, 0.44f, 0.45f, 0.16f, 0.37f});	 // hess
