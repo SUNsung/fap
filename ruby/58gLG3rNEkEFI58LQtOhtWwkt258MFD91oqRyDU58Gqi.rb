@@ -1,89 +1,113 @@
 
         
-                  res
-        end
-    
-                res = checksum + encrypted
-            res
-          end
-        end
+            def display_user_error!(e, message)
+      if FastlaneCore::Globals.verbose?
+        # with stack trace
+        reraise_formatted!(e, message)
+      else
+        # without stack trace
+        action_completed(@program[:name], status: FastlaneCore::ActionCompletionStatus::USER_ERROR, exception: e)
+        abort('\n[!] #{message}'.red)
       end
     end
+    
+          it 'allows you to specify the commit where to add the tag' do
+        tag = '2.0.0'
+        commit = 'beta_tag'
+        message = 'message'
+    
+          description
+    end
+    
+          it 'should shell escape keychain names when checking for installation' do
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
+    
+    def expect_correct_implementation_to_be_called(obj, method, os)
+  if method == :shellescape
+    # String.shellescape => CrossplatformShellwords.shellescape => ...
+    expect(obj).to receive(:shellescape).and_call_original
+    expect(CrossplatformShellwords).to receive(:shellescape).with(obj).and_call_original
+    if os == 'windows'
+      # WindowsShellwords.shellescape
+      expect(WindowsShellwords).to receive(:shellescape).with(obj).and_call_original
+      expect(Shellwords).not_to(receive(:escape))
+    else
+      # Shellswords.escape
+      expect(Shellwords).to receive(:escape).with(obj).and_call_original
+      expect(WindowsShellwords).not_to(receive(:shellescape))
+    end
+  elsif method == :shelljoin
+    # Array.shelljoin => CrossplatformShellwords.shelljoin => CrossplatformShellwords.shellescape ...
+    expect(obj).to receive(:shelljoin).and_call_original
+    expect(CrossplatformShellwords).to receive(:shelljoin).with(obj).and_call_original
+    expect(CrossplatformShellwords).to receive(:shellescape).at_least(:once).and_call_original
   end
 end
+
     
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
+    exec_arr = ['fastlane', tool_name] + ARGV
     
-              def initialize(options = {})
-            self.class.attributes.each do |attr|
-              if options.has_key?(attr)
-                m = (attr.to_s + '=').to_sym
-                self.send(m, options[attr])
+        # Finds a machine where the UUID is prefixed by the given string.
+    #
+    # @return [Hash]
+    def find_by_prefix(prefix)
+      @machines.each do |uuid, data|
+        return data.merge('id' => uuid) if uuid.start_with?(prefix)
+      end
+    
+            # Defines additional command line commands available by key. The key
+        # becomes the subcommand, so if you register a command 'foo' then
+        # 'vagrant foo' becomes available.
+        #
+        # @param [String] name Subcommand key.
+        def self.command(name=UNSET_VALUE, &block)
+          data[:command] ||= Registry.new
+    
+                    raise Errors::VMNoMatchError if machines.empty?
+              else
+                # String name, just look for a specific VM
+                @logger.debug('Finding machine that match name: #{name}')
+                machines << get_machine.call(name.to_sym)
+                raise Errors::VMNotFoundError, name: name if !machines[0]
               end
+            end
+          else
+            # No name was given, so we return every VM in the order
+            # configured.
+            @logger.debug('Loading all machines...')
+            machines = @env.machine_names.map do |machine_name|
+              get_machine.call(machine_name)
             end
           end
     
-              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
+            # This contains all the synced folder implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Integer>>]
+        attr_reader :synced_folders
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
     
-        it 'redirects to /stream for a mobile user' do
-      request.headers['X_MOBILE_DEVICE'] = true
-      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
-      expect(response).to be_redirect
-      expect(response.location).to match /^#{stream_url}\??$/
-    end
-  end
     
-          it 'it calls toggle_hidden_shareable' do
-        expect(@controller.current_user).to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
-        put :update, params: {id: 42, post_id: @status.id}, format: :js
-      end
-    end
     
-    module Sinatra
-  class Application < Base
+    {    if (bt.className == 'condensed') {
+      bt.className = 'expanded';
+      toggler.innerHTML = '(condense)';
+    } else {
+      bt.className = 'condensed';
+      toggler.innerHTML = '(expand)';
+    }
+  }
+  //-->
+  </script>
     
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
-        end
-    
-          class << self
-        alias escape_url escape
-        public :escape_html
+          def cookie_paths(path)
+        path = '/' if path.to_s.empty?
+        paths = []
+        Pathname.new(path).descend { |p| paths << p.to_s }
+        paths
       end
     
-      it 'should allow changing report only' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
-      run DummyApp
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
     end
-    
-          # Checks whether this `hash` element is on the same line as `other`.
-      #
-      # @note A multiline element is considered to be on the same line if it
-      #       shares any of its lines with `other`
-      #
-      # @return [Boolean] whether this element is on the same line as `other`
-      def same_line?(other)
-        loc.last_line == other.loc.line || loc.line == other.loc.last_line
-      end
