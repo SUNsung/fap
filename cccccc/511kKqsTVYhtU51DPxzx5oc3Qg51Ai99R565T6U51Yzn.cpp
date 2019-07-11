@@ -1,126 +1,195 @@
 
         
-        OPERATOR_SCHEMA(EnforceFinite)
-    .NumInputs(1)
-    .NumOutputs(0)
-    .SetDoc(R'DOC(
-Raise if there is NaN or Inf values in the input tensor.
-)DOC')
-    .Input(0, 'input', 'Input tensor');
+            enum BORDER_MODE
+    {
+        BORDER_MODE_UNDEFINED,
+        BORDER_MODE_CONSTANT,
+        BORDER_MODE_REPLICATE,
+        BORDER_MODE_REFLECT,
+        BORDER_MODE_REFLECT101,
+        BORDER_MODE_WRAP
+    };
     
-    OPERATOR_SCHEMA(GivenTensorFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-This op fills an output tensor with the data specified by the *value* and *dtype* arguments.  The output tensor shape is specified by the *shape* argument. Beware, when using this argument *value* should have a value for every element of the *output*, as missing values will not be initialized automatically. If *input_as_shape* is set to *true*, then the *input* should be a 1D tensor containing the desired output shape (the dimensions specified in *extra_shape* will also be appended). In this case, the *shape* argument should **not** be set.
-    
-              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
-          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
-          CAFFE_ENFORCE(H >= dkernel_h);
-          CAFFE_ENFORCE(W >= dkernel_w);
-          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
-          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
-    
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
-    
-    REGISTER_CUDA_OPERATOR(LC2D, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LC2DGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
-    
-    
-    { private:
-  tesseract::ParagraphJustification justification_;
-  int margin_;
-  int first_indent_;
-  int body_indent_;
-  int tolerance_;
-};
-    
-      // The pointed-to Pair has changed its key value, so the location of pair
-  // is reshuffled to maintain the heap invariant.
-  // Must be a valid pointer to an element of the heap_!
-  // Caution! Since GenericHeap is based on GenericVector, reallocs may occur
-  // whenever the vector is extended and elements may get shuffled by any
-  // Push or Pop operation. Therefore use this function only if Data in Pair is
-  // of type DoublePtr, derived (first) from DoublePtr, or has a DoublePtr as
-  // its first element. Reshuffles the heap to maintain the invariant.
-  // Time = O(log n).
-  void Reshuffle(Pair* pair) {
-    int index = pair - &heap_[0];
-    Pair hole_pair = heap_[index];
-    index = SiftDown(index, hole_pair);
-    index = SiftUp(index, hole_pair);
-    heap_[index] = hole_pair;
-  }
-    
-    #ifndef PLUGIN_CAFFE_CAFFE_COMMON_H_
-#define PLUGIN_CAFFE_CAFFE_COMMON_H_
-    
-    /*!
- * \brief Async functor object
- *  calling argument of the function.
- */
-class TVMFunctor {
- public:
-  // constructor
-  explicit TVMFunctor(PackedFunc func, PackedFunc fset_stream)
-      : func_(func), fset_stream_(fset_stream) {}
+        void operator() (const typename VecTraits<u32>::vec128 & v_src0,
+                     const typename VecTraits<u32>::vec128 & v_src1,
+                     typename VecTraits<u32>::vec128 & v_dst) const
+    {
+        float32x4_t vs1 = vcvtq_f32_u32(v_src0);
+        float32x4_t vs2 = vcvtq_f32_u32(v_src1);
     }
     
-    /*!
- *  Copyright (c) 2018 by Contributors
- * \file transformer.cc
- * \brief CPU implementation of the operators used in Transformer
- */
-#include <mxnet/base.h>
-#include './transformer-inl.h'
-#include '../tensor/elemwise_unary_op.h'
-    
-    Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or
-with width and height of the second input symbol, i.e., with one input, we need h_w to
-specify the crop height and width, otherwise the second input symbol's size will be used
-)code' ADD_FILELINE)
-    
-    #include <algorithm>
-#include <vector>
-#include './spatial_transformer-inl.h'
-namespace mxnet {
-namespace op {
-#if defined(__CUDACC__) && MXNET_USE_CUDNN == 1 && CUDNN_MAJOR >= 5
-template<typename DType>
-class CuDNNSpatialTransformerOp : public Operator {
- public:
-  explicit CuDNNSpatialTransformerOp(SpatialTransformerParam param) {
-    this->param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-    if (param_.sampler_type == st::kBilinear) {
-      sampler_ = CUDNN_SAMPLER_BILINEAR;
-    }
-  }
-    }
-    }
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    {
+        v_dst = internal::vmvn(internal::vceq(v_src0, v_src1));
     }
     
-    
-    {  int ret = x;
-  return ret;
+    bool isConvolutionSupported(const Size2D &size, const Size2D &ksize,
+                            BORDER_MODE border)
+{
+    return isSupportedConfiguration() && size.width >= 8 &&
+        (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REPLICATE) &&
+        (ksize.width == 3) && (ksize.height == 3);
 }
     
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(5, 3);
+                if (mask[0])
+                process(src, j, j + 8, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+            if (mask[1])
+                process(src, j + 8, j + 16, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+        }
+        for ( ; j < roiw8; j += 8)
+        {
+            internal::prefetch(src + j);
+            int16x8_t v_src = vld1q_s16(src + j);
     
-    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
+        Size2D size(_size);
+    if (srcStride == dstStride &&
+        srcStride == rng1Stride &&
+        srcStride == rng2Stride &&
+        srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    const size_t width = size.width & ~( 32/sizeof(T) - 1 );
+    
+            for ( ; j + 7 < size.width; j += 8)
+        {
+            internal::prefetch(sqsum + j);
+            internal::prefetch(src + j);
+    }
+    
+    namespace xgboost {
+/*!
+ * \brief interface of evaluation metric used to evaluate model performance.
+ *  This has nothing to do with training, but merely act as evaluation purpose.
+ */
+class Metric {
+ protected:
+  LearnerTrainParam const* tparam_;
+    }
+    }
+    
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
+    
+      friend bool operator==(const GPUDistribution& a, const GPUDistribution& b) {
+    bool const res = a.devices_ == b.devices_ &&
+                     a.granularity_ == b.granularity_ &&
+                     a.overlap_ == b.overlap_ &&
+                     a.offsets_ == b.offsets_;
+    return res;
+  }
+    
+    /**
+ * \brief Updates the gradient vector based on a change in the bias.
+ *
+ * \param group_idx Zero-based index of the group.
+ * \param num_group Number of groups.
+ * \param dbias     The change in bias.
+ * \param in_gpair  The gradient vector to be updated.
+ * \param p_fmat    The input feature matrix.
+ */
+inline void UpdateBiasResidualParallel(int group_idx, int num_group, float dbias,
+                                       std::vector<GradientPair> *in_gpair,
+                                       DMatrix *p_fmat) {
+  if (dbias == 0.0f) return;
+  const auto ndata = static_cast<bst_omp_uint>(p_fmat->Info().num_row_);
+#pragma omp parallel for schedule(static)
+  for (bst_omp_uint i = 0; i < ndata; ++i) {
+    GradientPair &g = (*in_gpair)[i * num_group + group_idx];
+    if (g.GetHess() < 0.0f) continue;
+    g += GradientPair(g.GetHess() * dbias, 0);
+  }
 }
+    
+    
+    {
+    {}  // namespace metric
+}  // namespace xgboost
+    
+      ASSERT_EQ(model.bias()[0], 5.0f);
+    
+    
+    {  delete metric;
+}
+    
+    
+    {  delete obj;
+}
+    
+    
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
+    }
+    
+        virtual const char * CallStack() const override { return m_callStack.c_str(); }
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+    
+    {  return 0;
+}
+
+    
+    
+    {
+    {}  // namespace experimental
+}  // namespace rocksdb
+
+    
+    
+    {  virtual ~TransactionDBMutexFactory() {}
+};
+    
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+      Byte t3(bytes + 3);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
     namespace apollo {
 namespace canbus {
