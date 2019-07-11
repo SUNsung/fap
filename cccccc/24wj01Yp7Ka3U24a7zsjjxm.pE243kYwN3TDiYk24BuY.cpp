@@ -1,47 +1,52 @@
 
         
-        
-    { private:
-  // The collection of images to put in the PDF.
-  Pixa* pixa_;
-  // The fonts used to draw text captions.
-  L_Bmf* fonts_;
-};
+        #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
     
-      // Adds an element with a weight of 1.
-  void add(double x, double y);
-  // Adds an element with a specified weight.
-  void add(double x, double y, double weight);
-  // Adds a whole LLSQ.
-  void add(const LLSQ& other);
-  // Deletes an element with a weight of 1.
-  void remove(double x, double y);
-  int32_t count() const {  // no of elements
-    return static_cast<int>(total_weight + 0.5);
-  }
+    #include 'src/cpp/server/dynamic_thread_pool.h'
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_common.h
+ * \brief Common functions for caffeOp and caffeLoss symbols
+ * \author Haoran Wang
+*/
     
     
     {
-    {}  // namespace internal
-}  // namespace testing
+    {}  // namespace parameter
+}  // namespace dmlc
     
-    #ifndef GTEST_SAMPLES_SAMPLE3_INL_H_
-#define GTEST_SAMPLES_SAMPLE3_INL_H_
+    KVStore* KVStore::Create(const char *type_name) {
+  std::string tname = type_name;
+  std::transform(tname.begin(), tname.end(), tname.begin(), ::tolower);
+  KVStore* kv = nullptr;
+  bool use_device_comm = false;
+  auto has = [tname](const std::string& pattern) {
+    return tname.find(pattern) != std::string::npos;
+  };
+  if (has('device')) {
+    use_device_comm = true;
+  }
+    }
     
+    struct APCCollection {
+  static APCHandle::Pair Make(const ObjectData*,
+                              APCHandleLevel level,
+                              bool unserializeObj);
+  static void Delete(APCHandle*);
+    }
     
-    { private:
-  RowBlock<IndexType> out_;
-  std::unique_ptr<Parser<IndexType> > parser_;
-  uint32_t num_col_;
-  std::vector<size_t> offset_;
-  std::vector<IndexType> dense_index_;
-  std::vector<xgboost::bst_float> dense_value_;
-};
+    #endif // HPHP_DATA_STREAM_WRAPPER_H
+
     
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
+    template<typename F>
+void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
+                        int64_t rate, F fillCols) {
+  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
+  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
+  if (!StructuredLog::coinflip(effectiveRate)) return;
+    }
+    
+    #ifndef incl_HPHP_PIPE_H_
+#define incl_HPHP_PIPE_H_
