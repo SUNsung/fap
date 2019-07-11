@@ -1,222 +1,247 @@
 
         
-        '''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
+        
+if __name__ == '__main__':
+    main()
+
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
+    if os.name == 'nt':
+    from tornado.platform.windows import set_close_exec
+else:
+    from tornado.platform.posix import set_close_exec
     
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%d,%d,%d,%d' % (publicKey[0], publicKey[1], publicKey[2], publicKey[3]))
+        @gen.coroutine
+    def resolve(
+        self, host: str, port: int, family: int = 0
+    ) -> 'Generator[Any, Any, List[Tuple[int, Any]]]':
+        if is_valid_ip(host):
+            addresses = [host]
+        else:
+            # gethostbyname doesn't take callback as a kwarg
+            fut = Future()  # type: Future[Tuple[Any, Any]]
+            self.channel.gethostbyname(
+                host, family, lambda result, error: fut.set_result((result, error))
+            )
+            result, error = yield fut
+            if error:
+                raise IOError(
+                    'C-Ares returned error %s: %s while resolving %s'
+                    % (error, pycares.errno.strerror(error), host)
+                )
+            addresses = result.addresses
+        addrinfo = []
+        for address in addresses:
+            if '.' in address:
+                address_family = socket.AF_INET
+            elif ':' in address:
+                address_family = socket.AF_INET6
+            else:
+                address_family = socket.AF_UNSPEC
+            if family != socket.AF_UNSPEC and family != address_family:
+                raise IOError(
+                    'Requested socket family %d but got %d' % (family, address_family)
+                )
+            addrinfo.append((typing.cast(int, address_family), (address, port)))
+        return addrinfo
+
     
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
-    
-        def _colision_resolution(self, key, data=None):
-        i = 1
-        new_key = self.hash_function(key + i*i)
-    
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
-    
-    # frequency taken from http://en.wikipedia.org/wiki/Letter_frequency
-englishLetterFreq = {'E': 12.70, 'T': 9.06, 'A': 8.17, 'O': 7.51, 'I': 6.97,
-                     'N': 6.75, 'S': 6.33, 'H': 6.09, 'R': 5.99, 'D': 4.25,
-                     'L': 4.03, 'C': 2.78, 'U': 2.76, 'M': 2.41, 'W': 2.36,
-                     'F': 2.23, 'G': 2.02, 'Y': 1.97, 'P': 1.93, 'B': 1.29,
-                     'V': 0.98, 'K': 0.77, 'J': 0.15, 'X': 0.15, 'Q': 0.10,
-                     'Z': 0.07}
-ETAOIN = 'ETAOINSHRDLCUMWFGYPBVKJXQZ'
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    
-    min_length = 8
-max_length = 16
-password = ''.join(random.choice(chars) for x in range(random.randint(min_length, max_length)))
-print('Password: ' + password)
-print('[ If you are thinking of using this passsword, You better save it. ]')
-    
-        if cfg.DEDUP_BOXES > 0 and not cfg.MODEL.FASTER_RCNN:
-        # Map scores and predictions back to the original set of boxes
-        scores = scores[inv_index, :]
-        pred_boxes = pred_boxes[inv_index, :]
+        def test_asyncio_callback(self):
+        # Basic test that the asyncio loop is set up correctly.
+        asyncio.get_event_loop().call_soon(self.stop)
+        self.wait()
     
     
-def add_fpn_ResNet50_conv5_P2only_body(model):
-    return add_fpn_onto_conv_body(
-        model,
-        ResNet.add_ResNet50_conv5_body,
-        fpn_level_info_ResNet50_conv5,
-        P2only=True
+class GoogleOAuth2Test(AsyncHTTPTestCase):
+    def get_app(self):
+        return Application(
+            [
+                # test endpoints
+                ('/client/login', GoogleLoginHandler, dict(test=self)),
+                # simulated google authorization server endpoints
+                ('/google/oauth2/authorize', GoogleOAuth2AuthorizeHandler),
+                ('/google/oauth2/token', GoogleOAuth2TokenHandler),
+                ('/google/oauth2/userinfo', GoogleOAuth2UserinfoHandler),
+            ],
+            google_oauth={
+                'key': 'fake_google_client_id',
+                'secret': 'fake_google_client_secret',
+            },
+        )
+    
+            o = Object()
+        answer = yield o.f()
+        self.assertEqual(answer, 42)
+    
+    
+class auto_adb():
+    def __init__(self):
+        try:
+            adb_path = 'adb'
+            subprocess.Popen([adb_path], stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+            self.adb_path = adb_path
+        except OSError:
+            if platform.system() == 'Windows':
+                adb_path = os.path.join('Tools', 'adb', 'adb.exe')
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    self.adb_path = adb_path
+                except OSError:
+                    pass
+            else:
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                except OSError:
+                    pass
+            print('请安装 ADB 及驱动并配置环境变量')
+            print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
+            exit(1)
+    
+    
+def open_accordant_config():
+    '''
+    调用配置文件
+    '''
+    screen_size = _get_screen_size()
+    config_file = '{path}/config/{screen_size}/config.json'.format(
+        path=sys.path[0],
+        screen_size=screen_size
     )
     
+        elif parser.mode == 'auto':
+        bot = AutoBot(params=settings.get_bot_params(parser.model)) 
+        bot.run()
     
-def _ratio_enum(anchor, ratios):
-    '''Enumerate a set of anchors for each aspect ratio wrt an anchor.'''
-    w, h, x_ctr, y_ctr = _whctrs(anchor)
-    size = w * h
-    size_ratios = size / ratios
-    ws = np.round(np.sqrt(size_ratios))
-    hs = np.round(ws * ratios)
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
+        bot_params = {
+        'TIME_COEFF': 2.,
+        'COORD_Y_START_SCAN': 200,
+        'PIECE_BASE_HEIGHT_HALF': 13,
+        'PIECE_BODY_WIDTH': 49,
+        'SWIPE_X1': 375,
+        'SWIPE_Y1': 1055,
+        'SWIPE_X2': 375,
+        'SWIPE_Y2': 1055
+    }
     
-            if model.train:
-            loss_gradients = {}
-            for lg in head_loss_gradients.values():
-                if lg is not None:
-                    loss_gradients.update(lg)
-            return loss_gradients
-        else:
-            return None
     
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.CollectAndDistributeFpnRpnProposals for
-        inputs/outputs documentation.
+def main():
+    '''
+    主函数
+    '''
+    print('程序版本号：{}'.format(VERSION))
+    print('激活窗口并按 CONTROL + C 组合键退出')
+    debug.dump_device_info()
+    screenshot.check_screenshot()
+    
+    
+def jump(piece_x, board_x, im, swipe_x1, swipe_y1):
+    distanceX = abs(board_x - piece_x)  # 起点到目标的水平距离
+    shortEdge = min(im.size)  # 屏幕宽度
+    jumpPercent = distanceX / shortEdge  # 跳跃百分比
+    jumpFullWidth = 1700  # 跳过整个宽度 需要按压的毫秒数
+    press_time = round(jumpFullWidth * jumpPercent)  # 按压时长
+    press_time = 0 if not press_time else max(
+        press_time, 200)  # press_time大于0时限定最小值
+    print('%-12s %.2f%% (%s/%s) | Press: %sms' %
+          ('Distance:', jumpPercent * 100, distanceX, shortEdge, press_time))
+    
+    
+class ExitAutocall(IPyAutocall):
+    '''An autocallable object which will be added to the user namespace so that
+    exit, exit(), quit or quit() are all valid ways to close the shell.'''
+    rewrite = False
+    
+    def __call__(self):
+        self._ip.ask_exit()
+        
+class ZMQExitAutocall(ExitAutocall):
+    '''Exit IPython. Autocallable, so it needn't be explicitly called.
+    
+    Parameters
+    ----------
+    keep_kernel : bool
+      If True, leave the kernel alive. Otherwise, tell the kernel to exit too
+      (default).
+    '''
+    def __call__(self, keep_kernel=False):
+        self._ip.keepkernel_on_exit = keep_kernel
+        self._ip.ask_exit()
+
+    
+    
+class __BuiltinUndefined(object): pass
+BuiltinUndefined = __BuiltinUndefined()
+    
+            # Colors for printing the exception
+        excName = C.Red,
+        #line = C.Brown,  # brown often is displayed as yellow
+        line = C.Red,
+        caret = C.Normal,
+        Normal = C.Normal,
+        ))
+    
+            you can also use the specific value `:memory:` (including the colon
+        at both end but not the back ticks), to avoid creating an history file.
+        
+        ''').tag(config=True)
+    
+    enabled = Bool(True,
+        help='''enable the SQLite history
+        
+        set enabled=False to disable the SQLite history,
+        in which case there will be no stored history, no SQLite connection,
+        and no background saving thread.  This may be necessary in some
+        threaded environments where IPython is embedded.
         '''
-        # inputs is
-        # [rpn_rois_fpn2, ..., rpn_rois_fpn6,
-        #  rpn_roi_probs_fpn2, ..., rpn_roi_probs_fpn6]
-        # If training with Faster R-CNN, then inputs will additionally include
-        #  + [roidb, im_info]
-        rois = collect(inputs, self._train)
-        if self._train:
-            # During training we reuse the data loader code. We populate roidb
-            # entries on the fly using the rois generated by RPN.
-            # im_info: [[im_height, im_width, im_scale], ...]
-            im_info = inputs[-1].data
-            im_scales = im_info[:, 2]
-            roidb = blob_utils.deserialize(inputs[-2].data)
-            # For historical consistency with the original Faster R-CNN
-            # implementation we are *not* filtering crowd proposals.
-            # This choice should be investigated in the future (it likely does
-            # not matter).
-            json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-            roidb_utils.add_bbox_regression_targets(roidb)
-            # Compute training labels for the RPN proposals; also handles
-            # distributing the proposals over FPN levels
-            output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-            blobs = {k: [] for k in output_blob_names}
-            fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-            for i, k in enumerate(output_blob_names):
-                blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+    ).tag(config=True)
+    
+    connection_options = Dict(
+        help='''Options for configuring the SQLite connection
+        
+        These options are passed as keyword args to sqlite3.connect
+        when establishing database connections.
+        '''
+    ).tag(config=True)
+    
+        def start(self):
+        if self.subapp is None:
+            print('No subcommand specified. Must specify one of: %s' % \
+                                                    (self.subcommands.keys()))
+            print()
+            self.print_description()
+            self.print_subcommands()
+            self.exit(1)
         else:
-            # For inference we have a special code path that avoids some data
-            # loader overhead
-            distribute(rois, None, outputs, self._train)
+            return self.subapp.start()
+
     
-    from detectron.core.config import assert_and_infer_cfg
-from detectron.core.config import cfg
-from detectron.core.config import merge_cfg_from_file
-from detectron.core.config import merge_cfg_from_list
-from detectron.datasets.roidb import combined_roidb_for_training
-from detectron.roi_data.loader import RoIDataLoader
-from detectron.utils.logging import setup_logging
-from detectron.utils.timer import Timer
+    #*****************************************************************************
+#       Copyright (C) 2001-2005 Fernando Perez <fperez@colorado.edu>
+#
+#  Distributed under the terms of the BSD License.  The full license is in
+#  the file COPYING, distributed as part of this software.
+#*****************************************************************************
     
-    EUCTW_CLS = (
-    2,2,2,2,2,2,2,2,  # 00 - 07
-    2,2,2,2,2,2,0,0,  # 08 - 0f
-    2,2,2,2,2,2,2,2,  # 10 - 17
-    2,2,2,0,2,2,2,2,  # 18 - 1f
-    2,2,2,2,2,2,2,2,  # 20 - 27
-    2,2,2,2,2,2,2,2,  # 28 - 2f
-    2,2,2,2,2,2,2,2,  # 30 - 37
-    2,2,2,2,2,2,2,2,  # 38 - 3f
-    2,2,2,2,2,2,2,2,  # 40 - 47
-    2,2,2,2,2,2,2,2,  # 48 - 4f
-    2,2,2,2,2,2,2,2,  # 50 - 57
-    2,2,2,2,2,2,2,2,  # 58 - 5f
-    2,2,2,2,2,2,2,2,  # 60 - 67
-    2,2,2,2,2,2,2,2,  # 68 - 6f
-    2,2,2,2,2,2,2,2,  # 70 - 77
-    2,2,2,2,2,2,2,2,  # 78 - 7f
-    0,0,0,0,0,0,0,0,  # 80 - 87
-    0,0,0,0,0,0,6,0,  # 88 - 8f
-    0,0,0,0,0,0,0,0,  # 90 - 97
-    0,0,0,0,0,0,0,0,  # 98 - 9f
-    0,3,4,4,4,4,4,4,  # a0 - a7
-    5,5,1,1,1,1,1,1,  # a8 - af
-    1,1,1,1,1,1,1,1,  # b0 - b7
-    1,1,1,1,1,1,1,1,  # b8 - bf
-    1,1,3,1,3,3,3,3,  # c0 - c7
-    3,3,3,3,3,3,3,3,  # c8 - cf
-    3,3,3,3,3,3,3,3,  # d0 - d7
-    3,3,3,3,3,3,3,3,  # d8 - df
-    3,3,3,3,3,3,3,3,  # e0 - e7
-    3,3,3,3,3,3,3,3,  # e8 - ef
-    3,3,3,3,3,3,3,3,  # f0 - f7
-    3,3,3,3,3,3,3,0   # f8 - ff
-)
+            self.shell.logger.switch_log(1)
     
-            return self.state
+    from IPython import get_ipython
+from IPython.core.display import display
+from IPython.core.error import TryNext
+from IPython.utils.data import chop
+from IPython.utils.process import system
+from IPython.utils.terminal import get_terminal_size
+from IPython.utils import py3compat
     
-            # If we've seen escape sequences, use the EscCharSetProber, which
-        # uses a simple state machine to check for known escape sequences in
-        # HZ and ISO-2022 encodings, since those are the only encodings that
-        # use such sequences.
-        if self._input_state == InputState.ESC_ASCII:
-            if not self._esc_charset_prober:
-                self._esc_charset_prober = EscCharSetProber(self.lang_filter)
-            if self._esc_charset_prober.feed(byte_str) == ProbingState.FOUND_IT:
-                self.result = {'encoding':
-                               self._esc_charset_prober.charset_name,
-                               'confidence':
-                               self._esc_charset_prober.get_confidence(),
-                               'language':
-                               self._esc_charset_prober.language}
-                self.done = True
-        # If we've seen high bytes (i.e., those with values greater than 127),
-        # we need to do more complicated checks using all our multi-byte and
-        # single-byte probers that are left.  The single-byte probers
-        # use character bigram distributions to determine the encoding, whereas
-        # the multi-byte probers use a combination of character unigram and
-        # bigram distributions.
-        elif self._input_state == InputState.HIGH_BYTE:
-            if not self._charset_probers:
-                self._charset_probers = [MBCSGroupProber(self.lang_filter)]
-                # If we're checking non-CJK encodings, use single-byte prober
-                if self.lang_filter & LanguageFilter.NON_CJK:
-                    self._charset_probers.append(SBCSGroupProber())
-                self._charset_probers.append(Latin1Prober())
-            for prober in self._charset_probers:
-                if prober.feed(byte_str) == ProbingState.FOUND_IT:
-                    self.result = {'encoding': prober.charset_name,
-                                   'confidence': prober.get_confidence(),
-                                   'language': prober.language}
-                    self.done = True
-                    break
-            if self.WIN_BYTE_DETECTOR.search(byte_str):
-                self._has_win_bytes = True
     
-        def feed(self, byte_str):
-        for c in byte_str:
-            coding_state = self.coding_sm.next_state(c)
-            if coding_state == MachineState.ERROR:
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                if self.coding_sm.get_current_charlen() >= 2:
-                    self._num_mb_chars += 1
+def install_payload_page():
+    '''DEPRECATED, use show_in_pager hook
+    
+    Install this version of page as IPython.core.page.page.
+    '''
+    warnings.warn('''install_payload_page is deprecated.
+    Use `ip.set_hook('show_in_pager, page.as_hook(payloadpage.page))`
+    ''')
+    from IPython.core import page as corepage
+    corepage.page = page
