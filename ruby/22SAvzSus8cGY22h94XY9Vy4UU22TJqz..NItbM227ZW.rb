@@ -1,119 +1,84 @@
 
         
-              it 'adds docset_package_filename param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_package_filename: 'DocSet package filename'
-          )
-        end').runner.execute(:test)
+                def initialize(argv, env)
+          @argv = argv
+          @env  = env
+          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
+        end
     
-    class Array
-  def shelljoin
-    CrossplatformShellwords.shelljoin(self)
-  end
+            # Mounts a shared folder.
+        #
+        # This method should create, mount, and properly set permissions
+        # on the shared folder. This method should also properly
+        # adhere to any configuration values such as `shared_folder_uid`
+        # on `config.vm`.
+        #
+        # @param [String] name The name of the shared folder.
+        # @param [String] guestpath The path on the machine which the user
+        #   wants the folder mounted.
+        # @param [Hash] options Additional options for the shared folder
+        #   which can be honored.
+        def mount_shared_folder(name, guestpath, options)
+          raise BaseError, _key: :unsupported_shared_folder
+        end
+    
+            # Registers additional providers to be available.
+        #
+        # @param [Symbol] name Name of the provider.
+        def self.provider(name=UNSET_VALUE, &block)
+          data[:providers] ||= Registry.new
+    
+            def initialize(env, config)
+          @env    = env
+          @config = config
+        end
+    
+        # Get a value by the given key.
+    #
+    # This will evaluate the block given to `register` and return the
+    # resulting value.
+    def get(key)
+      return nil if !@items.key?(key)
+      return @results_cache[key] if @results_cache.key?(key)
+      @results_cache[key] = @items[key].call
+    end
+    alias :[] :get
+    
+    puts '\nUnable to find an RSS feed for the following blogs:'
+puts '==================================================='
+unavailable.each do |b|
+  puts '#{b.name} | #{b.web_url}'
 end
+puts '==================================================='
+
     
-    exec_arr = ['fastlane', tool_name] + ARGV
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
     
-        context 'with keywords' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' },
-          keywords: { 'en-US' => 'Some, key, words' }
-        }
-      end
+    Liquid::Template.register_tag('config_tag', ConfigTag)
     
-        class [[NAME_CLASS]] < Action
-      def self.run(params)
-        # fastlane will take care of reading in the parameter and fetching the environment variable:
-        UI.message 'Parameter API Token: #{params[:api_token]}'
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-        it 'marks a notification as unread without timestamping' do
-      note = Timecop.travel(1.hour.ago) do
-        FactoryGirl.create(:notification, recipient: alice, unread: false)
-      end
-    
-        context 'with an authenticated user' do
-      before do
-        sign_in(bob, scope: :user)
-        allow(@controller).to receive(:current_user).and_return(bob)
-      end
-    
-          it 'raises an error' do
-        expect {
-          put :update, params: {id: 42, post_id: @status.id}, format: :js
-        }.to raise_error ActiveRecord::RecordNotFound
-      end
-    
-              expect(gon['preloads'][:mentioned_person][:name]).to eq(alice.person.name)
-          expect(gon['preloads'][:mentioned_person][:handle]).to eq(alice.person.diaspora_handle)
-        end
-      end
+        def get_gist_url_for(gist, file)
+      'https://gist.githubusercontent.com/raw/#{gist}/#{file}'
     end
     
-    LogStash::Bundler.setup!
-    
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
-      end
+      # Removes trailing forward slash from a string for easily appending url segments
+  def strip_slash(input)
+    if input =~ /(.+)\/$|^\/$/
+      input = $1
     end
-    
-          puts user_feedback_string_for('bootstrapping', args[:platform], machines, {'experimental' => experimental})
-    
-    @@ index
-  <h1>Sinatra + Sidekiq Example</h1>
-  <h2>Failed: <%= @failed %></h2>
-  <h2>Processed: <%= @processed %></h2>
-    
-        config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      'Cache-Control' => 'public, max-age=#{2.days.to_i}'
-    }
-  else
-    config.action_controller.perform_caching = false
-    
-        initialize_with { Tmuxinator::Project.new(file) }
+    input
   end
     
-          it 'gets the custom tmux command' do
-        expect(project.tmux_command).to eq 'byobu'
-      end
-    end
-    
-      yield
-    
-          it 'returns the command' do
-        expect(window.commands).to eq ['tmux send-keys -t test:1 vim C-m']
-      end
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
     end
