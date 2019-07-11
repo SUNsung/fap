@@ -1,194 +1,204 @@
 
         
-        namespace tensorflow {
+        char *DiverseListBase::addNewStorageSlow(std::size_t needed) {
+  bool wasInline = isAllocatedInline();
     }
     
-    int NPyBfloat16_SetItem(PyObject* item, void* data, void* arr) {
-  bfloat16 x;
-  if (!AsBfloat16(item, &x)) return -1;
-  memcpy(data, &x, sizeof(bfloat16));
-  return 0;
+    
+    {  OutLines.append(Lines.begin(), Lines.end());
 }
+
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // This enum represents potential configurations of L1/shared memory when
-// running a particular kernel. These values represent user preference, and
-// the runtime is not required to respect these choices.
-enum class KernelCacheConfig {
-  // Indicates no preference for device L1/shared memory configuration.
-  kNoPreference,
+    %{
     }
     
-    // The API reference of abi::__cxa_demangle() can be found in
-// libstdc++'s manual.
-// https://gcc.gnu.org/onlinedocs/libstdc++/libstdc++-html-USERS-4.3/a01696.html
-string Demangle(const char *mangled) {
-  string demangled;
-  int status = 0;
-  char *result = nullptr;
-#if HAS_CXA_DEMANGLE
-  result = abi::__cxa_demangle(mangled, nullptr, nullptr, &status);
-#endif
-  if (status == 0 && result != nullptr) {  // Demangling succeeded.
-    demangled.append(result);
-    free(result);
+      SubstitutionMap getSubstitutions() const {
+    return CurCallee.getSubstitutions();
   }
-  return demangled;
+    
+    #include 'base/memory/weak_ptr.h'
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
 }
     
-    		typedef struct
-		{
-			unsigned red2 : 4;
-			unsigned red1 : 4;
-			//
-			unsigned green2 : 4;
-			unsigned green1 : 4;
-			//
-			unsigned blue2 : 4;
-			unsigned blue1 : 4;
-			//
-			unsigned flip : 1;
-			unsigned diff : 1;
-			unsigned cw2 : 3;
-			unsigned cw1 : 3;
-			//
-			unsigned int selectors;
-		} Individual;
-    
-    #define CLIPPER_VERSION '6.4.2'
-    
-    #define PSHR32(a,shift) (celt_mips--,SHR32(ADD32((a),(((opus_val32)(1)<<((shift))>>1))),shift))
-#define VSHR32(a, shift) (((shift)>0) ? SHR32(a, shift) : SHL32(a, -(shift)))
-    
-      const char* data = filename.data();
-  int data_len = filename.length();
-  bool base64 = false;
-  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
-    return nullptr;
-  }
-  data += sizeof('data:') - 1;
-  data_len -= sizeof('data:') - 1;
-    
-      explicit UrlFile(const char *method = 'GET', const Array& headers = null_array,
-                   const String& postData = null_string,
-                   int maxRedirect = HttpClient::defaultMaxRedirect,
-                   int timeout = -1, bool ignoreErrors = false);
-    
-    #include <folly/Hash.h>
-    
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
-    
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    
-    {  SocketCanClientRaw socket_can_client;
-  EXPECT_TRUE(socket_can_client.Init(param));
-  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(socket_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  socket_can_client.Stop();
-}
-    
-    void ClusterQualityInfo702::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  int id = target_id(bytes, length);
-  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == id) {
-      auto conti_obs = conti_radar->mutable_contiobs(i);
-      conti_obs->set_longitude_dist_rms(
-          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
-      conti_obs->set_lateral_dist_rms(
-          LINEAR_RMS[lateral_dist_rms(bytes, length)]);
-      conti_obs->set_longitude_vel_rms(
-          LINEAR_RMS[longitude_vel_rms(bytes, length)]);
-      conti_obs->set_lateral_vel_rms(
-          LINEAR_RMS[lateral_vel_rms(bytes, length)]);
-      conti_obs->set_probexist(PROBOFEXIST[pdh0(bytes, length)]);
-      switch (invalid_state(bytes, length)) {
-        case 0x01:
-        case 0x02:
-        case 0x03:
-        case 0x06:
-        case 0x07:
-        case 0x0E:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
-      switch (ambig_state(bytes, length)) {
-        case 0x00:
-        case 0x01:
-        case 0x02:
-          conti_obs->set_probexist(PROBOFEXIST[0]);
-        default:
-          break;
-      }
+      for(auto& data : params->data) {
+    if (!writer->Write(data)) {
+      *error = writer->error();
+      writer->Reset();
+      return false;
     }
   }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    class NwObjAllocateIdFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjAllocateIdFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+  bool ReadProtoFromTextContent(const std::string& text,
+                                ::google::protobuf::Message* proto) const {
+    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
+    return success;
+  }
+    
+    #if MXNET_USE_OPENCV
+#include <opencv2/opencv.hpp>
+#include <vector>  // NOLINT(*)
+#include <utility> // NOLINT(*)
+#include <string> // NOLINT(*)
+    
+    .. note:: `Crop` is deprecated. Use `slice` instead.
+    
+    #ifndef MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#define MXNET_OPERATOR_CUDNN_LRN_INL_H_
+#include <vector>
+#include './lrn-inl.h'
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_spatial_transformer-inl.h
+ * \brief
+ * \author Wei Wu
+*/
+#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file ndarray_op.cc
+ * \brief
+ * \author Junyuan Xie
+*/
+#include './ndarray_op-inl.h'
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+    
+        // Submit Tab Bar and Tabs
+    {
+        ImGuiTabBarFlags tab_bar_flags = (opt_fitting_flags) | (opt_reorderable ? ImGuiTabBarFlags_Reorderable : 0);
+        if (ImGui::BeginTabBar('##tabs', tab_bar_flags))
+        {
+            if (opt_reorderable)
+                NotifyOfDocumentsClosedElsewhere(app);
+    }
+    }
+    
+        // Note: the triangle is displayed rotated with triangle_pa pointing to Hue, but most coordinates stays unrotated for logic.
+    float triangle_r = wheel_r_inner - (int)(sv_picker_size * 0.027f);
+    ImVec2 triangle_pa = ImVec2(triangle_r, 0.0f); // Hue point.
+    ImVec2 triangle_pb = ImVec2(triangle_r * -0.5f, triangle_r * -0.866025f); // Black point.
+    ImVec2 triangle_pc = ImVec2(triangle_r * -0.5f, triangle_r * +0.866025f); // White point.
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Poll and handle events (inputs, window resize, etc.)
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        ImGui_ImplSDL2_ProcessEvent(&event);
+        // Capture events here, based on io.WantCaptureMouse and io.WantCaptureKeyboard
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+        IDXGISwapChain1* swapChain1 = NULL;
+    dxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, hWnd, &sd, NULL, NULL, &swapChain1);
+    swapChain1->QueryInterface(IID_PPV_ARGS(&g_pSwapChain));
+    swapChain1->Release();
+    dxgiFactory->Release();
+    
+    void CleanupDeviceD3D()
+{
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+    if (g_pD3D) { g_pD3D->Release(); g_pD3D = NULL; }
 }
     
-    #include 'glog/logging.h'
+        // Create the vertex shader
+    {
+        static const char* vertexShader =
+            'cbuffer vertexBuffer : register(b0) \
+            {\
+            float4x4 ProjectionMatrix; \
+            };\
+            struct VS_INPUT\
+            {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            PS_INPUT main(VS_INPUT input)\
+            {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+            }';
+    }
     
-    #include 'glog/logging.h'
+        // Restore the DX9 transform
+    g_pd3dDevice->SetTransform(D3DTS_WORLD, &last_world);
+    g_pd3dDevice->SetTransform(D3DTS_VIEW, &last_view);
+    g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
     
-    namespace apollo {
-namespace localization {
-namespace msf {
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
+{
+    // Update buttons
+    ImGuiIO& io = ImGui::GetIO();
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+    {
+        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
+        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
+        g_MouseJustPressed[i] = false;
     }
     }
+    
+        // Setup viewport:
+    {
+        VkViewport viewport;
+        viewport.x = 0;
+        viewport.y = 0;
+        viewport.width = (float)fb_width;
+        viewport.height = (float)fb_height;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(command_buffer, 0, 1, &viewport);
     }
-    
-      MatrixXd mat_golden(20, 10);
-  // clang-format off
-  mat_golden <<
-    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-     1, -1,  0,  0,  0,  0,  0,  0,  0,  0,
-    -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
-     0,  1, -1,  0,  0,  0,  0,  0,  0,  0,
-     0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
-     0,  0,  1, -1,  0,  0,  0,  0,  0,  0,
-     0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
-     0,  0,  0,  1, -1,  0,  0,  0,  0,  0,
-     0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
-     0,  0,  0,  0,  1, -1,  0,  0,  0,  0,
-     0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
-     0,  0,  0,  0,  0,  1, -1,  0,  0,  0,
-     0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
-     0,  0,  0,  0,  0,  0,  1, -1,  0,  0,
-     0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
-     0,  0,  0,  0,  0,  0,  0,  1, -1,  0,
-     0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
-     0,  0,  0,  0,  0,  0,  0,  0,  1, -1,
-     0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
-    
-    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
