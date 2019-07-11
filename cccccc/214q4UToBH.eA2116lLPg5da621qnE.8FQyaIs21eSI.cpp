@@ -1,315 +1,322 @@
 
         
-        IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
+          CHROMEG_CALLBACK_1(GlobalMenuBarRegistrarX11,
+                     void,
+                     OnProxyCreated,
+                     GObject*,
+                     GAsyncResult*);
+  CHROMEG_CALLBACK_1(GlobalMenuBarRegistrarX11,
+                     void,
+                     OnNameOwnerChanged,
+                     GObject*,
+                     GParamSpec*);
     
-    
-    {} // namespace nwapi
-
-    
-    
-    {}  // namespace nw
-    
-    // Popup menus may get squished if they open up too close to the bottom of the
-// screen. This function takes the size of the screen, the size of the menu,
-// an optional widget, the Y position of the mouse click, and adjusts the popup
-// menu's Y position to make it fit if it's possible to do so.
-// Returns the new Y position of the popup menu.
-int CalculateMenuYPosition(const GdkRectangle* screen_rect,
-                           const GtkRequisition* menu_req,
-                           GtkWidget* widget, const int y) {
-  CHECK(screen_rect);
-  CHECK(menu_req);
-  // If the menu would run off the bottom of the screen, and there is enough
-  // screen space upwards to accommodate the menu, then pop upwards. If there
-  // is a widget, then also move the anchor point to the top of the widget
-  // rather than the bottom.
-  const int screen_top = screen_rect->y;
-  const int screen_bottom = screen_rect->y + screen_rect->height;
-  const int menu_bottom = y + menu_req->height;
-  int alternate_y = y - menu_req->height;
-  if (widget) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
-    alternate_y -= allocation.height;
-  }
-  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
-    return alternate_y;
-  return y;
+    bool Converter<PersistentDictionary>::FromV8(v8::Isolate* isolate,
+                                             v8::Local<v8::Value> val,
+                                             PersistentDictionary* out) {
+  if (!val->IsObject())
+    return false;
+  *out = PersistentDictionary(isolate, v8::Local<v8::Object>::Cast(val));
+  return true;
 }
     
-    bool MenuItem::GetChecked() {
-  return is_checked_;
-}
     
-      base::ScopedAllowBaseSyncPrimitivesOutsideBlockingScope allow_wait;
+    {}  // namespace
     
-    #include 'base/lazy_instance.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/nw_screen.h'
-#include 'extensions/browser/extensions_browser_client.h'
-#include 'ui/display/display_observer.h'
-#include 'ui/display/display.h'
-#include 'ui/display/screen.h'
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-      // Connects this and other, discarding any existing connections.
-  void Connect(DoublePtr* other) {
-    other->Disconnect();
-    Disconnect();
-    other->other_end_ = this;
-    other_end_ = other;
-  }
-  // Disconnects this and other, making OtherEnd() return nullptr for both.
-  void Disconnect() {
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = nullptr;
-      other_end_ = nullptr;
+    namespace mate {
     }
-  }
-  // Returns the pointer to the other end of the double pointer.
-  DoublePtr* OtherEnd() const {
-    return other_end_;
-  }
     
-    //////////////////////////////////////////////////////////////////////
+    template <>
+struct Converter<Promise> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate, Promise val);
+  // TODO(MarshallOfSound): Implement FromV8 to allow promise chaining
+  //                        in native land
+  // static bool FromV8(v8::Isolate* isolate,
+  //                    v8::Local<v8::Value> val,
+  //                    Promise* out);
+};
     
-    
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
+    void GlobalMenuBarRegistrarX11::RegisterXID(unsigned long xid) {
+  DCHECK(registrar_proxy_);
+  std::string path = electron::GlobalMenuBarX11::GetPathForWindow(xid);
     }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
     
-    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+    // We will use the boost shared_ptr instead of the new C++11 one mainly
+// because cuda does not work (at least now) well with C++11 features.
+using boost::shared_ptr;
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
 
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
+    
+    void opus_ifft_neon(const kiss_fft_state *st,
+                    const kiss_fft_cpx *fin,
+                    kiss_fft_cpx *fout);
+    
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
+    
+        Rational Pow(Rational const& base, Rational const& pow);
+    Rational Root(Rational const& base, Rational const& root);
+    Rational Fact(Rational const& rat);
+    Rational Mod(Rational const& a, Rational const& b);
+    
+                    uint64_t w64Bits = result.ToUInt64_t();
+                uint64_t lsb = ((w64Bits & 0x01) == 1) ? 1 : 0;
+                w64Bits >>= 1; // RShift by 1
+                w64Bits |= (lsb << (m_dwWordBitWidth - 1));
+    
+                uint64_t w64Bits = rhs.ToUInt64_t();
+            bool fMsb = (w64Bits >> (m_dwWordBitWidth - 1)) & 1;
+    
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
+    }
+    
+     private:
+  /*! \brief indexes into top_ */
+  enum { DATA = 0, LABEL, NR_SUPPORTED_TOP_ITEMS };
+    
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
+  }
+    
+       out = data / sqrt(data.shape[-1])
     
     
     {
-    {        ListNode* retNode = dummyHead->next;
-        delete dummyHead;
-        return retNode;
+    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
+'will be used as crop_like shape reference')
+.add_arguments(CropParam::__FIELDS__())
+.set_key_var_num_args('num_args');
+}  // namespace op
+}  // namespace mxnet
+
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file ndarray_op.cc
+ * \brief
+ * \author Junyuan Xie
+*/
+#include './ndarray_op-inl.h'
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+    
+    MXNET_REGISTER_OP_PROPERTY(IdentityAttachKLSparseReg, IdentityAttachKLSparseRegProp)
+.describe('Apply a sparse regularization to the output a sigmoid activation function.')
+.add_argument('data', 'NDArray-or-Symbol', 'Input data.')
+.add_arguments(IdentityAttachKLSparseRegParam::__FIELDS__());
+    
+    /*!
+ * \brief concat CSRNDArray on the first dimension.
+ */
+struct concat_csr_first_dim {
+  /*!
+   * \param i              the i-th row of the input ndarray
+   * \param out_idx        output csr ndarray column indices
+   * \param out_data       output csr ndarray data
+   * \param out_indptr     output csr ndarray row index pointer
+   * \param in_idx         input csr ndarray column indices
+   * \param in_data        input csr ndarray data
+   * \param in_indptr      input csr ndarray row index pointer
+   * \param indptr_offset  offset for ouput ndarray row index pointer
+   * \param idx_offset     offset for ouput ndarray column indices
+   */
+  template<typename DType, typename RType, typename IType>
+  MSHADOW_XINLINE static void Map(int i, const OpReqType req,
+                                  DType* out_data, const DType* in_data,
+                                  RType* out_indptr, const RType* in_indptr,
+                                  IType* out_idx, const IType* in_idx,
+                                  const nnvm::dim_t indptr_offset,
+                                  const nnvm::dim_t idx_offset) {
+    if (i == 0) out_indptr[0] = 0;
+    out_indptr[i+1+indptr_offset] = in_indptr[i+1] + idx_offset;
+    for (nnvm::dim_t j = in_indptr[i]; j < in_indptr[i+1]; ++j) {
+      KERNEL_ASSIGN(out_idx[j+idx_offset], req, in_idx[j]);
+      KERNEL_ASSIGN(out_data[j+idx_offset], req, in_data[j]);
     }
+  }
 };
     
-    
-    {private:
-    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
-        for( ; p < nums.size() ; p ++ )
-            if( nums[p] != nums[p - 1] )
-                break;
-        return p;
+    namespace CNTK
+{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
     }
+    }
+    
+    
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
+    }
+    
+            for (auto outputToFetch : outputsToFetch)
+        {
+            if (outputToFetch.second == nullptr)
+                outputsToFetch[outputToFetch.first] = outputs[outputToFetch.first];
+        }
+    
+            auto matrix = sequenceData->GetMatrix<ElementType>();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(DeviceDescriptor::CPUDevice()), true);
+        auto cpuSparseMatrix = matrix->m_CPUSparseMatrix;
+        auto currentSequenceNumCols = matrix->GetNumCols();
+        auto currentSequenceColStarts = cpuSparseMatrix->SecondaryIndexLocation();
+        auto currentSequenceNumNonZeroValues = currentSequenceColStarts[currentSequenceNumCols] - currentSequenceColStarts[0];
+        std::copy(cpuSparseMatrix->MajorIndexLocation(), cpuSparseMatrix->MajorIndexLocation() + currentSequenceNumNonZeroValues, std::back_inserter(rowIndices));
+        std::copy((char*)(cpuSparseMatrix->Data()), (char*)(cpuSparseMatrix->Data() + currentSequenceNumNonZeroValues), std::back_inserter(nonZeroValues));
+    
+        void VariableFields::SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device)
+    {
+        if (m_value != nullptr)
+            LogicError('Variable '%S': Value initialization config cannot be set if a value already exists', AsString().c_str());
+    }
+    
+    size_t DataReader::GetNumParallelSequencesForFixingBPTTMode()
+{
+    size_t nNbr = 0;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+    {
+        IDataReader* ptr = m_dataReaders[m_ioNames[i]];
+        if (nNbr == 0)
+            nNbr = ptr->GetNumParallelSequencesForFixingBPTTMode();
+        else if (nNbr != ptr->GetNumParallelSequencesForFixingBPTTMode())
+            LogicError('GetNumParallelSequences: number of slices in each minibatch not consistent for these streams');
+    }
+    return nNbr;
+}
+    
+    // base class that we can catch, independent of the type parameter
+struct /*interface*/ IExceptionWithCallStackBase
+{
+    virtual const char * CallStack() const = 0;
+    virtual ~IExceptionWithCallStackBase() noexcept = default;
 };
-    
-            ListNode* dummyHead1 = new ListNode(-1);
-        ListNode* dummyHead2 = new ListNode(-1);
-        ListNode* prev1 = dummyHead1;
-        ListNode* prev2 = dummyHead2;
-    
-                cur = stack.top();
-            stack.pop();
-            res.push_back(cur->val);
-            cur = cur->right;
     
     using namespace std;
     
     
-    {
-    {        stack<TreeNode*> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-            if(cur != NULL){
-                res.push_back(cur->val);
-                stack.push(cur);
-                cur = cur->left;
-            }
-            else{
-                cur = stack.top();
-                stack.pop();
-                cur = cur->right;
-            }
+    {            for (size_t i = 0; i < 2; i++)
+                Input(i)->Gradient().TransferToDeviceIfNotThere(m_deviceId, true);
         }
-        return res;
-    }
-};
-    
-    
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-            err = vkResetCommandPool(g_Device, command_pool, 0);
-        check_vk_result(err);
-        VkCommandBufferBeginInfo begin_info = {};
-        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        err = vkBeginCommandBuffer(command_buffer, &begin_info);
-        check_vk_result(err);
-    
-    int main(int, char**)
-{
-    IwGxInit();
-    }
-    
-        // Render command lists
-    int vtx_offset = 0;
-    int idx_offset = 0;
-    ImVec2 clip_off = draw_data->DisplayPos;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        catch (...)
         {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                // User callback (registered via ImDrawList::AddCallback)
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                // Apply scissor/clipping rectangle
-                const D3D10_RECT r = { (LONG)(pcmd->ClipRect.x - clip_off.x), (LONG)(pcmd->ClipRect.y - clip_off.y), (LONG)(pcmd->ClipRect.z - clip_off.x), (LONG)(pcmd->ClipRect.w - clip_off.y)};
-                ctx->RSSetScissorRects(1, &r);
-    }
-    }
-    }
+            fprintf(stderr, 'LookupTableNode unit test is not passed!');
+            return false;
+        }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
-}
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-    // Win32 message handler
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
-    }
-    
-    
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    xfer += iprot->skip(ftype);
-    xfer += iprot->readFieldEnd();
-  }
-    
-    ExtensionException::ExtensionException(const ExtensionException& other22) : TException() {
-  code = other22.code;
-  message = other22.message;
-  uuid = other22.uuid;
-  __isset = other22.__isset;
-}
-ExtensionException& ExtensionException::operator=(const ExtensionException& other23) {
-  code = other23.code;
-  message = other23.message;
-  uuid = other23.uuid;
-  __isset = other23.__isset;
-  return *this;
-}
-void ExtensionException::printTo(std::ostream& out) const {
-  using ::apache::thrift::to_string;
-  out << 'ExtensionException(';
-  out << 'code=' << to_string(code);
-  out << ', ' << 'message=' << to_string(message);
-  out << ', ' << 'uuid=' << to_string(uuid);
-  out << ')';
-}
-    
-    
-    {
-    {      auto serial = resp.content.find('serial_number');
-      if (serial != resp.content.end()) {
-        hw_info[serial->second] = resp.content;
-      };
-    }
-  });
-    
-      std::string carveFSPath = carve.getCarveDir().string();
-  auto paths = platformGlob(carveFSPath + '/*');
-  std::set<fs::path> carves;
-  for (const auto& p : paths) {
-    carves.insert(fs::path(p));
-  }
-    
-    #include <boost/io/detail/quoted_manip.hpp>
+        // a count of how many sequnces are packed for a particular frame.
+    // reset to zero, and compute from current layout information
+    // this information is useful when creating the tensor descriptors for CuDNN.
+    numSequencesForFrame2.resize(maxSeqLength);
+    fill(numSequencesForFrame2.begin(), numSequencesForFrame2.end(), 0L);
