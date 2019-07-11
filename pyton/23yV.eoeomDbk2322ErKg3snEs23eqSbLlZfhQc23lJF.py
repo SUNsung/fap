@@ -1,238 +1,139 @@
 
         
-        
-if __name__ == '__main__':
-    unittest.main()
-
+                '''
+        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
+        self.__dict__.update(**kwargs)
     
-            if 'skip' in test_case:
-            print_skipping(test_case['skip'])
-            return
-        for other_ie in other_ies:
-            if not other_ie.working():
-                print_skipping('test depends on %sIE, marked as not WORKING' % other_ie.ie_key())
-                return
+        if req_b and resp:
+        # Request/Response separator.
+        output.append([b'\n\n'])
     
-            ydl = FakeYDL({
-            'proxy': '%s://127.0.0.1:%d' % (protocol, self.port),
-        })
-        return ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8')
+            def get_auth(self, username=None, password=None):
+            assert username is None
+            assert password is None
+            assert self.raw_auth == BASIC_AUTH_HEADER_VALUE
+            return basic_auth(self.raw_auth)
     
-    
-class Formatting(object):
-    '''A delegate class that invokes the actual processors.'''
-    
-        def inner(r):
-        r.headers['Authorization'] = header
-        return r
-    
-        if args.auth_plugin:
-        session.auth = {
-            'type': args.auth_plugin.auth_type,
-            'raw_auth': args.auth_plugin.raw_auth,
-        }
-    elif session.auth:
-        kwargs['auth'] = session.auth
-    
-            :type status: Status
-        :type output: file
-        '''
-        super(ProgressReporterThread, self).__init__()
-        self.status = status
-        self.output = output
-        self._tick = tick
-        self._update_interval = update_interval
-        self._spinner_pos = 0
-        self._status_line = ''
-        self._prev_bytes = 0
-        self._prev_time = time()
-        self._should_stop = threading.Event()
-    
-    from .compat import is_py2, builtin_str, str
-    
-        def _close_server_sock_ignore_errors(self):
-        try:
-            self.server_sock.close()
-        except IOError:
-            pass
-    
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
-    
-            with pytest.raises(socket.error):
-            new_sock = socket.socket()
-            new_sock.connect((host, port))
-    
-        def close(self):
-        '''Releases the connection back to the pool. Once this method has been
-        called the underlying ``raw`` object must not be accessed again.
-    
-        def test_HTTP_200_OK_HEAD(self, httpbin):
-        r = requests.head(httpbin('get'))
-        assert r.status_code == 200
-    
-        # Compute detections for the original image (identity transform) last to
-    # ensure that the Caffe2 workspace is populated with blobs corresponding
-    # to the original image on return (postcondition of im_detect_bbox)
-    scores_i, boxes_i, im_scale_i = im_detect_bbox(
-        model, im, cfg.TEST.SCALE, cfg.TEST.MAX_SIZE, boxes=box_proposals
-    )
-    add_preds_t(scores_i, boxes_i)
+        def test_implicit_GET_with_headers(self, httpbin):
+        r = http(httpbin.url + '/headers', 'Foo:bar')
+        assert HTTP_OK in r
+        assert r.json['headers']['Foo'] == 'bar'
     
     
-def cityscapes_to_coco_without_person_rider(cityscapes_id):
-    lookup = {
-        0: 0,  # ... background
-        1: 2,  # bicycle
-        2: 3,  # car
-        3: -1,  # person (ignore)
-        4: 7,  # train
-        5: 8,  # truck
-        6: 4,  # motorcycle
-        7: 6,  # bus
-        8: -1,  # rider (ignore)
-    }
-    return lookup[cityscapes_id]
-    
-        # Indices of examples for which we try to make predictions
-    ex_inds = np.where(overlaps >= cfg.TRAIN.BBOX_THRESH)[0]
+def test_unicode_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': UNICODE}
     
     
-def generate_anchors(
-    stride=16, sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.5, 1, 2)
-):
-    '''Generates a matrix of anchor boxes in (x1, y1, x2, y2) format. Anchors
-    are centered on stride / 2, have (approximate) sqrt areas of the specified
-    sizes, and aspect ratios as given.
+class CaseInsensitiveDict(MutableMapping):
+    '''A case-insensitive ``dict``-like object.
+    
+        def copy(self):
+        '''Return a copy of this RequestsCookieJar.'''
+        new_cj = RequestsCookieJar()
+        new_cj.set_policy(self.get_policy())
+        new_cj.update(self)
+        return new_cj
+    
+        if implementation == 'CPython':
+        implementation_version = platform.python_version()
+    elif implementation == 'PyPy':
+        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
+                                               sys.pypy_version_info.minor,
+                                               sys.pypy_version_info.micro)
+        if sys.pypy_version_info.releaselevel != 'final':
+            implementation_version = ''.join([
+                implementation_version, sys.pypy_version_info.releaselevel
+            ])
+    elif implementation == 'Jython':
+        implementation_version = platform.python_version()  # Complete Guess
+    elif implementation == 'IronPython':
+        implementation_version = platform.python_version()  # Complete Guess
+    else:
+        implementation_version = 'Unknown'
+    
+            # Verify we receive an Authorization header in response, then
+        # challenge again.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_401)
+    
+                assert r.status_code == 200
+            assert r.text == u'roflol'
+            assert r.headers['Content-Length'] == '6'
+    
+            http_error_msg = ''
+        if isinstance(self.reason, bytes):
+            # We attempt to decode utf-8 first because some servers
+            # choose to localize their reason strings. If the string
+            # isn't utf-8, we fall back to iso-8859-1 for all other
+            # encodings. (See PR #3538)
+            try:
+                reason = self.reason.decode('utf-8')
+            except UnicodeDecodeError:
+                reason = self.reason.decode('iso-8859-1')
+        else:
+            reason = self.reason
+    
+        def get_redirect_target(self, resp):
+        '''Receives a Response. Returns a redirect URI or ``None``'''
+        # Due to the nature of how requests processes redirects this method will
+        # be called at least once upon the original response and at least twice
+        # on each subsequent redirect response (if any).
+        # If a custom mixin is used to handle this logic, it may be advantageous
+        # to cache the redirect location onto the response object as a private
+        # attribute.
+        if resp.is_redirect:
+            location = resp.headers['location']
+            # Currently the underlying http module on py3 decode headers
+            # in latin1, but empirical evidence suggests that latin1 is very
+            # rarely used with non-ASCII characters in HTTP headers.
+            # It is more likely to get UTF8 header rather than latin1.
+            # This causes incorrect handling of UTF8 encoded location headers.
+            # To solve this, we re-encode the location in latin1.
+            if is_py3:
+                location = location.encode('latin1')
+            return to_native_string(location, 'utf8')
+        return None
+    
+        :param url: URL for the new :class:`Request` object.
+    :param params: (optional) Dictionary, list of tuples or bytes to send
+        in the query string for the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-    return _generate_anchors(
-        stride,
-        np.array(sizes, dtype=np.float) / stride,
-        np.array(aspect_ratios, dtype=np.float)
-    )
     
+    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+'''
     
-# ---------------------------------------------------------------------------- #
-# RPN and Faster R-CNN outputs and losses
-# ---------------------------------------------------------------------------- #
+            # Removing index on 'EventTag', fields ['project_id', 'key', 'value']
+        db.delete_index(u'tagstore_eventtag', ['project_id', 'key_id', 'value_id'])
     
-        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
-    # Combine predictions across all levels and retain the top scoring
-    rois = np.concatenate([blob.data for blob in roi_inputs])
-    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
-    inds = np.argsort(-scores)[:post_nms_topN]
-    rois = rois[inds, :]
-    return rois
+            # Changing field 'EventTag.project_id'
+        db.alter_column(u'tagstore_eventtag', 'project_id', self.gf(
+            'sentry.db.models.fields.bounded.BoundedBigIntegerField')())
     
-        kp_fg_rois_per_this_image = np.minimum(fg_rois_per_image, kp_fg_inds.size)
-    if kp_fg_inds.size > kp_fg_rois_per_this_image:
-        kp_fg_inds = np.random.choice(
-            kp_fg_inds, size=kp_fg_rois_per_this_image, replace=False
+        class Meta:
+        app_label = 'tagstore'
+        unique_together = (('project_id', 'event_id', 'key', 'value'), )
+        index_together = (
+            ('project_id', 'key', 'value'),
+            ('group_id', 'key', 'value'),
         )
     
-            # add fg targets
-        for i in range(rois_fg.shape[0]):
-            fg_polys_ind = fg_polys_inds[i]
-            poly_gt = polys_gt[fg_polys_ind]
-            roi_fg = rois_fg[i]
-            # Rasterize the portion of the polygon mask within the given fg roi
-            # to an M x M binary image
-            mask = segm_utils.polys_to_mask_wrt_box(poly_gt, roi_fg, M)
-            mask = np.array(mask > 0, dtype=np.int32)  # Ensure it's binary
-            masks[i, :] = np.reshape(mask, M**2)
-    else:  # If there are no fg masks (it does happen)
-        # The network cannot handle empty blobs, so we must provide a mask
-        # We simply take the first bg roi, given it an all -1's mask (ignore
-        # label), and label it with class zero (bg).
-        bg_inds = np.where(blobs['labels_int32'] == 0)[0]
-        # rois_fg is actually one background roi, but that's ok because ...
-        rois_fg = sampled_boxes[bg_inds[0]].reshape((1, -1))
-        # We give it an -1's blob (ignore label)
-        masks = -blob_utils.ones((1, M**2), int32=True)
-        # We label it with class = 0 (background)
-        mask_class_labels = blob_utils.zeros((1, ))
-        # Mark that the first roi has a mask
-        roi_has_mask[0] = 1
-    
-        return blob, im_scales
-
+        results = []
+    for plugin in plugins.for_project(project, version=1):
+        if isinstance(plugin, NotificationPlugin):
+            results.append(plugin)
     
     
-def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
-    '''Add RetinaNet blobs.'''
-    # RetinaNet is applied to many feature levels, as in the FPN paper
-    k_max, k_min = cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.RPN_MIN_LEVEL
-    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
-    num_aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
-    aspect_ratios = cfg.RETINANET.ASPECT_RATIOS
-    anchor_scale = cfg.RETINANET.ANCHOR_SCALE
-    
-    from caffe2.proto import caffe2_pb2
-from caffe2.python import core
-from caffe2.python import gradient_checker
-from caffe2.python import workspace
-    
-    
-def test_3():
-    for o in [1 << 8, (1 << 16) - 1, -((1 << 7) + 1), -(1 << 15)]:
-        check(3, o)
-    
-    plt.figtext(0.05, 0.5, 'pandas', size=40)
-    
-        expected = [piece.value.rank()
-                for key, piece in df.groupby(['key1', 'key2'])]
-    expected = concat(expected, axis=0)
-    expected = expected.reindex(result.index)
-    tm.assert_series_equal(result, expected)
-    
-    
-@pytest.mark.parametrize('style,inherited,equiv', [
-    ('margin: 1px; margin: 2px', '',
-     'margin: 2px'),
-    ('margin: 1px', 'margin: 2px',
-     'margin: 1px'),
-    ('margin: 1px; margin: inherit', 'margin: 2px',
-     'margin: 2px'),
-    ('margin: 1px; margin-top: 2px', '',
-     'margin-left: 1px; margin-right: 1px; ' +
-     'margin-bottom: 1px; margin-top: 2px'),
-    ('margin-top: 2px', 'margin: 1px',
-     'margin: 1px; margin-top: 2px'),
-    ('margin: 1px', 'margin-top: 2px',
-     'margin: 1px'),
-    ('margin: 1px; margin-top: inherit', 'margin: 2px',
-     'margin: 1px; margin-top: 2px'),
-])
-def test_css_precedence(style, inherited, equiv):
-    resolve = CSSResolver()
-    inherited_props = resolve(inherited)
-    style_props = resolve(style, inherited=inherited_props)
-    equiv_props = resolve(equiv)
-    assert style_props == equiv_props
-    
-        f = io.BytesIO(dumpf.getvalue())
-    dumpf.close()
-    
-    
-MyNamedTuple = namedtuple('MyNamedTuple', 'x y')
-    
-    
-class ChineseTokenizer(Tokenizer):
-    
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-opt, args = parser.parse_args()
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-    if opt.withWeight is None:
-    withWeight = False
-else:
-    if int(opt.withWeight) is 1:
-        withWeight = True
-    else:
-        withWeight = False
+@instrumented_task(name='sentry.tasks.clear_expired_resolutions',
+                   time_limit=15, soft_time_limit=10)
+def clear_expired_resolutions(release_id):
+    '''
+    This should be fired when ``release_id`` is created, and will indicate to
+    the system that any pending resolutions older than the given release can now
+    be safely transitioned to resolved.
