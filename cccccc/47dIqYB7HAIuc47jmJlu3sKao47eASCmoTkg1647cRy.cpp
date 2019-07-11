@@ -1,293 +1,163 @@
 
         
-            // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
+        #endif
     
-    // Owns a python object and decrements the reference count on destruction.
-// This class is not threadsafe.
-template <typename PyObjectStruct>
-class ScopedPythonPtr {
- public:
-  // Takes the ownership of the specified object to ScopedPythonPtr.
-  // The reference count of the specified py_object is not incremented.
-  explicit ScopedPythonPtr(PyObjectStruct* py_object = NULL)
-      : ptr_(py_object) {}
+    void bitwiseNot(const Size2D &size,
+                const u8 *srcBase, ptrdiff_t srcStride,
+                u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    // Author: liujisi@google.com (Pherl Liu)
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    }
     
-    static inline int internalInflateInit2(
-    z_stream* zcontext, GzipInputStream::Format format) {
-  int windowBitsFormat = 0;
-  switch (format) {
-    case GzipInputStream::GZIP: windowBitsFormat = 16; break;
-    case GzipInputStream::AUTO: windowBitsFormat = 32; break;
-    case GzipInputStream::ZLIB: windowBitsFormat = 0; break;
-  }
-  return inflateInit2(zcontext, /* windowBits */15 | windowBitsFormat);
+    // It is possible to accumulate up to 131071 schar multiplication results in sint32 without overflow
+// We process 16 elements and accumulate two new elements per step. So we could handle 131071/2*16 elements
+#define DOT_INT_BLOCKSIZE 131070*8
+    f64 result = 0.0;
+    for (size_t row = 0; row < size.height; ++row)
+    {
+        const s8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
+        const s8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
+    }
+    
+    bool isFlipSupported(FLIP_MODE flipMode, u32 elemSize)
+{
+    bool supportedElemSize = (elemSize == 1) || (elemSize == 2) || (elemSize == 3) || (elemSize == 4);
+    return isSupportedConfiguration() &&
+            ((supportedElemSize && ((flipMode == FLIP_BOTH_MODE) || (flipMode == FLIP_HORIZONTAL_MODE))) ||
+             (flipMode == FLIP_VERTICAL_MODE));
 }
     
-    TEST(ByteSourceTest, CopyTo) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  string str;
-  StringByteSink sink(&str);
-    }
+                uint32x4_t ln04 = vaddq_u32(lane0, lane4);
+            uint32x4_t ln13 = vaddq_u32(lane1, lane3);
     
-    class CopyNoAssign {
- public:
-  explicit CopyNoAssign(int value) : foo(value) {}
-  CopyNoAssign(const CopyNoAssign& other) : foo(other.foo) {}
-  int foo;
- private:
-  const CopyNoAssign& operator=(const CopyNoAssign&);
+    template <typename T, int elsize> struct vtail
+{
+    static inline void inRange(const T *, const T *, const T *,
+                               u8 *, size_t &, size_t)
+    {
+        //do nothing since there couldn't be enough data
+    }
+};
+template <typename T> struct vtail<T, 2>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
+        if( x + 8 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1(dst + x, internal::vmovn(vd));
+            x+=8;
+        }
+    }
+};
+template <typename T> struct vtail<T, 1>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        typedef typename internal::VecTraits<T>::vec64 vec64;
+        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
+        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
+        if( x + 16 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1q(dst + x, vd);
+            x+=16;
+        }
+        if( x + 8 < width)
+        {
+             vec64  vs = internal::vld1( src + x);
+             vec64 vr1 = internal::vld1(rng1 + x);
+             vec64 vr2 = internal::vld1(rng2 + x);
+            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
+            internal::vst1(dst + x, vd);
+            x+=8;
+        }
+    }
 };
     
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-    {  // Yes || Yes == true.
-  value = or_<true_, true_>::value;
-  EXPECT_TRUE(value);
-  // Yes || No == true.
-  value = or_<true_, false_>::value;
-  EXPECT_TRUE(value);
-  // No || Yes == true.
-  value = or_<false_, true_>::value;
-  EXPECT_TRUE(value);
-  // No || No == false.
-  value = or_<false_, false_>::value;
-  EXPECT_FALSE(value);
-}
+      // Null char in the string.
     
-    // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
-// executed:
-//
-//   1. It generates a warning if there is more than one active
-//   thread.  This is because it's safe to fork() or clone() only
-//   when there is a single thread.
-//
-//   2. The parent process clone()s a sub-process and runs the death
-//   test in it; the sub-process exits with code 0 at the end of the
-//   death test, if it hasn't exited already.
-//
-//   3. The parent process waits for the sub-process to terminate.
-//
-//   4. The parent process checks the exit code and error message of
-//   the sub-process.
-//
-// Examples:
-//
-//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
-//   for (int i = 0; i < 5; i++) {
-//     EXPECT_DEATH(server.ProcessRequest(i),
-//                  'Invalid request .* in ProcessRequest()')
-//                  << 'Failed to die on request ' << i;
-//   }
-//
-//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
-//
-//   bool KilledBySIGHUP(int exit_code) {
-//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
-//   }
-//
-//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
-//
-// On the regular expressions used in death tests:
-//
-//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
-//   which uses the POSIX extended regex syntax.
-//
-//   On other platforms (e.g. Windows), we only support a simple regex
-//   syntax implemented as part of Google Test.  This limited
-//   implementation should be enough most of the time when writing
-//   death tests; though it lacks many features you can find in PCRE
-//   or POSIX extended regex syntax.  For example, we don't support
-//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
-//   repetition count ('x{5,7}'), among others.
-//
-//   Below is the syntax that we do support.  We chose it to be a
-//   subset of both PCRE and POSIX extended regex, so it's easy to
-//   learn wherever you come from.  In the following: 'A' denotes a
-//   literal character, period (.), or a single \\ escape sequence;
-//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
-//   natural numbers.
-//
-//     c     matches any literal character c
-//     \\d   matches any decimal digit
-//     \\D   matches any character that's not a decimal digit
-//     \\f   matches \f
-//     \\n   matches \n
-//     \\r   matches \r
-//     \\s   matches any ASCII whitespace, including \n
-//     \\S   matches any character that's not a whitespace
-//     \\t   matches \t
-//     \\v   matches \v
-//     \\w   matches any letter, _, or decimal digit
-//     \\W   matches any character that \\w doesn't match
-//     \\c   matches any literal character c, which must be a punctuation
-//     .     matches any single character except \n
-//     A?    matches 0 or 1 occurrences of A
-//     A*    matches 0 or many occurrences of A
-//     A+    matches 1 or many occurrences of A
-//     ^     matches the beginning of a string (not that of each line)
-//     $     matches the end of a string (not that of each line)
-//     xy    matches x followed by y
-//
-//   If you accidentally use PCRE or POSIX extended regex features
-//   not implemented by us, you will get a run-time failure.  In that
-//   case, please try to rewrite your regular expression within the
-//   above syntax.
-//
-//   This implementation is *not* meant to be as highly tuned or robust
-//   as a compiled regex library, but should perform well enough for a
-//   death test, which already incurs significant overhead by launching
-//   a child process.
-//
-// Known caveats:
-//
-//   A 'threadsafe' style death test obtains the path to the test
-//   program from argv[0] and re-executes it in the sub-process.  For
-//   simplicity, the current implementation doesn't search the PATH
-//   when launching the sub-process.  This means that the user must
-//   invoke the test program via a path that contains at least one
-//   path separator (e.g. path/to/foo_test and
-//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
-//   is rarely a problem as people usually don't put the test binary
-//   directory in PATH.
-//
-// TODO(wan@google.com): make thread-safe death tests search the PATH.
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
     
-    # if GTEST_HAS_COMBINE
-// Combine() allows the user to combine two or more sequences to produce
-// values of a Cartesian product of those sequences' elements.
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
 //
-// Synopsis:
-// Combine(gen1, gen2, ..., genN)
-//   - returns a generator producing sequences with elements coming from
-//     the Cartesian product of elements from the sequences generated by
-//     gen1, gen2, ..., genN. The sequence elements will have a type of
-//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
-//     of elements from sequences produces by gen1, gen2, ..., genN.
+// Test program to verify that GzipOutputStream is compatible with command line
+// gzip or java.util.zip.GzipOutputStream
 //
-// Combine can have up to 10 arguments. This number is currently limited
-// by the maximum number of elements in the tuple implementation used by Google
-// Test.
-//
-// Example:
-//
-// This will instantiate tests in test case AnimalTest each one with
-// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
-// tuple('dog', BLACK), and tuple('dog', WHITE):
-//
-// enum Color { BLACK, GRAY, WHITE };
-// class AnimalTest
-//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
-//
-// TEST_P(AnimalTest, AnimalLooksNice) {...}
-//
-// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
-//                         Combine(Values('cat', 'dog'),
-//                                 Values(BLACK, WHITE)));
-//
-// This will instantiate tests in FlagDependentTest with all variations of two
-// Boolean flags:
-//
-// class FlagDependentTest
-//     : public testing::TestWithParam<tuple<bool, bool> > {
-//   virtual void SetUp() {
-//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
-//     tie(external_flag_1, external_flag_2) = GetParam();
-//   }
-// };
-//
-// TEST_P(FlagDependentTest, TestFeature1) {
-//   // Test your code using external_flag_1 and external_flag_2 here.
-// }
-// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
-//                         Combine(Bool(), Bool()));
-//
-template <typename Generator1, typename Generator2>
-internal::CartesianProductHolder2<Generator1, Generator2> Combine(
-    const Generator1& g1, const Generator2& g2) {
-  return internal::CartesianProductHolder2<Generator1, Generator2>(
-      g1, g2);
-}
+// Reads data on standard input and writes compressed gzip stream to standard
+// output.
     
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    // Next, associate a list of types with the test case, which will be
-// repeated for each type in the list.  The typedef is necessary for
-// the macro to parse correctly.
-typedef testing::Types<char, int, unsigned int> MyTypes;
-TYPED_TEST_CASE(FooTest, MyTypes);
-    
-    // Traps C++ exceptions escaping statement and reports them as test
-// failures. Note that trapping SEH exceptions is not implemented here.
-# if GTEST_HAS_EXCEPTIONS
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  try { \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } catch (const ::std::exception& gtest_exception) { \
-    fprintf(\
-        stderr, \
-        '\n%s: Caught std::exception-derived exception escaping the ' \
-        'death test statement. Exception message: %s\n', \
-        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
-        gtest_exception.what()); \
-    fflush(stderr); \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  } catch (...) { \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  }
-    
-      // Join an existing circle.
-  void join(linked_ptr_internal const* ptr)
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    
-template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9>
-class CartesianProductGenerator9
-    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
-        T7, T8, T9> > {
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
  public:
-  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> ParamType;
-    }
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
     
-    // A unique struct template used as the default value for the
-// arguments of class template Templates.  This allows us to simulate
-// variadic templates (e.g. Templates<int>, Templates<int, double>,
-// and etc), which C++ doesn't support directly.
-template <typename T>
-struct NoneT {};
+    template <typename T, size_t N>
+internal::ParamGenerator<T> ValuesIn(const T (&array)[N]) {
+  return ValuesIn(array, array + N);
+}
     
-      // Applies a function/functor on each element of the queue, and
-  // returns the result in a new queue.  The original queue is not
-  // affected.
-  template <typename F>
-  Queue* Map(F function) const {
-    Queue* new_queue = new Queue();
-    for (const QueueNode<E>* node = head_; node != NULL; node = node->next_) {
-      new_queue->Enqueue(function(node->element()));
-    }
-    }
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED2.  Don't use
+// this in your code.
+#define GTEST_PRED2_(pred, v1, v2, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred2Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             pred, \
+                                             v1, \
+                                             v2), on_failure)
+    
+    
+// This sample shows how to write a more complex unit test for a class
+// that has multiple member functions.
+//
+// Usually, it's a good idea to have one test for each method in your
+// class.  You don't have to do that exactly, but it helps to keep
+// your tests organized.  You may also throw in additional tests as
+// needed.
