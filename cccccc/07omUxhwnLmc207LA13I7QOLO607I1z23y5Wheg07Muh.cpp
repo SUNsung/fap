@@ -1,83 +1,110 @@
 
         
-        void CacheImpl::releaseValue(void *Value) {
-  // FIXME: Implementation.
-}
+        Dictionary::Dictionary(v8::Isolate* isolate, v8::Local<v8::Object> object)
+    : isolate_(isolate), object_(object) {}
     
-    void CacheImpl::removeAll() {
-  cache_remove_all(static_cast<cache_t*>(Impl));
-}
+    ```
     
-    using namespace swift;
+    Github Link:
+- https://github.com/pytorch/pytorch/blob/master/caffe2/operators/floor_op.cc
     
-    const uint16_t swift::unicode::ExtendedGraphemeClusterNoBoundaryRulesMatrix[] = {
-% for row in get_extended_grapheme_cluster_rules_matrix(break_table):
-  ${row},
-% end
+    Example 2 (with KEY):
+DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
+RANGES = [
+  [
+    [2, 4],
+    [0, 2],
+  ],
+  [
+    [0, 0],
+    [6, 2],
+  ]
+]
+lengths = [4, 2]
+OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
+OUTPUT[1] = [[1, 2], [8, 7]]
+    
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    #include 'swift/Demangling/ManglingUtils.h'
+    # define INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
+  ::testing::internal::ParamGenerator<test_case_name::ParamType> \
+      gtest_##prefix##test_case_name##_EvalGenerator_() { return generator; } \
+  int gtest_##prefix##test_case_name##_dummy_ = \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestCaseInstantiation(\
+                  #prefix, \
+                  &gtest_##prefix##test_case_name##_EvalGenerator_, \
+                  __FILE__, __LINE__)
+    
+      // A helper class that aborts a death test when it's deleted.
+  class ReturnSentinel {
+   public:
+    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
+    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
+   private:
+    DeathTest* const test_;
+    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
+  } GTEST_ATTRIBUTE_UNUSED_;
+    
+      // Returns true if pathname describes a root directory. (Windows has one
+  // root directory per disk drive.)
+  bool IsRootDirectory() const;
+    
+    #define GTEST_TEST_THROW_(statement, expected_exception, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::ConstCharPtr gtest_msg = '') { \
+    bool gtest_caught_expected = false; \
+    try { \
+      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+    } \
+    catch (expected_exception const&) { \
+      gtest_caught_expected = true; \
+    } \
+    catch (...) { \
+      gtest_msg.value = \
+          'Expected: ' #statement ' throws an exception of type ' \
+          #expected_exception '.\n  Actual: it throws a different type.'; \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__); \
+    } \
+    if (!gtest_caught_expected) { \
+      gtest_msg.value = \
+          'Expected: ' #statement ' throws an exception of type ' \
+          #expected_exception '.\n  Actual: it throws nothing.'; \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__); \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_testthrow_, __LINE__): \
+      fail(gtest_msg.value)
     
     
+    {  // Returns the smallest prime number greater than p; or returns -1
+  // if the next prime is beyond the capacity of the table.
+  virtual int GetNextPrime(int p) const = 0;
+};
     
-    bool Punycode::decodePunycodeUTF8(StringRef InputPunycode,
-                                  std::string &OutUTF8) {
-  std::vector<uint32_t> OutCodePoints;
-  if (!decodePunycode(InputPunycode, OutCodePoints))
-    return false;
-    }
-    
-    #include 'swift/Basic/LLVM.h'
-#include 'llvm/ADT/ArrayRef.h'
-#include <string>
-#include <vector>
-    
-    std::string tmppath() {
-  // TMPFILE is for manual test execution during which the user will specify
-  // the full temp file path using the environmental variable TMPFILE
-  const char* tmpfile = getenv('TMPFILE');
-  if (tmpfile) {
-    return std::string(tmpfile);
-  }
-    }
-    
-    // Deserialize incoming server stats. Returns the number of bytes deserialized.
-size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
-                              uint64_t* server_elapsed_time);
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  FILETIME idle, kernel, user;
-  if (GetSystemTimes(&idle, &kernel, &user) != 0) {
-    total = FiletimeToInt(kernel) + FiletimeToInt(user);
-    busy = total - FiletimeToInt(idle);
-  }
-  return std::make_pair(busy, total);
+    // Tests positive input.
+TEST(IsPrimeTest, Positive) {
+  EXPECT_FALSE(IsPrime(4));
+  EXPECT_TRUE(IsPrime(5));
+  EXPECT_FALSE(IsPrime(6));
+  EXPECT_TRUE(IsPrime(23));
 }
     
-      QAbstractItemModel *model;
-    
-    void ConnectionsManager::addNewConnection(const ServerConfig& config,
-                                          bool saveToConfig) {
-  // add connection to internal container
-  QSharedPointer<RedisClient::Connection> connection(
-      new RedisClient::Connection(config));
-  ServerConfig conf = config;
-  conf.setOwner(connection.toWeakRef());
-  connection->setConnectionConfig(conf);
-  m_connections.push_back(connection);
+      // Applies a function/functor on each element of the queue, and
+  // returns the result in a new queue.  The original queue is not
+  // affected.
+  template <typename F>
+  Queue* Map(F function) const {
+    Queue* new_queue = new Queue();
+    for (const QueueNode<E>* node = head_; node != NULL; node = node->next_) {
+      new_queue->Enqueue(function(node->element()));
     }
-    
-    
-    {    return a.exec();
-}
-    
-    TabModel::~TabModel() {
-  QtConcurrent::run(
-      [](QSharedPointer<RedisClient::Connection> connection) {
-        connection->disconnect();
-      },
-      m_connection);
     }
-    
-      QString getName() const override;
