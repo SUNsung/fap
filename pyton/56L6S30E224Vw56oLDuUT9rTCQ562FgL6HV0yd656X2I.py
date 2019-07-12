@@ -1,165 +1,178 @@
 
         
-        import codecs
-import subprocess
+            def __init__(self, level, row, spot_number, spot_size, vehicle_size):
+        self.level = level
+        self.row = row
+        self.spot_number = spot_number
+        self.spot_size = spot_size
+        self.vehicle_size = vehicle_size
+        self.vehicle = None
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+            (foo, p1), 2
+        (bar, p1), 3
+        (foo, p2), 3
+        (bar, p3), 10
+        (foo, p4), 1
+        '''
+        yield key, sum(values)
     
-        outfile, = args
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
+        def move_to_front(self, node):
+        ...
     
-            for tc in test_cases:
-            info_dict = tc.get('info_dict', {})
-            if not (info_dict.get('id') and info_dict.get('ext')):
-                raise Exception('Test definition incorrect. The output file cannot be known. Are both \'id\' and \'ext\' keys present?')
-    
-        def debug(self, msg):
+        def remove_link_to_crawl(self, url):
+        '''Remove the given link from `links_to_crawl`.'''
         pass
     
-    from youtube_dl.jsinterp import JSInterpreter
+    names = []
+for ie in ordered_cls:
+    name = ie.__name__
+    src = build_lazy_ie(ie, name)
+    module_contents.append(src)
+    if ie in _ALL_CLASSES:
+        names.append(name)
     
-    from test.helper import assertRegexpMatches
+        def test_allsubtitles(self):
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['no']))
+        self.assertEqual(md5(subtitles['no']), '544fa917d3197fcbee64634559221cc2')
     
-            print('****************** Testing Edit Distance DP Algorithm ******************')
-        print()
     
-    	hexrep = format(i,'08x')
-	thing = ''
-	for i in [3,2,1,0]:
-		thing += hexrep[2*i:2*i+2]
-	return thing
+@pytest.mark.parametrize(
+    ('username', 'password', 'message'),
+    (('a', 'test', b'Incorrect username.'), ('test', 'a', b'Incorrect password.')),
+)
+def test_login_validate_input(auth, username, password, message):
+    response = auth.login(username, password)
+    assert message in response.data
     
-        freqPairs = list(freqToLetter.items())
-    freqPairs.sort(key = getItemAtIndexZero, reverse = True)
-    
-            if pattern not in allPatterns:
-            allPatterns[pattern] = [word]
+            if error is not None:
+            flash(error)
         else:
-            allPatterns[pattern].append(word)
+            db = get_db()
+            db.execute(
+                'UPDATE post SET title = ?, body = ? WHERE id = ?', (title, body, id)
+            )
+            db.commit()
+            return redirect(url_for('blog.index'))
     
-        def database_forwards(self, app_label, schema_editor, from_state, to_state):
-        if schema_editor.connection.vendor != 'postgresql':
-            return
-        schema_editor.execute('CREATE EXTENSION IF NOT EXISTS %s' % schema_editor.quote_name(self.name))
-        # Clear cached, stale oids.
-        get_hstore_oids.cache_clear()
-        get_citext_oids.cache_clear()
-        # Registering new type handlers cannot be done before the extension is
-        # installed, otherwise a subsequent data migration would use the same
-        # connection.
-        register_type_handlers(schema_editor.connection)
+        app.url_map.converters['ctx'] = ContextConverter
     
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
+        # TASK: print the cross-validated scores for the each parameters set
+    # explored by the grid search
     
-        def save(self, must_create=False):
-        if self.session_key is None:
-            return self.create()
-        if must_create:
-            func = self._cache.add
-        elif self._cache.get(self.cache_key) is not None:
-            func = self._cache.set
-        else:
-            raise UpdateError
-        result = func(self.cache_key,
-                      self._get_session(no_load=must_create),
-                      self.get_expiry_age())
-        if must_create and not result:
-            raise CreateError
+    First example
+-------------
+The first example illustrates how robust covariance estimation can help
+concentrating on a relevant cluster when another one exists. Here, many
+observations are confounded into one and break down the empirical covariance
+estimation.
+Of course, some screening tools would have pointed out the presence of two
+clusters (Support Vector Machines, Gaussian Mixture Models, univariate
+outlier detection, ...). But had it been a high-dimensional example, none
+of these could be applied that easily.
     
-        class Meta(AbstractBaseSession.Meta):
-        db_table = 'django_session'
+                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
+                                left=0, right=1)
+            plt.suptitle('n_cluster=%i, connectivity=%r' %
+                         (n_clusters, connectivity is not None), size=17)
+    
+        ax.w_xaxis.set_ticklabels([])
+    ax.w_yaxis.set_ticklabels([])
+    ax.w_zaxis.set_ticklabels([])
+    ax.set_xlabel('Petal width')
+    ax.set_ylabel('Sepal length')
+    ax.set_zlabel('Petal length')
+    ax.set_title(titles[fignum - 1])
+    ax.dist = 12
+    fignum = fignum + 1
+    
+    plt.show()
 
     
-    from httpie.plugins import plugin_manager
-from httpie.context import Environment
+    ######################################################################
+# Generate datasets. We choose the size big enough to see the scalability
+# of the algorithms, but not too big to avoid too long running times
     
-            Use `self.raw_auth` to access the raw value passed through
-        `--auth, -a`.
+    import numpy as np
+from sklearn.cluster import MeanShift, estimate_bandwidth
+from sklearn.datasets.samples_generator import make_blobs
     
-        class Plugin(AuthPlugin):
-        auth_type = 'test-prompt-false'
-        prompt_password = False
+    # MiniBatchKMeans
+ax = fig.add_subplot(1, 3, 2)
+for k, col in zip(range(n_clusters), colors):
+    my_members = mbk_means_labels == order[k]
+    cluster_center = mbk_means_cluster_centers[order[k]]
+    ax.plot(X[my_members, 0], X[my_members, 1], 'w',
+            markerfacecolor=col, marker='.')
+    ax.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
+            markeredgecolor='k', markersize=6)
+ax.set_title('MiniBatchKMeans')
+ax.set_xticks(())
+ax.set_yticks(())
+plt.text(-3.5, 1.8, 'train time: %.2fs\ninertia: %f' %
+         (t_mini_batch, mbk.inertia_))
     
+    # Get a reference to the Raspberry Pi camera.
+# If this fails, make sure you have a camera connected to the RPi and that you
+# enabled your camera in raspi-config and rebooted first.
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
     
-def test_unicode_url_query_arg_item(httpbin):
-    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['args'] == {'test': UNICODE}, r
+    while video_capture.isOpened():
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
     
-    import pytest
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
     
-            if module.check_mode:
-            mp_id = get_monitoring_policy(oneandone_conn, monitoring_policy_id)
-            if (monitoring_policy_processes and mp_id):
-                return True
-            return False
-    
-            # if we reach this point we can assume that the host was taken to the desired state
-    
-    
-def ensure(module, client):
-    name = module.params['cn']
-    state = module.params['state']
-    
-    
-def do_send_request(module, url, params, key):
-    data = json.dumps(params)
-    headers = {
-        'Content-Type': 'application/json',
-        'x-stackdriver-apikey': key
+        # 讲识别结果以json键值对的数据结构输出
+    result = {
+        'face_found_in_image': face_found,
+        'is_picture_of_obama': is_obama
     }
-    response, info = fetch_url(module, url, headers=headers, data=data, method='POST')
-    if info['status'] != 200:
-        module.fail_json(msg='Unable to send msg: %s' % info['msg'])
+    return jsonify(result)
     
-    # If true, show URL addresses after external links.
-#
-# man_show_urls = False
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
     
-        # If the temperature is not a number this can cause issues
-    # with Polymer components, so bail early there.
-    if not isinstance(temperature, Number):
-        raise TypeError(
-            'Temperature is not a number: {}'.format(temperature))
+    # This is a super simple (but slow) example of running face recognition on live video from your webcam.
+# There's a second example that's a little more complicated but runs faster.
     
-    _LOGGER = logging.getLogger(__name__)
+                # Or instead, use the known face with the smallest distance to the new face
+            face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+            best_match_index = np.argmin(face_distances)
+            if matches[best_match_index]:
+                name = known_face_names[best_match_index]
+    
+            # Loop through each face in this frame of video
+        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+            # See if the face is a match for the known face(s)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    
+    PROJECT_NAME = 'Home Assistant'
+PROJECT_PACKAGE_NAME = 'homeassistant'
+PROJECT_AUTHOR = 'The Home Assistant Authors'
+PROJECT_COPYRIGHT = ' 2013-2018, {}'.format(PROJECT_AUTHOR)
+PROJECT_LONG_DESCRIPTION = ('Home Assistant is an open-source '
+                            'home automation platform running on Python 3. '
+                            'Track and control all devices at home and '
+                            'automate control. '
+                            'Installation in less than a minute.')
+PROJECT_GITHUB_USERNAME = 'home-assistant'
+PROJECT_GITHUB_REPOSITORY = 'home-assistant'
+    
+            if not version.is_prerelease or version.release[2] != 0:
+            to_change['release'] = _bump_release(version.release, 'minor')
