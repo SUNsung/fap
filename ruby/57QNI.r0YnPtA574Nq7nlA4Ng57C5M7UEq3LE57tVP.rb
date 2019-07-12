@@ -1,165 +1,134 @@
 
         
-            def initialize
-      @pages = {}
+            def resource_params
+      params.require(:email_domain_block).permit(:domain)
     end
+  end
+end
+
     
-            private
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
     
-          def root
-        css('.nav-index-group').each do |node|
-          if heading = node.at_css('.nav-index-group-heading')
-            heading.name = 'h2'
+      # Answers if the response is a redirection one.
+  #
+  # @return [Boolean] true if the response is a redirection, false otherwise.
+  def redirect?
+    [301, 302, 303, 307, 308].include?(code)
+  end
+    
+    
+IAX_SUBTYPE_NEW     = 1
+IAX_SUBTYPE_PING    = 2
+IAX_SUBTYPE_PONG    = 3
+IAX_SUBTYPE_ANSWER  = 4
+IAX_SUBTYPE_ACK     = 4
+IAX_SUBTYPE_HANGUP  = 5
+IAX_SUBTYPE_REJECT  = 6
+IAX_SUBTYPE_ACCEPT  = 7
+IAX_SUBTYPE_AUTHREQ = 8
+IAX_SUBTYPE_AUTHREP = 9
+IAX_SUBTYPE_INVAL   = 10
+IAX_SUBTYPE_LAGRQ   = 11
+IAX_SUBTYPE_LAGRP   = 12
+IAX_SUBTYPE_REGREQ  = 13
+IAX_SUBTYPE_REGAUTH = 14
+IAX_SUBTYPE_REGACK  = 15
+IAX_SUBTYPE_REGREJ  = 16
+IAX_SUBTYPE_REGREL  = 17
+IAX_SUBTYPE_VNAK    = 18
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+              # Encodes the authenticator field
+          #
+          # @return [String]
+          def encode_authenticator
+            authenticator.encode
           end
-          node.parent.before(node.children)
-        end
-    
-      def local_domain?
-    TagManager.instance.web_domain?(hub_topic_domain)
-  end
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
-    end
-  end
-    
-      def apply_header_limit
-    response.headers['X-RateLimit-Limit'] = rate_limit_limit
-  end
-    
-      def set_user_activity
-    return unless user_needs_sign_in_update?
-    current_user.update_tracked_fields!(request)
-  end
-    
-      def test_file_exists(path)
-    exists?('f', path)
-  end
-    
-      class VagrantSSHCommandError < RuntimeError; end
-    
-        def top_level_tasks
-      if tasks_without_stage_dependency.include?(@top_level_tasks.first)
-        @top_level_tasks
-      else
-        @top_level_tasks.unshift(ensure_stage.to_s)
-      end
-    end
-    
-            if built_in_scm_name?
-          load_built_in_scm
-        else
-          # Compatibility with existing 3.x third-party SCMs
-          register_legacy_scm_hooks
-          load_legacy_scm_by_name
         end
       end
-    
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
-      end
-      # rubocop:enable Security/MarshalLoad
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-            directives.compact.sort.join('; ')
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-    module LogStash module PluginManager module PackInstaller
-  class Local
-    PACK_EXTENSION = '.zip'
-    LOGSTASH_PATTERN_RE = /logstash\/?/
-    
-      private
-  def update_all?
-    plugins_arg.size == 0
-  end
-    
-    
-# This is a non obvious hack,
-# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
-# use them.
-#
-# Details: https://github.com/jruby/jruby-openssl/issues/105
-Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
-Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
   end
-  output += '></#{tag}>'
 end
     
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
+              # Decodes the nonce field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_nonce(input)
+            input.value[0].value.to_i
+          end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self]
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncryptedData Name, invalid input'
+            end
+    
+    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
+  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
+end
+    
+        def any?(key)
+      value = fetch(key)
+      if value && value.respond_to?(:any?)
+        begin
+          return value.any?
+        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
+          # Gracefully ignore values whose `any?` method doesn't accept 0 args
         end
+      end
     
-      # Returns a title cased string based on John Gruber's title case http://daringfireball.net/2008/08/title_case_update
-  def titlecase(input)
-    input.titlecase
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
   end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
