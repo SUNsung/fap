@@ -1,310 +1,226 @@
 
         
-            for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
+                suite = loader.loadTestsFromName('sdasfasfasdf', unittest)
+        expected = 'module 'unittest' has no attribute 'sdasfasfasdf''
+        error, test = self.check_deferred_error(loader, suite)
+        self.assertIn(
+            expected, error,
+            'missing error string in %r' % error)
+        self.assertRaisesRegex(AttributeError, expected, test.sdasfasfasdf)
+    
+        def test_unicode(self):
+        # Legacy unicode literals:
+        self.check_tokenize('Örter = u'places'\ngrün = U'green'', '''\
+    NAME       'Örter'       (1, 0) (1, 5)
+    OP         '='           (1, 6) (1, 7)
+    STRING     'u'places''   (1, 8) (1, 17)
+    NEWLINE    '\\n'          (1, 17) (1, 18)
+    NAME       'grün'        (2, 0) (2, 4)
+    OP         '='           (2, 5) (2, 6)
+    STRING     'U'green''    (2, 7) (2, 15)
+    ''')
+    
+        def compare_files(self, file1, file2):
+        with open(file1) as fp:
+            lines1 = fp.readlines()
+        with open(file2) as fp:
+            lines2 = fp.readlines()
+        self.assertEqual(lines1, lines2)
+    
+    # Make a local copy of what we are going to send.
+with open('outgoing.msg', 'wb') as f:
+    f.write(bytes(msg))
+    
+    # Import the email modules we'll need
+from email import policy
+from email.parser import BytesParser
+    
+    # Function to return the operator module
+def get_operator_module():
+    return operator
     
     
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
+def get_ann_fn(name):
+    '''Retrieve the annotation file for the dataset.'''
+    return _DATASETS[name][_ANN_FN]
     
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        if isinstance(dataset_names, basestring):
+        dataset_names = (dataset_names, )
+    if isinstance(proposal_files, basestring):
+        proposal_files = (proposal_files, )
+    if len(proposal_files) == 0:
+        proposal_files = (None, ) * len(dataset_names)
+    assert len(dataset_names) == len(proposal_files)
+    roidbs = [get_roidb(*args) for args in zip(dataset_names, proposal_files)]
+    roidb = roidbs[0]
+    for r in roidbs[1:]:
+        roidb.extend(r)
+    roidb = filter_for_training(roidb)
     
-        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
-    out = '# Supported sites\n' + ''.join(
-        ' - ' + md + '\n'
-        for md in gen_ies_md(ies))
+    def add_roi_2mlp_head(model, blob_in, dim_in, spatial_scale):
+    '''Add a ReLU MLP with two hidden layers.'''
+    hidden_dim = cfg.FAST_RCNN.MLP_HEAD_DIM
+    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
+    roi_feat = model.RoIFeatureTransform(
+        blob_in,
+        'roi_feat',
+        blob_rois='rois',
+        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
+        resolution=roi_size,
+        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
+    model.FC(roi_feat, 'fc6', dim_in * roi_size * roi_size, hidden_dim)
+    model.Relu('fc6', 'fc6')
+    model.FC('fc6', 'fc7', hidden_dim, hidden_dim)
+    model.Relu('fc7', 'fc7')
+    return 'fc7', hidden_dim
     
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-            def print_skipping(reason):
-            print('Skipping %s: %s' % (test_case['name'], reason))
-        if not ie.working():
-            print_skipping('IE marked as not _WORKING')
-            return
-    
-    
-class TestJSInterpreter(unittest.TestCase):
-    def test_basic(self):
-        jsi = JSInterpreter('function x(){;}')
-        self.assertEqual(jsi.call_function('x'), None)
-    
-    
-class CellTest(unittest.TestCase):
-    def test_comparison(self):
-        # These tests are here simply to exercise the comparison code;
-        # their presence should not be interpreted as providing any
-        # guarantees about the semantics (or even existence) of cell
-        # comparisons in future versions of CPython.
-        self.assertTrue(cell(2) < cell(3))
-        self.assertTrue(empty_cell() < cell('saturday'))
-        self.assertTrue(empty_cell() == empty_cell())
-        self.assertTrue(cell(-36) == cell(-36.0))
-        self.assertTrue(cell(True) > empty_cell())
-    
-            Paths are sorted before being imported to ensure reproducible execution
-        order even on filesystems with non-alphabetical ordering like ext3/4.
-        '''
-        set_implicit_top = False
-        if top_level_dir is None and self._top_level_dir is not None:
-            # make top_level_dir optional if called from load_tests in a package
-            top_level_dir = self._top_level_dir
-        elif top_level_dir is None:
-            set_implicit_top = True
-            top_level_dir = start_dir
-    
-    NAME_MAPPING.update({
-    ('__builtin__', 'basestring'): ('builtins', 'str'),
-    ('exceptions', 'StandardError'): ('builtins', 'Exception'),
-    ('UserDict', 'UserDict'): ('collections', 'UserDict'),
-    ('socket', '_socketobject'): ('socket', 'SocketType'),
-})
-    
-        def _generate_symbols(self, grammar_file, target_symbol_py_file):
-        proc = subprocess.Popen([sys.executable,
-                                 GEN_SYMBOL_FILE,
-                                 grammar_file,
-                                 target_symbol_py_file], stderr=subprocess.PIPE)
-        stderr = proc.communicate()[1]
-        return proc.returncode, stderr
-    
-        # Fetch the records to be pickled.
-    cursor.execute('SELECT * FROM memos')
-    memos = [MemoRecord(key, task) for key, task in cursor]
-    # Save the records using our custom DBPickler.
-    file = io.BytesIO()
-    DBPickler(file).dump(memos)
-    
-    # Now the header items can be accessed as a dictionary, and any non-ASCII will
-# be converted to unicode:
-print('To:', msg['to'])
-print('From:', msg['from'])
-print('Subject:', msg['subject'])
-    
-        with open(args.msgfile, 'rb') as fp:
-        msg = email.message_from_binary_file(fp, policy=default)
-    
-    ##
-    
-            print('Testing IMapIterator.next() with timeout:', end=' ')
-        it = pool.imap(calculatestar, TASKS)
-        while 1:
-            sys.stdout.flush()
-            try:
-                sys.stdout.write('\n\t%s' % it.next(0.02))
-            except StopIteration:
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
-    
-    buffer = ''
-    
-    
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    def add_ResNet_roi_conv5_head_for_keypoints(
+    model, blob_in, dim_in, spatial_scale
+):
+    '''Add a ResNet 'conv5' / 'stage5' head for Mask R-CNN keypoint prediction.
     '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
-    
-            self.vhost2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, 'localhost')
-    
-    
-# -- Options for HTMLHelp output ------------------------------------------
-    
-    ==========================================  ===================================
-``--dns-digitalocean-credentials``          DigitalOcean credentials_ INI file.
-                                            (Required)
-``--dns-digitalocean-propagation-seconds``  The number of seconds to wait for
-                                            DNS to propagate before asking the
-                                            ACME server to verify the DNS
-                                            record.
-                                            (Default: 10)
-==========================================  ===================================
-    
-    When renaming functions, it's generally a good idea to codemod existing yaml
-config files. An easy way to batch edit, by example, is a shell command like
-    
-    
-def add_single_gpu_param_update_ops(model, gpu_id):
-    # Learning rate of 0 is a dummy value to be set properly at the
-    # start of training
-    lr = model.param_init_net.ConstantFill(
-        [], 'lr', shape=[1], value=0.0
+    model.RoIFeatureTransform(
+        blob_in,
+        '_[pose]_pool5',
+        blob_rois='keypoint_rois',
+        method=cfg.KRCNN.ROI_XFORM_METHOD,
+        resolution=cfg.KRCNN.ROI_XFORM_RESOLUTION,
+        sampling_ratio=cfg.KRCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
     )
-    one = model.param_init_net.ConstantFill(
-        [], 'one', shape=[1], value=1.0
+    # Using the prefix '_[pose]_' to 'res5' enables initializing the head's
+    # parameters using pretrained 'res5' parameters if given (see
+    # utils.net.initialize_from_weights_file)
+    s, dim_in = ResNet.add_stage(
+        model,
+        '_[pose]_res5',
+        '_[pose]_pool5',
+        3,
+        dim_in,
+        2048,
+        512,
+        cfg.KRCNN.DILATION,
+        stride_init=int(cfg.KRCNN.ROI_XFORM_RESOLUTION / 7)
     )
-    wd = model.param_init_net.ConstantFill(
-        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    return s, 2048
+    
+    
+def fpn_rpn(model):
+    logger.warn(
+        'Deprecated: use `MODEL.TYPE: generalized_rcnn` with '
+        '`MODEL.RPN_ONLY: True` and FPN enabled via configs'
     )
-    # weight decay of GroupNorm's parameters
-    wd_gn = model.param_init_net.ConstantFill(
-        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
-    )
-    for param in model.TrainableParams(gpu_id=gpu_id):
-        logger.debug('param ' + str(param) + ' will be updated')
-        param_grad = model.param_to_grad[param]
-        # Initialize momentum vector
-        param_momentum = model.param_init_net.ConstantFill(
-            [param], param + '_momentum', value=0.0
-        )
-        if param in model.biases:
-            # Special treatment for biases (mainly to match historical impl.
-            # details):
-            # (1) Do not apply weight decay
-            # (2) Use a 2x higher learning rate
-            model.Scale(param_grad, param_grad, scale=2.0)
-        elif param in model.gn_params:
-            # Special treatment for GroupNorm's parameters
-            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
-        elif cfg.SOLVER.WEIGHT_DECAY > 0:
-            # Apply weight decay to non-bias weights
-            model.WeightedSum([param_grad, one, param, wd], param_grad)
-        # Update param_grad and param_momentum in place
-        model.net.MomentumSGDUpdate(
-            [param_grad, param_momentum, lr, param],
-            [param_grad, param_momentum, param],
-            momentum=cfg.SOLVER.MOMENTUM
-        )
-
-    
-    from detectron.core.config import cfg
-from detectron.datasets import json_dataset
-from detectron.datasets import roidb as roidb_utils
-import detectron.modeling.FPN as fpn
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-import detectron.utils.blob as blob_utils
+    return generalized_rcnn(model)
     
     
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
-    '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
-        )
-    else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
+class CollectAndDistributeFpnRpnProposalsOp(object):
+    def __init__(self, train):
+        self._train = train
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        shape = (sampled_fg_rois.shape[0] * cfg.KRCNN.NUM_KEYPOINTS, 1)
+    heats = heats.reshape(shape)
+    weights = weights.reshape(shape)
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+            X = np.random.randn(N, 256, 14, 14)
+        for _i in range(iters):
+            I = np.random.permutation(N)
+            workspace.FeedBlob('X', X.astype(np.float32))
+            workspace.FeedBlob('I', I.astype(np.int32))
+            workspace.RunNet(net.Proto().name)
+            np.testing.assert_allclose(
+                workspace.FetchBlob('Y'), X[I], rtol=1e-5, atol=1e-08
+            )
     
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
+    from .charsetprober import CharSetProber
+from .enums import ProbingState, MachineState
     
-        def new_future_import(self, old):
-        new = FromImport('__future__',
-                         [Name('absolute_import', prefix=' '), Comma(),
-                          Name('division', prefix=' '), Comma(),
-                          Name('print_function', prefix=' ')])
-        if old is not None:
-            new.prefix = old.prefix
-        return new
+    SJIS_CLS = (
+    1,1,1,1,1,1,1,1,  # 00 - 07
+    1,1,1,1,1,1,0,0,  # 08 - 0f
+    1,1,1,1,1,1,1,1,  # 10 - 17
+    1,1,1,0,1,1,1,1,  # 18 - 1f
+    1,1,1,1,1,1,1,1,  # 20 - 27
+    1,1,1,1,1,1,1,1,  # 28 - 2f
+    1,1,1,1,1,1,1,1,  # 30 - 37
+    1,1,1,1,1,1,1,1,  # 38 - 3f
+    2,2,2,2,2,2,2,2,  # 40 - 47
+    2,2,2,2,2,2,2,2,  # 48 - 4f
+    2,2,2,2,2,2,2,2,  # 50 - 57
+    2,2,2,2,2,2,2,2,  # 58 - 5f
+    2,2,2,2,2,2,2,2,  # 60 - 67
+    2,2,2,2,2,2,2,2,  # 68 - 6f
+    2,2,2,2,2,2,2,2,  # 70 - 77
+    2,2,2,2,2,2,2,1,  # 78 - 7f
+    3,3,3,3,3,2,2,3,  # 80 - 87
+    3,3,3,3,3,3,3,3,  # 88 - 8f
+    3,3,3,3,3,3,3,3,  # 90 - 97
+    3,3,3,3,3,3,3,3,  # 98 - 9f
+    #0xa0 is illegal in sjis encoding, but some pages does
+    #contain such byte. We need to be more error forgiven.
+    2,2,2,2,2,2,2,2,  # a0 - a7
+    2,2,2,2,2,2,2,2,  # a8 - af
+    2,2,2,2,2,2,2,2,  # b0 - b7
+    2,2,2,2,2,2,2,2,  # b8 - bf
+    2,2,2,2,2,2,2,2,  # c0 - c7
+    2,2,2,2,2,2,2,2,  # c8 - cf
+    2,2,2,2,2,2,2,2,  # d0 - d7
+    2,2,2,2,2,2,2,2,  # d8 - df
+    3,3,3,3,3,3,3,3,  # e0 - e7
+    3,3,3,3,3,4,4,4,  # e8 - ef
+    3,3,3,3,3,3,3,3,  # f0 - f7
+    3,3,3,3,3,0,0,0)  # f8 - ff
     
+    UCS2LE_CLS = (
+    0,0,0,0,0,0,0,0,  # 00 - 07
+    0,0,1,0,0,2,0,0,  # 08 - 0f
+    0,0,0,0,0,0,0,0,  # 10 - 17
+    0,0,0,3,0,0,0,0,  # 18 - 1f
+    0,0,0,0,0,0,0,0,  # 20 - 27
+    0,3,3,3,3,3,0,0,  # 28 - 2f
+    0,0,0,0,0,0,0,0,  # 30 - 37
+    0,0,0,0,0,0,0,0,  # 38 - 3f
+    0,0,0,0,0,0,0,0,  # 40 - 47
+    0,0,0,0,0,0,0,0,  # 48 - 4f
+    0,0,0,0,0,0,0,0,  # 50 - 57
+    0,0,0,0,0,0,0,0,  # 58 - 5f
+    0,0,0,0,0,0,0,0,  # 60 - 67
+    0,0,0,0,0,0,0,0,  # 68 - 6f
+    0,0,0,0,0,0,0,0,  # 70 - 77
+    0,0,0,0,0,0,0,0,  # 78 - 7f
+    0,0,0,0,0,0,0,0,  # 80 - 87
+    0,0,0,0,0,0,0,0,  # 88 - 8f
+    0,0,0,0,0,0,0,0,  # 90 - 97
+    0,0,0,0,0,0,0,0,  # 98 - 9f
+    0,0,0,0,0,0,0,0,  # a0 - a7
+    0,0,0,0,0,0,0,0,  # a8 - af
+    0,0,0,0,0,0,0,0,  # b0 - b7
+    0,0,0,0,0,0,0,0,  # b8 - bf
+    0,0,0,0,0,0,0,0,  # c0 - c7
+    0,0,0,0,0,0,0,0,  # c8 - cf
+    0,0,0,0,0,0,0,0,  # d0 - d7
+    0,0,0,0,0,0,0,0,  # d8 - df
+    0,0,0,0,0,0,0,0,  # e0 - e7
+    0,0,0,0,0,0,0,0,  # e8 - ef
+    0,0,0,0,0,0,0,0,  # f0 - f7
+    0,0,0,0,0,0,4,5   # f8 - ff
+)
     
-@gen.engine
-def run_tests():
-    url = options.url + '/getCaseCount'
-    control_ws = yield websocket_connect(url, None)
-    num_tests = int((yield control_ws.read_message()))
-    logging.info('running %d cases', num_tests)
-    msg = yield control_ws.read_message()
-    assert msg is None
+            if self.state == ProbingState.DETECTING:
+            if (self.context_analyzer.got_enough_data() and
+               (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
+                self._state = ProbingState.FOUND_IT
     
-                runpy.run_module(module, run_name='__main__', alter_sys=True)
-        elif mode == 'script':
-            with open(script) as f:
-                # Execute the script in our namespace instead of creating
-                # a new one so that something that tries to import __main__
-                # (e.g. the unittest module) will see names defined in the
-                # script instead of just those defined in this module.
-                global __file__
-                __file__ = script
-                # If __package__ is defined, imports may be incorrectly
-                # interpreted as relative to this module.
-                global __package__
-                del __package__
-                exec_in(f.read(), globals(), globals())
-    except SystemExit as e:
-        logging.basicConfig()
-        gen_log.info('Script exited with status %s', e.code)
-    except Exception as e:
-        logging.basicConfig()
-        gen_log.warning('Script exited with uncaught exception', exc_info=True)
-        # If an exception occurred at import time, the file with the error
-        # never made it into sys.modules and so we won't know to watch it.
-        # Just to make sure we've covered everything, walk the stack trace
-        # from the exception and watch every file.
-        for (filename, lineno, name, line) in traceback.extract_tb(sys.exc_info()[2]):
-            watch(filename)
-        if isinstance(e, SyntaxError):
-            # SyntaxErrors are special:  their innermost stack frame is fake
-            # so extract_tb won't see it and we have to get the filename
-            # from the exception object.
-            watch(e.filename)
-    else:
-        logging.basicConfig()
-        gen_log.info('Script exited normally')
-    # restore sys.argv so subsequent executions will include autoreload
-    sys.argv = original_argv
+            if not self._got_data:
+            self.logger.debug('no data received!')
     
-        def test_oauth10_request_parameters(self):
-        response = self.fetch('/oauth10/client/request_params')
-        response.rethrow()
-        parsed = json_decode(response.body)
-        self.assertEqual(parsed['oauth_consumer_key'], 'asdf')
-        self.assertEqual(parsed['oauth_token'], 'uiop')
-        self.assertTrue('oauth_nonce' in parsed)
-        self.assertTrue('oauth_signature' in parsed)
+            # Default to ASCII if it is all we've seen so far
+        elif self._input_state == InputState.PURE_ASCII:
+            self.result = {'encoding': 'ascii',
+                           'confidence': 1.0,
+                           'language': ''}
     
-    # All concrete subclasses of AlgorithmicEnv
-ALL_ENVS = [
-    alg.copy_.CopyEnv, 
-    alg.duplicated_input.DuplicatedInputEnv,
-    alg.repeat_copy.RepeatCopyEnv,
-    alg.reverse.ReverseEnv,
-    alg.reversed_addition.ReversedAdditionEnv,
-]
-ALL_TAPE_ENVS = [env for env in ALL_ENVS 
-    if issubclass(env, alg.algorithmic_env.TapeAlgorithmicEnv)]
-ALL_GRID_ENVS = [env for env in ALL_ENVS 
-    if issubclass(env, alg.algorithmic_env.GridAlgorithmicEnv)]
+            if self.state == ProbingState.DETECTING:
+            if self.get_confidence() > self.SHORTCUT_THRESHOLD:
+                self._state = ProbingState.FOUND_IT
