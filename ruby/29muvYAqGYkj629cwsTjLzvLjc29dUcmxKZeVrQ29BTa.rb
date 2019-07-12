@@ -1,112 +1,118 @@
 
         
-            # If you've clearned the pin, use bumped_at, otherwise put it at the top
-    def order_nocategory_with_pinned_sql
-      -'CASE
-        WHEN topics.pinned_globally
-         AND (COALESCE(topics.pinned_at, '#{lowest_date}') > COALESCE(tu.cleared_pinned_at, '#{lowest_date}'))
-          THEN topics.pinned_at + interval '9999 years'
-          ELSE topics.bumped_at
-       END DESC'
+              command_return = ActionCommandReturn.new(
+        return_value: action_return,
+        return_value_type: action_return_type,
+        closure_argument_value: closure_argument_value
+      )
+    
+        def rescue_file_error(e)
+      # We're also printing the new-lines, as otherwise the message is not very visible in-between the error and the stack trace
+      puts('')
+      FastlaneCore::UI.important('Error accessing file, this might be due to fastlane's directory handling')
+      FastlaneCore::UI.important('Check out https://docs.fastlane.tools/advanced/#directory-behavior for more details')
+      puts('')
+      raise e
     end
     
-      def self.write_cache!(date = nil)
-    if date.nil?
-      write_cache!(Time.now.utc)
-      write_cache!(Time.now.utc.yesterday)
-      return
+          it 'specified tag overrides generate tag' do
+        tag = '2.0.0'
+    
+      describe 'shell_command_from_args' do
+    it 'returns the string when a string is passed' do
+      command = command_from_args('git commit -m 'A message'')
+      expect(command).to eq('git commit -m 'A message'')
     end
     
-      def load_setting(name_arg, value, locale_defaults)
-    name = name_arg.to_sym
-    @defaults[DEFAULT_LOCALE.to_sym][name] = value
-    
-      module Deferrable
-    
-      def self.apply_headers(cors_origins, env, headers)
-    origin = nil
-    
-      def set_cache_control_headers
-    if Rails.env.development?
-      response.headers['Last-Modified'] = Time.zone.now.httpdate
-      immutable_for(1.second)
-    else
-      response.headers['Last-Modified'] = last_modified.httpdate if last_modified
-      immutable_for(1.year)
+          it 'keeps the specified metadata folder' do
+        expect(options[:metadata_path]).to eq('./metadata')
+      end
     end
   end
 end
 
     
-      def log_later(data, host)
-    Scheduler::Defer.later('Track view', _db = nil) do
-      self.class.log_request_on_site(data, host)
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
+      end
     end
-  end
     
-              # topic must not be archived
-          if post.topic&.archived
-            raise StandardError.new I18n.t('poll.topic_must_be_open_to_toggle_status') if raise_errors
-            return
-          end
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
     
-          def rate_limit_resets_in
-        # We add a few seconds to the rate limit so we don't _immediately_
-        # resume when the rate limit resets as this may result in us performing
-        # a request before GitHub has a chance to reset the limit.
-        octokit.rate_limit.resets_in + 5
+    2) You are testing a Devise controller bypassing the router.
+   If so, you can explicitly tell Devise which mapping to use:
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
       end
     
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
+            def declaration_with_comment(node)
+          buffer = processed_source.buffer
+          begin_pos = get_source_range(node, comments_as_separators).begin_pos
+          end_line = buffer.line_for_position(node.loc.expression.end_pos)
+          end_pos = buffer.line_range(end_line).end_pos
+          Parser::Source::Range.new(buffer, begin_pos, end_pos)
         end
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
+      option '--no-depends', :flag, 'Do not list any dependencies in this package',
+    :default => false
     
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
-      end
-    
-    class User < ActiveRecord::Base
-  devise :database_authenticatable
-end
-    
-              if mod.const_defined?('ClassMethods')
-            class_mod = mod.const_get('ClassMethods')
-            extend class_mod
-    
-          # Checks whether the user session has expired based on configured time.
-      def timedout?(last_access)
-        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
-      end
-    
-            @user.send_confirmation_instructions
-      end
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+        if @attributes.include?(:prefix)
+      installdir = staging_path(@attributes[:prefix])
     else
-      ['Unknown mode: #{hub_mode}', 422]
+      installdir = staging_path
     end
+    
+      # Removes the end-of-tar records from the given [target_path].
+  # End of tar records are two contiguous empty tar records at the end of the file
+  # Taken together, they comprise 1k of null data.
+  def cut_tar_record(target_path)
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
+    end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
   end
     
-      included do
-    before_action :set_locale
-  end
+      # Output this package to the given path.
+  def output(output_path)
+    output_check(output_path)
     
-        it 'rejects invalid jsfiddle link' do
-      expect do
-        generate_new_liquid('invalid_jsfiddle_link')
-      end.to raise_error(StandardError)
-    end
+        cwd = ::Dir.pwd
+    ::Dir.chdir(staging_path)
+    
+    # A pleaserun package.
+#
+# This does not currently support 'output'
+class FPM::Package::PleaseRun < FPM::Package
+  # TODO(sissel): Implement flags.
+    
+        logger.info('Trying to download', :package => package)
+    
+    
+    # Convert the 'package directory' built above to a real solaris package.
+    safesystem('pkgtrans', '-s', build_path, output_path, name)
+    safesystem('cp', '#{build_path}/#{output_path}', output_path)
+  end # def output
+    
+      private
+    
+          def self.has_issues_with_add_symlink?
+        return !::Gem::Package::TarWriter.public_instance_methods.include?(:add_symlink)
+      end
+    end # module TarWriter
+  end # module Issues
+end # module FPM
