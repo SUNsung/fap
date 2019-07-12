@@ -1,93 +1,106 @@
-      begin
-        if xcode_outdated
-          # We have to raise that error within this `begin` block to show a nice user error without a stack trace
-          FastlaneCore::UI.user_error!('fastlane requires a minimum version of Xcode #{Fastlane::MINIMUM_XCODE_RELEASE}, please upgrade and make sure to use `sudo xcode-select -s /Applications/Xcode.app`')
+
+        
+            def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
+    
+              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
+          return
         end
     
-            expect(result).to \
-          eq('carthage bootstrap TestDependency1 TestDependency2')
-      end
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+  end
     
-          run!
-    end
+      def user_needs_sign_in_update?
+    user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
   end
 end
 
     
-        context 'only newlines' do
-      let(:keywords) { 'One\nTwo\r\nThree\nFour Token\n' }
+    # This example uses the API to create a package from local files
+# it also creates necessary init-scripts and systemd files so our executable can be used as a service
     
-        class [[NAME_CLASS]] < Action
-      def self.run(params)
-        # fastlane will take care of reading in the parameter and fetching the environment variable:
-        UI.message 'Parameter API Token: #{params[:api_token]}'
-    
-        def translation_scope
-      'devise.unlocks'
-    end
-end
-
-    
-    MESSAGE
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-          private
-    
-            @email = headers[:to]
-        headers
-      end
-    
-          selected_modules = modules.map(&:to_sym).uniq.sort_by do |s|
-        Devise::ALL.index(s) || -1  # follow Devise::ALL order
-      end
-    
-            # Attempt to find a user by its email. If a record is found, send new
-        # password instructions to it. If user is not found, returns a new user
-        # with an email not found error.
-        # Attributes must contain the user's email
-        def send_reset_password_instructions(attributes={})
-          recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
-          recoverable.send_reset_password_instructions if recoverable.persisted?
-          recoverable
+            until(data.length == record_length)
+          data << file.read(TAR_CHUNK_SIZE)
         end
     
-        AIR_APPLICATION_INSTALLER =
-      '/Applications/Utilities/Adobe AIR Application Installer.app/Contents/MacOS/Adobe AIR Application Installer'
+      option '--lint' , :flag, 'Check manifest with pkglint',
+    :default => true
     
-      config.action_mailer.perform_caching = false
-    
-        def _project_root
-      project.root if project.root?
+        logger.info('Installing pear package', :package => input_package,
+                  :directory => staging_path)
+    ::Dir.chdir(staging_path) do
+      safesystem('pear', '-c', config, 'install', '-n', '-f', input_package)
     end
     
-      factory :project_with_custom_name, class: Tmuxinator::Project do
-    transient do
-      file { yaml_load('spec/fixtures/sample.yml') }
+        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
+    libs.each do |file|
+      base = staging_path(File.join(attributes[:prefix]))
+      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
+      File.chmod(0755, File.join(base, file))
     end
     
-    shared_examples_for 'a project hook' do
-  let(:project) { FactoryBot.build(:project) }
     
-      def attributes_match
-    expect(@actual).to have_attributes(@expected_attrs)
+    # Convert the 'package directory' built above to a real solaris package.
+    safesystem('pkgtrans', '-s', build_path, output_path, name)
+    safesystem('cp', '#{build_path}/#{output_path}', output_path)
+  end # def output
+    
+      # Input a zipfile.
+  def input(input_path)
+    # use part of the filename as the package name
+    self.name = File.extname(input_path)[1..-1]
+    
+      def destroy
+    @address_endpoint.destroy
+    redirect_to_with_json [organization, @server, :address_endpoints]
   end
     
-      orig_stdout = $stdout
-  orig_stderr = $stderr
+      def update
+    if @credential.update(params.require(:credential).permit(:name, :hold))
+      redirect_to_with_json [organization, @server, :credentials]
+    else
+      render_form_errors 'edit', @credential
+    end
+  end
     
-      describe '#name_options' do
-    context 'with a name' do
-      let(:window_name) { 'editor' }
+              if qs[:msgid]
+            options[:where][:message_id] = qs[:msgid]
+            options[:where].delete(:spam)
+            options[:where].delete(:scope)
+          end
+          options[:where][:tag] = qs[:tag] if qs[:tag]
+          options[:where][:id] = qs[:id] if qs[:id]
+          options[:where][:spam] = true if qs[:spam] == 'yes' || qs[:spam] == 'y'
+          if qs[:before] || qs[:after]
+            options[:where][:timestamp] = {}
+            if qs[:before]
+              begin
+                options[:where][:timestamp][:less_than] = get_time_from_string(qs[:before]).to_f
+              rescue TimeUndetermined => e
+                flash.now[:alert] = 'Couldn't determine time for before from '#{qs[:before]}''
+              end
+            end
     
-        def start(name = nil, *args)
-      # project-config takes precedence over a named project in the case that
-      # both are provided.
-      if options['project-config']
-        args.unshift name if name
-        name = nil
-      end
+      def persist
+    auth_session.persist! if logged_in?
+    render :plain => 'OK'
+  end
+    
+    end
+
+    
+      context 'called with one color' do
+    it 'applies same color to all sides' do
+      rule = 'border-color: #f00'
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    end
+  end
