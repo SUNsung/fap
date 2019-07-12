@@ -1,87 +1,233 @@
 
         
-          virtual bool Next(void) {
-    if (out_ != nullptr) {
-      recycle_queue_.push(out_); out_ = nullptr;
-    }
-    // do recycle
-    if (recycle_queue_.size() == param_.prefetch_buffer) {
-      DataBatch *old_batch =  recycle_queue_.front();
-      // can be more efficient on engine
-      for (NDArray& arr : old_batch->data) {
-        arr.WaitToWrite();
-      }
-      recycle_queue_.pop();
-      iter.Recycle(&old_batch);
-    }
-    return iter.Next(&out_);
+        REGISTER_OP('Add').Doc(R'doc(
+An op to test that duplicate registrations don't override previously
+registered ops.
+)doc');
+    
+    
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
   }
-  virtual const DataBatch &Value(void) const {
-    return *out_;
-  }
+}
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+    
+        http://www.apache.org/licenses/LICENSE-2.0
     
     
     {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
-}  // namespace mxnet
+    {}  // namespace host
+}  // namespace stream_executor
 
     
-    template<typename xpu>
-void NDArrayOp<xpu>::Forward(const OpContext &ctx,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<OpReqType> &req,
-                   const std::vector<TBlob> &out_data,
-                   const std::vector<TBlob> &aux_args) {
-  using namespace mshadow;
-  Context ndctx = get_ctx();
-  std::vector<void*> ptrs;
-  std::vector<Engine::VarHandle> ndvar;
-  std::vector<int> tags;
-  for (auto& i : req) CHECK_NE(i, kAddTo);
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+
+    
+    void App::SetProxyConfig(content::RenderProcessHost* render_process_host,
+                         const std::string& proxy_config) {
+  net::ProxyConfig config;
+  config.proxy_rules().ParseFromString(proxy_config);
+  net::URLRequestContextGetter* context_getter =
+    render_process_host->GetBrowserContext()->
+    GetRequestContextForRenderProcess(render_process_host->GetID());
     }
     
-    int64_t VMTOC::getValue(int64_t index, bool qword) {
-  HPHP::Address addr = reinterpret_cast<HPHP::Address>(
-      static_cast<intptr_t>(index) + getPtrVector());
-  int64_t ret_val = 0;
-  int max_elem = qword ? 8 : 4;
-  for (int i = max_elem-1; i >= 0; i--) {
-    ret_val = addr[i] + (ret_val << 8);
+    void MenuItem::SetSubmenu(Menu* menu) {
+  if (submenu_) submenu_->RemoveKeys();
+    }
+    
+    
+    {  for (AppWindow* window : windows) {
+    if (window->NWCanClose())
+      window->GetBaseWindow()->Close();
   }
-  return ret_val;
 }
     
-      void EmitXFXForm(const uint8_t op,
-                   const RegNumber rs,
-                   const SpecialReg spr,
-                   const uint16_t xo,
-                   const uint8_t rsv = 0) {
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnDeallocateObject(id);
+  return true;
+}
+    
+      kFullType = 1,
+    
+    class Writer {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
     }
     
-      // The HHIRLICM runtime option is all capitals, so separation
-  // cannot be determined. Special case it.
-  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
-  // The HHVM ini option becomes the standard PHP option.
-  boost::replace_first(out,
-                       'hhvm.server.upload.max_file_uploads',
-                       'max_file_uploads');
-  // Make sure IPv6 or IPv4 are handled correctly
-  boost::replace_first(out, '_i_pv', '_ipv');
-  boost::replace_first(out, '.i_pv', '.ipv');
-  // urls are special too. Let's not have 'ur_ls'
-  boost::replace_first(out, '_ur_ls', '_urls');
-  boost::replace_first(out, '.ur_ls', '.urls');
-  // No use of Eval in our ini strings
-  boost::replace_first(out, '.eval.', '.');
-  boost::replace_first(out, '.my_sql.', '.mysql.');
-  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
+    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
+#define STORAGE_LEVELDB_DB_MEMTABLE_H_
     
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/stream-wrapper-registry.h'
+      // If non-null, use the specified cache for blocks.
+  // If null, leveldb will automatically create and use an 8MB internal cache.
+  Cache* block_cache = nullptr;
     
-    ///////////////////////////////////////////////////////////////////////////////
+    
+    {  Insert(1, 100);
+  ASSERT_EQ(-1, Lookup(1));
+}
+    
+      double min_;
+  double max_;
+  double num_;
+  double sum_;
+  double sum_squares_;
+    
+    int PSTokenizer::lookChar() {
+  if (charBuf < 0) {
+    charBuf = (*getCharFunc)(data);
+  }
+  return charBuf;
+}
+    
+    #include <config.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+    
+      check(state->getFillColorSpace(), state->getFillColor(),
+	state->getFillOpacity(), state->getBlendMode());
+  gdi = gFalse;
+  if ((level == psLevel1 || level == psLevel1Sep) &&
+      state->getFillColorSpace()->getMode() == csPattern) {
+    level1PSBug = gTrue;
+  }
+    
+      //----- image drawing
+  virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+			     int width, int height, GBool invert,
+			     GBool interpolate, GBool inlineImg);
+  virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+			 int width, int height, GfxImageColorMap *colorMap,
+			 GBool interpolate, int *maskColors, GBool inlineImg);
+  virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+			       int width, int height,
+			       GfxImageColorMap *colorMap,
+			       GBool interpolate,
+			       Stream *maskStr, int maskWidth, int maskHeight,
+			       GBool maskInvert, GBool maskInterpolate);
+  virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
+				   int width, int height,
+				   GfxImageColorMap *colorMap,
+				   GBool interpolate,
+				   Stream *maskStr,
+				   int maskWidth, int maskHeight,
+				   GfxImageColorMap *maskColorMap,
+				   GBool maskInterpolate);
+    
+      virtual void *makeAuthData(GooString *ownerPassword,
+			     GooString *userPassword);
+  virtual void *getAuthData();
+  virtual void freeAuthData(void *authData);
+  virtual GBool authorize(void *authData);
+  virtual int getPermissionFlags() { return permFlags; }
+  virtual GBool getOwnerPasswordOk() { return gFalse; }
+  virtual Guchar *getFileKey() { return fileKey; }
+  virtual int getFileKeyLength() { return fileKeyLength; }
+  virtual int getEncVersion() { return encVersion; }
+  virtual CryptAlgorithm getEncAlgorithm() { return encAlgorithm; }
+    
+      //----- update graphics state
+  virtual void updateAll(GfxState *state);
+  virtual void updateCTM(GfxState *state, double m11, double m12,
+			 double m21, double m22, double m31, double m32);
+  virtual void updateLineDash(GfxState *state);
+  virtual void updateFlatness(GfxState *state);
+  virtual void updateLineJoin(GfxState *state);
+  virtual void updateLineCap(GfxState *state);
+  virtual void updateMiterLimit(GfxState *state);
+  virtual void updateLineWidth(GfxState *state);
+  virtual void updateStrokeAdjust(GfxState *state);
+  virtual void updateFillColor(GfxState *state);
+  virtual void updateStrokeColor(GfxState *state);
+  virtual void updateBlendMode(GfxState *state);
+  virtual void updateFillOpacity(GfxState *state);
+  virtual void updateStrokeOpacity(GfxState *state);
+    
+    #ifdef _WIN32
+  setmode(fileno(stdin), O_BINARY);
+#endif
+    
+    // Temporary data for one destination ImFont* (multiple source fonts can be merged into one destination ImFont)
+struct ImFontBuildDstDataFT
+{
+    int                 SrcCount;           // Number of source fonts targeting this destination font.
+    int                 GlyphsHighest;
+    int                 GlyphsCount;
+    ImBoolVector        GlyphsSet;          // This is used to resolve collision when multiple sources are merged into a same destination font.
+};
+    
+    
+    {
+    {
+    {                // Bind texture, Draw
+                ID3D11ShaderResourceView* texture_srv = (ID3D11ShaderResourceView*)pcmd->TextureId;
+                ctx->PSSetShaderResources(0, 1, &texture_srv);
+                ctx->DrawIndexed(pcmd->ElemCount, pcmd->IdxOffset + global_idx_offset, pcmd->VtxOffset + global_vtx_offset);
+            }
+        }
+        global_idx_offset += cmd_list->IdxBuffer.Size;
+        global_vtx_offset += cmd_list->VtxBuffer.Size;
+    }
+    
+        // Render command lists
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
+        const int nVert = cmd_list->VtxBuffer.Size;
+        CIwFVec2* pVertStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwFVec2* pUVStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwColour* pColStream = IW_GX_ALLOC(CIwColour, nVert);
+    }
+    
+    void    ImGui_ImplWin32_NewFrame()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt() && 'Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().');
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        glfwDestroyWindow(window);
+    glfwTerminate();
