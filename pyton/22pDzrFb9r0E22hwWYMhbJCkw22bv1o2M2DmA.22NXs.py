@@ -1,250 +1,273 @@
 
         
-            def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
+        import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-    from mrjob.job import MRJob
+    import youtube_dl
     
-            (foo, p1), 2
-        (bar, p1), 3
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
+    module_contents = [
+    module_template + '\n' + getsource(InfoExtractor.suitable) + '\n',
+    'class LazyLoadSearchExtractor(LazyLoadExtractor):\n    pass\n']
+    
+    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+README_FILE = os.path.join(ROOT_DIR, 'README.md')
+    
+    from youtube_dl.utils import encodeArgument
+    
+        def test_allsubtitles(self):
+        self.DL.expect_warning('Automatic Captions not supported by this server')
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['heb']))
+        self.assertEqual(md5(subtitles['heb']), 'e758c5d7cb982f6bef14f377ec7a3920')
+    
+    batch_size = 128
+num_classes = 10
+epochs = 12
+log_dir = './logs'
+    
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
+    
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
+    
+    1 - Train a simple convnet on the MNIST dataset the first 5 digits [0..4].
+2 - Freeze convolutional layers and fine-tune dense layers
+   for the classification of digits [5..9].
+    
+    
+def test_deconv_length():
+    assert conv_utils.deconv_length(None, 1, 7, 'same', None) is None
+    assert conv_utils.deconv_length(224, 1, 7, 'same', None) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', None) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', None) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', None) == 67
+    assert conv_utils.deconv_length(32, 1, 5, 'full', None) == 28
+    assert conv_utils.deconv_length(32, 2, 5, 'full', None) == 59
+    assert conv_utils.deconv_length(224, 1, 7, 'same', 0) == 224
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 0) == 447
+    assert conv_utils.deconv_length(224, 2, 7, 'same', 1) == 448
+    assert conv_utils.deconv_length(32, 1, 5, 'valid', 0) == 36
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 0) == 67
+    assert conv_utils.deconv_length(32, 2, 5, 'valid', 1) == 68
+    assert conv_utils.deconv_length(6, 1, 3, 'full', 0) == 4
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 1) == 10
+    assert conv_utils.deconv_length(6, 2, 3, 'full', 2) == 11
+    
+        def handle(self):
+        '''Handle multiple requests if necessary.'''
+        self.close_connection = True
+    
+        # 'The specifier name is a ``dotted name'' that may resolve either to
+    # a module, a test case class, a TestSuite instance, a test method
+    # within a test case class, or a callable object which returns a
+    # TestCase or TestSuite instance.'
+    #
+    # What happens when the module is found, but the attribute isn't?
+    def test_loadTestsFromName__unknown_attr_name_on_package(self):
+        loader = unittest.TestLoader()
+    
+        def test_cookie_second_line_noncommented_first_line(self):
+        lines = (
+            b'print('\xc2\xa3')\n',
+            b'# vim: set fileencoding=iso8859-15 :\n',
+            b'print('\xe2\x82\xac')\n'
+        )
+        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
+        self.assertEqual(encoding, 'utf-8')
+        expected = [b'print('\xc2\xa3')\n']
+        self.assertEqual(consumed_lines, expected)
+    
+    from . import abc as resources_abc
+from contextlib import contextmanager, suppress
+from importlib import import_module
+from importlib.abc import ResourceLoader
+from io import BytesIO, TextIOWrapper
+from pathlib import Path
+from types import ModuleType
+from typing import Iterable, Iterator, Optional, Set, Union   # noqa: F401
+from typing import cast
+from typing.io import BinaryIO, TextIO
+from zipimport import ZipImportError
+    
+    # Make a local copy of what we are going to send.
+with open('outgoing.msg', 'wb') as f:
+    f.write(bytes(msg))
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+                if buffer.lstrip().upper().startswith('SELECT'):
+                print(cur.fetchall())
+        except sqlite3.Error as e:
+            print('An error occurred:', e.args[0])
+        buffer = ''
+    
+    # Register the adapter
+sqlite3.register_adapter(Point, adapt_point)
+    
+    import sqlite3
+import os
+    
+    
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
+    
+    
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
+    
+    
+def mock_real_ip(app):
+    '''Inject middleware to mock real IP.
+    
+        def test_extended_properties(self):
+        print(u'John's relatives: {0}'.format(self.John.relatives))
+        self.assertDictEqual(
+            {'name': 'John', 'occupation': 'Coder', 'relatives': 'Many relatives.', 'call_count2': 0},
+            self.John.__dict__,
+        )
+    
+        def test_extended_property_values_cloning(self):
+        sample_object_1 = self.prototype.clone()
+        sample_object_1.some_value = 'test string'
+        sample_object_2 = self.prototype.clone()
+        self.assertRaises(AttributeError, lambda: sample_object_2.some_value)
+    
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time * 10), expected_execution_time)
+    
+    
+class Provider:
+    def __init__(self):
+        self.msg_queue = []
+        self.subscribers = {}
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+    
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(optionflags=doctest.ELLIPSIS)
+
+    
+        >>> class ClassRegistree(BaseRegisteredClass):
+    ...    def __init__(self, *args, **kwargs):
+    ...        pass
+    
+        def handle(self, request):
         '''
-        yield key, sum(values)
-    
-        def get_person(self, person_id):
-        person_server = self.lookup[person_id]
-        return person_server.people[person_id]
+        Handle request and stop.
+        If can't - call next handler in chain.
     
     
-class Node(object):
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
+    
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_MultipleMessagesAndDiagnostics_test( post_vim_message ):
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
+    { 'message': 'On the first day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
+    { 'message': 'A test file in a Command-T' },
+    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
+    { 'message': 'On the second day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
+    { 'message': 'Two popup menus, and a test file in a Command-T' },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER1' ] ),
+    call( 'bar', [ 'PLACEHOLDER2' ] ),
+    call( 'baz', [ 'PLACEHOLDER3' ] ),
+    call( 'foo', [ 'PLACEHOLDER4' ] )
+  ] )
+    
+      def shutdown( self, wait=True ):
+    with self._shutdown_lock:
+      self._shutdown = True
+      self._work_queue.put( None )
+    if wait:
+      for t in self._threads:
+        t.join()
+  shutdown.__doc__ = _base.Executor.shutdown.__doc__
 
     
-    r = openssl_encode('aes-128-cbc', key, iv)
-print('aes_cbc_decrypt')
-print(repr(r))
+            if return_when == FIRST_EXCEPTION:
+            waiter = _AllCompletedWaiter(pending_count, stop_on_exception=True)
+        elif return_when == ALL_COMPLETED:
+            waiter = _AllCompletedWaiter(pending_count, stop_on_exception=False)
+        else:
+            raise ValueError('Invalid return condition: %r' % return_when)
     
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    import io
-import optparse
-import os.path
-import re
-    
-    # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-    
-        def test_youporn(self):
-        self._assert_restricted(
-            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
-            '505835.mp4', 2, old_age=25)
-    
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-    
-    
-class TestJSInterpreter(unittest.TestCase):
-    def test_basic(self):
-        jsi = JSInterpreter('function x(){;}')
-        self.assertEqual(jsi.call_function('x'), None)
-    
-    
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
-    
-    
-class UnrewindableBodyError(RequestException):
-    '''Requests encountered an error when trying to rewind a body'''
-    
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
-    
-                if isinstance(e.reason, _ProxyError):
-                raise ProxyError(e, request=request)
-    
-        def items(self):
-        '''Dict-like items() that returns a list of name-value tuples from the
-        jar. Allows client-code to call ``dict(RequestsCookieJar)`` and get a
-        vanilla python dict of key value pairs.
-    
-    try:
-    from urllib3.contrib import pyopenssl
-except ImportError:
-    pyopenssl = None
-    OpenSSL = None
-    cryptography = None
-else:
-    import OpenSSL
-    import cryptography
-    
-    This module provides the capabilities for the Requests hooks system.
-    
-        text_200 = (b'HTTP/1.1 200 OK\r\n'
-                b'Content-Length: 0\r\n\r\n')
-    
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
-    
-            certfile = os.path.join(CertUtil.ca_certdir, commonname + '.crt')
-        with open(certfile, 'wb') as fp:
-            fp.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert))
-            if CertUtil.cert_publickey is None:
-                fp.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, pkey))
-        return certfile
-    
-                        mte = MismatchedTokenException(c, self.input)
-                    self.recover(mte)
-                    raise mte
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': True,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found and loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
-    
-    
-def ContentsOfTestFile( test_file ):
-  dir_of_script = os.path.dirname( os.path.abspath( __file__ ) )
-  full_path_to_test_file = os.path.join( dir_of_script, 'testdata', test_file )
-  return ReadFile( full_path_to_test_file )
-    
-    # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
-    
-        def test_cancelled(self):
-        self.assertFalse(PENDING_FUTURE.cancelled())
-        self.assertFalse(RUNNING_FUTURE.cancelled())
-        self.assertTrue(CANCELLED_FUTURE.cancelled())
-        self.assertTrue(CANCELLED_AND_NOTIFIED_FUTURE.cancelled())
-        self.assertFalse(EXCEPTION_FUTURE.cancelled())
-        self.assertFalse(SUCCESSFUL_FUTURE.cancelled())
-    
-    # choose a random port to avoid colliding with TIME_WAIT sockets left over
-# from previous runs.
-define('min_port', type=int, default=8000)
-define('max_port', type=int, default=9000)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    
-class AnyThreadEventLoopPolicy(asyncio.DefaultEventLoopPolicy):  # type: ignore
-    '''Event loop policy that allows loop creation on any thread.
-    
-    For each function or class described in `tornado.platform.interface`,
-the appropriate platform-specific implementation exists in this module.
-Most code that needs access to this functionality should do e.g.::
-    
-    print('Starting')
-sys.stdout.flush()
-if 'TESTAPP_STARTED' not in os.environ:
-    os.environ['TESTAPP_STARTED'] = '1'
-    # Simulate an internal autoreload (one not caused
-    # by the wrapper).
-    tornado.autoreload._reload()
-else:
-    # Exit directly so autoreload doesn't catch it.
-    os._exit(0)
-'''
-    
-            class Delegate(HTTPMessageDelegate):
-            def headers_received(self, start_line, headers):
-                test.code = start_line.code
+            # Shutdown is a two-step process.
+        self._shutdown_thread = False
+        self._shutdown_lock = threading.Lock()
+        self._queue_count = 0
+        self._pending_work_items = {}
