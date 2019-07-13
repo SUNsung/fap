@@ -1,268 +1,211 @@
 
         
-        #include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
+        #include 'src/cpp/ext/filters/census/context.h'
+    
+    // Returns the outgoing data size from the grpc call final info.
+uint64_t GetOutgoingDataSize(const grpc_call_final_info* final_info);
+    
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
+    
+    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
+    
+    #include <windows.h>
+#include <cstdint>
+    
+     */
+    
+            static FunctionPtr Deserialize(const Dictionary& dictionary,
+            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
+            const CNTK::DeviceDescriptor& device);
     
     
-    {  std::vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'SubGradient',
-        '',
-        std::vector<std::string>{GO(0), I(0), I(1)},
-        std::vector<std::string>{GI(0), GI(1)});
-  }
-};
+    {            return { m_packedData->GetMatrix<ElementType>(), m_packedDataLayout };
+        }
     
-    </details>
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
+                {
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
     
-    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
- *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
- */
-template <typename Dtype>
-class PositiveUnitballFiller : public Filler<Dtype> {
- public:
-  explicit PositiveUnitballFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    DCHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
-    // We expect the filler to not be called very frequently, so we will
-    // just use a simple implementation
-    int dim = blob->count() / blob->shape(0);
-    CHECK(dim);
-    for (int i = 0; i < blob->shape(0); ++i) {
-      Dtype sum = 0;
-      for (int j = 0; j < dim; ++j) {
-        sum += data[i * dim + j];
-      }
-      for (int j = 0; j < dim; ++j) {
-        data[i * dim + j] /= sum;
-      }
+    
+    {        assert(m_fd == -1);
+        for (;;)
+        {
+            // opening a lock file
+            int fd = open(m_fileName.c_str(), O_WRONLY | O_CREAT, 0666);
+            if (fd < 0)
+                RuntimeError('Acquire: Failed to open lock file %s: %s.', m_fileName.c_str(), strerror(errno));
+            // locking it with the fcntl API
+            memset(&m_lock, 0, sizeof(m_lock));
+            m_lock.l_type = F_WRLCK;
+            // BUG: fcntl call with F_SETLKW doesn't always reliably detect when lock is released
+            // As a workaround, using alarm() for interupting fcntl if it waits more than 1 second
+            setupTimeout(1);
+            int r = fcntl(fd, wait ? F_SETLKW : F_SETLK, &m_lock);
+            if (errno == EINTR)
+            {
+                sleep(1);
+                // retrying in the case of signal or timeout
+                close(fd);
+                continue;
+            }
+            if (r != 0)
+            {
+                // acquire failed
+                close(fd);
+                umask(mask);
+                return false;
+            }
+            // we own the exclusive lock on file descriptor, but we need to double-check
+            // that the lock file wasn't deleted and/or re-created;
+            // checking this by comparing inode numbers
+            struct stat before, after;
+            fstat(fd, &before);
+            if (stat(m_fileName.c_str(), &after) != 0 || before.st_ino != after.st_ino)
+            {
+                // we have a race with 'unlink' call in Release()
+                // our lock is held to the previous instance of the file;
+                // this is not a problem, we just need to retry locking the new file
+                close(fd);
+                continue;
+            }
+            else
+            {
+                // lock acquired successfully
+                m_fd = fd;
+                umask(mask);
+                return true;
+            }
+        }
     }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
     
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include <vector>
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-     public:
-  // Constructs an empty Message.
-  Message();
-    
-    namespace testing {
-    }
-    
-     private:
-  // A string containing a description of the outcome of the last death test.
-  static std::string last_death_test_message_;
-    
-      // Static methods
-    
-    template <GTEST_6_TYPENAMES_(T)>
-inline GTEST_6_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4, const T5& f5) {
-  return GTEST_6_TUPLE_(T)(f0, f1, f2, f3, f4, f5);
-}
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
-
-    
-    
-    {}  // namespace grpc
-    
-      Status GetFileContainingExtension(
-      ServerContext* context,
-      const reflection::v1alpha::ExtensionRequest* request,
-      reflection::v1alpha::ServerReflectionResponse* response);
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  gpr_log(GPR_ERROR,
-          'Platforms other than Linux, Windows, and MacOS are not supported.');
-  return std::make_pair(busy, total);
-}
-    
-    #include '2d/CCActionInstant.h'
-#include '2d/CCNode.h'
-#include '2d/CCSprite.h'
-    
-        void removeActionAtIndex(ssize_t index, struct _hashElement *element);
-    void deleteHashElement(struct _hashElement *element);
-    void actionAllocWithHashElement(struct _hashElement *element);
-    
-    GridBase* PageTurn3D::getGrid()
-{
-    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
-    if (result)
+        // Executing this function from BrainScript merely sets up a lambda, but does not actually create any clone.
+    // This is so that the function can be called multiple times in order to create multiple clones.
+    CloneFunctionConfigLambda(const IConfigRecordPtr configp) :
+        ConfigLambda(CreateParamNames(*configp), NamedParams(), [this](vector<ConfigValuePtr> &&args, NamedParams &&namedArgs, const std::wstring &exprName){ return this->DoClone(args, exprName); })
     {
-        result->setNeedDepthTestForBlit(true);
+        let& config = *configp;
+        // input nodes
+        inputNodes = GetInputNodes(config);
+        // output nodes
+        let outputNodesParam = config[L'outputNodes'];  // can be a node or a record
+        if (outputNodesParam.Is<ComputationNodeBase>()) // scalar case: result is a single node
+            outputNodes[L''] = outputNodesParam.AsPtr<ComputationNodeBase>(); // indicated by a '' node name in outputNodes[]
+        else                                            // multi-valued case: result is a record of nodes
+        {
+            let& outputNodesRecord = outputNodesParam.AsRef<IConfigRecord>();
+            for (let& nodeName : outputNodesRecord.GetMemberIds())
+                outputNodes[nodeName] = outputNodesRecord[nodeName].AsPtr<ComputationNodeBase>();
+            if (outputNodes.empty())
+                InvalidArgument('CloneFunction: At least one output nodes must be specified.');
+        }
+        // treatment of parameters
+        wstring parametersOption = config[L'parameters'];
+        if      (parametersOption == L'learnable') parameterTreatment = ParameterTreatment::learnable;
+        else if (parametersOption == L'constant')  parameterTreatment = ParameterTreatment::constant;
+        else if (parametersOption == L'shared')    parameterTreatment = ParameterTreatment::shared;
+        else InvalidArgument('CloneFunction: 'parameters' option must be 'learnable', 'constant', or 'shared'.');
     }
     
-    return result;
-}
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
     
-        /**
-    @brief Show part of the tile.
-    @param pos The position index of the tile should be shown.
-    @param distance The percentage that the tile should be shown.
-    */
-    virtual void transformTile(const Vec2& pos, float distance);
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    void ClippingRectangleNode::onBeforeVisitScissor()
+    // MatrixPool -- class to support memory sharing
+// Despite the gather general name of this class, it is specifically designed to support the memory sharing of ComputationNodes.
+// Note: see #define SUPRESS_MEMSHARING below as for how to temporarily disable memory sharing altogether, for debugging
+class MatrixPool
 {
-    if (_clippingEnabled) {
-        glEnable(GL_SCISSOR_TEST);
-    }
-    }
-    
-    /**
-@brief Clipping Rectangle Node.
-@details A node that clipped with specified rectangle.
- The region of ClippingRectangleNode doesn't support any transform except scale.
-@js NA
-*/
-class CC_DLL ClippingRectangleNode : public Node
-{    
 public:
-    /**
-    @brief Create node with specified clipping region.
-    @param clippingRegion Specify the clipping rectangle.
-    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
-    */
-    static ClippingRectangleNode* create(const Rect& clippingRegion);
-    /**
-    @brief Create a clipping rectangle node.
-    @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
-    */
-    static ClippingRectangleNode* create();
-    
-    /**
-    @brief Get the clipping rectangle.
-    @return The clipping rectangle.
-    */
-    const Rect& getClippingRegion() const {
-        return _clippingRegion;
-    }
-    /**
-    @brief Set the clipping rectangle.
-    @param clippingRegion Specify the clipping rectangle.
-    */
-    void setClippingRegion(const Rect& clippingRegion);
-    
-    /**
-    @brief Get whether the clipping is enabled or not.
-    @return Whether the clipping is enabled or not. Default is true.
-    */
-    bool isClippingEnabled() const {
-        return _clippingEnabled;
-    }
+    typedef const void* AliasNodePtr; // use as an identifier in place of ComputationNodeBasePtr to avoid include order issue
     }
     
-    NS_CC_END
-
+      static bool isInitialized6() { return data6_.initialized; }
     
-        virtual void onEnter();
-    virtual void onExit();
-    virtual void onAdd();
-    virtual void onRemove();
-    
-        /** Unload all texture atlas texture create by special file name.
-     CAUTION : All component use this font texture should be reset font name, though the file name is same!
-               otherwise, it will cause program crash!
-    */
-    static void unloadFontAtlasTTF(const std::string& fontFileName);
-    
-    
-    {};
-    
-      QJsonDocument jsonConfig = QJsonDocument::fromJson(data);
-    
-    void TabViewModel::setCurrentTab(int i) { m_currentTabIndex = i; }
-    
-    template <class T>
-TabViewModel::ModelFactory getTabModelFactory() {
-  return TabViewModel::ModelFactory(
-      [](QSharedPointer<RedisClient::Connection> c, int dbIndex) {
-        return QSharedPointer<TabModel>(new T(c, dbIndex),
-                                        &QObject::deleteLater);
-      });
-}
-
-    
-    // Creates a strong reference from a raw pointer, assuming that it points to a
-// freshly-created object. See the documentation for RefPtr for usage.
-template <typename T>
-static inline RefPtr<T> adoptRef(T* ptr) {
-  return RefPtr<T>::adoptRef(ptr);
-}
-    
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
-    
-      // Define a method that calls into the represented Java class
-  local_ref<JFile::javaobject> getCacheDir() {
-    static auto method = getClass()->getMethod<JFile::javaobject()>('getCacheDir');
-    return method(self());
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
   }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
+}
     
-    class JFile : public JavaClass<JFile> {
- public:
-  static constexpr const char* kJavaDescriptor = 'Ljava/io/File;';
+    void DHTRoutingTable::showBuckets() const
+{
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
+    }
+  */
+}
+    
+    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
+  std::string filenameTemp = filename;
+  filenameTemp += '__temp';
+  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
     }
     
+    #include 'common.h'
     
+    class DHTTask {
+public:
+  virtual ~DHTTask() = default;
+    }
+    
+    class DHTTaskFactoryImpl : public DHTTaskFactory {
+private:
+  std::shared_ptr<DHTNode> localNode_;
+    }
+    
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    public:
+  // _remoteNode is always null
+  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                    const unsigned char* data, size_t length,
+                    const std::string& ipaddr, uint16_t port);
+    
+        // out_of_range.402
+    try
     {
+        // try to use the array index '-'
+        json::const_reference ref = j.at('/array/-'_json_pointer);
+    }
+    catch (json::out_of_range& e)
     {
-} // namespace jni
-} // namespace facebook
+        std::cout << e.what() << '\n';
+    }
