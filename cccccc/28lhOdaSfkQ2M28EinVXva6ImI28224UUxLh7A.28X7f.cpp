@@ -1,257 +1,190 @@
 
         
-        #include 'base/callback.h'
-#include 'base/macros.h'
-#include 'base/memory/ref_counted.h'
-#include 'base/strings/string16.h'
-#include 'net/cert/nss_cert_database.h'
-    
-    
-    {}  // namespace mate
-
-    
-    enum CreateFunctionTemplateFlags {
-  HolderIsFirstArgument = 1 << 0,
+        
+    {  DISALLOW_COPY_AND_ASSIGN(GlobalMenuBarRegistrarX11);
 };
     
-    // This specialization allows people to construct function templates directly if
-// they need to do fancier stuff.
-template <>
-struct CallbackTraits<v8::Local<v8::FunctionTemplate>> {
-  static v8::Local<v8::FunctionTemplate> CreateTemplate(
-      v8::Local<v8::FunctionTemplate> templ) {
-    return templ;
-  }
+    
+    { private:
+  v8::Local<v8::Promise::Resolver> resolver_;
 };
     
-      v8::Isolate* isolate() const { return isolate_; }
-    
-      ProcessSingleton(const base::FilePath& user_data_dir,
-                   const NotificationCallback& notification_callback);
-  ~ProcessSingleton();
-    
-    namespace {
+    namespace mate {
     }
     
-    #define TegraRowOp_Invoker(name, func, src_cnt, dst_cnt, val_cnt, ...) \
-template <typename ST, typename DT> \
-class TegraRowOp_##name##_Invoker : public cv::ParallelLoopBody \
-{ \
-public: \
-    TegraRowOp_##name##_Invoker(ROW_SRC_ARG##src_cnt \
-                                ROW_DST_ARG##dst_cnt \
-                                ROW_VAL_ARG##val_cnt) : \
-         cv::ParallelLoopBody() ROW_SRC_STORE##src_cnt \
-                                ROW_DST_STORE##dst_cnt \
-                                ROW_VAL_STORE##val_cnt {} \
-    virtual void operator()(const cv::Range& range) const \
-    { \
-        CAROTENE_NS::func(CAROTENE_NS::Size2D(range.end-range.start, 1), __VA_ARGS__); \
-    } \
-private: \
-    ROW_SRC_VAR##src_cnt \
-    ROW_DST_VAR##dst_cnt \
-    ROW_VAL_VAR##val_cnt \
-    const TegraRowOp_##name##_Invoker& operator= (const TegraRowOp_##name##_Invoker&); \
-};
+      // Creates an activity and sets it as the one currently in use.
+  void SetUserActivity(const std::string& type,
+                       const base::DictionaryValue& user_info,
+                       mate::Arguments* args);
     
-        typedef ptrdiff_t  stride_t;
-    
-    
-    {} // namespace CAROTENE_NS
-
-    
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
+    // static
+mate::Handle<DownloadItem> DownloadItem::Create(v8::Isolate* isolate,
+                                                download::DownloadItem* item) {
+  auto* existing = TrackableObject::FromWrappedClass(isolate, item);
+  if (existing)
+    return mate::CreateHandle(isolate, static_cast<DownloadItem*>(existing));
     }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(u8, s32, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.u8 q3, d4                                       \n\t'
-            'vmovl.u8 q4, d5                                       \n\t'
-            'vmovl.u16 q5, d6                                      \n\t'
-            'vmovl.u16 q6, d7                                      \n\t'
-            'vmovl.u16 q7, d8                                      \n\t'
-            'vmovl.u16 q8, d9                                      \n\t'
-            'vcvt.f32.u32 q9, q5                                   \n\t'
-            'vcvt.f32.u32 q10, q6                                  \n\t'
-            'vcvt.f32.u32 q11, q7                                  \n\t'
-            'vcvt.f32.u32 q12, q8                                  \n\t'
-            'vmul.f32 q13, q9, q0                                  \n\t'
-            'vmul.f32 q14, q10, q0                                 \n\t'
-            'vmul.f32 q15, q11, q0                                 \n\t'
-            'vmul.f32 q2, q12, q0                                  \n\t'
-            'vadd.f32 q3, q13, q1                                  \n\t'
-            'vadd.f32 q4, q14, q1                                  \n\t'
-            'vadd.f32 q5, q15, q1                                  \n\t'
-            'vadd.f32 q6, q2, q1                                   \n\t'
-            'vcvt.s32.f32 q7, q3                                   \n\t'
-            'vcvt.s32.f32 q8, q4                                   \n\t'
-            'vcvt.s32.f32 q9, q5                                   \n\t'
-            'vcvt.s32.f32 q10, q6                                  \n\t'
-            'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
-            'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
-            'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
-            'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 4),
-              [dst3] 'r' (_dst + i + 8),
-              [dst4] 'r' (_dst + i + 12),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10',
-            'd11','d12','d13','d14','d15','d16','d17',
-            'd18','d19','d20','d21','d22','d23','d24',
-            'd25','d26','d27','d28','d29','d30','d31'
-        );
-    }
-})
-#else
-CVTS_FUNC(u8, s32, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        uint8x16_t vline = vld1q_u8(_src + i);
-        uint16x8_t vline1_u16 = vmovl_u8(vget_low_u8 (vline));
-        uint16x8_t vline2_u16 = vmovl_u8(vget_high_u8(vline));
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline1_u16));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline1_u16));
-        uint32x4_t vline3_u32 = vmovl_u16(vget_low_u16 (vline2_u16));
-        uint32x4_t vline4_u32 = vmovl_u16(vget_high_u16(vline2_u16));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        float32x4_t vline3_f32 = vcvtq_f32_u32(vline3_u32);
-        float32x4_t vline4_f32 = vcvtq_f32_u32(vline4_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline3_f32 = vmulq_f32(vline3_f32, vscale);
-        vline4_f32 = vmulq_f32(vline4_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline3_f32 = vaddq_f32(vline3_f32, vshift);
-        vline4_f32 = vaddq_f32(vline4_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int32x4_t vline3_s32 = vcvtq_s32_f32(vline3_f32);
-        int32x4_t vline4_s32 = vcvtq_s32_f32(vline4_f32);
-        vst1q_s32(_dst + i + 0,  vline1_s32);
-        vst1q_s32(_dst + i + 4,  vline2_s32);
-        vst1q_s32(_dst + i + 8,  vline3_s32);
-        vst1q_s32(_dst + i + 12, vline4_s32);
-    }
-})
-#endif
+    	//Find node with minimum y value (max x if equal)
+	float32 minY = 1e10;
+	float32 maxX = -1e10;
+	int32 minYIndex = -1;
+	for (int32 i = 0; i < nNodes; ++i) {
+		if (nodes[i].position.y < minY && nodes[i].nConnected > 1) {
+			minY = nodes[i].position.y;
+			minYIndex = i;
+			maxX = nodes[i].position.x;
+		} else if (nodes[i].position.y == minY && nodes[i].position.x > maxX && nodes[i].nConnected > 1) {
+			minYIndex = i;
+			maxX = nodes[i].position.x;
+		}
+	}
     
-        if (func == NULL)
-        return;
-    
-            int16x8_t tcurr1 = vmovq_n_s16(0x0);
-        int16x8_t tnext1 = vmovq_n_s16(0x0);
-        int16x8_t tprev1 = vmovq_n_s16(0x0);
-        int16x8_t tpprev1 = vmovq_n_s16(0x0);
-        int16x8_t tppprev1 = vmovq_n_s16(0x0);
-    
-    class Semaphore {
- public:
-  void post(int n = 1) {
-    std::unique_lock<std::mutex> lock(m_);
-    n_ += n;
-    cv_.notify_all();
-  }
-    }
-    
-    namespace caffe2 {
-    }
-    
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
-  } else {
-    return index_ == rhs.index_;
-  }
+    bool b2Triangle::IsInside(float32 _x, float32 _y){
+	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
+	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
+	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
+	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
+		
+		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
+		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
+		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		
+		float32 dot00 = vx0*vx0+vy0*vy0;
+		float32 dot01 = vx0*vx1+vy0*vy1;
+		float32 dot02 = vx0*vx2+vy0*vy2;
+		float32 dot11 = vx1*vx1+vy1*vy1;
+		float32 dot12 = vx1*vx2+vy1*vy2;
+		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		
+		return ((u>=0)&&(v>=0)&&(u+v<=1));    
 }
     
-    // Serialize outgoing server stats. Returns the number of bytes serialized.
-size_t ServerStatsSerialize(uint64_t server_elapsed_time, char* buf,
-                            size_t buf_size);
+    		virtual bool HasSeverelyBentDifferentialColors(void) const = 0;
     
-    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H */
-
-    
-    Status ProtoServerReflection::GetAllExtensionNumbers(
-    ServerContext* context, const grpc::string& type,
-    ExtensionNumberResponse* response) {
-  if (descriptor_pool_ == nullptr) {
-    return Status::CANCELLED;
-  }
-    }
-    
-    #include <grpc/support/cpu.h>
-    
-    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
-    
-    // Given a map from type K to a set of value type V, removes the given key and
-// the associated set, and returns the set. Returns an empty set if the key is
-// not found.
-template <typename K, typename V>
-std::set<V> UnorderedMapOfSetExtract(std::unordered_map<K, std::set<V>>& map,
-                                     const K& key) {
-  auto it = map.find(key);
-  if (it != map.end()) {
-    auto set = std::move(it->second);
-    map.erase(it);
-    return set;
-  }
-  return {};
-};
+    		float fLeftGrayErrorSum = 0.0f;
+		float fRightGrayErrorSum = 0.0f;
+		float fTopGrayErrorSum = 0.0f;
+		float fBottomGrayErrorSum = 0.0f;
     
     
-    {}  // namespace leveldb
+#if !defined(FFT_ARM_H)
+#define FFT_ARM_H
     
-    class VersionSet {
+    #undef silk_CLZ32
+static OPUS_INLINE opus_int32 silk_CLZ32_armv5(opus_int32 in32)
+{
+  int res;
+  __asm__(
+      '#silk_CLZ32\n\t'
+      'clz %0, %1\n\t'
+      : '=r'(res)
+      : 'r'(in32)
+  );
+  return res;
+}
+#define silk_CLZ32(in32) (silk_CLZ32_armv5(in32))
+    
+    /*!
++ * \brief The result holder of dispatch mode of each Node in the graph.
++ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
++ *
++ * \code
++ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
++ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
++ *  // get dispatch mode by entry node id
++ *  int node_type = dispatch_modes[nid];
++ * \endcode
++ *
++ * \sa FInferStorageType
++ */
+using DispatchModeVector = std::vector<DispatchMode>;
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file image_augmenter.h
+ * \brief Interface of opencv based image augmenter
+ */
+#ifndef MXNET_IO_IMAGE_AUGMENTER_H_
+#define MXNET_IO_IMAGE_AUGMENTER_H_
+    
+    /*!
+ * \brief Iterator that normalize a image.
+ *  It also applies a few augmention before normalization.
+ */
+class ImageNormalizeIter : public IIterator<DataInst> {
  public:
-  VersionSet(const std::string& dbname, const Options* options,
-             TableCache* table_cache, const InternalKeyComparator*);
-  VersionSet(const VersionSet&) = delete;
-  VersionSet& operator=(const VersionSet&) = delete;
+  explicit ImageNormalizeIter(IIterator<DataInst> *base)
+      : base_(base), meanfile_ready_(false) {
+  }
     }
     
-      // EXPERIMENTAL: If true, append to existing MANIFEST and log files
-  // when a database is opened.  This can significantly speed up open.
-  //
-  // Default: currently false, but may become true later.
-  bool reuse_logs = false;
+      // Initialise the Hadamard product to eye(k)
+  // where k is the number of 'factors'
+  int k = out.size(0);
+  Tensor<cpu, 2, DType> hadamard_prod(Shape2(k, k));
+  AllocSpace(&hadamard_prod);
+  hadamard_prod = 1;
     
-        template std::shared_ptr<const Matrix<float>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<double>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<half>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<char>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
-    template std::shared_ptr<const Matrix<short>> NDArrayView::GetMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const;
+        ImGuiIO& io = ImGui::GetIO();
     
-    
-    {        return dict[versionKey].Value<size_t>();
+    void    ImGui_ImplWin32_NewFrame()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt() && 'Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().');
     }
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
-    }
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+    //---- Using 32-bits vertex indices (default is 16-bits) is one way to allow large meshes with more than 64K vertices. 
+// Your renderer back-end will need to support it (most example renderer back-ends support both 16/32-bits indices).
+// Another way to allow large meshes while keeping 16-bits indices is to handle ImDrawCmd::VtxOffset in your renderer. 
+// Read about ImGuiBackendFlags_RendererHasVtxOffset for details.
+//#define ImDrawIdx unsigned int
+    
+            // Child 1: no border, enable horizontal scrollbar
+        {
+            ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar | (disable_mouse_wheel ? ImGuiWindowFlags_NoScrollWithMouse : 0);
+            ImGui::BeginChild('Child1', ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 260), false, window_flags);
+            for (int i = 0; i < 100; i++)
+            {
+                ImGui::Text('%04d: scrollable region', i);
+                if (goto_line && line == i)
+                    ImGui::SetScrollHereY();
+            }
+            if (goto_line && line >= 100)
+                ImGui::SetScrollHereY();
+            ImGui::EndChild();
+        }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            // Rendering
+        ImGui::EndFrame();
+        g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
+        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x*255.0f), (int)(clear_color.y*255.0f), (int)(clear_color.z*255.0f), (int)(clear_color.w*255.0f));
+        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
+        if (g_pd3dDevice->BeginScene() >= 0)
+        {
+            ImGui::Render();
+            ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+            g_pd3dDevice->EndScene();
+        }
+        HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
