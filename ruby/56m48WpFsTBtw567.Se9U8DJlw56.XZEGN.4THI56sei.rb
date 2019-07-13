@@ -1,85 +1,67 @@
 
         
-          context 'clearing unsupported fields of agents' do
-    before do
-      visit new_agent_path
-    end
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
-    
-    describe DefaultScenarioImporter do
-  let(:user) { users(:bob) }
-  describe '.import' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      mock(DefaultScenarioImporter).seed(is_a(User))
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-      describe '#jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('\\u003c/script\\u003e')
-    end
-    
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
-    
-        it 'should raise error when response has an error' do
-      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
+                def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
+      end
     end
   end
 end
 
     
-        def initialize
-      @entries = []
-      @index = Set.new
-      @types = Hash.new { |hash, key| hash[key] = Type.new key }
-    end
+    module Gitlab
+  module GithubImport
+    # HTTP client for interacting with the GitHub API.
+    #
+    # This class is basically a fancy wrapped around Octokit while adding some
+    # functionality to deal with rate limiting and parallel imports. Usage is
+    # mostly the same as Octokit, for example:
+    #
+    #     client = GithubImport::Client.new('hunter2')
+    #
+    #     client.labels.each do |label|
+    #       puts label.name
+    #     end
+    class Client
+      include ::Gitlab::Utils::StrongMemoize
     
-        def terminal_width
-      return @terminal_width if defined? @terminal_width
-    
-            css('*[layout]').remove_attr('layout')
-        css('*[layout-xs]').remove_attr('layout-xs')
-        css('*[flex]').remove_attr('flex')
-        css('*[flex-xs]').remove_attr('flex-xs')
-        css('*[ng-class]').remove_attr('ng-class')
-        css('*[align]').remove_attr('align')
-        css('h1, h2, h3').remove_attr('class')
-    
-          # Sign in a user bypassing the warden callbacks and stores the user
-      # straight in session. This option is useful in cases the user is already
-      # signed in, but we want to refresh the credentials in session.
-      #
-      # Examples:
-      #
-      #   bypass_sign_in @user, scope: :user
-      #   bypass_sign_in @user
-      def bypass_sign_in(resource, scope: nil)
-        scope ||= Devise::Mapping.find_scope!(resource)
-        expire_data_after_sign_in!
-        warden.session_serializer.store(resource, scope)
-      end
-    
-            # Removes reset_password token
-        def clear_reset_password_token
-          self.reset_password_token = nil
-          self.reset_password_sent_at = nil
+            def id_for_already_imported_cache(issue)
+          issue.number
         end
     
-          module ClassMethods
-        Devise::Models.config(self, :timeout_in)
+            def importer_class
+          NoteImporter
+        end
+    
+          # Returns the ID to use for the cache used for checking if an object has
+      # already been imported or not.
+      #
+      # object - The object we may want to import.
+      def id_for_already_imported_cache(object)
+        raise NotImplementedError
       end
+    
+          def action_name(env)
+        if env[CONTROLLER_KEY]
+          action_for_rails(env)
+        elsif env[ENDPOINT_KEY]
+          action_for_grape(env)
+        end
+      end
+    
+      def destroy
+    unless current_user.authenticate(params[:password])
+      respond_to do |wants|
+        wants.html { redirect_to organization_delete_path(@organization), :alert => 'The password you entered was not valid. Please check and try again.' }
+        wants.json { render :json => {:alert => 'The password you entered was invalid. Please check and try again.'} }
+      end
+      return
     end
+    
+      def index
+    @users = organization.organization_users.where(:user_type => 'User').includes(:user).to_a.sort_by { |u| '#{u.user.first_name}#{u.user.last_name}'.upcase }
+    @pending_users = organization.organization_users.where(:user_type => 'UserInvite').includes(:user).to_a.sort_by { |u| u.user.email_address.upcase }
   end
-end
