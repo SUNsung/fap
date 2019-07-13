@@ -1,68 +1,72 @@
 
         
-            def __init__(self):
-        self.name = 'pgcrypto'
-    
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
-    
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+            with open('README.md', 'w+') as sorted_file:
+        sorted_file.write(final_README)
     
     
-def test_preprocess_input():
-    # Test image batch with float and int image input
-    x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    xint = x.astype('int32')
-    assert utils.preprocess_input(x).shape == x.shape
-    assert utils.preprocess_input(xint).shape == xint.shape
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
     
-def test_objective_shapes_2d():
-    y_a = K.variable(np.random.random((6, 7)))
-    y_b = K.variable(np.random.random((6, 7)))
-    for obj in allobj:
-        objective_output = obj(y_a, y_b)
-        assert K.eval(objective_output).shape == (6,)
+@pytest.mark.parametrize('script, output, help_text, result', [
+    ('apt-get isntall vim', invalid_operation('isntall'),
+     apt_get_help, 'apt-get install vim'),
+    ('apt saerch vim', invalid_operation('saerch'),
+     apt_help, 'apt search vim'),
+])
+def test_get_new_command(set_help, output, script, help_text, result):
+    set_help(help_text)
+    assert get_new_command(Command(script, output))[0] == result
+
     
-    model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
     
-def mean_squared_logarithmic_error(y_true, y_pred):
-    first_log = K.log(K.clip(y_pred, K.epsilon(), None) + 1.)
-    second_log = K.log(K.clip(y_true, K.epsilon(), None) + 1.)
-    return K.mean(K.square(first_log - second_log), axis=-1)
+@pytest.fixture
+def brew_no_available_formula():
+    return '''Error: No available formula for elsticsearch '''
     
-        logger.info('Generating rollout for {}'.format(spec.id))
     
-        # You can set the level to logger.DEBUG or logger.WARN if you
-    # want to change the amount of output.
-    logger.set_level(logger.INFO)
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
+
     
-        def test_reversed_addition_3rows(self):
-        env = alg.reversed_addition.ReversedAdditionEnv(base=3, rows=3)
-        input_expected = [
-            ([[1,1,0],[0,1,1]], [2, 2]),
-            ([[1,1,2],[0,1,1]], [1,0,1]),
-        ]
-        for (input_grid, expected_target) in input_expected:
-            self.assertEqual(env.target_from_input_data(input_grid), expected_target)
+    
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert match(Command(script.format(filename.format(ext)), ''))
