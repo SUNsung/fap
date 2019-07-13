@@ -1,119 +1,103 @@
 
         
-            it 'opens the dry run modal even when clicking on the refresh icon' do
-      visit edit_agent_path(agent)
-      find('.agent-dry-run-button span.glyphicon').click
-      expect(page).to have_text('Event to send (Optional)')
-    end
-    
-            it 'creates new Agents, even if one already exists with the given guid (so that we don't overwrite a user's work outside of the scenario)' do
-          agents(:bob_weather_agent).update_attribute :guid, 'a-weather-agent'
-    
-        @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
-      a.user = users(:bob)
-      a.save!
-    }
-    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
-      a.user = users(:bob)
-      a.save!
-    }
-  end
-    
-    # call-seq:
-#   Digest(name) -> digest_subclass
-#
-# Returns a Digest subclass by +name+ in a thread-safe manner even
-# when on-demand loading is involved.
-#
-#   require 'digest'
-#
-#   Digest('MD5')
-#   # => Digest::MD5
-#
-#   Digest(:SHA256)
-#   # => Digest::SHA256
-#
-#   Digest(:Foo)
-#   # => LoadError: library not found for class Digest::Foo -- digest/foo
-def Digest(name)
-  const = name.to_sym
-  Digest::REQUIRE_MUTEX.synchronize {
-    # Ignore autoload's because it is void when we have #const_missing
-    Digest.const_missing(const)
-  }
-rescue LoadError
-  # Constants do not necessarily rely on digest/*.
-  if Digest.const_defined?(const)
-    Digest.const_get(const)
-  else
-    raise
-  end
-end
-
-    
-      RTLD_GLOBAL = Handle::RTLD_GLOBAL # :nodoc:
-  RTLD_LAZY   = Handle::RTLD_LAZY   # :nodoc:
-  RTLD_NOW    = Handle::RTLD_NOW    # :nodoc:
-end
-
-    
-      # Disable automatic flushing of the log to improve performance.
-  # config.autoflush_log = false
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-        it 'does not let a user destroy other likes' do
-      like2 = eve.like!(@message)
-      like_count = Like.count
-    
-          FactoryGirl.create(:notification, :recipient => alice)
-      note = FactoryGirl.create(:notification, :recipient => user2)
-    
-        context 'on a post you do not partecipate to' do
-      it 'says it is an unprocessable request' do
-        delete :destroy, params: {post_id: post.id}
-        expect(response.code).to eq('422')
-      end
-    end
-  end
-end
-
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
+                def to_s
+          @symbol.to_s
         end
+        alias to_str to_s
+    
+        def order_by_category_sql(dir)
+      -'CASE WHEN categories.id = #{SiteSetting.uncategorized_category_id.to_i} THEN '' ELSE categories.name END #{dir}'
+    end
+    
+    describe ContentSecurityPolicy::Builder do
+  let(:builder) { described_class.new }
+    
+        def extend_directive(directive, sources)
+      return unless extendable?(directive)
+    
+      describe 'script-src' do
+    it 'always has self, logster, sidekiq, and assets' do
+      script_srcs = parse(policy)['script-src']
+      expect(script_srcs).to include(*%w[
+        'unsafe-eval'
+        'report-sample'
+        http://test.localhost/logs/
+        http://test.localhost/sidekiq/
+        http://test.localhost/mini-profiler-resources/
+        http://test.localhost/assets/
+        http://test.localhost/brotli_asset/
+        http://test.localhost/extra-locales/
+        http://test.localhost/highlight-js/
+        http://test.localhost/javascripts/
+        http://test.localhost/plugins/
+        http://test.localhost/theme-javascripts/
+        http://test.localhost/svg-sprite/
+      ])
+    end
+    
+              timings = MethodProfiler.stop
+          if timings && duration = timings[:total_duration]
+            headers['X-Runtime'] = '#{'%0.6f' % duration}'
+          end
+    
+    Given /^I start the rails application$/ do
+  cd('.') do
+    require 'rails'
+    require './config/environment'
+    require 'capybara'
+    Capybara.app = Rails.application
+  end
+end
+    
+        def self.register(klass, attachment_name, attachment_options)
+      instance.register(klass, attachment_name, attachment_options)
+    end
+    
+        def calculated_type_matches
+      possible_types.select do |content_type|
+        content_type == type_from_file_contents
       end
+    end
+    
+        def raise_because_imagemagick_missing
+      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
     end
   end
 end
 
     
-        def each(&block)
-      @cookies.each(&block)
+        # Returns a the attachment hash.  See Paperclip::Attachment#hash_key for
+    # more details.
+    def hash attachment=nil, style_name=nil
+      if attachment && style_name
+        attachment.hash_key(style_name)
+      else
+        super()
+      end
     end
+    
+    Capybara.javascript_driver = :javascript_test
+    
+        describe '#title' do
+      it 'returns the page title' do
+        expect(string.title).to eq('simple_node')
+      end
+    end
+    
+    Given /^that the uploader reverses the filename$/ do
+  @klass.class_eval do
+    def filename
+      super.reverse unless super.blank?
+    end
+  end
+end
+    
+          def initialize(uploader)
+        @uploader = uploader
+      end
+    
+          class MiniMagickWrapper # :nodoc:
+        attr_reader :image
+        def width
+          image[:width]
+        end
