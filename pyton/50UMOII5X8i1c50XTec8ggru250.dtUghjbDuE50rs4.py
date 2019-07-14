@@ -1,107 +1,115 @@
 
         
-            def __init__(self):
-        self.name = 'unaccent'
+        
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
+    
+        def short_desc(self):
+        return 'Fetch a URL using the Scrapy downloader'
+    
+        def download_request(self, request, spider):
+        p = urlparse_cached(request)
+        scheme = 'https' if request.meta.get('is_secure') else 'http'
+        bucket = p.hostname
+        path = p.path + '?' + p.query if p.query else p.path
+        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
+        if self.anon:
+            request = request.replace(url=url)
+        elif self._signer is not None:
+            import botocore.awsrequest
+            awsrequest = botocore.awsrequest.AWSRequest(
+                method=request.method,
+                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
+                headers=request.headers.to_unicode_dict(),
+                data=request.body)
+            self._signer.add_auth(awsrequest)
+            request = request.replace(
+                url=url, headers=awsrequest.headers.items())
+        else:
+            signed_headers = self.conn.make_request(
+                    method=request.method,
+                    bucket=bucket,
+                    key=unquote(p.path),
+                    query_args=unquote(p.query),
+                    headers=request.headers,
+                    data=request.body)
+            request = request.replace(url=url, headers=signed_headers)
+        return self._download_http(request, spider)
 
     
-        try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
+        text = html.remove_tags_with_content(text, ('script', 'noscript'))
+    text = html.replace_entities(text)
+    text = html.remove_comments(text)
+    return _ajax_crawlable_re.search(text) is not None
+
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+        def test_repr(self):
+        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
+                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
     
     
-class Session(AbstractBaseSession):
-    '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+class Signature(jose.Signature):
+    '''ACME-specific Signature. Uses ACME-specific Header for customer fields.'''
+    __slots__ = jose.Signature._orig_slots  # pylint: disable=no-member
     
-        That is, your objects should:
+            self.vhosts.append(
+            obj.VirtualHost(
+                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
+                False, False,
+                'wildcard.com', set(['*.wildcard.com'])))
     
-    def _int_list_from_bigint(bigint):
-    # Special case 0
-    if bigint < 0:
-        raise error.Error('Seed must be non-negative, not {}'.format(bigint))
-    elif bigint == 0:
-        return [0]
+    ========================================  =====================================
+``--dns-cloudflare-credentials``          Cloudflare credentials_ INI file.
+                                          (Required)
+``--dns-cloudflare-propagation-seconds``  The number of seconds to wait for DNS
+                                          to propagate before asking the ACME
+                                          server to verify the DNS record.
+                                          (Default: 10)
+========================================  =====================================
     
-        existing = rollout_dict.get(spec.id)
-    if existing:
-        differs = False
-        for key, new_hash in rollout.items():
-            differs = differs or existing[key] != new_hash
-        if not differs:
-            logger.debug('Hashes match with existing for {}'.format(spec.id))
-            return False
-        else:
-            logger.warn('Got new hash for {}. Overwriting.'.format(spec.id))
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = u'0'
+# The full version, including alpha/beta/rc tags.
+release = u'0'
     
-    if not hasattr(env.action_space, 'n'):
-    raise Exception('Keyboard agent only supports discrete action spaces')
-ACTIONS = env.action_space.n
-SKIP_CONTROL = 0    # Use previous control decision SKIP_CONTROL times, that's how you
-                    # can test what skip is still usable.
+    .. code-block:: bash
+   :caption: To acquire a certificate for ``example.com``
     
-                if abs(force) > friction_limit:
-                f_force /= force
-                p_force /= force
-                force = friction_limit  # Correct physics here
-                f_force *= force
-                p_force *= force
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
     
-    Number of connections from one IP is limited.
-We have nothing against scripting and automated queries.
-Even the opposite, we encourage them. But there are some
-connection limits that even we can't handle.
-Currently the limits are quite restrictive, but they will be relaxed
-in the future.
+       certbot certonly \\
+     --dns-digitalocean \\
+     --dns-digitalocean-credentials ~/.secrets/certbot/digitalocean.ini \\
+     -d example.com
     
-    class Fosdem(CommandAdapter):
+        def test_publisher_shall_append_subscription_message_to_queue(cls):
+        ''' msg_queue ~ Provider.notify(msg) ~ Publisher.publish(msg) '''
+        expected_msg = 'expected msg'
+        pro = Provider()
+        pub = Publisher(pro)
+        Subscriber('sub name', pro)
+        cls.assertEqual(len(pro.msg_queue), 0)
+        pub.publish(expected_msg)
+        cls.assertEqual(len(pro.msg_queue), 1)
+        cls.assertEqual(pro.msg_queue[0], expected_msg)
     
-            return ['git', 'clone', cls._repository_url, local_repository_dir]
+        def test_2nd_am_station_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1380'
+        self.assertEqual(station, expected_station)
     
-        def _starting_page(self, query):
-        number_of_pages = self._rosetta_get_list(query)
-        answer = (
-            '# %s pages available\n'
-            '# use /:list to list'
-        ) % number_of_pages
-        return answer
-    
-            search_order = ['common', 'linux', 'osx', 'sunos', 'windows']
-        local_rep = self.local_repository_location()
-        ext = self._cheatsheet_files_extension
-    
-        >>> print(_get_nested({'a.b': 10, 'a':{'b': 20}}, 'a.b'))
-    10
-    >>> print(_get_nested({'a': {'b': 20}}, 'a.b'))
-    20
-    >>> print(_get_nested({'a': {'b': {'c': 30}}}, 'a.b.c'))
-    30
-    '''
-    
-    def visualize(answer_data, request_options):
-    '''
-    Renders `answer_data` as ANSI output.
-    '''
-    answers = answer_data['answers']
-    return _visualize(answers, request_options, search_mode=bool(answer_data['keyword']))
+        >>> class ClassRegistree(BaseRegisteredClass):
+    ...    def __init__(self, *args, **kwargs):
+    ...        pass
