@@ -1,160 +1,276 @@
 
         
-        class CensusChannelData : public ChannelData {
- public:
-  grpc_error* Init(grpc_channel_element* elem,
-                   grpc_channel_element_args* args) override;
-};
+            void convertScale(const Size2D &_size,
+                      const u8 * srcBase, ptrdiff_t srcStride,
+                      s8 * dstBase, ptrdiff_t dstStride,
+                      f64 alpha, f64 beta);
     
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    
-    {  // Schedule the given callback for execution.
-  virtual void Add(const std::function<void()>& callback) = 0;
-};
-    
-    using grpc::core::Bucket;
-using grpc::core::Histogram;
-using grpc::core::Metric;
-using grpc::core::Stats;
-    
-    #include <grpc/support/time.h>
-#include <grpcpp/support/config.h>
-#include <grpcpp/support/time.h>
-    
-    int64_t VMTOC::getIndex(uint64_t elem) {
-  auto pos = m_map.find(elem);
-  if (pos != m_map.end()) {
-    return pos->second;
-  }
-  return LLONG_MIN;
-}
-    
-          MD_form_t md_formater {{
-        rc,
-        static_cast<uint32_t>(sh >> 5),                         // sh5
-        xop,
-        static_cast<uint32_t>(((mb >> 5) | (mb << 1)) & 0x3F),  // me5 || me0:4
-        static_cast<uint32_t>(sh & 0x1F),                       // sh0:4
-        static_cast<uint32_t>(ra),
-        static_cast<uint32_t>(rs),
-        op
-      }};
-    
-      /**
-   * Fill up vector with summary information.
-   */
-  virtual void debuggerInfo(InfoVec& /*info*/) {}
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
-    
-    #ifndef incl_HPHP_OUTPUT_FILE_H_
-#define incl_HPHP_OUTPUT_FILE_H_
-    
-    
-    {  StructuredLogEntry cols;
-  fillCols(cols);
-  cols.setStr('event_name', event);
-  cols.setInt('priority', priority);
-  StructuredLog::log('hhvm_perf_warning', cols);
-}
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
+    void accumulate(const Size2D &size,
+                const u8 *srcBase, ptrdiff_t srcStride,
+                s16 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
-  );
+    
+        void operator() (const typename VecTraits<f32>::vec64 & v_src0,
+                     const typename VecTraits<f32>::vec64 & v_src1,
+                     typename VecTraits<f32>::vec64 & v_dst) const
+    {
+        float32x2_t vs1 = vmla_f32(vget_low(vgamma), v_src0, vget_low(valpha));
+        v_dst = vmla_f32(vs1, v_src1, vget_low(vbeta));
+    }
+    
+    void blur3x3(const Size2D &size, s32 cn,
+             const f32 * srcBase, ptrdiff_t srcStride,
+             f32 * dstBase, ptrdiff_t dstStride,
+             BORDER_MODE borderType, f32 borderValue, Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isBlurF32Supported(size, cn, borderType));
+#ifdef CAROTENE_NEON
+    size_t colsn = size.width * cn;
+    }
+    
+        ptrdiff_t mapstep;
+    s32* mag_buf[3];
+    u8* map;
+    _normEstimator<L2gradient, externalSobel> normEstimator(size, cn, borderMargin, mapstep, mag_buf, map);
+    
+    inline float32x4_t vrecpq_f32(float32x4_t val)
+{
+    float32x4_t reciprocal = vrecpeq_f32(val);
+    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
+    reciprocal = vmulq_f32(vrecpsq_f32(val, reciprocal), reciprocal);
+    return reciprocal;
 }
     
-      // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
     
     
+    {  source.CopyTo(&sink, data.size() - 2);
+  EXPECT_EQ(data.substr(1, data.size() - 2), str);
+  EXPECT_EQ('!', source.Peek());
+}
     
-    #include 'hphp/runtime/base/user-attributes.h'
-#include 'hphp/runtime/base/tv-comparisons.h'
-#include 'hphp/runtime/vm/disas.h'
+    int main(int argc, const char** argv) {
+  FileOutputStream fout(STDOUT_FILENO);
+  GzipOutputStream out(&fout);
+  int readlen;
+    }
     
-        // output element with key 'the ugly'
-    std::cout << object.at('the ugly') << '\n';
+    using google::protobuf::FileDescriptorProto;
+using google::protobuf::FileDescriptor;
+using google::protobuf::DescriptorPool;
+using google::protobuf::io::Printer;
+using google::protobuf::util::SchemaGroupStripper;
+using google::protobuf::util::EnumScrubber;
     
-    /**
- * @brief Utility method to get value for specified key.
- *
- * Docker supports querying primary columns by prefix. This is preserved when
- * querying thought OSQuery.
- *
- * For example the following should return same result as long as there is only
- * one container with 'id' that starts with '12345678':
- *   SELECT * FROM docker_containers WHERE id = '1234567890abcdef'
- *   SELECT * FROM docker_containers WHERE id = '12345678'
- *
- * @param tree Property tree response from docker.
- * @param set Set that might contain prefix values.
- * @param key Key to look for in the property tree.
+    #include <ctime>
+#include <fstream>
+#include <google/protobuf/util/time_util.h>
+#include <iostream>
+#include <string>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace objectivec {
+    }
+    }
+    }
+    }
+    
+    /*
+ * True if line from a0->a1 intersects b0->b1
  */
-std::string getValue(const pt::ptree& tree,
-                     const std::set<std::string>& set,
-                     const std::string& key) {
-  std::string value = tree.get<std::string>(key, '');
-  if (boost::starts_with(value, 'sha256:')) {
-    value.erase(0, 7);
-  }
-  if (set.empty()) {
-    return value; // Return value from tree, if set is empty
-  }
-    }
-    
-        std::string pack;
-    auto stat = genPack(name->second, value->second, pack);
-    response.push_back({{name->second, pack}});
-    return stat;
-  } else if (action->second == 'update') {
-    auto source = request.find('source');
-    auto data = request.find('data');
-    if (source == request.end() || data == request.end()) {
-      return Status(1, 'Missing source or data');
-    }
-    
-    #include <osquery/utils/system/env.h>
-    
-      virtual ExpectedSuccess<DatabaseError> open() = 0;
-  virtual void close() = 0;
-    
-    Expected<std::string, DatabaseError> RocksdbDatabase::getString(
-    const std::string& domain, const std::string& key) {
-  auto result = getRawBytes(domain, key);
-  if (result) {
-    std::string result_str = result.take();
-    if (BOOST_UNLIKELY(validateInt32StorageBuffer(result_str))) {
-      auto type_error = createError(RocksdbError::UnexpectedValueType)
-                        << 'Fetching string as integer';
-      LOG(ERROR) << type_error.getMessage().c_str();
-      assert(false);
-      return createError(DatabaseError::KeyNotFound, std::move(type_error));
-    }
-    return result_str;
-  }
-  return result.takeError();
+bool intersect(const b2Vec2& a0, const b2Vec2& a1,
+			   const b2Vec2& b0, const b2Vec2& b1) {
+	b2Vec2 myVec(0.0f,0.0f);
+	return intersect(a0, a1, b0, b1, myVec);
 }
-    
-    #include <unordered_map>
     
     #pragma once
+    
+    /*
+EtcBlock4x4Encoding.cpp
+    
+    					// try each CW
+					for (unsigned int uiCW = 0; uiCW < CW_RANGES; uiCW++)
+					{
+						unsigned int auiPixelSelectors[PIXELS / 2];
+						ColorFloatRGBA	afrgbaDecodedPixels[PIXELS / 2];
+						float afPixelErrors[PIXELS / 2] = { FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX,
+															FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX };
+    }
+    
+    //use_int32: When enabled 32bit ints are used instead of 64bit ints. This
+//improve performance but coordinate values are limited to the range +/- 46340
+//#define use_int32
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#if OPUS_FAST_INT64
+#define MULT16_32_Q16(a,b) ((opus_val32)SHR((opus_int64)((opus_val16)(a))*(b),16))
+#else
+#define MULT16_32_Q16(a,b) ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16))
+#endif
+    
+      // read a token
+  i = 0;
+  buf[i++] = c;
+  if (c == '(') {
+    backslash = gFalse;
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+      if (c == '\\') {
+	backslash = gTrue;
+      } else if (!backslash && c == ')') {
+	break;
+      } else {
+	backslash = gFalse;
+      }
+    }
+  } else if (c == '<') {
+    while ((c = lookChar()) != EOF) {
+      consumeChar();
+      if (i < size && specialChars[c] != 1) {
+	buf[i++] = c;
+      }
+      if (c == '>') {
+	break;
+      }
+    }
+  } else if (c != '[' && c != ']') {
+    while ((c = lookChar()) != EOF && !specialChars[c]) {
+      consumeChar();
+      if (i < size) {
+	buf[i++] = c;
+      }
+    }
+  }
+  // Zero terminate token string
+  buf[i] = '\0';
+  // Return length of token
+  *length = i;
+    
+    
+    {  if (tree->dictLookup('Kids', &kids)->isArray()) {
+    for (i = 0; i < kids.arrayGetLength(); ++i) {
+      if (kids.arrayGet(i, &kid)->isDict())
+	parse(&kid);
+      kid.free();
+    }
+  }
+  kids.free();
+}
+    
+      type = transitionReplace;
+  duration = 1;
+  alignment = transitionHorizontal;
+  direction = transitionInward;
+  angle = 0;
+  scale = 1.0;
+  rectangular = gFalse;
+  ok = gTrue;
+    
+      // Get type
+  PageTransitionType getType() { return type; }
+    
+      check(state->getFillColorSpace(), state->getFillColor(),
+	state->getFillOpacity(), state->getBlendMode());
+  gdi = gFalse;
+  if ((level == psLevel1 || level == psLevel1Sep) &&
+      state->getFillColorSpace()->getMode() == csPattern) {
+    level1PSBug = gTrue;
+  }
+    
+      // Attempt to authorize the document, using the supplied
+  // authorization data (which may be NULL).  Returns true if
+  // successful (i.e., if at least the right to open the document was
+  // granted).
+  virtual GBool authorize(void *authData) = 0;
+    
+    
+    {      dword(xl_formater.instruction);
+   }
+    
+    struct APCCollection {
+  static APCHandle::Pair Make(const ObjectData*,
+                              APCHandleLevel level,
+                              bool unserializeObj);
+  static void Delete(APCHandle*);
+    }
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
+    }
+  }
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+    #ifndef HPHP_DATA_STREAM_WRAPPER_H
+#define HPHP_DATA_STREAM_WRAPPER_H
+    
+    PlainDirectory::PlainDirectory(int fd) {
+  m_dir = ::fdopendir(fd);
+}
+    
+    #endif // HPHP_FILE_STREAM_WRAPPER_H
+
+    
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
+};
+    
+    #endif
+
+    
+      Pipe();
+  virtual ~Pipe();
