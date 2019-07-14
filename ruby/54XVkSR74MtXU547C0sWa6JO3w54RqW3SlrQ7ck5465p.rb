@@ -1,41 +1,45 @@
 
         
-          gem.add_development_dependency 'danger'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rubocop', '0.48.1'
-end
+        def extmake(target, basedir = 'ext', maybestatic = true)
+  FileUtils.mkpath target unless File.directory?(target)
+  begin
+    # don't build if parent library isn't build
+    parent = true
+    d = target
+    until (d = File.dirname(d)) == '.'
+      if File.exist?('#{$top_srcdir}/#{basedir}/#{d}/extconf.rb')
+        parent = (/^all:\s*install/ =~ IO.read('#{d}/Makefile') rescue false)
+        break
+      end
+    end
+    
+    # :startdoc:
 
     
-    Then(/^the specified stage files are created$/) do
-  qa = TestApp.test_app_path.join('config/deploy/qa.rb')
-  production = TestApp.test_app_path.join('config/deploy/production.rb')
-  expect(File.exist?(qa)).to be true
-  expect(File.exist?(production)).to be true
-end
+        private
     
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
+      # Disable Rails's static asset server (Apache or nginx will already do this).
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
     
-          def matches?(other)
-        # This matching logic must stay in sync with `Servers#add_host`.
-        hostname == other.hostname && port == other.port
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
       end
+    end
     
-    set_if_empty :default_env, {}
-set_if_empty :keep_releases, 5
     
-      # Configure public file server for tests with Cache-Control for performance.
-  config.public_file_server.enabled = true
-  config.public_file_server.headers = {
-    'Cache-Control' => 'public, max-age=#{1.hour.to_i}'
-  }
-    
-      private
+# This is a non obvious hack,
+# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
+# use them.
+#
+# Details: https://github.com/jruby/jruby-openssl/issues/105
+Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
+Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
