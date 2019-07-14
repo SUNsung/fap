@@ -1,163 +1,319 @@
 
         
-        #endif
+        #endif // BITCOIN_QT_OPENURIDIALOG_H
+
     
-    void bitwiseNot(const Size2D &size,
-                const u8 *srcBase, ptrdiff_t srcStride,
-                u8 *dstBase, ptrdiff_t dstStride)
+    BOOST_AUTO_TEST_CASE(univalue_object)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    UniValue obj(UniValue::VOBJ);
+    std::string strKey, strVal;
+    UniValue v;
     }
     
-        for (ptrdiff_t y = 0; y < height; ++y)
-    {
-        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
-        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
-        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
-    // It is possible to accumulate up to 131071 schar multiplication results in sint32 without overflow
-// We process 16 elements and accumulate two new elements per step. So we could handle 131071/2*16 elements
-#define DOT_INT_BLOCKSIZE 131070*8
-    f64 result = 0.0;
-    for (size_t row = 0; row < size.height; ++row)
-    {
-        const s8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
-        const s8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
-    }
-    
-    bool isFlipSupported(FLIP_MODE flipMode, u32 elemSize)
-{
-    bool supportedElemSize = (elemSize == 1) || (elemSize == 2) || (elemSize == 3) || (elemSize == 4);
-    return isSupportedConfiguration() &&
-            ((supportedElemSize && ((flipMode == FLIP_BOTH_MODE) || (flipMode == FLIP_HORIZONTAL_MODE))) ||
-             (flipMode == FLIP_VERTICAL_MODE));
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
 }
+
     
-                uint32x4_t ln04 = vaddq_u32(lane0, lane4);
-            uint32x4_t ln13 = vaddq_u32(lane1, lane3);
+      // Thread local context for Caffe. Moved to common.cpp instead of
+  // including boost/thread.hpp to avoid a boost/NVCC issues (#1009, #1010)
+  // on OSX. Also fails on Linux with CUDA 7.0.18.
+  static Caffe& Get();
     
-    template <typename T, int elsize> struct vtail
-{
-    static inline void inRange(const T *, const T *, const T *,
-                               u8 *, size_t &, size_t)
-    {
-        //do nothing since there couldn't be enough data
-    }
-};
-template <typename T> struct vtail<T, 2>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
-        if( x + 8 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1(dst + x, internal::vmovn(vd));
-            x+=8;
-        }
-    }
-};
-template <typename T> struct vtail<T, 1>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<T>::vec64 vec64;
-        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1q(dst + x, vd);
-            x+=16;
-        }
-        if( x + 8 < width)
-        {
-             vec64  vs = internal::vld1( src + x);
-             vec64 vr1 = internal::vld1(rng1 + x);
-             vec64 vr2 = internal::vld1(rng2 + x);
-            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
-            internal::vst1(dst + x, vd);
-            x+=8;
-        }
-    }
-};
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+    {}  // namespace caffe
     
-      // Null char in the string.
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-    
-    // Author: brianolson@google.com (Brian Olson)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Test program to verify that GzipOutputStream is compatible with command line
-// gzip or java.util.zip.GzipOutputStream
-//
-// Reads data on standard input and writes compressed gzip stream to standard
-// output.
-    
-    # if !GTEST_OS_WINDOWS
-// Tests that an exit code describes an exit due to termination by a
-// given signal.
-class GTEST_API_ KilledBySignal {
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
  public:
-  explicit KilledBySignal(int signum);
-  bool operator()(int exit_status) const;
- private:
-  const int signum_;
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
 };
-# endif  // !GTEST_OS_WINDOWS
+#endif
     
-    template <typename T, size_t N>
-internal::ParamGenerator<T> ValuesIn(const T (&array)[N]) {
-  return ValuesIn(array, array + N);
+        Rational Pow(Rational const& base, Rational const& pow);
+    Rational Root(Rational const& base, Rational const& root);
+    Rational Fact(Rational const& rat);
+    Rational Mod(Rational const& a, Rational const& b);
+    
+            bool IsZero() const;
+    
+        auto operandCommand = std::make_shared<COpndCommand>(commands, fNegative, fDecimal, fSciFmt);
+    operandCommand->Initialize(rat);
+    int iCommandEnd = AddCommand(operandCommand);
+    m_lastOpStartIndex = IchAddSzToEquationSz(numStr, iCommandEnd);
+    
+    bool COpndCommand::IsNegative() const
+{
+    return m_fNegative;
 }
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    #pragma once
+    
+    void LiveRegionHost::Announce(NarratorAnnouncement ^ announcement)
+{
+    if (m_host == nullptr)
+    {
+        m_host = ref new TextBlock();
+        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
+    }
+    }
+    
+    public
+    enum class AutomationNotificationProcessing
+    {
+        ImportantAll = 0,
+        ImportantMostRecent = 1,
+        All = 2,
+        MostRecent = 3,
+        CurrentThenMostRecent = 4
+    };
+    
+    
+    {
+    {
+    {  /*!
+   * \brief Worker threads.
+   */
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+};
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
+
+    
+     private:
+  /*! \brief base iterator */
+  std::unique_ptr<IIterator<DataInst> > base_;
+  /*! whether mean image is ready */
+  bool meanfile_ready_;
+  /*! \brief output data */
+  DataInst out_;
+  // normalize parameter.
+  ImageNormalizeParam param_;
+  /*! \brief mean image, if needed */
+  mshadow::TensorContainer<cpu, 3> meanimg_;
+  /*! \brief temp space for output image */
+  mshadow::TensorContainer<cpu, 3> outimg_;
+  /*! \brief random numeber engine */
+  common::RANDOM_ENGINE rnd_;
+  // random magic number of this iterator
+  static const int kRandMagic = 0;
+    
+    template<typename xpu, typename OP>
+void EvalMatFillRowElem_(const TBlob &lhs, const TBlob &mhs, const TBlob &rhs,
+                         TBlob *ret, RunContext ctx) {
+  using namespace mshadow::expr;
+  mshadow::Stream<xpu> *s = ctx.get_stream<xpu>();
+  ret->get<xpu, 2, real_t>(s)
+          = mat_fill_row_element(lhs.get<xpu, 2, real_t>(s),
+                                 mhs.get<xpu, 1, real_t>(s),
+                                 rhs.get<xpu, 1, real_t>(s));
 }
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED2.  Don't use
-// this in your code.
-#define GTEST_PRED2_(pred, v1, v2, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred2Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             pred, \
-                                             v1, \
-                                             v2), on_failure)
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                        sampler_,
+                                                        dtype_,
+                                                        4,
+                                                        dim));
+    }
+  }
+    
+    template<typename xpu>
+void ConcatCompute(const nnvm::NodeAttrs& attrs, const OpContext& ctx,
+                   const std::vector<TBlob>& inputs,
+                   const std::vector<OpReqType>& req,
+                   const std::vector<TBlob>& outputs) {
+  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
+  MSHADOW_TYPE_SWITCH(inputs[concat_enum::kData0].type_flag_, DType, {
+    ConcatOp<xpu, DType> op;
+    op.Init(param);
+    op.Forward(ctx, inputs, req, outputs);
+  });
+}
     
     
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
+    {    // out_of_range.404
+    try
+    {
+        // try to use a JSON pointer that cannot be resolved
+        json::const_reference ref = j.at('/number/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+        // the following call will not add an object, because there is already
+    // a value stored at key 'B'
+    auto res2 = null.emplace('B', 'c');
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(4, 4);
+    
+    Eigen::MatrixXd SplineSegKernel::Kernel(const uint32_t num_params,
+                                        const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateFx(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'fx', &term_matrix);
+  return kernel_fx_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
+    
+    TEST_F(Accelrpt68Test, reset) {
+  Accelrpt68 acc;
+  int32_t length = 8;
+  ChassisDetail chassis_detail;
+  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
+    }
+    
+    // config detail: {'name': 'torque_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': True, 'physical_range':
+// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
+// 'motorola', 'physical_unit': 'N-m'}
+double Brakemotorrpt372::torque_input(const std::uint8_t* bytes,
+                                      int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+        Size winSize = Director::getInstance()->getWinSize();
+    _fullScreenSize.set(winSize.width, winSize.height);
+    _halfScreenSize = _fullScreenSize * 0.5f;
+    _offsetX=xOffset;
+    _offsetY=yOffset;
+    _halfScreenSize.x += _offsetX;
+    _halfScreenSize.y += _offsetY;
+    
+    if (_boundarySet)
+    {
+        _leftBoundary = -((rect.origin.x+rect.size.width) - _fullScreenSize.x);
+        _rightBoundary = -rect.origin.x ;
+        _topBoundary = -rect.origin.y;
+        _bottomBoundary = -((rect.origin.y+rect.size.height) - _fullScreenSize.y);
+    }
+    
+        // Overrides
+    OrbitCamera *clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    OrbitCamera();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~OrbitCamera();
+    
+    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
+    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    
+    
+    {
+    {
+    {            if (action->getTag() == (int)tag && action->getOriginalTarget() == target)
+            {
+                removeActionAtIndex(i, element);
+                break;
+            }
+        }
+    }
+}
+    
+    #endif /* __CCACTIONTWEEN_H__ */
+    
+    
+#include '2d/CCClippingRectangleNode.h'
+#include 'base/CCDirector.h'
+#include 'renderer/CCRenderer.h'
+#include 'math/Vec2.h'
+#include 'platform/CCGLView.h'
