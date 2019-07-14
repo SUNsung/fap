@@ -1,107 +1,65 @@
 
         
-              def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
+              def feature_element_timing_key(feature_element)
+        '\'#{feature_element.name}\' (#{feature_element.location})'
       end
     
-          it 'allows you to specify your own message' do
-        tag = '2.0.0'
-        message = 'message'
+            request_count_counter.increment
     
-          it 'sets the platform to (downcase) ios' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              platform: 'ios'
-            )
-          end').runner.execute(:test)
+          private
     
-          it 'works with exclude regex' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              exclude_regex: /Test/
-            )
-          end').runner.execute(:test)
+        private
     
-          it 'splits correctly' do
-        expected = [
-          'One',
-          'Two',
-          'Three',
-          'Four Token',
-          'Or',
-          'Newlines',
-          'Everywhere'
-        ]
-        expect(generator.split_keywords(keywords)).to eq(expected)
-      end
-    end
-  end
-end
-
+      private
     
-        def create
-      authorize :email_domain_block, :create?
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
+      included do
+    before_action :set_locale
   end
     
-      def update
-    setting.data = params[:data]
-    setting.save!
+    # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
+# is to ensure that people can’t use malicious code from pod specifications.
+#
+# It does this by creating a ‘seatbelt’ profile on the fly and executing the
+# given command through `/usr/bin/sandbox-exec`. This profile format is an
+# undocumented format, which uses TinyScheme to implement its DSL.
+#
+# Even though it uses a undocumented format, it’s actually very self-explanatory.
+# Because we use a whitelist approach, `(deny default)`, any action that is
+# denied is logged to `/var/log/system.log`. So tailing that should provide
+# enough information on steps that need to be take to get something to work.
+#
+# For more information see:
+#
+# * https://github.com/CocoaPods/CocoaPods/issues/939
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
+# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
+# * `$ man sandbox-exec`
+# * `$ ls /usr/share/sandbox`
     
-      def set_user_activity
-    return unless user_needs_sign_in_update?
-    current_user.update_tracked_fields!(request)
-  end
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
+    
+          def report
+        <<-EOS
+    
+        def execute
+      temp_path = generate_temporary_path
+      packet_gem = Paquet::Gem.new(temp_path, LogStash::Environment::CACHE_PATH)
+    
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
