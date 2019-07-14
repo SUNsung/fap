@@ -1,393 +1,267 @@
 
         
-        // The browser want to open a file.
-IPC_MESSAGE_CONTROL1(ShellViewMsg_Open,
-                     std::string /* file name */)
+          // Parallel training
+  int solver_count_;
+  int solver_rank_;
+  bool multiprocess_;
     
-    #include 'content/nw/src/api/base/base.h'
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
+      int channel_axis_;
+  int num_;
+  int channels_;
+  int group_;
+  int out_spatial_dim_;
+  int weight_offset_;
+  int num_output_;
+  bool bias_term_;
+  bool is_1x1_;
+  bool force_nd_im2col_;
     
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
-}
-    
-    
-    {}  // namespace nwapi
-
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-      inline int offset(const vector<int>& indices) const {
-    CHECK_LE(indices.size(), num_axes());
-    int offset = 0;
-    for (int i = 0; i < num_axes(); ++i) {
-      offset *= shape(i);
-      if (indices.size() > i) {
-        CHECK_GE(indices[i], 0);
-        CHECK_LT(indices[i], shape(i));
-        offset += indices[i];
-      }
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
-    return offset;
-  }
-  /**
-   * @brief Copy from a source Blob.
-   *
-   * @param source the Blob to copy from
-   * @param copy_diff if false, copy the data; if true, copy the diff
-   * @param reshape if false, require this Blob to be pre-shaped to the shape
-   *        of other (and die otherwise); if true, Reshape this Blob to other's
-   *        shape if necessary
-   */
-  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
-      bool reshape = false);
     
-    
-    { protected:
+     protected:
   /**
-   * @param bottom input Blob vector (length 1)
+   * @param bottom input Blob vector (length 2+)
    *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
    * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
    */
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
     
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    namespace caffe {
-    }
-    
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
-    }
-    
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
- public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
-    }
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
-   */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
-    }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
-    }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
-  }
-    
-    
-    {
-    {}  // namespace data
-}  // namespace xgboost
-
-    
-      dmlc::TemporaryDirectory tempdir;
-  const std::string tmp_file = tempdir.path + '/metainfo.binary';
-  dmlc::Stream* fs = dmlc::Stream::Create(tmp_file.c_str(), 'w');
-  info.SaveBinary(fs);
-  delete fs;
-    
-    /*!
- * \brief Input stream that support additional PeekRead
- *  operation, besides read.
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of SigmoidLayer.
  */
-class PeekableInStream : public dmlc::Stream {
+template <typename Dtype>
+class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
  public:
-  explicit PeekableInStream(dmlc::Stream* strm)
-      : strm_(strm), buffer_ptr_(0) {}
+  explicit CuDNNSigmoidLayer(const LayerParameter& param)
+      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSigmoidLayer();
     }
     
-      EXPECT_FALSE(devices.Contains(1));
-    
-      // init thread buffers
-  inline void InitThreadTemp(int nthread) {
-    int prev_thread_temp_size = thread_temp_.size();
-    if (prev_thread_temp_size < nthread) {
-      thread_temp_.resize(nthread, RegTree::FVec());
-      for (int i = prev_thread_temp_size; i < nthread; ++i) {
-        thread_temp_[i].Init(model_.param.num_feature);
+    // Returns a new x-height maximally compatible with the result in word_res.
+// See comment above for overall algorithm.
+float Tesseract::ComputeCompatibleXheight(WERD_RES *word_res,
+                                          float* baseline_shift) {
+  STATS top_stats(0, UINT8_MAX);
+  STATS shift_stats(-UINT8_MAX, UINT8_MAX);
+  int bottom_shift = 0;
+  int num_blobs = word_res->rebuild_word->NumBlobs();
+  do {
+    top_stats.clear();
+    shift_stats.clear();
+    for (int blob_id = 0; blob_id < num_blobs; ++blob_id) {
+      TBLOB* blob = word_res->rebuild_word->blobs[blob_id];
+      UNICHAR_ID class_id = word_res->best_choice->unichar_id(blob_id);
+      if (unicharset.get_isalpha(class_id) ||
+          unicharset.get_isdigit(class_id)) {
+        int top = blob->bounding_box().top() + bottom_shift;
+        // Clip the top to the limit of normalized feature space.
+        if (top >= INT_FEAT_RANGE)
+          top = INT_FEAT_RANGE - 1;
+        int bottom = blob->bounding_box().bottom() + bottom_shift;
+        int min_bottom, max_bottom, min_top, max_top;
+        unicharset.get_top_bottom(class_id, &min_bottom, &max_bottom,
+                                  &min_top, &max_top);
+        // Chars with a wild top range would mess up the result so ignore them.
+        if (max_top - min_top > kMaxCharTopRange)
+          continue;
+        int misfit_dist = std::max((min_top - x_ht_acceptance_tolerance) - top,
+                            top - (max_top + x_ht_acceptance_tolerance));
+        int height = top - kBlnBaselineOffset;
+        if (debug_x_ht_level >= 2) {
+          tprintf('Class %s: height=%d, bottom=%d,%d top=%d,%d, actual=%d,%d: ',
+                  unicharset.id_to_unichar(class_id),
+                  height, min_bottom, max_bottom, min_top, max_top,
+                  bottom, top);
+        }
+        // Use only chars that fit in the expected bottom range, and where
+        // the range of tops is sensibly near the xheight.
+        if (min_bottom <= bottom + x_ht_acceptance_tolerance &&
+            bottom - x_ht_acceptance_tolerance <= max_bottom &&
+            min_top > kBlnBaselineOffset &&
+            max_top - kBlnBaselineOffset >= kBlnXHeight &&
+            misfit_dist > 0) {
+          // Compute the x-height position using proportionality between the
+          // actual height and expected height.
+          int min_xht = DivRounded(height * kBlnXHeight,
+                                   max_top - kBlnBaselineOffset);
+          int max_xht = DivRounded(height * kBlnXHeight,
+                                   min_top - kBlnBaselineOffset);
+          if (debug_x_ht_level >= 2) {
+            tprintf(' xht range min=%d, max=%d\n', min_xht, max_xht);
+          }
+          // The range of expected heights gets a vote equal to the distance
+          // of the actual top from the expected top.
+          for (int y = min_xht; y <= max_xht; ++y)
+            top_stats.add(y, misfit_dist);
+        } else if ((min_bottom > bottom + x_ht_acceptance_tolerance ||
+                    bottom - x_ht_acceptance_tolerance > max_bottom) &&
+                   bottom_shift == 0) {
+          // Get the range of required bottom shift.
+          int min_shift = min_bottom - bottom;
+          int max_shift = max_bottom - bottom;
+          if (debug_x_ht_level >= 2) {
+            tprintf(' bottom shift min=%d, max=%d\n', min_shift, max_shift);
+          }
+          // The range of expected shifts gets a vote equal to the min distance
+          // of the actual bottom from the expected bottom, spread over the
+          // range of its acceptance.
+          int misfit_weight = abs(min_shift);
+          if (max_shift > min_shift)
+            misfit_weight /= max_shift - min_shift;
+          for (int y = min_shift; y <= max_shift; ++y)
+            shift_stats.add(y, misfit_weight);
+        } else {
+          if (bottom_shift == 0) {
+            // Things with bottoms that are already ok need to say so, on the
+            // 1st iteration only.
+            shift_stats.add(0, kBlnBaselineOffset);
+          }
+          if (debug_x_ht_level >= 2) {
+            tprintf(' already OK\n');
+          }
+        }
       }
     }
+    if (shift_stats.get_total() > top_stats.get_total()) {
+      bottom_shift = IntCastRounded(shift_stats.median());
+      if (debug_x_ht_level >= 2) {
+        tprintf('Applying bottom shift=%d\n', bottom_shift);
+      }
+    }
+  } while (bottom_shift != 0 &&
+           top_stats.get_total() < shift_stats.get_total());
+  // Baseline shift is opposite sign to the bottom shift.
+  *baseline_shift = -bottom_shift / word_res->denorm.y_scale();
+  if (debug_x_ht_level >= 2) {
+    tprintf('baseline shift=%g\n', *baseline_shift);
   }
-    
-    
-    { protected:
-  /*! \brief internal base score of the model */
-  bst_float base_score_;
-  /*! \brief objective function */
-  std::unique_ptr<ObjFunction> obj_;
-  /*! \brief The gradient booster used by the model*/
-  std::unique_ptr<GradientBooster> gbm_;
-  /*! \brief The evaluation metrics used to evaluate the model. */
-  std::vector<std::unique_ptr<Metric> > metrics_;
-  /*! \brief Training parameter. */
-  LearnerTrainParam tparam_;
-};
-    
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-    
-    {    return 0;
-}
-
-    
-    void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(io.Fonts->IsBuilt() && 'Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().');
-    }
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplAllegro5_RenderDrawData(ImDrawData* draw_data)
-{
-    // Avoid rendering when minimized
-    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
-        return;
-    }
-    
-        // Store our identifier
-    io.Fonts->TexID = (ImTextureID)g_FontTexture;
-    
-    #pragma once
-    
-    void DHTReplaceNodeTask::sendMessage()
-{
-  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
-  if (!questionableNode) {
-    setFinished(true);
+  if (top_stats.get_total() == 0)
+    return bottom_shift != 0 ? word_res->x_height : 0.0f;
+  // The new xheight is just the median vote, which is then scaled out
+  // of BLN space back to pixel space to get the x-height in pixel space.
+  float new_xht = top_stats.median();
+  if (debug_x_ht_level >= 2) {
+    tprintf('Median xht=%f\n', new_xht);
+    tprintf('Mode20:A: New x-height = %f (norm), %f (orig)\n',
+            new_xht, new_xht / word_res->denorm.y_scale());
   }
-  else {
-    getMessageDispatcher()->addMessageToQueue(
-        getMessageFactory()->createPingMessage(questionableNode), timeout_,
-        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  // The xheight must change by at least x_ht_min_change to be used.
+  if (fabs(new_xht - kBlnXHeight) >= x_ht_min_change)
+    return new_xht / word_res->denorm.y_scale();
+  else
+    return bottom_shift != 0 ? word_res->x_height : 0.0f;
+}
+    
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
+    }
   }
-}
-    
-      ~DHTRoutingTableSerializer();
-    
-    #endif // D_DHT_TASK_FACTORY_H
-
-    
-    void DHTTaskFactoryImpl::setMessageDispatcher(DHTMessageDispatcher* dispatcher)
-{
-  dispatcher_ = dispatcher;
-}
-    
-    
-    {  void setTimeout(std::chrono::seconds timeout)
-  {
-    timeout_ = std::move(timeout);
-  }
-};
-    
-    namespace aria2 {
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
     }
     
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port) const
-{
-  return generateToken(infoHash, ipaddr, port, secret_[0]);
-}
+    // Reads all boxes from the string. Otherwise, as ReadAllBoxes.
+// continue_on_failure allows reading to continue even if an invalid box is
+// encountered and will return true if it succeeds in reading some boxes.
+// It otherwise gives up and returns false on encountering an invalid box.
+bool ReadMemBoxes(int target_page, bool skip_blanks, const char* box_data,
+                  bool continue_on_failure,
+                  GenericVector<TBOX>* boxes,
+                  GenericVector<STRING>* texts,
+                  GenericVector<STRING>* box_texts,
+                  GenericVector<int>* pages);
     
-    const std::string DHTUnknownMessage::E('e');
-    
-    
-    {  double ret = x * OBJECT_WIDTH_RES;
-  return ret;
-}
-    
-        auto it_lower = std::lower_bound(
-        speed_limit_.speed_limit_points().begin(),
-        speed_limit_.speed_limit_points().end(), s,
-        [](const std::pair<double, double>& point, const double curr_s) {
-          return point.first < curr_s;
-        });
-    
-      kernel.AddReferenceLineKernelMatrix(index_list, pos_list, 10.0);
-    
-    Eigen::MatrixXd SplineSegKernel::NthDerivativeKernel(
-    const uint32_t n, const uint32_t num_params, const double accumulated_x) {
-  if (n == 1) {
-    return DerivativeKernel(num_params, accumulated_x);
-  } else if (n == 2) {
-    return SecondOrderDerivativeKernel(num_params, accumulated_x);
-  } else if (n == 3) {
-    return ThirdOrderDerivativeKernel(num_params, accumulated_x);
-  } else {
-    return Eigen::MatrixXd::Zero(num_params, num_params);
-  }
-}
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-      x <<= 0;
-  x >>= 0;
-    
-    
-    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
-  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
-  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
-  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
-}
+    #endif  // TESSERACT_CCUTIL_QRSEQUENCE_H_
