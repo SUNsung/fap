@@ -1,163 +1,255 @@
 
         
-        
-    {}  // namespace testing
+        #include <cstdlib>
+#include <iostream>
     
-    // This flag controls whether Google Test catches all test-thrown exceptions
-// and logs them as failures.
-GTEST_DECLARE_bool_(catch_exceptions);
-    
-    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
-#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_)};
-    return ValuesIn(array);
-  }
-    
-    // GTEST_n_TUPLE_(T) is the type of an n-tuple.
-#define GTEST_0_TUPLE_(T) tuple<>
-#define GTEST_1_TUPLE_(T) tuple<T##0, void, void, void, void, void, void, \
-    void, void, void>
-#define GTEST_2_TUPLE_(T) tuple<T##0, T##1, void, void, void, void, void, \
-    void, void, void>
-#define GTEST_3_TUPLE_(T) tuple<T##0, T##1, T##2, void, void, void, void, \
-    void, void, void>
-#define GTEST_4_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, void, void, void, \
-    void, void, void>
-#define GTEST_5_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, void, void, \
-    void, void, void>
-#define GTEST_6_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, void, \
-    void, void, void>
-#define GTEST_7_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
-    void, void, void>
-#define GTEST_8_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
-    T##7, void, void>
-#define GTEST_9_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
-    T##7, T##8, void>
-#define GTEST_10_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
-    T##7, T##8, T##9>
-    
-    // We don't want to require the users to write TemplatesN<...> directly,
-// as that would require them to count the length.  Templates<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Templates<list>
-// will appear as Templates<list, NoneT, NoneT, ..., NoneT> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Templates<T1, ..., TN>, and Google Test will translate
-// that to TemplatesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Templates template.
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    // Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
-    }
-    
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
-    }
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(offset_vec.size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), data_vec.size());
-    fo->Write(offset_vec);
-    min_index_ = page.base_rowid;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(data_vec.size());
-    value_.data.resize(data_vec.size());
-    }
-    
-    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s16, f32, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-    {    beg++;
-    beg--;
-    SPAN_ASSERT_TRUE(*beg == 2, status_);
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s16 q3, d4                                       \n\t'
+            'vmovl.s16 q4, d5                                       \n\t'
+            'vcvt.f32.s32 q5, q3                                    \n\t'
+            'vcvt.f32.s32 q6, q4                                    \n\t'
+            'vmul.f32 q7, q5, q0                                    \n\t'
+            'vmul.f32 q8, q6, q0                                    \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vadd.f32 q10, q8, q1                                     \n\t'
+            'vst1.32 {d18-d19}, [%[dst1]]                             \n\t'
+            'vst1.32 {d20-d21}, [%[dst2]]                             \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
+        );
+    }
+})
+#else
+CVTS_FUNC(s16, f32, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int16x8_t vline = vld1q_s16(_src + i);
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vst1q_f32(_dst + i + 0, vline1_f32);
+        vst1q_f32(_dst + i + 4, vline2_f32);
+    }
+})
+#endif
+    
+                uint16x8_t v_mask0 = vorrq_u16(vceqq_s16(v_src0, v_maxval8), vceqq_s16(v_src0, v_minval8));
+            uint16x8_t v_mask1 = vorrq_u16(vceqq_s16(v_src1, v_maxval8), vceqq_s16(v_src1, v_minval8));
+    
+    inline float32x2_t vrecp_f32(float32x2_t val)
+{
+    float32x2_t reciprocal = vrecpe_f32(val);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    return reciprocal;
+}
+    
+    workspace.ResetWorkspace()
+    
+    MeasureInt64 RpcClientSentMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientSentMessagesPerRpcMeasureName,
+                             'Number of messages sent per RPC', kCount);
+  return measure;
+}
+    
+      Status GetFileByName(ServerContext* context, const grpc::string& file_name,
+                       reflection::v1alpha::ServerReflectionResponse* response);
+    
+    CreateThreadPoolFunc g_ctp_impl = CreateDefaultThreadPoolImpl;
+    
+    namespace {
+    }
+    
+    void LoadDataStore::ReportStreamClosed(const grpc::string& hostname,
+                                       const grpc::string& lb_id) {
+  auto it_per_host_store = per_host_stores_.find(hostname);
+  GPR_ASSERT(it_per_host_store != per_host_stores_.end());
+  it_per_host_store->second.ReportStreamClosed(lb_id);
+}
+    
+    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
+                          gpr_timespec* to) {
+  high_resolution_clock::duration deadline = from.time_since_epoch();
+  seconds secs = duration_cast<seconds>(deadline);
+  if (from == high_resolution_clock::time_point::max() ||
+      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
+      secs.count() < 0) {
+    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
+    return;
   }
+  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
+  to->tv_sec = static_cast<int64_t>(secs.count());
+  to->tv_nsec = static_cast<int32_t>(nsecs.count());
+  to->clock_type = GPR_CLOCK_REALTIME;
+}
+    
+    
+    {}  // namespace leveldb
+    
+      // Make multiple inputs so we need to compact.
+  for (int i = 0; i < 2; i++) {
+    Build(10);
+    dbi->TEST_CompactMemTable();
+    Corrupt(kTableFile, 100, 1);
+    env_.SleepForMicroseconds(100000);
+  }
+  dbi->CompactRange(nullptr, nullptr);
+    
+     private:
+  enum { kMaxHeight = 12 };
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-null, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or to nullptr if no Table object
+  // underlies the returned iterator.  The returned '*tableptr' object is owned
+  // by the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options, uint64_t file_number,
+                        uint64_t file_size, Table** tableptr = nullptr);
+    
+      Iterator* NewConcatenatingIterator(const ReadOptions&, int level) const;
+    
+    
+    {}  // namespace leveldb
+    
+      Options options;
+  Options index_block_options;
+  WritableFile* file;
+  uint64_t offset;
+  Status status;
+  BlockBuilder data_block;
+  BlockBuilder index_block;
+  std::string last_key;
+  int64_t num_entries;
+  bool closed;  // Either Finish() or Abandon() has been called.
+  FilterBlockBuilder* filter_block;
+    
+    void PopplerCache::put(PopplerCacheKey *key, PopplerCacheItem *item)
+{
+  int movingStartIndex = lastValidCacheIndex + 1;
+  if (lastValidCacheIndex == cacheSize - 1) {
+    delete keys[lastValidCacheIndex];
+    delete items[lastValidCacheIndex];
+    movingStartIndex = cacheSize - 1;
+  } else {
+    lastValidCacheIndex++;
+  }
+  for (int i = movingStartIndex; i > 0; i--) {
+    keys[i] = keys[i - 1];
+    items[i] = items[i - 1];
+  }
+  keys[0] = key;
+  items[0] = item;
+}
+    
+    
+    {  private:
+    XRef *xref;
+    PopplerCache *cache;
 };
     
+    #ifdef USE_GCC_PRAGMAS
+#pragma implementation
+#endif
     
-    {  auto row_iter = dmat->GetRowBatches().begin();
-  auto row_iter_read = dmat_read->GetRowBatches().begin();
-  // Test the data read into the first row
-  auto first_row = (*row_iter)[0];
-  auto first_row_read = (*row_iter_read)[0];
-  EXPECT_EQ(first_row.size(), first_row_read.size());
-  EXPECT_EQ(first_row[2].index, first_row_read[2].index);
-  EXPECT_EQ(first_row[2].fvalue, first_row_read[2].fvalue);
-  delete dmat;
-  delete dmat_read;
-}
-
+    #ifndef Sound_H
+#define Sound_H
     
-    template <typename Iter>
-void InitializeRange(Iter _begin, Iter _end) {
-  float j = 0;
-  for (Iter i = _begin; i != _end; ++i, ++j) {
-    *i = j;
+    
+    {  // create the temporary bitmap
+  bitmap = new SplashBitmap(w, h, bitmapRowPad, colorMode, gTrue,
+			    bitmapTopDown);
+  splash = new Splash(bitmap, vectorAntialias,
+		      transpGroup->origSplash->getScreen());
+  if (isolated) {
+    switch (colorMode) {
+    case splashModeMono1:
+    case splashModeMono8:
+      color[0] = 0;
+      break;
+    case splashModeXBGR8:
+      color[3] = 255;
+    case splashModeRGB8:
+    case splashModeBGR8:
+      color[0] = color[1] = color[2] = 0;
+      break;
+#if SPLASH_CMYK
+    case splashModeCMYK8:
+      color[0] = color[1] = color[2] = color[3] = 0;
+      break;
+#endif
+    default:
+      // make gcc happy
+      break;
+    }
+    splash->clear(color, 0);
+  } else {
+    splash->blitTransparent(transpGroup->origBitmap, tx, ty, 0, 0, w, h);
+    splash->setInNonIsolatedGroup(transpGroup->origBitmap, tx, ty);
   }
+  transpGroup->tBitmap = bitmap;
+  state->shiftCTM(-tx, -ty);
+  updateCTM(state, 0, 0, 0, 0, 0, 0);
 }
     
-      devices = GPUSet::Range(2, -1);
-  EXPECT_EQ(devices, GPUSet::Empty());
-  EXPECT_EQ(devices.Size(), 0);
-  EXPECT_TRUE(devices.IsEmpty());
+      virtual bool Next(void) {
+    // MxNet iterator is expected to return CPU-accessible memory
+    if (::caffe::Caffe::mode() != ::caffe::Caffe::CPU) {
+      ::caffe::Caffe::set_mode(::caffe::Caffe::CPU);
+      CHECK_EQ(::caffe::Caffe::mode(), ::caffe::Caffe::CPU);
+    }
+    caffe_data_layer_->Forward(bottom_, top_);
+    CHECK_GT(batch_size_, 0) << 'batch size must be greater than zero';
+    CHECK_EQ(out_.batch_size, batch_size_) << 'Internal Error: batch size mismatch';
+    }
     
-      /*!
-   * \brief Set additional attribute to the Booster.
-   *  The property will be saved along the booster.
-   * \param key The key of the property.
-   * \param value The value of the property.
-   */
-  virtual void SetAttr(const std::string& key, const std::string& value) = 0;
-  /*!
-   * \brief Get attribute from the booster.
-   *  The property will be saved along the booster.
-   * \param key The key of the attribute.
-   * \param out The output value.
-   * \return Whether the key exists among booster's attributes.
-   */
-  virtual bool GetAttr(const std::string& key, std::string* out) const = 0;
-  /*!
-   * \brief Delete an attribute from the booster.
-   * \param key The key of the attribute.
-   * \return Whether the key was found among booster's attributes.
-   */
-  virtual bool DelAttr(const std::string& key) = 0;
-  /*!
-   * \brief Get a vector of attribute names from the booster.
-   * \return vector of attribute name strings.
-   */
-  virtual std::vector<std::string> GetAttrNames() const = 0;
+      // override set_default
+  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
+    caffe::NetParameter net_param;
+    if (!ReadProtoFromTextContent(value, &net_param))
+      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    }
+    
+    namespace mxnet {
+namespace engine {
+    }
+    }
+    
+      virtual bool Next(void) {
+    if (!this->Next_()) return false;
+    return true;
+  }
+    
+      ~PrefetcherIter() {
+    while (recycle_queue_.size() != 0) {
+      DataBatch *batch = recycle_queue_.front();
+      recycle_queue_.pop();
+      delete batch;
+    }
+    delete out_;
+    iter.Destroy();
+  }
