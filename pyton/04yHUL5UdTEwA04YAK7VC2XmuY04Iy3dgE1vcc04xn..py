@@ -1,114 +1,139 @@
 
         
-            def park_vehicle(self, vehicle):
-        spot = self._find_available_spot(vehicle)
-        if spot is None:
-            return None
-        else:
-            spot.park_vehicle(vehicle)
-            return spot
+                # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
     
-        def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
+def test_credentials_in_url(httpbin_both):
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:password')
+    r = http('GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-            self.mock_eventcollector()
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth == USERNAME + SEP_CREDENTIALS + PASSWORD
+            assert username == USERNAME
+            assert password == PASSWORD
+            return basic_auth()
     
-        def test_del_msg_failure_with_null_msg(self):
-        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
-        message = MagicMock(spec=Message)
-        message.name = 'msg_3'
-        message.to_id = self.id
-        message.del_on_recipient = False
     
-            self.amqp.assert_event_item(
-            {
-                'event_type': event_type,
-                'event_topic': 'quarantine',
-                'payload': {
-                    'domain': request.host,
-                    'referrer_domain': self.domain_mock(),
-                    'verified_email': context.user.email_verified,
-                    'user_id': context.user._id,
-                    'sr_name': subreddit.name,
-                    'referrer_url': request.headers.get(),
-                    'user_agent': request.user_agent,
-                    'user_agent_parsed': request.parsed_agent.to_dict(),
-                    'sr_id': subreddit._id,
-                    'user_name': context.user.name,
-                    'oauth2_client_id': context.oauth2_client._id,
-                    'oauth2_client_app_type': context.oauth2_client.app_type,
-                    'oauth2_client_name': context.oauth2_client.name,
-                    'geoip_country': context.location,
-                    'obfuscated_data': {
-                        'client_ip': request.ip,
-                        'client_ipv4_24': '1.2.3',
-                        'client_ipv4_16': '1.2',
-                    }
-                }
-            }
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', httpbin.url + '/get', env=env)
+        assert 'HTTP/' not in r
+    
+            plugin = plugin_manager.get_auth_plugin(auth['type'])()
+    
+    
+def fw_rules_to_dict(rules):
+    fw_rules = list()
+    for rule in rules:
+        fw_rules.append(
+            dict(
+                dest_port=rule.get_DestinationPortRange().lower(),
+                dest_ip=rule.get_DestinationIp().lower().lower(),
+                source_port=rule.get_SourcePortRange().lower(),
+                source_ip=rule.get_SourceIp().lower(),
+                protocol=protocol_to_string(rule.get_Protocols()).lower(),
+                policy=rule.get_Policy().lower(),
+                is_enable=rule.get_IsEnabled(),
+                enable_logging=rule.get_EnableLogging(),
+                description=rule.get_Description()
+            )
         )
+    return fw_rules
     
-        def test_image_link(self):
-        post = Link(is_self=True, selftext='''
-Some text here.
-https://example.com
-https://reddit.com/a.jpg''')
-        url = _get_scrape_url(post)
-        self.assertEqual(url, 'https://reddit.com/a.jpg')
+        # Build the common request body
+    body = dict()
+    for k in ('component', 'version', 'hosts'):
+        v = module.params[k]
+        if v is not None:
+            body[k] = v
     
-        def test_loads(self):
-        self.assertEquals('', TestPermissionSet.loads(None).dumps())
-        self.assertEquals('', TestPermissionSet.loads('').dumps())
-        self.assertEquals('+x,+y', TestPermissionSet.loads('+x,+y').dumps())
-        self.assertEquals('+x,-y', TestPermissionSet.loads('+x,-y').dumps())
-        self.assertEquals('+all', TestPermissionSet.loads('+x,-y,+all').dumps())
-        self.assertEquals('+x,-y,+z',
-                          TestPermissionSet.loads('+x,-y,+z').dumps())
-        self.assertRaises(ValueError,
-                          TestPermissionSet.loads, '+x,-y,+z', validate=True)
-        self.assertEquals(
-            '+x,-y',
-            TestPermissionSet.loads('-all,+x,-y', validate=True).dumps())
+    EXAMPLES = '''
+- honeybadger_deployment:
+    token: AAAAAA
+    environment: staging
+    user: ansible
+    revision: b6826b8
+    repo: 'git@github.com:user/repo.git'
+'''
     
-        @patch('r2.models.Subreddit.user_subreddits')
-    def test_subreddit_logged_in(self, user_subreddits):
-        user_subreddits.return_value = subscriptions
-        srname = 'test1'
-        subreddit = Subreddit(name=srname)
-        srnames = srnames_from_site(self.logged_in, subreddit)
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'https://example.com/a.jpg')
+        def add_containers(self):
+        ''' Add the paned window containers that
+            hold each main area of the gui '''
+        logger.debug('Adding containers')
+        maincontainer = tk.PanedWindow(self,
+                                       sashrelief=tk.RAISED,
+                                       orient=tk.VERTICAL)
+        maincontainer.pack(fill=tk.BOTH, expand=True)
     
-            for width in (108, 216, 320, 640, 960, 1080):
-            url = self.provider.resize_image(image, width)
-            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
-                width*2))
-
+        new_shape = shape[:3] + [int(shape[3] / (scale ** 2))]
+    var_x = initializer(new_shape, dtype)
+    var_x = tf.transpose(var_x, perm=[2, 0, 1, 3])
+    var_x = tf.image.resize_nearest_neighbor(var_x, size=(shape[0] * scale, shape[1] * scale))
+    var_x = tf.space_to_depth(var_x, block_size=scale)
+    var_x = tf.transpose(var_x, perm=[1, 2, 0, 3])
+    return var_x
     
-        def test_mcreddit_detector(self):
-        user_agent = 'McReddit - Reddit Client for iOS'
-        agent_parsed = {}
-        result = McRedditDetector().detect(user_agent, agent_parsed)
-        self.assertTrue(result)
-        self.assertEqual(agent_parsed['browser']['name'],
-                         McRedditDetector.name)
-        self.assertEqual(agent_parsed['platform']['name'], 'iOS')
-        self.assertEqual(agent_parsed['app_name'],
-                         agent_parsed['browser']['name'])
+                bwd_inputs = [t for op in bwd_ops for t in op.inputs]
+            # list of tensors in forward graph that is in input to bwd graph
+            ts_filtered = list(set(bwd_inputs).intersection(ts_all))
+            debug_print('Using tensors {}'.format(ts_filtered))
     
-        def test_padding_roundtrip(self):
-        from r2.lib.tracking import _unpad_message, _pad_message
-        tested = _unpad_message(_pad_message(MESSAGE))
-        self.assertEquals(MESSAGE, tested)
+        def get_option_values(self, command=None):
+        ''' Return all or single command control titles
+            with the associated tk_var value '''
+        ctl_dict = dict()
+        for cmd, opts in self.opts.items():
+            if command and command != cmd:
+                continue
+            cmd_dict = dict()
+            for opt in opts:
+                cmd_dict[opt['control_title']] = opt['value'].get()
+            ctl_dict[cmd] = cmd_dict
+        logger.debug('command: '%s', ctl_dict: '%s'', command, ctl_dict)
+        return ctl_dict
+    
+            input_shape = K.int_shape(inputs)
+        if len(input_shape) != 4:
+            raise ValueError('Inputs should have rank ' +
+                             str(4) +
+                             '; Received input shape:', str(input_shape))
+    
+        # list of integers
+    result = s.iloc[[0, 2, 3, 4, 5]]
+    expected = s.reindex(s.index[[0, 2, 3, 4, 5]])
+    assert_series_equal(result, expected)
+    
+        Returns
+    -------
+    y : scalar or array_like
+        The result, of length R or length M or M by R,
+    
+            with p1 as string, p2 as fspath:
+            mypath = CustomFSPath(fspath)
+            df.to_hdf(mypath, key='bar')
+            df.to_hdf(string, key='bar')
