@@ -1,92 +1,91 @@
 
         
-        #pragma once
-    
-    unordered_map<wstring, wstring> CCalcEngine::s_engineStrings;
-    
-    using namespace CalculatorApp::Common::Automation;
-using namespace Windows::UI::Xaml::Automation;
-using namespace Windows::UI::Xaml::Automation::Peers;
-using namespace Windows::UI::Xaml::Controls;
-    
-    namespace CalculatorApp::Common::Automation
-{
-    // These enum types are copied from the types available in
-    // Windows::UI::Xaml::Automation::Peers in the RS3 SDK.
-    // When this app switches to min version RS3, these custom
-    // enums should be removed and the Windows types should be used
-    // instead.
-    // TODO - MSFT 12735088
-public
-    enum class AutomationNotificationKind
-    {
-        ItemAdded = 0,
-        ItemRemoved = 1,
-        ActionCompleted = 2,
-        ActionAborted = 3,
-        Other = 4
-    };
+        TEST(MemEnvTest, OverwriteOpenFile) {
+  const char kWrite1Data[] = 'Write #1 data';
+  const size_t kFileDataLen = sizeof(kWrite1Data) - 1;
+  const std::string kTestFileName = test::TmpDir() + '/leveldb-TestFile.dat';
     }
     
-            // Inner state of the underlying reader.
-        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
-        // when the reader state is restored after the first StartEpoch call.
-        Internal::Optional<Dictionary> m_state;
     
-            state.Save(tempCheckpointFile);
+    {}  // namespace leveldb
     
-    template <typename TVector>
-inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
-{
-    foreach_index(currentLocation, v)
-    {
-        // Pick a random location and swap with current one
-        const size_t randomLocation = RandMT(0, v.size(), rng);
-        std::swap(v[currentLocation], v[randomLocation]);
+    
+    {  // If true, the write will be flushed from the operating system
+  // buffer cache (by calling WritableFile::Sync()) before the write
+  // is considered complete.  If this flag is true, writes will be
+  // slower.
+  //
+  // If this flag is false, and the machine crashes, some recent
+  // writes may be lost.  Note that if it is just the process that
+  // crashes (i.e., the machine does not reboot), no writes will be
+  // lost even if sync==false.
+  //
+  // In other words, a DB write with sync==false has similar
+  // crash semantics as the 'write()' system call.  A DB write
+  // with sync==true has similar crash semantics to a 'write()'
+  // system call followed by 'fsync()'.
+  bool sync = false;
+};
+    
+    class Block {
+ public:
+  // Initialize the block with the specified contents.
+  explicit Block(const BlockContents& contents);
     }
+    
+      // Allocation state
+  char* alloc_ptr_;
+  size_t alloc_bytes_remaining_;
+    
+    // Different bits-per-byte
+    
+    class EnvWindowsTest {
+ public:
+  static void SetFileLimits(int mmap_limit) {
+    EnvWindowsTestHelper::SetReadOnlyMMapLimit(mmap_limit);
+  }
+    }
+    
+      void Clear();
+  void Add(double value);
+  void Merge(const Histogram& other);
+    
+    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
+                                    const SliceParts& key) {
+  std::string key_buf;
+  Slice key_slice(key, &key_buf);
+  return SingleDelete(column_family, key_slice);
 }
     
-        bool UnitTest()
-    {
-        try
-        {
-            size_t nInput = 2;
-            size_t nHidden = 3;
-            size_t nOutput = 3;
-    }
-    }
-    
-    /**
-@brief FlipY3D action.
-@details This action is used for flipping the target node on the y axis.
-*/
-class CC_DLL FlipY3D : public FlipX3D
-{
-public:
-    /**
-    @brief Create the action with duration.
-    @param duration Specify the duration of the FlipY3D action. It's a value in seconds.
-    @return If the creation success, return a pointer of FlipY3D action; otherwise, return nil.
-    */
-    static FlipY3D* create(float duration);
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
     
     
-NS_CC_END
+    {// Factor method to create a new persistent cache
+Status NewPersistentCache(Env* const env, const std::string& path,
+                          const uint64_t size,
+                          const std::shared_ptr<Logger>& log,
+                          const bool optimized_for_nvm,
+                          std::shared_ptr<PersistentCache>* cache);
+}  // namespace rocksdb
 
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+      // Create a TransactionDBCondVar object.
+  virtual std::shared_ptr<TransactionDBCondVar> AllocateCondVar() = 0;
     
-    NS_CC_END
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    maxBackgroundOperations
+ * Signature: (J)I
+ */
+jint Java_org_rocksdb_BackupableDBOptions_maxBackgroundOperations(
+    JNIEnv* /*env*/, jobject /*jobj*/, jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return static_cast<jint>(bopt->max_background_operations);
+}
