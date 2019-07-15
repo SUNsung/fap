@@ -1,345 +1,263 @@
 
         
-            if (info.bytes > buf.size()) {
-      llvm::dbgs() << 'AST section too small.\n';
-      return false;
+        namespace tensorflow {
+namespace python_op_gen_internal {
+    }
     }
     
     
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
-    DCache.Entries.erase(Entry);
-    return true;
-  }
-  return false;
-}
-    
-      std::size_t capacity = EndOfAllocation - Begin;
-  std::size_t requiredCapacity = capacity + needed;
-  do {
-    capacity = 2 * capacity + 16;
-  } while (capacity < requiredCapacity);
-    
-    unsigned swift::measureNewline(const char *BufferPtr, const char *BufferEnd) {
-  if (BufferPtr == BufferEnd)
-    return 0;
-    }
-    
-      InvocationInfo constructInvocation(const LinkJobAction &job,
-                                     const JobContext &context) const override;
-    
-    static const char* kImplVersionName = 'api_version';
-    
-    // Checks if the file contains any enum definitions (at the root or
-// nested under a message).
-bool FileContainsEnums(const FileDescriptor* file) {
-  if (file->enum_type_count() > 0) {
-    return true;
-  }
-  for (int i = 0; i < file->message_type_count(); i++) {
-    if (MessageContainsEnums(file->message_type(i))) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-    TEST(TemplateUtilTest, TestIdentity) {
-  EXPECT_TRUE(
-      (type_equals_<GOOGLE_NAMESPACE::identity_<int>::type, int>::value));
-  EXPECT_TRUE(
-      (type_equals_<GOOGLE_NAMESPACE::identity_<void>::type, void>::value));
-}
-    
-    #include <caffe/layer.hpp>
-#include <caffe/blob.hpp>
-#include <caffe/layer_factory.hpp>
-    
-    
-    {}  // namespace mxnet
+    {}  // end namespace tensorflow
 
     
+    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
+// will be deleted by TFE_DeleteTensorHandle.
+using Safe_TFE_TensorHandlePtr =
+    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
+Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
     
-template<typename xpu, typename DType>
-inline void KhatriRaoCompute_(const nnvm::NodeAttrs &attrs,
-                              const OpContext &ctx,
-                              const std::vector<TBlob> &in_data,
-                              const std::vector<OpReqType> &req,
-                              const std::vector<TBlob> &out_data) {
-  using namespace mxnet_op;
-  if (req[0] == kNullOp) return;
-    }
-    
-    
-    {    typename DataType<DType>::ScaleType alpha = (req[bs::kData] == kNullOp) ? 0.0f : 1.0f;
-    typename DataType<DType>::ScaleType beta = (req[bs::kData] == kAddTo) ? 1.0f : 0.0f;
-    typename DataType<DType>::ScaleType alpha_dgrid = 1.0f;
-    typename DataType<DType>::ScaleType beta_dgrid = 0.0f;
-    CUDNN_CALL(cudnnSpatialTfSamplerBackward(s->dnn_handle_,
-                                             st_desc_,
-                                             &alpha,
-                                             in_desc_,
-                                             data.dptr_,
-                                             &beta,
-                                             in_desc_/*reuse in_desc_*/,
-                                             gdata.dptr_/*output*/,
-                                             &alpha_dgrid,
-                                             out_desc_/*reuse out_desc_*/,
-                                             grad.dptr_,
-                                             grid_tmp.dptr_,
-                                             &beta_dgrid,
-                                             grid_tmp.dptr_));
-    Assign(ggrid, req[bs::kGrid], transpose(grid_tmp, Shape4(0, 3, 1, 2)));
+    string TryFindKernelClass(const string& serialized_node_def) {
+  tensorflow::NodeDef node_def;
+  if (!node_def.ParseFromString(serialized_node_def)) {
+    LOG(WARNING) << 'Error parsing node_def';
+    return '';
   }
-    
-        // Make sure that the dictionary contains all required keys, and if it does, return version value
-    // from the dictionary.
-    template <typename T>
-    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
-    { 
-        const auto& version = GetVersion(dict);
     }
     
     
-    {            sequenceLengths[i] = currentSequenceDataShape.SubShape(fullyDefinedSampleShape.Rank()).TotalSize();
-            maxSequenceLength = std::max(maxSequenceLength, sequenceLengths[i]);
-        }
-    
-    
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
-}
+    {}  // namespace stream_executor
+#endif  // TENSORFLOW_STREAM_EXECUTOR_HOST_OR_DEVICE_SCALAR_H_
 
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-            // all cloned nodes' inputs must be redirected if they reference a node that has been cloned as well
-        size_t numRelinks = 0; // (statistics: how many inputs have we relinked?)
-        for (let& clonedNodesKV : clonedNodes)
-        {
-            let& node = clonedNodesKV.second;
-            let& inputs2 = node->GetInputs();
-            for (size_t i = 0; i < inputs2.size(); i++)
-            {
-                fprintf(stderr, '%ls.inputs[%d] = %ls (%d)', node->NodeName().c_str(), (int)i, inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
-                let iter = clonedNodes.find(inputs2[i]);
-                if (iter == clonedNodes.end())
-                    continue;
-                // input is also a cloned node: relink
-                node->SetInput(i, iter->second);
-                fprintf(stderr, ' ==>  %ls (%d)\n', inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
-                numRelinks++;
-            }
-        }
-    
-        virtual void BackpropToNonLooping(size_t inputIndex) override
-    {
-        LogicError('The node \'%ls\' can be used in training, but it does not participate in gradient propagation.', OperationName().c_str());
+    napi_value Init(napi_env env, napi_value exports) {
+  napi_status status;
+  napi_property_descriptor descriptors[] = {
+      {'Print', NULL, Print, NULL, NULL, NULL, napi_default, NULL}};
     }
     
-            // For windowed LSTM, CNTK is providing data with the second dimension being time-like and the third dimension
-        // being minibatch index. CuDnn expects the second dimension to be minibatch index, and the third dimension
-        // to be time-like. This sequence of operations creates a transposed copy of the data in m_transposedInput
-        // and shapeXT
+    std::string V8TypeAsString(v8::Isolate* isolate, v8::Local<v8::Value> value) {
+  if (value.IsEmpty())
+    return '<empty handle>';
+  v8::MaybeLocal<v8::String> details =
+      value->ToDetailString(isolate->GetCurrentContext());
+  std::string result;
+  if (!details.IsEmpty())
+    ConvertFromV8(isolate, details.ToLocalChecked(), &result);
+  return result;
+}
     
-        const int nums[] = {0,4,3,0};
-    vector<int> nums_vec( nums, nums + sizeof(nums)/sizeof(int) );
-    int target = 0;
-    printVec(Solution().twoSum(nums_vec, target));
-    
-    
-    {        return res;
+    template <typename Sig>
+void InvokeNew(const base::Callback<Sig>& factory,
+               v8::Isolate* isolate,
+               Arguments* args) {
+  if (!args->IsConstructCall()) {
+    args->ThrowError('Requires constructor call');
+    return;
+  }
     }
     
+    // Specialization for member function pointers. We need to handle this case
+// specially because the first parameter for callbacks to MFP should typically
+// come from the the JavaScript 'this' object the function was called on, not
+// from the first normal parameter.
+template <typename T>
+struct CallbackTraits<
+    T,
+    typename std::enable_if<std::is_member_function_pointer<T>::value>::type> {
+  static v8::Local<v8::FunctionTemplate> CreateTemplate(v8::Isolate* isolate,
+                                                        T callback) {
+    int flags = HolderIsFirstArgument;
+    return CreateFunctionTemplate(isolate, base::Bind(callback), flags);
+  }
+};
     
-    {
-    {                if(prev->right == NULL){
-                    prev->right = cur;
-                    cur = cur->left;
+    template <>
+struct Converter<PersistentDictionary> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     PersistentDictionary* out);
+};
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(ScopedPersistent);
+};
+    
+    // static
+void CertificateManagerModel::Create(content::BrowserContext* browser_context,
+                                     const CreationCallback& callback) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  base::PostTaskWithTraits(
+      FROM_HERE, {BrowserThread::IO},
+      base::BindOnce(&CertificateManagerModel::GetCertDBOnIOThread,
+                     browser_context->GetResourceContext(), callback));
+}
+    
+    namespace base {
+class CommandLine;
+}
+    
+    // and_ is a template && operator.
+// and_<A, B>::value evaluates 'A::value && B::value'.
+template<typename A, typename B>
+struct and_ : public integral_constant<bool, (A::value && B::value)> {
+};
+    
+    #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+    
+    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
+// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
+// death tests are supported; otherwise they just issue a warning.  This is
+// useful when you are combining death test assertions with normal test
+// assertions in one test.
+#if GTEST_HAS_DEATH_TEST
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    EXPECT_DEATH(statement, regex)
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    ASSERT_DEATH(statement, regex)
+#else
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
+#endif
+    
+      const std::string& file() const { return file_; }
+  int line() const { return line_; }
+  int index() const { return index_; }
+  int write_fd() const { return write_fd_; }
+    
+    
+    {    linked_ptr_internal const* p = ptr;
+    while (p->next_ != ptr) p = p->next_;
+    p->next_ = this;
+    next_ = ptr;
+  }
+    
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_),
+        begin1_(other.begin1_),
+        end1_(other.end1_),
+        current1_(other.current1_),
+        begin2_(other.begin2_),
+        end2_(other.end2_),
+        current2_(other.current2_),
+        begin3_(other.begin3_),
+        end3_(other.end3_),
+        current3_(other.current3_),
+        begin4_(other.begin4_),
+        end4_(other.end4_),
+        current4_(other.current4_),
+        begin5_(other.begin5_),
+        end5_(other.end5_),
+        current5_(other.current5_),
+        begin6_(other.begin6_),
+        end6_(other.end6_),
+        current6_(other.current6_),
+        begin7_(other.begin7_),
+        end7_(other.end7_),
+        current7_(other.current7_),
+        begin8_(other.begin8_),
+        end8_(other.end8_),
+        current8_(other.current8_) {
+      ComputeCurrentValue();
+    }
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+                    // Fetch (from data) the last input index where a match was attempted.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                int64_t  &lbStartIdx = fData[opValue+2];
+                if (lbStartIdx < 0) {
+                    // First time through loop.
+                    lbStartIdx = fp->fInputIdx - minML;
+                    if (lbStartIdx > 0) {
+                        U16_SET_CP_START(inputBuf, 0, lbStartIdx);
+                    }
+                } else {
+                    // 2nd through nth time through the loop.
+                    // Back up start position for match by one.
+                    if (lbStartIdx == 0) {
+                        lbStartIdx--;
+                    } else {
+                        U16_BACK_1(inputBuf, 0, lbStartIdx);
+                    }
                 }
-                else{
-                    prev->right = NULL;
-                    res.push_back(cur->val);
-                    cur = cur->right;
-                }
-            }
+    
+    #include 'remtrans.h'
+#include 'unicode/unifilt.h'
+    
+        //  Copy the Unicode Sets.
+    //    Could be made more efficient if the sets were reference counted and shared,
+    //    but I doubt that pattern copying will be particularly common.
+    //    Note:  init() already added an empty element zero to fSets
+    int32_t i;
+    int32_t  numSets = other.fSets->size();
+    fSets8 = new Regex8BitSet[numSets];
+    if (fSets8 == NULL) {
+    	fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+    	return *this;
+    }
+    for (i=1; i<numSets; i++) {
+        if (U_FAILURE(fDeferredStatus)) {
+            return *this;
         }
-    
-    int main() {
-    }
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-            stack.push(root);
-        while(!stack.empty()){
-    }
-    
-    void
-RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue value,
-                                UErrorCode &errorCode) {
-    UColAttributeValue oldValue = getAttribute(attr, errorCode);
-    if(U_FAILURE(errorCode)) { return; }
-    if(value == oldValue) {
-        setAttributeExplicitly(attr);
-        return;
-    }
-    const CollationSettings &defaultSettings = getDefaultSettings();
-    if(settings == &defaultSettings) {
-        if(value == UCOL_DEFAULT) {
-            setAttributeDefault(attr);
-            return;
+        UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
+        UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
+        if (newSet == NULL) {
+            fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+            break;
         }
-    }
-    CollationSettings *ownedSettings = SharedObject::copyOnWrite(settings);
-    if(ownedSettings == NULL) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+        fSets->addElement(newSet, fDeferredStatus);
+        fSets8[i] = other.fSets8[i];
     }
     
-    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
-    resetAll();
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    UnicodeString oneScriptName;
-    for (int32_t i=0; i<scriptString.length();) {
-        UChar32 c = scriptString.char32At(i);
-        i = scriptString.moveIndex32(i, 1);
-        if (!u_isUWhiteSpace(c)) {
-            oneScriptName.append(c);
-            if (i < scriptString.length()) {
-                continue;
-            }
-        }
-        if (oneScriptName.length() > 0) {
-            char buf[40];
-            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
-            buf[sizeof(buf)-1] = 0;
-            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
-            if (sc == UCHAR_INVALID_CODE) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
-                this->set((UScriptCode)sc, status);
-            }
-            if (U_FAILURE(status)) {
-                return *this;
-            }
-            oneScriptName.remove();
-        }
-    }
-    return *this;
-}
-    
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
-public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
-};
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
-    
-    #endif
+    #endif // SELFMTIMPL
+//eof
 
+    
+    U_NAMESPACE_END
     
     // -------------------------------------
     
-    static const int32_t gMaxFastInt = 4096;
-    
-    #include 'unicode/udat.h'
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    /**
- * Construct a StringReplacer that sets the emits the given output
- * text and sets the cursor to the given position.
- * @param theOutput text that will replace input text when the
- * replace() method is called.  May contain stand-in characters
- * that represent nested replacers.
- * @param theCursorPos cursor position that will be returned by
- * the replace() method
- * @param theData transliterator context object that translates
- * stand-in characters to UnicodeReplacer objects
- */
-StringReplacer::StringReplacer(const UnicodeString& theOutput,
-                               int32_t theCursorPos,
-                               const TransliterationRuleData* theData) {
-    output = theOutput;
-    cursorPos = theCursorPos;
-    hasCursor = TRUE;
-    data = theData;
-    isComplex = TRUE;
-}
-    
-        // out_of_range.401
-    try
-    {
-        // try to use a an invalid array index
-        json::reference ref = j.at('/array/4'_json_pointer);
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+    UnicodeString &
+SmallIntFormatter::format(
+        int32_t smallPositiveValue,
+        const IntDigitCountRange &range,
+        UnicodeString &appendTo) {
+    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
     }
     
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
+        // Check for null pointers
+    if (fDateIgnorables == NULL || fTimeIgnorables == NULL || fOtherIgnorables == NULL) {
+        goto ExitConstrDeleteAll;
+    }
+    
+    #endif  // !UCONFIG_NO_FORMATTING
+#endif  // __STANDARDPLURAL_H__
+
+    
+    #define WRITE_CHECK(fp, ptr, count)                                            \
+  if (fp.write((ptr), (count)) != (count)) {                                   \
+    throw DL_ABORT_EX(                                                         \
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
+  }
     
     
-    {  int ret = x;
-  return ret;
+    {  virtual bool finished() = 0;
+};
+    
+      DHTRoutingTable* routingTable_;
+    
+    
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+};
+    
+    bool DNSCache::CacheEntry::operator==(const CacheEntry& e) const
+{
+  return hostname_ == e.hostname_ && port_ == e.port_;
 }
-    
-      x <<= 4;
-  x |= t;
-    
-    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
-  spline_func_ = spline_func;
-  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
-  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
-  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
-}
-    
-    TEST_F(GemVehicleFactoryTest, InitVehicleController) {
-  EXPECT_TRUE(gem_factory_.CreateVehicleController() != nullptr);
-}
-    
-      Byte t1(bytes + 5);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
