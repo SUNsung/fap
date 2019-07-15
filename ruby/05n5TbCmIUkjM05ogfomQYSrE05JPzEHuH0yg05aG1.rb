@@ -1,30 +1,22 @@
 
         
-            def initialize(pattern)
-      @source = pattern
-      @re = compile(pattern)
-    end
-    
-          when /^(?<num>-?(0[dbo])?[0-9_]+(\.[0-9_]+)?([eE][+-]?[0-9]+i?|r)?)(?<sep>\.|::)(?<mes>[^.]*)$/
-        # Numeric
-        receiver = $~[:num]
-        sep = $~[:sep]
-        message = Regexp.quote($~[:mes])
-    
-            pending 'relative paths with ./ have absolute __FILE__'
+              if description
+        UI.user_error!('Do not let descriptions end with a '.', since it's used for user inputs as well for key :#{key}') if description[-1] == '.'
       end
-    end
     
-              actual = with_term { IRB::Color.colorize_code(code, complete: false) }
-          assert_equal(result, actual, 'Case: colorize_code(#{code.dump}, complete: false)\nResult: #{humanized_literal(actual)}')
-        else
-          actual = with_term { IRB::Color.colorize_code(code) }
-          assert_equal(code, actual)
-        end
-      end
-    end
+    # remove all double quotes completely
+def simulate_normal_shell_unwrapping(string)
+  string.gsub!(''', '')
+  regex = /^(')(\S*)(')$/
+  unless string.to_s.match(regex).nil?
+    string = string.to_s.match(regex)[2] # get only part in quotes
+  end
+  return string
+end
     
-    # for each blog URL, check if rss URL exists
-matches.each do |match|
-  name = match[0]
-  web_url = match[1]
+            FastlaneCore::CommanderGenerator.new.generate(Cert::Options.available_options, command: c)
+    
+          describe 'running with fastlane' do
+        before do
+          allow(FastlaneCore::Helper).to receive(:fastlane_enabled?).and_return(true)
+          allow(FastlaneCore::FastlaneFolder).to receive(:path).and_return('./fastlane')
