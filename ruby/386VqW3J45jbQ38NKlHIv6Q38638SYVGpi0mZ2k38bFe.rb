@@ -1,87 +1,75 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
+            # JOIN of topics table based on manipulating draft_key seems imperfect
+    builder = DB.build <<~SQL
+      SELECT
+        d.*, t.title, t.id topic_id, t.archetype,
+        t.category_id, t.closed topic_closed, t.archived topic_archived,
+        pu.username, pu.name, pu.id user_id, pu.uploaded_avatar_id, pu.username_lower,
+        du.username draft_username, NULL as raw, NULL as cooked, NULL as post_number
+      FROM drafts d
+      LEFT JOIN LATERAL json_extract_path_text (d.data::json, 'postId') postId ON TRUE
+      LEFT JOIN posts p ON postId :: BIGINT = p.id
+      LEFT JOIN topics t ON
+        CASE
+            WHEN d.draft_key LIKE '%' || '#{EXISTING_TOPIC}' || '%'
+              THEN CAST(replace(d.draft_key, '#{EXISTING_TOPIC}', '') AS INT)
+            ELSE 0
+        END = t.id
+      JOIN users pu on pu.id = COALESCE(p.user_id, t.user_id, d.user_id)
+      JOIN users du on du.id = #{user_id}
+      /*where*/
+      /*order_by*/
+      /*offset*/
+      /*limit*/
+    SQL
+    
+        SCRIPT_ASSET_DIRECTORIES = [
+      # [dir, can_use_s3_cdn, can_use_cdn]
+      ['/assets/',             true, true],
+      ['/brotli_asset/',       true, true],
+      ['/extra-locales/',      false, false],
+      ['/highlight-js/',       false, true],
+      ['/javascripts/',        false, true],
+      ['/plugins/',            false, true],
+      ['/theme-javascripts/',  false, true],
+      ['/svg-sprite/',         false, true],
+    ]
+    
+      def self.bundle(langs)
+    result = File.read(HIGHLIGHTJS_DIR + 'highlight.min.js')
+    langs.each do |lang|
+      begin
+        result << '\n' << File.read(HIGHLIGHTJS_DIR + 'languages/#{lang}.min.js')
+      rescue Errno::ENOENT
+        # no file, don't care
       end
     end
-  end
-end
-
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+        Extension.theme_extensions(theme_ids).each { |extension| builder << extension }
+    Extension.plugin_extensions.each { |extension| builder << extension }
+    builder << Extension.site_setting_extension
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+      describe 'script-src' do
+    it 'always has self, logster, sidekiq, and assets' do
+      script_srcs = parse(policy)['script-src']
+      expect(script_srcs).to include(*%w[
+        'unsafe-eval'
+        'report-sample'
+        http://test.localhost/logs/
+        http://test.localhost/sidekiq/
+        http://test.localhost/mini-profiler-resources/
+        http://test.localhost/assets/
+        http://test.localhost/brotli_asset/
+        http://test.localhost/extra-locales/
+        http://test.localhost/highlight-js/
+        http://test.localhost/javascripts/
+        http://test.localhost/plugins/
+        http://test.localhost/theme-javascripts/
+        http://test.localhost/svg-sprite/
+      ])
     end
-  end
-end
-
     
-              # We split the arguments into two: One set containing any
-          # flags before a word, and then the rest. The rest are what
-          # get actually sent on to the subcommand.
-          argv.each_index do |i|
-            if !argv[i].start_with?('-')
-              # We found the beginning of the sub command. Split the
-              # args up.
-              main_args   = argv[0, i]
-              sub_command = argv[i]
-              sub_args    = argv[i + 1, argv.length - i + 1]
-    
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
-        end
-    
-              # Return the registry
-          data[:guests]
-        end
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
-    
-      # We manage the result cache ourselves and the default of 10 minutes can be
-  # too low (particularly on Travis CI), causing results from some integration
-  # tests to be dropped. This causes random fluctuations in test coverage.
-  merge_timeout 86400
-    
-            def swap_range(corrector, range1, range2)
-          src1 = range1.source
-          src2 = range2.source
-          corrector.replace(range1, src2)
-          corrector.replace(range2, src1)
-        end
-      end
-    end
-  end
-end
+          response.headers['Last-Modified'] = 10.years.ago.httpdate
+      response.headers['Content-Length'] = svg_sprite.bytesize.to_s
+      immutable_for 1.year
