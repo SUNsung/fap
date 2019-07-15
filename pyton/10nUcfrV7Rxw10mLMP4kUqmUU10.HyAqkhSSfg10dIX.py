@@ -1,161 +1,161 @@
 
         
-        
-def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)  # select large prime number.
-    e_1 = primitiveRoot(p)  # one primitive root on modulo p.
-    d = random.randrange(3, p)  # private_key -> have to be greater than 2 for safety.
-    e_2 = cryptoMath.findModInverse(pow(e_1, d, p), p)
+            def __init__(self, **kwargs):
+        '''
+        Use keyword arguments to overwrite
+        any of the class attributes for this instance.
     
-        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
-                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
-                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
-                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
-                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
-                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
-                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
-                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
-                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
-                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
-                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
-                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
-                 971, 977, 983, 991, 997]
+        def get_auth(self, username=None, password=None):
+        '''
+        If `auth_parse` is set to `True`, then `username`
+        and `password` contain the parsed credentials.
     
-        def solve_sub_array(self):
-        rear = [int(self.array[0])]*len(self.array)
-        sum_value = [int(self.array[0])]*len(self.array)
-        for i in range(1, len(self.array)):
-            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
-            rear[i] = max(sum_value[i], rear[i-1])
-        return rear[len(self.array)-1]
+            '''
+        r.headers['Authorization'] = type(self).make_header(
+            self.username, self.password).encode('latin1')
+        return r
     
-    
-def b_expo(a, b):
-    res = 0
-    while b > 0:
-        if b&1:
-            res += a
-    
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
-    
-    from xml.etree import cElementTree as ET
-from copy import copy
-from ..common import *
-#----------------------------------------------------------------------
-def ckplayer_get_info_by_xml(ckinfo):
-    '''str->dict
-    Information for CKPlayer API content.'''
-    e = ET.XML(ckinfo)
-    video_dict = {'title': '',
-                  #'duration': 0,
-                  'links': [],
-                  'size': 0,
-                  'flashvars': '',}
-    dictified = dictify(e)['ckplayer']
-    if 'info' in dictified:
-        if '_text' in dictified['info'][0]['title'][0]:  #title
-            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
-    
-        stream_id_pattern = r'id='html_stream' value='(\w+)''
-    stream_id = match1(html, stream_id_pattern)
-    
-    __all__ = ['icourses_download', 'icourses_playlist_download']
-    
-        html = get_content(url)
-    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
-    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
-    if id is None:
-        video_pattern = r''vid'\s*:\s*' + uuid_pattern
-        id = match1(html, video_pattern)
-    assert id, 'can't find video info'
-    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
-    
-    class Imgur(VideoExtractor):
-    name = 'Imgur'
-    
-        >>> extract_array([1, 2, 3])
-    [1, 2, 3]
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
     
-def test_iloc():
-    s = Series(np.random.randn(10), index=list(range(0, 20, 2)))
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-        result = df.to_html(index=False)
-    for i in ['foo', 'bar', 'car', 'bike']:
-        assert i not in result
-    # must be the same result as normal index
-    assert result == expected_without_index
-    
-    from ycm.client.base_request import BaseRequest, BuildRequestData
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
-    
-      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
-                        'kind' : 'WARNING' } )
-  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
-                        'kind' : 'ERROR' } )
-  _assert_accepts( f, { 'text' : 'This burrito WILL be shown',
-                        'kind' : 'ERROR' } )
+        def test_POST_with_data_auto_JSON_headers(self, httpbin):
+        r = http('POST', httpbin.url + '/post', 'a=b')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == JSON_ACCEPT
+        assert r.json['headers']['Content-Type'] == 'application/json'
     
     
-class FakeFuture( object ):
-  '''A fake version of a future response object, just about suitable for
-  mocking a server response as generated by PostDataToHandlerAsync.
-  Not usually used directly. See MockAsyncServerResponse* methods'''
-  def __init__( self, done, response = None, exception = None ):
-    self._done = done
+def setup(app):
+    app.add_crossref_type(
+        directivename = 'setting',
+        rolename      = 'setting',
+        indextemplate = 'pair: %s; setting',
+    )
+    app.add_crossref_type(
+        directivename = 'signal',
+        rolename      = 'signal',
+        indextemplate = 'pair: %s; signal',
+    )
+    app.add_crossref_type(
+        directivename = 'command',
+        rolename      = 'command',
+        indextemplate = 'pair: %s; command',
+    )
+    app.add_crossref_type(
+        directivename = 'reqmeta',
+        rolename      = 'reqmeta',
+        indextemplate = 'pair: %s; reqmeta',
+    )
+    app.add_role('source', source_role)
+    app.add_role('commit', commit_role)
+    app.add_role('issue', issue_role)
+    app.add_role('rev', rev_role)
     
-        # Create and fill-in the class template
-    numfields = len(field_names)
-    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
-    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
-    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
-    template = '''class %(typename)s(tuple):
-        '%(typename)s(%(argtxt)s)' \n
-        __slots__ = () \n
-        _fields = %(field_names)r \n
-        def __new__(_cls, %(argtxt)s):
-            return _tuple.__new__(_cls, (%(argtxt)s)) \n
-        @classmethod
-        def _make(cls, iterable, new=tuple.__new__, len=len):
-            'Make a new %(typename)s object from a sequence or iterable'
-            result = new(cls, iterable)
-            if len(result) != %(numfields)d:
-                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
-            return result \n
-        def __repr__(self):
-            return '%(typename)s(%(reprtxt)s)' %% self \n
-        def _asdict(t):
-            'Return a new dict which maps field names to their values'
-            return {%(dicttxt)s} \n
-        def _replace(_self, **kwds):
-            'Return a new %(typename)s object replacing specified fields with new values'
-            result = _self._make(map(kwds.pop, %(field_names)r, _self))
-            if kwds:
-                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
-            return result \n
-        def __getnewargs__(self):
-            return tuple(self) \n\n''' % locals()
-    for i, name in enumerate(field_names):
-        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
+    # Read lines from the linkcheck output file
+try:
+    with open('build/linkcheck/output.txt') as out:
+        output_lines = out.readlines()
+except IOError:
+    print('linkcheck output not found; please run linkcheck first.')
+    exit(1)
+    
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
+        else:
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
+
+    
+    
+def sanitize_module_name(module_name):
+    '''Sanitize the given module name, by replacing dashes and points
+    with underscores and prefixing it with a letter if it doesn't start
+    with one
+    '''
+    module_name = module_name.replace('-', '_').replace('.', '_')
+    if module_name[0] not in string.ascii_letters:
+        module_name = 'a' + module_name
+    return module_name
+    
+    
+class Command(ScrapyCommand):
+    
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
+            else:
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
+
+    
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
+    
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
+    
+            if self.slot.start_requests is not None:
+            # not all start requests are handled
+            return False
+    
+        def test_insertion_sort(self):
+        insertion_sort = InsertionSort()
+    
+    
+def main():
+    test = TestStack()
+    test.test_end_to_end()
+    
+    from gym.envs.tests.spec_list import should_skip_env_spec_for_tests
+from gym.envs.tests.test_envs_semantics import generate_rollout_hash, hash_object
+    
+    # All concrete subclasses of AlgorithmicEnv
+ALL_ENVS = [
+    alg.copy_.CopyEnv, 
+    alg.duplicated_input.DuplicatedInputEnv,
+    alg.repeat_copy.RepeatCopyEnv,
+    alg.reverse.ReverseEnv,
+    alg.reversed_addition.ReversedAdditionEnv,
+]
+ALL_TAPE_ENVS = [env for env in ALL_ENVS 
+    if issubclass(env, alg.algorithmic_env.TapeAlgorithmicEnv)]
+ALL_GRID_ENVS = [env for env in ALL_ENVS 
+    if issubclass(env, alg.algorithmic_env.GridAlgorithmicEnv)]
