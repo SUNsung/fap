@@ -1,97 +1,75 @@
 
         
-                def to_s
-          @symbol.to_s
-        end
-        alias to_str to_s
+                  # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
     
-    class ArelLike
-  def to_ary
-    true
-  end
-  def each
-    a = Array.new(2) { |id| Comment.new(id + 1) }
-    a.each { |i| yield i }
-  end
-end
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
     
-    # Mimic how Jekyll's LiquidRenderer would process a non-static file, with
-# some dummy payload
-def always_liquid(content)
-  Liquid::Template.error_mode = :warn
-  Liquid::Template.parse(content, :line_numbers => true).render(
-    'author' => 'John Doe',
-    'title'  => 'FooBar'
-  )
-end
+              # Decodes the error_code field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
+          end
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
+          OptionParser.new do |opts|
+        opts.banner = 'See full documentation at http://capistranorb.com/.'
+        opts.separator ''
+        opts.separator 'Install capistrano in a project:'
+        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
+        opts.separator ''
+        opts.separator 'Show available tasks:'
+        opts.separator '    bundle exec cap -T'
+        opts.separator ''
+        opts.separator 'Invoke (or simulate invoking) a task:'
+        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
+        opts.separator ''
+        opts.separator 'Advanced options:'
+    
+          def set(key, value=nil, &block)
+        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
+        remember_location(key)
+        values[key] = block || value
+        trace_set(key)
+        values[key]
       end
     
-            def importer_class
-          NoteImporter
-        end
-    
-          def action_for_rails(env)
-        controller = env[CONTROLLER_KEY]
-        action = '#{controller.class.name}##{controller.action_name}'
-    
-        it 'creates an agent with a source and a receiver' do
-      visit '/'
-      page.find('a', text: 'Agents').trigger(:mouseover)
-      click_on('New Agent')
-    
-    describe AgentRunner do
-  context 'without traps' do
-    before do
-      stub.instance_of(Rufus::Scheduler).every
-      stub.instance_of(AgentRunner).set_traps
-      @agent_runner = AgentRunner.new
-    end
-    
-          a = '        Events will have the fields you specified.  Your options look like:\n\n            {\n      \'url\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@src\'\n      },\n      \'title\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@title\'\n      }\n    }\'\n'
-      expect(Utils.unindent(a)).to eq('Events will have the fields you specified.  Your options look like:\n\n    {\n      \'url\': {\n\'css\': \'#comic img\',\n\'value\': \'@src\'\n      },\n      \'title\': {\n\'css\': \'#comic img\',\n\'value\': \'@title\'\n      }\n    }\'')
-    end
+    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
+  validate(strategy) do |key, _value|
+    warn(
+      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
+      'Capistrano 3.7.0.\n'\
+      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
+    )
   end
-    
-        @checker = Agents::AftershipAgent.new(:name => 'tectonic', :options => @opts)
-    @checker.user = users(:bob)
-    @checker.save!
-  end
-    
-      describe '#working?' do
-    it 'should not be working until the first event was received' do
-      expect(@checker).not_to be_working
-      @checker.last_receive_at = Time.now
-      expect(@checker).to be_working
-    end
-  end
-    
-      gem.add_development_dependency 'danger'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rubocop', '0.48.1'
 end
-
     
-          servers.add_role(name, hosts, options)
-    end
+          def part_of_ignored_node?(node)
+        ignored_nodes.map(&:loc).any? do |ignored_loc|
+          if ignored_loc.expression.begin_pos > node.source_range.begin_pos
+            next false
+          end
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
+          def below_array_length?(node)
+        node.values.length < min_size_config
       end
-    
-      def new
-    @broadcast = Broadcast.new
-  end
