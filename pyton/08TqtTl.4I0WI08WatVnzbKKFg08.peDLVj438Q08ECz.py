@@ -1,129 +1,133 @@
 
         
-            def database_backwards(self, app_label, schema_editor, from_state, to_state):
-        schema_editor.execute('DROP EXTENSION %s' % schema_editor.quote_name(self.name))
-        # Clear cached, stale oids.
-        get_hstore_oids.cache_clear()
-        get_citext_oids.cache_clear()
+        import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    versions_info['versions'][version] = new_version
+versions_info['latest'] = version
     
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        def _close_server_sock_ignore_errors(self):
-        try:
-            self.server_sock.close()
-        except IOError:
-            pass
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
     
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    from collections.abc import Callable, Mapping, MutableMapping
-    
-        if isinstance(cookies, dict):
-        cookiejar = cookiejar_from_dict(
-            cookies, cookiejar=cookiejar, overwrite=False)
-    elif isinstance(cookies, cookielib.CookieJar):
-        try:
-            cookiejar.update(cookies)
-        except AttributeError:
-            for cookie_in_jar in cookies:
-                cookiejar.set_cookie(cookie_in_jar)
-    
-        See https://github.com/requests/requests/issues/1979.
-    '''
-    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
-                b'Content-Length: 0\r\n'
-                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
-                b', opaque='372825293d1c26955496c80ed6426e9e', '
-                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
-    
-            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(b'send something')
-            time.sleep(2.5)
-            sock.sendall(b'still alive')
-            block_server.set()  # release server block
+    # NAME
     
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        ('example.com/path', 'http://example.com/path'),
-        ('//example.com/path', 'http://example.com/path'),
-    ))
-def test_prepend_scheme_if_needed(value, expected):
-    assert prepend_scheme_if_needed(value, 'http') == expected
-    
-    # Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-# html_extra_path = []
-    
-    
-if __name__ == '__main__':
-    main()
+parser = youtube_dl.parseOpts()[0]
+build_completion(parser)
 
     
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
+    
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
+    
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=keras.optimizers.Adadelta(),
+              metrics=['accuracy'])
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loss = MSE_MAE_loss(0.3)
+        inputs = keras.layers.Input((2,))
+        outputs = keras.layers.Dense(1, name='model_output')(inputs)
+        model = keras.models.Model(inputs, outputs)
+        model.compile(optimizer='sgd', loss={'model_output': loss})
+        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
+        model.save(model_filename)
+    
+    
+def create_multi_input_model_from(layer1, layer2):
+    input_1 = Input(shape=(data_dim,))
+    input_2 = Input(shape=(data_dim,))
+    out1 = layer1(input_1)
+    out2 = layer2(input_2)
+    out = Average()([out1, out2])
+    model = Model([input_1, input_2], out)
+    model.add_loss(K.mean(out2))
+    model.add_loss(1)
+    model.add_loss(1)
+    return model
+    
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
+    
+    
+def cosine_proximity(y_true, y_pred):
+    y_true = K.l2_normalize(y_true, axis=-1)
+    y_pred = K.l2_normalize(y_pred, axis=-1)
+    return -K.sum(y_true * y_pred, axis=-1)
+    
+            try:
+            spidercls = self.crawler_process.spider_loader.load(name)
+        except KeyError:
+            pass
         else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+            # if spider already exists and not --force then halt
+            if not opts.force:
+                print('Spider %r already exists in module:' % name)
+                print('  %s' % spidercls.__module__)
+                return
+        template_file = self._find_template(opts.template)
+        if template_file:
+            self._genspider(module, name, domain, opts.template, template_file)
+            if opts.edit:
+                self.exitcode = os.system('scrapy edit '%s'' % name)
     
-        try:
-        os.mkdir(args.directory)
-    except FileExistsError:
-        pass
+        def syntax(self):
+        return '[options]'
     
-        op = manager.operator()
-    print('op.add(23, 45) =', op.add(23, 45))
-    print('op.pow(2, 94) =', op.pow(2, 94))
-    print('op._exposed_ =', op._exposed_)
+                # backward-compatible SSL/TLS method:
+            #
+            # * this will respect `method` attribute in often recommended
+            #   `ScrapyClientContextFactory` subclass
+            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
+            #
+            # * getattr() for `_ssl_method` attribute for context factories
+            #   not calling super(..., self).__init__
+            return CertificateOptions(verify=False,
+                        method=getattr(self, 'method',
+                                       getattr(self, '_ssl_method', None)),
+                        fixBrokenPeers=True,
+                        acceptableCiphers=DEFAULT_CIPHERS)
+    
+    
+def _get_boto_connection():
+    from boto.s3.connection import S3Connection
+    
+        def handleStatus(self, version, status, message):
+        self.factory.gotStatus(version, status, message)
+    
+        def __init__(self, debug=False):
+        self.jars = defaultdict(CookieJar)
+        self.debug = debug
+    
+        def process_request(self, request, spider):
+        for k, v in self._headers:
+            request.headers.setdefault(k, v)
+
+    
+    
+def display_temp(hass: HomeAssistant, temperature: float, unit: str,
+                 precision: float) -> float:
+    '''Convert temperature into preferred units/precision for display.'''
+    temperature_unit = unit
+    ha_unit = hass.config.units.temperature_unit
+    
+        if unit_2 == LENGTH_MILES:
+        result = __meters_to_miles(meters)
+    elif unit_2 == LENGTH_FEET:
+        result = __meters_to_feet(meters)
+    elif unit_2 == LENGTH_KILOMETERS:
+        result = __meters_to_kilometers(meters)
