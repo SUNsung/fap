@@ -1,270 +1,176 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
+                @path = File.expand_path(path)
+        podspec_content = File.read(path)
     
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
-end
-
+                editor = editor(screenshot)
     
-    STDOUT.sync = true
-    
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
+          UI.success('Successfully submitted the app for review!')
     end
     
-        self.req_types.each do |key, i|
-      query = self.where(req_type: i)
-      s['#{key}_total']   = query.sum(:count)
-      s['#{key}_30_days'] = query.where('date > ?', 30.days.ago).sum(:count)
-      s['#{key}_7_days']  = query.where('date > ?', 7.days.ago).sum(:count)
-    end
-    
-      def report
-    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
-      'blocked-uri',
-      'disposition',
-      'document-uri',
-      'effective-directive',
-      'original-policy',
-      'referrer',
-      'script-sample',
-      'status-code',
-      'violated-directive',
-      'line-number',
-      'source-file'
-    )
-  end
-    
-    end
-
-    
-      def policy(theme_ids = [])
-    ContentSecurityPolicy.policy(theme_ids)
-  end
-end
-
-    
-          response.headers['Last-Modified'] = 10.years.ago.httpdate
-      response.headers['Content-Length'] = svg_sprite.bytesize.to_s
-      immutable_for 1.year
-    
-      MAX_TIME_READ_DIFF = 100
-  # attempt to add total read time to user based on previous time this was called
-  def self.update_time_read!(id)
-    if last_seen = last_seen_cached(id)
-      diff = (Time.now.to_f - last_seen.to_f).round
-      if diff > 0 && diff < MAX_TIME_READ_DIFF
-        update_args = ['time_read = time_read + ?', diff]
-        UserStat.where(user_id: id).update_all(update_args)
-        UserVisit.where(user_id: id, visited_at: Time.zone.now.to_date).update_all(update_args)
-      end
-    end
-    cache_last_seen(id, Time.now.to_f)
-  end
-    
-          launch_event = builder.new_event(:launch)
-      post_thread = client.post_event(launch_event)
-      unless post_thread.nil?
-        @threads << post_thread
-      end
-    end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
+            return ['-destination '#{value}'']
       end
     
-        # [String] A description shown to the user
-    attr_accessor :description
+        def handle_results(tests_exit_status)
+      result = TestResultParser.new.parse_result(test_results)
+      SlackPoster.new.run(result)
     
-        # wrap in double quotes if contains space
-    if str =~ /\s/
-      # double quotes have to be doubled if will be quoted
-      str.gsub!(''', '''')
-      return ''' + str + '''
-    else
-      return str
-    end
-  end
-  module_function :shellescape
-end
-
+            app.tunes_all_build_trains(platform: platform).each do |train|
+          message = []
+          message << 'Found train (version): #{train.version_string}'
+          message << ', comparing to supplied version: #{version}' if version
+          UI.verbose(message.join(' '))
     
-      # https://stackoverflow.com/a/18623297/252627, last variant
-  require 'open3'
-  Open3.popen3(compare_command) do |stdin, stdout, stderr, thread|
-    error = stderr.read.chomp
-    # expect(error).to eq(expected_compare_error)
-    expect(error).to eq(expected_compare_error) # match(/#{expected_compare_error}/)
-  end
-end
-    
-    full_params = ARGV.shelljoin
-    
-            it 'sets up screenshots folder in current folder' do
-          expect(options[:screenshots_path]).to eq('./screenshots')
-        end
-    
-        # This will detect the proper guest OS for the machine and set up
-    # the class to actually execute capabilities.
-    def detect!
-      guest_name = @machine.config.vm.guest
-      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
-    rescue Errors::CapabilityHostExplicitNotDetected => e
-      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
-    rescue Errors::CapabilityHostNotDetected
-      raise Errors::GuestNotDetected
-    end
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-            # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Environment] env Vagrant::Environment object of the
-        #   environment that this configuration has been loaded into. This
-        #   gives you convenient access to things like the the root path
-        #   and so on.
-        # @param [ErrorRecorder] errors
-        def validate(env, errors)
-        end
-      end
-    end
-  end
-end
-
-    
-            # Halt the machine. This method should gracefully shut down the
-        # operating system. This method will cause `vagrant halt` and associated
-        # commands to _block_, meaning that if the machine doesn't halt
-        # in a reasonable amount of time, this method should just return.
-        #
-        # If when this method returns, the machine's state isn't 'powered_off,'
-        # Vagrant will proceed to forcefully shut the machine down.
-        def halt
-          raise BaseError, _key: :unsupported_halt
-        end
-    
-              hosts
-        end
-    
-                    @env.machine_names.each do |machine_name|
-                  if machine_name =~ regex
-                    machines << get_machine.call(machine_name)
-                  end
-                end
-    
-            # This is an internal initialize function that should never be
-        # overridden. It is used to initialize some common internal state
-        # that is used in a provider.
-        def _initialize(name, machine)
-          initialize_capabilities!(
-            name.to_sym,
-            { name.to_sym => [Class.new, nil] },
-            Vagrant.plugin('2').manager.provider_capabilities,
-            machine,
-          )
-        end
-      end
-    end
-  end
-end
-
-    
-        def dependencies
-      @dependencies ||= [Cask::CaskLoader.load('adobe-air')]
-    end
-    
-          it 'adds per_page parameter to url' do
-        expect(current_url).to match(/per_page\=45/)
-      end
-    
-              def order_token
-            request.headers['X-Spree-Order-Token'] || params[:order_token]
+          def self.find_api_token(params)
+        return if params[:gsp_path]
+        unless params[:api_token].to_s.length > 0
+          Dir['./**/Info.plist'].each do |current|
+            result = Actions::GetInfoPlistValueAction.run(path: current, key: 'Fabric')
+            next unless result
+            next unless result.kind_of?(Hash)
+            params[:api_token] ||= result['APIKey']
+            UI.verbose('found an APIKey in #{current}')
           end
+        end
+      end
     
-              def payment_methods_serializer
-            Spree::Api::Dependencies.storefront_payment_method_serializer.constantize
+          def self.get_version_number!(plist_file)
+        plist = Xcodeproj::Plist.read_from_path(plist_file)
+        UI.user_error!('Unable to read plist: #{plist_file}') unless plist
+    
+      context '#in_use?' do
+    let(:index) { [] }
+    
+          iso_env.box3('base', '1.0', :foo, vagrantfile: <<-VF)
+      Vagrant.configure('2') do |config|
+        config.ssh.port = 123
+      end
+      VF
+    
+            # Filters triggers to be fired based on configured restraints
+        #
+        # @param [Array] triggers An array of triggers to be filtered
+        # @param [String] guest_name The name of the current guest
+        # @param [Symbol] type The type of trigger (:command or :type)
+        # @return [Array] The filtered array of triggers
+        def filter_triggers(triggers, guest_name, type)
+          # look for only_on trigger constraint and if it doesn't match guest
+          # name, throw it away also be sure to preserve order
+          filter = triggers.dup
+    
+          # Load dependencies into a request set for resolution
+      request_set = Gem::RequestSet.new(*plugin_deps)
+      # Never allow dependencies to be remotely satisfied during cleaning
+      request_set.remote = false
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
+end
+    
+        def backtrace_pattern
+      loc = Rake.application.find_rakefile_location
+      return unless loc
+    
+          def warn_set_scm_is_deprecated
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure your project is compatible with future versions of Capistrano,
+remove the :scm setting and instead add these lines to your Capfile after
+`require 'capistrano/deploy'`:
+    
+          def untrusted_keys
+        keys - @trusted_keys
+      end
+    
+      # escape unicode
+  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
+    
+          def instrument(env)
+        return unless i = options[:instrumenter]
+        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
+        i.instrument('rack.protection', env)
+      end
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
           end
+        end
     
-          @@return_authorization_attributes = [
-        :id, :number, :state, :order_id, :memo, :created_at, :updated_at
-      ]
+          def session_key
+        @session_key ||= options[:session_key]
+      end
+    end
+  end
+end
+
+    
+          alias react deny
+    
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to eq('connect-src https://api.mybank.com; default-src none; font-src https://cdn.mybank.net; frame-src self; img-src https://cdn.mybank.net; media-src https://cdn.mybank.net; object-src https://cdn.mybank.net; report-uri /my_amazing_csp_report_parser; sandbox allow-scripts; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net')
+    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
+  end
+    
+          def gateway_error(exception)
+        @order.errors.add(:base, exception.message)
+        invalid_resource!(@order)
+      end
+    
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
+          end
+        end
+    
+            def update
+          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
+          if @option_type.update(option_type_params)
+            render :show
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            def show
+          respond_with(@payment)
+        end
+    
+        it 'returns nil if an except is provided' do
+      valid_article = create(:article, tags: 'explainlikeimfive')
+      expect(described_class.new(valid_article, 'explainlikeimfive').tag).to eq(nil)
+    end
+    
+          it 'flashes an error message' do
+        post '/users/api_secrets', params: { api_secret: invalid_params }
+        expect(flash[:error]).to be_truthy
+        expect(flash[:notice]).to be_nil
+      end
+    end
+  end
+end
+
+    
+          it 'renders to appropriate page if user changes username twice and go to middle username' do
+        user.update(username: 'new_hotness_#{rand(10_000)}')
+        middle_username = user.username
+        user.update(username: 'new_new_username_#{rand(10_000)}')
+        get '/#{middle_username}/#{article.slug}'
+        expect(response.body).to redirect_to('/#{user.username}/#{article.slug}')
+      end
+    end
+    
+        it 'returns unauthorized if the user is not the author' do
+      second_user = create(:user)
+      article = create(:article, user: second_user)
+      expect { get '#{article.path}/manage' }.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
+    
+      private
