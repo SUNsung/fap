@@ -1,124 +1,146 @@
-// Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
+
+        
+                    // find the 'run' and 'load' keys and add them
+            if (config.Exists('run'))
+            {
+                ConfigValue sectionToRun = config('run');
+                newConfig.Insert('run', sectionToRun);
+            }
     
-    namespace stream_executor {
-namespace cuda {
+            m_word2class = config('word2cls', '');
+        m_cls2index = config('cls2index', '');
+        m_vocabSize = (int) config('vocabSize', '-1');
+        m_nbrCls = (int) config('nbrClass', '-1');
+        nce_noises = (int) config('noise_number', '-1'); // nce noise
+    
+    #ifndef let
+#define let const auto
+#endif
+    
+    private:
+    // determine the node-group array by the group tag
+    std::vector<ComputationNodeBasePtr>& GetNodeGroup(const std::wstring& groupTag)
+    {
+        if      (groupTag == L'feature'   ) return m_featureNodes;
+        else if (groupTag == L'label'     ) return m_labelNodes;
+        else if (groupTag == L'criterion' ) return m_criterionNodes;
+        else if (groupTag == L'evaluation') return m_evaluationNodes;
+        else if (groupTag == L'output'    ) return m_outputNodes;
+        else InvalidArgument('Invalid group tag '%ls', must be one of 'feature', 'label', 'criterion', 'evaluation', 'output'.', groupTag.c_str());
     }
-    }
     
-      // Creates a 1d FFT plan with scratch allocator.
-  virtual std::unique_ptr<Plan> Create1dPlanWithScratchAllocator(
-      Stream *stream, uint64 num_x, Type type, bool in_place_fft,
-      ScratchAllocator *scratch_allocator) = 0;
+        // The following functions create nodes and add them to the net, but don't attach inputs (some don't have inputs).
+    // There are special versions for nodes with custom constructors, and a catch-all, CreateComputationNode(), for all others.
+    // TODO: Do we really need these? Folks who want to use C++ can instead say net->AddNodeToNet(New<>(...)), which is not that different.
+    // TODO: separate into nodes that have inputs and those that duplicate functions with input adding except just not adding inputs. Clear?
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    template<class ElemType>
+ASGDHelper<ElemType>* NewASGDHelper(
+    const std::list<ComputationNodeBasePtr> & learnableNodes,                // Parameters that needs to be train
+    size_t nodeNumRanks,                                                     // Number of working nodes
+    bool useAsyncBuffer,                                            // Using asynchonous buffer to hide communication cost
+    bool isSimulatedModelAveragingSGD,
+    AdjustLearningRateAtBeginning adjusttype,
+    double adjustCoef,
+    size_t adjustPerMinibatches,
+    int traceLevel,
+    int syncPerfStats) 
+{
+#ifdef ASGD_PARALLEL_SUPPORT
+    return new MultiversoHelper<ElemType>(learnableNodes, nodeNumRanks, useAsyncBuffer, isSimulatedModelAveragingSGD, 
+                                      adjusttype, adjustCoef, adjustPerMinibatches, traceLevel, syncPerfStats);
+#else
+    return new NoneASGDHelper<ElemType>(learnableNodes, nodeNumRanks, useAsyncBuffer, isSimulatedModelAveragingSGD, 
+                                      adjusttype, adjustCoef, adjustPerMinibatches, traceLevel, syncPerfStats); 
+#endif
+}
     
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_HOST_HOST_PLATFORM_ID_H_
+    private:
+    void MarkDropoutNodesEvalTimeStampAsOutdated(const ComputationNetworkPtr& net, const ComputationNodeBasePtr& criterionNode);
+    std::shared_ptr<ASGDHelper<ElemType>> m_pASGDHelper;
+    
+    
+    {
+    {
+    {}}}
 
     
-    namespace stream_executor {
-namespace host {
-    }
-    }
+        BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(), expected.begin(), expected.end());
     
-        template CNTK_API std::tuple<const void*, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<float>() const;
-    template CNTK_API std::tuple<const void*, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<double>() const;
-    template CNTK_API std::tuple<const void*, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<float16>() const;
-    template CNTK_API std::tuple<const void*, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<int8_t>() const;
-    template CNTK_API std::tuple<const void*, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<int16_t>() const;
-    
-            // determine which nodes must be cloned
-        //  - intersection of:
-        //     - all indirect inputs of the specified outputs
-        //     - all dependents of leaves
-        //  - where leaves are:
-        //     - specified inputs
-        //     - unless parameters='shared': all parameters the specified outputs depend on
-    
-        template <class ElemType>
-    void RequestRelease(shared_ptr<Matrix<ElemType>> *pMatrixPtr)
-    {
-        auto memInfo = GetMemInfo(pMatrixPtr);
-        if (memInfo != nullptr)
-        {
-            memInfo->SetReleaseStep(m_stepCounter);
-        }
-        m_stepCounter++; 
+    void GlobalData::InitHostInfo() {
+  char host_name[1024];
+  gethostname(host_name, sizeof(host_name));
+  host_name_ = host_name;
     }
     
-    
-    {    // this->gather(beta,idx,a,alpha) operation is defined as
-    // *this[:,j] = a[:,idx[j]] * alpha + *this[:,j] * beta
-    dst.DoGatherColumnsOf(0.0, *(this->m_packingIndex), src, 1.0);
-}
-template<class ElemType>
-void OptimizedRNNStackNode<ElemType>::UnpackSequencesFromCuDNN(const Matrix<ElemType>& src, Matrix<ElemType>& dst)
-{
-    // this->scatter(beta,ndx,a,alpha) operation is defined as
-    // *this[:,idx[j]] = a[:,j] * alpha + *this[:,idx[j]] * beta
-    dst.DoScatterColumnsOf(0.0, *(this->m_packingIndex), src, 1.0, /*idxHaveDups*/ false);
-}
-    
-        // add values
-    auto res1 = object.emplace('three', 3);
-    null.emplace('A', 'a');
-    null.emplace('B', 'b');
-    
-    void Channel::timer_callback(swTimer *timer, swTimer_node *tnode)
-{
-    timer_msg_t *msg = (timer_msg_t *) tnode->data;
-    msg->error = true;
-    msg->timer = nullptr;
-    if (msg->type == CONSUMER)
-    {
-        msg->chan->consumer_remove(msg->co);
+    class MainWindow : public QMainWindow {
+  Q_OBJECT
     }
-    else
-    {
-        msg->chan->producer_remove(msg->co);
+    
+    #include <deque>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <vector>
+    
+    typedef boost::circular_buffer<VehicleStatus> MotionBuffer;
+typedef std::shared_ptr<MotionBuffer> MotionBufferPtr;
+typedef std::shared_ptr<const MotionBuffer> MotionBufferConstPtr;
+    
+    std::string Dst::PrintBba() const {
+  SelfCheck();
+  static constexpr size_t total_res_size = 10000;
+  static constexpr size_t row_res_size = 1000;
+  static auto print_row = [](const std::string &row_header,
+                             const std::vector<double> &data) {
+    std::string row_str = (boost::format('%19s ') % row_header).str();
+    row_str.reserve(row_res_size);
+    for (auto flt : data) {
+      row_str += (boost::format('%20.6lf') % (flt * 100)).str();
     }
-    msg->co->resume();
+    row_str += '\n';
+    return row_str;
+  };
+  std::string res;
+  res.reserve(total_res_size);
+  res += '\n';
+  // output table header
+  std::string header = (boost::format('%20s') % ' ').str();
+  header.reserve(row_res_size);
+  const std::vector<std::string> &fod_subset_names =
+      dst_data_ptr_->fod_subset_names_;
+  for (const auto &fod_subset_name : fod_subset_names) {
+    header += (boost::format('%20s') % fod_subset_name).str();
+  }
+  res += header + '\n';
+  res += print_row('belief_mass', bba_vec_);
+  // res += print_row('support', support_vec_);
+  // res += print_row('uncertainty', uncertainty_vec_);
+  // res += print_row('probability', probability_vec_);
+  return res;
 }
     
-        swListenPort *port = swServer_add_port(&serv, SW_SOCK_TCP, '127.0.0.1', 9501);
-    port->open_eof_check = 0;
-    //config
-    port->backlog = 128;
-    memcpy(port->protocol.package_eof, SW_STRL('\r\n\r\n'));  //开启eof检测，启用buffer区
+    double DstExistanceFusion::GetUnexistReliability(const std::string &sensor_id) {
+  common::SensorManager *sensor_manager = common::SensorManager::Instance();
+  CHECK_NOTNULL(sensor_manager);
+  if (sensor_manager->IsCamera(sensor_id)) {
+    return 0.8;
+  }
+  if (sensor_manager->IsLidar(sensor_id)) {
+    return 0.9;
+  }
+  return 0.6;
+}
     
-        time_t start = time(nullptr);
-    while (i != 1000)
-    {
-        usleep(100);
-        
-        if ((time(nullptr) - start) > 3)
-        {
-            ASSERT_TRUE(false);
-        }
-    }
-    
-    
-    {    void *alloc(size_t _size)
-    {
-        if (_size >= _callback_buffer->size)
-        {
-            size_t new_size = _callback_buffer->size * 2;
-            while (new_size < _size + 1)
-            {
-                new_size *= 2;
-            }
-            if (swString_extend(_callback_buffer, new_size) < 0)
-            {
-                abort();
-            }
-        }
-        length = _size;
-        buffer = _callback_buffer->str;
-        ((char *) buffer)[_size] = '\0';
-        return buffer;
-    }
-};
+    bool KalmanMotionFusion::Init() {
+  if (track_ref_ == nullptr) {
+    return false;
+  }
+  if (track_ref_->GetLatestLidarObject() != nullptr) {
+    filter_init_ = InitFilter(track_ref_->GetLatestLidarObject());
+  } else if (track_ref_->GetLatestRadarObject() != nullptr) {
+    filter_init_ = InitFilter(track_ref_->GetLatestRadarObject());
+  }
+  return true;
+}
