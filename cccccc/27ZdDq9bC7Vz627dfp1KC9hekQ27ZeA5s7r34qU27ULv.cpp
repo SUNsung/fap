@@ -1,387 +1,205 @@
 
         
-          // Build a substitution map to replace the protocol's \c Self and the type
-  // parameters of the requirement into a combined context that provides the
-  // type parameters of the conformance context and the parameters of the
-  // requirement.
-  auto selfType = cast<GenericTypeParamType>(
-      proto->getSelfInterfaceType()->getCanonicalType());
+          // Group fields
+  RunValidTextFormatTestProto2('GroupFieldNoColon', REQUIRED,
+                               'Data { group_int32: 1 }');
+  RunValidTextFormatTestProto2('GroupFieldWithColon', REQUIRED,
+                               'Data: { group_int32: 1 }');
+  RunValidTextFormatTestProto2('GroupFieldEmpty', REQUIRED,
+                               'Data {}');
     
+    #include <google/protobuf/pyext/message.h>
     
-    {  assert(*BufferPtr == '\r');
-  unsigned Bytes = 1;
-  if (BufferPtr != BufferEnd && *BufferPtr == '\n')
-    Bytes++;
-  return Bytes;
-}
-    
-    %{
+    // This struct is used directly for ScalarMap, and is the base class of
+// MessageMapContainer, which is used for MessageMap.
+struct MapContainer : public ContainerBase {
+  // Use to get a mutable message when necessary.
+  Message* GetMutableMessage();
     }
     
-    /// Translate the given operator character into its mangled form.
-///
-/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
-char Mangle::translateOperatorChar(char op) {
-  switch (op) {
-    case '&': return 'a'; // 'and'
-    case '@': return 'c'; // 'commercial at sign'
-    case '/': return 'd'; // 'divide'
-    case '=': return 'e'; // 'equal'
-    case '>': return 'g'; // 'greater'
-    case '<': return 'l'; // 'less'
-    case '*': return 'm'; // 'multiply'
-    case '!': return 'n'; // 'negate'
-    case '|': return 'o'; // 'or'
-    case '+': return 'p'; // 'plus'
-    case '?': return 'q'; // 'question'
-    case '%': return 'r'; // 'remainder'
-    case '-': return 's'; // 'subtract'
-    case '~': return 't'; // 'tilde'
-    case '^': return 'x'; // 'xor'
-    case '.': return 'z'; // 'zperiod' (the z is silent)
-    default:
-      return op;
+    
+    {  // For container containing messages, return a Python object for the given
+  // pointer to a message.
+  CMessage* BuildSubMessageFromPointer(const FieldDescriptor* field_descriptor,
+                                       Message* sub_message,
+                                       CMessageClass* message_class);
+  CMessage* MaybeReleaseSubMessage(Message* sub_message);
+} CMessage;
+    
+    int AssignSubscript(RepeatedCompositeContainer* self,
+                    PyObject* slice,
+                    PyObject* value) {
+  if (value != NULL) {
+    PyErr_SetString(PyExc_TypeError, 'does not support assignment');
+    return -1;
   }
-}
-    
-    std::string Demangle::getNodeTreeAsString(NodePointer Root) {
-  DemanglerPrinter Printer;
-  printNode(Printer, Root, 0);
-  return std::move(Printer).str();
-}
-    
-    
-    {  // let h = b = the number of basic code points in the input
-  // copy them to the output in order...
-  size_t h = 0;
-  for (auto C : InputCodePoints) {
-    if (C < 0x80) {
-      ++h;
-      OutPunycode.push_back(C);
     }
-    if (!isValidUnicodeScalar(C)) {
-      OutPunycode.clear();
-      return false;
-    }
+    
+    #include <memory>
+#include <string>
+#include <vector>
+    
+    bool GetAnyFieldDescriptors(const Message& message,
+                            const FieldDescriptor** type_url_field,
+                            const FieldDescriptor** value_field) {
+  const Descriptor* descriptor = message.GetDescriptor();
+  if (descriptor->full_name() != kAnyFullTypeName) {
+    return false;
   }
-  size_t b = h;
-  // ...followed by a delimiter if b > 0
-  if (b > 0)
-    OutPunycode.push_back(delimiter);
+  *type_url_field = descriptor->FindFieldByNumber(1);
+  *value_field = descriptor->FindFieldByNumber(2);
+  return (*type_url_field != NULL &&
+          (*type_url_field)->type() == FieldDescriptor::TYPE_STRING &&
+          *value_field != NULL &&
+          (*value_field)->type() == FieldDescriptor::TYPE_BYTES);
+}
+    
+      // Destructor deletes all owned heap allocated objects, and destructs objects
+  // that have non-trivial destructors, except for proto2 message objects whose
+  // destructors can be skipped. Also, frees all blocks except the initial block
+  // if it was passed in.
+  ~ArenaImpl();
+    
+      // Generate header code defining the enum.  This code should be placed
+  // within the enum's package namespace, but NOT within any class, even for
+  // nested enums.
+  void GenerateDefinition(io::Printer* printer);
+    
+    void second(void) {
+  printf('second\n');
+  emscripten_sleep(1);
+  longjmp(buf, -1);
+}
+    
+    //========================================================================
+//
+// Modified under the Poppler project - http://poppler.freedesktop.org
+//
+// All changes made under the Poppler project to this file are licensed
+// under GPL version 2 or later
+//
+// Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
+// Copyright (C) 2005 Jeff Muizelaar <jeff@infidigm.net>
+// Copyright (C) 2005-2010 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2006-2008 Pino Toscano <pino@kde.org>
+// Copyright (C) 2006 Nickolay V. Shmyrev <nshmyrev@yandex.ru>
+// Copyright (C) 2006 Scott Turner <scotty1024@mac.com>
+// Copyright (C) 2006-2010 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2007 Julien Rebetez <julienr@svn.gnome.org>
+// Copyright (C) 2008 Iñigo Martínez <inigomartinez@gmail.com>
+// Copyright (C) 2008 Brad Hards <bradh@kde.org>
+// Copyright (C) 2008 Ilya Gorenbein <igorenbein@finjan.com>
+//
+// To see a description of the changes please see the Changelog file that
+// came with your tarball or type make ChangeLog if you are building from git
+//
+//========================================================================
+    
+    
+    {private:
   
-  while (h < InputCodePoints.size()) {
-    // let m = the minimum code point >= n in the input
-    uint32_t m = 0x10FFFF;
-    for (auto codePoint : InputCodePoints) {
-      if (codePoint >= n && codePoint < m)
-        m = codePoint;
-    }
-    
-    delta = delta + (m - n) * (h + 1);
-    n = m;
-    for (auto c : InputCodePoints) {
-      if (c < n) ++delta;
-      if (c == n) {
-        int q = delta;
-        for (int k = base; ; k += base) {
-          int t = k <= bias ? tmin
-                : k >= bias + tmax ? tmax
-                : k - bias;
-          
-          if (q < t) break;
-          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
-          q = (q - t) / (base - t);
-        }
-        OutPunycode.push_back(digit_value(q));
-        bias = adapt(delta, h + 1, h == b);
-        delta = 0;
-        ++h;
-      }
-    }
-    ++delta; ++n;
-  }
-  return true;
-}
-    
-      /// A place to keep alive any buffers that are loaded as part of setting up
-  /// the frontend inputs.
-  SmallVector<std::unique_ptr<llvm::MemoryBuffer>, 4> ConfigurationFileBuffers;
-    
-        /*
-        Extract a single plane from 3 channel image
-    */
-    void extract3(const Size2D &size,
-                  const u8 * srcBase, ptrdiff_t srcStride,
-                  u8 * dstBase, ptrdiff_t dstStride,
-                  u32 coi);
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vadd(v_src0, v_src1);
-    }
-    
-    struct BitwiseAnd
-{
-    typedef u8 type;
-    }
-    
-    namespace internal {
-    }
-    
-    void makeOffsets(ptrdiff_t pixel[], ptrdiff_t row_stride)
-{
-    pixel[0] = 0 + row_stride * 3;
-    pixel[1] = 1 + row_stride * 3;
-    pixel[2] = 2 + row_stride * 2;
-    pixel[3] = 3 + row_stride * 1;
-    pixel[4] = 3 + row_stride * 0;
-    pixel[5] = 3 + row_stride * -1;
-    pixel[6] = 2 + row_stride * -2;
-    pixel[7] = 1 + row_stride * -3;
-    pixel[8] = 0 + row_stride * -3;
-    pixel[9] = -1 + row_stride * -3;
-    pixel[10] = -2 + row_stride * -2;
-    pixel[11] = -3 + row_stride * -1;
-    pixel[12] = -3 + row_stride * 0;
-    pixel[13] = -3 + row_stride * 1;
-    pixel[14] = -2 + row_stride * 2;
-    pixel[15] = -1 + row_stride * 3;
-}
-    
-    
-    {}
-    
-    #ifndef CAROTENE_INTRINSICS_HPP
-#define CAROTENE_INTRINSICS_HPP
-    
-    
-    {
-    {        for( ; x < cols; x++ )
-        {
-            s16 nextx;
-            s16 prevx;
-            // make border
-            if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT)
-            {
-                prevx = x == 0 ? v1[0] : v1[x-1];
-                nextx = x == cols-1 ? v1[x] : v1[x+1];
-            }
-            else if (border == BORDER_MODE_REFLECT101)
-            {
-                prevx = x == 0 ? v1[1] : v1[x-1];
-                nextx = x == cols-1 ? v1[x-1] : v1[x+1];
-            }
-            else //if (border == BORDER_MODE_CONSTANT)
-            {
-                prevx = x == 0 ? borderValue : v1[x-1];
-                nextx = x == cols-1 ? borderValue : v1[x+1];
-            }
-            *(drow+x) = prevx + nextx - 4*v1[x] + v0[x] + v2[x];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)border;
-    (void)borderValue;
-#endif
-}
-    
-    MeasureDouble RpcServerServerLatency() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerServerLatencyMeasureName,
-      'Time between first byte of request received to last byte of response '
-      'sent, or terminal error',
-      kUnitMilliseconds);
-  return measure;
-}
-    
-    namespace grpc {
-    }
-    
-    #endif  // !GRPC_CUSTOM_DEFAULT_THREAD_POOL
-
-    
-    LoadRecordKey::LoadRecordKey(const grpc::string& client_ip_and_token,
-                             grpc::string user_id)
-    : user_id_(std::move(user_id)) {
-  GPR_ASSERT(client_ip_and_token.size() >= 2);
-  int ip_hex_size;
-  GPR_ASSERT(sscanf(client_ip_and_token.substr(0, 2).c_str(), '%d',
-                    &ip_hex_size) == 1);
-  GPR_ASSERT(ip_hex_size == 0 || ip_hex_size == kIpv4AddressLength ||
-             ip_hex_size == kIpv6AddressLength);
-  size_t cur_pos = 2;
-  client_ip_hex_ = client_ip_and_token.substr(cur_pos, ip_hex_size);
-  cur_pos += ip_hex_size;
-  if (client_ip_and_token.size() - cur_pos < kLbIdLength) {
-    lb_id_ = kInvalidLbId;
-    lb_tag_ = '';
-  } else {
-    lb_id_ = client_ip_and_token.substr(cur_pos, kLbIdLength);
-    lb_tag_ = client_ip_and_token.substr(cur_pos + kLbIdLength);
-  }
-}
-    
-    // This is expected to be called when a binary op in the last say 1+2+ is changing to another one say 1+2* (+ changed to *)
-// It needs to know by this change a Precedence inversion happened. i.e. previous op was lower or equal to its previous op, but the new
-// one isn't. (Eg. 1*2* to 1*2^). It can add explicit brackets to ensure the precedence is inverted. (Eg. (1*2) ^)
-void CHistoryCollector::ChangeLastBinOp(int nOpCode, bool fPrecInvToHigher)
-{
-    TruncateEquationSzFromIch(m_lastBinOpStartIndex);
-    if (fPrecInvToHigher)
-    {
-        EnclosePrecInversionBrackets();
-    }
-    AddBinOpToHistory(nOpCode);
-}
-    
-    namespace CalcEngine
-{
-    Number::Number() noexcept
-        : Number(1, 0, { 0 })
-    {
-    }
-    }
-    
-    void CCalcEngine::InitChopNumbers()
-{
-    // these rat numbers are set only once and then never change regardless of
-    // base or precision changes
-    assert(m_chopNumbers.size() >= 4);
-    m_chopNumbers[0] = Rational{ rat_qword };
-    m_chopNumbers[1] = Rational{ rat_dword };
-    m_chopNumbers[2] = Rational{ rat_word };
-    m_chopNumbers[3] = Rational{ rat_byte };
-    }
-    
-    CUnaryCommand::CUnaryCommand(int command1, int command2)
-{
-    m_command = make_shared<CalculatorVector<int>>();
-    m_command->Append(command1);
-    m_command->Append(command2);
-}
-    
-    using namespace CalculatorApp::Common::Automation;
-using namespace Windows::Foundation::Metadata;
-using namespace Windows::UI::Xaml::Automation;
-using namespace Windows::UI::Xaml::Automation::Peers;
-using namespace Windows::UI::Xaml::Controls;
-    
-    class CaffeDataIterWrapper : public PrefetcherIter {
- public:
-  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
-  virtual ~CaffeDataIterWrapper() {
-    IF_CHECK_TIMING(
-      if (next_time_.load() > 0) {
-        LOG(WARNING) << 'Caffe data loader was blocked for '
-                     << next_time_.load()
-                     << ' ms waiting for incoming data';
-      }
-    )
-  }
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    // We need to init prefetcher args in order to get dtype
-    this->param_.InitAllowUnknown(kwargs);
-    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
-    switch (this->param_.dtype.value()) {
-      case mshadow::kFloat32:
-        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat64:
-        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat16:
-        LOG(FATAL) << 'float16 layer is not supported by caffe';
-        return;
-      default:
-        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
-        return;
-    }
-    PrefetcherIter::Init(kwargs);
-    this->param_.prefetch_buffer = 1;
-  }
-  virtual void BeforeFirst(void) {
-    return PrefetcherIter::BeforeFirst();
-  }
-  virtual bool Next(void) {
-    IF_CHECK_TIMING(
-      const uint64_t start_time = GetTickCountMS();
-    )
-    const bool rc = PrefetcherIter::Next();
-    IF_CHECK_TIMING(
-      const uint64_t diff_time  = GetTickCountMS() - start_time;
-      next_time_.fetch_add(diff_time);
-    )
-    return rc;
-  }
-    }
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_fieldentry.h
- * \brief Implement FieldEntry<caffe::LayerParameter>
- * \author Haoran Wang
- */
-#ifndef PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
-#define PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
-    
-    inline void Quantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
-                             const std::vector<mxnet::TBlob> &inputs,
-                             const float threshold) {
-  Quantize2BitKernelLaunch(s, inputs, threshold);
-}
-    
-    // relu
-MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
-.describe(R'code(Rescale the input by the square root of the channel dimension.
-    
-    namespace mxnet {
-namespace op {
-template<typename DType>
-class CuDNNLocalResponseNormOp : public Operator {
- public:
-  explicit CuDNNLocalResponseNormOp(LRNParam param) {
-    param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
-  }
-    }
-    }
-    }
-    
-      for (auto& blob : in_data) {
-    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
-    tags.push_back(0);
-  }
-  for (auto& blob : out_data) {
-    NDArray* nd = new NDArray(blob, ndctx.dev_id);
-    ptrs.push_back(reinterpret_cast<void*>(nd));
-    ndvar.push_back(nd->var());
-    tags.push_back(1);
-  }
-  std::sort(ndvar.begin(), ndvar.end());
-  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
-    
-    
-    { private:
-  int size_;
-  int dimension_;
-};  // class ConcatOp
-    
-    
-    {  static void setInitialized6(bool f) { data6_.initialized = f; }
+  PageTransitionType type;           // transition style
+  int duration;                      // duration of the effect in seconds
+  PageTransitionAlignment alignment; // dimension of the effect
+  PageTransitionDirection direction; // direction of motion
+  int angle;                         // direction in degrees
+  double scale;                      // scale
+  GBool rectangular;                 // is the area to be flown in rectangular?
+  GBool ok;                          // set if created successfully
 };
     
+    #include 'Object.h'
     
-    {} // namespace aria2
+    #endif
 
     
-      virtual std::shared_ptr<DHTTask> createPeerLookupTask(
-      const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
-      const std::shared_ptr<PeerStorage>& peerStorage) CXX11_OVERRIDE;
+    #include <dmlc/omp.h>
+#include <xgboost/logging.h>
+#include <algorithm>
+#include '../common/math.h'
+    
+    #if defined(XGBOOST_USE_NCCL) && defined(__CUDACC__)
+TEST(Metric, MGPU_RMSE) {
+  {
+    auto lparam = xgboost::CreateEmptyGenericParam(0, -1);
+    xgboost::Metric * metric = xgboost::Metric::Create('rmse', &lparam);
+    metric->Configure({});
+    ASSERT_STREQ(metric->Name(), 'rmse');
+    EXPECT_NEAR(GetMetricEval(metric, {0}, {0}), 0, 1e-10);
+    EXPECT_NEAR(GetMetricEval(metric,
+                              {0.1f, 0.9f, 0.1f, 0.9f},
+                              {  0,   0,   1,   1}),
+                0.6403f, 0.001f);
+    delete metric;
+  }
+    }
+    
+      // test PredTransform
+  xgboost::HostDeviceVector<xgboost::bst_float> io_preds = {0, 0.1f, 0.5f, 0.9f, 1};
+  std::vector<xgboost::bst_float> out_preds = {1, 1.10f, 1.64f, 2.45f, 2.71f};
+  obj->PredTransform(&io_preds);
+  auto& preds = io_preds.HostVector();
+  for (int i = 0; i < static_cast<int>(io_preds.Size()); ++i) {
+    EXPECT_NEAR(preds[i], out_preds[i], 0.01f);
+  }
+    
+    
+    {    // Synchronizes the section where a new Timestamp is generated and when it is registered in the
+    // storage engine.
+    mutable stdx::mutex _newOpMutex;
+};
+    
+    Status DistLockCatalogImpl::_unlock(OperationContext* opCtx, const FindAndModifyRequest& request) {
+    auto const shardRegistry = Grid::get(opCtx)->shardRegistry();
+    auto resultStatus = shardRegistry->getConfigShard()->runCommandWithFixedRetryAttempts(
+        opCtx,
+        ReadPreferenceSetting{ReadPreference::PrimaryOnly},
+        _locksNS.db().toString(),
+        request.toBSON({}),
+        Shard::kDefaultConfigCommandTimeout,
+        Shard::RetryPolicy::kIdempotent);
+    }
+    
+        static const char* kStageType;
+    
+        // Complete the command by appending the other options to the aggregate command.
+    if (auto collation = cmd.getCollation()) {
+        aggregationBuilder.append(kCollationField, collation.get());
+    }
+    
+    
+    {    std::vector<BSONObj> expectedPipeline{BSON('$count'
+                                               << 'count')};
+    ASSERT(std::equal(expectedPipeline.begin(),
+                      expectedPipeline.end(),
+                      ar.getPipeline().begin(),
+                      ar.getPipeline().end(),
+                      SimpleBSONObjComparator::kInstance.makeEqualTo()));
+}
+    
+        /**
+     * Used when there is a canonical query but no query solution (e.g. idhack queries, queries
+     * against a NULL collection, queries using the subplan stage).
+     */
+    static StatusWith<std::unique_ptr<PlanExecutor, PlanExecutor::Deleter>> make(
+        OperationContext* opCtx,
+        std::unique_ptr<WorkingSet> ws,
+        std::unique_ptr<PlanStage> rt,
+        std::unique_ptr<CanonicalQuery> cq,
+        const Collection* collection,
+        YieldPolicy yieldPolicy);
+    
+    
+    {    auto status = _kvEngine->dropIdent(opCtx, _rs->getIdent());
+    fassert(
+        51032,
+        status.withContext(str::stream() << 'failed to drop temporary ident: ' << _rs->getIdent()));
+    _recordStoreHasBeenDeleted = true;
+}
+    
+    namespace {
+    }
+    
+            {
+            WriteUnitOfWork wunit(&_opCtx);
+    }
