@@ -1,163 +1,178 @@
 
         
-            headers
+          def test_pretty_print_new
+    topic = Topic.new
+    actual = +''
+    PP.pp(topic, StringIO.new(actual))
+    expected = <<~PRETTY
+      #<Topic:0xXXXXXX
+       id: nil,
+       title: nil,
+       author_name: nil,
+       author_email_address: 'test@test.com',
+       written_on: nil,
+       bonus_time: nil,
+       last_read: nil,
+       content: nil,
+       important: nil,
+       approved: true,
+       replies_count: 0,
+       unique_replies_count: 0,
+       parent_id: nil,
+       parent_title: nil,
+       type: nil,
+       group: nil,
+       created_at: nil,
+       updated_at: nil>
+    PRETTY
+    assert actual.start_with?(expected.split('XXXXXX').first)
+    assert actual.end_with?(expected.split('XXXXXX').last)
   end
-end
     
+        wheel = wheel_class.create!(wheelable: car1)
+    
+        assert_equal <<~MESSAGE, run_routes_command
+                                     Prefix Verb   URI Pattern                                                                              Controller#Action
+              rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                  action_mailbox/ingresses/mandrill/inbound_emails#create
+              rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
+                 rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                     action_mailbox/ingresses/relay/inbound_emails#create
+              rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                  action_mailbox/ingresses/sendgrid/inbound_emails#create
+               rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                              action_mailbox/ingresses/mailgun/inbound_emails#create
+             rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#index
+                                            POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#create
+          new_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/new(.:format)                             rails/conductor/action_mailbox/inbound_emails#new
+         edit_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)                        rails/conductor/action_mailbox/inbound_emails#edit
+              rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#show
+                                            PATCH  /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
+                                            PUT    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
+                                            DELETE /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#destroy
+      rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                      rails/conductor/action_mailbox/reroutes#create
+                         rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
+                  rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
+                         rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
+                  update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
+                       rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
+    MESSAGE
+  end
+    
+      def test_cmd_exec_quotes
+    vprint_status('Starting cmd_exec quote tests')
+    
+      # Record from default audio source for +duration+ seconds;
+  # returns a low-quality wav file
+  def record_mic(duration)
+    request = Packet.create_request('webcam_audio_record')
+    request.add_tlv(TLV_TYPE_AUDIO_DURATION, duration)
+    response = client.send_request(request)
+    response.get_tlv(TLV_TYPE_AUDIO_DATA).value
+  end
+    
+        if sysinfo['Architecture'] == ARCH_X64 && target.arch.first == ARCH_X86
+      fail_with(Failure::NoTarget, 'Session host is x64, but the target is specified as x86')
+    elsif sysinfo['Architecture'] == ARCH_X86 && target.arch.first == ARCH_X64
+      fail_with(Failure::NoTarget, 'Session host is x86, but the target is specified as x64')
     end
     
-      def self.languages
-    langs = Dir.glob(HIGHLIGHTJS_DIR + 'languages/*.js').map do |path|
-      File.basename(path)[0..-8]
+        # Create a directory for the logs
+    logs = ::File.join(Msf::Config.log_directory, 'persistence', Rex::FileUtils.clean_path(host + filenameinfo))
+    
+        report_cred(
+      ip: ::Rex::Socket.resolv_to_dotted(host), # XXX: Workaround for unresolved hostnames
+      port: portnum,
+      service_name: sname,
+      user: user_name,
+      password: password
+    )
+    
+        begin
+      net_com_opts[:harness] = ::File.read(datastore['SOURCE_FILE'])
+      script = dot_net_compiler(net_com_opts)
+      if datastore['Powershell::Post::dry_run']
+        print_good 'Compiler code:\n#{script}'
+        return
+      end
+    rescue => e
+      print_error e
+      return
     end
     
-        Extension.theme_extensions(theme_ids).each { |extension| builder << extension }
-    Extension.plugin_extensions.each { |extension| builder << extension }
-    builder << Extension.site_setting_extension
-    
-              extension[directive] ||= []
-          extension[directive] << source
-        end
-      end
-    end
-  end
-end
-
-    
-        delegate :policy, to: :ContentSecurityPolicy
-    
-      def parse(csp_string)
-    csp_string.split(';').map do |policy|
-      directive, *sources = policy.split
-      [directive, sources]
-    end.to_h
+      bins.each do |from, to|
+    next if (from != 'metsvc.exe' and remove)
+    to ||= from
+    print_status(' >> Uploading #{from}...')
+    fd = client.fs.file.new(tempdir + '\\' + to, 'wb')
+    path = (from == 'metsrv.x86.dll') ? MetasploitPayloads.meterpreter_path('metsrv','x86.dll') : File.join(based, from)
+    fd.write(::File.read(path, ::File.size(path)))
+    fd.close
   end
     
-    # This module allows us to hijack a request and send it to the client in the deferred job queue
-# For cases where we are making remote calls like onebox or proxying files and so on this helps
-# free up a unicorn worker while the remote IO is happening
-module Hijack
+      include Msf::ModuleTest::PostTest
     
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
+          env['rack.errors'] = errors
     
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
+          # Captures the entire amount of a payment.
+      def purchase!
+        handle_payment_preconditions { process_purchase }
       end
     
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
-        end
-      end
-    
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
-      end
-    end
-  end
-end
-
-    
-          # Resets reset password token and send reset password instructions by email.
-      # Returns the token sent in the e-mail.
-      def send_reset_password_instructions
-        token = set_reset_password_token
-        send_reset_password_instructions_notification(token)
-    
-          def timeout_in
-        self.class.timeout_in
-      end
-    
-      # Returns meta tags.
-  # You will probably want to use this the web app's version info (or other stuff) can be found
-  # in the metadata.
-  #
-  # @return [Array<Nokogiri::XML::Element>]
-  def get_html_meta_elements
-    n = get_html_document
-    n.search('//meta')
-  end
-    
-    IAX_IE_CALLED_NUMBER  = 1
-IAX_IE_CALLING_NUMBER = 2
-IAX_IE_AUTH_METHODS   = 3
-IAX_IE_CALLING_NAME   = 4
-IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
-IAX_IE_ACTUAL_CODECS  = 8
-IAX_IE_PROTO_VERSION  = 11
-IAX_IE_REG_REFRESH    = 19
-IAX_IE_CHALLENGE_DATA = 15
-IAX_IE_CHALLENGE_RESP = 16
-IAX_IE_APPARENT_ADDR  = 18
-IAX_IE_REGREJ_CAUSE   = 22
-IAX_IE_HANGUP_CAUSE   = 42
-    
-            # UDP isn't supported
-        #
-        # @raise [NotImplementedError]
-        def recv_response_udp
-          raise ::NotImplementedError, 'Kerberos Client: UDP unsupported'
-        end
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Decodes the last_req from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Rex::Proto::Kerberos::Model::LastRequest>]
-          def decode_last_req(input)
-            last_requests = []
-            input.value[0].value.each do |last_request|
-              last_requests << Rex::Proto::Kerberos::Model::LastRequest.decode(last_request)
+              line_items.each do |line_item|
+            adjustments = line_item.delete(:adjustments_attributes)
+            extra_params = line_item.except(:variant_id, :quantity, :sku)
+            line_item = ensure_variant_id_from_params(line_item)
+            variant = Spree::Variant.find(line_item[:variant_id])
+            line_item = Cart::AddItem.call(order: order, variant: variant, quantity: line_item[:quantity]).value
+            # Raise any errors with saving to prevent import succeeding with line items
+            # failing silently.
+            if extra_params.present?
+              line_item.update!(extra_params)
+            else
+              line_item.save!
             end
-    
-      private
-    
-              extension_header = replace_ownership_headers(extension_header, true)
-    
-      # Output a zipfile.
-  def output(output_path)
-    output_check(output_path)
-    realpath = Pathname.new(output_path).realdirpath.to_s
-    ::Dir.chdir(staging_path) do
-      safesystem('zip', '-9r', realpath, '.')
-    end
-  end # def output
-end # class FPM::Package::Tar
-
-    
-      def initialize(package_name, opts = {}, &block)
-    @options = OpenStruct.new(:name => package_name.to_s)
-    @source, @target = opts.values_at(:source, :target).map(&:to_s)
-    @directory = File.expand_path(opts[:directory].to_s)
-    
-          prefix = ''
-      if name.bytesize > 100 then
-        parts = name.split('/', -1) # parts are never empty here
-        name = parts.pop            # initially empty for names with a trailing slash ('foo/.../bar/')
-        prefix = parts.join('/')    # if empty, then it's impossible to split (parts is empty too)
-        while !parts.empty? && (prefix.bytesize > 155 || name.empty?)
-          name = parts.pop + '/' + name
-          prefix = parts.join('/')
+            create_adjustments_from_params(adjustments, order, line_item)
+          rescue Exception => e
+            raise 'Order import line items: #{e.message} #{line_item}'
+          end
         end
+    
+          # the order builds a shipment on its own on transition to delivery, but we want
+      # the original exchange shipment, not the built one
+      order.shipments.destroy_all
+      shipments.each { |shipment| shipment.update(order_id: order.id) }
+      order.update!(state: 'confirm')
+    
+            def image_params
+          params.require(:image).permit(permitted_image_attributes)
+        end
+    
+          insist { input.attributes[:snap_confinement] } == 'test-confinement'
+    end
+    
+          @command.dependencies.tap do |dependencies|
+        # Verify dependencies don't include commas (#257)
+        dependencies.each do |dep|
+          next unless dep.include?(',')
+          splitdeps = dep.split(/\s*,\s*/)
+          @messages << 'Dependencies should not ' \
+            'include commas. If you want to specify multiple dependencies, use ' \
+            'the '-d' flag multiple times. Example: ' + \
+            splitdeps.map { |d| '-d '#{d}'' }.join(' ')
+        end
+      end
+    
+        # Write +COMPACT_MANIFEST, without the 'files' section.
+    File.open(staging_path('+COMPACT_MANIFEST'), 'w+') do |file|
+      file.write(pkgdata.to_json + '\n')
+    end
+    
+        self.attributes[:pacman_optional_depends] = control['optdepend'] || []
+    # There are other available attributes, but I didn't include them because:
+    # - makedepend: deps needed to make the arch package. But it's already
+    #   made. It just needs to be converted at this point
+    # - checkdepend: See above
+    # - makepkgopt: See above
+    # - size: can be dynamically generated
+    # - builddate: Should be changed to time of package conversion in the new
+    #   package, so this value should be thrown away.
+    
+        target = build_path(package)
+    FileUtils.mkdir(target) unless File.directory?(target)
