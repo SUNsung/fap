@@ -1,171 +1,74 @@
 
         
-            entry_points = {'console_scripts': proj_info['console_scripts']}
-)
-
-    
-    from ..common import *
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-    import urllib.request, urllib.parse
-from ..common import *
-    
-        title = r1(r'<meta property='og:title' content='(.*?)'>', html)
-    
-        def show_sec(course_id, chap_id):
-        ep = 'http://www.icourses.cn/jpk/getSectionNode.action?courseId={}&characId={}&mod=2'
-        req = post_content(ep.format(course_id, chap_id), post_data={})
-        return req
-    
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
+                self.title = re.search(r'<meta name='title' content='([^']+)'', video_page).group(1)
+        self.p_playlist()
+        for video in videos:
+            vid = parse_query_param(video, 'v')
+            index = parse_query_param(video, 'index')
+            try:
+                self.__class__().download_by_url(self.__class__.get_url_from_vid(vid), index=index, **kwargs)
+            except:
+                pass
     
     
-class BufferFull(UnpackException):
-    pass
+def funshion_download(url, **kwargs):
+    if re.match(r'http://www.fun.tv/vplay/v-(\w+)', url):
+        vid = re.search(r'http://www.fun.tv/vplay/v-(\w+)', url).group(1)
+        Funshion().download_by_vid(vid, single_video=True, **kwargs)
+    elif re.match(r'http://www.fun.tv/vplay/.*g-(\w+)', url):
+        epid = re.search(r'http://www.fun.tv/vplay/.*g-(\w+)', url).group(1)
+        url = 'http://pm.funshion.com/v5/media/episode?id={}&cl=mweb&uc=111'.format(epid)
+        meta = json.loads(get_content(url))
+        drama_name = meta['name']
     
+        license='MIT',
     
-def test_setitem_callable():
-    # GH 12533
-    s = pd.Series([1, 2, 3, 4], index=list('ABCD'))
-    s[lambda x: 'A'] = -1
-    tm.assert_series_equal(s, pd.Series([-1, 2, 3, 4], index=list('ABCD')))
+        def next_flow(self, request):
+        '''
+            Returns the next flow object, or None if no matching flow was
+            found.
+        '''
+        hsh = self._hash(request)
+        if hsh in self.flowmap:
+            if ctx.options.server_replay_nopop:
+                return self.flowmap[hsh][0]
+            else:
+                ret = self.flowmap[hsh].pop(0)
+                if not self.flowmap[hsh]:
+                    del self.flowmap[hsh]
+                return ret
     
-        with pytest.raises(ValueError, match=msg):
-        df.groupby('key').rank(method=ties_method,
-                               ascending=ascending,
-                               na_option=na_option, pct=pct)
-    
-    
-@pytest.mark.parametrize('input_color', [None, 'not-a-color'])
-def test_css_to_excel_bad_colors(input_color):
-    # see gh-18392
-    css = ('border-top-color: {color}; '
-           'border-right-color: {color}; '
-           'border-bottom-color: {color}; '
-           'border-left-color: {color}; '
-           'background-color: {color}; '
-           'color: {color}').format(color=input_color)
-    
-        unpacker = msgpack.Unpacker(f, read_size=read_size, use_list=1)
-    
-    
-MyNamedTuple = namedtuple('MyNamedTuple', 'x y')
-    
-            # exclude datetime
-        result = df.quantile(.5)
-        expected = Series([2.5], index=['b'])
-    
-        def setup(self):
-        self.fname = '__test__.msg'
-        N = 100000
-        C = 5
-        self.df = DataFrame(np.random.randn(N, C),
-                            columns=['float{}'.format(i) for i in range(C)],
-                            index=date_range('20000101', periods=N, freq='H'))
-        self.df['object'] = tm.makeStringIndex(N)
-        self.df.to_msgpack(self.fname)
-    
-        def __init__(self, lang_filter=None):
-        super(MultiByteCharSetProber, self).__init__(lang_filter=lang_filter)
-        self.distribution_analyzer = None
-        self.coding_sm = None
-        self._last_char = [0, 0]
-    
-        def get_confidence(self):
-        return self.distribution_analyzer.get_confidence()
-
-    
-    
-SJIS_ST = (
-    MachineState.ERROR,MachineState.START,MachineState.START,     3,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#00-07
-    MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#08-0f
-    MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START #10-17
-)
-    
-    
-class SJISProber(MultiByteCharSetProber):
-    def __init__(self):
-        super(SJISProber, self).__init__()
-        self.coding_sm = CodingStateMachine(SJIS_SM_MODEL)
-        self.distribution_analyzer = SJISDistributionAnalysis()
-        self.context_analyzer = SJISContextAnalysis()
-        self.reset()
-    
-    from .charsetprober import CharSetProber
-from .enums import ProbingState, MachineState
-from .codingstatemachine import CodingStateMachine
-from .mbcssm import UTF8_SM_MODEL
-    
-            if done:
-            self.save_complete()
-    
-    
-def shutdown(signal, frame):
-    raise ShutdownException()
-    
-    
-def human_readable_file_size(size):
-    suffixes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', ]
-    order = int(math.log(size, 2) / 10) if size else 0
-    if order >= len(suffixes):
-        order = len(suffixes) - 1
-    
-    
-class Crash(Exception):
-    pass
-    
-        def test_sort_service_dicts_5(self):
-        services = [
-            {
-                'links': ['parent'],
-                'name': 'grandparent'
-            },
-            {
-                'name': 'parent',
-                'network_mode': 'service:child'
-            },
-            {
-                'name': 'child'
-            }
-        ]
-    
-        def test_parse_volume_windows_just_drives_native(self):
-        windows_path = 'E:\\:C:\\:ro'
-        assert VolumeSpec._parse_win32(windows_path, False) == (
-            'E:\\',
-            'C:\\',
-            'ro'
+        def load(self, loader):
+        loader.add_option(
+            'stream_large_bodies', typing.Optional[str], None,
+            '''
+            Stream data to the client if response body exceeds the given
+            threshold. If streamed, the body will not be stored in any way.
+            Understands k/m/g suffixes, i.e. 3m for 3 megabytes.
+            '''
+        )
+        loader.add_option(
+            'stream_websockets', bool, False,
+            '''
+            Stream WebSocket messages between client and server.
+            Messages are captured and cannot be modified.
+            '''
         )
     
+        def finish(self):
+        super().finish()
+        self.timestamp_end = time.time()
     
-def test_parallel_execute_alignment(capsys):
-    ParallelStreamWriter.instance = None
-    results, errors = parallel_execute(
-        objects=['short', 'a very long name'],
-        func=lambda x: x,
-        get_name=six.text_type,
-        msg='Aligning',
-    )
+        class Rgb(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self.r = self._io.read_u1()
+            self.g = self._io.read_u1()
+            self.b = self._io.read_u1()
     
-        def test_chunked_line(self):
-        def reader():
-            yield b'a'
-            yield b'b'
-            yield b'c'
-            yield b'\n'
-            yield b'd'
+        def __del__(self):
+        if self.state != 'committed':
+            # This will be ignored by the interpreter, but emit a warning
+            raise exceptions.ControlException('Uncommitted reply: %s' % self.obj)
