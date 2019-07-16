@@ -1,99 +1,145 @@
 
         
-            # Sorting the libraries
-    inner_blocks = sorted(blocks[0].split('##'))
-    for i in range(1 , len(inner_blocks)):
-        if inner_blocks[i][0] != '#':
-            inner_blocks[i] = '##' + inner_blocks[i]
-    inner_blocks=''.join(inner_blocks)
-    
-        def __init__(self, unpacked, extra):
-        self.unpacked = unpacked
-        self.extra = extra
-    
-    
-def testSimpleValue():
-    check(b'\x93\xc0\xc2\xc3', (None, False, True, ))
+            def get(self):
+        if len(self.config.GAE_APPIDS):
+            if len(self.working_appid_list) == 0:
+                time_to_reset = 600 - (time.time() - self.last_reset_time)
+                if time_to_reset > 0:
+                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
+                    time.sleep(time_to_reset)
+                    return None
+                else:
+                    self.logger.warn('reset appid')
+                    self.reset_appid()
     
     
-@pytest.mark.parametrize('na_option', [True, 'bad', 1])
-@pytest.mark.parametrize('ties_method', [
-    'average', 'min', 'max', 'first', 'dense'])
-@pytest.mark.parametrize('ascending', [True, False])
-@pytest.mark.parametrize('pct', [True, False])
-@pytest.mark.parametrize('vals', [
-    ['bar', 'bar', 'foo', 'bar', 'baz'],
-    ['bar', np.nan, 'foo', np.nan, 'baz'],
-    [1, np.nan, 2, np.nan, 3]
-])
-def test_rank_naoption_raises(ties_method, ascending, na_option, pct, vals):
-    df = DataFrame({'key': ['foo'] * 5, 'val': vals})
-    msg = 'na_option must be one of 'keep', 'top', or 'bottom''
+def get_cmd_out(cmd):
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = proc.stdout
+    lines = out.readlines()
+    return lines
     
-    All the tests in these modules use ``self.assert_frame_equal`` or
-``self.assert_series_equal`` for dataframe or series comparisons. By default,
-they use the usual ``pandas.testing.assert_frame_equal`` and
-``pandas.testing.assert_series_equal``. You can override the checks used
-by defining the staticmethods ``assert_frame_equal`` and
-``assert_series_equal`` on your base test class.
+        def triger_check_network(self, fail=False, force=False):
+        time_now = time.time()
+        if not force:
+            if self._checking_num > 0:
+                return
     
-    
-class Formatter(object):
-    '''Format tabular data for printing.'''
-    def table(self, headers, rows):
-        table = texttable.Texttable(max_width=get_tty_width())
-        table.set_cols_dtype(['t' for h in headers])
-        table.add_rows([headers] + rows)
-        table.set_deco(table.HEADER)
-        table.set_chars(['-', '|', '+', '-'])
-    
-    import re
-    
-        def test_unicode_path_from_options(self):
-        paths = [b'\xe5\xb0\xb1\xe5\x90\x83\xe9\xa5\xad/docker-compose.yml']
-        opts = {'--file': paths}
-        environment = Environment.from_env_file('.')
-        assert get_config_path_from_options(
-            '.', opts, environment
-        ) == ['就吃饭/docker-compose.yml']
-    
-    from compose.cli import verbose_proxy
-from tests import unittest
+            # mmmhhh,... perhaps look at the first argument
+        # (f_locals[co_varnames[0]]?) and test if it's a (sub)class of
+        # requested recognizer...
+        
+        rules = []
+        for frame in reversed(inspect.stack()):
+            code = frame[0].f_code
+            codeMod = inspect.getmodule(code)
+            if codeMod is None:
+                continue
     
     
-def test_hour_minute():
-    assert timeparse.timeparse('2h32m') == 9120
-    
-        def test_remove_local_volume(self, mock_client):
-        vol = volume.Volume(mock_client, 'foo', 'project')
-        vol.remove()
-        mock_client.remove_volume.assert_called_once_with('foo_project')
-    
-        def configure(self, updated):
-        if 'stickycookie' in updated:
-            if ctx.options.stickycookie:
-                flt = flowfilter.parse(ctx.options.stickycookie)
-                if not flt:
-                    raise exceptions.OptionsError(
-                        'stickycookie: invalid filter expression: %s' % ctx.options.stickycookie
-                    )
-                self.flt = flt
-            else:
-                self.flt = None
-    
-        def __init__(self, address, source_address=None, spoof_source_address=None):
-        tcp.TCPClient.__init__(self, address, source_address, spoof_source_address)
-    
-    				strTag = self.codePages[self.currentCodePage].getTag(token)
-				if (strTag == None):
-					strTag = 'UNKNOWN_TAG_{0,2:X}'.format(token)
     
     
-def save_flows(path: pathlib.Path, flows: typing.Iterable[flow.Flow]) -> None:
-    with open(str(path / 'flows.json'), 'w') as f:
-        json.dump(
-            [flow_to_json(f) for f in flows],
-            f
-        )
+    def __str__(self):
+        if self.type == EOF:
+            return '<EOF>'
     
-                    line = next_line
+    
+def test_astype_categorical():
+    arr = period_array(['2000', '2001', '2001', None], freq='D')
+    result = arr.astype('category')
+    categories = pd.PeriodIndex(['2000', '2001'], freq='D')
+    expected = pd.Categorical.from_codes([0, 1, 1, -1], categories=categories)
+    tm.assert_categorical_equal(result, expected)
+    
+        def __init__(self, values, dtype=None, copy=False):
+        for val in values:
+            if not isinstance(val, self.dtype.type):
+                raise TypeError('All values must be of type ' + str(self.dtype.type))
+        self.data = values
+    
+            result = float_frame.cov(min_periods=len(float_frame) + 1)
+        assert isna(result.values).all()
+    
+        def test_oauth10_request_parameters(self):
+        response = self.fetch('/oauth10/client/request_params')
+        response.rethrow()
+        parsed = json_decode(response.body)
+        self.assertEqual(parsed['oauth_consumer_key'], 'asdf')
+        self.assertEqual(parsed['oauth_token'], 'uiop')
+        self.assertTrue('oauth_nonce' in parsed)
+        self.assertTrue('oauth_signature' in parsed)
+    
+    
+def main():
+    test = TestSelectionSort()
+    selection_sort = SelectionSort()
+    test.test_selection_sort(selection_sort.sort)
+    try:
+        test.test_selection_sort(selection_sort.sort_recursive)
+        test.test_selection_sort(selection_sort.sor_iterative_alt)
+    except NameError:
+        # Alternate solutions are only defined
+        # in the solutions file
+        pass
+    
+            print('Test: Enqueue on empty stack')
+        print('Test: Enqueue on non-empty stack')
+        print('Test: Multiple enqueue in a row')
+        num_items = 3
+        for i in range(0, num_items):
+            queue.enqueue(i)
+    
+    		def PreOrder (node):
+			if node is not None:
+				preOrder.append(node.data)
+				PreOrder(node.leftChild)
+				PreOrder(node.rightChild)
+    
+            print('Test: remove on a key that already exists')
+        hash_table.remove(10)
+        assert_equal(hash_table.get(0), 'foo')
+        assert_raises(KeyError, hash_table.get, 10)
+    
+            if 'start_period' in service_dict['healthcheck']:
+            service_dict['healthcheck']['start_period'] = serialize_ns_time_value(
+                service_dict['healthcheck']['start_period']
+            )
+    
+            return reduce(get_value, key.split('.'), self.dictionary)
+    
+    import codecs
+import hashlib
+import json.decoder
+import logging
+import ntpath
+import random
+    
+    
+def tls_config_from_options(options, environment=None):
+    environment = environment or Environment()
+    cert_path = environment.get('DOCKER_CERT_PATH') or None
+    
+            if config_path == self.config_file.filename:
+            try:
+                service_config = self.config_file.get_service(service_name)
+            except KeyError:
+                raise ConfigurationError(
+                    'Cannot extend service '{}' in {}: Service not found'.format(
+                        service_name, config_path)
+                )
+        else:
+            extends_file = ConfigFile.from_filename(config_path)
+            validate_config_version([self.config_file, extends_file])
+            extended_file = process_config_file(
+                extends_file, self.environment, service_name=service_name
+            )
+            service_config = extended_file.get_service(service_name)
+    
+        opts = parse_opts(args)
+    
+        def test_create_container_with_cpu_quota(self):
+        service = self.create_service('db', cpu_quota=40000, cpu_period=150000)
+        container = service.create_container()
+        container.start()
+        assert container.get('HostConfig.CpuQuota') == 40000
+        assert container.get('HostConfig.CpuPeriod') == 150000
