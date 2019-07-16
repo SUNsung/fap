@@ -1,330 +1,218 @@
 
         
-        #ifndef BITCOIN_QT_NETWORKSTYLE_H
-#define BITCOIN_QT_NETWORKSTYLE_H
+        
+    {  // Returns a string representation of the block dimensionality.
+  string ToString() const {
+    return absl::StrCat('BlockDim{', x, ', ', y, ', ', z, '}');
+  }
+};
     
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
+    // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
+// BUILD file.
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    #include <Python.h>
+    
+      // Close the underlying file and release its resources.
+  void Close();
+    
+    
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
+  }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
+    
+    #ifndef TENSORFLOW_STREAM_EXECUTOR_HOST_OR_DEVICE_SCALAR_H_
+#define TENSORFLOW_STREAM_EXECUTOR_HOST_OR_DEVICE_SCALAR_H_
+    
+    #include <ImfEnvmapAttribute.h>
+    
+    #include <ImfFloatAttribute.h>
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
+    
+        IMF_EXPORT
+    TileDescription &		tileDescription ();
+    IMF_EXPORT
+    const TileDescription &	tileDescription () const;
+    
+    	//
+	// The entries in scode are linked into lists with the
+	// entries in hlink serving as 'next' pointers and with
+	// the end of a list marked by hlink[j] == j.
+	//
+	// Traverse the lists that start at scode[m] and scode[mm].
+	// For each element visited, increment the length of the
+	// corresponding code by one bit. (If we visit scode[j]
+	// during the traversal, then the code for symbol j becomes
+	// one bit longer.)
+	//
+	// Merge the lists that start at scode[m] and scode[mm]
+	// into a single list that starts at scode[m].
+	//
+	
+	//
+	// Add a bit to all codes in the first list.
+	//
+    
+    
+template <>
+const char *
+IntAttribute::staticTypeName ()
+{
+    return 'int';
+}
+    
+    
+    {      // Between where %rsp is now and the saved RIP of the call into the
+      // freeLocalsHelpers stub, we have all the live regs we pushed, plus the
+      // saved RIP of the call from the stub to this helper.
+      v << syncpoint{makeIndirectFixup(prs.dwordsPushed())};
+    };
+    
+    
+    {    folly::format(&ret, '  {} := {}', show(Vreg{i}), show(def));
+    if (def.expr != PhysExpr{}) {
+      folly::format(&ret, ' ({} := {})', show(def.base), show(def.expr));
+    }
+    folly::format(&ret, '\n');
+  }
+    
+    OutputFile::~OutputFile() {
+  OutputFile::closeImpl();
+}
+    
+    namespace HPHP {
     }
     
-    %define	MOVDQ movdqu ;; assume buffers not aligned 
+    int64_t TempFile::tell() {
+  assertx(valid());
+  if (getLength() < 0) return -1;
+  return getPosition();
+}
     
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
     
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-extern std::string CurrentFileName(const std::string& dbname);
+    {  return m_innerFile->open(filename, mode) &&
+    (m_bzFile = BZ2_bzdopen(dup(m_innerFile->fd()), mode.data()));
+}
     
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
+      void moduleLoad(const IniSetting::Map& /*ini*/, Hdf /*config*/) override {
+    // Closure must be hoisted before anything which extends from it.
+    // So we place it in the global systemlib and bind its dependencies early.
+    loadClosure();
+  }
     
-    template <typename Dtype>
-inline void Layer<Dtype>::Backward(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down,
-    const vector<Blob<Dtype>*>& bottom) {
-  switch (Caffe::mode()) {
-  case Caffe::CPU:
-    Backward_cpu(top, propagate_down, bottom);
-    break;
-  case Caffe::GPU:
-    Backward_gpu(top, propagate_down, bottom);
-    break;
+    bool HHVM_FUNCTION(stream_context_set_params,
+                   const Resource& stream_or_context,
+                   const Array& params);
+    
+      Array vec1 = Array::CreateVec();
+  vec1.append('test');
+  EXPECT_TRUE(vec1.toBoolean() == true);
+  EXPECT_TRUE(vec1.toByte() == 1);
+  EXPECT_TRUE(vec1.toInt16() == 1);
+  EXPECT_TRUE(vec1.toInt32() == 1);
+  EXPECT_TRUE(vec1.toInt64() == 1);
+  EXPECT_TRUE(vec1.toDouble() == 1.0);
+  EXPECT_TRUE(vec1.toString() == s_Vec);
+    
+      EXPECT_EQ(intersection_of(tstruct,  mapn_str_int), tstruct);
+  EXPECT_EQ(intersection_of(tstruct2, mapn_str_int), tstruct2);
+  EXPECT_EQ(intersection_of(tstruct3, mapn_str_int), tstruct3);
+  EXPECT_EQ(intersection_of(tstruct4, mapn_str_int), TBottom);
+  EXPECT_EQ(intersection_of(tstruct, tstruct2),      tstruct);
+    
+    static bool isValidClassConstantName(int tokid) {
+  switch (tokid) {
+  case T_STRING:
+  case T_SUPER:
+  case T_XHP_ATTRIBUTE:
+  case T_XHP_CATEGORY:
+  case T_XHP_CHILDREN:
+  case T_XHP_REQUIRED:
+  case T_ENUM:
+  case T_CALLABLE:
+  case T_TRAIT:
+  case T_EXTENDS:
+  case T_IMPLEMENTS:
+  case T_STATIC:
+  case T_ABSTRACT:
+  case T_FINAL:
+  case T_PRIVATE:
+  case T_PROTECTED:
+  case T_PUBLIC:
+  case T_CONST:
+  case T_ENDDECLARE:
+  case T_ENDFOR:
+  case T_ENDFOREACH:
+  case T_ENDIF:
+  case T_ENDWHILE:
+  case T_LOGICAL_AND:
+  case T_GLOBAL:
+  case T_GOTO:
+  case T_INSTANCEOF:
+  case T_INSTEADOF:
+  case T_INTERFACE:
+  case T_NAMESPACE:
+  case T_NEW:
+  case T_LOGICAL_OR:
+  case T_LOGICAL_XOR:
+  case T_TRY:
+  case T_USE:
+  case T_VAR:
+  case T_EXIT:
+  case T_LIST:
+  case T_CLONE:
+  case T_INCLUDE:
+  case T_INCLUDE_ONCE:
+  case T_THROW:
+  case T_ARRAY:
+  case T_PRINT:
+  case T_ECHO:
+  case T_REQUIRE:
+  case T_REQUIRE_ONCE:
+  case T_RETURN:
+  case T_ELSE:
+  case T_ELSEIF:
+  case T_DEFAULT:
+  case T_BREAK:
+  case T_CONTINUE:
+  case T_SWITCH:
+  case T_YIELD:
+  case T_FUNCTION:
+  case T_IF:
+  case T_ENDSWITCH:
+  case T_FINALLY:
+  case T_FOR:
+  case T_FOREACH:
+  case T_DECLARE:
+  case T_CASE:
+  case T_DO:
+  case T_WHILE:
+  case T_AS:
+  case T_CATCH:
+  case T_DICT:
+  case T_VEC:
+  case T_KEYSET:
+  case T_VARRAY:
+  case T_DARRAY:
+  case T_INOUT:
+    return true;
   default:
-    LOG(FATAL) << 'Unknown caffe mode.';
-  }
-}
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual inline const char* type() const { return 'ArgMax'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #if GTEST_OS_SYMBIAN
-  // Streams a value (either a pointer or not) to this object.
-  template <typename T>
-  inline Message& operator <<(const T& value) {
-    StreamHelper(typename internal::is_pointer<T>::type(), value);
-    return *this;
-  }
-#else
-  // Streams a non-pointer value to this object.
-  template <typename T>
-  inline Message& operator <<(const T& val) {
-    // Some libraries overload << for STL containers.  These
-    // overloads are defined in the global namespace instead of ::std.
-    //
-    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-    // overloads are visible in either the std namespace or the global
-    // namespace, but not other namespaces, including the testing
-    // namespace which Google Test's Message class is in.
-    //
-    // To allow STL containers (and other types that has a << operator
-    // defined in the global namespace) to be used in Google Test
-    // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
-    // overloads of << defined in the global namespace and those
-    // visible via Koenig lookup are both exposed in this function.
-    using ::operator <<;
-    *ss_ << val;
-    return *this;
-  }
-    
-    // Functions producing parameter generators.
-//
-// Google Test uses these generators to produce parameters for value-
-// parameterized tests. When a parameterized test case is instantiated
-// with a particular generator, Google Test creates and runs tests
-// for each element in the sequence produced by the generator.
-//
-// In the following sample, tests from test case FooTest are instantiated
-// each three times with parameter values 3, 5, and 8:
-//
-// class FooTest : public TestWithParam<int> { ... };
-//
-// TEST_P(FooTest, TestThis) {
-// }
-// TEST_P(FooTest, TestThat) {
-// }
-// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
-//
-    
-    // UniversalPrintArray(begin, len, os) prints an array of 'len'
-// elements, starting at address 'begin'.
-template <typename T>
-void UniversalPrintArray(const T* begin, size_t len, ::std::ostream* os) {
-  if (len == 0) {
-    *os << '{}';
-  } else {
-    *os << '{ ';
-    const size_t kThreshold = 18;
-    const size_t kChunkSize = 8;
-    // If the array has more than kThreshold elements, we'll have to
-    // omit some details by printing only the first and the last
-    // kChunkSize elements.
-    // TODO(wan@google.com): let the user control the threshold using a flag.
-    if (len <= kThreshold) {
-      PrintRawArrayTo(begin, len, os);
-    } else {
-      PrintRawArrayTo(begin, kChunkSize, os);
-      *os << ', ..., ';
-      PrintRawArrayTo(begin + len - kChunkSize, kChunkSize, os);
-    }
-    *os << ' }';
-  }
-}
-// This overload prints a (const) char array compactly.
-GTEST_API_ void UniversalPrintArray(
-    const char* begin, size_t len, ::std::ostream* os);
-    
-      // Sets the elapsed time.
-  void set_elapsed_time(TimeInMillis elapsed) { elapsed_time_ = elapsed; }
-    
-    #include <grpcpp/security/auth_context.h>
-    
-    #include <grpc/support/cpu.h>
-    
-    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-
-    
-    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    void TimepointHR2Timespec(const high_resolution_clock::time_point& from,
-                          gpr_timespec* to) {
-  high_resolution_clock::duration deadline = from.time_since_epoch();
-  seconds secs = duration_cast<seconds>(deadline);
-  if (from == high_resolution_clock::time_point::max() ||
-      secs.count() >= gpr_inf_future(GPR_CLOCK_REALTIME).tv_sec ||
-      secs.count() < 0) {
-    *to = gpr_inf_future(GPR_CLOCK_REALTIME);
-    return;
-  }
-  nanoseconds nsecs = duration_cast<nanoseconds>(deadline - secs);
-  to->tv_sec = static_cast<int64_t>(secs.count());
-  to->tv_nsec = static_cast<int32_t>(nsecs.count());
-  to->clock_type = GPR_CLOCK_REALTIME;
-}
-    
-      NSDictionary *flagNames = @{
-#define GRPC_XMACRO_ITEM(methodName, FlagName) \
-    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
-#include 'GRXReachabilityFlagNames.xmacro.h'
-#undef GRPC_XMACRO_ITEM
-  };
-    
-    //--------------------------------------------------------------------------------
-//
-//  inputText()
-//
-//--------------------------------------------------------------------------------
-UText *RegexMatcher::inputText() const {
-    return fInputText;
-}
-    
-    void
-RuleBasedCollator::setFastLatinOptions(CollationSettings &ownedSettings) const {
-    ownedSettings.fastLatinOptions = CollationFastLatin::getOptions(
-            data, ownedSettings,
-            ownedSettings.fastLatinPrimaries, UPRV_LENGTHOF(ownedSettings.fastLatinPrimaries));
-}
-    
-    //-------------------------------------------------------------------------------
-//
-//  ScriptSet - A bit set representing a set of scripts.
-//
-//              This class was originally used exclusively with script sets appearing
-//              as part of the spoof check whole script confusable binary data. Its
-//              use has since become more general, but the continued use to wrap
-//              prebuilt binary data does constrain the design.
-//
-//-------------------------------------------------------------------------------
-class U_I18N_API ScriptSet: public UMemory {
-  public:
-    ScriptSet();
-    ScriptSet(const ScriptSet &other);
-    ~ScriptSet();
-    }
-    
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
-public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
-};
-    
-    
-    {    handler.addAttribute(fgPatternIndexToDateFormatField[patternCharIndex], beginOffset, appendTo.length());
-}
-    
-        // Freeze all the sets
-    fDateIgnorables->freeze();
-    fTimeIgnorables->freeze();
-    fOtherIgnorables->freeze();
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    FOLLY_SDT_DEFINE_SEMAPHORE(folly, test_semaphore_local)
-    
-    [[noreturn]] void exception_wrapper::onNoExceptionError(
-    char const* const name) {
-  std::ios_base::Init ioinit_; // ensure std::cerr is alive
-  std::cerr << 'Cannot use `' << name
-            << '` with an empty folly::exception_wrapper' << std::endl;
-  std::terminate();
-}
-    
-    #include <boost/regex/pending/unicode_iterator.hpp>
-    
-    TEST_F(SparseByteSetTest, each) {
-  for (auto c = lims::min(); c < lims::max(); ++c) {
-    EXPECT_TRUE(s.add(c));
-    EXPECT_TRUE(s.contains(c));
-  }
-  for (auto c = lims::min(); c < lims::max(); ++c) {
-    EXPECT_FALSE(s.add(c));
-    EXPECT_TRUE(s.contains(c));
-  }
-}
-    
-    
-    {
-    { private:
-  AtForkList() {
-#if FOLLY_HAVE_PTHREAD_ATFORK
-    int ret = pthread_atfork(
-        &AtForkList::prepare, &AtForkList::parent, &AtForkList::child);
-    if (ret != 0) {
-      throw_exception<std::system_error>(
-          ret, std::generic_category(), 'pthread_atfork failed');
-    }
-#elif !__ANDROID__ && !defined(_MSC_VER)
-// pthread_atfork is not part of the Android NDK at least as of n9d. If
-// something is trying to call native fork() directly at all with Android's
-// process management model, this is probably the least of the problems.
-//
-// But otherwise, this is a problem.
-#warning pthread_atfork unavailable
-#endif
-  }
-};
-} // namespace
-    
-    inline std::string familyNameStr(sa_family_t family) {
-  switch (family) {
-    case AF_INET:
-      return 'AF_INET';
-    case AF_INET6:
-      return 'AF_INET6';
-    case AF_UNSPEC:
-      return 'AF_UNSPEC';
-    case AF_UNIX:
-      return 'AF_UNIX';
-    default:
-      return familyNameStrDefault(family);
+    return false;
   }
 }
