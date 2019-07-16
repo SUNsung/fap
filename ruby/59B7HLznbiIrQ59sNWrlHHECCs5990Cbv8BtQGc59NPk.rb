@@ -1,72 +1,126 @@
 
         
-              def milestones(*args)
-        each_object(:milestones, *args)
+            def test_migrations_can_handle_foreign_keys_to_specific_tables
+      migration = RevertCustomForeignKeyTable.new
+      InvertibleMigration.migrate(:up)
+      migration.migrate(:up)
+      migration.migrate(:down)
+    end
+    
+      def test_indexes_in_create
+    assert_called_with(
+      ActiveRecord::Base.connection,
+      :data_source_exists?,
+      [:temp],
+      returns: false
+    ) do
+      expected = /\ACREATE TEMPORARY TABLE `temp` \( INDEX `index_temp_on_zip`  \(`zip`\)\)(?: ROW_FORMAT=DYNAMIC)? AS SELECT id, name, zip FROM a_really_complicated_query/
+      actual = ActiveRecord::Base.connection.create_table(:temp, temporary: true, as: 'SELECT id, name, zip FROM a_really_complicated_query') do |t|
+        t.index :zip
       end
     
-            val.to_i if val.present?
+    module ApplicationTests
+  module RakeTests
+    class RakeRoutesTest < ActiveSupport::TestCase
+      include ActiveSupport::Testing::Isolation
+    
+    module Docs
+  class EntryIndex
+    attr_reader :entries, :types
+    
+          def process_url?(url)
+        base_urls.any? { |base_url| base_url.contains?(url) }
       end
     
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
+          INDEX = Set.new
+    
+            # Remove root-level <div>
+        while div = at_css('h1 + div')
+          div.before(div.children)
+          div.remove
+        end
+    
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+          protected
+    
+            context 'if the currency is different than the order's currency' do
+          let(:currency) { 'GBP' }
+    
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def new
+          @payment_methods = Spree::PaymentMethod.available
+          respond_with(@payment_methods)
+        end
+    
+            def return_authorization_params
+          params.require(:return_authorization).permit(permitted_return_authorization_attributes)
+        end
       end
     end
   end
 end
 
     
-          class << self
-        attr_reader :processed_source, :comments_as_separators
-    
-                respond_with(@order, default_template: :show, status: 201)
-          else
-            @order = Spree::Order.create!(user: current_api_user, store: current_store)
-            if Cart::Update.call(order: @order, params: order_params).success?
-              respond_with(@order, default_template: :show, status: 201)
-            else
-              invalid_resource!(@order)
+              error =
+            if @quantity < 0 && @target_shipment == @original_shipment
+              '#{Spree.t(:negative_quantity, scope: 'api')}, \n#{Spree.t('wrong_shipment_target', scope: 'api')}'
+            elsif @target_shipment == @original_shipment
+              Spree.t(:wrong_shipment_target, scope: 'api')
+            elsif @quantity < 0
+              Spree.t(:negative_quantity, scope: 'api')
             end
-          end
-        end
     
-          @@stock_item_attributes = [
-        :id, :count_on_hand, :backorderable, :lock_version, :stock_location_id,
-        :variant_id
-      ]
+        obj = Helpers.new('HTTP_ACCEPT_LANGUAGE' => 'pt-PT,pt;q=0.8,en-US;q=0.6,en;q=0.4')
+    assert_equal 'pt', obj.locale
     
-        # Change directory to the source path, and glob files
-    # This is done so that we end up with a 'flat' archive, that doesn't
-    # have any path artifacts from the packager's absolute path.
-    ::Dir::chdir(path) do
-      entries = ::Dir::glob('**', File::FNM_DOTMATCH)
-    
-        self.description = info['description']
-    # Supposedly you can upload a package for npm with no author/author email
-    # so I'm being safer with this. Author can also be a hash or a string
-    self.vendor = 'Unknown <unknown@unknown.unknown>'
-    if info.include?('author')
-      author_info = info['author']
-      # If a hash, assemble into a string
-      if author_info.respond_to? :fetch
-        self.vendor = sprintf('%s <%s>', author_info.fetch('name', 'unknown'),
-                              author_info.fetch('email', 'unknown@unknown.unknown'))
-      else
-        # Probably will need a better check for validity here
-        self.vendor = author_info unless author_info == ''
-      end
+          assert_equal set.sort_by { |job| -job.score }, set
     end
     
-        self.conflicts = control['conflict'] || self.conflicts
-    
-      def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -p}.chomp
+    describe 'Sidekiq::Testing' do
+  describe 'require/load sidekiq/testing.rb' do
+    before do
+      require 'sidekiq/testing'
     end
-    # 'all' is a valid arch according to
-    # http://www.bolthole.com/solaris/makeapackage.html
     
-          @io.write header
+        it 'finds jobs enqueued by client' do
+      Sidekiq::Client.push(
+        'class' => 'NonExistentWorker',
+        'queue' => 'missing',
+        'args' => [1]
+      )
+    
+      # The CategoryIndex class creates a single category page for the specified category.
+  class CategoryIndex < Page
+    
+      class GistTagNoCache < GistTag
+    def initialize(tag_name, text, token)
+      super
+      @cache_disabled = true
+    end
+  end
+end
+    
+      # Returns a title cased string based on John Gruber's title case http://daringfireball.net/2008/08/title_case_update
+  def titlecase(input)
+    input.titlecase
+  end
