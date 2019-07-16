@@ -1,300 +1,398 @@
 
         
-            enum BORDER_MODE
-    {
-        BORDER_MODE_UNDEFINED,
-        BORDER_MODE_CONSTANT,
-        BORDER_MODE_REPLICATE,
-        BORDER_MODE_REFLECT,
-        BORDER_MODE_REFLECT101,
-        BORDER_MODE_WRAP
+        static UIdent KindImportModuleClang('source.lang.swift.import.module.clang');
+static UIdent KindImportModuleSwift('source.lang.swift.import.module.swift');
+    
+      /// Retrieve the declaration of Foundation.NSError.
+  ClassDecl *getNSErrorDecl() const;
+  /// Retrieve the declaration of Foundation.NSNumber.
+  ClassDecl *getNSNumberDecl() const;
+  /// Retrieve the declaration of Foundation.NSValue.
+  ClassDecl *getNSValueDecl() const;
+    
+    
+    {  char *OrigFn = *OrigFnPtr;
+  auto origKey =
+      (uintptr_t)SWIFT_THREAD_GETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY);
+  auto newKey = origKey | 0x1;
+  SWIFT_THREAD_SETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY, (void *)newKey);
+  return OrigFn;
+}
+    
+    enum : unsigned {
+  /// Number of words reserved in generic metadata patterns.
+  NumGenericMetadataPrivateDataWords = 16,
+};
+    
+    
+    {#undef case_setIfNonEmpty
+#undef check
+    }
+    
+    class CustomAttr;
+class NominalTypeDecl;
+struct PropertyWrapperBackingPropertyInfo;
+struct PropertyWrapperTypeInfo;
+class Type;
+class VarDecl;
+class TypeAliasDecl;
+class Type;
+    
+    
+    {    for (auto const s : succs(code.back())) {
+      FTRACE(4, '  -> {}\n', s);
+      auto& succ_state = env.block_states[s];
+      if (merge_into(succ_state, state)) workQ.push(env.block_to_rpo[s]);
+    }
+  } while (!workQ.empty());
+    
+      void emitNop(int n) {
+    if (n == 0) return;
+    static const uint8_t nops[][9] = {
+      { },
+      { 0x90 },
+      { 0x66, 0x90 },
+      { 0x0f, 0x1f, 0x00 },
+      { 0x0f, 0x1f, 0x40, 0x00 },
+      { 0x0f, 0x1f, 0x44, 0x00, 0x00 },
+      { 0x66, 0x0f, 0x1f, 0x44, 0x00, 0x00 },
+      { 0x0f, 0x1f, 0x80, 0x00, 0x00, 0x00, 0x00 },
+      { 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 },
+      { 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 },
     };
-    
-    
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
+    // While n >= 9, emit 9 byte NOPs
+    while (n >= 9) {
+      bytes(9, nops[9]);
+      n -= 9;
     }
-};
-    
-    template <>
-inline void NormCanny<true>(const ptrdiff_t colscn, s16* _dx, s16* _dy, s32* _norm)
-{
-    ptrdiff_t j = 0;
-    if (colscn >= 8)
-    {
-        int16x8_t vx = vld1q_s16(_dx);
-        int16x8_t vy = vld1q_s16(_dy);
-    }
-    }
-    
-    #define FILL_LINES2(macro,type) \
-            macro##_LINE(type,0) \
-            macro##_LINE(type,1)
-#define FILL_LINES3(macro,type) \
-            FILL_LINES2(macro,type) \
-            macro##_LINE(type,2)
-#define FILL_LINES4(macro,type) \
-            FILL_LINES3(macro,type) \
-            macro##_LINE(type,3)
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVT_FUNC(s16, u16, 8,
-     register int16x8_t vZero asm ('q4') = vmovq_n_s16(0);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
-             'vmax.s16 q1, q0, q4                                    \n\t'
-             'vst1.16 {d2-d3}, [%[dst]]                              \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst] 'r' (_dst + i + 0),
-               'w' (vZero)
-             : 'd0','d1','d2','d3'
-         );
-     }
-})
-#else
-CVT_FUNC(s16, u16, 8,
-     int16x4_t vZero = vmov_n_s16(0);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         int16x8_t vline_s16 = vld1q_s16(_src + i);
-    }
-    }
-    
-            for ( ; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint16x8_t v_src0 = vld1q_u16(src + j), v_src1 = vld1q_u16(src + j + 8);
-    }
-    
-    namespace CAROTENE_NS {
-    }
-    
-      // These two overloads allow streaming a wide C string to a Message
-  // using the UTF-8 encoding.
-  Message& operator <<(const wchar_t* wide_c_str);
-  Message& operator <<(wchar_t* wide_c_str);
-    
-    #if GTEST_HAS_STD_WSTRING
-GTEST_API_ void PrintWideStringTo(const ::std::wstring&s, ::std::ostream* os);
-inline void PrintTo(const ::std::wstring& s, ::std::ostream* os) {
-  PrintWideStringTo(s, os);
-}
-#endif  // GTEST_HAS_STD_WSTRING
-    
-      // Returns true iff the test part fatally failed.
-  bool fatally_failed() const { return type_ == kFatalFailure; }
-    
-      // Given directory = 'dir', relative_path = 'test.xml',
-  // returns 'dir/test.xml'.
-  // On Windows, uses \ as the separator rather than /.
-  static FilePath ConcatPaths(const FilePath& directory,
-                              const FilePath& relative_path);
-    
-    // Helper macro for defining tests.
-#define GTEST_TEST_(test_case_name, test_name, parent_class, parent_id)\
-class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
- public:\
-  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {}\
- private:\
-  virtual void TestBody();\
-  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
-};\
-\
-::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
-  ::test_info_ =\
-    ::testing::internal::MakeAndRegisterTestInfo(\
-        #test_case_name, #test_name, NULL, NULL, \
-        (parent_id), \
-        parent_class::SetUpTestCase, \
-        parent_class::TearDownTestCase, \
-        new ::testing::internal::TestFactoryImpl<\
-            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
-void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_
-
-    
-    ]]
-    
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the squre root of n
-    if (i > n/i) break;
-    }
-    
-    TEST(ListenersTest, DoesNotLeak) {
-  Water* water = new Water;
-  delete water;
-}
-    
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
-}
-    
-    
-    {  E element_;
-  QueueNode* next_;
-};
-    
-    AuthPropertyIterator::AuthPropertyIterator(
-    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
-    : property_(property),
-      ctx_(iter->ctx),
-      index_(iter->index),
-      name_(iter->name) {}
-    
-    #include 'src/cpp/ext/filters/census/context.h'
-    
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
+    bytes(n, nops[n]);
   }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
-}
     
-    // TODO: This may not be needed. Check to see if opencensus requires
-// a trailing server response.
-// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
-// rpc server stats messages. Rpc server stats consists of a uint64_t time
-// value (server latency in nanoseconds).
-class RpcServerStatsEncoding {
- public:
-  // Size of encoded RPC server stats.
-  static constexpr size_t kRpcServerStatsSize = 10;
-  // Error value.
-  static constexpr size_t kEncodeDecodeFailure = 0;
+          for (;;) {
+        switch (inc_len) {
+        case 0:
+          goto quit_loop_4;
+        case 1:
+          if (*bptr == delimiter_char) {
+            goto quit_loop_4;
+          }
+          break;
+        default:
+          break;
+        }
+        bptr += inc_len;
+        inc_len = (bptr < limit ? 1 : 0);
+      }
+    
+    req::ptr<File> PhpStreamWrapper::openFD(const char *sFD) {
+  if (is_cli_mode()) {
+    raise_warning('Direct access to file descriptors is not '
+                  'available via remote unix server execution');
+    return nullptr;
+  }
+  if (RuntimeOption::ServerExecutionMode()) {
+    raise_warning('Direct access to file descriptors '
+                  'is only available from command-line');
+    return nullptr;
+  }
     }
     
-      // Add the full names of registered services
-  void SetServiceList(const std::vector<grpc::string>* services);
-    
-    uint64_t PerBalancerStore::GetNumCallsInProgressForReport() {
-  GPR_ASSERT(!suspended_);
-  last_reported_num_calls_in_progress_ = num_calls_in_progress_;
-  return num_calls_in_progress_;
+    bool BZ2File::closeImpl() {
+  if (!isClosed()) {
+    if (m_bzFile) {
+      BZ2_bzclose(m_bzFile);
+      m_bzFile = nullptr;
+    }
+    setIsClosed(true);
+    if (m_innerFile) {
+      m_innerFile->close();
+    }
+  }
+  File::closeImpl();
+  return true;
 }
     
-    #endif  // GRPC_INTERNAL_CPP_UTIL_CORE_STATS_H
-
+      void requestInit() override {
+    requestInitMath();
+    requestInitOptions();
+  }
+ private:
+  void loadClosure();
     
-    namespace grpc {
+    bool ZipFile::open(const String& filename, const String& mode) {
+  assertx(m_gzFile == nullptr);
     }
     
-    INarratorAnnouncementHost^ NarratorAnnouncementHostFactory::GetHostProducer()
-{
-    for (INarratorAnnouncementHost^ host : NarratorAnnouncementHostFactory::s_hosts)
+    #include <memory>
+    
+    TEST(Type, ArrOfArr) {
+  auto const t1 = arr_mapn(TSStr, arr_mapn(TInt, TSStr));
+  auto const t2 = arr_mapn(TSStr, TArr);
+  auto const t3 = arr_mapn(TSStr, arr_packedn(TSStr));
+  auto const t4 = arr_mapn(TSStr, arr_mapn(TSStr, TSStr));
+  EXPECT_TRUE(t1.subtypeOf(t2));
+  EXPECT_TRUE(t1.couldBe(t3));
+  EXPECT_FALSE(t1.subtypeOf(t3));
+  EXPECT_TRUE(t3.subtypeOf(t1));
+  EXPECT_TRUE(t3.subtypeOf(t2));
+  EXPECT_FALSE(t1.couldBe(t4));
+  EXPECT_FALSE(t4.couldBe(t3));
+  EXPECT_TRUE(t4.subtypeOf(t2));
+}
+    
+    
     {
-        if (host->IsHostAvailable())
-        {
-            return host;
+    {
+    {
+    {
+    {
+    {
+    {              std::string codepoint(start, closebrace - start);
+              char *end = nullptr;
+              int32_t uchar = strtol(codepoint.c_str(), &end, 16);
+              if ((end && *end) || (uchar > 0x10FFFF)) {
+                throw fatal(
+                  'Invalid UTF-8 codepoint escape sequence: '
+                  'Codepoint too large');
+              }
+              if (uchar <= 0x0007F) {
+                output += (char)uchar;
+              } else if (uchar <= 0x007FF) {
+                output += (char)(0xC0 | ( uchar >> 6         ));
+                output += (char)(0x80 | ( uchar        & 0x3F));
+              } else if (uchar <= 0x00FFFF) {
+                output += (char)(0xE0 | ( uchar >> 12        ));
+                output += (char)(0x80 | ((uchar >>  6) & 0x3F));
+                output += (char)(0x80 | ( uchar        & 0x3F));
+              } else if (uchar <= 0x10FFFF) {
+                output += (char)(0xF0 | ( uchar >> 18        ));
+                output += (char)(0x80 | ((uchar >> 12) & 0x3F));
+                output += (char)(0x80 | ((uchar >>  6) & 0x3F));
+                output += (char)(0x80 | ( uchar        & 0x3F));
+              } else {
+                not_reached();
+                assert(false);
+              }
+              i += codepoint.size() + 2 /* strlen('{}') */;
+              break;
+            }
+            default: {
+              // check for an octal
+              if ('0' <= str[i] && str[i] <= '7') {
+                std::string soct;
+                soct += str[i]; // 0th octal digit
+                if ('0' <= str[i+1] && str[i+1] <= '7') {
+                  soct += str[++i];   // 1st octal digit
+                  if ('0' <= str[i+1] && str[i+1] <= '7') {
+                    soct += str[++i]; // 2nd octal digit
+                  }
+                }
+                output += strtol(soct.c_str(), nullptr, 8);
+              } else {
+                output += ch;
+                output += str[i];
+              }
+              break;
+            }
+          }
+        } else {
+          output += ch;
         }
+      } else {
+        output += ch;
+      }
     }
-    }
-    
-            return std::make_shared<CBinaryCommand>(DeserializeBinary());
-        break;
-    
-            static void UpdateFontFamilyAndSize(Windows::UI::Xaml::DependencyObject^ target);
-    
-        UBool      test(UScriptCode script, UErrorCode &status) const;
-    ScriptSet &Union(const ScriptSet &other);
-    ScriptSet &set(UScriptCode script, UErrorCode &status);
-    ScriptSet &reset(UScriptCode script, UErrorCode &status);
-    ScriptSet &intersect(const ScriptSet &other);
-    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
-    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
-    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
-    
-    
-    {    msgPattern.parseSelectStyle(newPattern, NULL, status);
-    if (U_FAILURE(status)) {
-        msgPattern.clear();
-    }
+  }
+  return output;
 }
     
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
+    
+    
+    {
+    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
+                                                   : PREF_DHT_ENTRY_POINT_HOST6;
+    if (!e->getOption()->get(prefEntryPointHost).empty()) {
+      {
+        PrefPtr prefEntryPointPort = family == AF_INET
+                                         ? PREF_DHT_ENTRY_POINT_PORT
+                                         : PREF_DHT_ENTRY_POINT_PORT6;
+        std::pair<std::string, uint16_t> addr(
+            e->getOption()->get(prefEntryPointHost),
+            e->getOption()->getAsInt(prefEntryPointPort));
+        std::vector<std::pair<std::string, uint16_t>> entryPoints;
+        entryPoints.push_back(addr);
+        auto command = make_unique<DHTEntryPointNameResolveCommand>(
+            e->newCUID(), e, family, entryPoints);
+        command->setBootstrapEnabled(true);
+        command->setTaskQueue(taskQueue.get());
+        command->setTaskFactory(taskFactory.get());
+        command->setRoutingTable(routingTable.get());
+        command->setLocalNode(localNode);
+        tempCommands.push_back(std::move(command));
+      }
+    }
+    else {
+      A2_LOG_INFO('No DHT entry point specified.');
+    }
+    {
+      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
+      command->setMessageDispatcher(dispatcher.get());
+      command->setMessageReceiver(receiver.get());
+      command->setTaskQueue(taskQueue.get());
+      command->setReadCheckSocket(connection->getSocket());
+      command->setConnection(std::move(connection));
+      command->setUDPTrackerClient(udpTrackerClient);
+      tempRoutineCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTTokenUpdateCommand>(
+          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
+      command->setTokenTracker(tokenTracker.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTBucketRefreshCommand>(
+          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
+      command->setTaskQueue(taskQueue.get());
+      command->setRoutingTable(routingTable.get());
+      command->setTaskFactory(taskFactory.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTPeerAnnounceCommand>(
+          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
+      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command =
+          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
+      command->setLocalNode(localNode);
+      command->setRoutingTable(routingTable.get());
+      tempCommands.push_back(std::move(command));
+    }
+    // add deserialized nodes to routing table
+    auto& desnodes = deserializer.getNodes();
+    for (auto& node : desnodes) {
+      routingTable->addNode(node);
+    }
+    if (!desnodes.empty()) {
+      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
+          taskFactory->createBucketRefreshTask());
+      task->setForceRefresh(true);
+      taskQueue->addPeriodicTask1(task);
+    }
+    // assign them into DHTRegistry
+    if (family == AF_INET) {
+      DHTRegistry::getMutableData().localNode = localNode;
+      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData().messageFactory = std::move(factory);
+      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
+      DHTRegistry::setInitialized(true);
+    }
+    else {
+      DHTRegistry::getMutableData6().localNode = localNode;
+      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData6().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
+      DHTRegistry::setInitialized6(true);
+    }
+    if (e->getBtRegistry()->getUdpPort() == 0) {
+      // We assign port last so that no exception gets in the way
+      e->getBtRegistry()->setUdpPort(port);
+    }
+  }
+  catch (RecoverableException& ex) {
+    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
+                        ' DHT is disabled.'),
+                    ex);
+    tempCommands.clear();
+    tempRoutineCommands.clear();
+    if (family == AF_INET) {
+      DHTRegistry::clearData();
+      e->getBtRegistry()->setUDPTrackerClient(
+          std::shared_ptr<UDPTrackerClient>{});
+    }
+    else {
+      DHTRegistry::clearData6();
+    }
+  }
+  return std::make_pair(std::move(tempCommands),
+                        std::move(tempRoutineCommands));
 }
     
-    #endif
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+    DHTTaskFactoryImpl::~DHTTaskFactoryImpl() = default;
+    
+    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
+{
+  periodicTaskQueue2_.addTask(task);
+}
+    
+      ~DHTTokenTracker();
+    
+      // show some sample bytes
+  virtual std::string toString() const CXX11_OVERRIDE;
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
 
     
-        if (fSharedNumberFormatters != NULL) {
-        freeSharedNumberFormatters(fSharedNumberFormatters);
-        fSharedNumberFormatters = NULL;
-    }
-    if (other.fSharedNumberFormatters != NULL) {
-        fSharedNumberFormatters = allocSharedNumberFormatters();
-        if (fSharedNumberFormatters) {
-            for (int32_t i = 0; i < UDAT_FIELD_COUNT; ++i) {
-                SharedObject::copyPtr(
-                        other.fSharedNumberFormatters[i],
-                        fSharedNumberFormatters[i]);
-            }
-        }
-    }
+        // create a JSON number from number_unsigned_t
+    json::number_integer_t value_unsigned_t = 17;
+    json j_unsigned_t(value_unsigned_t);
     
-    SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
-: fDateIgnorables(NULL),
-  fTimeIgnorables(NULL),
-  fOtherIgnorables(NULL)
+        const auto FACE_NUMBER_PARTS = 70u;
+    #define FACE_PAIRS_RENDER_GPU \
+        0,1,  1,2,  2,3,  3,4,  4,5,  5,6,  6,7,  7,8,  8,9,  9,10,  10,11,  11,12,  12,13,  13,14,  14,15,  15,16,  17,18,  18,19,  19,20, \
+        20,21,  22,23,  23,24,  24,25,  25,26,  27,28,  28,29,  29,30,  31,32,  32,33,  33,34,  34,35,  36,37,  37,38,  38,39,  39,40,  40,41, \
+        41,36,  42,43,  43,44,  44,45,  45,46,  46,47,  47,42,  48,49,  49,50,  50,51,  51,52,  52,53,  53,54,  54,55,  55,56,  56,57,  57,58, \
+        58,59,  59,48,  60,61,  61,62,  62,63,  63,64,  64,65,  65,66,  66,67,  67,60
+    #define FACE_SCALES_RENDER_GPU 1
+    const std::vector<unsigned int> FACE_PAIRS_RENDER {FACE_PAIRS_RENDER_GPU};
+    #define FACE_COLORS_RENDER_GPU 255.f,    255.f,    255.f
+    const std::vector<float> FACE_COLORS_RENDER{FACE_COLORS_RENDER_GPU};
+    const std::vector<float> FACE_SCALES_RENDER{FACE_SCALES_RENDER_GPU};
+    
+    inline cl_int enqueueWriteBuffer(
+        const Buffer& buffer,
+        cl_bool blocking,
+        size_type offset,
+        size_type size,
+        const void* ptr,
+        const vector<Event>* events = NULL,
+        Event* event = NULL)
 {
-    fDateIgnorables  = new UnicodeSet(UNICODE_STRING('[-,./[:whitespace:]]', 20), status);
-    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING('[-.:[:whitespace:]]', 19),  status);
-    fOtherIgnorables = new UnicodeSet(UNICODE_STRING('[:whitespace:]', 14),       status);
+    cl_int error;
+    CommandQueue queue = CommandQueue::getDefault(&error);
     }
-    
-    
-class SimpleDateFormatStaticSets : public UMemory
-{
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-        /**
-     * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
-     * and return the pointer.
-     * @return the UnicodeReplacer pointer.
-     */
-    virtual UnicodeReplacer* toReplacer() const;
