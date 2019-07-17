@@ -1,173 +1,170 @@
 
         
-        class Tag
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
+          respond_to :json
     
-        it 'creates an agent with a source and a receiver' do
-      visit '/'
-      page.find('a', text: 'Agents').trigger(:mouseover)
-      click_on('New Agent')
+    RSpec.describe Api::V1::PollsController, type: :controller do
+  render_views
     
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
-    
-        it 'returns a FontAwesome icon element' do
-      icon = icon_tag('fa-copy')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('i.fa.fa-copy')).to be_a Nokogiri::XML::Element
+        if target_account.blocking?(@account) || target_account.domain_blocking?(@account.domain) || target_account.moved?
+      reject_follow_request!(target_account)
+      return
     end
     
-        it 'should generate the correct events url' do
-      expect(@checker.send(:events_url)).to eq('https://basecamp.com/12345/api/v1/projects/6789/events.json')
+      def some_local_account
+    @some_local_account ||= Account.representative
+  end
+end
+
+    
+        if @poll.account.local?
+      distribute_poll!
+    else
+      deliver_votes!
+      queue_final_poll_check!
     end
-    
-      #
-  # Adds Server headers and stuff.
-  #
-  def add_response_headers(resp)
-    resp['Server'] = self.server_name if not resp['Server']
   end
     
+    class ActivityPub::DistributePollUpdateWorker
+  include Sidekiq::Worker
+  include Payloadable
     
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
+        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
     
-      def self.checksum(data)
-    sum = 0
-    data.unpack('C*').each {|c| sum += c }
-    sum = ~sum + 1
-    sum & 0xff
-  end
-    
-              private
-    
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
-          end
-    
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
-    
-                seq_values.each do |val|
-              case val.tag
-              when 0
-                self.options = decode_options(val)
-              when 1
-                self.cname = decode_cname(val)
-              when 2
-                self.realm = decode_realm(val)
-              when 3
-                self.sname = decode_sname(val)
-              when 4
-                self.from = decode_from(val)
-              when 5
-                self.till = decode_till(val)
-              when 6
-                self.rtime = decode_rtime(val)
-              when 7
-                self.nonce = decode_nonce(val)
-              when 8
-                self.etype = decode_etype(val)
-              when 10
-                self.enc_auth_data = decode_enc_auth_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequestBody SEQUENCE'
-              end
-            end
-          end
-    
-              private
-    
-          spec['version'] = Bootstrap::VERSION
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
+          it 'does not create a block from sender to recipient' do
+        expect(sender.blocking?(recipient)).to be false
       end
     
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
-    
-        # any errors will be logged to $stderr by invoke!
-    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
-    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
-    options[:local] = true if local?
-    output = LogStash::Bundler.invoke!(options)
-    # We currently dont removed unused gems from the logstash installation
-    # see: https://github.com/elastic/logstash/issues/6339
-    # output = LogStash::Bundler.invoke!(:clean => true)
-    display_updated_plugins(previous_gem_specs_map)
-  rescue => exception
-    gemfile.restore!
-    report_exception('Updated Aborted', exception)
-  ensure
-    display_bundler_output(output)
-  end
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      context 'with no user signed in' do
+    describe '#public' do
+      it 'succeeds' do
+        get :public
+        expect(response).to be_success
+      end
+    
+            false
+      end
+    
+          context 'with a node which meets only 1 requirement of []' do
+        let(:ruby) { '1' }
+    
+                do_something
+    
+      it 'does not register offense when guard clause is after single line ' \
+     'heredoc' do
+    expect_no_offenses(<<~RUBY)
+      def foo
+        raise ArgumentError, <<-MSG unless path
+          Must be called with mount point
+        MSG
+    
+            css_classes << 'selected' if selected
+    
+            it 'does not increase the count on hand' do
+          expect { subject }.not_to change { stock_item.reload.count_on_hand }
+        end
+      end
+    
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :show)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :show).load
+                     end
+        end
+    
+        it 'allows local middleware modification' do
+      $called = false
+      mware = Class.new { def call(worker_klass,msg,q,r); $called = true; msg;end }
+      client = Sidekiq::Client.new
+      client.middleware do |chain|
+        chain.add mware
+      end
+      client.push('class' => 'Blah', 'args' => [1,2,3])
+    
+        it 'can be memoized' do
+      q = Sidekiq::Queue.new('bar')
+      assert_equal 0, q.size
+      set = SetWorker.set(queue: :bar, foo: 'qaaz')
+      set.perform_async(1)
+      set.perform_async(1)
+      set.perform_async(1)
+      set.perform_async(1)
+      assert_equal 4, q.size
+      assert_equal 4, q.map{|j| j['jid'] }.uniq.size
+      set.perform_in(10, 1)
     end
+    
+      def test_available_locales
+    obj = Helpers.new
+    expected = %w(
+      ar cs da de el en es fa fr he hi it ja
+      ko nb nl pl pt pt-br ru sv ta uk ur
+      zh-cn zh-tw
+    )
+    assert_equal expected, obj.available_locales.sort
+  end
+    
+    describe 'DeadSet' do
+  def dead_set
+    Sidekiq::DeadSet.new
+  end
+    
+      it 'allows delayed scheduling of AM mails' do
+    ss = Sidekiq::ScheduledSet.new
+    assert_equal 0, ss.size
+    UserMailer.delay_for(5.days).greetings(1, 2)
+    assert_equal 1, ss.size
+  end
+    
+      def options
+    { :concurrency => 3, :queues => ['default'] }
+  end
+    
+          q = Sidekiq::Queue.new('custom_queue')
+      qs = q.size
+      assert SomeScheduledWorker.perform_in(-300, 'mike')
+      assert_equal 3, ss.size
+      assert_equal qs+1, q.size
+    
+          refute Sidekiq::Testing.enabled?
+      refute Sidekiq::Testing.fake?
+    end
+    
+    
+  config.vm.define 'centos6' do |centos6|
+    centos6.vm.box = 'puppetlabs/centos-6.6-64-puppet'
+  end
+    
+          # Verify the types requested are valid
+      types = FPM::Package.types.keys.sort
+      @command.input_type.tap do |val|
+        next if val.nil?
+        mandatory(FPM::Package.types.include?(val),
+                  'Invalid input package -s flag) type #{val.inspect}. ' \
+                  'Expected one of: #{types.join(', ')}')
+      end
+    
+      private
+  def input(package)
+    # Notes:
+    # * npm respects PREFIX
+    settings = {
+      'cache' => build_path('npm_cache'),
+      'loglevel' => 'warn',
+      'global' => 'true'
+    }
