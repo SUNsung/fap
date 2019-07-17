@@ -1,124 +1,175 @@
 
         
-        
-class CallCenter(object):
+                try:
+            self._db = shelve.open(cache_path)
+        except shelve_open_error + (ImportError,):
+            # Caused when switching between Python versions
+            warn('Removing possibly out-dated cache')
+            os.remove(cache_path)
+            self._db = shelve.open(cache_path)
     
+            packages = subprocess.check_output(
+            ['pkgfile', '-b', '-v', command],
+            universal_newlines=True, stderr=utils.DEVNULL
+        ).splitlines()
     
-class Deck(object):
+        @pytest.fixture(autouse=True)
+    def Popen(self, mocker):
+        mock = mocker.patch('thefuck.shells.fish.Popen')
+        mock.return_value.stdout.read.side_effect = [(
+            b'cd\nfish_config\nfuck\nfunced\nfuncsave\ngrep\nhistory\nll\nls\n'
+            b'man\nmath\npopd\npushd\nruby'),
+            (b'alias fish_key_reader /usr/bin/fish_key_reader\nalias g git\n'
+             b'alias alias_with_equal_sign=echo\ninvalid_alias'), b'func1\nfunc2', b'']
+        return mock
     
-        def current_year_month(self):
-        '''Return the current year and month.'''
-        ...
-    
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
+        @pytest.mark.parametrize('side_effect, exception', [
+        ([b'\n'], IndexError), (OSError, OSError)])
+    def test_get_version_error(self, side_effect, exception, shell, Popen):
+        Popen.return_value.stdout.read.side_effect = side_effect
+        with pytest.raises(exception):
+            shell._get_version()
+        assert Popen.call_args[0][0] == ['tcsh', '--version']
 
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
+        def from_shell(self, command_script):
+        '''Prepares command before running in app.'''
+        return self._expand_aliases(command_script)
+    
+        def app_alias(self, alias_name):
+        return ('alias {0} 'setenv TF_SHELL tcsh && setenv TF_ALIAS {0} && '
+                'set fucked_cmd=`history -h 2 | head -n 1` && '
+                'eval `thefuck ${{fucked_cmd}}`'').format(alias_name)
+    
+    
+@pytest.mark.usefixtures('no_memoize')
+@pytest.mark.parametrize('script, output, which', [
+    ('qweqwe', 'qweqwe: not found', None),
+    ('vom file.py', 'some text', None),
+    ('vim file.py', 'vim: not found', 'vim')])
+def test_not_match(mocker, script, output, which):
+    mocker.patch('thefuck.rules.no_command.which', return_value=which)
+    
+    
+@pytest.fixture(autouse=True)
+def Popen(mocker):
+    mock = mocker.patch('thefuck.rules.pyenv_no_such_command.Popen')
+    mock.return_value.stdout.readlines.return_value = (
+        b'--version\nactivate\ncommands\ncompletions\ndeactivate\nexec_\n'
+        b'global\nhelp\nhooks\ninit\ninstall\nlocal\nprefix_\n'
+        b'realpath.dylib\nrehash\nroot\nshell\nshims\nuninstall\nversion_\n'
+        b'version-file\nversion-file-read\nversion-file-write\nversion-name_\n'
+        b'version-origin\nversions\nvirtualenv\nvirtualenv-delete_\n'
+        b'virtualenv-init\nvirtualenv-prefix\nvirtualenvs_\n'
+        b'virtualenvwrapper\nvirtualenvwrapper_lazy\nwhence\nwhich_\n'
+    ).split()
+    return mock
+    
+        # One from history:
+    already_used = get_closest(
+        old_command, _get_used_executables(command),
+        fallback_to_first=False)
+    if already_used:
+        new_cmds = [already_used]
+    else:
+        new_cmds = []
+    
+            assert certdata, 'cert file %r is broken' % certfile
+        import ctypes
+        import ctypes.wintypes
+        class CERT_CONTEXT(ctypes.Structure):
+            _fields_ = [
+                ('dwCertEncodingType', ctypes.wintypes.DWORD),
+                ('pbCertEncoded', ctypes.POINTER(ctypes.wintypes.BYTE)),
+                ('cbCertEncoded', ctypes.wintypes.DWORD),
+                ('pCertInfo', ctypes.c_void_p),
+                ('hCertStore', ctypes.c_void_p),]
+        X509_ASN_ENCODING = 0x1
+        CERT_STORE_ADD_ALWAYS = 4
+        CERT_STORE_PROV_SYSTEM = 10
+        CERT_STORE_OPEN_EXISTING_FLAG = 0x4000
+        CERT_SYSTEM_STORE_CURRENT_USER = 1 << 16
+        CERT_SYSTEM_STORE_LOCAL_MACHINE = 2 << 16
+        CERT_FIND_SUBJECT_STR = 8 << 16 | 7
+        crypt32 = ctypes.windll.crypt32
+        ca_exists = False
+        store_handle = None
+        pCertCtx = None
+        ret = 0
+        for store in (CERT_SYSTEM_STORE_LOCAL_MACHINE, CERT_SYSTEM_STORE_CURRENT_USER):
+            try:
+                store_handle = crypt32.CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, None, CERT_STORE_OPEN_EXISTING_FLAG | store, u'root')
+                if not store_handle:
+                    if store == CERT_SYSTEM_STORE_CURRENT_USER and not ca_exists:
+                        xlog.warning('CertUtil.import_windows_ca failed: could not open system cert store')
+                        return False
+                    else:
+                        continue
+    
         '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
+    
+    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
+                 input=None, start=None, stop=None, oldToken=None):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            self.index = oldToken.index
+            self._text = oldToken._text
+            if isinstance(oldToken, CommonToken):
+                self.input = oldToken.input
+                self.start = oldToken.start
+                self.stop = oldToken.stop
+            
         else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+            self.type = type
+            self.input = input
+            self.charPositionInLine = -1 # set to invalid position
+            self.line = 0
+            self.channel = channel
+            
+	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
+            self.index = -1
+            
+            # We need to be able to change the text once in a while.  If
+            # this is non-null, then getText should return this.  Note that
+            # start/stop are not affected by changing this.
+            self._text = text
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(small_frame, model='cnn')
+        # Replace random parameters with COCO parameters if class mapping exists
+    for i in range(NUM_CS_CLS):
+        coco_cls_id = getattr(cs, convert_func)(i)
+        if coco_cls_id >= 0:  # otherwise ignore (rand init)
+            cs_blob[i] = coco_blob[coco_cls_id]
     
-    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
-# smaller distance are more similar to each other than ones with a larger distance.
+            # Test: merge with converted type
+        cfg2 = AttrDict()
+        cfg2.TRAIN = AttrDict()
+        cfg2.TRAIN.SCALES = [1]
+        core_config.merge_cfg_from_cfg(cfg2)
+        assert type(cfg.TRAIN.SCALES) is tuple
+        assert cfg.TRAIN.SCALES[0] == 1
     
-        pool = context.Pool(processes=processes)
+    from caffe2.proto import caffe2_pb2
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+        boxes = []
+    scores = []
+    ids = []
+    for i in range(raw_data.shape[0]):
+        if i % 1000 == 0:
+            print('{}/{}'.format(i + 1, len(roidb)))
+        # selective search boxes are 1-indexed and (y1, x1, y2, x2)
+        i_boxes = raw_data[i][:, (1, 0, 3, 2)] - 1
+        boxes.append(i_boxes.astype(np.float32))
+        scores.append(np.zeros((i_boxes.shape[0]), dtype=np.float32))
+        ids.append(roidb[i]['id'])
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
-
-    
-    face_detector = dlib.get_frontal_face_detector()
-    
-    # pylint: disable=relative-import,wrong-import-position,unused-argument,abstract-method
-    
-    class Latenz(GitRepositoryAdapter):
+    from detectron.core.config import cfg
+from detectron.datasets import task_evaluation
+from detectron.datasets.json_dataset import JsonDataset
+from detectron.utils.io import load_object
+from detectron.utils.logging import setup_logging
+import detectron.core.config as core_config
