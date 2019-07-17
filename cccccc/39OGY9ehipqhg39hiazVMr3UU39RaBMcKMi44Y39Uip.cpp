@@ -1,150 +1,398 @@
 
         
-        void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
+        public:
+    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
+    ~SignVerifyMessageDialog();
+    
+    
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    bool importer::isCFTypeDecl(
-       const clang::TypedefNameDecl *Decl) {
-  if (CFPointeeInfo::classifyTypedef(Decl))
-    return true;
-  return false;
-}
-    
-    std::string Mangle::translateOperator(StringRef Op) {
-  std::string Encoded;
-  for (char ch : Op) {
-    Encoded.push_back(translateOperatorChar(ch));
-  }
-  return Encoded;
-}
-    
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
-}
-    
-      /// The target to be passed to the compiler invocation. By default, this
-  /// is the target triple, but this may be overridden to accommodate some
-  /// platforms.
-  virtual std::string getTargetForLinker() const;
-    
-    Status Writer::EmitPhysicalRecord(RecordType t, const char* ptr,
-                                  size_t length) {
-  assert(length <= 0xffff);  // Must fit in two bytes
-  assert(block_offset_ + kHeaderSize + length <= kBlockSize);
+    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
+    (void) msg32;
+    (void) key32;
+    (void) algo16;
+    (void) data;
     }
     
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
+    public:
+    static const size_t OUTPUT_SIZE = 20;
     
-      // Return a handle to the current DB state.  Iterators created with
-  // this handle will all observe a stable snapshot of the current DB
-  // state.  The caller must call ReleaseSnapshot(result) when the
-  // snapshot is no longer needed.
-  virtual const Snapshot* GetSnapshot() = 0;
+    #include <stdint.h>
+#include <stdlib.h>
     
-    
-    {    fprintf(stderr,
-            'expected=%d..%d; got=%d; bad_keys=%d; bad_values=%d; missed=%d\n',
-            min_expected, max_expected, correct, bad_keys, bad_values, missed);
-    ASSERT_LE(min_expected, correct);
-    ASSERT_GE(max_expected, correct);
-  }
-    
-      WritableFile* dest_;
-  int block_offset_;  // Current offset in block
-    
-    namespace leveldb {
-    }
-    
-      // Return an iterator for the specified file number (the corresponding
-  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
-  // non-null, also sets '*tableptr' to point to the Table object
-  // underlying the returned iterator, or to nullptr if no Table object
-  // underlies the returned iterator.  The returned '*tableptr' object is owned
-  // by the cache and should not be deleted, and is valid for as long as the
-  // returned iterator is live.
-  Iterator* NewIterator(const ReadOptions& options, uint64_t file_number,
-                        uint64_t file_size, Table** tableptr = nullptr);
-    
-      // Number of open files that can be used by the DB.  You may need to
-  // increase this if your database has a large working set (budget
-  // one open file per 2MB of working set).
-  int max_open_files = 1000;
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_
-
-    
-    void
-FixedSortKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t /*n*/, int32_t length) {
-    // buffer_ != NULL && bytes != NULL && n > 0 && appended_ > capacity_
-    // Fill the buffer completely.
-    int32_t available = capacity_ - length;
-    if (available > 0) {
-        uprv_memcpy(buffer_ + length, bytes, available);
-    }
+    bool InternalFilterPolicy::KeyMayMatch(const Slice& key, const Slice& f) const {
+  return user_policy_->KeyMayMatch(ExtractUserKey(key), f);
 }
     
-    U_NAMESPACE_BEGIN
-    
-    U_CAPI UBool U_EXPORT2
-uhash_equalsScriptSet(const UElement key1, const UElement key2) {
-    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
-    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
-    return (*s1 == *s2);
+    bool GuessType(const std::string& fname, FileType* type) {
+  size_t pos = fname.rfind('/');
+  std::string basename;
+  if (pos == std::string::npos) {
+    basename = fname;
+  } else {
+    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
+  }
+  uint64_t ignored;
+  return ParseFileName(basename, &ignored, type);
 }
     
-    U_CAPI void U_EXPORT2
-uhash_deleteScriptSet(void *obj);
+      test_function<testfunc>(l, [](testfunc f) {
+    union { xmmType x; struct { uint64_t t; uint64_t v; }; } a0, a1, r;
+    }
     
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
+    ALWAYS_INLINE bool isPrologueStub(TCA addr) {
+  return addr == tc::ustubs().fcallHelperThunk;
+}
+    
+    /*
+ * Chase the sources of `def', recursively folding the 'root' DefInfos into
+ * their dependent defs.
+ */
+void flatten_impl(Env& env, DefInfo& def) {
+  auto const s = def.base;
+  if (!s.isVirt()) return;
+    }
+    
+      void jmp(Reg64 r)            { xedInstrR(XED_ICLASS_JMP,        r); }
+  void jmp(MemoryRef m)        { xedInstrM(XED_ICLASS_JMP,        m); }
+  void jmp(RIPRelativeRef m)   { xedInstrM(XED_ICLASS_JMP,        m); }
+  void call(Reg64 r)           { xedInstrR(XED_ICLASS_CALL_NEAR,  r); }
+  void call(MemoryRef m)       { xedInstrM(XED_ICLASS_CALL_NEAR,  m); }
+  void call(RIPRelativeRef m)  { xedInstrM(XED_ICLASS_CALL_NEAR,  m); }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    MemFile::MemFile(const String& wrapper, const String& stream)
+  : File(false, wrapper, stream), m_data(nullptr), m_len(-1), m_cursor(0),
+    m_malloced(false) {
+  setIsLocal(true);
+}
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+    
+    
+    {  std::stringstream ss;
+  ss << 'Unknown suite (0x' << std::hex << suite
+     << ') like TLS_NULL_WITH_NULL_NULL';
+  return ss.str();
+}
+    
+    int GnuTLSSession::closeConnection()
+{
+  rv_ = gnutls_bye(sslSession_, GNUTLS_SHUT_WR);
+  if (rv_ == GNUTLS_E_SUCCESS) {
+    return TLS_ERR_OK;
+  }
+  else if (rv_ == GNUTLS_E_AGAIN || rv_ == GNUTLS_E_INTERRUPTED) {
+    return TLS_ERR_WOULDBLOCK;
+  }
+  else {
+    return TLS_ERR_ERROR;
+  }
+}
+    
+    
+    {#if OPENSSL_VERSION_NUMBER >= 0x0090800fL
+#  ifndef OPENSSL_NO_ECDH
+  auto ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
+  if (ecdh == nullptr) {
+    A2_LOG_WARN(fmt('Failed to enable ECDHE cipher suites. Cause: %s',
+                    ERR_error_string(ERR_get_error(), nullptr)));
+  }
+  else {
+    SSL_CTX_set_tmp_ecdh(sslCtx_, ecdh);
+    EC_KEY_free(ecdh);
+  }
+#  endif // OPENSSL_NO_ECDH
+#endif   // OPENSSL_VERSION_NUMBER >= 0x0090800fL
+}
+    
+    
+    {  ssize_t ret = rv_;
+  rv_ = 1;
+  return ret;
+}
+    
+      virtual bool good() const = 0;
+    
+      static Data& getMutableData() { return data_; }
+    
+    bool DHTRoutingTable::addGoodNode(const std::shared_ptr<DHTNode>& node)
+{
+  return addNode(node, true);
+}
+    
+    #include 'TimeA2.h'
+    
+    
+    {} // namespace aria2
+    
+    std::pair<std::vector<std::unique_ptr<Command>>,
+          std::vector<std::unique_ptr<Command>>>
+DHTSetup::setup(DownloadEngine* e, int family)
+{
+  std::vector<std::unique_ptr<Command>> tempCommands;
+  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
+  if ((family != AF_INET && family != AF_INET6) ||
+      (family == AF_INET && DHTRegistry::isInitialized()) ||
+      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
+    return {};
+  }
+  try {
+    // load routing table and localnode id here
+    std::shared_ptr<DHTNode> localNode;
+    }
+    }
