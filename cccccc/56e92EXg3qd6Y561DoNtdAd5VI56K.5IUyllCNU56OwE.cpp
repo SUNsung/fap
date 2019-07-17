@@ -1,106 +1,157 @@
 
         
-          // This is a substitution function from the generic parameters of the
-  // conforming type to the synthetic environment.
-  //
-  // For structs, enums and protocols, this is a 1:1 mapping; for classes,
-  // we increase the depth of each generic parameter by 1 so that we can
-  // introduce a class-bound 'Self' parameter.
-  //
-  // This is a raw function rather than a substitution map because we need to
-  // keep generic parameters as generic, even if the conformanceSig (the best
-  // way to create the substitution map) equates them to concrete types.
-  auto conformanceToSyntheticTypeFn = [&](SubstitutableType *type) {
-    auto *genericParam = cast<GenericTypeParamType>(type);
-    if (covariantSelf) {
-      return GenericTypeParamType::get(genericParam->getDepth() + 1,
-                                       genericParam->getIndex(), ctx);
+            /**
+     * Returns namespace of the local oplog collection.
+     */
+    const NamespaceString& getOplogCollectionName() const;
+    
+    /**
+ * Simple struct for storing an error with an endpoint.
+ *
+ * Certain types of errors are not stored in WriteOps or must be returned to a caller.
+ */
+struct ShardError {
+    ShardError(const ShardEndpoint& endpoint, const WriteErrorDetail& error) : endpoint(endpoint) {
+        error.cloneTo(&this->error);
     }
     }
     
-      /// Retrieve the array of protocol conformances, which line up with the
-  /// requirements of the generic signature.
-  ArrayRef<ProtocolConformanceRef> getConformances() const {
-    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-  MutableArrayRef<ProtocolConformanceRef> getConformances() {
-    return MutableArrayRef<ProtocolConformanceRef>(
-                              getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-    
-    void CacheImpl::destroy() {
-  cache_destroy(static_cast<cache_t*>(Impl));
-}
-
-    
-    #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
-
-    
-    namespace {
-  // Quasi-lexicographic order: string length first, then string data.
-  // Since we don't care about the actual length, we can use this, which
-  // lets us ignore the string data a larger proportion of the time.
-  struct SortByLengthComparator {
-    bool operator()(StringRef lhs, StringRef rhs) const {
-      return (lhs.size() < rhs.size() ||
-              (lhs.size() == rhs.size() && lhs < rhs));
-    }
-  };
-} // end anonymous namespace
-    
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
-  }
-    }
-    
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
+    repl::OplogEntry getInnerNestedOplogEntry(const repl::OplogEntry& entry) {
+    uassert(40635,
+            str::stream() << 'expected nested oplog entry with ts: '
+                          << entry.getTimestamp().toString()
+                          << ' to have o2 field: '
+                          << redact(entry.toBSON()),
+            entry.getObject2());
+    return uassertStatusOK(repl::OplogEntry::parse(*entry.getObject2()));
 }
     
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        const SpecificStats* getSpecificStats() const final;
     
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
     
-        {
-        IDXGIFactory4* dxgiFactory = NULL;
-        IDXGISwapChain1* swapChain1 = NULL;
-        if (CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)) != S_OK ||
-            dxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, hWnd, &sd, NULL, NULL, &swapChain1) != S_OK ||
-            swapChain1->QueryInterface(IID_PPV_ARGS(&g_pSwapChain)) != S_OK)
-            return false;
-        swapChain1->Release();
-        dxgiFactory->Release();
-        g_pSwapChain->SetMaximumFrameLatency(NUM_BACK_BUFFERS);
-        g_hSwapChainWaitableObject = g_pSwapChain->GetFrameLatencyWaitableObject();
+    {    ASSERT_BSONOBJ_EQ(countCmd.getQuery(), fromjson('{ a : { '$gte' : 11 } }'));
+    ASSERT_EQ(countCmd.getLimit().get(), 100);
+    ASSERT_EQ(countCmd.getSkip().get(), 1000);
+    ASSERT_EQ(countCmd.getMaxTimeMS().get(), 10000u);
+    ASSERT_EQ(countCmd.getComment().get(), 'aComment');
+    ASSERT_BSONOBJ_EQ(countCmd.getHint(), fromjson('{ b : 5 }'));
+    ASSERT_BSONOBJ_EQ(countCmd.getCollation().get(), fromjson('{ locale : 'en_US' }'));
+    ASSERT_BSONOBJ_EQ(countCmd.getReadConcern().get(), fromjson('{ level: 'linearizable' }'));
+    ASSERT_BSONOBJ_EQ(countCmd.getQueryOptions().get(),
+                      fromjson('{ $readPreference: 'secondary' }'));
+}
+    
+    
+    {}  // namespace mongo
+
+    
+    #include 'mongo/platform/basic.h'
+    
+        void _appendStatsEntry(BSONObjBuilder& b, const char* statsName, const UsageData& map) const;
+    
+    U_NAMESPACE_BEGIN
+    
+      bool writeWithPriority(
+      T&& item,
+      size_t priority,
+      std::chrono::milliseconds timeout) {
+    size_t queue = std::min(getNumPriorities() - 1, priority);
+    CHECK_LT(queue, queues_.size());
+    return queues_.at(queue).tryWriteUntil(
+        std::chrono::steady_clock::now() + timeout, std::move(item));
+  }
+    
+      // Helper functions: shift the fingerprint value left by 8/32/64 bits,
+  // return the 'out' value (the bits that were shifted out), and add 'v'
+  // in the bits on the right.
+  uint8_t shlor8(uint8_t v);
+  uint32_t shlor32(uint32_t v);
+  uint64_t shlor64(uint64_t v);
+    
+    /** hazptr_cleanup: Reclaims all reclaimable objects retired to the domain */
+template <template <typename> class Atom>
+void hazptr_cleanup(hazptr_domain<Atom>& domain) noexcept {
+  domain.cleanup();
+}
+    
+    
+    {
+    {  folly::File file_;
+};
+} // namespace folly
+
+    
+    template <
+    typename Key,
+    typename Hasher = f14::DefaultHasher<Key>,
+    typename KeyEqual = f14::DefaultKeyEqual<Key>>
+using F14VectorSet = folly::F14VectorSet<
+    Key,
+    Hasher,
+    KeyEqual,
+    folly::detail::std_pmr::polymorphic_allocator<Key>>;
+    
+      //// PUBLIC - F14 Extensions
+    
+      template <typename V>
+  void visitPolicyAllocationClasses(
+      std::size_t chunkAllocSize,
+      std::size_t size,
+      std::size_t /*capacity*/,
+      V&& visitor) const {
+    if (chunkAllocSize > 0) {
+      visitor(
+          allocationBytesForOverAligned<ByteAlloc, kRequiredVectorAlignment>(
+              chunkAllocSize),
+          1);
     }
+    if (size > 0) {
+      visitor(sizeof(Value), size);
+    }
+  }
     
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void ResetDevice();
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX12 sample code but remove this dependency you can:
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
+    {  // Register the handler.
+  for (auto& handler : sockets_) {
+    if (!handler.registerHandler(EventHandler::READ | EventHandler::PERSIST)) {
+      // We're hosed.  We could just re-schedule backoffTimeout_ to
+      // re-try again after a little bit.  However, we don't want to
+      // loop retrying forever if we can't re-enable accepts.  Just
+      // abort the entire program in this state; things are really bad
+      // and restarting the entire server is probably the best remedy.
+      LOG(ERROR)
+          << 'failed to re-enable AsyncServerSocket accepts after backoff; '
+          << 'crashing now';
+      abort();
+    }
+  }
+  if (connectionEventCallback_) {
+    connectionEventCallback_->onBackoffEnded();
+  }
+}
+    
+      size_t allocSize;
+  if (!checked_add(&allocSize, std::max(size, minBlockSize()), sizeof(Block))) {
+    throw_exception<std::bad_alloc>();
+  }
+  if (sizeLimit_ != kNoSizeLimit &&
+      allocSize > sizeLimit_ - totalAllocatedSize_) {
+    throw_exception(std::bad_alloc());
+  }
+    
+        // Allocate a block with at least size bytes of storage.
+    // If allowSlack is true, allocate more than size bytes if convenient
+    // (via ArenaAllocatorTraits::goodSize()) as we'll try to pack small
+    // allocations in this block.
+    static std::pair<Block*, size_t>
+    allocate(Alloc& alloc, size_t size, bool allowSlack);
+    void deallocate(Alloc& alloc);
+    
+      // if there is a wait queue we are responsible for, try and start wakeups,
+  // don't bother with the mutex state
+  auto sleepers = proxy.waiters_;
+  if (proxy.next_) {
+    if (wake(Publish, *proxy.next_, proxy.waker_, sleepers, 0)) {
+      return;
+    }
+    }
