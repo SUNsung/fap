@@ -1,111 +1,245 @@
 
         
-        AboutProtocolHandler::~AboutProtocolHandler() {}
+        #ifndef INCLUDED_IMF_FLOAT_ATTRIBUTE_H
+#define INCLUDED_IMF_FLOAT_ATTRIBUTE_H
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
+    ////////////////////////////////////////////////////////////////////
+//
+// Forward declarations for OpenEXR - correctly declares namespace
+//
+////////////////////////////////////////////////////////////////////
     
-    
-    {}  // namespace atom
-    
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
-         ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
-      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 2));
+        if (getVersion (version) != EXR_VERSION)
+    {
+        THROW (IEX_NAMESPACE::InputExc, 'Cannot read '
+                              'version ' << getVersion (version) << ' '
+                              'image files.  Current file format version '
+                              'is ' << EXR_VERSION << '.');
     }
-    input_blob_names.push_back(GO(2));
-    
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
-    
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
-    
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
-    
-    #include 'ocrpara.h'
-#include 'host.h'  // For NearlyEqual()
     
     
-    {  UnicharAmbigsVector dang_ambigs_;
-  UnicharAmbigsVector replace_ambigs_;
-  GenericVector<UnicharIdVector *> one_to_one_definite_ambigs_;
-  GenericVector<UnicharIdVector *> ambigs_for_adaption_;
-  GenericVector<UnicharIdVector *> reverse_ambigs_for_adaption_;
-};
-    
-    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
-
-    
-      int operator==(const KDPair<Key, Data>& other) const {
-    return key == other.key;
-  }
-    
-    Transliterator* RemoveTransliterator::clone(void) const {
-    Transliterator* result = new RemoveTransliterator();
-    if (result != NULL && getFilter() != 0) {
-        result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
+class GenericOutputFile
+{
+    public:
+        IMF_EXPORT
+        virtual ~GenericOutputFile() {}
     }
-    return result;
+    
+    
+void		
+Header::setMaxImageSize (int maxWidth, int maxHeight)
+{
+    maxImageWidth = maxWidth;
+    maxImageHeight = maxHeight;
 }
     
-        RegexCompile     compiler(This, status);
-    compiler.compile(regex, pe, status);
+    	//
+	// delete the cached frame buffer
+	//
     
-    U_NAMESPACE_END
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
     
-    U_NAMESPACE_END
+    	ERR_FAIL_COND(!tasks.has(p_task));
+	Task &t = tasks[p_task];
     
-        switch (ruleMode)
+    	int cache_data_left() const;
+	mutable Error last_error;
+    
+    StringName::StringName(const char *p_name) {
+    }
+    
+    #include <alsa/asoundlib.h>
+#include <stdio.h>
+    
+    public:
+	virtual Error open();
+	virtual void close();
+    
+    class MainTimerSync {
+	// wall clock time measured on the main thread
+	uint64_t last_cpu_ticks_usec;
+	uint64_t current_cpu_ticks_usec;
+    }
+    
+    #include 'db/builder.h'
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db, const Comparator* user_key_comparator,
+                        Iterator* internal_iter, SequenceNumber sequence,
+                        uint32_t seed);
+    
+    namespace leveldb {
+    }
+    
+      // Backward iteration test
+  {
+    SkipList<Key, Comparator>::Iterator iter(&list);
+    iter.SeekToLast();
+    }
+    
+    
+    {#if !defined(NDEBUG)
+    snapshot->list_ = this;
+#endif  // !defined(NDEBUG)
+    snapshot->next_ = &head_;
+    snapshot->prev_ = head_.prev_;
+    snapshot->prev_->next_ = snapshot;
+    snapshot->next_->prev_ = snapshot;
+    return snapshot;
+  }
+    
+    TEST(VersionEditTest, EncodeDecode) {
+  static const uint64_t kBig = 1ull << 50;
+    }
+    
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+    class CondVar;
+    
+    TEST(Coding, Varint64Truncation) {
+  uint64_t large_value = (1ull << 63) + 100ull;
+  std::string s;
+  PutVarint64(&s, large_value);
+  uint64_t result;
+  for (size_t len = 0; len < s.size() - 1; len++) {
+    ASSERT_TRUE(GetVarint64Ptr(s.data(), s.data() + len, &result) == nullptr);
+  }
+  ASSERT_TRUE(GetVarint64Ptr(s.data(), s.data() + s.size(), &result) !=
+              nullptr);
+  ASSERT_EQ(large_value, result);
+}
+    
+        calendar->Day = 31;
+    calendar->Month = 12;
+    calendar->Year = c_maxYear;
+    auto maxYear = calendar->GetDateTime(); // 31st December, 9878
+    DateDiff_FromDate->MaxDate = maxYear;
+    DateDiff_ToDate->MaxDate = maxYear;
+    
+                property Platform::String
+                ^ Name { Platform::String ^ get() { return ref new Platform::String(m_original.name.c_str()); } }
+    
+            // Verify that raw, unformatted numbers are provided correctly
+        TEST_METHOD(VerifyRawFormatting)
+        {
+            m_viewModel->DisplayValue = L'1,001';
+            VERIFY_ARE_EQUAL(StringReference(L'1001'), m_viewModel->GetRawDisplayValue());
+    }
+    
+        auto groupedString = groupedStream.str();
+    wstring result(groupedString.rbegin(), groupedString.rend());
+    // Add the right (fractional or exponential) part of the number to the final string.
+    if (hasDecimal)
     {
-    // if the mode is day-of-month, the day of month is given
-    case DOM_MODE:
-        ruleDayOfMonth = ruleDay;
-        break;
+        result += displayString.substr(dec);
+    }
+    else if (hasExponent)
+    {
+        result += displayString.substr(exp);
     }
     
-    int32_t SimpleDateFormat::matchQuarterString(const UnicodeString& text,
-                              int32_t start,
-                              UCalendarDateFields field,
-                              const UnicodeString* data,
-                              int32_t dataCount,
-                              Calendar& cal) const
+      std::shared_ptr<DHTNode> newNode_;
+    
+    const std::string DHTResponseMessage::R('r');
+    
+    class DHTResponseMessage : public DHTAbstractMessage {
+protected:
+  virtual std::string toStringOptional() const { return A2STR::NIL; }
+    }
+    
+    std::shared_ptr<DHTBucket>
+DHTRoutingTable::getBucketFor(const std::shared_ptr<DHTNode>& node) const
 {
-    int32_t i = 0;
-    int32_t count = dataCount;
+  return getBucketFor(node->getID());
+}
+    
+    
+    {  const int clen = bittorrent::getCompactLength(family_);
+  // nodes
+  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
+                                                             eoi = nodes_.end();
+       i != eoi; ++i) {
+    const std::shared_ptr<DHTNode>& node = *i;
+    // Write IP address + port in Compact IP-address/port info form.
+    unsigned char compactPeer[COMPACT_LEN_IPV6];
+    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
+                                             node->getPort());
+    if (compactlen != clen) {
+      memset(compactPeer, 0, clen);
     }
+    uint8_t clen1 = clen;
+    // 1byte compact peer format length
+    WRITE_CHECK(fp, &clen1, sizeof(clen1));
+    // 7bytes reserved
+    WRITE_CHECK(fp, zero, 7);
+    // clen bytes compact peer
+    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
+    // 24-clen bytes reserved
+    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
+    // 20bytes: node ID
+    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
+    // 4bytes reserved
+    WRITE_CHECK(fp, zero, 4);
+  }
+  if (fp.close() == EOF) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  if (!File(filenameTemp).renameTo(filename)) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  A2_LOG_INFO('DHT routing table was saved successfully');
+}
     
-    #include 'unicode/uniset.h'
-#include 'unicode/udat.h'
-#include 'cmemory.h'
-#include 'uassert.h'
-#include 'ucln_in.h'
-#include 'umutex.h'
+        factory->setRoutingTable(routingTable.get());
+    factory->setConnection(connection.get());
+    factory->setMessageDispatcher(dispatcher.get());
+    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
+    factory->setTokenTracker(tokenTracker.get());
+    factory->setLocalNode(localNode);
+    factory->setBtRegistry(e->getBtRegistry().get());
     
-        int32_t length = fFlagAndLength;
-    if (length > getCapacity() && reallocate(length, 0) == NULL) {
-        setToBogus();
-        return;
+      ~DHTSetup();
+    
+    
+    {} // namespace aria2
+
+    
+    DHTTaskQueueImpl::DHTTaskQueueImpl()
+    : periodicTaskQueue1_(NUM_CONCURRENT_TASK),
+      periodicTaskQueue2_(NUM_CONCURRENT_TASK),
+      immediateTaskQueue_(NUM_CONCURRENT_TASK)
+{
+}
+    
+    /*
+ * Class:     org_rocksdb_CompactionJobStats
+ * Method:    elapsedMicros
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_CompactionJobStats_elapsedMicros(
+    JNIEnv*, jclass, jlong jhandle) {
+  auto* compact_job_stats =
+      reinterpret_cast<rocksdb::CompactionJobStats*>(jhandle);
+  return static_cast<jlong>(compact_job_stats->elapsed_micros);
+}
+    
+    #include 'rocksjni/portal.h'
+    
+    #include 'rocksjni/table_filter_jnicallback.h'
+#include 'rocksjni/portal.h'
+    
+        env->SetLongArrayRegion(jresults, 0, resultsLen, results.get());
+    if (env->ExceptionCheck()) {
+      // exception thrown: ArrayIndexOutOfBoundsException
+      env->DeleteLocalRef(jresults);
+      return nullptr;
     }
