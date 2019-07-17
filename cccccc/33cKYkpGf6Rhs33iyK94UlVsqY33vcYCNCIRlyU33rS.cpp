@@ -1,417 +1,343 @@
 
         
-        // static
-void WrappableBase::FirstWeakCallback(
-    const v8::WeakCallbackInfo<WrappableBase>& data) {
-  WrappableBase* wrappable = data.GetParameter();
-  wrappable->wrapper_.Reset();
-  data.SetSecondPassCallback(SecondWeakCallback);
-}
-    
-    // Arguments is a wrapper around v8::FunctionCallbackInfo that integrates
-// with Converter to make it easier to marshall arguments and return values
-// between V8 and C++.
-class Arguments {
- public:
-  Arguments();
-  explicit Arguments(const v8::FunctionCallbackInfo<v8::Value>& info);
-  ~Arguments();
-    }
-    
-    template <typename Sig>
-void InvokeNew(const base::Callback<Sig>& factory,
-               v8::Isolate* isolate,
-               Arguments* args) {
-  if (!args->IsConstructCall()) {
-    args->ThrowError('Requires constructor call');
-    return;
-  }
-    }
-    
-    bool Converter<double>::FromV8(v8::Isolate* isolate,
-                               v8::Local<v8::Value> val,
-                               double* out) {
-  if (!val->IsNumber())
-    return false;
-  *out = val.As<v8::Number>()->Value();
-  return true;
-}
-    
-    // static
-void CertificateManagerModel::DidGetCertDBOnUIThread(
-    net::NSSCertDatabase* cert_db,
-    bool is_user_db_available,
-    const CreationCallback& callback) {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-    }
-    
-    v8::Local<v8::Value> Arguments::ThrowError(const std::string& message) const {
-  isolate_->ThrowException(v8::Exception::Error(StringToV8(isolate_, message)));
-  return v8::Undefined(isolate_);
-}
-    
-    ObjectTemplateBuilder::ObjectTemplateBuilder(
-    v8::Isolate* isolate,
-    v8::Local<v8::ObjectTemplate> templ)
-    : isolate_(isolate), template_(templ) {}
-    
-      if ((str = opts.FindStringKey('applicationName'))) {
-    gtk_about_dialog_set_program_name(dialog, str->c_str());
-  }
-  if ((str = opts.FindStringKey('applicationVersion'))) {
-    gtk_about_dialog_set_version(dialog, str->c_str());
-  }
-  if ((str = opts.FindStringKey('copyright'))) {
-    gtk_about_dialog_set_copyright(dialog, str->c_str());
-  }
-  if ((str = opts.FindStringKey('website'))) {
-    gtk_about_dialog_set_website(dialog, str->c_str());
-  }
-  if ((str = opts.FindStringKey('iconPath'))) {
-    GError* error = nullptr;
-    constexpr int width = 64;   // width of about panel icon in pixels
-    constexpr int height = 64;  // height of about panel icon in pixels
-    }
-    
-    namespace {
-    }
-    
-    #ifndef BITCOIN_QT_OPENURIDIALOG_H
-#define BITCOIN_QT_OPENURIDIALOG_H
-    
-        const QString &getName() const { return name; }
+        // Request Shell's id for current render_view_host.
+IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_GetShellId,
+                           int /* result */)
     
     
-    {    /* On the first run, return 0 to force a second run */
-    if (counter == 0) {
-        memset(nonce32, 0, 32);
-        return 1;
-    }
-    /* On the second run, return an overflow to force a third run */
-    if (counter == 1) {
-        memset(nonce32, 0xff, 32);
-        return 1;
-    }
-    /* On the next run, return a valid nonce, but flip a coin as to whether or not to fail signing. */
-    memset(nonce32, 1, 32);
-    return secp256k1_rand_bits(1);
-}
-    
-    // Append the serialization of 'key' to *result.
-extern void AppendInternalKey(std::string* result,
-                              const ParsedInternalKey& key);
-    
-    
-/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
-template <typename Dtype>
-class ConstantFiller : public Filler<Dtype> {
- public:
-  explicit ConstantFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    const int count = blob->count();
-    const Dtype value = this->filler_param_.value();
-    CHECK(count);
-    for (int i = 0; i < count; ++i) {
-      data[i] = value;
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
-    
-    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+    {}  // namespace nw
 
     
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-LEVELDB_EXPORT Env* NewMemEnv(Env* base_env);
-    
-    leveldb_filterpolicy_t* leveldb_filterpolicy_create(
-    void* state, void (*destructor)(void*),
-    char* (*create_filter)(void*, const char* const* key_array,
-                           const size_t* key_length_array, int num_keys,
-                           size_t* filter_length),
-    uint8_t (*key_may_match)(void*, const char* key, size_t length,
-                             const char* filter, size_t filter_length),
-    const char* (*name)(void*)) {
-  leveldb_filterpolicy_t* result = new leveldb_filterpolicy_t;
-  result->state_ = state;
-  result->destructor_ = destructor;
-  result->create_ = create_filter;
-  result->key_match_ = key_may_match;
-  result->name_ = name;
-  return result;
-}
-    
-    #include 'leveldb/comparator.h'
-#include 'leveldb/db.h'
-#include 'leveldb/filter_policy.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/table_builder.h'
-#include 'util/coding.h'
-#include 'util/logging.h'
-    
-    const char* GetVarint32PtrFallback(const char* p, const char* limit,
-                                   uint32_t* value) {
-  uint32_t result = 0;
-  for (uint32_t shift = 0; shift <= 28 && p < limit; shift += 7) {
-    uint32_t byte = *(reinterpret_cast<const uint8_t*>(p));
-    p++;
-    if (byte & 128) {
-      // More bytes are present
-      result |= ((byte & 127) << shift);
-    } else {
-      result |= (byte << shift);
-      *value = result;
-      return reinterpret_cast<const char*>(p);
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
     }
-  }
-  return nullptr;
-}
     
-    #include 'db/memtable.h'
-#include 'db/dbformat.h'
-#include 'leveldb/comparator.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'util/coding.h'
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
-    Status WriteBatchInternal::InsertInto(const WriteBatch* b, MemTable* memtable) {
-  MemTableInserter inserter;
-  inserter.sequence_ = WriteBatchInternal::Sequence(b);
-  inserter.mem_ = memtable;
-  return b->Iterate(&inserter);
-}
+        bool Read(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return ReadText(data);
+        break;
+        case TYPE_HTML:
+        return ReadHTML(data);
+        break;
+        case TYPE_RTF:
+        return ReadRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return ReadImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;      
+    }
     
+      protected:
+    ~NwScreenRegisterStreamFunction() override {}
+    DECLARE_EXTENSION_FUNCTION('nw.Screen.registerStream', UNKNOWN)
     
-    {    if (diff_index >= min_length) {
-      // Do not shorten if one string is a prefix of the other
-    } else {
-      uint8_t diff_byte = static_cast<uint8_t>((*start)[diff_index]);
-      if (diff_byte < static_cast<uint8_t>(0xff) &&
-          diff_byte + 1 < static_cast<uint8_t>(limit[diff_index])) {
-        (*start)[diff_index]++;
-        start->resize(diff_index + 1);
-        assert(Compare(*start, limit) < 0);
+      /// Applies batch normalization on the `input` using the stored mean and
+  /// variance.
+  ///
+  /// The module must be constructed with `stateful = true` when calling this
+  /// method, as the module will otherwise not store running statistics. If you
+  /// want to supply the mean and variance yourself, use `pure_forward`.
+  Tensor forward(const Tensor& input);
+    
+    const std::string doc = R'DOC(
+  Single-feature representation:
+  - scalar features:
+    <feature full name> T
+  - list features:
+    <feature full name>.lengths int32
+    <feature full name>.values T
+  - map features:
+    <feature full name>.lengths int32
+    <feature full name>.keys K
+    <feature full name>.values V
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
       }
     }
   }
-    
-    TEST(CorruptionTest, SequenceNumberRecovery) {
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v1'));
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v2'));
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v3'));
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v4'));
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v5'));
-  RepairDB();
-  Reopen();
-  std::string v;
-  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
-  ASSERT_EQ('v5', v);
-  // Write something.  If sequence number was not recovered properly,
-  // it will be hidden by an earlier write.
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v6'));
-  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
-  ASSERT_EQ('v6', v);
-  Reopen();
-  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
-  ASSERT_EQ('v6', v);
 }
     
-      // Drop reference count.  Delete if no more references exist.
-  void Unref() {
-    --refs_;
-    assert(refs_ >= 0);
-    if (refs_ <= 0) {
-      delete this;
-    }
-  }
+        int length = 0;
+    wchar_t* temp = new wchar_t[100];
+    const wchar_t* data = m_selectedExpressionLastData->Data();
+    int i = 0, j = 0;
+    int commandIndex = displayExpressionToken->CommandIndex;
     
-    #include 'db/dbformat.h'
-#include 'leveldb/cache.h'
-#include 'leveldb/table.h'
-#include 'port/port.h'
-    
-        std::unique_ptr<DHTTaskFactory> taskFactory;
-    
-    class DHTNode;
-class DHTBucket;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTBucketTreeNode;
-    
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
-};
-    
-    namespace aria2 {
-    }
-    
-    class DownloadContext;
-class PeerStorage;
-class DHTTask;
-class DHTNode;
-class DHTBucket;
-    
-    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
+    namespace CalculationManager
 {
-  periodicTaskQueue2_.addTask(task);
+    class IResourceProvider;
 }
     
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    bool DHTUnknownMessage::send() { return true; }
-    
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the square root of n
-    if (i > n/i) break;
+                    // Loop through grouping vector until we find a non-zero value.
+                // '0' values may appear in a form of either e.g. '3;0' or '3;0;0'.
+                // A 0 in the last position means repeat the previous grouping.
+                // A 0 in another position is a group. So, '3;0;0' means 'group 3, then group 0 repeatedly'
+                // This could be expressed as just '3' but GetLocaleInfo is returning 3;0;0 in some cases instead.
+                for (currGrouping = 0; groupItr != grouping.end(); ++groupItr)
+                {
+                    // If it's a non-zero value, that's our new group
+                    if (*groupItr != 0)
+                    {
+                        currGrouping = *groupItr;
+                        break;
+                    }
     }
     
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
+    
+    {
+    {NNVM_REGISTER_OP(_contrib_backward_hawkesll)
+    .set_num_inputs(10)
+    .set_num_outputs(8)
+    .set_attr<nnvm::TIsBackward>('TIsBackward', true)
+    .set_attr<FCompute>('FCompute<cpu>', HawkesLLBackward<cpu>)
+    .set_attr<FResourceRequest>('FResourceRequest', [](const NodeAttrs& n) {
+        return std::vector<ResourceRequest>{ResourceRequest::Type::kTempSpace};
+    });
+}  // namespace op
+}  // namespace mxnet
 
     
-    // The purpose of this is to ensure that the UnitTest singleton is
-// created before main() is entered, and thus that ShouldUseColor()
-// works the same way as in a real Google-Test-based test.  We don't actual
-// run the TEST itself.
-TEST(GTestColorTest, Dummy) {
+    template<typename xpu, typename DType>
+MultiAllFiniteKernelParam<DType> FillMultiAllFiniteParam(const MultiAllFiniteParam& op_param,
+                                                         const OpContext &ctx,
+                                                         const std::vector<TBlob> &inputs) {
+  MultiAllFiniteKernelParam<DType> param;
+  using namespace mxnet_op;
+  Stream<xpu>* s = ctx.get_stream<xpu>();
+  param.count = op_param.num_arrays;
+  param.max_size = 0;
+  for (int i = 0; i < param.count; ++i) {
+    param.sizes[i] = inputs[i].shape_.Size();
+    if (param.max_size < param.sizes[i]) {
+      param.max_size = param.sizes[i];
+    }
+    param.arrays[i] = inputs[i].FlatTo2D<xpu, DType>(s).dptr_;
+  }
+  return param;
 }
     
-      if (strcmp(flag, 'throw_on_failure') == 0) {
-    cout << GTEST_FLAG(throw_on_failure);
-    return;
-  }
+    NNVM_REGISTER_PASS(RemoveAmpCast)
+.describe('')
+.set_body(RemoveAmpCast)
+.set_change_graph(true);
     
-    // Tests that private members can be accessed from a TEST declared as
-// a friend of the class.
-TEST(PrivateCodeTest, CanAccessPrivateMembers) {
-  PrivateCode a;
-  EXPECT_EQ(0, a.x_);
+    inline bool AMPMultiCastShape(const nnvm::NodeAttrs& attrs,
+                              std::vector<TShape> *in_attrs,
+                              std::vector<TShape> *out_attrs) {
+  const AMPMultiCastParam& param = dmlc::get<AMPMultiCastParam>(attrs.parsed);
+  CHECK_EQ(in_attrs->size(), param.num_outputs);
+  CHECK_EQ(out_attrs->size(), param.num_outputs);
     }
     
-    void Subroutine() {
-  EXPECT_EQ(42, 42);
+      OperatorProperty* Copy() const override {
+    DeformablePSROIPoolingProp* deformable_psroi_pooling_sym = new DeformablePSROIPoolingProp();
+    deformable_psroi_pooling_sym->param_ = this->param_;
+    return deformable_psroi_pooling_sym;
+  }
+    
+    int MXExecutorPrint(ExecutorHandle handle, const char **out_str) {
+  Executor *exec = static_cast<Executor*>(handle);
+  MXAPIThreadLocalEntry *ret = MXAPIThreadLocalStore::Get();
+  API_BEGIN();
+  std::ostringstream os;
+  exec->Print(os);
+  ret->ret_str = os.str();
+  *out_str = (ret->ret_str).c_str();
+  API_END();
 }
     
-    #include 'sample4.h'
+    int MXAutogradBackward(mx_uint num_output,
+                       NDArrayHandle *output_handles,
+                       NDArrayHandle *ograd_handles,
+                       int retain_graph) {
+  return MXAutogradBackwardEx(num_output, output_handles, ograd_handles,
+                              0, nullptr, retain_graph, false, true,
+                              nullptr, nullptr);
+}
     
-        void CallStaticVoidMethod(jclass clazz, jmethodID methodID, ...)
+      // inference step function for nid
+  auto infer_step = [&](uint32_t nid, bool last_iter) {
+    const auto& inode = idx[nid];
+    const uint32_t num_inputs = inode.inputs.size();
+    const uint32_t num_outputs = inode.source->num_outputs();
+    if (inode.source->is_variable()) {
+      // Variable node. No operator. Only one output entry.
+      CHECK(inode.source->op() == nullptr);
+      CHECK_EQ(num_outputs, 1U);
+      const uint32_t out_ent_id = idx.entry_id(nid, 0);
+      if (shape_attr_key.length() != 0 && fis_none(rshape[out_ent_id])) {
+        auto it = inode.source->attrs.dict.find(shape_attr_key);
+        if (it != inode.source->attrs.dict.end()) {
+          std::istringstream is(it->second);
+          CHECK(is >> rshape[out_ent_id]) << 'Invalid attribute';
+        }
+      }
+      // assign a default value to node attribute
+      if (dispatch_mode_name != nullptr) {
+        op::dispatch_mode_assign(&dispatch_modes[nid], default_mode_val);
+      }
+    } else if (is_backward.get(inode.source->op(), false) &&
+               inode.control_deps.size() && bwd_identity_assign) {
+      CHECK(dispatch_mode_name == nullptr)
+        << 'Backward inference for node attributes is not available';
+      CHECK_GE(inode.control_deps.size(), 1U)
+        << 'BackwardOp need to have control_deps to its forward op';
+      const IndexedGraph::Node& fnode = idx[inode.control_deps[0]];
+      nnvm::NodePtr fwd_ptr = inode.source->control_deps[0];
+      CHECK(fwd_ptr->op() != nullptr) << 'Forward op cannot be a variable';
+      // use gradient function to find out the correspondence.
+      std::vector<nnvm::NodeEntry> ograd(fwd_ptr->num_outputs());
+      for (size_t i = 0; i < ograd.size(); ++i) {
+        ograd[i].index = static_cast<uint32_t>(i);
+      }
+      // input gradient list
+      auto igrad = fgrad[fwd_ptr->op()](fwd_ptr, ograd);
+      const nnvm::Node* igrad_node = nullptr;
+      // Input gradient assignement
+      for (size_t i = 0; i < igrad.size(); ++i) {
+        if (igrad[i].node->op() == inode.source->op()) {
+          uint32_t eid = idx.entry_id(nid, igrad[i].index);
+          if (fis_none(rshape[eid])) {
+            rshape[eid] = rshape[idx.entry_id(fnode.inputs[i])];
+          } else if (!fis_none(rshape[idx.entry_id(fnode.inputs[i])])) {
+            // Need to skip empty forward shape, because it may not be
+            // available now and it is possible to infer the forward
+            // shape in one of the next a few passes
+            CHECK_EQ(rshape[eid], rshape[idx.entry_id(fnode.inputs[i])])
+                << 'Backward shape inconsistent with the forward shape';
+          }
+          if (igrad_node == nullptr) {
+            igrad_node = igrad[i].node.get();
+          } else {
+            CHECK(igrad_node == igrad[i].node.get());
+          }
+        }
+      }
+      // out grad entries
+      CHECK(igrad_node != nullptr)
+        << 'Cannot find matching backward op for ' << inode.source->attrs.name;
+      for (size_t i = 0; i < igrad_node->inputs.size(); ++i) {
+        const nnvm::NodeEntry& e = igrad_node->inputs[i];
+        if (e.node == nullptr) {
+          uint32_t eid = idx.entry_id(inode.inputs[i]);
+          if (fis_none(rshape[eid])) {
+            rshape[eid] = rshape[idx.entry_id(inode.control_deps[0], e.index)];
+          }
+        }
+      }
+    } else {
+      DispatchMode* dispatch_mode = nullptr;
+      bool forward_known = true;
+      // Forward operator inference.
+      ishape.resize(num_inputs, empty_val);
+      for (uint32_t i = 0; i < ishape.size(); ++i) {
+        ishape[i] = rshape[idx.entry_id(inode.inputs[i])];
+        if (fis_none(ishape[i])) forward_known = false;
+      }
+      oshape.resize(num_outputs, empty_val);
+      for (uint32_t i = 0; i < oshape.size(); ++i) {
+        oshape[i] = rshape[idx.entry_id(nid, i)];
+        if (fis_none(oshape[i])) forward_known = false;
+      }
+      if (dispatch_mode_name != nullptr) {
+        dispatch_mode = &dispatch_modes[nid];
+        if (dispatch_modes[nid] == DispatchMode::kUndefined) forward_known = false;
+      }
+      auto finfer = finfer_shape.get(inode.source->op(), fdefault);
+      if (!forward_known) {
+        if (finfer != nullptr) {
+          // Call inference function of the operator.
+          try {
+            forward_known = ApplyOpInferAttr(ret, finfer, inode.source->attrs,
+                                             nid, &ishape, &oshape, dispatch_mode);
+          } catch (const std::exception& e) {
+            throw dmlc::Error('Error in operator ' + inode.source->attrs.name + ': ' + e.what());
+          }
+        } else {
+          CHECK(!last_iter)
+              << 'Attribute ' << infer_name
+              << ' is not registed by op ' << inode.source->op()->name
+              << ' we are not able to complete the inference because of this';
+        }
+      }
+      // Save to the result map.
+      for (uint32_t i = 0; i < num_inputs; ++i) {
+        rshape[idx.entry_id(inode.inputs[i])] = ishape[i];
+      }
+      for (uint32_t i = 0; i < num_outputs; ++i) {
+        rshape[idx.entry_id(nid, i)] = oshape[i];
+      }
+    }
+  };
+    
+    // keep zero-center
+struct dequantize_zero_centered {
+  template<typename DstDType, typename SrcDType>
+  MSHADOW_XINLINE static void Map(int i, DstDType *out, const SrcDType *in,
+                                  const float *imin_range, const float *imax_range,
+                                  const float quantized_range) {
+    const float real_range = MaxAbs(*imax_range, *imin_range);
+    out[i] = in[i] * (real_range / quantized_range);
+  }
+};
+    
+    
     {
-        va_list args;
-        va_start(args, methodID);
-        functions->CallStaticVoidMethodV(this, clazz, methodID, args);
-        va_end(args);
-    }
-    void CallStaticVoidMethodV(jclass clazz, jmethodID methodID, va_list args)
-    { functions->CallStaticVoidMethodV(this, clazz, methodID, args); }
-    void CallStaticVoidMethodA(jclass clazz, jmethodID methodID, jvalue* args)
-    { functions->CallStaticVoidMethodA(this, clazz, methodID, args); }
+    {
+}  // namespace op
+}  // namespace mxnet
     
-    #include <fb/assert.h>
-#include <fb/log.h>
+          // At this point we have a in_idx[mid] which is close to row_seg_start
+      // Safety check to make sure mid is a valid indptr value
+      if (mid < row_indptr_start || mid > row_indptr_end)
+          mid = row_indptr_start;
     
-    
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
-};
-    
-    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
-    
-    template <typename T, typename ...Args>
-static inline RefPtr<T> createNew(Args&&... arguments) {
-  return RefPtr<T>::adoptRef(new T(std::forward<Args>(arguments)...));
-}
-    
-    #if ENABLE_FBASSERT
-#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
-#else
-#define FBASSERTMSGF(expr, msg, ...)
-#endif // ENABLE_FBASSERT
-    
-    
-    {  local_ref<JFile::javaobject> getFilesDir() {
-    static auto method = getClass()->getMethod<JFile::javaobject()>('getFilesDir');
-    return method(self());
-  }
-};
-    
-      // TODO? Create reusable interface for Allocatable classes and use it to
-  // strengthen type-checking (and possibly provide a default
-  // implementation of allocate().)
-  template <typename... Args>
-  static local_ref<jhybridobject> allocateWithCxxArgs(Args&&... args) {
-    auto hybridData = makeCxxInstance(std::forward<Args>(args)...);
-    static auto allocateMethod =
-        javaClassStatic()->template getStaticMethod<jhybridobject(jhybriddata)>('allocate');
-    return allocateMethod(javaClassStatic(), hybridData.get());
-  }
-    
-      struct Iterator;
-    
-      /// Invoke a method and return a local reference wrapping the result
-  local_ref<JniRet> operator()(alias_ref<jobject> self, Args... args);
-    
-    
-    {} // namespace detail
+      rnn_cell::desc rnn_cell(nalgorithm,
+      mode == rnn_enum::kRnnRelu ? algorithm::eltwise_relu : algorithm::eltwise_tanh);
