@@ -1,138 +1,69 @@
 
         
-                if now - self.lastmark >= 3:
-            self.lastmark = now
-            qps = len(self.tail) / sum(self.tail)
-            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
-    
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
-    
-    
-class Command(ScrapyCommand):
-    
-    
-def _parsed_url_args(parsed):
-    # Assume parsed is urlparse-d from Request.url,
-    # which was passed via safe_url_string and is ascii-only.
-    b = lambda s: to_bytes(s, encoding='ascii')
-    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))
-    path = b(path)
-    host = b(parsed.hostname)
-    port = parsed.port
-    scheme = b(parsed.scheme)
-    netloc = b(parsed.netloc)
-    if port is None:
-        port = 443 if scheme == b'https' else 80
-    return scheme, netloc, host, port, path
-    
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
+        
+def rle_mask_nms(masks, dets, thresh, mode='IOU'):
+    '''Performs greedy non-maximum suppression based on an overlap measurement
+    between masks. The type of measurement is determined by `mode` and can be
+    either 'IOU' (standard intersection over union) or 'IOMA' (intersection over
+    mininum area).
     '''
+    if len(masks) == 0:
+        return []
+    if len(masks) == 1:
+        return [0]
     
-            if not model.train or cfg.MODEL.FASTER_RCNN:
-            # Proposals are needed during:
-            #  1) inference (== not model.train) for RPN only and Faster R-CNN
-            #  OR
-            #  2) training for Faster R-CNN
-            # Otherwise (== training for RPN only), proposals are not needed
-            lvl_anchors = generate_anchors(
-                stride=2.**lvl,
-                sizes=(cfg.FPN.RPN_ANCHOR_START_SIZE * 2.**(lvl - k_min), ),
-                aspect_ratios=cfg.FPN.RPN_ASPECT_RATIOS
-            )
-            rpn_cls_probs_fpn = model.net.Sigmoid(
-                rpn_cls_logits_fpn, 'rpn_cls_probs_fpn' + slvl
-            )
-            model.GenerateProposals(
-                [rpn_cls_probs_fpn, rpn_bbox_pred_fpn, 'im_info'],
-                ['rpn_rois_fpn' + slvl, 'rpn_roi_probs_fpn' + slvl],
-                anchors=lvl_anchors,
-                spatial_scale=sc
-            )
+        return dataset_name, proposal_file
     
-    def add_fast_rcnn_outputs(model, blob_in, dim):
-    '''Add RoI classification and bounding box regression output ops.'''
-    # Box classification layer
-    model.FC(
-        blob_in,
-        'cls_score',
-        dim,
-        model.num_classes,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    if not model.train:  # == if test
-        # Only add softmax when testing; during training the softmax is combined
-        # with the label cross entropy loss for numerical stability
-        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
-    # Box regression layer
-    num_bbox_reg_classes = (
-        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
-    )
-    model.FC(
-        blob_in,
-        'bbox_pred',
-        dim,
-        num_bbox_reg_classes * 4,
-        weight_init=gauss_fill(0.001),
-        bias_init=const_fill(0.0)
-    )
+        def test_merge_cfg_from_file(self):
+        with tempfile.NamedTemporaryFile() as f:
+            envu.yaml_dump(cfg, f)
+            s = cfg.MODEL.TYPE
+            cfg.MODEL.TYPE = 'dummy'
+            assert cfg.MODEL.TYPE != s
+            core_config.merge_cfg_from_file(f.name)
+            assert cfg.MODEL.TYPE == s
+    
+    # coco (val5k)
+# INFO roidb.py: 220: 1        person: 21296
+# INFO roidb.py: 220: 2       bicycle: 628
+# INFO roidb.py: 220: 3           car: 3818
+# INFO roidb.py: 220: 4    motorcycle: 732
+# INFO roidb.py: 220: 5      airplane: 286 <------ irrelevant
+# INFO roidb.py: 220: 6           bus: 564
+# INFO roidb.py: 220: 7         train: 380
+# INFO roidb.py: 220: 8         truck: 828
+    
+            def start_service(service):
+            service_containers = service.start(quiet=True, **options)
+            containers.extend(service_containers)
+    
+        @property
+    def _labels(self):
+        if version_lt(self.client._version, '1.23'):
+            return None
+        labels = self.labels.copy() if self.labels else {}
+        labels.update({
+            LABEL_PROJECT: self.project,
+            LABEL_NETWORK: self.name,
+            LABEL_VERSION: __version__,
+        })
+        return labels
     
     
-def _generate_anchors(base_size, scales, aspect_ratios):
-    '''Generate anchor (reference) windows by enumerating aspect ratios X
-    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
-    '''
-    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
-    anchors = _ratio_enum(anchor, aspect_ratios)
-    anchors = np.vstack(
-        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
-    )
-    return anchors
+def normpath(path, win_host=False):
+    ''' Custom path normalizer that handles Compose-specific edge cases like
+        UNIX paths on Windows hosts and vice-versa. '''
     
-        if upsample_heatmap:
-        # Increase heatmap output size via bilinear upsampling
-        blob_out = model.BilinearInterpolation(
-            blob_out, 'kps_score', cfg.KRCNN.NUM_KEYPOINTS,
-            cfg.KRCNN.NUM_KEYPOINTS, cfg.KRCNN.UP_SCALE
-        )
+        terminator = ''
+    
+    import tempfile
     
     
-def _build_forward_graph(model, single_gpu_build_func):
-    '''Construct the forward graph on each GPU.'''
-    all_loss_gradients = {}  # Will include loss gradients from all GPUs
-    # Build the model on each GPU with correct name and device scoping
-    for gpu_id in range(cfg.NUM_GPUS):
-        with c2_utils.NamedCudaScope(gpu_id):
-            all_loss_gradients.update(single_gpu_build_func(model))
-    return all_loss_gradients
+def max_name_width(service_names, max_index_width=3):
+    '''Calculate the maximum width of container names so we can make the log
+    prefixes line up like so:
     
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
-    
-        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
-    
-    __all__ = ['set_close_exec']
-
-    
-        def find(self, needle: str, start: int = 0, end: int = None) -> int:
-        assert start >= 0, start
-        pos = self.pos
-        start += pos
-        if end is None:
-            index = self.text.find(needle, start)
-        else:
-            end += pos
-            assert end >= start
-            index = self.text.find(needle, start, end)
-        if index != -1:
-            index -= pos
-        return index
+        @mock.patch('updateHostsFile.path_join_robust', side_effect=mock_path_join_robust)
+    def test_remove_hosts_file_backup(self, _):
+        with open(self.hosts_file, 'w') as f:
+            f.write('foo')
