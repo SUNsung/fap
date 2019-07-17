@@ -1,254 +1,317 @@
 
         
-            typedef ptrdiff_t  stride_t;
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
-        v_dst = internal::vqsub(v_max, v_min);
+    #include 'content/nw/src/api/base/base.h'
+    
+    #include <string>
+    
+    v8::Handle<v8::Value> AllocateId(int routing_id) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope scope(isolate);
     }
     
-    #define IMPL_ADDWEIGHTED(type)                                \
-void addWeighted(const Size2D &,                              \
-                 const type *, ptrdiff_t,                     \
-                 const type *, ptrdiff_t,                     \
-                 type *, ptrdiff_t,                           \
-                 f32, f32, f32)                               \
-{                                                             \
-    internal::assertSupportedConfiguration();                 \
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+
+    
+    
+    {} // namespace nwapi
+
+    
+    
+#include 'base/basictypes.h'
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->is_checked_;
 }
     
-    #include 'common.hpp'
-    
-     *Redistributions in binary form must reproduce the above copyright
-  notice, this list of conditions and the following disclaimer in the
-  documentation and/or other materials provided with the distribution.
-    
-    
-    {
-    {
-    {            // make shift
-            prevx = currx;
-            currx = nextx;
-        }
+    void Menu::Create(const base::DictionaryValue& option) {
+  is_menu_modified_ = true;
+  menu_delegate_.reset(new MenuDelegate(object_manager()));
+  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
     }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)border;
-    (void)borderValue;
-#endif
+    
+    ExtensionFunction::ResponseAction
+NwAppQuitFunction::Run() {
+  ExtensionService* service =
+    ExtensionSystem::Get(browser_context())->extension_service();
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppQuitFunction::DoJob,
+                   service,
+                   extension_id()));
+  return RespondNow(NoArguments());
 }
     
-    REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
     
-    **Result**
+    #include 'extensions/browser/extension_function.h'
     
-    REGISTER_CUDA_OPERATOR(LC3D, LocallyConnectedOp<float, CUDAContext>);
-REGISTER_CUDA_OPERATOR(
-    LC3DGradient,
-    LocallyConnectedGradientOp<float, CUDAContext>);
+    int hdf5_load_int(hid_t loc_id, const string& dataset_name);
+void hdf5_save_int(hid_t loc_id, const string& dataset_name, int i);
+string hdf5_load_string(hid_t loc_id, const string& dataset_name);
+void hdf5_save_string(hid_t loc_id, const string& dataset_name,
+                      const string& s);
     
-    #include <vector>
-#include 'Ratpack/ratpak.h'
+    #include 'hdf5.h'
+#include 'hdf5_hl.h'
     
-    // WARNING: IDC_SIGN is a special unary op but still this doesn't catch this. Caller has to be aware
-// of it and catch it themselves or not needing this
-bool IsUnaryOpCode(OpCode opCode)
-{
-    return IsOpInRange(opCode, IDC_UNARYFIRST, IDC_UNARYLAST);
+      /**
+   * @brief Run Forward and return the result.
+   *
+   */
+  const vector<Blob<Dtype>*>& Forward(Dtype* loss = NULL);
+  /// @brief DEPRECATED; use Forward() instead.
+  const vector<Blob<Dtype>*>& ForwardPrefilled(Dtype* loss = NULL) {
+    LOG_EVERY_N(WARNING, 1000) << 'DEPRECATED: ForwardPrefilled() '
+        << 'will be removed in a future version. Use Forward().';
+    return Forward(loss);
+  }
+    
+     protected:
+  string SnapshotFilename(const string& extension);
+  string SnapshotToBinaryProto();
+  string SnapshotToHDF5();
+  // The test routine
+  void TestAll();
+  void Test(const int test_net_id = 0);
+  virtual void SnapshotSolverState(const string& model_filename) = 0;
+  virtual void RestoreSolverStateFromHDF5(const string& state_file) = 0;
+  virtual void RestoreSolverStateFromBinaryProto(const string& state_file) = 0;
+  void DisplayOutputBlobs(const int net_id);
+  void UpdateSmoothedLoss(Dtype loss, int start_iter, int average_loss);
+    
+    void InitLog() {
+  ::google::InitGoogleLogging('');
+  ::google::InstallFailureSignalHandler();
+}
+void InitLogLevel(int level) {
+  FLAGS_minloglevel = level;
+  InitLog();
+}
+void InitLogLevelPipe(int level, bool stderr) {
+  FLAGS_minloglevel = level;
+  FLAGS_logtostderr = stderr;
+  InitLog();
+}
+void Log(const string& s) {
+  LOG(INFO) << s;
 }
     
-                /* Return complement. */
-        case IDC_COM:
-            if (m_radix == 10 && !m_fIntegerMode)
-            {
-                result = -(RationalMath::Integer(rat) + 1);
-            }
-            else
-            {
-                result = rat ^ m_chopNumbers[m_numwidth];
-            }
-            break;
-    
-    #include <array>
-#include 'ICalcDisplay.h'
-#include 'IHistoryDisplay.h'
-#include 'Rational.h'
-    
-    
-    {                    if (fBadExponent)
-                    {
-                        throw(CALC_E_DOMAIN);
-                    }
-                }
-                else
-                {
-                    // If the exponent is not odd disregard the sign.
-                    sign = 1;
-                }
-    
-    void ascalerat(_Inout_ PRAT* pa, ANGLE_TYPE angletype, int32_t precision)
-{
-    switch (angletype)
-    {
-    case ANGLE_RAD:
-        break;
-    case ANGLE_DEG:
-        divrat(pa, two_pi, precision);
-        mulrat(pa, rat_360, precision);
-        break;
-    case ANGLE_GRAD:
-        divrat(pa, two_pi, precision);
-        mulrat(pa, rat_400, precision);
-        break;
+    template <typename Dtype>
+void Solver<Dtype>::Step(int iters) {
+  const int start_iter = iter_;
+  const int stop_iter = iter_ + iters;
+  int average_loss = this->param_.average_loss();
+  losses_.clear();
+  smoothed_loss_ = 0;
+  iteration_timer_.Start();
     }
+    
+      std::vector<Prediction> Classify(const cv::Mat& img, int N = 5);
+    
+    /**
+ * @brief Pools the input image by taking the max, average, etc. within regions.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class PoolingLayer : public Layer<Dtype> {
+ public:
+  explicit PoolingLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      /// @brief Compute the sum of absolute values (L1 norm) of the data.
+  Dtype asum_data() const;
+  /// @brief Compute the sum of absolute values (L1 norm) of the diff.
+  Dtype asum_diff() const;
+  /// @brief Compute the sum of squares (L2 norm squared) of the data.
+  Dtype sumsq_data() const;
+  /// @brief Compute the sum of squares (L2 norm squared) of the diff.
+  Dtype sumsq_diff() const;
+    
+      // This random number generator facade hides boost and CUDA rng
+  // implementation from one another (for cross-platform compatibility).
+  class RNG {
+   public:
+    RNG();
+    explicit RNG(unsigned int seed);
+    explicit RNG(const RNG&);
+    RNG& operator=(const RNG&);
+    void* generator();
+   private:
+    class Generator;
+    shared_ptr<Generator> generator_;
+  };
+    
+    SEXP XGDMatrixNumCol_R(SEXP handle) {
+  bst_ulong ncol;
+  R_API_BEGIN();
+  CHECK_CALL(XGDMatrixNumCol(R_ExternalPtrAddr(handle), &ncol));
+  R_API_END();
+  return ScalarInteger(static_cast<int>(ncol));
 }
-    
-    void modrat(PRAT* pa, PRAT b)
-{
-    // contrary to remrat(X, 0) returning 0, modrat(X, 0) must return X
-    if (zerrat(b))
-    {
-        return;
-    }
-    }
-    
-    {
-    // Only do the multiply if it isn't zero.
-    if (!zernum((*pa)->pp))
-    {
-        mulnumx(&((*pa)->pp), b->pp);
-        mulnumx(&((*pa)->pq), b->pq);
-        trimit(pa, precision);
-    }
-    else
-    {
-        // If it is zero, blast a one in the denominator.
-        DUPNUM(((*pa)->pq), num_one);
-    }
-    }
     
     /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
+ * \brief dump model, return array of strings representing model dump
+ * \param handle handle
+ * \param fnum number of features
+ * \param fname names of features
+ * \param ftype types of features
+ * \param with_stats whether to dump with statistics
+ * \param format the format to dump the model in
+ * \param out_len length of output array
+ * \param out_models pointer to hold representing dump of each model
+ * \return 0 when success, -1 when failure happens
  */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
+XGB_DLL int XGBoosterDumpModelExWithFeatures(BoosterHandle handle,
+                                             int fnum,
+                                             const char **fname,
+                                             const char **ftype,
+                                             int with_stats,
+                                             const char *format,
+                                             bst_ulong *out_len,
+                                             const char ***out_models);
     
-    namespace mxnet {
-namespace op {
-namespace caffe {
-    }
-    }
-    }
-    
-    MXNET_REGISTER_IO_ITER(CaffeDataIter)
-.describe('Create MxNet iterator for a Caffe data layer.')
-.add_arguments(CaffeDataParam::__FIELDS__())
-.add_arguments(PrefetcherParam::__FIELDS__())
-.set_body([]() {
-    return new CaffeDataIterWrapper();
-});
-    
-        if (param_.mean_r > 0.0f || param_.mean_g > 0.0f ||
-        param_.mean_b > 0.0f || param_.mean_a > 0.0f) {
-      // subtract mean per channel
-      data[0] -= param_.mean_r;
-      if (data.shape_[0] >= 3) {
-        data[1] -= param_.mean_g;
-        data[2] -= param_.mean_b;
-      }
-      if (data.shape_[0] == 4) {
-        data[3] -= param_.mean_a;
-      }
-    } else if (!meanfile_ready_ || param_.mean_img.length() == 0) {
-      // do not subtract anything
-    } else {
-      CHECK(meanfile_ready_);
-      data -= meanimg_;
-    }
-    
-      virtual bool Next(void) {
-    if (out_ != nullptr) {
-      recycle_queue_.push(out_); out_ = nullptr;
-    }
-    // do recycle
-    if (recycle_queue_.size() == param_.prefetch_buffer) {
-      DataBatch *old_batch =  recycle_queue_.front();
-      // can be more efficient on engine
-      for (NDArray& arr : old_batch->data) {
-        arr.WaitToWrite();
-      }
-      recycle_queue_.pop();
-      iter.Recycle(&old_batch);
-    }
-    return iter.Next(&out_);
+    #if defined(XGBOOST_USE_NCCL) && defined(__CUDACC__)
+TEST(Metric, MGPU_RMSE) {
+  {
+    auto lparam = xgboost::CreateEmptyGenericParam(0, -1);
+    xgboost::Metric * metric = xgboost::Metric::Create('rmse', &lparam);
+    metric->Configure({});
+    ASSERT_STREQ(metric->Name(), 'rmse');
+    EXPECT_NEAR(GetMetricEval(metric, {0}, {0}), 0, 1e-10);
+    EXPECT_NEAR(GetMetricEval(metric,
+                              {0.1f, 0.9f, 0.1f, 0.9f},
+                              {  0,   0,   1,   1}),
+                0.6403f, 0.001f);
+    delete metric;
   }
-  virtual const DataBatch &Value(void) const {
-    return *out_;
+    }
+    
+      GpuIdType const n_devices_visible = AllVisible().Size();
+  CHECK_LE(n_gpus, n_devices_visible);
+  if (n_devices_visible == 0 || n_gpus == 0 || n_rows == 0) {
+    LOG(DEBUG) << 'Runing on CPU.';
+    return Empty();
   }
     
-      /*!
-   * \brief sets two bit gradient compression
-   * \param threshold float value used for thresholding gradients
-   */
-  void SetTwoBitCompression(const float threshold);
+    // linear
+#include '../src/linear/linear_updater.cc'
+#include '../src/linear/updater_coordinate.cc'
+#include '../src/linear/updater_shotgun.cc'
+    
+      EXPECT_FALSE(devices.Contains(1));
+    
+    // Get an example generate config with one static source name to JSON content.
+std::map<std::string, std::string> getTestConfigMap(const std::string& file);
+    
+    
+    {} // namespace osquery
+
+    
+    
+    {  for (auto& action : temp_doc.doc().GetObject()) {
+    for (auto& row : action.value.GetArray()) {
+      auto obj = doc.getObject();
+      serializeEvent(item, row, doc, obj);
+      doc.addCopy('action', action.name.GetString(), obj);
+      doc.push(obj);
+    }
+  }
+  return Status::success();
+}
+    
+    bool VelodyneParser::is_scan_valid(int rotation, float range) {
+  // check range first
+  if (range < config_.min_range() || range > config_.max_range()) {
+    return false;
+  }
+  // condition added to avoid calculating points which are not
+  // in the interesting defined area (min_angle < area < max_angle)
+  // not used now
+  // if ((config_.min_angle > config_.max_angle && (rotation <=
+  // config_.max_angle || rotation >= config_.min_angle))
+  //     || (config_.min_angle < config_.max_angle && rotation >=
+  //     config_.min_angle
+  //         && rotation <= config_.max_angle)) {
+  //     return true;
+  // }
+  return true;
+}
+    
+      double LongitudinalAccelerationCost(const double acceleration);
+    
+        apollo::drivers::gnss::GnssType gnss_type;
+    
+      graph.UpdateObstacleConstraints(10.0, get_safe_distance(5.0), 0.5, 5.0, 10.0);
     
     
     {
-    {NNVM_REGISTER_OP(IdentityAttachKLSparseReg)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>('FSetInputVarAttrOnCompose',
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find('__init__') != var->attrs.dict.end()) return;
-      if (index == 1) {
-        var->attrs.dict['__init__'] = '[\'zero\', {}]';
-      }
-    });
-}  // namespace op
-}  // namespace mxnet
-    
-    namespace HPHP { namespace HHBBC {
+    {    if (emergency_mode && mode != Chassis::EMERGENCY_MODE) {
+      set_driving_mode(Chassis::EMERGENCY_MODE);
+      message_manager_->ResetSendMessages();
     }
+    end = ::apollo::common::time::AsInt64<::apollo::common::time::micros>(
+        ::apollo::common::time::Clock::Now());
+    std::chrono::duration<double, std::micro> elapsed{end - start};
+    if (elapsed < default_period) {
+      std::this_thread::sleep_for(default_period - elapsed);
+    } else {
+      AERROR << 'Too much time consumption in GemController looping process:'
+             << elapsed.count();
     }
-    
-    struct Assembler {
-    }
-    
-    struct ObjectData;
-struct Object;
-    
-      const char* data = filename.data();
-  int data_len = filename.length();
-  bool base64 = false;
-  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
-    return nullptr;
   }
-  data += sizeof('data:') - 1;
-  data_len -= sizeof('data:') - 1;
+}
     
-    #ifndef incl_HPHP_PERF_EVENT_H_
-#define incl_HPHP_PERF_EVENT_H_
+    DEFINE_bool(only_one_send, false, 'only send test.');
+DEFINE_string(can_client_conf_file_a,
+              'modules/canbus/conf/can_client_conf_a.pb.txt',
+              'can client conf for client a');
+DEFINE_string(can_client_conf_file_b,
+              'modules/canbus/conf/can_client_conf_b.pb.txt',
+              'can client conf for client b');
+DEFINE_int64(agent_mutual_send_frames, 1000, 'Every agent send frame num');
     
-    #include 'hphp/util/stack-trace.h'
+      AINFO << 'Init Transformer ...';
+  ObstacleTransformerInitOptions transformer_init_options;
+  transformer_init_options.root_dir = FLAGS_transformer_root;
+  transformer_init_options.conf_file = FLAGS_transformer_conf;
     
     
-    {  size_t operator()(const copy_ptr<Map>& m) const {
-    auto ret = m->size();
-    for (auto& kv : *m) {
-      ret = folly::hash::hash_combine(ret, kv.first.get());
-      ret = folly::hash::hash_combine(ret,
-                                      static_cast<int64_t>(kv.second.m_type));
-      if (!isNullType(kv.second.m_type)) {
-        ret = folly::hash::hash_combine(ret, kv.second.m_data.num);
-      }
-    }
-    return ret;
-  }
+    {  bool IsSidePassableObstacle(const ReferenceLineInfo& reference_line_info);
 };
+    
+    /*
+ * read scenario specific configs and set in context_ for stages to read
+ */
+bool StopSignUnprotectedScenario::GetScenarioConfig() {
+  if (!config_.has_stop_sign_unprotected_config()) {
+    AERROR << 'miss scenario specific config';
+    return false;
+  }
+  context_.scenario_config.CopyFrom(config_.stop_sign_unprotected_config());
+  return true;
+}
+    
+    
+    {  init_ = true;
+}
