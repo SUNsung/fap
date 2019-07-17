@@ -1,276 +1,204 @@
 
         
-            def score(self):
-        min_over = sys.MAXSIZE
-        max_under = -sys.MAXSIZE
-        for score in self.possible_scores():
-            if self.BLACKJACK < score < min_over:
-                min_over = score
-            elif max_under < score <= self.BLACKJACK:
-                max_under = score
-        return max_under if max_under != -sys.MAXSIZE else min_over
+        
+def main():
+    argument_spec = vmware_argument_spec()
+    argument_spec.update(dict(
+        switch=dict(type='str', required=True, aliases=['switch_name']),
+        name=dict(type='str', required=True),
+        state=dict(type='str', required=True, choices=['present', 'absent']),
+        session_type=dict(type='str', default='dvPortMirror', choices=['dvPortMirror',
+                                                                       'encapsulatedRemoteMirrorSource',
+                                                                       'remoteMirrorDest',
+                                                                       'remoteMirrorSource']),
+        enabled=dict(type='bool', default=True),
+        description=dict(type='str'),
+        source_port_transmitted=dict(type='str'),
+        source_port_received=dict(type='str'),
+        destination_port=dict(type='str'),
+        encapsulation_vlan_id=dict(type='int'),
+        strip_original_vlan=dict(type='bool'),
+        mirrored_packet_length=dict(type='int'),
+        normal_traffic_allowed=dict(type='bool'),
+        sampling_rate=dict(type='int'),
+        source_vm_transmitted=dict(type='dict',
+                                   options=dict(
+                                       name=dict(type='str'),
+                                       nic_label=dict(type='str'))),
+        source_vm_received=dict(type='dict',
+                                options=dict(
+                                    name=dict(type='str'),
+                                    nic_label=dict(type='str'))),
+        destination_vm=dict(type='dict',
+                            options=dict(
+                                name=dict(type='str'),
+                                nic_label=dict(type='str'))),
+    ))
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
+    session = VMwareVspanSession(module)
+    session.process_operation()
     
-            (2016-01, shopping), 125
-        (2016-01, gas), 50
+            spec = dict(
+            region=dict(type='str', default='na'),
+            mcp_user=dict(type='str', required=False),
+            mcp_password=dict(type='str', required=False, no_log=True),
+            location=dict(type='str', required=True),
+            validate_certs=dict(type='bool', required=False, default=True)
+        )
+    
+    EXAMPLES = '''
+# Note - You must set the CLC_V2_API_USERNAME And CLC_V2_API_PASSWD Environment variables before running these examples
+    
+            if not CLC_FOUND:
+            self.module.fail_json(msg=missing_required_lib('clc-sdk'), exception=CLC_IMP_ERR)
+        if not REQUESTS_FOUND:
+            self.module.fail_json(msg=missing_required_lib('requests'), exception=REQUESTS_IMP_ERR)
+        if requests.__version__ and LooseVersion(
+                requests.__version__) < LooseVersion('2.5.0'):
+            self.module.fail_json(
+                msg='requests library  version should be >= 2.5.0')
+    
+    EXAMPLES = '''
+# Add a user to a password file and ensure permissions are set
+- htpasswd:
+    path: /etc/nginx/passwdfile
+    name: janedoe
+    password: '9s36?;fyNp'
+    owner: root
+    group: www-data
+    mode: 0640
+    
+    from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+    
+    def predict(self, input):
         '''
-        total = sum(values)
-        self.handle_budget_notifications(key, total)
-        yield key, sum(values)
-    
-        def reducer(self, key, values):
-        '''Sum values for each key.
-    
-        for prime in lowPrimes:
-        if (num % prime) == 0:
-            return False
-    
-            while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
-    
-    try:
-	raw_input		#Python 2
-except NameError:
-	raw_input = input	#Python 3
-    
-    This is a pure Python implementation of Dynamic Programming solution to the longest_sub_array problem.
-    
-        for i in range(1, n+1):
-        for j in range(1, s+1):
-            dp[i][j]= dp[i][j-1]
-    
-    # Mock test below
-if False: # change to true to run this test case.
-    import sklearn.datasets as ds
-    dataset = ds.load_iris()
-    k = 3
-    heterogeneity = []
-    initial_centroids = get_initial_centroids(dataset['data'], k, seed=0)
-    centroids, cluster_assignment = kmeans(dataset['data'], k, initial_centroids, maxiter=400,
-                                        record_heterogeneity=heterogeneity, verbose=True)
-    plot_heterogeneity(heterogeneity, k)
-
-    
-    
-def b_expo(a, b):
-    res = 1
-    while b > 0:
-        if b&1:
-            res *= a
-    
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
         try:
-        citext_oids = get_citext_oids(connection.alias)
-        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
-        psycopg2.extensions.register_type(array_type, None)
-    except ProgrammingError:
-        # citext is not available on the database.
-        #
-        # The same comments in the except block of the above call to
-        # register_hstore() also apply here.
-        pass
-
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
     
-    
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
+            The recognizer attempts to recover from single missing
+        symbols. But, actions might refer to that missing symbol.
+        For example, x=ID {f($x);}. The action clearly assumes
+        that there has been an identifier matched previously and that
+        $x points at that token. If that token is missing, but
+        the next token in the stream is what we want we assume that
+        this token is missing and we keep going. Because we
+        have to return some token to replace the missing token,
+        we have to conjure one up. This method gives the user control
+        over the tokens returned for missing tokens. Mostly,
+        you will want to create something special for identifier
+        tokens. For literals such as '{' and ',', the default
+        action in the parser or tree parser works. It simply creates
+        a CommonToken of the appropriate type. The text will be the token.
+        If you change what tokens must be created by the lexer,
+        override this method to create the appropriate tokens.
         '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
+    }
     
-        if section is not None:
-        if section not in sitemaps:
-            raise Http404('No sitemap available for section: %r' % section)
-        maps = [sitemaps[section]]
+    
+def deserialize_event(event):
+    # Deserialize into Python dictionary and extract the 'NewImage' (the new version of the full ddb document)
+    ddb = event.get('dynamodb')
+    if ddb:
+        result = {
+            '__action_type': event.get('eventName'),
+        }
+    
+            def forward_request(self, method, path, data, headers):
+            sleep_time = int(path.replace('/', ''))
+            time.sleep(sleep_time)
+            response = Response()
+            response.status_code = 200
+            response._content = ('%s' % sleep_time) * file_length
+            return response
+    
+    
+def get_handler_file_from_name(handler_name, runtime=LAMBDA_DEFAULT_RUNTIME):
+    # TODO: support Java Lambdas in the future
+    delimiter = '.'
+    if runtime.startswith(LAMBDA_RUNTIME_NODEJS):
+        file_ext = '.js'
+    elif runtime.startswith(LAMBDA_RUNTIME_GOLANG):
+        file_ext = ''
+    elif runtime.startswith(LAMBDA_RUNTIME_DOTNETCORE2) or runtime.startswith(LAMBDA_RUNTIME_DOTNETCORE21):
+        file_ext = '.dll'
+        delimiter = ':'
+    elif runtime.startswith(LAMBDA_RUNTIME_RUBY):
+        file_ext = '.rb'
+    elif runtime.startswith(LAMBDA_RUNTIME_CUSTOM_RUNTIME):
+        file_ext = '.sh'
     else:
-        maps = sitemaps.values()
-    page = request.GET.get('p', 1)
+        file_ext = '.py'
+    return '%s%s' % (handler_name.split(delimiter)[0], file_ext)
     
-        def css_classes(self, extra_classes=None):
-        '''
-        Return a string of space-separated CSS classes for this field.
-        '''
-        if hasattr(extra_classes, 'split'):
-            extra_classes = extra_classes.split()
-        extra_classes = set(extra_classes or [])
-        if self.errors and hasattr(self.form, 'error_css_class'):
-            extra_classes.add(self.form.error_css_class)
-        if self.field.required and hasattr(self.form, 'required_css_class'):
-            extra_classes.add(self.form.required_css_class)
-        return ' '.join(extra_classes)
+        def return_response(self, method, path, data, headers, response):
+        if response.status_code >= 400:
+            LOG.debug('Error response from CloudFormation (%s) %s %s: %s' %
+                      (response.status_code, method, path, response.content))
+        if response._content:
+            aws_stack.fix_account_id_in_arns(response)
     
+        def test_extract_query_params(self):
+        path, query_params = apigateway_listener.extract_query_string_params(
+            '/foo/bar?foo=foo&bar=bar&bar=baz'
+        )
+        self.assertEqual(path, '/foo/bar')
+        self.assertEqual(query_params, {'foo': 'foo', 'bar': ['bar', 'baz']})
     
-class DjangoTemplates(EngineMixin, BaseRenderer):
-    '''
-    Load Django templates from the built-in widget templates in
-    django/forms/templates and from apps' 'templates' directory.
-    '''
-    backend = DjangoTemplates
+            self.assertEqual(response.headers['content-length'], '0')
+        # clean up
+        self._delete_bucket(bucket_name, [object_key])
     
-        def iter_lines(self, chunk_size):
-        '''Return an iterator over the body yielding (`line`, `line_feed`).'''
-        raise NotImplementedError()
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
+    INSTALL_DIR_INFRA = '%s/infra' % ROOT_PATH
+INSTALL_DIR_NPM = '%s/node_modules' % ROOT_PATH
+INSTALL_DIR_ES = '%s/elasticsearch' % INSTALL_DIR_INFRA
+INSTALL_DIR_DDB = '%s/dynamodb' % INSTALL_DIR_INFRA
+INSTALL_DIR_KCL = '%s/amazon-kinesis-client' % INSTALL_DIR_INFRA
+INSTALL_DIR_STEPFUNCTIONS = '%s/stepfunctions' % INSTALL_DIR_INFRA
+INSTALL_DIR_ELASTICMQ = '%s/elasticmq' % INSTALL_DIR_INFRA
+INSTALL_PATH_LOCALSTACK_FAT_JAR = '%s/localstack-utils-fat.jar' % INSTALL_DIR_INFRA
+URL_LOCALSTACK_FAT_JAR = ('https://repo1.maven.org/maven2/' +
+    'cloud/localstack/localstack-utils/{v}/localstack-utils-{v}-fat.jar').format(v=LOCALSTACK_MAVEN_VERSION)
     
     
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
+def stop_infra():
+    if common.INFRA_STOPPED:
+        return
+    common.INFRA_STOPPED = True
     
-    
-def test_unicode_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': UNICODE}
-    
-        @property
-    def path(self):
-        '''Return the config file path creating basedir, if needed.'''
-        path = self._get_path()
-        try:
-            os.makedirs(os.path.dirname(path), mode=0o700)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        return path
-    
-            # builtin function:
-        self.assertEqual(len.__qualname__, 'len')
-        self.assertEqual(time.time.__qualname__, 'time')
-    
-            # Reference: http://hoohoo.ncsa.uiuc.edu/cgi/env.html
-        # XXX Much of the following could be prepared ahead of time!
-        env = copy.deepcopy(os.environ)
-        env['SERVER_SOFTWARE'] = self.version_string()
-        env['SERVER_NAME'] = self.server.server_name
-        env['GATEWAY_INTERFACE'] = 'CGI/1.1'
-        env['SERVER_PROTOCOL'] = self.protocol_version
-        env['SERVER_PORT'] = str(self.server.server_port)
-        env['REQUEST_METHOD'] = self.command
-        uqrest = urllib.parse.unquote(rest)
-        env['PATH_INFO'] = uqrest
-        env['PATH_TRANSLATED'] = self.translate_path(uqrest)
-        env['SCRIPT_NAME'] = scriptname
-        if query:
-            env['QUERY_STRING'] = query
-        env['REMOTE_ADDR'] = self.client_address[0]
-        authorization = self.headers.get('authorization')
-        if authorization:
-            authorization = authorization.split()
-            if len(authorization) == 2:
-                import base64, binascii
-                env['AUTH_TYPE'] = authorization[0]
-                if authorization[0].lower() == 'basic':
-                    try:
-                        authorization = authorization[1].encode('ascii')
-                        authorization = base64.decodebytes(authorization).\
-                                        decode('ascii')
-                    except (binascii.Error, UnicodeError):
-                        pass
-                    else:
-                        authorization = authorization.split(':')
-                        if len(authorization) == 2:
-                            env['REMOTE_USER'] = authorization[0]
-        # XXX REMOTE_IDENT
-        if self.headers.get('content-type') is None:
-            env['CONTENT_TYPE'] = self.headers.get_content_type()
-        else:
-            env['CONTENT_TYPE'] = self.headers['content-type']
-        length = self.headers.get('content-length')
-        if length:
-            env['CONTENT_LENGTH'] = length
-        referer = self.headers.get('referer')
-        if referer:
-            env['HTTP_REFERER'] = referer
-        accept = []
-        for line in self.headers.getallmatchingheaders('accept'):
-            if line[:1] in '\t\n\r ':
-                accept.append(line.strip())
-            else:
-                accept = accept + line[7:].split(',')
-        env['HTTP_ACCEPT'] = ','.join(accept)
-        ua = self.headers.get('user-agent')
-        if ua:
-            env['HTTP_USER_AGENT'] = ua
-        co = filter(None, self.headers.get_all('cookie', []))
-        cookie_str = ', '.join(co)
-        if cookie_str:
-            env['HTTP_COOKIE'] = cookie_str
-        # XXX Other HTTP_* headers
-        # Since we're setting the env in the parent, provide empty
-        # values to override previously set values
-        for k in ('QUERY_STRING', 'REMOTE_HOST', 'CONTENT_LENGTH',
-                  'HTTP_USER_AGENT', 'HTTP_COOKIE', 'HTTP_REFERER'):
-            env.setdefault(k, '')
-    
-        def test_file_display(self):
-        for handler in (self.dialog.idle_credits,
-                        self.dialog.idle_readme,
-                        self.dialog.idle_news):
-            self.error.message = ''
-            self.view.called = False
-            with self.subTest(handler=handler):
-                handler()
-                self.assertEqual(self.error.message, '')
-                self.assertEqual(self.view.called, True)
-    
-    # Generic implementation of splitext, to be parametrized with
-# the separators
-def _splitext(p, sep, altsep, extsep):
-    '''Split the extension from a pathname.
-    
-        def testEOFError(self):
-        bz2d = BZ2Decompressor()
-        text = bz2d.decompress(self.DATA)
-        self.assertRaises(EOFError, bz2d.decompress, b'anything')
-        self.assertRaises(EOFError, bz2d.decompress, b'')
-    
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
-        else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+        # set basic CLI commands
+    config.CLI_COMMANDS['infra'] = {
+        'description': 'Commands to manage the infrastructure',
+        'function': cli.cmd_infra
+    }
+    config.CLI_COMMANDS['start'] = {
+        'description': 'Shorthand to start the infrastructure',
+        'function': cli.cmd_infra
+    }
+    config.CLI_COMMANDS['web'] = {
+        'description': 'Commands to manage the Web dashboard',
+        'function': cli.cmd_web
+    }
+    config.CLI_COMMANDS['ssh'] = {
+        'description': 'Shorthand to obtain a shell in the running container',
+        'function': cli.cmd_ssh
+    }
