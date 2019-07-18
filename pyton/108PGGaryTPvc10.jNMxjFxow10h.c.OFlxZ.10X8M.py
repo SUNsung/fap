@@ -1,64 +1,75 @@
 
         
-            # Sorting the libraries
-    inner_blocks = sorted(blocks[0].split('##'))
-    for i in range(1 , len(inner_blocks)):
-        if inner_blocks[i][0] != '#':
-            inner_blocks[i] = '##' + inner_blocks[i]
-    inner_blocks=''.join(inner_blocks)
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
+            else:
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
     
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
+            def predicate(problem):
+            return cls.SEVERITY_LEVELS[problem.severity] >= threshold
     
-        if K.image_data_format() == 'channels_last':
-        x_train = x_train.transpose(0, 2, 3, 1)
-        x_test = x_test.transpose(0, 2, 3, 1)
+        project_id = BoundedBigIntegerField()
+    group_id = BoundedBigIntegerField(null=True)
+    event_id = BoundedBigIntegerField()
+    # We want to keep this model lightweight, so lets use a pointer to
+    # TagKey/TagValue
+    key_id = BoundedBigIntegerField()
+    value_id = BoundedBigIntegerField()
+    # maintain a date column for easy removal
+    date_added = models.DateTimeField(default=timezone.now, db_index=True)
     
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+            # Adding model 'GroupTagValue'
+        db.create_table(u'tagstore_grouptagvalue', (
+            ('_value', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagValue'], db_column='value')),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('times_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('_key', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['tagstore.TagKey'], db_column='key')),
+            ('first_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+            ('group_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('last_seen', self.gf('django.db.models.fields.DateTimeField')(
+                null=True, db_index=True)),
+        ))
+        db.send_create_signal('tagstore', ['GroupTagValue'])
     
-    Gets to 99.25% test accuracy after 12 epochs
-(there is still a lot of margin for parameter tuning).
-16 seconds per epoch on a GRID K520 GPU.
-'''
+        def forwards(self, orm):
+        # Adding model 'TagKey'
+        db.create_table(u'tagstore_tagkey', (
+            ('id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(primary_key=True)),
+            ('project_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(db_index=True)),
+            ('environment_id', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)),
+            ('key', self.gf('django.db.models.fields.CharField')(max_length=32)),
+            ('values_seen', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+            ('status', self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(default=0)),
+        ))
+        db.send_create_signal('tagstore', ['TagKey'])
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-    for i, face_distance in enumerate(face_distances):
-    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
-    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
-    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
-    print()
+        for notifier in get_activity_notifiers(activity.project):
+        notifier.notify_about_activity(activity)
 
     
-    for face_location in face_locations:
+    flags.DEFINE_integer(
+    'n_best_size', 20,
+    'The total number of n-best predictions to generate in the '
+    'nbest_predictions.json output file.')
     
+      def test_config_to_json_string(self):
+    config = modeling.BertConfig(vocab_size=99, hidden_size=37)
+    obj = json.loads(config.to_json_string())
+    self.assertEqual(obj['vocab_size'], 99)
+    self.assertEqual(obj['hidden_size'], 37)
     
-def process_images_in_process_pool(images_to_check, number_of_cpus, model):
-    if number_of_cpus == -1:
-        processes = None
-    else:
-        processes = number_of_cpus
+    flags.DEFINE_string(
+    'bert_hub_module_handle', None,
+    'Handle for the BERT TF-Hub module.')
     
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0].rect.top(), 144, delta=25)
-        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 389, delta=25)
-    
-    # Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    'Barack Obama',
-    'Joe Biden'
-]
+      output = input_tensor
