@@ -1,281 +1,143 @@
 
         
-        
-class BlackJackCard(Card):
+            def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
+            self.parser.env = MockEnvironment()
     
-class QueryApi(object):
+            actual = get_unique_filename(orig_name, attempts(unique_on_attempt))
+        assert expected == actual
     
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
     
-            status_line = 'HTTP/{version} {status} {reason}'.format(
-            version=version,
-            status=original.status,
-            reason=original.reason
-        )
-        headers = [status_line]
-        try:
-            # `original.msg` is a `http.client.HTTPMessage` on Python 3
-            # `_headers` is a 2-tuple
-            headers.extend(
-                '%s: %s' % header for header in original.msg._headers)
-        except AttributeError:
-            # and a `httplib.HTTPMessage` on Python 2.x
-            # `headers` is a list of `name: val<CRLF>`.
-            headers.extend(h.strip() for h in original.msg.headers)
+        def format_body(self, content, mime):
+        if is_valid_mime(mime):
+            for p in self.enabled_plugins:
+                content = p.format_body(content, mime)
+        return content
+
     
-        The message bytes are converted to an encoding suitable for
-    `self.env.stdout`. Unicode errors are replaced and binary data
-    is suppressed. The body is always streamed by line.
-    
-        def get_auth(self, username=None, password=None):
         '''
-        If `auth_parse` is set to `True`, then `username`
-        and `password` contain the parsed credentials.
+    req_h = OUT_REQ_HEAD in output_options
+    req_b = OUT_REQ_BODY in output_options
+    resp_h = OUT_RESP_HEAD in output_options
+    resp_b = OUT_RESP_BODY in output_options
+    req = req_h or req_b
+    resp = resp_h or resp_b
+    
+        # This be set automatically once the plugin has been loaded.
+    package_name = None
     
     
-class HTTPBasicAuth(requests.auth.HTTPBasicAuth):
-    
-        def unregister(self, plugin):
-        self._plugins.remove(plugin)
+class DigestAuthPlugin(BuiltinAuthPlugin):
     
     
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        plugin_manager.register(Plugin)
+class IHCDevice(Entity):
+    '''Base class for all IHC devices.
     
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+def config_per_platform(config: ConfigType,
+                        domain: str) -> Iterable[Tuple[Any, Any]]:
+    '''Break a component config into different platforms.
     
     
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+async def test_if_not_fires_for_enter_on_zone_leave(hass, calls):
+    '''Test for not firing on zone leave.'''
+    hass.states.async_set('test.entity', 'hello', {
+        'latitude': 32.880586,
+        'longitude': -117.237564
+    })
+    await hass.async_block_till_done()
     
-                for prefix in SESSION_IGNORED_HEADER_PREFIXES:
-                if name.lower().startswith(prefix.lower()):
-                    break
+    
+async def test_setup_entry_successful(hass):
+    '''Test setup entry is successful.'''
+    entry = MockConfigEntry(domain=hmipc.DOMAIN, data={
+        hmipc.HMIPC_HAPID: 'ABC123',
+        hmipc.HMIPC_AUTHTOKEN: '123',
+        hmipc.HMIPC_NAME: 'hmip',
+    })
+    entry.add_to_hass(hass)
+    with patch.object(hmipc, 'HomematicipHAP') as mock_hap:
+        mock_hap.return_value.async_setup.return_value = mock_coro(True)
+        assert await async_setup_component(hass, hmipc.DOMAIN, {
+            hmipc.DOMAIN: {
+                hmipc.CONF_ACCESSPOINT: 'ABC123',
+                hmipc.CONF_AUTHTOKEN: '123',
+                hmipc.CONF_NAME: 'hmip',
+            }
+        }) is True
+    
+    
+@pytest.fixture(autouse=True)
+def netdisco_mock():
+    '''Mock netdisco.'''
+    with patch.dict('sys.modules', {
+        'netdisco.discovery': MagicMock(),
+    }):
+        yield
+    
+        @abc.abstractmethod
+    def check_range(self, request):
+        '''Compare passed value to predefined interval'''
+    
+    
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+    '''
+http://peter-hoffmann.com/2010/extrinsic-visitor-pattern-python-inheritance.html
+    
+    *TL;DR
+Creates objects without having to specify the exact class.
+'''
+    
+        def product_list(self):
+        return self.data['products'].keys()
+    
+        # low-level i.e. Implementation specific
+    def draw(self):
+        self._drawing_api.draw_circle(self._x, self._y, self._radius)
+    
+    from pandas.compat import is_platform_windows
+import pandas.util._test_decorators as td
+    
             else:
-                self['headers'][name] = value
-    
-        def ensure_absent(self):
-        '''Ensures the rule and targets are absent'''
-        rule_description = self.rule.describe()
-        if not rule_description:
-            # Rule doesn't exist so don't need to delete
-            return
-        self.rule.delete()
+            raise Exception('invalid pickle state')
     
     
-DOCUMENTATION = '''
----
-module: ec2_snapshot
-short_description: creates a snapshot from an existing volume
-description:
-    - creates an EC2 snapshot from an existing EBS volume
-version_added: '1.5'
-options:
-  volume_id:
-    description:
-      - volume from which to take the snapshot
-    required: false
-  description:
-    description:
-      - description to be applied to the snapshot
-    required: false
-  instance_id:
-    description:
-    - instance that has the required volume to snapshot mounted
-    required: false
-  device_name:
-    description:
-    - device name of a mounted volume to be snapshotted
-    required: false
-  snapshot_tags:
-    description:
-      - a hash/dictionary of tags to add to the snapshot
-    required: false
-    version_added: '1.6'
-  wait:
-    description:
-      - wait for the snapshot to be ready
-    type: bool
-    required: false
-    default: yes
-    version_added: '1.5.1'
-  wait_timeout:
-    description:
-      - how long before wait gives up, in seconds
-      - specify 0 to wait forever
-    required: false
-    default: 0
-    version_added: '1.5.1'
-  state:
-    description:
-      - whether to add or create a snapshot
-    required: false
-    default: present
-    choices: ['absent', 'present']
-    version_added: '1.9'
-  snapshot_id:
-    description:
-      - snapshot id to remove
-    required: false
-    version_added: '1.9'
-  last_snapshot_min_age:
-    description:
-      - If the volume's most recent snapshot has started less than `last_snapshot_min_age' minutes ago, a new snapshot will not be created.
-    required: false
-    default: 0
-    version_added: '2.0'
-    
-            elif desired_state == 'disabled':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be put in disabled state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.OFFLINE]:
-                if one.host.status(host.ID, HOST_STATUS.DISABLED):
-                    self.wait_for_host_state(host, [HOST_STATES.DISABLED])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not disable host')
-            elif current_state in [HOST_STATES.DISABLED]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to disable' % current_state_name)
-    
-    
-def nat_rules_to_dict(nat_rules):
-    result = []
-    for rule in nat_rules:
-        gw_rule = rule.get_GatewayNatRule()
-        result.append(
-            dict(
-                rule_type=rule.get_RuleType().lower(),
-                original_ip=gw_rule.get_OriginalIp().lower(),
-                original_port=(gw_rule.get_OriginalPort().lower() or 'any'),
-                translated_ip=gw_rule.get_TranslatedIp().lower(),
-                translated_port=(gw_rule.get_TranslatedPort().lower() or 'any'),
-                protocol=(gw_rule.get_Protocol().lower() or 'any')
-            )
-        )
-    return result
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-            if service is not None:
-            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberservice_hbacsvc', []), service,
-                                            client.hbacrule_add_service,
-                                            client.hbacrule_remove_service, 'hbacsvc') or changed
-    
-        try:
-        data = urlencode(params)
-        response, info = fetch_url(module, url, data=data)
-    except Exception as e:
-        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
-    else:
-        if info['status'] == 201:
-            module.exit_json(changed=True)
-        else:
-            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
-    
-    # (c) 2013, Darryl Stoflet <stoflet@gmail.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-    
-        ##################################################################
-    # deploy requires revision_id
-    # annotation requires msg
-    # We verify these manually
-    ##################################################################
-    
-        def test_decode_bad(self):
-        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
-    
-            # Force reload if files were modified
-        # This is needed to recalculate augeas directive span
-        if save_files:
-            for sf in save_files:
-                self.aug.remove('/files/'+sf)
-            self.aug.load()
-        if title and not temporary:
-            self.finalize_checkpoint(title)
-    
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-dns-cloudflare', u'certbot-dns-cloudflare Documentation',
-     [author], 1)
-]
-    
-    
-setup_locate_faces = '''
-import face_recognition
-    
-            # Draw a label with a name below the face
-        text_width, text_height = draw.textsize(name)
-        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-        draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        # Write the resulting image to the output video file
-    print('Writing frame {} / {}'.format(frame_number, length))
-    output_movie.write(frame)
-    
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0][0], 144, delta=25)
-        self.assertAlmostEqual(detected_faces[0][1], 608, delta=25)
-        self.assertAlmostEqual(detected_faces[0][2], 389, delta=25)
-        self.assertAlmostEqual(detected_faces[0][3], 363, delta=25)
-    
-        # Sparkle the eyes
-    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
-    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
-    
-    # This is an example of running face recognition on a single image
-# and drawing a box around each person that was identified.
+def test_getitem_simple(multiindex_dataframe_random_data):
+    df = multiindex_dataframe_random_data.T
+    expected = df.values[:, 0]
+    result = df['foo', 'one'].values
+    tm.assert_almost_equal(result, expected)
