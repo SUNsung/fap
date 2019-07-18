@@ -1,285 +1,183 @@
 
         
-        void MapLiteTestUtil::ExpectMapFieldsSet(const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsSet<unittest::MapEnumLite,
-                                      unittest::MAP_ENUM_BAR_LITE,
-                                      unittest::MAP_ENUM_BAZ_LITE>(message);
-}
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    std::ostream& operator<<(std::ostream& os, const Status& x) {
-  os << x.ToString();
-  return os;
-}
+    #include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
     
-    TEST(StructurallyValidTest, InvalidUTF8String) {
-  const string invalid_str('abcd\xA0\xB0\xA0\xB0\xA0\xB0 - xyz789');
-  EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data(),
-                                       invalid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_FALSE(IsStructurallyValidUTF8(invalid_str.data() + i,
-                                         invalid_str.size() - i));
-  }
-}
+    #include 'tensorflow/compiler/xla/service/buffer_assignment.h'
+#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+#include 'tensorflow/core/platform/types.h'
     
-    
-    {  return 0;
-}
-
-    
-      while (true) {
-    void* outptr;
-    int outlen;
-    bool ok;
-    do {
-      ok = out.Next(&outptr, &outlen);
-      if (!ok) {
-        break;
-      }
-    } while (outlen <= 0);
-    readlen = read(STDIN_FILENO, outptr, outlen);
-    if (readlen <= 0) {
-      out.BackUp(outlen);
-      break;
+    Status CustomCallThunk::ExecuteOnStream(const ExecuteParams& params) {
+  // gpu_stream is CUstream or e.g. the equivalent type in ROCm.
+  auto gpu_stream = se::gpu::AsGpuStreamValue(params.stream);
+  auto typed_call_target =
+      reinterpret_cast<void (*)(decltype(gpu_stream), void** /*buffers*/,
+                                const char* /*opaque*/, size_t /*opaque_len*/)>(
+          call_target_);
     }
-    if (readlen < outlen) {
-      out.BackUp(outlen - readlen);
-    }
-  }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {
-  return 0;
-}
+    FftThunk::FftThunk(FftType fft_type, absl::Span<const int64> fft_length,
+                   const BufferAllocation::Slice& input_buffer,
+                   const BufferAllocation::Slice& output_buffer,
+                   const Shape& input_shape, const Shape& output_shape,
+                   const HloInstruction* hlo)
+    : Thunk(Kind::kFft, hlo),
+      fft_type_(FftTypeToSeType(fft_type)),
+      fft_length_(fft_length.begin(), fft_length.end()),
+      scale_factor_(1.0f),
+      input_buffer_(input_buffer),
+      output_buffer_(output_buffer),
+      input_shape_(input_shape),
+      output_shape_(output_shape) {}
+    
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_GPU_INFEED_THUNK_H_
 
-    
-    
-    {    return true;
-  }
-    
-      /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
     
      private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
-    }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
-#endif
+  // Buffers passed to the kernel as arguments.
+  const std::vector<const BufferAllocation*> args_;
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #endif  // CAFFE_CONCAT_LAYER_HPP_
-
+    Status SequentialThunk::Initialize(const GpuExecutable& executable,
+                                   se::StreamExecutor* executor) {
+  for (auto& thunk : thunks_) {
+    TF_RETURN_IF_ERROR(thunk->Initialize(executable, executor));
+  }
+  return Status::OK();
+}
     
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    public:
+  /// Introduces a new constraint checker arena, supplanting any
+  /// existing constraint checker arena.
+  ///
+  /// \param self The ASTContext into which this constraint checker arena
+  /// will be installed.
+  ///
+  /// \param allocator The allocator used for allocating any data that
+  /// goes into the constraint checker arena.
+  ConstraintCheckerArenaRAII(ASTContext &self,
+                             llvm::BumpPtrAllocator &allocator);
+    
+    
+    {  auto origKey =
+      (uintptr_t)SWIFT_THREAD_GETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY);
+  if ((origKey & 0x1) != 0) {
+    auto mask = ((uintptr_t)-1) < 1;
+    auto resetKey = origKey & mask;
+    SWIFT_THREAD_SETSPECIFIC(SWIFT_COMPATIBILITY_50_TLS_KEY, (void *)resetKey);
+    return nullptr;
+  }
+  return ReplFn;
+}
+    
+        Offset offset = (RelativeOffsetPlusIndirectAndInt & ~getIntMask());
+    
+    /// RAII class that suppresses diagnostics by temporarily disabling all of
+/// the diagnostic consumers.
+class DiagnosticSuppression {
+  DiagnosticEngine &diags;
+  std::vector<DiagnosticConsumer *> consumers;
+    }
+    
+    class OrientationDetector {
  public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+  OrientationDetector(const GenericVector<int>* allowed_scripts,
+                      OSResults* results);
+  bool detect_blob(BLOB_CHOICE_LIST* scores);
+  int get_orientation();
+ private:
+  OSResults* osr_;
+  const GenericVector<int>* allowed_scripts_;
+};
     
+    #include 'dppoint.h'
+#include 'errcode.h'
+#include 'tprintf.h'
     
-    {}  // namespace caffe
+      // Get the value of the top (smallest, defined by operator< ) element.
+  const Pair& PeekTop() const {
+    return heap_[0];
+  }
+  // Get the value of the worst (largest, defined by operator< ) element.
+  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
     
-    namespace caffe {
-    }
+      // Insert the given unichar represention in the UNICHARMAP and associate it
+  // with the given id. The length of the representation MUST be non-zero.
+  void insert(const char* const unichar_repr, UNICHAR_ID id);
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
+    // Clear all data.
+void IntFeatureDist::Clear() {
+  delete [] features_;
+  features_ = nullptr;
+  delete [] features_delta_one_;
+  features_delta_one_ = nullptr;
+  delete [] features_delta_two_;
+  features_delta_two_ = nullptr;
 }
     
-    using apollo::common::ErrorCode;
+    # endif  // NDEBUG for EXPECT_DEBUG_DEATH
+#endif  // GTEST_HAS_DEATH_TEST
     
-    #include 'gtest/gtest.h'
+    #if 0
     
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
+                on_failure)
     
+      tuple(const tuple& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_), f3_(t.f3_),
+      f4_(t.f4_), f5_(t.f5_), f6_(t.f6_) {}
     
-    {  // Report Messages
-  AddRecvProtocolData<Accelrpt68, true>();
-  AddRecvProtocolData<Brakemotorrpt170, true>();
-  AddRecvProtocolData<Brakemotorrpt271, true>();
-  AddRecvProtocolData<Brakemotorrpt372, true>();
-  AddRecvProtocolData<Brakerpt6c, true>();
-  AddRecvProtocolData<Datetimerpt83, true>();
-  AddRecvProtocolData<Globalrpt6a, true>();
-  AddRecvProtocolData<Headlightrpt77, true>();
-  AddRecvProtocolData<Hornrpt79, true>();
-  AddRecvProtocolData<Latlonheadingrpt82, true>();
-  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
-  AddRecvProtocolData<Shiftrpt66, true>();
-  AddRecvProtocolData<Steeringmotorrpt173, true>();
-  AddRecvProtocolData<Steeringmotorrpt274, true>();
-  AddRecvProtocolData<Steeringmotorrpt375, true>();
-  AddRecvProtocolData<Steeringrpt16e, true>();
-  AddRecvProtocolData<Turnrpt64, true>();
-  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
-  AddRecvProtocolData<Wheelspeedrpt7a, true>();
-  AddRecvProtocolData<Wiperrpt91, true>();
-  AddRecvProtocolData<Yawraterpt81, true>();
-}
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33>
+struct Types33 {
+  typedef T1 Head;
+  typedef Types32<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33> Tail;
+};
     
-    using ::apollo::drivers::canbus::Byte;
-    
-    namespace apollo {
-namespace canbus {
-namespace gem {
-    }
-    }
-    }
-    
-    #include 'glog/logging.h'
+    // The following family of struct and struct templates are used to
+// represent template lists.  In particular, TemplatesN<T1, T2, ...,
+// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
+// for Templates0, every struct in the family has two member types:
+// Head for the selector of the first template in the list, and Tail
+// for the rest of the list.
