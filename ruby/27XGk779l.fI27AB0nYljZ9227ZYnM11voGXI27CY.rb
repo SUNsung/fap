@@ -1,65 +1,150 @@
 
         
-              def feature_element_timing_key(feature_element)
-        '\'#{feature_element.name}\' (#{feature_element.location})'
+              [poll type=regular]
+      * Hello
+      * World
+      [/poll]
+    MD
+    
+        it 'should import branch from ssh url' do
+      Discourse::Utils.expects(:execute_command).with({
+        'GIT_SSH_COMMAND' => 'ssh -i #{@ssh_folder}/id_rsa -o StrictHostKeyChecking=no'
+      }, 'git', 'clone', '--single-branch', '-b', branch, ssh_url, @temp_folder)
+    
+        def fetch_group(group_name)
+      group_name = group_name.downcase
+      group = @groups[group_name]
+    
+        post_action_types = PostActionType.where(id: PostActionType.flag_types.values).order('id')
+    
+    class Admin::GroupsController < Admin::AdminController
+  def bulk
+  end
+    
+            /^#{path}[^\/]*\.t?gz$/i
+      end
+    end
+    
+              s3_helper.expects(:s3_bucket).returns(s3_bucket).at_least_once
+          s3_bucket.expects(:object).with('uploads/second/original/1X/#{upload.sha1}.png').returns(s3_object)
+          s3_object.expects(:acl).returns(s3_object)
+          s3_object.expects(:put).with(acl: 'private').returns(s3_object)
+    
+        desc 'Get the list of the available license template' do
+      detail 'This feature was introduced in GitLab 8.7.'
+      success ::API::Entities::License
+    end
+    params do
+      optional :popular, type: Boolean, desc: 'If passed, returns only popular licenses'
+      use :pagination
+    end
+    get 'templates/licenses' do
+      popular = declared(params)[:popular]
+      popular = to_boolean(popular) if popular.present?
+    
+          encrypted_token = settings.first.runners_registration_token_encrypted
+      decrypted_token = ::Gitlab::CryptoHelper.aes256_gcm_decrypt(encrypted_token)
+    
+          context 'and user cannot admin_group_member' do
+        before do
+          allow(presenter).to receive(:can?).with(user, :admin_group_member, group).and_return(false)
+        end
+    
+            it { expect(presenter.can_resend_invite?).to eq(true) }
       end
     
-            request_count_counter.increment
+            new(sandbox, sandbox.root.to_s, pods_project, umbrella_targets_descriptions)
+      end
     
-          private
+          # @return [Boolean] whether the target is built as a framework
+      #
+      def framework?
+        packaging == :framework
+      end
+    
+    ENV['SKIP_SETUP'] = 'true'
+if ENV['SKIP_XCODEBUILD'].nil? && Pod::Executable.which('xcodebuild').nil?
+  ENV['SKIP_XCODEBUILD'] = 'true'
+end
+    
+            it 'can be initialized with specs, platform and whether it requires frameworks' do
+          variant = PodVariant.new(@specs, [], [], @platform, @type)
+          variant.specs.should == @specs
+          variant.platform.should == @platform
+          variant.build_type.should == @type
+        end
+    
+              it 'does not require a host target, if there is no user project (manual integration)' do
+            @target.stubs(:user_project).returns(nil)
+            @target.stubs(:user_target_uuids).returns([])
+            @target.requires_host_target?.should == false
+          end
+    
+              it 'saves the xcconfig' do
+            path = temporary_directory + 'sample.xcconfig'
+            @generator.save_as(path)
+            generated = Xcodeproj::Config.new(path)
+            generated.class.should == Xcodeproj::Config
+          end
+    
+          def updates
+        @updates ||= begin
+          ensure_external_podspecs_present!
+          spec_sets.map do |set|
+            spec = set.specification
+            source_version = set.versions.first
+            pod_name = spec.root.name
+            lockfile_version = lockfile.version(pod_name)
+            if source_version > lockfile_version
+              matching_spec = unlocked_pods.find { |s| s.name == pod_name }
+              matching_version =
+                matching_spec ? matching_spec.version : '(unused)'
+              [pod_name, lockfile_version, matching_version, source_version]
+            end
+          end.compact.uniq
+        end
+      end
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Given(/^a custom task to generate a file$/) do
+  TestApp.copy_task_to_test_app('spec/support/tasks/database.rake')
+end
+    
+        (stdout + stderr).each_line { |line| puts '[vagrant] #{line}' }
     
         private
     
-      private
-    
-      included do
-    before_action :set_locale
-  end
-    
-    # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
-# is to ensure that people can’t use malicious code from pod specifications.
-#
-# It does this by creating a ‘seatbelt’ profile on the fly and executing the
-# given command through `/usr/bin/sandbox-exec`. This profile format is an
-# undocumented format, which uses TinyScheme to implement its DSL.
-#
-# Even though it uses a undocumented format, it’s actually very self-explanatory.
-# Because we use a whitelist approach, `(deny default)`, any action that is
-# denied is logged to `/var/log/system.log`. So tailing that should provide
-# enough information on steps that need to be take to get something to work.
-#
-# For more information see:
-#
-# * https://github.com/CocoaPods/CocoaPods/issues/939
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
-# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
-# * `$ man sandbox-exec`
-# * `$ ls /usr/share/sandbox`
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
+        def configure_backend
+      backend.configure do |sshkit|
+        configure_sshkit_output(sshkit)
+        sshkit.output_verbosity = fetch(:log_level)
+        sshkit.default_env      = fetch(:default_env)
+        sshkit.backend          = fetch(:sshkit_backend, SSHKit::Backend::Netssh)
+        sshkit.backend.configure do |backend|
+          backend.pty                = fetch(:pty)
+          backend.connection_timeout = fetch(:connection_timeout)
+          backend.ssh_options        = (backend.ssh_options || {}).merge(fetch(:ssh_options, {}))
         end
+      end
+    end
     
-          def report
-        <<-EOS
+          ServerKey = Struct.new(:hostname, :port)
     
-        def execute
-      temp_path = generate_temporary_path
-      packet_gem = Paquet::Gem.new(temp_path, LogStash::Environment::CACHE_PATH)
+          def keys
+        values.keys
+      end
     
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+      it 'records when the config was read' do
+    expect(subject.read_at).to be <= Time.now
+  end
