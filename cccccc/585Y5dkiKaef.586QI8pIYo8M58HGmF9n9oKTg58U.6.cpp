@@ -1,193 +1,248 @@
 
         
-        	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+            bst_uint newsize = std::max(bst_uint(lower_.size()), bst_uint(std::max(leftid, rightid) + 1u));
     
-    			float fLeftGrayError = CalcGrayDistance2(*pfrgbaLeft, m_frgbaSourceAverageLeft);
-			float fRightGrayError = CalcGrayDistance2(*pfrgbaRight, m_frgbaSourceAverageRight);
-			float fTopGrayError = CalcGrayDistance2(*pfrgbaTop, m_frgbaSourceAverageTop);
-			float fBottomGrayError = CalcGrayDistance2(*pfrgbaBottom, m_frgbaSourceAverageBottom);
+    #include <cstdint>
+#include <rabit/c_api.h>
+#include <xgboost/c_api.h>
+#include <xgboost/base.h>
+#include <xgboost/logging.h>
+#include './xgboost4j.h'
+#include <cstring>
+#include <vector>
+#include <string>
     
-    #define ADD16(a,b) ((a)+(b))
-#define SUB16(a,b) ((a)-(b))
-#define ADD32(a,b) ((a)+(b))
-#define SUB32(a,b) ((a)-(b))
-#define MULT16_16_16(a,b)     ((a)*(b))
-#define MULT16_16(a,b)     ((opus_val32)(a)*(opus_val32)(b))
-#define MAC16_16(c,a,b)     ((c)+(opus_val32)(a)*(opus_val32)(b))
+      const MetaInfo& Info() const override;
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+      // Loop over the batches and count the records
+  int64_t batch_count = 0;
+  int64_t row_count = 0;
+  for (const auto &batch : dmat->GetRowBatches()) {
+    batch_count++;
+    row_count += batch.Size();
+  }
+  EXPECT_GE(batch_count, 2);
+  EXPECT_EQ(row_count, dmat->Info().num_row_);
     
-    /** Shift by a and round-to-neareast 32-bit value. Result is a 16-bit value */
-#define ROUND16(x,a) (EXTRACT16(PSHR32((x),(a))))
-/** Divide by two */
-#define HALF16(x)  (SHR16(x,1))
-#define HALF32(x)  (SHR32(x,1))
+    // objectives
+#include '../src/objective/objective.cc'
+#include '../src/objective/regression_obj.cc'
+#include '../src/objective/multiclass_obj.cc'
+#include '../src/objective/rank_obj.cc'
+#include '../src/objective/hinge.cc'
     
-    #include 'src/cpp/ext/filters/census/context.h'
-    
-      static void OnDoneRecvTrailingMetadataCb(void* user_data, grpc_error* error);
-    
-      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
-               grpc_closure* then_call_closure) override;
+    TEST(Transform, DeclareUnifiedTest(Basic)) {
+  const size_t size {256};
+  std::vector<bst_float> h_in(size);
+  std::vector<bst_float> h_out(size);
+  InitializeRange(h_in.begin(), h_in.end());
+  std::vector<bst_float> h_sol(size);
+  InitializeRange(h_sol.begin(), h_sol.end());
+    }
     
     
-    {
-    {   private:
-    const grpc::string name_;
-    const int value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
-}
-    
-      const auto& weights = info.weights_.HostVector();
+    {  // thread temp data
+  // used to hold temporal sketch
+  std::vector<std::vector<SketchEntry> > thread_sketch_;
+  // used to hold statistics
+  std::vector<std::vector<SKStats> > thread_stats_;
+  // node statistics
+  std::vector<SKStats> node_stats_;
+  // summary array
+  std::vector<WXQSketch::SummaryContainer> summary_array_;
+  // reducer for summary
+  rabit::Reducer<SKStats, SKStats::Reduce> stats_reducer_;
+  // reducer for summary
+  rabit::SerializeReducer<WXQSketch::SummaryContainer> sketch_reducer_;
+  // per node, per feature sketch
+  std::vector<common::WXQuantileSketch<bst_float, bst_float> > sketchs_;
+};
     
     
     {
-    {XGBOOST_REGISTER_GBM(GBTree, 'gbtree')
-.describe('Tree booster, gradient boosted trees.')
-.set_body([](const std::vector<std::shared_ptr<DMatrix> >& cached_mats, bst_float base_margin) {
-    auto* p = new GBTree(base_margin);
-    p->InitCache(cached_mats);
-    return p;
+    {XGBOOST_REGISTER_TREE_UPDATER(TreeRefresher, 'refresh')
+.describe('Refresher that refreshes the weight and statistics according to data.')
+.set_body([]() {
+    return new TreeRefresher();
   });
-XGBOOST_REGISTER_GBM(Dart, 'dart')
-.describe('Tree booster, dart.')
-.set_body([](const std::vector<std::shared_ptr<DMatrix> >& cached_mats, bst_float base_margin) {
-    GBTree* p = new Dart(base_margin);
-    return p;
-  });
-}  // namespace gbm
+}  // namespace tree
 }  // namespace xgboost
 
     
-        // out_of_range.401
-    try
-    {
-        // try to use a an invalid array index
-        json::const_reference ref = j.at('/array/4'_json_pointer);
+      bool PartialMerge(const Slice& /*key*/, const Slice& left_operand,
+                    const Slice& right_operand, std::string* new_value,
+                    Logger* /*logger*/) const override {
+    if (left_operand.compare(right_operand) >= 0) {
+      new_value->assign(left_operand.data(), left_operand.size());
+    } else {
+      new_value->assign(right_operand.data(), right_operand.size());
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+    return true;
+  }
     
-    int main()
-{
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
-    }
-    
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = ((rand() % 19999) + 1) * 37;
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_GT(ret, 0);
-        lists.insert(key);
-    }
-    
-    TEST(coroutine_channel, push_yield)
-{
-    Channel chan(1);
-    }
-    
-    int php_swoole_websocket_frame_pack(swString *buffer, zval *zdata, zend_bool opcode, zend_bool fin, zend_bool mask)
-{
-    char *data = NULL;
-    size_t length = 0;
-    zend_long code = WEBSOCKET_CLOSE_NORMAL;
-    if (Z_TYPE_P(zdata) == IS_OBJECT && instanceof_function(Z_OBJCE_P(zdata), swoole_websocket_frame_ce))
-    {
-        zval *zframe = zdata;
-        zval *ztmp = NULL;
-        zdata = NULL;
-        if ((ztmp = sw_zend_read_property(swoole_websocket_frame_ce, zframe, ZEND_STRL('opcode'), 0)))
-        {
-            opcode = zval_get_long(ztmp);
-        }
-        if (opcode == WEBSOCKET_OPCODE_CLOSE)
-        {
-            if ((ztmp = sw_zend_read_property_not_null(swoole_websocket_frame_ce, zframe, ZEND_STRL('code'), 1)))
-            {
-                code = zval_get_long(ztmp);
-            }
-            if ((ztmp = sw_zend_read_property_not_null(swoole_websocket_frame_ce, zframe, ZEND_STRL('reason'), 1)))
-            {
-                zdata = ztmp;
-            }
-        }
-        if (!zdata && (ztmp = sw_zend_read_property(swoole_websocket_frame_ce, zframe, ZEND_STRL('data'), 0)))
-        {
-            zdata = ztmp;
-        }
-        if ((ztmp = sw_zend_read_property(swoole_websocket_frame_ce, zframe, ZEND_STRL('finish'), 0)))
-        {
-            fin = zval_is_true(ztmp);
-        }
-    }
-    if (unlikely(opcode > SW_WEBSOCKET_OPCODE_MAX))
-    {
-        swoole_php_fatal_error(E_WARNING, 'the maximum value of opcode is %d', SW_WEBSOCKET_OPCODE_MAX);
-        return SW_ERR;
-    }
-    zend::string str_zdata;
-    if (zdata && !ZVAL_IS_NULL(zdata))
-    {
-        str_zdata = zdata;
-        data = str_zdata.val();
-        length = str_zdata.len();
-    }
-    switch(opcode)
-    {
-    case WEBSOCKET_OPCODE_CLOSE:
-        return swWebSocket_pack_close_frame(buffer, code, data, length, mask);
-    default:
-        swWebSocket_encode(buffer, data, length, opcode, fin, mask);
-    }
-    return SW_OK;
+    std::shared_ptr<TransactionDBCondVar>
+TransactionDBMutexFactoryImpl::AllocateCondVar() {
+  return std::shared_ptr<TransactionDBCondVar>(new TransactionDBCondVarImpl());
 }
     
-    void ExampleQt::run() {
+      // When an actor (column family) requests a stop token, all writes will be
+  // stopped until the stop token is released (deleted)
+  std::unique_ptr<WriteControllerToken> GetStopToken();
+  // When an actor (column family) requests a delay token, total delay for all
+  // writes to the DB will be controlled under the delayed write rate. Every
+  // write needs to call GetDelay() with number of bytes writing to the DB,
+  // which returns number of microseconds to sleep.
+  std::unique_ptr<WriteControllerToken> GetDelayToken(
+      uint64_t delayed_write_rate);
+  // When an actor (column family) requests a moderate token, compaction
+  // threads will be increased
+  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
+    
+    int main() {
+  // open DB
+  Options options;
+  options.create_if_missing = true;
+  DB* db;
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
     }
     
-    int main(int argc, char **argv)
-{
-    swoole_init();
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+      // Return stats as map of {string, double} per-tier
+  //
+  // Persistent cache can be initialized as a tier of caches. The stats are per
+  // tire top-down
+  virtual StatsType Stats() = 0;
+    
+    
+    { protected:
+  virtual ~Snapshot();
+};
+    
+    #pragma once
+// lua headers
+extern 'C' {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+    
+    TEST_F(PacksTests, test_restriction_population) {
+  // Require that all potential restrictions are populated before being checked.
+  auto doc = getExamplePacksConfig();
+  const auto& packs = doc.doc()['packs'];
+  Pack fpack('fake_pack', packs['restricted_pack']);
     }
     
-            memcpy(&tmp, recv_pkg.ptr, sizeof(tmp));
-        ASSERT_EQ(tmp, recv_pkg.size);
+    enum class DatabaseError {
+  // Unknown error, currently unused
+  Unknown = 1,
+  DbIsNotOpen = 2,
+  InvalidPath = 3,
+  FailToDestroyDB = 4,
+  FailToOpenDatabase = 5,
+  FailToReadData = 6,
+  FailToWriteData = 7,
+  KeyNotFound = 8,
+  DomainNotFound = 9,
+  // Corruption or other unrecoverable error after DB can't be longer used
+  // Database should be closed, destroyed and opened again
+  // If this error was received during data access, then application
+  // is likely to die soon
+  // See message and/or underlying error for details
+  Panic = 10,
+};
     
-    TEST(os_wait, wait_before_child_exit)
-{
-    coro_test([](void *arg)
-    {
-        swoole_coroutine_signal_init();
-    }
-    }
+    ExpectedSuccess<RocksdbMigrationError> migrateRocksDBDatabase(
+    const std::string& path);
     
-    using namespace std;
+    Status LoggerPlugin::call(const PluginRequest& request,
+                          PluginResponse& response) {
+  std::vector<StatusLogLine> intermediate_logs;
+  if (request.count('string') > 0) {
+    return this->logString(request.at('string'));
+  } else if (request.count('snapshot') > 0) {
+    return this->logSnapshot(request.at('snapshot'));
+  } else if (request.count('init') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    this->setProcessName(request.at('init'));
+    this->init(this->name(), intermediate_logs);
+    return Status(0);
+  } else if (request.count('status') > 0) {
+    deserializeIntermediateLog(request, intermediate_logs);
+    return this->logStatus(intermediate_logs);
+  } else if (request.count('event') > 0) {
+    return this->logEvent(request.at('event'));
+  } else if (request.count('action') && request.at('action') == 'features') {
+    size_t features = 0;
+    features |= (usesLogStatus()) ? LOGGER_FEATURE_LOGSTATUS : 0;
+    features |= (usesLogEvent()) ? LOGGER_FEATURE_LOGEVENT : 0;
+    return Status(static_cast<int>(features));
+  } else {
+    return Status(1, 'Unsupported call to logger plugin');
+  }
+}
+    
+    /**
+ * @brief Logger plugin feature bits for complicated loggers.
+ *
+ * Logger plugins may opt-in to additional features like explicitly handling
+ * Glog status events or requesting event subscribers to forward each event
+ * directly to the logger. This enumeration tracks, and corresponds to, each
+ * of the feature methods defined in a logger plugin.
+ *
+ * A specific registry call action can be used to retrieve an overloaded Status
+ * object containing all of the opt-in features.
+ */
+enum LoggerFeatures {
+  LOGGER_FEATURE_BLANK = 0,
+  LOGGER_FEATURE_LOGSTATUS = 1,
+  LOGGER_FEATURE_LOGEVENT = 2,
+};
+    
+    
+    {} // namespace osquery
+
+    
+      /**
+   * @brief Bind this plugin to an external plugin reference.
+   *
+   * Allow a specialized plugin type to act when an external plugin is
+   * registered (e.g., a TablePlugin will attach the table name).
+   *
+   * @param name The broadcasted name of the plugin.
+   * @param info The routing info for the owning extension.
+   */
+  static Status addExternal(const std::string& name,
+                            const PluginResponse& info) {
+    (void)name;
+    (void)info;
+    return Status::success();
+  }
+    
+    GTEST_TEST(InMemoryDatabaseTest, test_destroy) {
+  auto db = std::make_unique<InMemoryDatabase>('test');
+  ASSERT_FALSE(db->open().isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key', 10).isError());
+  db->close();
+  // In memory db should be destroyed on close
+  // but we want to test that destroy is not failing for no reason
+  auto result = db->destroyDB();
+  EXPECT_TRUE(result);
+  ASSERT_FALSE(db->open().isError());
+  auto get_result = db->getInt32(kPersistentSettings, 'key');
+  EXPECT_FALSE(get_result);
+  EXPECT_EQ(get_result.getError(), DatabaseError::KeyNotFound);
+}
