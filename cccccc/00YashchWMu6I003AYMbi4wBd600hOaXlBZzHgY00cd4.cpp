@@ -1,166 +1,105 @@
 
         
-        wchar_t CCalcEngine::DecimalSeparator() const
+            void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
+    
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
+    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    
+        BOOST_CHECK(v.setBool(false));
+    BOOST_CHECK_EQUAL(v.isBool(), true);
+    BOOST_CHECK_EQUAL(v.isTrue(), false);
+    BOOST_CHECK_EQUAL(v.isFalse(), true);
+    BOOST_CHECK_EQUAL(v.getBool(), false);
+    
+    namespace bech32
 {
-    return m_decimalSeparator;
-}
-
-    
-    public
-    enum class AutomationNotificationProcessing
-    {
-        ImportantAll = 0,
-        ImportantMostRecent = 1,
-        All = 2,
-        MostRecent = 3,
-        CurrentThenMostRecent = 4
-    };
-    
-    //----------------------------------------------------------------------------
-//
-//  ScriptSet implementation
-//
-//----------------------------------------------------------------------------
-ScriptSet::ScriptSet() {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] = 0;
     }
+    
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
 }
     
-    SelectFormat&
-SelectFormat::operator=(const SelectFormat& other) {
-    if (this != &other) {
-        msgPattern = other.msgPattern;
-    }
-    return *this;
-}
-    
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
-    
-    SharedBreakIterator::SharedBreakIterator(
-        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    
-    {private:
-    int32_t fMax;
-    int32_t fMin;
+    // Filter policy wrapper that converts from internal keys to user keys
+class InternalFilterPolicy : public FilterPolicy {
+ private:
+  const FilterPolicy* const user_policy_;
+ public:
+  explicit InternalFilterPolicy(const FilterPolicy* p) : user_policy_(p) { }
+  virtual const char* Name() const;
+  virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const;
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const;
 };
     
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    #include <ImfEnvmapAttribute.h>
+    
+    FastHufDecoder::FastHufDecoder
+    (const char *&table,
+     int numBytes,
+     int minSymbol,
+     int maxSymbol,
+     int rleSymbol)
+:
+    _rleSymbol (rleSymbol),
+    _numSymbols (0),
+    _minCodeLength (255),
+    _maxCodeLength (0),
+    _idToSymbol (0)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
+    //
+    // List of symbols that we find with non-zero code lengths
+    // (listed in the order we find them). Store these in the
+    // same format as the code book stores codes + lengths - 
+    // low 6 bits are the length, everything above that is
+    // the symbol.
+    //
     }
     
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
-    }
-}
-    
-    /**
- * Implement UnicodeMatcher
- */
-void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
-    UChar32 ch;
-    for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
-        ch = pattern.char32At(i);
-        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
-        if (matcher == NULL) {
-            toUnionTo.add(ch);
-        } else {
-            matcher->addMatchSetTo(toUnionTo);
-        }
-    }
-}
-    
-    
-    {  sender.Update();
-  sender.Stop();
-  EXPECT_FALSE(sender.IsRunning());
-}
-    
-    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
-    
-    TEST_F(Accelrpt68Test, reset) {
-  Accelrpt68 acc;
-  int32_t length = 8;
-  ChassisDetail chassis_detail;
-  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
+    void GenericInputFile::readMagicNumberAndVersionField(OPENEXR_IMF_INTERNAL_NAMESPACE::IStream& is, int& version)
+{
+    //
+    // Read the magic number and the file format version number.
+    // Then check if we can read the rest of this file.
+    //
     }
     
     
-    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
-  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
-  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
-  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
-}
-    
-    // config detail: {'name': 'manual_input', 'enum': {0: 'MANUAL_INPUT_OFF', 1:
-// 'MANUAL_INPUT_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 7, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Manual_inputType Hornrpt79::manual_input(const std::uint8_t* bytes,
-                                                      int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
+class GenericOutputFile
+{
+    public:
+        IMF_EXPORT
+        virtual ~GenericOutputFile() {}
     }
     
-    using ::apollo::drivers::canbus::Byte;
+    	    int zerun = getBits (8, c, lc, p) + SHORTEST_LONG_RUN;
+    
+    
+//-----------------------------------------------------------------------------
+//
+//	Low-level file input and output for OpenEXR.
+//
+//-----------------------------------------------------------------------------
+    
+    		  case OPENEXR_IMF_INTERNAL_NAMESPACE::HALF:
+    
+    //-----------------------------------------------------------------------------
+//
+//	class InputFile -- a scanline-based interface that can be used
+//	to read both scanline-based and tiled OpenEXR image files.
+//
+//-----------------------------------------------------------------------------
