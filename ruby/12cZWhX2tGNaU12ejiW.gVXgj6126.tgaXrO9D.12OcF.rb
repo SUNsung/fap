@@ -1,73 +1,140 @@
 
         
-        #############################################################################
-#
-# Standard tasks
-#
-#############################################################################
+            it 'should return consistent encodings for fresh and cached downloads' do
+      # Net::HTTP always returns binary ASCII-8BIT encoding. File.read auto-detects the encoding
+      # Make sure we File.read after downloading a file for consistency
     
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+      def descriptions_for(user)
+    descriptions_by_id[user.id].join ', '
+  end
+    
+          expect(Rails.logger.warnings).to eq(1)
+      expect(status).to eq(429)
+    end
+    
+          group2.update!(automatic: true)
+    
+          result = reviewable.perform(current_user, params[:action_id].to_sym, args)
+    rescue Reviewable::InvalidAction => e
+      # Consider InvalidAction an InvalidAccess
+      raise Discourse::InvalidAccess.new(e.message)
+    rescue Reviewable::UpdateConflict
+      return render_json_error(I18n.t('reviewables.conflict'), status: 409)
+    end
+    
+    RSpec.describe Admin::GroupsController do
+  fab!(:admin) { Fabricate(:admin) }
+  fab!(:user) { Fabricate(:user) }
+  fab!(:group) { Fabricate(:group) }
+    
+            expect(upload.extension).to eq('png')
+        expect(File.extname(upload.url)).to eq('.png')
+        expect(upload.original_filename).to eq('png_as.png')
+      end
+    
+        let(:src) do
+      [
+        'def foo; end',
+        'def bar; end',
+        'def baz; end'
+      ].join('\n')
+    end
+    
+            def correct_for_blockarg_type(node)
+          lambda do |corrector|
+            range = range_with_surrounding_space(range: node.source_range,
+                                                 side: :left)
+            range = range_with_surrounding_comma(range, :left)
+            corrector.remove(range)
+          end
+        end
+      end
+    end
+  end
 end
+
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
-    
-    module Jekyll
-  module Drops
-    class UnifiedPayloadDrop < Drop
-      mutable true
-    
-          it 'requires the passwords to match when changing them' do
-        visit edit_admin_user_path(users(:bob))
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Update User'
-        expect(page).to have_text('Password confirmation doesn't match')
+              args.one? || !args[-2].hash_type?
+        end
       end
     end
+  end
+end
+
     
-        it 'returns a label 'Missing Gems' if a given agent has dependencies missing' do
-      stub(@agent).dependencies_missing? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Missing Gems'
-    end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-          it 'handles signals' do
-        @agent_runner.instance_variable_set(:@signal_queue, ['TERM'])
-        @agent_runner.run
+      it 'can correct MethodDefParentheses and other offense' do
+    create_file('example.rb', <<~RUBY)
+      def primes limit
+        1.upto(limit).select { |i| i.even? }
       end
+    RUBY
+    expect(cli.run(%w[-D --auto-correct])).to eq(0)
+    expect($stderr.string).to eq('')
+    expect(IO.read('example.rb')).to eq(<<~RUBY)
+      # frozen_string_literal: true
+    
+      context 'when a variable is reassigned ' \
+          'with logical operator assignment and referenced' do
+    it 'accepts' do
+      expect_no_offenses(<<~RUBY)
+        def some_method
+          foo = do_something_returns_object_or_nil
+          foo ||= 1
+          foo
+        end
+      RUBY
+    end
+  end
+    
+        def file_checksum(file, config_store)
+      digester = Digest::SHA1.new
+      mode = File.stat(file).mode
+      digester.update(
+        '#{file}#{mode}#{config_store.for(file).signature}'
+      )
+      digester.file(file)
+      digester.hexdigest
+    rescue Errno::ENOENT
+      # Spurious files that come and go should not cause a crash, at least not
+      # here.
+      '_'
     end
     
-    describe Rufus::Scheduler do
-  before :each do
-    Agent.delete_all
+      it 'registers an offense for `raise` guard clause not followed ' \
+     'by empty line when `if` condition is after heredoc' do
+    expect_offense(<<~RUBY)
+      def foo
+        raise ArgumentError, <<-MSG if path
+          Must be called with mount point
+        MSG
+      ^^^^^ Add empty line after guard clause.
+        bar
+      end
+    RUBY
+  end
+    
+          # Checks whether this is a multiline block. This is overridden here
+      # because the general version in `Node` does not work for `block` nodes.
+      #
+      # @return [Boolean] whether the `block` literal is on a several lines
+      def multiline?
+        !single_line?
+      end
+    
+        def pre
+      _pre = yaml['pre']
+    
+    FactoryBot.define do
+  factory :project, class: Tmuxinator::Project do
+    transient do
+      file { yaml_load('spec/fixtures/sample.yml') }
+    end
+    
+        desc 'debug [PROJECT] [ARGS]', COMMANDS[:debug]
+    method_option :attach, type: :boolean,
+                           aliases: '-a',
+                           desc: 'Attach to tmux session after creation.'
+    method_option :name, aliases: '-n',
+                         desc: 'Give the session a different name'
+    method_option 'project-config', aliases: '-p',
+                                    desc: 'Path to project config file'
