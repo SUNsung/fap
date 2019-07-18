@@ -1,75 +1,212 @@
 
         
-        Status WriteBatchBase::DeleteRange(const SliceParts& begin_key,
-                                   const SliceParts& end_key) {
-  std::string begin_key_buf, end_key_buf;
-  Slice begin_key_slice(begin_key, &begin_key_buf);
-  Slice end_key_slice(end_key, &end_key_buf);
-  return DeleteRange(begin_key_slice, end_key_slice);
-}
+          // Always look through inherited conformances.
+  if (auto *inherited = dyn_cast<InheritedProtocolConformance>(conformance))
+    conformance = inherited->getInheritedConformance();
     
-    
-    {}  // namespace rocksdb
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
-  assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
-    
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    #pragma once
-    
-      // Builds an openable snapshot of RocksDB on the same disk, which
-  // accepts an output directory on the same disk, and under the directory
-  // (1) hard-linked SST files pointing to existing live SST files
-  // SST files will be copied if output directory is on a different filesystem
-  // (2) a copied manifest files and other files
-  // The directory should not already exist and will be created by this API.
-  // The directory will be an absolute path
-  // log_size_for_flush: if the total log file size is equal or larger than
-  // this value, then a flush is triggered for all the column families. The
-  // default value is 0, which means flush is always triggered. If you move
-  // away from the default, the checkpoint may not contain up-to-date data
-  // if WAL writing is not always enabled.
-  // Flush will always trigger if it is 2PC.
-  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
-                                  uint64_t log_size_for_flush = 0);
-    
-    class OptimisticTransactionDB : public StackableDB {
- public:
-  // Open an OptimisticTransactionDB similar to DB::Open().
-  static Status Open(const Options& options, const std::string& dbname,
-                     OptimisticTransactionDB** dbptr);
-    }
-    
-    #include <jni.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-    
-    bool StressScavengeObserver::HasRequestedGC() const {
-  return has_requested_gc_;
-}
-    
-    
-    {    global_pool_.Swap(other.global_pool_);
+      /// Add the low N bits from the given value to the vector.
+  void add(size_t numBits, uint64_t value) {
+    append(fromAPInt(APInt(numBits, value)));
   }
     
-    namespace v8 {
-namespace internal {
+      std::string PGOFuncName;
+    
+      /// Look up the implementation function for the given method.
+  Optional<Entry> getEntry(SILModule &M, SILDeclRef method) const;
+    
+      switch (whichAccessor) {
+  case Getter:
+    // Original accessor's args should be @in or @out, meaning they won't be
+    // captured or aliased.
+    accessorThunk->addAttribute(1, llvm::Attribute::NoCapture);
+    accessorThunk->addAttribute(1, llvm::Attribute::NoAlias);
+    accessorThunk->addAttribute(2, llvm::Attribute::NoCapture);
+    accessorThunk->addAttribute(2, llvm::Attribute::NoAlias);
+    // Output is sret.
+    accessorThunk->addAttribute(1, llvm::Attribute::StructRet);
+    break;
+  case Setter:
+    // Original accessor's args should be @in or @out, meaning they won't be
+    // captured or aliased.
+    accessorThunk->addAttribute(1, llvm::Attribute::NoCapture);
+    accessorThunk->addAttribute(1, llvm::Attribute::NoAlias);
+    accessorThunk->addAttribute(2, llvm::Attribute::NoCapture);
+    accessorThunk->addAttribute(2, llvm::Attribute::NoAlias);
+    break;
+  case Equals:
+  case Hash:
+    break;
+  }
+    
+    
+    {#ifndef NDEBUG
+  LLVM_ATTRIBUTE_DEPRECATED(void dump(SourceManager &SM, llvm::raw_ostream &OS = llvm::errs(),
+                            unsigned Indent = 0) const,
+                  'only for use in the debugger');
+  LLVM_ATTRIBUTE_DEPRECATED(void dump(SILModule &Mod) const, 'only for use in the debugger');
+#endif
+};
+    
+    
+    {    // Emit a debug_value[_addr] instruction to record the start of this value's
+    // lifetime.
+    SILLocation PrologueLoc(vd);
+    PrologueLoc.markAsPrologue();
+    SILDebugVariable DbgVar(vd->isLet(), /*ArgNo=*/0);
+    if (address)
+      SGF.B.createDebugValueAddr(PrologueLoc, value, DbgVar);
+    else
+      SGF.B.createDebugValue(PrologueLoc, value, DbgVar);
+  }
+  
+  void copyOrInitValueInto(SILGenFunction &SGF, SILLocation loc,
+                           ManagedValue value, bool isInit) override {
+    // If this let value has an address, we can handle it just like a single
+    // buffer value.
+    if (hasAddress())
+      return SingleBufferInitialization::
+        copyOrInitValueIntoSingleBuffer(SGF, loc, value, isInit, address);
+    
+    // Otherwise, we bind the value.
+    if (isInit) {
+      // Disable the rvalue expression cleanup, since the let value
+      // initialization has a cleanup that lives for the entire scope of the
+      // let declaration.
+      bindValue(value.forward(SGF), SGF);
+    } else {
+      // Disable the expression cleanup of the copy, since the let value
+      // initialization has a cleanup that lives for the entire scope of the
+      // let declaration.
+      bindValue(value.copyUnmanaged(SGF, loc).forward(SGF), SGF);
     }
+  }
+    
+        // Skip the closure's necessary bindings struct, if it's present.
+    auto SizeOfNecessaryBindings = Info.NumBindings * sizeof(StoredPointer);
+    Builder.addField(/*size=*/SizeOfNecessaryBindings,
+                     /*alignment=*/sizeof(StoredPointer),
+                     /*numExtraInhabitants=*/0,
+                     /*bitwiseTakable=*/true);
+    
+    #if defined(__x86_64__) || defined(__amd64__)
+    
+    Status TestWritableFile::Sync() {
+  if (!env_->IsFilesystemActive()) {
+    return Status::OK();
+  }
+  // Ensure new files referred to by the manifest are in the filesystem.
+  Status s = target_->Sync();
+  if (s.ok()) {
+    state_.pos_at_last_sync_ = state_.pos_;
+  }
+  if (env_->IsFileCreatedSinceLastDirSync(state_.filename_)) {
+    Status ps = SyncParent();
+    if (s.ok() && !ps.ok()) {
+      s = ps;
+    }
+  }
+  return s;
+}
+    
+    std::string InfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG';
+}
+    
+    
+    {  bool rword_indicates_list_item;
+  bool rword_likely_starts_idea;
+  bool rword_likely_ends_idea;
+};
+    
+    #include 'allheaders.h'
+    
+    // Possible normalization methods. Use NEGATIVE values as these also
+// double up as markers for the last sub-classifier.
+enum NormalizationMode {
+  NM_BASELINE = -3,         // The original BL normalization mode.
+  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
+  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
+};
+    
+    cmderOptions GetOption()
+{
+	cmderOptions cmderOptions;
+	LPWSTR *szArgList;
+	int argCount;
     }
     
-      BIND(&if_lhsisnotnumber);
-  {
-    // No checks on rhs are done yet. We just know lhs is not a number or Smi.
-    Label if_lhsisoddball(this), if_lhsisnotoddball(this);
-    Node* lhs_instance_type = LoadInstanceType(lhs);
-    Node* lhs_is_oddball = InstanceTypeEqual(lhs_instance_type, ODDBALL_TYPE);
-    Branch(lhs_is_oddball, &if_lhsisoddball, &if_lhsisnotoddball);
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname, Env* env, const Options& options,
+                  TableCache* table_cache, Iterator* iter, FileMetaData* meta);
+    
+    std::string CurrentFileName(const std::string& dbname) {
+  return dbname + '/CURRENT';
+}
+    
+    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
+
+    
+      fname = LockFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kDBLockFile, type);
+    
+    
+    {
+    {
+    {      if (rnd->Next() % 2) {
+        iter.Next();
+        pos = MakeKey(key(pos), gen(pos) + 1);
+      } else {
+        Key new_target = RandomTarget(rnd);
+        if (new_target > pos) {
+          pos = new_target;
+          iter.Seek(new_target);
+        }
+      }
     }
+  }
+};
+const uint32_t ConcurrentTest::K;
+    
+    Status TableCache::Get(const ReadOptions& options, uint64_t file_number,
+                       uint64_t file_size, const Slice& k, void* arg,
+                       void (*handle_result)(void*, const Slice&,
+                                             const Slice&)) {
+  Cache::Handle* handle = nullptr;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, handle_result);
+    cache_->Release(handle);
+  }
+  return s;
+}
+    
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(), contents.size() - 1));
+  ASSERT_EQ(
+      'Put(foo, bar)@200'
+      'ParseError()',
+      PrintContents(&batch));
+}
+    
+    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
+
+    
+    
+    {}  // anonymous namespace
+    
+    
+    {}  // namespace leveldb
