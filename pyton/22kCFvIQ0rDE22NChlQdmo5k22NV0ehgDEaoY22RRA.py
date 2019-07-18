@@ -1,190 +1,219 @@
 
         
-                When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+            # Get the info of users who have more than 20 ratings on items
+    grouped = df.groupby(movielens.USER_COLUMN)
+    df = grouped.filter(
+        lambda x: len(x) >= rconst.MIN_NUM_RATINGS) # type: pd.DataFrame
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
+      def test_create_model_train(self):
+    model = transformer.create_model(self.params, True)
+    inputs, outputs = model.inputs, model.outputs
+    self.assertEqual(len(inputs), 2)
+    self.assertEqual(len(outputs), 1)
+    self.assertEqual(inputs[0].shape.as_list(), [None, None])
+    self.assertEqual(inputs[0].dtype, tf.int64)
+    self.assertEqual(inputs[1].shape.as_list(), [None, None])
+    self.assertEqual(inputs[1].dtype, tf.int64)
+    self.assertEqual(outputs[0].shape.as_list(), [None, None, 41])
+    self.assertEqual(outputs[0].dtype, tf.float32)
     
-    
-class Budget(object):
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-    
-def test_when_cant_configure_automatically(shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=False)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
-    
-    
-@pytest.mark.parametrize('script, output, help_text, result', [
-    ('apt-get isntall vim', invalid_operation('isntall'),
-     apt_get_help, 'apt-get install vim'),
-    ('apt saerch vim', invalid_operation('saerch'),
-     apt_help, 'apt search vim'),
-])
-def test_get_new_command(set_help, output, script, help_text, result):
-    set_help(help_text)
-    assert get_new_command(Command(script, output))[0] == result
-
-    
-    
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
-    
-    USERNAME = 'user'
-PASSWORD = 'password'
-# Basic auth encoded `USERNAME` and `PASSWORD`
-# noinspection SpellCheckingInspection
-BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
-BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
-AUTH_OK = {'authenticated': True, 'user': USERNAME}
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
+        loss_scale_help_text = (
+        'The amount to scale the loss by when the model is run. {}. Before '
+        'gradients are computed, the loss is multiplied by the loss scale, '
+        'making all gradients loss_scale times larger. To adjust for this, '
+        'gradients are divided by the loss scale before being applied to '
+        'variables. This is mathematically equivalent to training without '
+        'a loss scale, but the loss scale helps avoid some intermediate '
+        'gradients from underflowing to zero. If not provided the default '
+        'for fp16 is 128 and 1 for all other dtypes.{}'
     )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+    if dynamic_loss_scale:
+      loss_scale_help_text = loss_scale_help_text.format(
+          'This can be an int/float or the string 'dynamic'',
+          ' The string 'dynamic' can be used to dynamically determine the '
+          'optimal loss scale during training, but currently this '
+          'significantly slows down performance')
+      loss_scale_validation_msg = ('loss_scale should be a positive int/float '
+                                   'or the string 'dynamic'.')
+    else:
+      loss_scale_help_text = loss_scale_help_text.format(
+          'This must be an int/float', '')
+      loss_scale_validation_msg = 'loss_scale should be a positive int/float.'
+    if loss_scale:
+      flags.DEFINE_string(
+          name='loss_scale', short_name='ls', default=None,
+          help=help_wrap(loss_scale_help_text))
+    
+        if (warmup and 'step_timestamp_log' in stats and
+        len(stats['step_timestamp_log']) > warmup):
+      # first entry in the time_log is start of step 1. The rest of the
+      # entries are the end of each step recorded
+      time_log = stats['step_timestamp_log']
+      elapsed = time_log[-1].timestamp - time_log[warmup].timestamp
+      num_examples = (
+          total_batch_size * log_steps * (len(time_log) - warmup - 1))
+      examples_per_sec = num_examples / elapsed
+      metrics.append({'name': 'exp_per_second',
+                      'value': examples_per_sec})
+    
+    flags.DEFINE_float('learning_power', 0.9,
+                   'The power value used in the poly learning policy.')
+    
+          # Reverse the resizing and padding operations performed in preprocessing.
+      # First, we slice the valid regions (i.e., remove padded region) and then
+      # we resize the predictions back.
+      original_image = tf.squeeze(samples[common.ORIGINAL_IMAGE])
+      original_image_shape = tf.shape(original_image)
+      predictions = tf.slice(
+          predictions,
+          [0, 0, 0],
+          [1, original_image_shape[0], original_image_shape[1]])
+      resized_shape = tf.to_int32([tf.squeeze(samples[common.HEIGHT]),
+                                   tf.squeeze(samples[common.WIDTH])])
+      predictions = tf.squeeze(
+          tf.image.resize_images(tf.expand_dims(predictions, 3),
+                                 resized_shape,
+                                 method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
+                                 align_corners=True), 3)
+    
+    # Extensions.
+_DELF_EXTENSION = '.delf'
+    
+            for page_num in itertools.count(1):
+            video_list = self._download_json(
+                'http://api.vfan.vlive.tv/vproxy/channelplus/getChannelVideoList',
+                channel_code, note='Downloading channel list page #%d' % page_num,
+                query={
+                    'app_id': app_id,
+                    'channelSeq': channel_seq,
+                    # Large values of maxNumOfRows (~300 or above) may cause
+                    # empty responses (see [1]), e.g. this happens for [2] that
+                    # has more than 300 videos.
+                    # 1. https://github.com/ytdl-org/youtube-dl/issues/13830
+                    # 2. http://channels.vlive.tv/EDBF.
+                    'maxNumOfRows': 100,
+                    '_': int(time.time()),
+                    'pageNo': page_num
+                }
+            )
+    
+        def _extract_video_info(self, content_id, site='cbs', mpx_acc=2198311517):
+        items_data = self._download_xml(
+            'http://can.cbs.com/thunder/player/videoPlayerService.php',
+            content_id, query={'partner': site, 'contentId': content_id})
+        video_data = xpath_element(items_data, './/item')
+        title = xpath_text(video_data, 'videoTitle', 'title', True)
+        tp_path = 'dJ5BDC/media/guid/%d/%s' % (mpx_acc, content_id)
+        tp_release_url = 'http://link.theplatform.com/s/' + tp_path
+    
+            return {
+            'id': video_id,
+            'title': title,
+            'formats': formats,
+            'thumbnails': thumbnails,
+            'description': video_data.get('short_description'),
+            'like_count': int_or_none(video_data.get('like_count')),
+            'timestamp': parse_iso8601(video_data.get('released_at')),
+            'series': series,
+            'episode': episode,
+            'season': season,
+            'season_id': season_id,
+            'season_number': season_number,
+            'episode_number': episode_number,
+            'subtitles': subtitles,
+            'age_limit': parse_age_limit(video_data.get('rating')),
+        }
 
     
+                if count > fragment_retries:
+                if not fatal:
+                    self.report_skip_fragment(frag_index)
+                    continue
+                self.report_error('giving up after %s fragment retries' % fragment_retries)
+                return False
     
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+        for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
     
+    new_version = {}
     
-class TestRequestBodyFromFilePath:
-    '''
-    `http URL @file'
+        readme = re.sub(r'(?s)^.*?(?=# DESCRIPTION)', '', readme)
+    readme = re.sub(r'\s+youtube-dl \[OPTIONS\] URL \[URL\.\.\.\]', '', readme)
+    readme = PREFIX + readme
     
-            try:
-            response = self.client.delete_rule(Name=self.name)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not delete rule %s' % self.name)
-        self.changed = True
-        return response
+    project = 'Flask'
+copyright = '2010 Pallets'
+author = 'Pallets'
+release, version = get_version('Flask')
     
-        required = [volume_id, snapshot_id, instance_id]
-    if required.count(None) != len(required) - 1:  # only 1 must be set
-        module.fail_json(msg='One and only one of volume_id or instance_id or snapshot_id must be specified')
-    if instance_id and not device_name or device_name and not instance_id:
-        module.fail_json(msg='Instance ID and device name must both be specified')
-    
-            monitoring_policy_port = oneandone.client.Port(
-            protocol=port['protocol'],
-            port=port['port'],
-            alert_if=port['alert_if'],
-            email_notification=port['email_notification']
-        )
-    
-        def get_status():
-        '''Return the status of the process in monit, or the empty string if not present.'''
-        rc, out, err = module.run_command('%s %s' % (MONIT, SUMMARY_COMMAND), check_rc=True)
-        for line in out.split('\n'):
-            # Sample output lines:
-            # Process 'name'    Running
-            # Process 'name'    Running - restart pending
-            parts = parse(line.split())
-            if parts != '':
-                return parts
-    
-        def __init__(self, *a, **kw):
-        super(QPSSpider, self).__init__(*a, **kw)
-        if self.qps is not None:
-            self.qps = float(self.qps)
-            self.download_delay = 1 / self.qps
-        elif self.download_delay is not None:
-            self.download_delay = float(self.download_delay)
-    
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--headers', dest='headers', action='store_true', \
-            help='print response HTTP headers instead of body')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
-    
-        def set_spidercls(self, url, opts):
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            try:
-                self.spidercls = spider_loader.load(opts.spider)
-            except KeyError:
-                logger.error('Unable to find spider: %(spider)s',
-                             {'spider': opts.spider})
-        else:
-            self.spidercls = spidercls_for_request(spider_loader, Request(url))
-            if not self.spidercls:
-                logger.error('Unable to find spider for: %(url)s',
-                             {'url': url})
+        seems_fishy = False
+    if total_found == 0:
+        info.append('Error: the template could not be found.')
+        seems_fishy = True
+    elif total_found > 1:
+        info.append('Warning: multiple loaders returned a match for the template.')
+        seems_fishy = True
     
     
-class Command(ScrapyCommand):
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+            explain_template_loading_attempts(self.app, template, attempts)
+    
+            app.add_url_rule('/hello/<name>', view_func=MyView.as_view('myview'))
     
     
-    class ScrapyClientTLSOptions(ClientTLSOptions):
-        '''
-        SSL Client connection creator ignoring certificate verification errors
-        (for genuinely invalid certificates or bugs in verification code).
+def test_config_missing_json():
+    app = flask.Flask(__name__)
+    with pytest.raises(IOError) as e:
+        app.config.from_json('missing.json')
+    msg = str(e.value)
+    assert msg.startswith(
+        '[Errno 2] Unable to load configuration file (No such file or directory):'
+    )
+    assert msg.endswith('missing.json'')
+    assert not app.config.from_json('missing.json', silent=True)
     
-    import six
-from w3lib import html
+        @property
+    def name(self):
+        '''Return the device name.'''
+        return self._name
     
-    Attention flow layer is responsible for linking and fusing information from the context and the query words.
+        assert await async_setup_component(hass, automation.DOMAIN, {
+        automation.DOMAIN: {
+            'trigger': {
+                'platform': 'zone',
+                'entity_id': 'test.entity',
+                'zone': 'zone.test',
+                'event': 'enter',
+            },
+            'action': {
+                'service': 'test.automation',
+                'data_template': {
+                    'some': '{{ trigger.%s }}' % '}} - {{ trigger.'.join((
+                        'platform', 'entity_id',
+                        'from_state.state', 'to_state.state',
+                        'zone.name'))
+                },
+    }
+    }
+    }
