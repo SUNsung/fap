@@ -1,153 +1,78 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-        def resource_params
-      params.require(:email_domain_block).permit(:domain)
-    end
-  end
-end
-
-    
-      def process_salmon
-    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
-  end
-end
-
-    
-      def update
-    setting.data = params[:data]
-    setting.save!
-    
-      UPDATE_SIGN_IN_HOURS = 24
-    
-      UPDATE_SIGN_IN_HOURS = 24
-    
-        def test_code_around_binding_with_script_lines__
-      with_script_lines do |script_lines|
-        Tempfile.create('irb') do |f|
-          code = 'IRB::WorkSpace.new(binding)\n'
-          script_lines[f.path] = code.split(/^/)
-    
-      def pretty_print(q) # :nodoc:
-    q.group 2, '[SpecificFile:', ']' do
-      q.breakable
-      q.text @path
-    end
-  end
-    
-          after do
-        @client.close
-        @server.close
-      end
-    
-      def test_tailcall_condition_block
-    bug = '[ruby-core:78015] [Bug #12905]'
-    
-      def test_singleton_method_via_eigenclass
-    util_parser <<-RUBY
-class C
-   class << self
-     def a() end
-   end
-end
-    RUBY
-    
-              actual = with_term { IRB::Color.colorize_code(code, complete: false) }
-          assert_equal(result, actual, 'Case: colorize_code(#{code.dump}, complete: false)\nResult: #{humanized_literal(actual)}')
-        else
-          actual = with_term { IRB::Color.colorize_code(code) }
-          assert_equal(code, actual)
-        end
+                expect(FileStore::BaseStore.new.get_path_for_upload(upload))
+          .to eq('original/2X/4/4170ac2a2782a1516fe9e13d7322ae482c1bd594.png')
       end
     end
     
-          foo
+          warn = GlobalSetting.max_reqs_per_ip_mode == 'warn' ||
+        GlobalSetting.max_reqs_per_ip_mode == 'warn+block'
     
-            if specs.size > 0
-          specs
-        else
-          raise LogStash::PluginManager::PluginNotFoundError, 'Cannot find plugins matching: `#{plugin_pattern}`'
-        end
-      end.flatten
-    end
+      it 'returns the correct language' do
+    expect(I18n.t('foo', locale: :en)).to eq('Foo in :en')
+    expect(I18n.t('foo', locale: :de)).to eq('Foo in :de')
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
+        if @post && errors.blank? && !@opts[:import_mode]
+      store_unique_post_key
+      # update counters etc.
+      @post.topic.reload
     
-      def create
-    @broadcast = Broadcast.new(broadcast_params)
-    redirect_to '/internal/broadcasts'
+      class BulkInvite < Jobs::Base
+    sidekiq_options retry: false
+    
+      def expired?
+    created_at < SiteSetting.invite_expiry_days.days.ago
   end
     
-        def last?
-      index == tab.panes.length - 1
+        reviewable = ReviewableQueuedPost.new(
+      created_by: @user,
+      payload: payload,
+      topic_id: @args[:topic_id],
+      reviewable_by_moderator: true
+    )
+    reviewable.payload['title'] = @args[:title] if @args[:title].present?
+    reviewable.category_id = args[:category] if args[:category].present?
+    reviewable.created_new!
+    
+      def index
+    offset = params[:offset].to_i
+    
+    require_dependency 'backup_restore/backup_store'
+require_dependency 's3_helper'
+    
+        context 'dist' do
+      it 'should have the dist in the release' do
+        subject.name = 'example'
+        subject.attributes[:rpm_dist] = 'el6'
+        subject.version = '1.0'
+        @target = Stud::Temporary.pathname
+    
+            data = ''
+        record_length = determine_record_length(record_length)
+    
+      # Map of what scripts are named.
+  SCRIPT_MAP = {
+    :before_install     => 'preinstall',
+    :after_install      => 'postinstall',
+  } unless defined?(SCRIPT_MAP)
+    
+      option '--group', 'GROUP',
+    'Set the group to GROUP in the prototype file.',
+    :default => 'root'
+    
+        self.name = control['pkgname'][0]
+    
+      end
+    
+        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
+    libs.each do |file|
+      base = staging_path(File.join(attributes[:prefix]))
+      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
+      File.chmod(0755, File.join(base, file))
     end
     
-      describe '#hook_on_project_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_start' }
-    end
-  end
-  describe '#hook_on_project_first_start' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_first_start' }
-    end
-  end
-  describe '#hook_on_project_restart' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_restart' }
-    end
-  end
-  describe '#hook_on_project_exit' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_exit' }
-    end
-  end
-  describe '#hook_on_project_stop' do
-    it_should_behave_like 'a project hook' do
-      let(:hook_name) { 'on_project_stop' }
-    end
-  end
-end
-
-    
-            windows, _, s0 = Open3.capture3(<<-CMD)
-          tmux list-windows -t #{session}\
-          -F '#W \#{window_layout} \#{window_active} \#{pane_current_path}'
-        CMD
-        panes, _, s1 = Open3.capture3(<<-CMD)
-          tmux list-panes -s -t #{session} -F '#W \#{pane_current_path}'
-        CMD
-        tmux_options, _, s2 = Open3.capture3(<<-CMD)
-          tmux show-options -t #{session}
-        CMD
-        project_root = tmux_options[/^default-path '(.+)'$/, 1]
+        ::Dir.mkdir(File.join(builddir, 'manifests'))
+    manifests.each do |manifest|
+      dir = File.join(builddir, 'manifests', File.dirname(manifest))
+      logger.info('manifests targeting: #{dir}')
+      ::Dir.mkdir(dir) if !File.directory?(dir)
