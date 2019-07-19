@@ -1,104 +1,65 @@
 
         
-            def __init__(self, message, severity=SEVERITY_CRITICAL, url=None):
-        assert severity in self.SEVERITY_LEVELS
-        self.message = six.text_type(message)
-        self.severity = severity
-        self.url = url
+            Args:
+        x(tf.Tensor):
+        kernel_size(int or list of int):
+        out_channels(int):
+        act_fn(function):
+        strides(int or list of int):
+        padding(str):
+        name(str):
+        reuse(bool):
     
-            backlogged, size = None, 0
-        from sentry.monitoring.queues import backend
-        if backend is not None:
-            size = backend.get_size('default')
-            backlogged = size > 0
-    
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
+    # 如果一个 ngram 都没找到，gensim 会报错
+#   其实可以返回一个 0 向量的，它内部实际上是从一个 0 向量开始累加的；
+#   但返回时做了一个判断——如果依然是 0 向量，则报错
+# print(model.wv['z'])
+r'''
+Traceback (most recent call last):
+  File 'D:/OneDrive/workspace/github/DL-Notes-for-Interview/code/工具库/gensim/FastText.py', line 53, in <module>
+    print(model.wv['z'])
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 336, in __getitem__
+    return self.get_vector(entities)
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 454, in get_vector
+    return self.word_vec(word)
+  File 'D:\program\work\Python\Anaconda3\envs\tf\lib\site-packages\gensim\models\keyedvectors.py', line 1989, in word_vec
+    raise KeyError('all ngrams for word %s absent from model' % word)
+KeyError: 'all ngrams for word z absent from model'
 '''
-from __future__ import absolute_import
     
+                                len_p = [len(p) for p in obj['contours']]
+                            if min(len_p) <= 4:
+                                print('Warning: invalid contours.')
+                                continue  # skip non-instance categories
     
-@instrumented_task(name='sentry.tasks.options.sync_options', queue='options')
-def sync_options(cutoff=ONE_HOUR):
-    '''
-    Ensures all options that have been updated (within the database) since
-    ``cutoff`` have their correct values stored in the cache.
+            # Test: merge with an invalid key
+        s = 'dummy3'
+        cfg2 = AttrDict()
+        cfg2.FOO = AttrDict()
+        cfg2.FOO.BAR = s
+        with self.assertRaises(KeyError):
+            core_config.merge_cfg_from_cfg(cfg2)
     
+            if cfg.RETINANET.SOFTMAX:
+            cls_prob = cls_prob[:, :, 1::, :, :]
     
-def input(prompt):
-    '''
-    Version of input (raw_input in Python 2) which forces a flush of sys.stdout
-    to avoid problems where the prompt fails to appear due to line buffering
-    '''
-    sys.stdout.write(prompt)
-    sys.stdout.flush()
-    return sys.stdin.readline().rstrip('\n')
+        # Add suffix ops
+    new_net.Proto().op.extend(net.Proto().op[prefix_len:])
+    # Add external input blobs
+    # Treat any undefined blobs as external inputs
+    input_names = [
+        i for op in new_net.Proto().op for i in op.input
+        if not new_net.BlobIsDefined(i)]
+    new_net.Proto().external_input.extend(input_names)
+    # Add external output blobs
+    output_names = [str(o) for o in outputs]
+    new_net.Proto().external_output.extend(output_names)
+    return new_net, [new_net.GetBlobRef(o) for o in output_names]
     
-        @pytest.mark.skipif(six.PY3, reason='Env values in Python 3 are already Unicode')
-    def test_unicode_path_from_env(self):
-        with mock.patch.dict(os.environ):
-            os.environ['COMPOSE_FILE'] = b'\xe5\xb0\xb1\xe5\x90\x83\xe9\xa5\xad/docker-compose.yml'
-            environment = Environment.from_env_file('.')
-            assert get_config_path_from_options(
-                '.', {}, environment
-            ) == ['就吃饭/docker-compose.yml']
-
+        def wait_for_stop(self):
+        return self._event.wait()
     
-        def assert_failure(self, res, code=None):
-        self.assertEqual(res.status, 200)
-        body = res.body
-        body = json.loads(body)
-        self.assertTrue('json' in body)
-        errors = body['json'].get('errors')
-        self.assertTrue(code in [x[0] for x in errors])
-        data = body['json'].get('data')
-        self.assertFalse(bool(data))
-    
-            Will raise an AssertionError if the captcha code is called.
-        '''
-        return contextlib.nested(
-            # ensure that a captcha is not needed
-            patch.object(
-                validator,
-                'need_provider_captcha',
-                return_value=False,
-            ),
-            # ensure that the captcha is unused
-            patch.object(
-                g.captcha_provider,
-                'validate_captcha',
-                side_effect=AssertionError,
-            ),
-        )
-    
-            # Scenario: call returns duplicate errors
-        _response.response_code = TRANSACTION_ERROR
-        _response.response_reason_code = TRANSACTION_DUPLICATE
-        _request.make_request.return_value = (True, _response)
-        self.assertRaises(DuplicateTransactionError, create_authorization_hold,
-                          self.customer_id, self.payment_profile_id,
-                          self.amount, 12345)
-    
-        def test_nested_url(self):
-        testcase = u'*{background-image:calc(url('http://foobar/'))}'
-        self.assertInvalid(testcase)
-    
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
-    
-        def test_mcreddit_detector(self):
-        user_agent = 'McReddit - Reddit Client for iOS'
-        outs = detect(user_agent)
-        self.assertEqual(outs['browser']['name'], McRedditDetector.name)
-    
-        def test_future_header(self):
-        body = '{'user': 'reddit', 'password': 'hunter2'}'
-        self.assert_invalid(
-            body,
-            header='2:awesomefuturespec',
-            error=signing.ERRORS.UNKOWN_GLOBAL_VERSION,
-            global_version=2,
-        )
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
