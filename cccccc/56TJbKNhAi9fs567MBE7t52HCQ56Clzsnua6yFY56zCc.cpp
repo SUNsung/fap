@@ -1,384 +1,376 @@
 
         
-        // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    // clear cache on the renderer side
-IPC_MESSAGE_CONTROL0(ShellViewMsg_ClearCache)
-    
-    class ObjectManager;
-    
-    namespace nwapi {
-    }
-    
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+          void visitDestroyValueInst(DestroyValueInst *DVI) {
+    SGM.useConformancesFromType(DVI->getOperand()->getType().getASTType());
   }
+    
+      /// Intersect a bit-vector of the same size into this vector.
+  ClusteredBitVector &operator&=(const ClusteredBitVector &other) {
+    assert(size() == other.size());
+    if (Bits) {
+      APInt &v = Bits.getValue();
+      v &= other.Bits.getValue();
+    }
+    return *this;
+  }
+    
+      auto &M = getModule();
+  for (auto &BB : *this) {
+    for (auto I = BB.begin(), E = BB.end(); I != E;) {
+      auto Inst = &*I;
+      ++I;
+      SILInstruction::destroy(Inst);
+      // TODO: It is only safe to directly deallocate an
+      // instruction if this BB is being removed in scope
+      // of destructing a SILFunction.
+      M.deallocateInst(Inst);
+    }
+    BB.InstList.clearAndLeakNodesUnsafely();
+  }
+    
+    
+    {  S.writeToStream(os);
 }
-    
-    
-    {} // namespace extensions
 
     
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+      // Inline constructor
+  auto calleeSource = ([&]() -> SILValue {
+    // Handle partial_apply/thin_to_thick -> convert_function:
+    // tryDeleteDeadClosure must run before deleting a ConvertFunction that uses
+    // the PartialApplyInst or ThinToThickFunctionInst. tryDeleteDeadClosure
+    // will delete any uses of the closure, including a
+    // convert_escape_to_noescape conversion.
+    if (auto *cfi = dyn_cast<ConvertFunctionInst>(calleeValue))
+      return stripCopiesAndBorrows(cfi->getOperand());
     }
     
-      // implement nw.Screen.isMonitorStarted()
-  class NwScreenIsMonitorStartedFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenIsMonitorStartedFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    #endif // SWIFT_REFLECTION_METADATASOURCEBUILDER_H
+
+    
+      const CaptureTypeRecord *operator->() const {
+    return Cur;
+  }
+    
+    
+    {  // Fall back to the raw string.
+  return reflectionName;
+}
+    
+    #include <ImfEnvmapAttribute.h>
+    
+    template <> IMF_EXPORT
+void EnvmapAttribute::readValueFrom (OPENEXR_IMF_INTERNAL_NAMESPACE::IStream &,
+                                     int,
+                                     int);
+    
+        static const int TABLE_LOOKUP_BITS = 12;
+    
+    // attributes used in headers are TypedAttributes
+class Attribute;
+    
+        OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, magic);
+    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::read <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (is, version);
+    
+    
+#endif /* IMFGENERICINPUTFILE_H_ */
+
+    
+    void
+GenericOutputFile::writeMagicNumberAndVersionField (OPENEXR_IMF_INTERNAL_NAMESPACE::OStream& os,
+                                                    const Header * headers,
+                                                    int parts)
+{
+    OPENEXR_IMF_INTERNAL_NAMESPACE::Xdr::write <OPENEXR_IMF_INTERNAL_NAMESPACE::StreamIO> (os, MAGIC);
     }
     
+        IMF_EXPORT
+    void			insert (const std::string &name,
+				        const Attribute &attribute);
     
-bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
-                                           int /* size */) {
-  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
-                'Reaching here usually means a ZeroCopyOutputStream '
-                'implementation bug.';
-  return false;
-}
+    OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_ENTER
     
-    TEST(StatusOr, TestPointerAssignmentStatusOk) {
-  const int kI = 0;
-  StatusOr<const int*> source(&kI);
-  StatusOr<const int*> target;
-  target = source;
-  EXPECT_EQ(source.status(), target.status());
-  EXPECT_EQ(source.ValueOrDie(), target.ValueOrDie());
-}
     
-      while (true) {
-    void* outptr;
-    int outlen;
-    bool ok;
-    do {
-      ok = out.Next(&outptr, &outlen);
-      if (!ok) {
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT 
+
+    
+    #endif  // CAFFE_CLIP_LAYER_HPP_
+
+    
+      while (iter_ < stop_iter) {
+    // zero-init the params
+    net_->ClearParamDiffs();
+    if (param_.test_interval() && iter_ % param_.test_interval() == 0
+        && (iter_ > 0 || param_.test_initialization())) {
+      if (Caffe::root_solver()) {
+        TestAll();
+      }
+      if (requested_early_exit_) {
+        // Break out of the while loop because stop was requested while testing.
         break;
       }
-    } while (outlen <= 0);
-    readlen = read(STDIN_FILENO, outptr, outlen);
-    if (readlen <= 0) {
-      out.BackUp(outlen);
-      break;
     }
-    if (readlen < outlen) {
-      out.BackUp(outlen - readlen);
+    }
+    
+      Status* recv_status_ = nullptr;
+    
+      Status BidiStream(
+      ServerContext* context,
+      ServerReaderWriter<EchoResponse, EchoRequest>* stream) override;
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
     }
   }
-    
-    
-    {
-    {    reflection->MutableUnknownFields(message)->Clear();
-  }
- private:
-  virtual bool ShouldBeClear(const FieldDescriptor *field) = 0;
-};
-    
-    
-    {  if (op->send_message() != nullptr) {
-    ++sent_message_count_;
-  }
-  if (op->recv_message() != nullptr) {
-    recv_message_ = op->op()->payload->recv_message.recv_message;
-    initial_on_done_recv_message_ =
-        op->op()->payload->recv_message.recv_message_ready;
-    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
-  }
-  if (op->recv_trailing_metadata() != nullptr) {
-    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
-    initial_on_done_recv_trailing_metadata_ =
-        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
-    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
-        &on_done_recv_trailing_metadata_;
-  }
-  // Call next op.
-  grpc_call_next_op(elem, op->op());
+  return '';
 }
     
+      GPR_ASSERT(WSAConnect(cli_sock, (grpc_sockaddr*)&addr, addr_len, NULL, NULL,
+                        NULL, NULL) == 0);
+  svr_sock = accept(lst_sock, (grpc_sockaddr*)&addr, &addr_len);
+  GPR_ASSERT(svr_sock != INVALID_SOCKET);
     
-    {}  // namespace grpc
-    
-      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
-               grpc_closure* then_call_closure) override;
-    
-    class ProtoServerReflection final
-    : public reflection::v1alpha::ServerReflection::Service {
- public:
-  ProtoServerReflection();
-    }
-    
-    
-	std::wstring cmderStart = path;
-	std::wstring cmderTask = taskName;
-	std::wstring cmderConEmuArgs = conemu_args;
-    
-    namespace leveldb {
-    }
-    
-    class AutoCompactTest {
- public:
-  AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
-    }
-    
-      SequentialFile* const file_;
-  Reporter* const reporter_;
-  bool const checksum_;
-  char* const backing_store_;
-  Slice buffer_;
-  bool eof_;  // Last Read() indicated EOF by returning < kBlockSize
-    
-      // Returns true if the information we have available guarantees that
-  // the compaction is producing data in 'level+1' for which no data exists
-  // in levels greater than 'level+1'.
-  bool IsBaseLevelForKey(const Slice& user_key);
-    
-    
-    {  // If true, the write will be flushed from the operating system
-  // buffer cache (by calling WritableFile::Sync()) before the write
-  // is considered complete.  If this flag is true, writes will be
-  // slower.
-  //
-  // If this flag is false, and the machine crashes, some recent
-  // writes may be lost.  Note that if it is just the process that
-  // crashes (i.e., the machine does not reboot), no writes will be
-  // lost even if sync==false.
-  //
-  // In other words, a DB write with sync==false has similar
-  // crash semantics as the 'write()' system call.  A DB write
-  // with sync==true has similar crash semantics to a 'write()'
-  // system call followed by 'fsync()'.
-  bool sync = false;
-};
-    
-      if (r->pending_index_entry) {
-    assert(r->data_block.empty());
-    r->options.comparator->FindShortestSeparator(&r->last_key, key);
-    std::string handle_encoding;
-    r->pending_handle.EncodeTo(&handle_encoding);
-    r->index_block.Add(r->last_key, Slice(handle_encoding));
-    r->pending_index_entry = false;
+      sock = WSASocket(AF_INET6, SOCK_STREAM, IPPROTO_TCP, NULL, 0,
+                   grpc_get_default_wsa_socket_flags());
+  if (sock == INVALID_SOCKET) {
+    error = GRPC_WSA_ERROR(WSAGetLastError(), 'WSASocket');
+    goto failure;
   }
     
-    #include 'util/arena.h'
+    GPR_GLOBAL_CONFIG_DEFINE_BOOL(bool_var, false, '');
+GPR_GLOBAL_CONFIG_DEFINE_INT32(int32_var, 0, '');
+GPR_GLOBAL_CONFIG_DEFINE_STRING(string_var, '', '');
     
-      // Array of new[] allocated memory blocks
-  std::vector<char*> blocks_;
-    
-    TEST(EnvTest, StartThread) {
-  State state(0, 3);
-  for (int i = 0; i < 3; i++) {
-    env_->StartThread(&ThreadBody, &state);
-  }
-  while (true) {
-    state.mu.Lock();
-    int num = state.num_running;
-    state.mu.Unlock();
-    if (num == 0) {
-      break;
-    }
-    env_->SleepForMicroseconds(kDelayMicros);
-  }
-    }
-    
-      void Clear();
-  void Add(double value);
-  void Merge(const Histogram& other);
-    
-    #pragma once
+    #ifndef NDEBUG
+#define GRPC_COMBINER_DEBUG_ARGS \
+  , const char *file, int line, const char *reason
+#define GRPC_COMBINER_REF(combiner, reason) \
+  grpc_combiner_ref((combiner), __FILE__, __LINE__, (reason))
+#define GRPC_COMBINER_UNREF(combiner, reason) \
+  grpc_combiner_unref((combiner), __FILE__, __LINE__, (reason))
+#else
+#define GRPC_COMBINER_DEBUG_ARGS
+#define GRPC_COMBINER_REF(combiner, reason) grpc_combiner_ref((combiner))
+#define GRPC_COMBINER_UNREF(combiner, reason) grpc_combiner_unref((combiner))
+#endif
     
     
-    {        return clone;
-    }
-    
-    
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
-            }
-        }
-    
-        virtual const char * CallStack() const override { return m_callStack.c_str(); }
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-    bool CreateDeviceD3D(HWND hWnd)
-{
-    if ((g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
-        return false;
-    }
-    
-      virtual std::string toString() const CXX11_OVERRIDE;
-    
-      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
-                        const unsigned char* key) const;
-    
-    
-    {  size_t getQueueSize() const { return queue_.size(); }
-};
-    
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+    {}  // namespace grpc_impl
 
     
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
+    namespace grpc {
+    }
+    
+        SendHealthCheckRpc('', Status::OK, HealthCheckResponse::NOT_SERVING);
+    SendHealthCheckRpc(kHealthyService, Status::OK,
+                       HealthCheckResponse::NOT_SERVING);
+    SendHealthCheckRpc(kUnhealthyService, Status::OK,
+                       HealthCheckResponse::NOT_SERVING);
+    SendHealthCheckRpc(kNotRegisteredService,
+                       Status(StatusCode::NOT_FOUND, ''));
+    
+      void TearDown() override {
+    server_->Shutdown();
+    void* ignored_tag;
+    bool ignored_ok;
+    cq_->Shutdown();
+    while (LoopForTag(&ignored_tag, &ignored_ok))
+      ;
+    stub_.reset();
+    grpc_recycle_unused_port(port_);
   }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
+    
+      // for typevar checking
+  void pushTypeScope();
+  void popTypeScope();
+  void addTypeVar(const std::string &name);
+  bool isTypeVar(const std::string &name);
+  bool isTypeVarInImmediateScope(const std::string &name);
+    
+    #include 'hphp/util/copy-ptr.h'
+#include 'hphp/util/functional.h'
+    
+    #ifndef incl_HPHP_MYSQLSTATS_H_
+#define incl_HPHP_MYSQLSTATS_H_
+    
+      iterator find(const StringData* key) { return m_map.find(key); }
+  iterator begin()                     { return m_map.begin(); }
+  iterator end()                       { return m_map.end(); }
+  V        size() const                { return m_list.size(); }
+    
+    void StackTraceNoHeap::printStackTrace(int fd) const {
+  folly::symbolizer::Symbolizer symbolizer;
+  folly::symbolizer::SymbolizedFrame frames[kMaxFrame];
+  symbolizer.symbolize((uintptr_t*)m_frames, frames, m_frame_count);
+  for (int i = 0, fr = 0; i < m_frame_count; i++) {
+    auto const& frame = frames[i];
+    if (!frame.name ||
+        !frame.name[0] ||
+        isBlacklisted(frame.name)) {
+      continue;
+    }
+    printFrameHdr(fd, fr);
+    demangle(fd, frame.name);
+    if (frame.location.hasFileAndLine) {
+      char fileBuf[PATH_MAX];
+      fileBuf[0] = '\0';
+      frame.location.file.toBuffer(fileBuf, sizeof(fileBuf));
+      printStr(fd, ' at ');
+      write_path(fd, fileBuf);
+      printStr(fd, ':');
+      printInt(fd, frame.location.line);
+    }
+    printStr(fd, '\n');
+    fr++;
   }
 }
     
-    DNSCache::AddrEntry::AddrEntry(const AddrEntry& c) = default;
     
-        std::vector<AddrEntry>::iterator find(const std::string& addr);
+RangeState::RangeState(uintptr_t lowAddr, uintptr_t highAddr, Reserved)
+  : low_use(lowAddr)
+  , low_map(lowAddr)
+  , high_use(highAddr)
+  , high_map(highAddr)
+  , low_internal(reinterpret_cast<char*>(lowAddr))
+  , high_internal(reinterpret_cast<char*>(highAddr)) {
+  constexpr size_t size2m = 2u << 20;
+  always_assert((lowAddr <= highAddr) &&
+                !(lowAddr % size2m) && !(highAddr % size2m));
+}
     
-    class ExtensionHandler : virtual public ExtensionIf {
- public:
-  ExtensionHandler() {
-    // Your initialization goes here
-  }
+    
+    {  HTTPException ex(HTTPException::Direction::INGRESS_AND_EGRESS,
+                   'Stream aborted, streamID');
+  ex.setProxygenError(proxygen::kErrorStreamAbort);
+  ex.setCodecStatusCode(proxygen::ErrorCode::CANCEL);
+  pushTxn.onError(ex);
+  pushHandler->detachTransaction();
+  m_transport->pushResourceBody(id, nullptr, 0, true);
+  m_server.deliverMessages();
+  sendResponse('12345');
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    bool js_cocos2dx_TransitionZoomFlipY_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_TransitionZoomFlipY_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_TransitionZoomFlipY(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_TransitionZoomFlipY_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_TransitionZoomFlipY_TransitionZoomFlipY(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    string FileUtilsAndroid::getWritablePath() const
+{
+    // Fix for Nexus 10 (Android 4.2 multi-user environment)
+    // the path is retrieved through Java Context.getCacheDir() method
+    string dir('');
+    string tmp = JniHelper::callStaticStringMethod('org.cocos2dx.lib.Cocos2dxHelper', 'getCocos2dxWritablePath');
     }
     
-    // Sanity check integration test for iokit_devicetree
-// Spec file: specs/darwin/iokit_devicetree.table
-    
-    class iokitRegistry : public testing::Test {
- protected:
-  void SetUp() override {
-    setUpEnvironment();
-  }
-};
-    
-    class KernelInfo : public testing::Test {
-  protected:
-    void SetUp() override {
-      setUpEnvironment();
-    }
-};
-    
-    
-    {
-    {} // namespace table_tests
-} // namespace osquery
+    #endif // __CC_FILEUTILS_ANDROID_H__
 
     
-    using ::apollo::canbus::ChassisDetail;
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+    NS_CC_EXT_BEGIN
+    
+    //
+// SpritePolygonTestNoCrash
+//
+SpritePolygonTestNoCrash::SpritePolygonTestNoCrash()
+{
+    _title = 'SpritePolygon ';
+    _subtitle = 'AutoPolygon: should not crash';
 }
     
-    double ObjectExtendedInfo60D::oritation_angle(const std::uint8_t* bytes,
-                                              int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
+    // UIPageViewTest
+UIPageViewChildSizeTest::UIPageViewChildSizeTest()
+    : _displayValueLabel(nullptr)
+{
     }
     
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     
-    {  int ret = x;
-  return ret;
-}
-    
-    int ObjectQualityInfo60C::oritation_angle_rms(const std::uint8_t* bytes,
-                                              int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 2);
+    void Scene::render(Renderer* renderer, const Mat4* eyeTransforms, const Mat4* eyeProjections, unsigned int multiViewCount)
+{
+    auto director = Director::getInstance();
+    Camera* defaultCamera = nullptr;
+    const auto& transform = getNodeToParentTransform();
     }
     
-    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
-#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
-#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
-#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
-#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
-#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
-#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
-    
-    // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
-// 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 48, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 1);
+      size_t idx = 0;
+  while (idx < ioQueue->size()) {
+    int numIovecs = 0;
+    while (numIovecs < kNumIovecs && idx < ioQueue->size()) {
+      const auto& str = (*ioQueue)[idx];
+      iovecs[numIovecs].iov_base = const_cast<char*>(str.data());
+      iovecs[numIovecs].iov_len = str.size();
+      ++numIovecs;
+      ++idx;
     }
+    }
+    
+      /**
+   * Get the output file.
+   */
+  const folly::File& getFile() const {
+    return file_;
+  }
+    
+      void rehash(std::size_t bucketCapacity) {
+    // The standard's rehash() requires understanding the max load factor,
+    // which is easy to get wrong.  Since we don't actually allow adjustment
+    // of max_load_factor there is no difference.
+    reserve(bucketCapacity);
+  }
+    
+        if (preciseAllocInfo) {
+      EXPECT_EQ(testAllocatedMemorySize, 0);
+      EXPECT_EQ(m.getAllocatedMemorySize(), 0);
+    }
+    auto emptyMapAllocatedMemorySize = testAllocatedMemorySize;
+    auto emptyMapAllocatedBlockCount = testAllocatedBlockCount;
+    
+      // Empty member optimization: package Alloc with a non-empty member
+  // in case Alloc is empty (as it is in the case of SysAllocator).
+  struct AllocAndSize : public Alloc {
+    explicit AllocAndSize(const Alloc& a, size_t s)
+        : Alloc(a), minBlockSize(s) {}
+    }
+    
+      // Insert big chunk, should still fit in one block
+  arena.allocate(bigChunkSize);
+  bytesUsed += bigChunkSize;
+  EXPECT_EQ(arena.bytesUsed(), bytesUsed);
+  EXPECT_TRUE(arena.totalSize() >= blockSize);
+  EXPECT_TRUE(arena.totalSize() <= 2 * blockSize);
+    
+     private:
+  Func func_;
+  Waiter& waiter_;
+    
+    // Tests that private members can be accessed from a TEST_F declared
+// as a friend of the class.
+TEST_F(PrivateCodeFixtureTest, CanAccessPrivateMembers) {
+  PrivateCode a;
+  EXPECT_EQ(0, a.x_);
+    }
+    
+    // This macro defines 100 dummy tests.
+#define HUNDRED_TESTS_(test_case_name_prefix) \
+  TEN_TESTS_(test_case_name_prefix ## 0) \
+  TEN_TESTS_(test_case_name_prefix ## 1) \
+  TEN_TESTS_(test_case_name_prefix ## 2) \
+  TEN_TESTS_(test_case_name_prefix ## 3) \
+  TEN_TESTS_(test_case_name_prefix ## 4) \
+  TEN_TESTS_(test_case_name_prefix ## 5) \
+  TEN_TESTS_(test_case_name_prefix ## 6) \
+  TEN_TESTS_(test_case_name_prefix ## 7) \
+  TEN_TESTS_(test_case_name_prefix ## 8) \
+  TEN_TESTS_(test_case_name_prefix ## 9)
