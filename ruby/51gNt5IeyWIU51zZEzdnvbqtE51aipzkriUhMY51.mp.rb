@@ -1,94 +1,68 @@
 
         
-            remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+            should 'not filter symlink entries when safe mode disabled' do
+      allow(File).to receive(:symlink?).with('symlink.js').and_return(true)
+      files = %w(symlink.js)
+      assert_equal files, @site.reader.filter_entries(files)
     end
     
-    describe ContactsController, :type => :controller do
-  describe '#index' do
-    before do
-      AppConfig.chat.enabled = true
-      @aspect = bob.aspects.create(:name => 'another aspect')
-      bob.share_with alice.person, @aspect
-      bob.share_with eve.person, @aspect
-      sign_in bob, scope: :user
+          # `{{ site.related_posts }}` is how posts can get posts related to
+      # them, either through LSI if it's enabled, or through the most
+      # recent posts.
+      # We should remove this in 4.0 and switch to `{{ post.related_posts }}`.
+      def related_posts
+        return nil unless @current_document.is_a?(Jekyll::Document)
+    
+        # Read Site data from disk and load it into internal data structures.
+    #
+    # Returns nothing.
+    def read
+      @site.layouts = LayoutReader.new(site).read
+      read_directories
+      read_included_excludes
+      sort_files!
+      @site.data = DataReader.new(site).read(site.config['data_dir'])
+      CollectionReader.new(site).read
+      ThemeAssetsReader.new(site).read
     end
     
-        it 'returns an empty array for a post with no likes' do
-      get :index, params: {post_id: @message.id}
-      expect(JSON.parse(response.body)).to eq([])
-    end
-    
-        it 'supports a limit per_page parameter' do
-      2.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index, params: {per_page: 2}
-      expect(assigns[:notifications].count).to eq(2)
-    end
-    
-      describe '#destroy' do
-    let(:post) { FactoryGirl.create(:status_message) }
-    
-      describe '#create' do
-    it 'redirects to /stream for a non-mobile user' do
-      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
-      expect(response).to be_redirect
-      expect(response.location).to match /^#{stream_url}\??$/
-    end
-    
-      opts.on('-r', '--redis [HOST:PORT]', 'Redis connection string') do |host|
-    Resque.redis = host
+    SUITE.each do |key, text|
+  Benchmark.ips do |x|
+    x.report('regex-check   - #{key}') { check_with_regex(text) }
+    x.report('builtin-check - #{key}') { check_with_builtin(text) }
+    x.compare!
   end
+end
+# ------------------------------------------------------------------------
     
-    # Here's our ActiveRecord class
-class Repository < ActiveRecord::Base
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
+    def native_relative
+  DOC_PATH.sub('#{COL_PATH}/', '')
+end
     
-          # When a job fails, a new instance of your Failure backend is created
-      # and #save is called.
-      #
-      # This is where you POST or PUT or whatever to your Failure service.
-      def save
+          def escaped_name
+        CGI.escape(@name)
       end
     
-          def self.count(queue = nil, class_name = nil)
-        if queue
-          if class_name
-            n = 0
-            each(0, count(queue), queue, class_name) { n += 1 }
-            n
-          else
-            data_store.num_failed(queue).to_i
-          end
-        else
-          total = 0
-          queues.each { |q| total += count(q) }
-          total
-        end
+          def mathjax
+        @mathjax
       end
     
-          failure_hooks(plugin).each do |hook|
-        if hook.to_s.end_with?('failure')
-          raise LintError, '#{plugin}.#{hook} is not namespaced'
-        end
-      end
+      test 'guards against creation of existing page' do
+    name = 'A'
+    post '/create', :content => 'abc', :page => name,
+         :format             => 'markdown', :message => 'def'
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
+    
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
-    
-      def failed_size
-    @failed_size ||= Resque::Failure.count(params[:queue], params[:class])
   end
-    
-      def assert_exception_caught(result)
-    refute_nil result
-    assert !result.start_with?('Finished Normally'), 'Job Finished normally.  (sleep parameter to LongRunningJob not long enough?)'
-    assert result.start_with?('Caught TermException'), 'TermException exception not raised in child.'
-  end
+end
