@@ -1,339 +1,390 @@
 
         
-          const tensorflow::OpRegistrationData* op_reg_data;
-  auto status =
-      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
-  if (!status.ok()) {
-    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
-    return '';
-  }
-  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // static
-void CallbackHolderBase::FirstWeakCallback(
-    const v8::WeakCallbackInfo<CallbackHolderBase>& data) {
-  data.GetParameter()->v8_ref_.Reset();
-  data.SetSecondPassCallback(SecondWeakCallback);
-}
-    
-    
-    {  return args[0];
-}
-    
-      // Call object._init if we have one.
-  v8::Local<v8::Function> init;
-  if (Dictionary(isolate, wrapper).Get('_init', &init))
-    init->Call(isolate->GetCurrentContext(), wrapper, 0, nullptr).IsEmpty();
-    
-    template <>
-struct Converter<std::string> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const std::string& val);
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     std::string* out);
-};
-    
-      template <typename T>
-  bool Set(const base::StringPiece& key, const T& val) {
-    v8::Local<v8::Value> v8_value;
-    if (!TryConvertToV8(isolate_, val, &v8_value))
-      return false;
-    v8::Maybe<bool> result = GetHandle()->Set(
-        isolate_->GetCurrentContext(), StringToV8(isolate_, key), v8_value);
-    return !result.IsNothing() && result.FromJust();
-  }
-    
-      // It's against Google C++ style to return a non-const ref, but we take some
-  // poetic license here in order that all calls to Set() can be via the '.'
-  // operator and line up nicely.
-  template <typename T>
-  ObjectTemplateBuilder& SetValue(const base::StringPiece& name, T val) {
-    return SetImpl(name, ConvertToV8(isolate_, val));
-  }
-    
-    // Wrappable is a base class for C++ objects that have corresponding v8 wrapper
-// objects. To retain a Wrappable object on the stack, use a gin::Handle.
-//
-// USAGE:
-// // my_class.h
-// class MyClass : Wrappable<MyClass> {
-//  public:
-//   ...
-// };
-//
-// Subclasses should also typically have private constructors and expose a
-// static Create function that returns a mate::Handle. Forcing creators through
-// this static Create function will enforce that clients actually create a
-// wrapper for the object. If clients fail to create a wrapper for a wrappable
-// object, the object will leak because we use the weak callback from the
-// wrapper as the signal to delete the wrapped object.
-class WrappableBase {
- public:
-  WrappableBase();
-  virtual ~WrappableBase();
+        void run_recovery_tests(void) {
+    int i;
+    for (i = 0; i < count; i++) {
+        test_ecdsa_recovery_api();
     }
+    for (i = 0; i < 64*count; i++) {
+        test_ecdsa_recovery_end_to_end();
+    }
+    test_ecdsa_recovery_edge_cases();
+}
     
-    #if defined(OS_POSIX) && !defined(OS_ANDROID)
-  // Exposed for testing.  We use a timeout on Linux, and in tests we want
-  // this timeout to be short.
-  NotifyResult NotifyOtherProcessWithTimeout(
-      const base::CommandLine& command_line,
-      int retry_attempts,
-      const base::TimeDelta& timeout,
-      bool kill_unresponsive);
-  NotifyResult NotifyOtherProcessWithTimeoutOrCreate(
-      const base::CommandLine& command_line,
-      int retry_attempts,
-      const base::TimeDelta& timeout);
-  void OverrideCurrentPidForTesting(base::ProcessId pid);
-  void OverrideKillCallbackForTesting(
-      const base::RepeatingCallback<void(int)>& callback);
-#endif
-    
-    
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
-    .Output(
-        0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/utils/math.h'
-    
-    #ifndef B2_TRIANGLE_H
-#define B2_TRIANGLE_H
-    
-    
-    {}
-
-    
-    //use_lines: Enables line clipping. Adds a very minor cost to performance.
-#define use_lines
-  
-//use_deprecated: Enables temporary support for the obsolete functions
-//#define use_deprecated  
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
+    bool ParseInt32(const std::string& str, int32_t *out)
 {
-  int res;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b),'r'(a)
-  );
-  return res;
+    if (!ParsePrechecks(str))
+        return false;
+    char *endp = NULL;
+    errno = 0; // strtol will not set errno if valid
+    long int n = strtol(str.c_str(), &endp, 10);
+    if(out) *out = (int32_t)n;
+    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
+    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
+    // platforms the size of these types may be different.
+    return endp && *endp == 0 && !errno &&
+        n >= std::numeric_limits<int32_t>::min() &&
+        n <= std::numeric_limits<int32_t>::max();
 }
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
     
-    /* (a32 * (b32 >> 16)) >> 16 */
-#undef silk_SMULWT
-static OPUS_INLINE opus_int32 silk_SMULWT_armv5e(opus_int32 a, opus_int32 b)
-{
-  int res;
-  __asm__(
-      '#silk_SMULWT\n\t'
-      'smulwt %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define silk_SMULWT(a, b) (silk_SMULWT_armv5e(a, b))
+        objTypes['cat2'] = UniValue::VSTR;
+    BOOST_CHECK(!obj.checkObject(objTypes));
     
-    // Implements printing a reference type T&.
-template <typename T>
-class UniversalPrinter<T&> {
+    %define SHUF_00BA	xmm10 ; shuffle xBxA -> 00BA
+%define SHUF_DC00	xmm11 ; shuffle xDxC -> DC00
+%define BYTE_FLIP_MASK	xmm12
+    
+%ifdef LINUX
+%define NUM_BLKS rdx	; 3rd arg
+%define CTX	rsi	; 2nd arg
+%define INP	rdi	; 1st arg
+    
+    class ModelDB: public DB {
  public:
-  // MSVC warns about adding const to a function type, so we want to
-  // disable the warning.
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4180)  // Temporarily disables warning 4180.
-#endif  // _MSC_VER
-    }
-    
-      // Gets the number of all test parts.  This is the sum of the number
-  // of successful test parts and the number of failed test parts.
-  int total_part_count() const;
-    
-      // Returns true if pathname describes a directory in the file-system
-  // that exists.
-  bool DirectoryExists() const;
-    
-    // The text used in failure messages to indicate the start of the
-// stack trace.
-GTEST_API_ extern const char kStackTraceMarker[];
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
-  }
-    }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15>
-struct Templates15 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates14<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15> Tail;
-};
-    
-    $range i 1..n
-template <$for i, [[GTEST_TEMPLATE_ T$i = NoneT]]>
-struct Templates {
-  typedef Templates$n<$for i, [[T$i]]> type;
-};
-    
-    #include 'gtest/gtest.h'
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-      void Corrupt(FileType filetype, int offset, int bytes_to_corrupt) {
-    // Pick file to corrupt
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_.target()->GetChildren(dbname_, &filenames));
-    uint64_t number;
-    FileType type;
-    std::string fname;
-    int picked_number = -1;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      if (ParseFileName(filenames[i], &number, &type) && type == filetype &&
-          int(number) > picked_number) {  // Pick latest file
-        fname = dbname_ + '/' + filenames[i];
-        picked_number = number;
-      }
-    }
-    ASSERT_TRUE(!fname.empty()) << filetype;
-    }
-    
-      // Return the earliest node that comes at or after key.
-  // Return nullptr if there is no such node.
-  //
-  // If prev is non-null, fills prev[level] with pointer to previous
-  // node at 'level' for every level in [0..max_height_-1].
-  Node* FindGreaterOrEqual(const Key& key, Node** prev) const;
-    
-      Iterator* NewConcatenatingIterator(const ReadOptions&, int level) const;
-    
-    TEST(MemEnvTest, Locks) {
-  FileLock* lock;
+  class ModelSnapshot : public Snapshot {
+   public:
+    KVMap map_;
+  };
     }
     
     
     {}  // namespace leveldb
     
-    static const int kBlockSize = 4096;
-    
-    namespace CalcEngine
-{
-    class CalcNumSec
-    {
-    public:
-        CalcNumSec()
-            : value()
-            , m_isNegative(false)
-        {
-        }
-    }
-    }
-    
-    
-    {                Windows::UI::Xaml::Interop::IBindableObservableVector ^ observable =
-                    dynamic_cast<Windows::UI::Xaml::Interop::IBindableObservableVector ^>(source);
-                if (observable)
-                {
-                    observable->VectorChanged += ref new Windows::UI::Xaml::Interop::BindableVectorChangedEventHandler(
-                        this, &AlwaysSelectedCollectionView::OnSourceBindableVectorChanged);
-                }
-            }
-    
-    #include <osquery/flags.h>
-#include <osquery/logger.h>
-#include <osquery/tables.h>
-#include <osquery/utils/conversions/join.h>
-#include <osquery/utils/info/platform_type.h>
-#include <osquery/utils/json/json.h>
-    
-      /**
-   * @brief The schedule will check and record previously executing queries.
-   *
-   * If a query is found on initialization, the name will be recorded, it is
-   * possible to skip previously failed queries.
-   */
-  std::string failed_query_;
-    
-      // Initialize a discovery cache at time 0.
-  discovery_cache_ = std::make_pair<size_t, bool>(0, false);
-  valid_ = true;
-    
-    fs::path getConfDirPathImpl() {
-  char const* kEnvVarName = 'TEST_CONF_FILES_DIR';
-  auto const value_opt = osquery::getEnvVar(kEnvVarName);
-  EXPECT_TRUE(static_cast<bool>(value_opt))
-      << 'Env var ' << boost::io::quoted(kEnvVarName) << ' was not found, '
-      << ' looks like cxx_test argument 'env' is not set up.';
-  return fs::path(value_opt.get());
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
+  }
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
+  }
+  delete file;
+  return Status::OK();
 }
     
-    Expected<int32_t, DatabaseError> RocksdbDatabase::getInt32(
-    const std::string& domain, const std::string& key) {
-  Expected<std::string, DatabaseError> buffer = getRawBytes(domain, key);
-  if (buffer) {
-    std::string value = buffer.take();
-    if (BOOST_LIKELY(validateInt32StorageBuffer(value))) {
-      int32_t result = *(reinterpret_cast<const int32_t*>(value.data()));
-      return ntohl(result);
-    } else {
-      auto type_error = createError(RocksdbError::UnexpectedValueType)
-                        << 'Fetching string as integer';
-      auto error =
-          createError(DatabaseError::KeyNotFound, std::move(type_error));
-      assert(false && error.getMessage().c_str());
-      LOG(ERROR) << error.getMessage();
-      debug_only::fail(error.getMessage().c_str());
-      return std::move(error);
+          PartialCompactTestPreFault(num_pre_sync, num_post_sync);
+      PartialCompactTestReopenWithFault(RESET_DROP_UNSYNCED_DATA,
+                                        num_pre_sync,
+                                        num_post_sync);
+    
+    // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
+    
+      protobuf_unittest::TestAny message;
+  message.mutable_any_value()->PackFrom(any);
+  ASSERT_TRUE(message.ParseFromString(message.SerializeAsString()));
+  EXPECT_FALSE(message.any_value().Is<protobuf_unittest::TestAny>());
+  EXPECT_TRUE(message.any_value().Is<google::protobuf::Any>());
+    
+    // The abstract interface to a class which generates code implementing a
+// particular proto file in a particular language.  A number of these may
+// be registered with CommandLineInterface to support various languages.
+class PROTOC_EXPORT CodeGenerator {
+ public:
+  inline CodeGenerator() {}
+  virtual ~CodeGenerator();
+    }
+    
+    #define MESSAGE_TEST_NAME MessageTest
+#define GENERATED_DESCRIPTOR_TEST_NAME GeneratedDescriptorTest
+#define GENERATED_MESSAGE_TEST_NAME GeneratedMessageTest
+#define GENERATED_ENUM_TEST_NAME GeneratedEnumTest
+#define GENERATED_SERVICE_TEST_NAME GeneratedServiceTest
+#define HELPERS_TEST_NAME HelpersTest
+#define DESCRIPTOR_INIT_TEST_NAME DescriptorInitializationTest
+    
+    Importer::Importer(SourceTree* source_tree,
+                   MultiFileErrorCollector* error_collector)
+    : database_(source_tree),
+      pool_(&database_, database_.GetValidationErrorCollector()) {
+  pool_.EnforceWeakDependencies(true);
+  database_.RecordErrorsTo(error_collector);
+}
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MultiFileErrorCollector);
+};
+    
+    
+    {  // Create temporary file
+  auto fd = mkstemp(&tmp[0]);
+  if (fd == -1) {
+    throw std::system_error(errno, std::system_category());
+  }
+  close(fd);
+  return std::string(tmp.data(), tmp.size());
+}
+    
+    
+    {
+    {    return SingleGradientDef(
+        'MergeSingleMapFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
+  }
+};
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+    
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
+}
+    
+    
+// Returns the median value of the vector, given that the values are
+// circular, with the given modulus. Values may be signed or unsigned,
+// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
+// NOTE that the array is shuffled, but the time taken is linear.
+// An assumption is made that most of the values are spread over no more than
+// half the range, but wrap-around is accounted for if the median is near
+// the wrap-around point.
+// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
+// T must be an integer or float/double type.
+template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
+  LLSQ stats;
+  T halfrange = static_cast<T>(modulus / 2);
+  int num_elements = v->size();
+  for (int i = 0; i < num_elements; ++i) {
+    stats.add((*v)[i], (*v)[i] + halfrange);
+  }
+  bool offset_needed = stats.y_variance() < stats.x_variance();
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] += halfrange;
     }
   }
-  return buffer.takeError();
+  int median_index = v->choose_nth_item(num_elements / 2);
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] -= halfrange;
+    }
+  }
+  return (*v)[median_index];
+}
+    
+      // The first paragraph on a page often lacks a first line indent, but should
+  // still be modeled by the same model as other body text paragraphs on the
+  // page.
+  bool is_very_first_or_continuation;
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
+    
+    #endif  // TESSERACT_CCUTIL_QRSEQUENCE_H_
+
+    
+    // Class to encapsulate all the functionality and sub-structures required
+// to count errors for an isolated character classifier (ShapeClassifier).
+class ErrorCounter {
+ public:
+  // Computes and returns the unweighted boosting_mode error rate of the given
+  // classifier. Can be used for testing, or inside an iterative training
+  // system, including one that uses boosting.
+  // report_levels:
+  // 0 = no output.
+  // 1 = bottom-line error rate.
+  // 2 = bottom-line error rate + time.
+  // 3 = font-level error rate + time.
+  // 4 = list of all errors + short classifier debug output on 16 errors.
+  // 5 = list of all errors + short classifier debug output on 25 errors.
+  // * The boosting_mode determines which error type is used for computing the
+  //   scaled_error output, and setting the is_error flag in the samples.
+  // * The fontinfo_table is used to get string font names for the debug
+  //   output, and also to count font attributes errors.
+  // * The page_images vector may contain a Pix* (which may be nullptr) for each
+  //   page index assigned to the samples.
+  // * The it provides encapsulated iteration over some sample set.
+  // * The outputs unichar_error, scaled_error and totals_report are all
+  //   optional.
+  // * If not nullptr, unichar error gets the top1 unichar error rate.
+  // * Scaled_error gets the error chosen by boosting_mode weighted by the
+  //   weights on the samples.
+  // * Fonts_report gets a string summarizing the error rates for each font in
+  //   both human-readable form and as a tab-separated list of error counts.
+  //   The human-readable form is all before the first tab.
+  // * The return value is the un-weighted version of the scaled_error.
+  static double ComputeErrorRate(ShapeClassifier* classifier,
+                                 int report_level, CountTypes boosting_mode,
+                                 const FontInfoTable& fontinfo_table,
+                                 const GenericVector<Pix*>& page_images,
+                                 SampleIterator* it,
+                                 double* unichar_error,
+                                 double* scaled_error,
+                                 STRING* fonts_report);
+  // Tests a pair of classifiers, debugging errors of the new against the old.
+  // See errorcounter.h for description of arguments.
+  // Iterates over the samples, calling the classifiers in normal/silent mode.
+  // If the new_classifier makes a boosting_mode error that the old_classifier
+  // does not, and the appropriate, it will then call the new_classifier again
+  // with a debug flag and a keep_this argument to find out what is going on.
+  static void DebugNewErrors(ShapeClassifier* new_classifier,
+                             ShapeClassifier* old_classifier,
+                             CountTypes boosting_mode,
+                             const FontInfoTable& fontinfo_table,
+                             const GenericVector<Pix*>& page_images,
+                             SampleIterator* it);
+    }
+    
+    // Setup the map for the given indexed_features that have been indexed by
+// feature_map.
+void IntFeatureDist::Set(const GenericVector<int>& indexed_features,
+                          int canonical_count, bool value) {
+  total_feature_weight_ = canonical_count;
+  for (int i = 0; i < indexed_features.size(); ++i) {
+    const int f = indexed_features[i];
+    features_[f] = value;
+    for (int dir = -kNumOffsetMaps; dir <= kNumOffsetMaps; ++dir) {
+      if (dir == 0) continue;
+      const int mapped_f = feature_map_->OffsetFeature(f, dir);
+      if (mapped_f >= 0) {
+        features_delta_one_[mapped_f] = value;
+        for (int dir2 = -kNumOffsetMaps; dir2 <= kNumOffsetMaps; ++dir2) {
+          if (dir2 == 0) continue;
+          const int mapped_f2 = feature_map_->OffsetFeature(mapped_f, dir2);
+          if (mapped_f2 >= 0)
+            features_delta_two_[mapped_f2] = value;
+        }
+      }
+    }
+  }
+}
+    
+    mkldnn_output_t CreateMKLDNNMem(const NDArray &out_arr,
+                                const mkldnn::memory::primitive_desc &desc,
+                                OpReqType req,
+                                const NDArray* in_arr) {
+  if (kAddTo == req) {
+    auto tmp = TmpMemMgr::Get()->Alloc(desc);
+    return mkldnn_output_t(OutDataOp::AddBack, tmp);
+  } else if (kWriteInplace == req && in_arr != nullptr && CanWriteTo(out_arr, *in_arr, desc)) {
+    mkldnn::memory *mem = const_cast<NDArray &>(out_arr).CreateMKLDNNData(desc);
+    // mem is nullptr if out_arr is view and desc is MKLDNN format.
+    // need to Reorder2Default before calling CreateMKLDNNMem
+    CHECK(mem != nullptr);
+    return mkldnn_output_t(OutDataOp::Noop, mem);
+  } else if (kWriteInplace == req) {
+    auto tmp = TmpMemMgr::Get()->Alloc(desc);
+    return mkldnn_output_t(OutDataOp::CopyBack, tmp);
+  } else if (kWriteTo == req) {
+    mkldnn::memory *mem = const_cast<NDArray &>(out_arr).CreateMKLDNNData(desc);
+    if (nullptr == mem) {
+      auto tmp = TmpMemMgr::Get()->Alloc(desc);
+      return mkldnn_output_t(OutDataOp::CopyBack, tmp);
+    }
+    return mkldnn_output_t(OutDataOp::Noop, mem);
+  }
+  auto tmp = TmpMemMgr::Get()->Alloc(desc);
+  return mkldnn_output_t(OutDataOp::Noop, tmp);
 }
     
     
-    {  /**
-   * @brief The host identifier at the time when logs are flushed.
-   *
-   * There is occasionally a delay between logging a status and decorating
-   * with the host identifier. In most cases the identifier is static so this
-   * does not matter. In some cases the host identifier causes database lookups.
-   */
-  std::string identifier;
+    {
+    {}  // namespace op
+}  // namespace mxnet
+#endif  // MXNET_OPERATOR_NN_MOMENTS_INL_H_
+
+    
+    DMLC_REGISTER_PARAMETER(MomentsParam);
+    
+    DMLC_REGISTER_PARAMETER(AMPCastParam);
+DMLC_REGISTER_PARAMETER(AMPMultiCastParam);
+    
+    #include <mxnet/storage.h>
+#include <cstddef>
+    
+    template<int req>
+struct IndexArrayDefaultKernel {
+  MSHADOW_XINLINE static void Map(int i,
+                                  int64_t* out_data,
+                                  const int ndim,
+                                  const dim_t* shape) {
+    int64_t index = i;
+    for (ptrdiff_t j = ndim - 1; j >= 0; j--) {
+      KERNEL_ASSIGN(out_data[ptrdiff_t(i) * ptrdiff_t(ndim) + j], req, index % shape[j]);
+      index /= shape[j];
+    }
+  }
 };
+    
+        if (!q.value.HasMember('interval')) {
+      query.interval = FLAGS_schedule_default_interval;
+    } else {
+      query.interval = JSON::valueToSize(q.value['interval']);
+    }
+    
+      // This function designed to write batch of data as one operation and get
+  // as much performance as possbile. Because of this, db may not guarantee
+  // data consistency or atomic nature of operation
+  // Please see actual function implementation for details and limitations
+  virtual ExpectedSuccess<DatabaseError> putStringsUnsafe(
+      const std::string& domain,
+      const std::vector<std::pair<std::string, std::string>>& data) = 0;
+    
+    #include <osquery/utils/json/json.h>
+    
+      /// The UNIX time for when the status message was emitted
+  size_t time;
