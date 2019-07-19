@@ -1,134 +1,210 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+          // Check if any casting is required for the partially-applied function.
+  SILValue ResultValue = castValueToABICompatibleType(
+      &B, Loc, NewPAI, NewPAI->getType(), OldPAI->getType());
+  OldPAI->replaceAllUsesWith(ResultValue);
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      if (PyType_Ready(&PyBfloat16_Type) < 0) {
-    return false;
-  }
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
-  }
-}
-
-    
-    
-    {    // Must be 'const' or nothing.
-    clang::Qualifiers quals = pointee.getQualifiers();
-    bool isConst = quals.hasConst();
-    quals.removeConst();
-    if (quals.empty()) {
-      if (auto record = pointee->getAs<clang::RecordType>()) {
-        auto recordDecl = record->getDecl();
-        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
-            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return forRecord(isConst, record->getDecl());
+            // ObjC protocol names aren't mangled.
+        if (!protocolNode) {
+          auto module = Dem.createNode(Node::Kind::Module,
+                                            MANGLING_MODULE_OBJC);
+          auto node = Dem.createNode(Node::Kind::Protocol);
+          node->addChild(module, Dem);
+          node->addChild(Dem.createNode(Node::Kind::Identifier, ProtoName),
+                         Dem);
+          auto typeNode = Dem.createNode(Node::Kind::Type);
+          typeNode->addChild(node, Dem);
+          type_list->addChild(typeNode, Dem);
+          continue;
         }
-      } else if (pointee->isVoidType()) {
-        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
-            isKnownCFTypeName(typedefDecl->getName())) {
-          return isConst ? forConstVoid() : forVoid();
+    
+      const Lowering::TypeLowering &
+  getTypeLowering(Lowering::AbstractionPattern orig, Type subst);
+    
+    TEST(ClusteredBitVector, FlipAllSmall) {
+  ClusteredBitVector vec;
+  vec.appendClearBits(48);
+  EXPECT_EQ(false, vec[12]);
+  EXPECT_EQ(0u, vec.count());
+  vec.flipAll();
+  EXPECT_EQ(true, vec[12]);
+  EXPECT_EQ(48u, vec.count());
+  vec.clearBit(7);
+  EXPECT_EQ(true, vec[12]);
+  EXPECT_EQ(false, vec[7]);
+  EXPECT_EQ(47u, vec.count());
+  vec.flipAll();
+  EXPECT_EQ(false, vec[12]);
+  EXPECT_EQ(true, vec[7]);
+  EXPECT_EQ(1u, vec.count());
+}
+    
+    
+    {
+    {
+    {
+    {          // Get the file-name to group map if parsing correctly.
+          pMap = Parser.getParsedMap();
         }
       }
+      if (!pMap)
+        return NullGroupName;
+      StringRef FileName = llvm::sys::path::filename(FullPath);
+      auto Found = pMap->find(FileName);
+      if (Found == pMap->end()) {
+        Ctx.Diags.diagnose(SourceLoc(), diag::error_no_group_info, FileName);
+        return NullGroupName;
+      }
+      return Found->second;
     }
-  }
+  };
     
-    void StartCmder(std::wstring  path = L'', bool is_single_mode = false, std::wstring taskName = L'', std::wstring cfgRoot = L'', bool use_user_cfg = true, std::wstring conemu_args = L'')
-{
-#if USE_TASKBAR_API
-	wchar_t appId[MAX_PATH] = { 0 };
-#endif
-	wchar_t exeDir[MAX_PATH] = { 0 };
-	wchar_t icoPath[MAX_PATH] = { 0 };
-	wchar_t cfgPath[MAX_PATH] = { 0 };
-	wchar_t backupCfgPath[MAX_PATH] = { 0 };
-	wchar_t cpuCfgPath[MAX_PATH] = { 0 };
-	wchar_t userCfgPath[MAX_PATH] = { 0 };
-	wchar_t defaultCfgPath[MAX_PATH] = { 0 };
-	wchar_t conEmuPath[MAX_PATH] = { 0 };
-	wchar_t configDirPath[MAX_PATH] = { 0 };
-	wchar_t userConfigDirPath[MAX_PATH] = { 0 };
-	wchar_t userBinDirPath[MAX_PATH] = { 0 };
-	wchar_t userProfiledDirPath[MAX_PATH] = { 0 };
-	wchar_t userProfilePath[MAX_PATH] = { 0 };
-	wchar_t legacyUserProfilePath[MAX_PATH] = { 0 };
-	wchar_t userAliasesPath[MAX_PATH] = { 0 };
-	wchar_t legacyUserAliasesPath[MAX_PATH] = { 0 };
-	wchar_t args[MAX_PATH * 2 + 256] = { 0 };
-	wchar_t userConEmuCfgPath[MAX_PATH] = { 0 };
+        case ConstraintKind::ApplicableFunction:
+    case ConstraintKind::DynamicCallableApplicableFunction:
+    case ConstraintKind::BindOverload: {
+      if (result.FullyBound && result.InvolvesTypeVariables)
+        continue;
     }
     
-    /* TessCallback */
-#define GLU_TESS_BEGIN                     100100
-#define GLU_BEGIN                          100100
-#define GLU_TESS_VERTEX                    100101
-#define GLU_VERTEX                         100101
-#define GLU_TESS_END                       100102
-#define GLU_END                            100102
-#define GLU_TESS_ERROR                     100103
-#define GLU_TESS_EDGE_FLAG                 100104
-#define GLU_EDGE_FLAG                      100104
-#define GLU_TESS_COMBINE                   100105
-#define GLU_TESS_BEGIN_DATA                100106
-#define GLU_TESS_VERTEX_DATA               100107
-#define GLU_TESS_END_DATA                  100108
-#define GLU_TESS_ERROR_DATA                100109
-#define GLU_TESS_EDGE_FLAG_DATA            100110
-#define GLU_TESS_COMBINE_DATA              100111
     
-    DeviceNRecoder::~DeviceNRecoder() {
-  if (imgStr) {
-    delete imgStr;
-  }
+    {  if (Negative)
+    *P++ = '-';
+  std::reverse(Buffer, P);
+  return size_t(P - Buffer);
 }
     
-      // Is page valid?
-  GBool isOk() { return ok; }
     
-    class Parser {
-public:
+template <>
+const char *
+FloatAttribute::staticTypeName ()
+{
+    return 'float';
+}
+    
+    // streams
+class OStream;
+class IStream;
+    
+    
+Slice *
+FrameBuffer::findSlice (const char name[])
+{
+    SliceMap::iterator i = _map.find (name);
+    return (i == _map.end())? 0: &i->second;
+}
+    
+    
+void
+IStream::clear ()
+{
+    // empty
+}
+    
+    
+bool
+InputFile::isComplete () const
+{
+    if (_data->dsFile)
+        return _data->dsFile->isComplete();
+    else if (_data->isTiled)
+	return _data->tFile->isComplete();
+    else
+	return _data->sFile->isComplete();
+}
+    
+        //---------------------------------------------------------------
+    // Read pixel data:
+    //
+    // readPixels(s1,s2) reads all scan lines with y coordinates
+    // in the interval [min (s1, s2), max (s1, s2)] from the file,
+    // and stores them in the current frame buffer.
+    //
+    // Both s1 and s2 must be within the interval
+    // [header().dataWindow().min.y, header().dataWindow().max.y]
+    //
+    // The scan lines can be read from the file in random order, and
+    // individual scan lines may be skipped or read multiple times.
+    // For maximum efficiency, the scan lines should be read in the
+    // order in which they were written to the file.
+    //
+    // readPixels(s) calls readPixels(s,s).
+    //
+    //---------------------------------------------------------------
+    
+    /// Applies [Batch Normalization](https://arxiv.org/abs/1502.03167) to an input.
+///
+/// Refer to the documentation for
+/// [`BatchNorm1d`](https://pytorch.org/docs/stable/nn.html#torch.nn.BatchNorm1d)
+/// in PyTorch to learn more about the exact semantics of this module, __but see
+/// the note below regarding differences between the Python and C++ API__.
+///
+/// \rst
+/// .. attention::
+///   In the Python API, there are separate implementations for 1-D, 2-D and 3-D
+///   BatchNorm. In C++, there is only one `BatchNorm` module, which works for
+///   any of these dimensions.
+/// \endrst
+class TORCH_API BatchNormImpl : public torch::nn::Cloneable<BatchNormImpl> {
+ public:
+  explicit BatchNormImpl(int64_t features)
+      : BatchNormImpl(BatchNormOptions(features)) {}
+  explicit BatchNormImpl(BatchNormOptions options);
     }
     
-      // Returns true if the operations performed since the last call to
-  // clearStats() are all monochrome (black or white).
-  GBool isMonochrome() { return mono; }
+    REGISTER_GRADIENT(Sub, GetSubGradient);
+    
+    
+    {
+    {    return SingleGradientDef(
+        'MergeSingleScalarFeatureTensorsGradient',
+        '', /* name */
+        input_blob_names,
+        output_blob_names);
+  }
+};
+    
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+        // cut off inline image streams at appropriate length
+    if (inlineImg) {
+      str = new FixedLengthEncoder(str, len);
+    } else if (useCompressed) {
+      str = str->getUndecodedStream();
+    }
+    
+    //------------------------------------------------------------------------
+    
+    
+    {    annotsRef = xref->addIndirectObject (&obj1);
+    annots.initRef(annotsRef.num, annotsRef.gen);
+    pageObj.dictSet ('Annots', &annots);
+    xref->setModifiedObject (&pageObj, pageRef);
+  } else {
+    getAnnots(&obj1);
+    if (obj1.isArray()) {
+      obj1.arrayAdd (tmp.initRef (annotRef.num, annotRef.gen));
+      if (annots.isRef())
+        xref->setModifiedObject (&obj1, annots.getRef());
+      else
+        xref->setModifiedObject (&pageObj, pageRef);
+    }
+    obj1.free();
+  }
     
     //========================================================================
 //
@@ -137,172 +213,262 @@ public:
 // All changes made under the Poppler project to this file are licensed
 // under GPL version 2 or later
 //
-// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
+// Copyright (C) 2005 Jeff Muizelaar <jeff@infidigm.net>
+// Copyright (C) 2006 Pino Toscano <pino@kde.org>
+// Copyright (C) 2006 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2007 Julien Rebetez <julienr@svn.gnome.org>
+// Copyright (C) 2008 Iñigo Martínez <inigomartinez@gmail.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
 //
 //========================================================================
     
-      int permFlags;
-  GBool ownerPasswordOk;
-  Guchar fileKey[16];
-  int fileKeyLength;
-  int encVersion;
-  int encRevision;
-  GBool encryptMetadata;
-  CryptAlgorithm encAlgorithm;
+    #ifndef PRESCANOUTPUTDEV_H
+#define PRESCANOUTPUTDEV_H
     
-    #include 'goo/gtypes.h'
-#include 'splash/SplashTypes.h'
-#include 'splash/SplashPattern.h'
-#include 'poppler-config.h'
-#include 'OutputDev.h'
-#include 'GfxState.h'
-    
-        void Trainer::Save(const std::wstring& modelFilePath, const std::vector<DictionaryValue>& learnerState, const Dictionary& externalState, const Dictionary& distributedState)
-    {
-        std::wstring tempModelFile = modelFilePath + L'.tmp';
-        Dictionary state;
-        state[versionPropertyName] = trainerCheckpointVersion;
-        state[learnersPropertyName] = learnerState;
-        state[externalStatePropertyName] = externalState;
-        state[distributedStatePropertyName] = distributedState;
-    }
-    
-    
-    {
-    {                m_dataFields->m_valueInitializer = nullptr;
-                m_dataFields->m_valueInitializationDevice = nullptr;
-            });
-        }
-    
-            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
-        {
-            // failed to acquire
-            int rc = ::CloseHandle(m_handle);
-            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-            {
-                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
-            }
-            m_handle = NULL;
-            return false;
-        }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-        ConfigValuePtr NodeToConfigValuePtr(ComputationNodeBasePtr node)
-    {
-        assert(node);
-        auto valuep = ConfigValuePtr(node, [](const std::wstring& msg) { LogicError('CloneFunction (NodeToConfigValuePtr): Unexpected failure: %ls', msg.c_str()); }, node->NodeName());
-        return valuep;
-    }
-    
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-bool ImGui_ImplAllegro5_ProcessEvent(ALLEGRO_EVENT *ev)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-    static int g_Time = 0;          // Current time, in milliseconds
-    
-    // Main code
-int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    ::RegisterClassEx(&wc);
-    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-        // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-    D3DMATRIX last_world, last_view, last_projection;
-    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
-    
-        io.SetClipboardTextFn = ImGui_ImplGlfw_SetClipboardText;
-    io.GetClipboardTextFn = ImGui_ImplGlfw_GetClipboardText;
-    io.ClipboardUserData = g_Window;
-#if defined(_WIN32)
-    io.ImeWindowHandle = (void*)glfwGetWin32Window(g_Window);
+    #ifdef USE_GCC_PRAGMAS
+#pragma interface
 #endif
     
-    void main()
-{
-    Out.Color = aColor;
-    Out.UV = aUV;
-    gl_Position = vec4(aPos * pc.uScale + pc.uTranslate, 0, 1);
+    
+    {  //
+  // parse Media Screen Parameters
+  if (obj->dictLookup('SP', &tmp2)->isDict()) { // media screen parameters
+    Object params;
+    if (tmp2.dictLookup('MH', &params)->isDict()) {
+      MH.parseMediaScreenParameters(&params);
+    }
+    params.free();
+    if (tmp2.dictLookup('BE', &params)->isDict()) {
+      BE.parseMediaScreenParameters(&params);
+    }
+    params.free();
+  }
+  tmp2.free();
 }
-*/
-static uint32_t __glsl_shader_vert_spv[] =
+    
+      enum MediaWindowRelativeTo {
+    windowRelativeToDocument = 0,
+    windowRelativeToApplication,
+    windowRelativeToDesktop
+  };
+    
+    
+    {  if (readAttrs)
+  {
+    Object tmp;
+    Dict *dict = streamObj->getStream()->getDict();
+    dict->lookup('F', &tmp);
+    if (!tmp.isNull()) {
+      Object obj1;
+      // valid 'F' key -> external file
+      kind = soundExternal;
+      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
+        fileName = obj1.getString()->copy();
+        obj1.free();
+      }
+    } else {
+      // no file specification, then the sound data have to be
+      // extracted from the stream
+      kind = soundEmbedded;
+    }
+    tmp.free();
+    // sampling rate
+    dict->lookup('R', &tmp);
+    if (tmp.isNum()) {
+      samplingRate = tmp.getNum();
+    }
+    tmp.free();
+    // sound channels
+    dict->lookup('C', &tmp);
+    if (tmp.isInt()) {
+      channels = tmp.getInt();
+    }
+    tmp.free();
+    // bits per sample
+    dict->lookup('B', &tmp);
+    if (tmp.isInt()) {
+      bitsPerSample = tmp.getInt();
+    }
+    tmp.free();
+    // encoding format
+    dict->lookup('E', &tmp);
+    if (tmp.isName())
+    {
+      const char *enc = tmp.getName();
+      if (strcmp('Raw', enc) == 0) {
+        encoding = soundRaw;
+      } else if (strcmp('Signed', enc) == 0) {
+        encoding = soundSigned;
+      } else if (strcmp('muLaw', enc) == 0) {
+        encoding = soundMuLaw;
+      } else if (strcmp('ALaw', enc) == 0) {
+        encoding = soundALaw;
+      }
+    }
+    tmp.free();
+  }
+}
+    
+      const MetaInfo& Info() const override;
+    
+    
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
+    
+    namespace xgboost {
+namespace common {
+struct Timer {
+  using ClockT = std::chrono::high_resolution_clock;
+  using TimePointT = std::chrono::high_resolution_clock::time_point;
+  using DurationT = std::chrono::high_resolution_clock::duration;
+  using SecondsT = std::chrono::duration<double>;
+    }
+    }
+    }
+    
+    RegTree ConstructTree() {
+  RegTree tree;
+  tree.ExpandNode(
+      /*nid=*/0, /*split_index=*/0, /*split_value=*/0.0f,
+      /*default_left=*/true,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  auto left = tree[0].LeftChild();
+  auto right = tree[0].RightChild();
+  tree.ExpandNode(
+      /*nid=*/left, /*split_index=*/1, /*split_value=*/1.0f,
+      /*default_left=*/false,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  tree.ExpandNode(
+      /*nid=*/right, /*split_index=*/2, /*split_value=*/2.0f,
+      /*default_left=*/false,
+      0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  return tree;
+}
+    
+     private:
+  class Builder : public ColMaker::Builder {
+   public:
+    explicit Builder(const TrainParam &param,
+                     std::unique_ptr<SplitEvaluator> spliteval)
+        : ColMaker::Builder(param, std::move(spliteval)) {}
+    inline void UpdatePosition(DMatrix* p_fmat, const RegTree &tree) {
+      const auto ndata = static_cast<bst_omp_uint>(p_fmat->Info().num_row_);
+      #pragma omp parallel for schedule(static)
+      for (bst_omp_uint ridx = 0; ridx < ndata; ++ridx) {
+        int nid = this->DecodePosition(ridx);
+        while (tree[nid].IsDeleted()) {
+          nid = tree[nid].Parent();
+          CHECK_GE(nid, 0);
+        }
+        this->position_[ridx] = nid;
+      }
+    }
+    inline const int* GetLeafPosition() const {
+      return dmlc::BeginPtr(this->position_);
+    }
+    }
+    
+      /*!
+   * \brief Get configuration arguments currently stored by the learner
+   * \return Key-value pairs representing configuration arguments
+   */
+  virtual const std::map<std::string, std::string>& GetConfigurationArguments() const = 0;
+    
+      // predict the leaf scores without dropped trees
+  inline bst_float PredValue(const SparsePage::Inst &inst,
+                             int bst_group,
+                             unsigned root_index,
+                             RegTree::FVec *p_feats,
+                             unsigned tree_begin,
+                             unsigned tree_end) {
+    bst_float psum = 0.0f;
+    p_feats->Fill(inst);
+    for (size_t i = tree_begin; i < tree_end; ++i) {
+      if (model_.tree_info[i] == bst_group) {
+        bool drop = (std::binary_search(idx_drop_.begin(), idx_drop_.end(), i));
+        if (!drop) {
+          int tid = model_.trees[i]->GetLeafIndex(*p_feats, root_index);
+          psum += weight_drop_[i] * (*model_.trees[i])[tid].LeafValue();
+        }
+      }
+    }
+    p_feats->Drop(inst);
+    return psum;
+  }
+    
+    
+    {    // Setup orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
+    {
+        float L = draw_data->DisplayPos.x;
+        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
+        float T = draw_data->DisplayPos.y;
+        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
+        ALLEGRO_TRANSFORM transform;
+        al_identity_transform(&transform);
+        al_use_transform(&transform);
+        al_orthographic_transform(&transform, L, T, 1.0f, R, B, -1.0f);
+        al_use_projection_transform(&transform);
+    }
+}
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    static void ImGui_ImplDX10_CreateFontsTexture()
 {
-    0x07230203,0x00010000,0x00080001,0x0000002e,0x00000000,0x00020011,0x00000001,0x0006000b,
-    0x00000001,0x4c534c47,0x6474732e,0x3035342e,0x00000000,0x0003000e,0x00000000,0x00000001,
-    0x000a000f,0x00000000,0x00000004,0x6e69616d,0x00000000,0x0000000b,0x0000000f,0x00000015,
-    0x0000001b,0x0000001c,0x00030003,0x00000002,0x000001c2,0x00040005,0x00000004,0x6e69616d,
-    0x00000000,0x00030005,0x00000009,0x00000000,0x00050006,0x00000009,0x00000000,0x6f6c6f43,
-    0x00000072,0x00040006,0x00000009,0x00000001,0x00005655,0x00030005,0x0000000b,0x0074754f,
-    0x00040005,0x0000000f,0x6c6f4361,0x0000726f,0x00030005,0x00000015,0x00565561,0x00060005,
-    0x00000019,0x505f6c67,0x65567265,0x78657472,0x00000000,0x00060006,0x00000019,0x00000000,
-    0x505f6c67,0x7469736f,0x006e6f69,0x00030005,0x0000001b,0x00000000,0x00040005,0x0000001c,
-    0x736f5061,0x00000000,0x00060005,0x0000001e,0x73755075,0x6e6f4368,0x6e617473,0x00000074,
-    0x00050006,0x0000001e,0x00000000,0x61635375,0x0000656c,0x00060006,0x0000001e,0x00000001,
-    0x61725475,0x616c736e,0x00006574,0x00030005,0x00000020,0x00006370,0x00040047,0x0000000b,
-    0x0000001e,0x00000000,0x00040047,0x0000000f,0x0000001e,0x00000002,0x00040047,0x00000015,
-    0x0000001e,0x00000001,0x00050048,0x00000019,0x00000000,0x0000000b,0x00000000,0x00030047,
-    0x00000019,0x00000002,0x00040047,0x0000001c,0x0000001e,0x00000000,0x00050048,0x0000001e,
-    0x00000000,0x00000023,0x00000000,0x00050048,0x0000001e,0x00000001,0x00000023,0x00000008,
-    0x00030047,0x0000001e,0x00000002,0x00020013,0x00000002,0x00030021,0x00000003,0x00000002,
-    0x00030016,0x00000006,0x00000020,0x00040017,0x00000007,0x00000006,0x00000004,0x00040017,
-    0x00000008,0x00000006,0x00000002,0x0004001e,0x00000009,0x00000007,0x00000008,0x00040020,
-    0x0000000a,0x00000003,0x00000009,0x0004003b,0x0000000a,0x0000000b,0x00000003,0x00040015,
-    0x0000000c,0x00000020,0x00000001,0x0004002b,0x0000000c,0x0000000d,0x00000000,0x00040020,
-    0x0000000e,0x00000001,0x00000007,0x0004003b,0x0000000e,0x0000000f,0x00000001,0x00040020,
-    0x00000011,0x00000003,0x00000007,0x0004002b,0x0000000c,0x00000013,0x00000001,0x00040020,
-    0x00000014,0x00000001,0x00000008,0x0004003b,0x00000014,0x00000015,0x00000001,0x00040020,
-    0x00000017,0x00000003,0x00000008,0x0003001e,0x00000019,0x00000007,0x00040020,0x0000001a,
-    0x00000003,0x00000019,0x0004003b,0x0000001a,0x0000001b,0x00000003,0x0004003b,0x00000014,
-    0x0000001c,0x00000001,0x0004001e,0x0000001e,0x00000008,0x00000008,0x00040020,0x0000001f,
-    0x00000009,0x0000001e,0x0004003b,0x0000001f,0x00000020,0x00000009,0x00040020,0x00000021,
-    0x00000009,0x00000008,0x0004002b,0x00000006,0x00000028,0x00000000,0x0004002b,0x00000006,
-    0x00000029,0x3f800000,0x00050036,0x00000002,0x00000004,0x00000000,0x00000003,0x000200f8,
-    0x00000005,0x0004003d,0x00000007,0x00000010,0x0000000f,0x00050041,0x00000011,0x00000012,
-    0x0000000b,0x0000000d,0x0003003e,0x00000012,0x00000010,0x0004003d,0x00000008,0x00000016,
-    0x00000015,0x00050041,0x00000017,0x00000018,0x0000000b,0x00000013,0x0003003e,0x00000018,
-    0x00000016,0x0004003d,0x00000008,0x0000001d,0x0000001c,0x00050041,0x00000021,0x00000022,
-    0x00000020,0x0000000d,0x0004003d,0x00000008,0x00000023,0x00000022,0x00050085,0x00000008,
-    0x00000024,0x0000001d,0x00000023,0x00050041,0x00000021,0x00000025,0x00000020,0x00000013,
-    0x0004003d,0x00000008,0x00000026,0x00000025,0x00050081,0x00000008,0x00000027,0x00000024,
-    0x00000026,0x00050051,0x00000006,0x0000002a,0x00000027,0x00000000,0x00050051,0x00000006,
-    0x0000002b,0x00000027,0x00000001,0x00070050,0x00000007,0x0000002c,0x0000002a,0x0000002b,
-    0x00000028,0x00000029,0x00050041,0x00000011,0x0000002d,0x0000001b,0x0000000d,0x0003003e,
-    0x0000002d,0x0000002c,0x000100fd,0x00010038
-};
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
+    
+    static void ImGui_ImplDX12_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
+    
+        for (uint32_t i = 0; i < wd->ImageCount; i++)
+    {
+        ImGui_ImplVulkanH_DestroyFrame(device, &wd->Frames[i], allocator);
+        ImGui_ImplVulkanH_DestroyFrameSemaphores(device, &wd->FrameSemaphores[i], allocator);
+    }
+    IM_FREE(wd->Frames);
+    IM_FREE(wd->FrameSemaphores);
+    wd->Frames = NULL;
+    wd->FrameSemaphores = NULL;
+    vkDestroyRenderPass(device, wd->RenderPass, allocator);
+    vkDestroySwapchainKHR(device, wd->Swapchain, allocator);
+    vkDestroySurfaceKHR(instance, wd->Surface, allocator);
+    
+    #ifdef __FREEGLUT_EXT_H__
+void ImGui_ImplGLUT_MouseWheelFunc(int button, int dir, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    if (dir > 0)
+        io.MouseWheel += 1.0;
+    else if (dir < 0)
+        io.MouseWheel -= 1.0;
+    (void)button; // Unused
+}
+#endif
