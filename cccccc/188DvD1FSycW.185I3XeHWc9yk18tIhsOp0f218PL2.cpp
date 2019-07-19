@@ -1,167 +1,167 @@
 
         
-        
-    {}  // namespace atom
-
+        #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
     
-    namespace atom {
+    class TBOX;
+    
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
+    }
+  }
+    
+      double m() const;  // get gradient
+  double c(double m) const;            // get constant
+  double rms(double m, double c) const;            // get error
+  double pearson() const;  // get correlation coefficient.
+    
+    
+    {}  // namespace tesseract.
+    
+      // Fills in two ambiguity tables (replaceable and dangerous) with information
+  // read from the ambigs file. An ambiguity table is an array of lists.
+  // The array is indexed by a class id. Each entry in the table provides
+  // a list of potential ambiguities which can start with the corresponding
+  // character. For example the ambiguity 'rn -> m', would be located in the
+  // table at index of unicharset.unichar_to_id('r').
+  // In 1-1 ambiguities (e.g. s -> S, 1 -> I) are recorded in
+  // one_to_one_definite_ambigs_. This vector is also indexed by the class id
+  // of the wrong part of the ambiguity and each entry contains a vector of
+  // unichar ids that are ambiguous to it.
+  // encoder_set is used to encode the ambiguity strings, undisturbed by new
+  // unichar_ids that may be created by adding the ambigs.
+  void LoadUnicharAmbigs(const UNICHARSET& encoder_set,
+                         TFile *ambigs_file, int debug_level,
+                         bool use_ambigs_for_adaption, UNICHARSET *unicharset);
+    
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
+    }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
+    
+      // The UNICHARMAP is represented as a tree whose nodes are of type
+  // UNICHARMAP_NODE.
+  struct UNICHARMAP_NODE {
     }
     
-      // content::JavaScriptDialogManager implementations.
-  void RunJavaScriptDialog(content::WebContents* web_contents,
-                           content::RenderFrameHost* rfh,
-                           content::JavaScriptDialogType dialog_type,
-                           const base::string16& message_text,
-                           const base::string16& default_prompt_text,
-                           DialogClosedCallback callback,
-                           bool* did_suppress_message) override;
-  void RunBeforeUnloadDialog(content::WebContents* web_contents,
-                             content::RenderFrameHost* rfh,
-                             bool is_reload,
-                             DialogClosedCallback callback) override;
-  void CancelDialogs(content::WebContents* web_contents,
-                     bool reset_state) override;
-    
-    
-    {}  // namespace atom
-
-    
-    namespace c10d {
-namespace test {
-    }
-    }
-    
-    REGISTER_CPU_OPERATOR(
-    MergeSingleMapFeatureTensors,
-    MergeSingleMapFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleMapFeatureTensors)
-    .SetDoc(
-        'Merge given single-feature tensors with map features into one '
-        'multi-feature tensor.' +
-        doc)
-    .NumInputs([](int n) { return n >= 4 && n % 4 == 0; })
-    .NumOutputs(5)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values', '.values')
-    .Input(3, 'in1_presence', '.presence')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values_lengths', '.values.lengths')
-    .Output(3, 'out_values_keys', '.values.keys')
-    .Output(4, 'out_values_values', '.values.values')
-    .Arg('feature_ids', 'feature ids');
-    
-    X before running op:
-[[ 3.813361   -1.319647    5.2089314  -4.931328    0.6218652 ]
- [ 7.2757645   5.5552588   5.785643   -2.4790506  -0.41400087]
- [ 1.1541046  -6.933266    3.3754056   1.6569928  -1.7670316 ]
- [-3.4932013   4.891472    1.5530115  -3.2443287  -4.605099  ]
- [-4.574543   -7.360948    5.91305    -8.196495   -5.357458  ]]
-X after running op:
-[[ 3. -2.  5. -5.  0.]
- [ 7.  5.  5. -3. -1.]
- [ 1. -7.  3.  1. -2.]
- [-4.  4.  1. -4. -5.]
- [-5. -8.  5. -9. -6.]]
-    
-    template <typename T, class Context>
-class BernoulliJSDGradientOp final : public Operator<Context> {
+    namespace xgboost {
+namespace data {
+// Used for single batch data.
+class SimpleDMatrix : public DMatrix {
  public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
+  explicit SimpleDMatrix(std::unique_ptr<DataSource>&& source)
+      : source_(std::move(source)) {}
+    }
+    }
+    }
+    
+    #endif  // DMLC_ENABLE_STD_THREAD
+
+    
+    TEST(Tree, DumpText) {
+  auto tree = ConstructTree();
+  FeatureMap fmap;
+  auto str = tree.DumpModel(fmap, true, 'text');
+  size_t n_leaves = 0;
+  size_t iter = 0;
+  while ((iter = str.find('leaf', iter + 1)) != std::string::npos) {
+    n_leaves++;
+  }
+  ASSERT_EQ(n_leaves, 4);
+    }
+    
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct GradientBoosterReg
+    : public dmlc::FunctionRegEntryBase<
+  GradientBoosterReg,
+  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
+                                  bst_float base_margin)> > {
 };
     
-    #endif  // STORAGE_LEVELDB_UTIL_ENV_POSIX_TEST_HELPER_H_
-
     
+    {GlobalRandomEngine& GlobalRandom() {
+  return RandomThreadLocalStore::Get()->engine;
+}
+}  // namespace common
     
-    {
-    {}  // namespace log
-}  // namespace leveldb
+    void GBTree::DoBoost(DMatrix* p_fmat,
+                     HostDeviceVector<GradientPair>* in_gpair,
+                     ObjFunction* obj) {
+  std::string updater_seq = tparam_.updater_seq;
+  this->PerformTreeMethodHeuristic(p_fmat, {this->cfg_.begin(), this->cfg_.end()});
+  this->ConfigureUpdaters({this->cfg_.begin(), this->cfg_.end()});
+  LOG(DEBUG) << 'Using updaters: ' << tparam_.updater_seq;
+  // initialize the updaters only when needed.
+  if (updater_seq != tparam_.updater_seq) {
+    this->updaters_.clear();
+  }
+    }
     
-      // Return the current version.
-  Version* current() const { return current_; }
+      /**
+   * @brief Optionally handle snapshot query results separately from events.
+   *
+   * If a logger plugin wants to write snapshot query results (potentially
+   * large amounts of data) to a specific sink it should implement logSnapshot.
+   * Otherwise the serialized log item data will be forwarded to logString.
+   *
+   * @param s A special log item will complete results from a query.
+   * @return log status
+   */
+  virtual Status logSnapshot(const std::string& s) {
+    return logString(s);
+  }
     
-      // Returns a new iterator over the table contents.
-  // The result of NewIterator() is initially invalid (caller must
-  // call one of the Seek methods on the iterator before using it).
-  Iterator* NewIterator(const ReadOptions&) const;
-    
-    char* Arena::AllocateNewBlock(size_t block_bytes) {
-  char* result = new char[block_bytes];
-  blocks_.push_back(result);
-  memory_usage_.fetch_add(block_bytes + sizeof(char*),
-                          std::memory_order_relaxed);
-  return result;
+    TEST_F(RocksdbDatabaseTest, test_keys_search) {
+  auto db = std::make_unique<RocksdbDatabase>('test', path_);
+  ASSERT_TRUE(db->open());
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'key_1', 1));
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'key_2', 2));
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'key_3', 3));
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'kEy_1', 4));
+  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'kEy_2', 5));
+  auto result_all = db->getKeys(kPersistentSettings);
+  EXPECT_TRUE(result_all);
+  EXPECT_EQ((*result_all).size(), 5);
+  auto result_some = db->getKeys(kPersistentSettings, 'key');
+  EXPECT_TRUE(result_some);
+  EXPECT_EQ((*result_some).size(), 3);
 }
     
-    int main()
-{
-    // create JSON object
-    json object =
-    {
-        {'the good', 'il buono'},
-        {'the bad', 'il cattivo'},
-        {'the ugly', 'il brutto'}
-    };
+    
+    {  // Append the decorations.
+  if (!item.decorations.empty()) {
+    auto dec_obj = doc.getObject();
+    auto target_obj = std::ref(dec_obj);
+    if (FLAGS_decorations_top_level) {
+      target_obj = std::ref(obj);
     }
-    
-        // read-only access
-    
-        // print values
-    std::cout << object << '\n';
-    std::cout << null << '\n';
-    
-            static void renderNamespaceItems(QSharedPointer<Operations> operations,
-                                         RedisClient::Connection::NamespaceItems items,
-                                         QSharedPointer<AbstractNamespaceItem> parent,
-                                         const QSet<QByteArray> &expandedNamespaces);
-    
-    
-QString binaryStringToEscapedString(const QByteArray &value)
-{
-    QString val = QString::fromStdString(value.toStdString());
+    for (const auto& name : item.decorations) {
+      doc.addRef(name.first, name.second, target_obj);
     }
-    
-    #include <QtNetwork>
-    
-    
-    {};
-    
-    
-    {  virtual grpc::string get_input_type_name() const = 0;
-  virtual grpc::string get_output_type_name() const = 0;
-  virtual bool NoStreaming() const = 0;
-  virtual bool ClientStreaming() const = 0;
-  virtual bool ServerStreaming() const = 0;
-  virtual bool BidiStreaming() const = 0;
-};
-    
-    #ifdef _WIN32
-  #define TEST_ASSERT_FUNC(exp) TestEq(exp, true, #exp, __FILE__, __LINE__, __FUNCTION__)
-  #define TEST_EQ_FUNC(exp, val) TestEq(exp, val, #exp, __FILE__, __LINE__, __FUNCTION__)
-#else
-  #define TEST_ASSERT_FUNC(exp) TestEq(exp, true, #exp, __FILE__, __LINE__, __PRETTY_FUNCTION__)
-  #define TEST_EQ_FUNC(exp, val) TestEq(exp, val, #exp, __FILE__, __LINE__, __PRETTY_FUNCTION__)
-#endif
-    
-      const uint8_t *data() const { return GRPC_SLICE_START_PTR(slice_); }
-    
-    struct GrpcLikeMessageBuilder : private AllocatorMember,
-                                public flatbuffers::FlatBufferBuilder {
-private:
-  GrpcLikeMessageBuilder(const GrpcLikeMessageBuilder &);
-  GrpcLikeMessageBuilder &operator=(const GrpcLikeMessageBuilder &);
+    if (!FLAGS_decorations_top_level) {
+      doc.add('decorations', dec_obj, obj);
     }
-    
-    #include <grpc++/impl/codegen/async_stream.h>
-#include <grpc++/impl/codegen/async_unary_call.h>
-#include <grpc++/impl/codegen/method_handler_impl.h>
-#include <grpc++/impl/codegen/proto_utils.h>
-#include <grpc++/impl/codegen/rpc_method.h>
-#include <grpc++/impl/codegen/service_type.h>
-#include <grpc++/impl/codegen/status.h>
-#include <grpc++/impl/codegen/stub_options.h>
-#include <grpc++/impl/codegen/sync_stream.h>
+  }
+}
