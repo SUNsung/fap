@@ -1,75 +1,139 @@
 
         
-          def _test_request__stream_body(http)
-    req = Net::HTTP::Post.new('/')
-    data = $test_net_http_data
-    req.content_length = data.size
-    req['Content-Type'] = 'application/x-www-form-urlencoded'
-    req.body_stream = StringIO.new(data)
-    res = http.request(req)
-    assert_kind_of Net::HTTPResponse, res
-    assert_kind_of String, res.body
-    assert_equal data.size, res.body.size
-    assert_equal data, res.body
-  end
+                path = @site.in_source_dir(File.join(dir, magic_dir, entry))
+        Document.new(path,
+                     :site       => @site,
+                     :collection => @site.posts)
+      end.reject(&:nil?)
+    end
     
-          # specific to Ruby 2.7+
-      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.7.0')
-        tests.merge!({
-          '4.5.6' => '#{MAGENTA}#{BOLD}4.5#{CLEAR}#{RED}#{REVERSE}.6#{CLEAR}',
-          '\e[0m\n' => '#{RED}#{REVERSE}^[#{CLEAR}[#{BLUE}#{BOLD}0#{CLEAR}#{RED}#{REVERSE}m#{CLEAR}\n',
-          '<<EOS\nhere\nEOS' => '#{RED}<<EOS#{CLEAR}\n#{RED}here#{CLEAR}\n#{RED}EOS#{CLEAR}',
-          ':@1' => '#{YELLOW}:#{CLEAR}#{RED}#{REVERSE}@1#{CLEAR}',
-          '@@1' => '#{RED}#{REVERSE}@@1#{CLEAR}',
-        })
-      end
+        def placeholders
+      {
+        :collection => @collection.label,
+        :path       => cleaned_relative_path,
+        :output_ext => '',
+        :name       => '',
+        :title      => '',
+      }
+    end
     
-    Rake::TestTask.new(:'test:core') do |t|
-  core_tests = %w[base delegator encoding extensions filter
-     helpers mapped_error middleware radius rdoc
-     readme request response result route_added_hook
-     routing server settings sinatra static templates]
-  t.test_files = core_tests.map {|n| 'test/#{n}_test.rb'}
-  t.ruby_opts = ['-r rubygems'] if defined? Gem
-  t.ruby_opts << '-I.'
-  t.warning = true
-end
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
-end
-
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-      it 'returns the sorted config parts' do
-    expect(subject.config_parts).to eq(ordered_config_parts)
-  end
-    
-          context 'when the plugin doesnt exist' do
-        it 'fails to install and report an error' do
-          command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-output-impossible-plugin')
-          expect(command.stderr).to match(/Plugin not found, aborting/)
+            should 'create index URL based on filename' do
+          @page = setup_page('/contacts', 'index.html')
+          assert_equal '/contacts/', @page.url
         end
       end
-    end
-  end
-end
-
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+        should 'not break kramdown' do
+      kramdown_doc = Kramdown::Document.new('# Some Header #', @config['kramdown'])
+      assert_equal :class, kramdown_doc.options[:syntax_highlighter_opts][:css]
+      assert_equal 'lipsum', kramdown_doc.options[:syntax_highlighter_opts][:foobar]
+    end
+    
+        require 'memory_profiler'
+    
+          def before_step(step)
+        @current_step = step
+      end
+    
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-    RSpec.configure do |c|
-  c.include ServiceTester
+          def use_identicon
+        @page.wiki.user_icons == 'identicon'
+      end
+    
+          def base_url
+        @base_url
+      end
+    
+    context 'Precious::Views::Editing' do
+  include Rack::Test::Methods
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    Precious::App.set(:gollum_path, @path)
+    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+        class Mgr
+      attr_reader :latest_error
+      attr_reader :mutex
+      attr_reader :cond
+      def initialize
+        @mutex = ::Mutex.new
+        @cond = ::ConditionVariable.new
+      end
+      def processor_died(inst, err)
+        @latest_error = err
+        @mutex.synchronize do
+          @cond.signal
+        end
+      end
+      def processor_stopped(inst)
+        @mutex.synchronize do
+          @cond.signal
+        end
+      end
+      def options
+        { :concurrency => 3, :queues => ['default'] }
+      end
+    end
+    
+        describe 'failed' do
+      it 'returns number of failed jobs' do
+        Sidekiq.redis { |conn| conn.set('stat:failed', 5) }
+        s = Sidekiq::Stats.new
+        assert_equal 5, s.failed
+      end
+    end
+    
+        it 'calculates an average poll interval based on the number of known Sidekiq processes' do
+      with_sidekiq_option(:average_scheduled_poll_interval, 10) do
+        3.times do |i|
+          Sidekiq.redis do |conn|
+            conn.sadd('processes', 'process-#{i}')
+            conn.hset('process-#{i}', 'info', nil)
+          end
+        end
+    
+    describe Sidekiq do
+  describe 'json processing' do
+    it 'handles json' do
+      assert_equal({'foo' => 'bar'}, Sidekiq.load_json('{\'foo\':\'bar\'}'))
+      assert_equal '{\'foo\':\'bar\'}', Sidekiq.dump_json({ 'foo' => 'bar' })
+    end
+  end
+    
+    self_read, self_write = IO.pipe
+%w(INT TERM TSTP TTIN).each do |sig|
+  begin
+    trap sig do
+      self_write.puts(sig)
+    end
+  rescue ArgumentError
+    puts 'Signal #{sig} not supported'
+  end
 end
+    
+    Sidekiq::Extensions.enable_delay!
+
+    
+        initialize_with { Tmuxinator::Project.new(file, force_attach: true) }
+  end
+    
+        it 'lists only projects in $TMUXINATOR_CONFIG when set' do
+      allow(ENV).to receive(:[]).with('TMUXINATOR_CONFIG').
+        and_return '#{fixtures_dir}/TMUXINATOR_CONFIG'
+      expect(described_class.configs).to eq ['TMUXINATOR_CONFIG']
+    end
+  end
