@@ -1,192 +1,204 @@
 
         
-              def export_name_on_schema_dump?
-        !ActiveRecord::SchemaDumper.fk_ignore_pattern.match?(name) if name
-      end
+          it 'can dynamically generate a poll' do
     
-    class RenderJSTest < ActionController::TestCase
-  class TestController < ActionController::Base
-    protect_from_forgery
-    
-    require 'abstract_unit'
-require 'controller/fake_models'
-require 'active_support/logger'
-    
-        should 'set the linenos option to 'table' ' \
-           'if the linenos key is given the table value' do
-      tag = highlight_block_with_opts('ruby linenos=table ')
-      assert_equal(
-        { :linenos => 'table' },
-        tag.instance_variable_get(:@highlight_options)
-      )
+        def handle_bounce(e)
+      # never reply to bounced emails
+      log_email_process_failure(@mail, e)
+      set_incoming_email_rejection_message(@receiver.incoming_email, I18n.t('emails.incoming.errors.bounced_email_error'))
     end
     
-    module Jekyll
-  class Reader
-    attr_reader :site
+      def create_list(filter, options = {}, topics = nil)
+    topics ||= default_results(options)
+    topics = yield(topics) if block_given?
     
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+      PRIVATE_IP ||= /^(127\.)|(192\.168\.)|(10\.)|(172\.1[6-9]\.)|(172\.2[0-9]\.)|(172\.3[0-1]\.)|(::1$)|([fF][cCdD])/
+    
+          auto_close
+    end
+    
+        context 'with a category restriction' do
+      fab!(:category) { Fabricate(:category, read_restricted: true) }
+      let(:topic) { Fabricate(:topic, category: category) }
+      let(:post) { Fabricate(:post, topic: topic) }
+      fab!(:moderator) { Fabricate(:moderator) }
+      fab!(:admin) { Fabricate(:admin) }
+    
+        def remote?
+      true
+    end
+    
+        end
+    
+          json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['staff_action_logs'].length).to eq(3)
+      expect(json['staff_action_logs'][0]['new_value']).to eq('value 4')
+    
+        module_function :content_type, :grab_video_preview, :portrait?, :resolution, :video_resolution, :md5digest
+  end
 end
 
     
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+            # Gets actual simctl device type from device name
+        return device_names.map do |device_name|
+          device = SimCtl.device(name: device_name)
+          if device
+            device.devicetype.name
+          end
+        end.compact
+      end
+    end
+  end
+end
+
     
-          CHARS = {
-        :failed    => '\u2718'.red,
-        :pending   => '\u203D'.yellow,
-        :undefined => '\u2718'.red,
-        :passed    => '\u2714'.green,
-        :skipped   => '\u203D'.blue,
-      }.freeze
+            [
+          FastlaneCore::ConfigItem.new(key: :name,
+                                       env_name: 'FL_REGISTER_DEVICE_NAME',
+                                       description: 'Provide the name of the device to register as'),
+          FastlaneCore::ConfigItem.new(key: :udid,
+                                       env_name: 'FL_REGISTER_DEVICE_UDID',
+                                       description: 'Provide the UDID of the device to register as'),
+          FastlaneCore::ConfigItem.new(key: :team_id,
+                                     env_name: 'REGISTER_DEVICE_TEAM_ID',
+                                     code_gen_sensitive: true,
+                                     default_value: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
+                                       default_value_dynamic: true,
+                                     description: 'The ID of your Developer Portal team if you're in multiple teams',
+                                     optional: true,
+                                     verify_block: proc do |value|
+                                       ENV['FASTLANE_TEAM_ID'] = value.to_s
+                                     end),
+          FastlaneCore::ConfigItem.new(key: :team_name,
+                                       env_name: 'REGISTER_DEVICE_TEAM_NAME',
+                                       description: 'The name of your Developer Portal team if you're in multiple teams',
+                                       optional: true,
+                                       code_gen_sensitive: true,
+                                       default_value: CredentialsManager::AppfileConfig.try_fetch_value(:team_name),
+                                       default_value_dynamic: true,
+                                       verify_block: proc do |value|
+                                         ENV['FASTLANE_TEAM_NAME'] = value.to_s
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :username,
+                                       env_name: 'DELIVER_USER',
+                                       description: 'Optional: Your Apple ID',
+                                       default_value: user,
+                                       default_value_dynamic: true)
+        ]
+      end
     
-            def initialize
-          @websockets = []
-          @connections_count = 0
-          @started_event = Utils::ThreadEvent.new
-          @stopped_event = Utils::ThreadEvent.new
-        end
+            expected_options = FastlaneCore::Configuration.create(available_options, { git_branch: 'my-branch' })
     
-    # Unset all host plugins so that we aren't executing subprocess things
-# to detect a host for every test.
-Vagrant.plugin('2').manager.registered.dup.each do |plugin|
-  if plugin.components.hosts.to_hash.length > 0
-    Vagrant.plugin('2').manager.unregister(plugin)
+          def self.is_supported?(platform)
+        platform == :android
+      end
+    
+          def self.get_target!(project, target_name)
+        targets = project.targets
+    
+          it 'updates an existing user' do
+        visit edit_admin_user_path(users(:bob))
+        check 'Admin'
+        click_on 'Update User'
+        expect(page).to have_text('User 'bob' was successfully updated.')
+        visit edit_admin_user_path(users(:bob))
+        expect(page).to have_checked_field('Admin')
+      end
+    
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+    end
+    
+      let :agent do
+    Agents::WebsiteAgent.create!(
+      user: users(:bob),
+      name: 'xkcd',
+      options: valid_options,
+      keep_events_for: 2.days
+    )
+  end
+    
+        describe 'with an integer' do
+      it 'prepends the corresponding character to the stream' do
+        @gz.ungetc 0x21
+        @gz.read.should == '!12345abcde'
+      end
+    
+          gzio.mtime.should == Time.at(1)
+    end
+    
+    describe 'GzipWriter#write' do
+  before :each do
+    @data = '12345abcde'
+    @zip = [31, 139, 8, 0, 44, 220, 209, 71, 0, 3, 51, 52, 50, 54, 49, 77,
+            76, 74, 78, 73, 5, 0, 157, 5, 0, 36, 10, 0, 0, 0].pack('C*')
+    @io = StringIO.new ''.b
+  end
+    
+      after :each do
+    @z.close unless @z.closed?
+  end
+    
+        before do
+      @inflator.inflate(@zeros) do |chunk|
+        @chunks << chunk
+        break
+      end
+    end
+    
+      def contacts_by_type(type)
+    order = ['profiles.first_name ASC', 'profiles.last_name ASC', 'profiles.diaspora_handle ASC']
+    contacts = case type
+      when 'all'
+        order.unshift 'receiving DESC'
+        current_user.contacts
+      when 'only_sharing'
+        current_user.contacts.only_sharing
+      when 'receiving'
+        current_user.contacts.receiving
+      when 'by_aspect'
+        order.unshift 'contact_id IS NOT NULL DESC'
+        contacts_by_aspect(@aspect.id)
+      else
+        raise ArgumentError, 'unknown type #{type}'
+      end
+    contacts.includes(person: :profile)
+            .order(order)
+  end
+    
+        respond_to do |format|
+      format.html
+      format.xml { render :xml => @notifications.to_xml }
+      format.json {
+        render json: render_as_json(@unread_notification_count, @grouped_unread_notification_counts, @notifications)
+      }
+    end
+  end
+    
+    Then(/^directory symlinks are created in the new release$/) do
+  pending
+  TestApp.linked_dirs.each do |dir|
+    run_vagrant_command(test_symlink_exists(TestApp.release_path.join(dir)))
   end
 end
     
-    require File.expand_path('../../base', __FILE__)
-    
-          @logger.debug('Enabling default remote RubyGems sources')
-      default_sources.each do |src|
-        @logger.debug('Adding source - #{src}')
-        Gem.sources << src
-      end
-    
-            opts = OptionParser.new do |o|
-          o.banner = 'Usage: vagrant global-status'
-          o.separator ''
-          o.on('--prune', 'Prune invalid entries.') do |p|
-            options[:prune] = true
-          end
+        def any?(key)
+      value = fetch(key)
+      if value && value.respond_to?(:any?)
+        begin
+          return value.any?
+        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
+          # Gracefully ignore values whose `any?` method doesn't accept 0 args
         end
-    
-        def check_sha256_actually_256(sha256: cask.sha256, stanza: 'sha256')
-      odebug 'Verifying #{stanza} string is a legal SHA-256 digest'
-      return unless sha256.is_a?(String)
-      return if sha256.length == 64 && sha256[/^[0-9a-f]+$/i]
-    
-              unless method_called_ever?(body_node, :go_resource)
-            # processed_source.ast is passed instead of body_node because `require` would be outside body_node
-            find_method_with_args(processed_source.ast, :require, 'language/go') do
-              problem 'require \'language/go\' is unnecessary unless using `go_resource`s'
-            end
-          end
-    
-        @resource.url(val, specs)
-    dependency_collector.add(@resource)
-  end
-    
-          expect(dep.name).to eq('foo')
-      expect(dep.tags).to include(:head)
-    end
-    
-        it 'raises an error when duplicate resources are defined' do
-      subject.resource('foo') { url 'foo-1.0' }
-      expect {
-        subject.resource('foo') { url 'foo-1.0' }
-      }.to raise_error(DuplicateResourceError)
-    end
-    
-        its(:inspect) { is_expected.to eq('#<JavaRequirement: [] version='1.7+'>') }
-  end
-    
-              # Xcode 2.x's xcodebuild has a different version string
-          case xcodebuild_output[/DevToolsCore-(\d+\.\d)/, 1]
-          when '515.0' then return '2.0'
-          when '798.0' then return '2.5'
-          end
-        end
-    
-        attr_predicate :binaries?, :force?, :skip_cask_deps?, :require_sha?,
-                   :reinstall?, :upgrade?, :verbose?, :installed_as_dependency?,
-                   :quarantine?
-    
-        context 'with an unusually long query string' do
-      let(:url) do
-        [
-          'https://node49152.ssl.fancycdn.example.com',
-          '/fancycdn/node/49152/file/upload/download',
-          '?cask_class=zf920df',
-          '&cask_group=2348779087242312',
-          '&cask_archive_file_name=cask.zip',
-          '&signature=CGmDulxL8pmutKTlCleNTUY%2FyO9Xyl5u9yVZUE0',
-          'uWrjadjuz67Jp7zx3H7NEOhSyOhu8nzicEHRBjr3uSoOJzwkLC8L',
-          'BLKnz%2B2X%2Biq5m6IdwSVFcLp2Q1Hr2kR7ETn3rF1DIq5o0lHC',
-          'yzMmyNe5giEKJNW8WF0KXriULhzLTWLSA3ZTLCIofAdRiiGje1kN',
-          'YY3C0SBqymQB8CG3ONn5kj7CIGbxrDOq5xI2ZSJdIyPysSX7SLvE',
-          'DBw2KdR24q9t1wfjS9LUzelf5TWk6ojj8p9%2FHjl%2Fi%2FVCXN',
-          'N4o1mW%2FMayy2tTY1qcC%2FTmqI1ulZS8SNuaSgr9Iys9oDF1%2',
-          'BPK%2B4Sg==',
-        ].join
       end
     
-          def to_sym
-        SYMBOLS.invert.fetch(@version) { :dunno }
+          def assert_value_or_block_not_both(value, block)
+        return if value.nil? || block.nil?
+        raise Capistrano::ValidationError,
+              'Value and block both passed to Configuration#set'
       end
-    
-      it { is_expected.to change(Notification, :count).by(1) }
-    
-        def available_status(product) # will return a human readable string
-      return Spree.t(:discontinued)  if product.discontinued?
-      return Spree.t(:deleted) if product.deleted?
-    
-          unless order.payments.present?
-        card_to_reuse = original_order.valid_credit_cards.first
-        card_to_reuse = original_order.user.credit_cards.default.first if !card_to_reuse && original_order.user
-        Spree::Payment.create!(order: order,
-                               payment_method_id: card_to_reuse.try(:payment_method_id),
-                               source: card_to_reuse,
-                               amount: order.total)
-      end
-    
-        context 'stock should not restock' do
-      context 'return_item is not resellable' do
-        before { return_item.resellable = false }
-    
-          rescue_from ActionController::ParameterMissing, with: :error_during_processing
-      rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
-      rescue_from CanCan::AccessDenied, with: :unauthorized
-      rescue_from Spree::Core::GatewayError, with: :gateway_error
-    
-            def update
-          authorize! :update, @order, order_token
-          @address = find_address
-    
-            def new; end
-    
-            def purchase
-          perform_payment_action(:purchase)
-        end
-    
-            def new; end
