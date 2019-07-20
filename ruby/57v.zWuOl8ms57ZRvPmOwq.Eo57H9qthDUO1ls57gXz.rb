@@ -1,144 +1,148 @@
 
         
-                  @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
+          private
     
-            subject.file = StringIO.new(invalid_data)
-        expect(subject).not_to be_valid
-        expect(subject.errors[:base]).to include('The provided data does not appear to be a valid Scenario.')
-      end
+      def reject_existing_followers!
+    @account.passive_relationships.where(account: Account.where(domain: @domain)).includes(:account).reorder(nil).find_each do |follow|
+      reject_follow!(follow)
+    end
+  end
     
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
+      def some_local_account
+    @some_local_account ||= Account.representative
+  end
+end
+
+    
+      def call(account, poll, choices)
+    authorize_with account, poll, :vote?
+    
+      def inboxes
+    # Deliver the status to all followers.
+    # If the status is a reply to another local status, also forward it to that
+    # status' authors' followers.
+    @inboxes ||= if @status.reply? && @status.thread.account.local? && @status.distributable?
+                   @account.followers.or(@status.thread.account.followers).inboxes
+                 else
+                   @account.followers.inboxes
+                 end
+  end
+    
+      let(:user) { Fabricate(:user) }
+    
+      class UnexpectedResponseError < Error; end
+    
+        def assert_not_interned_error(obj, meth, name, msg = nil, &block)
+      e = assert_raise(NameError, msg) {obj.__send__(meth, name, &block)}
+      assert_not_pinneddown(name, msg)
+      e
     end
     
-        it 'should raise error when response has an error' do
-      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
+        def initialize(dllname, func, import, export = '0', calltype = :stdcall)
+      @proto = [import].join.tr(WIN32_TYPES, DL_TYPES).sub(/^(.)0*$/, '\1')
+      import = @proto.chars.map {|win_type| TYPEMAP[win_type.tr(WIN32_TYPES, DL_TYPES)]}
+      export = TYPEMAP[export.tr(WIN32_TYPES, DL_TYPES)]
+      calltype = Fiddle::Importer.const_get(:CALL_TYPE_TO_ABI)[calltype]
+    
+    describe 'GzipReader#rewind' do
+    
+        z = Zlib::Inflate.new
+    result << z.inflate(data)
+    result << z.finish
+    
+          def initialize(linkage: :static, packaging: :library)
+        raise ArgumentError, 'Invalid linkage option #{linkage.inspect}, valid options are #{KNOWN_LINKAGE_OPTIONS.inspect}' unless KNOWN_LINKAGE_OPTIONS.include?(linkage)
+        raise ArgumentError, 'Invalid packaging option #{packaging.inspect}, valid options are #{KNOWN_PACKAGING_OPTIONS.inspect}' unless KNOWN_PACKAGING_OPTIONS.include?(packaging)
+    
+          it 'omits common specs' do
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec, @default_subspec, @inner_subspec], [], [], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @inner_subspec, @foo_subspec], [], [], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @inner_subspec, @bar_subspec], [], [], Platform.ios),
+        ])
+        variants.scope_suffixes.values.should == %w(.common .common-Foo .common-Bar)
+      end
+    
+    module Pod
+  class Installer
+    class Analyzer
+      describe PodVariant do
+        before do
+          @specs = [stub('Spec'), stub('Spec/Foo')]
+          @testspecs = [stub('Spec/Tests')]
+          @appspecs = [stub('Spec/App')]
+          @platform = Platform.ios
+          @type = Target::BuildType.dynamic_framework
+        end
+    
+              it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
+            @consumer.stubs(:requires_arc?).returns(true)
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-fobjc-arc')
+          end
+    
+                  phase.input_paths = nil
+              phase.output_paths = nil
+              phase.input_file_list_paths = input_paths_by_config.each_key.map(&:file_list_relative_path).uniq
+              phase.output_file_list_paths = output_paths_by_config.each_key.map(&:file_list_relative_path).uniq
+            else
+              input_paths = input_paths_by_config.values.flatten(1).uniq
+              output_paths = output_paths_by_config.values.flatten(1).uniq
+              TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+    
+      it 'renders a user's story successfully' do
+    expect(get: '/ben/this-is-a-slug').to route_to(
+      controller: 'stories',
+      action: 'show',
+      slug: 'this-is-a-slug',
+      username: 'ben',
+    )
+  end
+    
+        def install_path
+      @install_path ||= if options[:path]
+          Pathname.new(File.join(options[:path], 'bourbon'))
+        else
+          Pathname.new('bourbon')
+        end
+    end
+    
+      context 'called with three colors' do
+    it 'applies second color to left and right' do
+      rule = 'border-color: #f00 #0f0 #00f'
+    
+    
+#
+# Tests
+#
+    
+      Resque.remove_worker(worker)
+  puts '** removed #{worker}'
+end
+    
+          def show_args(args)
+        Array(args).map do |a|
+          a.to_yaml
+        end.join('\n')
+      rescue
+        args.to_s
+      end
+    
+      def page_entries_info(start, stop, size, name = nil)
+    if size == 0
+      name ? 'No #{name}s' : '<b>0</b>'
+    elsif size == 1
+      'Showing <b>1</b>' + (name ? ' #{name}' : '')
+    elsif size > failed_per_page
+      'Showing #{start}-#{stop} of <b>#{size}</b>' + (name ? ' #{name}s' : '')
+    else
+      'Showing #{start} to <b>#{size - 1}</b>' + (name ? ' #{name}s' : '')
     end
   end
 end
 
     
-        private
-    
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
+        @@all_heartbeat_threads = []
+    def self.kill_all_heartbeat_threads
+      @@all_heartbeat_threads.each(&:kill).each(&:join)
+      @@all_heartbeat_threads = []
     end
-    
-        def base_url
-      @base_url ||= URL.parse self.class.base_url
-    end
-    
-          def fetch_redirections
-        result = {}
-        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
-          build_pages do |page|
-            next if page[:response_effective_path] == page[:response_path]
-            result[page[:response_path].downcase] = page[:response_effective_path]
-          end
-        end
-        result
-      end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
-        else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
-        end
-      end
-    
-    desc 'preview the site in a web browser'
-task :preview do
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  puts 'Starting to watch source with Jekyll and Compass. Starting Rack on port #{server_port}'
-  system 'compass compile --css-dir #{source_dir}/stylesheets' unless File.exist?('#{source_dir}/stylesheets/screen.css')
-  jekyllPid = Process.spawn({'OCTOPRESS_ENV'=>'preview'}, 'jekyll build --watch')
-  compassPid = Process.spawn('compass watch')
-  rackupPid = Process.spawn('rackup --port #{server_port}')
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
-    end
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
-    
-      s.add_dependency 'erubis', '~> 2.6'
-  s.add_dependency 'thor', '~> 0.19', '>= 0.15.0'
-  s.add_dependency 'xdg', '~> 2.2', '>= 2.2.5'
-    
-      factory :project_with_deprecations, class: Tmuxinator::Project do
-    transient do
-      file { yaml_load('spec/fixtures/sample.deprecations.yml') }
-    end
-    
-      chain :with do |attrs|
-    @expected_attrs = attrs
-  end
-    
-        context '$EDITOR is not set' do
-      before do
-        allow(ENV).to receive(:[]).with('EDITOR') { nil }
-      end
