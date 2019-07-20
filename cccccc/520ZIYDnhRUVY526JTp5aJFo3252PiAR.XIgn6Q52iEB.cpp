@@ -1,170 +1,280 @@
 
         
-        void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
+        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
   }
 }
-
-    
-    void
-swift::trimLeadingWhitespaceFromLines(StringRef RawText,
-                                      unsigned WhitespaceToTrim,
-                                      SmallVectorImpl<StringRef> &OutLines) {
-  SmallVector<StringRef, 8> Lines;
-    }
-    
-    // Section 6.2: Decoding procedure
     
     
-    {/// Emit a Swift-style dependencies file for \p SF.
-bool emitReferenceDependencies(DiagnosticEngine &diags, SourceFile *SF,
-                               const DependencyTracker &depTracker,
-                               StringRef outputPath);
-} // end namespace swift
-    
-    /**
- * @brief An interface for the units of computation which can be composed into a
- *        Net.
- *
- * Layer%s must implement a Forward function, in which they take their input
- * (bottom) Blob%s (if any) and compute their output Blob%s (if any).
- * They may also implement a Backward function, in which they compute the error
- * gradients with respect to their input Blob%s, given the error gradients with
- * their output Blob%s.
- */
-template <typename Dtype>
-class Layer {
- public:
-  /**
-   * You should not implement your own constructor. Any set up code should go
-   * to SetUp(), where the dimensions of the bottom blobs are provided to the
-   * layer.
-   */
-  explicit Layer(const LayerParameter& param)
-    : layer_param_(param) {
-      // Set phase and copy blobs (if there are any).
-      phase_ = param.phase();
-      if (layer_param_.blobs_size() > 0) {
-        blobs_.resize(layer_param_.blobs_size());
-        for (int i = 0; i < layer_param_.blobs_size(); ++i) {
-          blobs_[i].reset(new Blob<Dtype>());
-          blobs_[i]->FromProto(layer_param_.blobs(i));
-        }
-      }
-    }
-  virtual ~Layer() {}
-    }
-    
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
-
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    class ScriptDetector {
- public:
-  ScriptDetector(const GenericVector<int>* allowed_scripts,
-                 OSResults* osr, tesseract::Tesseract* tess);
-  void detect_blob(BLOB_CHOICE_LIST* scores);
-  bool must_stop(int orientation);
- private:
-  OSResults* osr_;
-  static const char* korean_script_;
-  static const char* japanese_script_;
-  static const char* fraktur_script_;
-  int korean_id_;
-  int japanese_id_;
-  int katakana_id_;
-  int hiragana_id_;
-  int han_id_;
-  int hangul_id_;
-  int latin_id_;
-  int fraktur_id_;
-  tesseract::Tesseract* tess_;
-  const GenericVector<int>* allowed_scripts_;
+    {  // No copying allowed
+  LookupKey(const LookupKey&);
+  void operator=(const LookupKey&);
 };
     
-    #include 'tesseractclass.h'
-#ifdef _OPENMP
-#include <omp.h>
-#endif  // _OPENMP
+    std::string SSTTableFileName(const std::string& name, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(name, number, 'sst');
+}
     
-      // Returns a pointer to the vector with all unichar ids that appear in the
-  // 'correct' part of the ambiguity pair when the given unichar id appears
-  // in the 'wrong' part of the ambiguity. E.g. if DangAmbigs file consist of
-  // m->rn,rn->m,m->iii, UnicharAmbigsForAdaption() called with unichar id of
-  // m will return a pointer to a vector with unichar ids of r,n,i.
-  inline const UnicharIdVector *AmbigsForAdaption(
-      UNICHAR_ID unichar_id) const {
-    if (ambigs_for_adaption_.empty()) return nullptr;
-    return ambigs_for_adaption_[unichar_id];
-  }
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+    
+    
+    {}  // namespace nwapi
     
     
     {}
     
-    //////////////////////////////////////////////////////////////////////
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
     
-      // Special code for overflow handling
-  bool cond = (BranchConditions::Always != bc);
-  if (bc == BranchConditions::Overflow || bc == BranchConditions::NoOverflow) {
-    a.xor(reg::r0, reg::r0, reg::r0,false);
-    a.mtspr(Assembler::SpecialReg::XER, reg::r0);
-  } else if (cond && immt != ImmType::AnyCompact) {
-    // Unconditional branch (jmp or call) doesn't need this reserve bytes
-    a.emitNop(2 * instr_size_in_bytes);
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    #include 'base/lazy_instance.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/nw_screen.h'
+#include 'extensions/browser/extensions_browser_client.h'
+#include 'ui/display/display_observer.h'
+#include 'ui/display/display.h'
+#include 'ui/display/screen.h'
+    
+    void set_superblock_metainfo(real_superblock_t *superblock,
+                             const std::vector<std::vector<char> > &keys,
+                             const std::vector<binary_blob_t> &values,
+                             cluster_version_t version) {
+    buf_write_t write(superblock->get());
+    reql_btree_superblock_t *data
+        = static_cast<reql_btree_superblock_t *>(
+            write.get_data_write(REQL_BTREE_SUPERBLOCK_SIZE));
+    }
+    
+        std::pair<key_t, value_t> operator*() {
+        return std::make_pair(key(), value());
+    }
+    key_t key() { return std::make_pair(key_size, key_ptr); }
+    value_t value() { return std::make_pair(value_size, value_ptr); }
+    
+        if (create) {
+        vector_stream_t key;
+        // The version used when deserializing this data depends on the block magic.
+        // The block magic set by init_real_superblock corresponds to the latest version
+        // and so this serialization does too.
+        // VSI: Do this better.
+        write_message_t wm;
+        region_t kr = region_t::universe();
+        serialize_for_metainfo(&wm, kr);
+        key.reserve(wm.size());
+        int res = send_write_message(&key, &wm);
+        guarantee(!res);
+    }
+    
+        void operator()(const point_write_t &w) {
+        sampler->new_sample();
+        response->response = point_write_response_t();
+        point_write_response_t *res =
+            boost::get<point_write_response_t>(&response->response);
+    }
+    
+    namespace unittest {
+    }
+    
+    
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedFakeTestPartResultReporter);
+};
+    
+    // This macro is for implementing ASSERT_DEATH*, EXPECT_DEATH*,
+// ASSERT_EXIT*, and EXPECT_EXIT*.
+# define GTEST_DEATH_TEST_(statement, predicate, regex, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+    const ::testing::internal::RE& gtest_regex = (regex); \
+    ::testing::internal::DeathTest* gtest_dt; \
+    if (!::testing::internal::DeathTest::Create(#statement, &gtest_regex, \
+        __FILE__, __LINE__, &gtest_dt)) { \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+    } \
+    if (gtest_dt != NULL) { \
+      ::testing::internal::scoped_ptr< ::testing::internal::DeathTest> \
+          gtest_dt_ptr(gtest_dt); \
+      switch (gtest_dt->AssumeRole()) { \
+        case ::testing::internal::DeathTest::OVERSEE_TEST: \
+          if (!gtest_dt->Passed(predicate(gtest_dt->Wait()))) { \
+            goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+          } \
+          break; \
+        case ::testing::internal::DeathTest::EXECUTE_TEST: { \
+          ::testing::internal::DeathTest::ReturnSentinel \
+              gtest_sentinel(gtest_dt); \
+          GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, gtest_dt); \
+          gtest_dt->Abort(::testing::internal::DeathTest::TEST_DID_NOT_DIE); \
+          break; \
+        } \
+        default: \
+          break; \
+      } \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__): \
+      fail(::testing::internal::DeathTest::LastMessage())
+// The symbol 'fail' here expands to something into which a message
+// can be streamed.
+    
+    // IsAProtocolMessage<T>::value is a compile-time bool constant that's
+// true iff T is type ProtocolMessage, proto2::Message, or a subclass
+// of those.
+template <typename T>
+struct IsAProtocolMessage
+    : public bool_constant<
+  ImplicitlyConvertible<const T*, const ::ProtocolMessage*>::value ||
+  ImplicitlyConvertible<const T*, const ::proto2::Message*>::value> {
+};
+    
+        // Setup back-end capabilities flags
+    g_hWnd = (HWND)hwnd;
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendPlatformName = 'imgui_impl_win32';
+    io.ImeWindowHandle = hwnd;
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+    
+    #include 'imgui.h'
+#include 'imgui_impl_win32.h'
+#include 'imgui_impl_dx11.h'
+#include <d3d11.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+    
+    
+    {        UINT64 fenceValue = g_fenceLastSignaledValue + 1;
+        g_pd3dCommandQueue->Signal(g_fence, fenceValue);
+        g_fenceLastSignaledValue = fenceValue;
+        frameCtxt->FenceValue = fenceValue;
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    // DirectX
+#include <stdio.h>
+#include <d3d10_1.h>
+#include <d3d10.h>
+#include <d3dcompiler.h>
+#ifdef _MSC_VER
+#pragma comment(lib, 'd3dcompiler') // Automatically link with d3dcompiler.lib as we are using D3DCompile() below.
+#endif
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'D3D12_GPU_DESCRIPTOR_HANDLE' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Renderer: Support for large meshes (64k+ vertices) with 16-bits indices.
+// Issues:
+//  [ ] 64-bit only for now! (Because sizeof(ImTextureId) == sizeof(void*)). See github.com/ocornut/imgui/pull/301
+    
+    BulkOperations::Manager::Manager(QSharedPointer<ConnectionsModel> model,
+                                 QSharedPointer<QPython> p)
+    : QObject(nullptr), m_model(model), m_python(p) {
+  Q_ASSERT(m_model);
+}
+    
+      Q_PROPERTY(
+      QString operationName READ operationName NOTIFY operationNameChanged)
+  Q_PROPERTY(
+      QString connectionName READ connectionName NOTIFY connectionNameChanged)
+  Q_PROPERTY(int dbIndex READ dbIndex NOTIFY dbIndexChanged)
+  Q_PROPERTY(QString keyPattern READ keyPattern WRITE setKeyPattern NOTIFY
+                 keyPatternChanged)
+  Q_PROPERTY(int operationProgress READ operationProgress NOTIFY
+                 operationProgressChanged)
+ public:
+  enum class Operation {
+    DELETE_KEYS,
+    COPY_KEYS,
+    IMPORT_RDB_KEYS,
+    TTL,
+  };
+    
+      bool isMetadataValid() const override;
+    
+    ValueEditor::EmbeddedFormattersManager::EmbeddedFormattersManager(
+    QSharedPointer<QPython> p)
+    : m_python(p) {
+  QObject::connect(m_python.data(), &QPython::error, this,
+                   &EmbeddedFormattersManager::error);
+}
+    
+    namespace ValueEditor {
+    }
+    
+      if (role == name) {
+    return data['name'];
+  } else if (role == version) {
+    return data['version'];
+  } else if (role == cmd) {
+    return data['cmd'];
+  } else if (role == description) {
+    return data['description'];
   }
     
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
+     public:
+  ExternalFormattersManager();
     
-    private:
-  bool m_get;
-  bool m_ignoreErrors;
-  const char* m_method;
-  Array m_headers;
-  String m_postData;
-  int m_maxRedirect;
-  int m_timeout;
-  std::string m_error;
-  StringBuffer m_response;
-  Array m_responseHeaders;
+      // Dialogs
+  void requestBulkOperation(
+      QSharedPointer<RedisClient::Connection> connection, int dbIndex,
+      BulkOperations::Manager::Operation op, QRegExp keyPattern,
+      BulkOperations::AbstractOperation::OperationCallback callback);
