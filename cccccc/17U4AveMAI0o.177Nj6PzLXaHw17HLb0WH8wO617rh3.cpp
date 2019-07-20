@@ -1,170 +1,170 @@
 
         
-          // If the requirement itself is non-generic, the synthetic signature
-  // is that of the conformance context.
-  if (!covariantSelf &&
-      reqSig->getGenericParams().size() == 1 &&
-      reqSig->getRequirements().size() == 1) {
-    syntheticSignature = conformanceDC->getGenericSignatureOfContext();
-    if (syntheticSignature) {
-      syntheticSignature = syntheticSignature->getCanonicalSignature();
-      syntheticEnvironment =
-        syntheticSignature->createGenericEnvironment();
-    }
-    }
-    
-      /// Retrieve the array of replacement types, which line up with the
-  /// generic parameters.
-  ///
-  /// Note that the types may be null, for cases where the generic parameter
-  /// is concrete but hasn't been queried yet.
-  ArrayRef<Type> getReplacementTypes() const {
-    return llvm::makeArrayRef(getTrailingObjects<Type>(),
-                              getNumReplacementTypes());
-  }
-    
-        StringRef Line = RawText.substr(0, Pos);
-    Lines.push_back(Line);
-    if (!IsFirstLine) {
-      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
-      if (NonWhitespacePos != StringRef::npos)
-        WhitespaceToTrim =
-            std::min(WhitespaceToTrim,
-                     static_cast<unsigned>(NonWhitespacePos));
-    }
-    IsFirstLine = false;
-    
-      static CFPointeeInfo forVoid() {
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = nullptr;
-    return info;
-  }
-    
-    
-    {  return encodePunycode(InputCodePoints, OutPunycode);
-}
-    
-    #endif
-
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  // crc32c values for all supported record types.  These are
-  // pre-computed to reduce the overhead of computing the crc of the
-  // record type stored in the header.
-  uint32_t type_crc_[kMaxRecordType + 1];
-};
-    
-    #endif  // STORAGE_LEVELDB_DB_MEMTABLE_H_
-
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options, uint64_t file_number,
-             uint64_t file_size, const Slice& k, void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    class LEVELDB_EXPORT Status {
- public:
-  // Create a success status.
-  Status() noexcept : state_(nullptr) {}
-  ~Status() { delete[] state_; }
-    }
-    
-      explicit Table(Rep* rep) : rep_(rep) {}
-    
-      ~WriteBatch();
-    
-    
-    {  const char* data_;
-  size_t size_;
-  uint32_t restart_offset_;  // Offset in data_ of restart array
-  bool owned_;               // Block owns data_[]
-};
-    
-    namespace leveldb {
-    }
-    
-    
-    {  // Open test file some number above the sum of the two limits to force
-  // leveldb::WindowsEnv to switch from mapping the file into memory
-  // to basic file reading.
-  const int kNumFiles = kMMapLimit + 5;
-  leveldb::RandomAccessFile* files[kNumFiles] = {0};
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
-  }
-  char scratch;
-  Slice read_result;
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(files[i]->Read(i, 1, &read_result, &scratch));
-    ASSERT_EQ(kFileData[i], read_result[0]);
-  }
-  for (int i = 0; i < kNumFiles; i++) {
-    delete files[i];
-  }
-  ASSERT_OK(env_->DeleteFile(test_file));
-}
-    
-          cbw.Write(buffer.data(), input.begin(), input.end());
-    
-    void SimpleCSRSource::Clear() {
-  page_.Clear();
-  this->info.Clear();
-}
-    
-      TestObservers(int * _status): status_(_status) {}
-    
-      const xgboost::MetaInfo& info = dmat->Info();
-  const std::vector<uint64_t> expected_qids{1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3};
-  const std::vector<xgboost::bst_uint> expected_group_ptr{0, 4, 8, 12};
-  CHECK(info.qids_ == expected_qids);
-  CHECK(info.group_ptr_ == expected_group_ptr);
-  CHECK_GE(info.kVersion, info.kVersionQidAdded);
-    
-    // implementing configure.
-template<typename PairIter>
-inline void ObjFunction::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
-    
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
-    
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        // The DiagTimesNode does not require its output value for computing
-        // the gradients of its input nodes
-        return false;
-    }
-    
-        // compute forward backward algorithm
-    void ForwardPropS(Matrix<ElemType>& alpha, Matrix<ElemType>& backtrace, Matrix<ElemType>& functionValues, const Matrix<ElemType>& pos_scores, const Matrix<ElemType>& pair_scores, const size_t stt, const size_t stp)
-    {
-        // to-do, each slice is for one sentence
-        // to-do, number of slices correspond to number of frames
-        // this implementation only supports one sentence per minibatch
-    }
-    
-    template <class ElemType>
-EpochAccumulatorNode<ElemType>::EpochAccumulatorNode(const Microsoft::MSR::ScriptableObjects::IConfigRecordPtr configp)
-    : EpochAccumulatorNode(configp->Get(L'deviceId'), L'<placeholder>')
+        /* Coin network-specific GUI style information */
+class NetworkStyle
 {
-    AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
+    }
+    
+        /* Check signing with a goofy nonce function */
+    
+    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
+#define BITCOIN_CRYPTO_RIPEMD160_H
+    
+    %macro FOUR_ROUNDS_AND_SCHED 0
+	;; compute s0 four at a time and s1 two at a time
+	;; compute W[-16] + W[-7] 4 at a time
+	movdqa	XTMP0, X3
+    mov	y0, e		; y0 = e
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+    mov	y1, a		; y1 = a
+	palignr	XTMP0, X2, 4	; XTMP0 = W[-7]
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    mov	y2, f		; y2 = f
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+	movdqa	XTMP1, X1
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    xor	y2, g		; y2 = f^g
+	paddd	XTMP0, X0	; XTMP0 = W[-7] + W[-16]
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+	;; compute s0
+	palignr	XTMP1, X0, 4	; XTMP1 = W[-15]
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+	movdqa	XTMP2, XTMP1	; XTMP2 = W[-15]
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+    add	y2, y0		; y2 = S1 + CH
+    add	y2, [rsp + _XFER + 0*4]	; y2 = k + w + S1 + CH
+	movdqa	XTMP3, XTMP1	; XTMP3 = W[-15]
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pslld	XTMP1, (32-7)
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	psrld	XTMP2, 7
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	por	XTMP1, XTMP2	; XTMP1 = W[-15] ror 7
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    
+    
+    {
+    {    db_->ReleaseSnapshot(s2);
+    ASSERT_EQ('v4', Get('foo'));
+  } while (ChangeOptions());
+}
+    
+    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
+  uint64_t file_size;
+  RandomAccessFile* file = NULL;
+  Table* table = NULL;
+  Status s = env->GetFileSize(fname, &file_size);
+  if (s.ok()) {
+    s = env->NewRandomAccessFile(fname, &file);
+  }
+  if (s.ok()) {
+    // We use the default comparator, which may or may not match the
+    // comparator used in this database. However this should not cause
+    // problems since we only use Table operations that do not require
+    // any comparisons.  In particular, we do not call Seek or Prev.
+    s = Table::Open(Options(), file, file_size, &table);
+  }
+  if (!s.ok()) {
+    delete table;
+    delete file;
+    return s;
+  }
+    }
+    
+    
+    { private:
+  port::Mutex mutex_;
+  std::map<std::string, FileState> db_file_state_;
+  std::set<std::string> new_files_since_last_dir_sync_;
+  bool filesystem_active_;  // Record flushes, syncs, writes
+};
+    
+            /**
+         * Add your initializationOnThread description here.
+         * This is equivalent to the constructor, but it is run in the thread where this function will operate
+         */
+        void initializationOnThread();
+    
+    // Specialized getInfoHelper for vector params
+template <typename Func, typename T>
+inline cl_int getInfoHelper(Func f, cl_uint name, vector<T>* param, long)
+{
+    size_type required;
+    cl_int err = f(name, 0, NULL, &required);
+    if (err != CL_SUCCESS) {
+        return err;
+    }
+    const size_type elements = required / sizeof(T);
+    }
+    
+        public:
+        PersonTracker(const bool mergeResults, const int levels = 3, const int patchSize = 31,
+                      const float confidenceThreshold = 0.05f, const bool trackVelocity = false,
+                      const bool scaleVarying = false, const float rescale = 640);
+    
+        template<typename T>
+    Point<T> Point<T>::operator+(const Point<T>& point) const
+    {
+        try
+        {
+            return Point<T>{T(x + point.x), T(y + point.y)};
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Point<T>{};
+        }
+    }
+    
+        // Static methods
+    template<typename T>
+    Rectangle<T> recenter(const Rectangle<T>& rectangle, const T newWidth, const T newHeight)
+    {
+        try
+        {
+            Rectangle<T> result;
+            const auto centerPoint = rectangle.center();
+            result.x = centerPoint.x - T(newWidth / 2.f);
+            result.y = centerPoint.y - T(newHeight / 2.f);
+            result.width = newWidth;
+            result.height = newHeight;
+            return result;
+        }
+        catch (const std::exception& e)
+        {
+            error(e.what(), __LINE__, __FUNCTION__, __FILE__);
+            return Rectangle<T>{};
+        }
+    }
+    
+    QByteArray gzipDecode(const QByteArray &val) {
+  z_stream strm;
+  strm.zalloc = Z_NULL;
+  strm.zfree = Z_NULL;
+  strm.opaque = Z_NULL;
+  strm.avail_in = 0;
+  strm.next_in = Z_NULL;
+  QByteArray output;
+    }
+    
+    QByteArray compress(const QByteArray& val, unsigned algo);
+    
+    void ValueEditor::EmbeddedFormattersManager::isValid(
+    const QString &formatterName, const QByteArray &data, QJSValue jsCallback) {
+  m_python->call('formatters.validate', QVariantList{formatterName, data},
+                 jsCallback);
 }
