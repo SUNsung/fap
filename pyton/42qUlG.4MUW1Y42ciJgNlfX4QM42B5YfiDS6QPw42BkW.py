@@ -1,167 +1,163 @@
 
         
-          # Plotting
-  f = plt.figure(figsize=(18,20), tight_layout=True)
-  plot_lfads_timeseries(train_bxtxd, train_model_vals,
-                        train_ext_input_bxtxi,
-                        truth_bxtxn=train_truth_bxtxd,
-                        conversion_factor=cf, bidx=bidx,
-                        output_dist=output_dist, col_title='Train')
-  plot_lfads_timeseries(valid_bxtxd, valid_model_vals,
-                        valid_ext_input_bxtxi,
-                        truth_bxtxn=valid_truth_bxtxd,
-                        conversion_factor=cf, bidx=bidx,
-                        output_dist=output_dist,
-                        subplot_cidx=1, col_title='Valid')
+        REWRITE_HTTPS_ARGS_WITH_END = [
+    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,NE,R=permanent]']
+'''Apache version >= 2.3.9 rewrite rule arguments used for redirections to
+    https vhost'''
     
     
-def tensor_bxtxn_to_list_t_bxn(tensor_bxtxn):
-  '''Convert a numpy tensor with shape BxTxN to a length T list of numpy tensors
-  with shape BxT.
+class PyTest(TestCommand):
+    user_options = []
     
-      # Two consecutive substitutions always belong to the same question
-  question_ids = [qid for i, qid in enumerate(question_ids) if i % 2 == 0]
-  assert len(question_ids) == len(prediction_correctness)
-  num_questions = len(set(question_ids))
-    
-          if len(example) > num_steps:
-        final_x = example[:num_steps]
-        final_y = example[1:(num_steps + 1)]
-        w[i] = 1
+        def test_perform(self):
+        self.auth.perform([self.achall])
     
     
-def percent_correct(real_sequence, fake_sequences):
-  '''Determine the percent of tokens correctly generated within a batch.'''
-  identical = 0.
-  for fake_sequence in fake_sequences:
-    for real, fake in zip(real_sequence, fake_sequence):
-      if real == fake:
-        identical += 1.
-  return identical / recursive_length(fake_sequences)
-
+@app.route('/swagger.json')
+def spec():
+    swag = swagger(app)
+    swag['info']['version'] = VERSION
+    swag['info']['title'] = 'AWS Resources Dashboard'
+    return jsonify(swag)
+    
+        def test_create_sns_message_body_json_structure_without_default_key(self):
+        action = {
+            'Message': ['{'message': 'abc'}'],
+            'MessageStructure': ['json']
+        }
+        with assert_raises(Exception) as exc:
+            sns_listener.create_sns_message_body(self.subscriber, action)
+        self.assertEqual(str(exc.exception), 'Unable to find 'default' key in message payload')
     
     
-def create_discriminator(hparams,
-                         sequence,
-                         is_training,
-                         reuse=None,
-                         initial_state=None,
-                         inputs=None,
-                         present=None):
-  '''Create the Discriminator model specified by the FLAGS and hparams.
+def deserialize_event(event):
+    # Deserialize into Python dictionary and extract the 'NewImage' (the new version of the full ddb document)
+    ddb = event.get('dynamodb')
+    if ddb:
+        result = {
+            '__action_type': event.get('eventName'),
+        }
+    
+        def do_download(param):
+        tmp_file = tmp_file_pattern % param
+        TMP_FILES.append(tmp_file)
+        download('http://localhost:%s/%s' % (test_port, param), tmp_file)
+    
+        return jsonify({})
     
     
-# -- Options for Texinfo output -------------------------------------------
+def receive_assert_delete(queue_url, assertions, sqs_client=None, required_subject=None):
+    if not sqs_client:
+        sqs_client = aws_stack.connect_to_service('sqs')
     
-        '''
-    def __init__(self, *args, **kwargs):
-        super(AugeasConfigurator, self).__init__(*args, **kwargs)
+        def test_s3_put_object_on_presigned_url(self):
+        bucket_name = 'test-bucket-%s' % short_uid()
+        self.s3_client.create_bucket(Bucket=bucket_name)
+        body = 'something body'
+        # get presigned URL
+        object_key = 'test-presigned-key'
+        url = self.s3_client.generate_presigned_url(
+            'put_object', Params={'Bucket': bucket_name, 'Key': object_key}
+        )
+        # put object
+        response = requests.put(url, data=body, verify=False)
+        self.assertEqual(to_str(response.content), '')
+        # get object and compare results
+        downloaded_object = self.s3_client.get_object(Bucket=bucket_name, Key=object_key)
+        download_object = downloaded_object['Body'].read()
+        self.assertEqual(to_str(body), to_str(download_object))
+        # clean up
+        self._delete_bucket(bucket_name, [object_key])
     
-    UIR_ARGS = ['always', 'set', 'Content-Security-Policy',
-            'upgrade-insecure-requests']
+        def RestAPI_get_cfn_attribute(self, attribute_name):
+        if attribute_name == 'Id':
+            return self.id
+        if attribute_name == 'Region':
+            return self.region_name
+        if attribute_name == 'Name':
+            return self.name
+        if attribute_name == 'Description':
+            return self.description
+        if attribute_name == 'RootResourceId':
+            for id, resource in self.resources.items():
+                if resource.parent_id is None:
+                    return resource.id
+            return None
+        raise UnformattedGetAttTemplateException()
     
-        # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-    
-        def backward(self, output):
-        return 1 - output * output
-    
-        def get_bias(self):
-        return self.bias
-    
-    
-if __name__ == '__main__':
-    '''
-    Desc:
-        main 函数，训练我们的线性单元，并进行预测
-    Args:
-        None
-    Returns:
-        None
-    '''
-    # 首先训练我们的线性单元
-    linear_unit = train_linear_unit()
-    # 打印训练获得的权重 和 偏置
-    print(linear_unit)
-    # 测试
-    print('Work 3.4 years, monthly salary = %.2f' % linear_unit.predict([3.4]))
-    print('Work 15 years, monthly salary = %.2f' % linear_unit.predict([15]))
-    print('Work 1.5 years, monthly salary = %.2f' % linear_unit.predict([1.5]))
-    print('Work 6.3 years, monthly salary = %.2f' % linear_unit.predict([6.3]))
-    plot(linear_unit)
-
-    
-    
-# 图像数据加载器
-class ImageLoader(Loader):
-    def get_picture(self, content, index):
-        '''
-        内部函数，从文件中获取图像
-        '''
-        start = index * 28 * 28 + 16
-        picture = []
-        for i in range(28):
-            picture.append([])
-            for j in range(28):
-                picture[i].append(
-                    self.to_int(content[start + i * 28 + j]))
-        return picture
+    TEST_STREAM_NAME = 'firehose_test_' + short_uid()
+TEST_TAG_1 = {'Key': 'MyTag', 'Value': 'TestValue'}
+TEST_TAG_2 = {'Key': 'AnotherTag', 'Value': 'AnotherValue'}
+TEST_TAGS = [TEST_TAG_1, TEST_TAG_2]
     
     
-    def predict(self, input_vec):
-        '''
-        Desc:
-            输入向量，输出感知器的计算结果
-        Args:
-            input_vec —— 输入向量
-        Returns:
-            感知器的计算结果
-        '''
-        # 将输入向量的计算结果返回
-        # 调用 激活函数 activator ，将输入向量输入，计算感知器的结果
-        # reduce() 函数是 python 2 的内置函数，从 python 3 开始移到了 functools 模块
-        # reduce() 从左到右对一个序列的项累计地应用有两个参数的函数，以此合并序列到一个单一值，例如 reduce(lambda x,y: x+y, [1,2,3,4,5]) 计算的就是 ((((1+2)+3)+4)+5)
-        # map() 接收一个函数 f 和一个 list ，并通过把函数 f 依次作用在 list 的每个元素上，得到一个新的 list 返回。比如我们的 f 函数是计算平方， map(f, [1,2,3,4,5]) ===> 返回 [1,4,9,16,25]
-        # zip() 接收任意多个（包括 0 个和 1个）序列作为参数，返回一个 tuple 列表。例：x = [1,2,3] y = [4,5,6] z = [7,8,9] xyz = zip(x, y, z) ===> [(1,4,7), (2,5,8), (3,6,9)]
-        return self.activator(reduce(lambda a, b: a + b,map(lambda (x, w): x * w, zip(input_vec, self.weights)), 0.0) + self.bias)
+class TestInsertionSort(object):
     
-        def calc_gradient(self, parent):
-        '''
-        计算每个节点权重的梯度，并将它们求和，得到最终的梯度
-        '''
-        W_grad = np.zeros((self.node_width, 
-                            self.node_width * self.child_count))
-        b_grad = np.zeros((self.node_width, 1))
-        if not parent.children:
-            return W_grad, b_grad
-        parent.W_grad = np.dot(parent.delta, parent.children_data.T)
-        parent.b_grad = parent.delta
-        W_grad += parent.W_grad
-        b_grad += parent.b_grad
-        for child in parent.children:
-            W, b = self.calc_gradient(child)
-            W_grad += W
-            b_grad += b
-        return W_grad, b_grad
+            print('Two or more elements')
+        data = [5, 1, 7, 2, 6, -3, 5, 7, -10]
+        assert_equal(func(data), sorted(data))
     
-        topNfeat = 20
-    eigValInd = eigValInd[:-(topNfeat+1):-1]
-    cov_all_score = float(sum(eigvals))
-    sum_cov_score = 0
-    for i in range(0, len(eigValInd)):
-        line_cov_score = float(eigvals[eigValInd[i]])
-        sum_cov_score += line_cov_score
-        '''
-        我们发现其中有超过20%的特征值都是0。
-        这就意味着这些特征都是其他特征的副本，也就是说，它们可以通过其他特征来表示，而本身并没有提供额外的信息。
+            print('Test: Pop on a stack to destroy it')
+        assert_equal(stacks.pop(), 'a')
     
+    		print('Test: insert checking with post order traversal')
+		expectVal = [7, 25, 10, 38, 40, 30, 60, 80, 70, 50]
+		assert_equal(myTree.printPostOrder(), expectVal)
+		expectVal = [91, 81, 71, 61, 51, 41, 31, 21, 11, 1]
+		assert_equal(myTree2.printPostOrder(), expectVal)
     
-class MRWordCountUtility(MRJob):
+        After each step the agent is provided with one of four possible observations
+    which indicate where the guess is in relation to the randomly chosen number
     
-        def requestheaders(self, f):
-        if self.auth:
-            if f.mode == 'upstream' and not f.server_conn.via:
-                f.request.headers['Proxy-Authorization'] = self.auth
-            elif ctx.options.mode.startswith('reverse'):
-                f.request.headers['Proxy-Authorization'] = self.auth
+            self.action_space = spaces.Box(low=np.array([-self.bounds]), high=np.array([self.bounds]),
+                                       dtype=np.float32)
+        self.observation_space = spaces.Discrete(4)
+    
+            # Raises KeyError because the new envs have extra info
+        with self.assertRaises(KeyError):
+            verify_environments_match('Humanoid-v3', 'Humanoid-v2')
+    
+        def to_jsonable(self, sample_n):
+        return np.array(sample_n).tolist()
+    
+    # Unit test environment for CNNs and CNN+RNN algorithms.
+# Looks like this (RGB observations):
+#
+#  ---------------------------
+# |                           |
+# |                           |
+# |                           |
+# |          **               |
+# |          **               |
+# |                           |
+# |                           |
+# |                           |
+# |                           |
+# |                           |
+#  ========     ==============
+#
+# Goal is to go through the hole at the bottom. Agent controls square using Left-Nop-Right actions.
+# It falls down automatically, episode length is a bit less than FIELD_H
+#
+# CubeCrash-v0                    # shaped reward
+# CubeCrashSparse-v0              # reward 0 or 1 at the end
+# CubeCrashScreenBecomesBlack-v0  # for RNNs
+#
+# To see how it works, run:
+#
+# python examples/agents/keyboard_agent.py CubeCrashScreen-v0
+    
+    class ContactDetector(contactListener):
+    def __init__(self, env):
+        contactListener.__init__(self)
+        self.env = env
+    def BeginContact(self, contact):
+        if self.env.lander==contact.fixtureA.body or self.env.lander==contact.fixtureB.body:
+            self.env.game_over = True
+        for i in range(2):
+            if self.env.legs[i] in [contact.fixtureA.body, contact.fixtureB.body]:
+                self.env.legs[i].ground_contact = True
+    def EndContact(self, contact):
+        for i in range(2):
+            if self.env.legs[i] in [contact.fixtureA.body, contact.fixtureB.body]:
+                self.env.legs[i].ground_contact = False
