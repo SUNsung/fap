@@ -1,242 +1,162 @@
 
         
-        from utils import write_datasets
-from synthetic_data_utils import add_alignment_projections, generate_data
-from synthetic_data_utils import generate_rnn, get_train_n_valid_inds
-from synthetic_data_utils import nparray_and_transpose
-from synthetic_data_utils import spikify_data, gaussify_data, split_list_by_inds
-import matplotlib
-import matplotlib.pyplot as plt
-import scipy.signal
+            print('Cleaning up existing sources directory.')
+    if os.path.exists(sources_dir):
+        shutil.rmtree(sources_dir)
     
-        test_data = utils.parse_commonsense_reasoning_test(test_data_name)
-    self.question_ids, self.sentences, self.labels = test_data
-    self.all_probs = []  # aggregate single-model prediction here.
+    batch_size = 64  # Batch size for training.
+epochs = 100  # Number of epochs to train for.
+latent_dim = 256  # Latent dimensionality of the encoding space.
+num_samples = 10000  # Number of samples to train on.
+# Path to the data txt file on disk.
+data_path = 'fra-eng/fra.txt'
     
-      def word_to_id(self, word):
-    if word in self._word_to_id:
-      return self._word_to_id[word]
-    else:
-      if word.lower() in self._word_to_id:
-        return self._word_to_id[word.lower()]
-    return self.unk
+    # train
+rms = RMSprop()
+model.compile(loss=contrastive_loss, optimizer=rms, metrics=[accuracy])
+model.fit([tr_pairs[:, 0], tr_pairs[:, 1]], tr_y,
+          batch_size=128,
+          epochs=epochs,
+          validation_data=([te_pairs[:, 0], te_pairs[:, 1]], te_y))
     
+        A Capsule Network Layer implementation in Keras
+    There are two versions of Capsule Networks.
+    One is similar to dense layer (for the fixed-shape input),
+    and the other is similar to time distributed dense layer
+    (for inputs of varied length).
     
-def imdb_raw_data(data_path=None):
-  '''Load IMDB raw data from data directory 'data_path'.
-  Reads IMDB tf record files containing integer ids,
-  and performs mini-batching of the inputs.
-  Args:
-    data_path: string path to the directory where simple-examples.tgz has
-      been extracted.
-  Returns:
-    tuple (train_data, valid_data)
-    where each of the data objects can be passed to IMDBIterator.
-  '''
+        # Properties
+        params: dict. Training parameters
+            (eg. verbosity, batch size, number of epochs...).
+        model: instance of `keras.models.Model`.
+            Reference of the model being trained.
     
-        Args:
-      hparams:  Hyperparameters for the MaskGAN.
-      data: Data to evaluate.
-      id_to_word: Dictionary of indices to words.
-      log_dir: Log directory.
-      output_file:  Output file for the samples.
-  '''
-  # Boolean indicating operational mode.
-  is_training = False
+            if self.inputs:
+            self._init_graph_network(self.inputs,
+                                     self.outputs,
+                                     name=self.name)
+            self.built = True
     
-      # Cumulative Discounted Returns.  The true value function V*(s).
-  cumulative_rewards = []
-  for t in xrange(FLAGS.sequence_length):
-    cum_value = tf.zeros(shape=[FLAGS.batch_size])
-    for s in xrange(t, FLAGS.sequence_length):
-      cum_value += missing_list[s] * np.power(gamma, (s - t)) * rewards_list[s]
-    cumulative_rewards.append(cum_value)
-  cumulative_rewards = tf.stack(cumulative_rewards, axis=1)
+        def get_losses_for(self, inputs=None):
+        return super(RNN, self).get_losses_for(inputs=inputs)
     
-      if not FLAGS.dis_share_embedding:
-    decoder_embedding = [
-        v for v in tf.trainable_variables()
-        if v.op.name == 'dis/decoder/rnn/embedding'
-    ][0]
-  decoder_lstm_w_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  decoder_lstm_w_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
+        def compute_mask(self, inputs, mask=None):
+        if not self.mask_zero:
+            return None
+        output_mask = K.not_equal(inputs, 0)
+        return output_mask
     
-      return decoder_fn
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
+               'Upgrade-Insecure-Requests': UIR_ARGS}
     
-        invocations = dict(
-        aliases='alias_details',
-        all='all_details',
-        config='config_details',
-        mappings='mapping_details',
-        policy='policy_details',
-        versions='version_details',
-    )
+        def test_wildcard(self):
+        self.assertFalse(self.addr.is_wildcard())
+        self.assertTrue(self.addr1.is_wildcard())
+        self.assertTrue(self.addr2.is_wildcard())
     
-    - name: Create a host and adjust its template
-  one_host:
-    name: host2
-    cluster_name: default
-    template:
-        LABELS:
-            - gold
-            - ssd
-        RESERVED_CPU: -100
-'''
+    from certbot import achallenges
+from certbot.compat import filesystem
+from certbot.tests import acme_util
+from certbot.tests import util as test_util
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+        def test_it(self):
+        with mock.patch('certbot.client.acme_client.BackwardsCompatibleClientV2') as mock_client:
+            mock_client().external_account_required.side_effect = self._false_mock
+            with mock.patch('certbot.account.report_new_account'):
+                with mock.patch('certbot.eff.handle_subscription'):
+                    self._call()
     
-        from sklearn.tree import DecisionTreeRegressor
+    The path to this file can be provided interactively or using the
+``--dns-rfc2136-credentials`` command-line argument. Certbot records the
+path to this file for use during renewal, but does not store the file's contents.
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+            :param str domain_name: The domain name to query for an SOA record.
+        :returns: True if found, False otherwise.
+        :rtype: bool
+        :raises certbot.errors.PluginError: if no response is received.
+        '''
     
-    print('consensus score: {:.1f}'.format(score))
+    You should pack your words in a greedy approach; that is, pack as many words as
+you can in each line. Pad extra spaces ' ' when necessary so that each line has
+exactly maxWidth characters.
+    
+            self.assertEqual(n_sum(2, [[-3, 0], [-2, 1], [2, 2], [3, 3], [8, 4], [-9, 5]], 0,  # noqa: E501
+                               sum_closure=lambda a, b: a[0] + b[0]),  # noqa: E501
+                         [[[-3, 0], [3, 3]], [[-2, 1], [2, 2]]])  # noqa: E501
+        self.assertEqual(n_sum(2, [[-3, 0], [-2, 1], [2, 2], [3, 3], [8, 4], [-9, 5]], [0, 3],  # noqa: E501
+                               sum_closure=lambda a, b: [a[0] + b[0], a[1] + b[1]],  # noqa: E501
+                               same_closure=lambda a, b: a[0] == b[0] and a[1] == b[1]),  # noqa: E501
+                         [[[-3, 0], [3, 3]], [[-2, 1], [2, 2]]])  # noqa: E501
+        self.assertEqual(n_sum(2, [[-3, 0], [-2, 1], [2, 2], [3, 3], [8, 4], [-9, 5]], -5,  # noqa: E501
+                               sum_closure=lambda a, b: [a[0] + b[1], a[1] + b[0]],  # noqa: E501
+                               compare_closure=lambda a, b: -1 if a[0] < b else 1 if a[0] > b else 0),  # noqa: E501
+                         [[[-9, 5], [8, 4]]])  # noqa: E501
+    
+        @staticmethod
+    def decode_file(file_in_name, file_out_name):
+        with open(file_in_name, 'rb') as file_in, open(file_out_name, 'wb') as file_out:
+            reader = HuffmanReader(file_in)
+            additional_bits = reader.get_number_of_additional_bits_in_the_last_byte()
+            tree = reader.load_tree()
+    
+    remove_dups(a1)
+print_linked_list(a1)
+remove_dups_wothout_set(a1)
+print_linked_list(a1)
+
     
     
-# Plot the distances
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    avg_dist = np.zeros((n_clusters, n_clusters))
-    plt.figure(figsize=(5, 4.5))
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
-                                                metric=metric).mean()
-    avg_dist /= avg_dist.max()
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            plt.text(i, j, '%5.3f' % avg_dist[i, j],
-                     verticalalignment='center',
-                     horizontalalignment='center')
-    
-        plt.figure(figsize=(6, 4))
-    for i in range(X_red.shape[0]):
-        plt.text(X_red[i, 0], X_red[i, 1], str(y[i]),
-                 color=plt.cm.nipy_spectral(labels[i] / 10.),
-                 fontdict={'weight': 'bold', 'size': 9})
-    
-    Evaluate the ability of k-means initializations strategies to make
-the algorithm convergence robust as measured by the relative standard
-deviation of the inertia of the clustering (i.e. the sum of squared
-distances to the nearest cluster center).
-    
-    import random
-import threading
-import time
-import os
-from front_base.random_get_slice import RandomGetSlice
-    
-        data = response.content
-    response_headers = response.headers
-    if 'content-encoding' not in response_headers and len(response.content) < URLFETCH_DEFLATE_MAXSIZE and response_headers.get('content-type', '').startswith(('text/', 'application/json', 'application/javascript')):
-        if 'gzip' in accept_encoding:
-            response_headers['Content-Encoding'] = 'gzip'
-            compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-            dataio = BytesIO()
-            dataio.write('\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff')
-            dataio.write(compressobj.compress(data))
-            dataio.write(compressobj.flush())
-            dataio.write(struct.pack('<LL', zlib.crc32(data) & 0xFFFFFFFFL, len(data) & 0xFFFFFFFFL))
-            data = dataio.getvalue()
-        elif 'deflate' in accept_encoding:
-            response_headers['Content-Encoding'] = 'deflate'
-            data = zlib.compress(data)[2:-4]
-    if data:
-         response_headers['Content-Length'] = str(len(data))
-    response_headers_data = zlib.compress('\n'.join('%s:%s' % (k.title(), v) for k, v in response_headers.items() if not k.startswith('x-google-')))[2:-4]
-    if 'rc4' not in options:
-        start_response('200 OK', [('Content-Type', __content_type__)])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))+response_headers_data
-        yield data
-    else:
-        start_response('200 OK', [('Content-Type', __content_type__), ('X-GOA-Options', 'rc4')])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))
-        yield rc4crypt(response_headers_data, __password__)
-        yield rc4crypt(data, __password__)
-    
-    # Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-    
-    # Required dataset entry keys
-_IM_DIR = 'image_directory'
-_ANN_FN = 'annotation_file'
+if __name__ == '__main__':
+  main()
+
     
     
-def _do_matlab_eval(json_dataset, salt, output_dir='output'):
-    import subprocess
-    logger.info('-----------------------------------------------------')
-    logger.info('Computing results with the official MATLAB eval code.')
-    logger.info('-----------------------------------------------------')
-    info = voc_info(json_dataset)
-    path = os.path.join(
-        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
-    cmd = 'cd {} && '.format(path)
-    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
-    cmd += '-r 'dbstop if error; '
-    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
-       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
-               output_dir)
-    logger.info('Running:\n{}'.format(cmd))
-    subprocess.call(cmd, shell=True)
+class UpdateModelMixin:
+    '''
+    Update a model instance.
+    '''
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
     
-    ... -> RoI ----\                               /-> box cls output -> cls loss
-                -> RoIFeatureXform -> box head
-... -> Feature /                               \-> box reg output -> reg loss
-       Map
+        # Map methods into required permission codes.
+    # Override this if you need to also provide 'view' permissions,
+    # or if you want to provide custom permission codes.
+    perms_map = {
+        'GET': [],
+        'OPTIONS': [],
+        'HEAD': [],
+        'POST': ['%(app_label)s.add_%(model_name)s'],
+        'PUT': ['%(app_label)s.change_%(model_name)s'],
+        'PATCH': ['%(app_label)s.change_%(model_name)s'],
+        'DELETE': ['%(app_label)s.delete_%(model_name)s'],
+    }
     
     
-def _build_forward_graph(model, single_gpu_build_func):
-    '''Construct the forward graph on each GPU.'''
-    all_loss_gradients = {}  # Will include loss gradients from all GPUs
-    # Build the model on each GPU with correct name and device scoping
-    for gpu_id in range(cfg.NUM_GPUS):
-        with c2_utils.NamedCudaScope(gpu_id):
-            all_loss_gradients.update(single_gpu_build_func(model))
-    return all_loss_gradients
+def _reverse(viewname, args=None, kwargs=None, request=None, format=None, **extra):
+    '''
+    Same as `django.urls.reverse`, but optionally takes a request
+    and returns a fully qualified URL, using the request to get the base URL.
+    '''
+    if format is not None:
+        kwargs = kwargs or {}
+        kwargs['format'] = format
+    url = django_reverse(viewname, args=args, kwargs=kwargs, **extra)
+    if request:
+        return request.build_absolute_uri(url)
+    return url
     
-        assert len(blobs_in) == k_max - k_min + 1
-    bbox_feat_list = []
-    cls_pred_dim = (
-        model.num_classes if cfg.RETINANET.SOFTMAX else (model.num_classes - 1)
-    )
-    # unpacked bbox feature and add prediction layers
-    bbox_regr_dim = (
-        4 * (model.num_classes - 1) if cfg.RETINANET.CLASS_SPECIFIC_BBOX else 4
-    )
     
-        if fg_inds.shape[0] > 0:
-        # Class labels for the foreground rois
-        mask_class_labels = blobs['labels_int32'][fg_inds]
-        masks = blob_utils.zeros((fg_inds.shape[0], M**2), int32=True)
+class ReadOnlyModelViewSet(mixins.RetrieveModelMixin,
+                           mixins.ListModelMixin,
+                           GenericViewSet):
+    '''
+    A viewset that provides default `list()` and `retrieve()` actions.
+    '''
+    pass
     
-    # Example usage:
-# data_loader_benchmark.par \
-#   NUM_GPUS 2 \
-#   TRAIN.DATASETS '('voc_2007_trainval',)' \
-#   TRAIN.PROPOSAL_FILES /path/to/voc_2007_trainval/proposals.pkl \
-#   DATA_LOADER.NUM_THREADS 4 \
-#   DATA_LOADER.MINIBATCH_QUEUE_SIZE 64 \
-#   DATA_LOADER.BLOBS_QUEUE_CAPACITY 8
+        def __str__(self):
+        return 'Note: %s' % self.text
