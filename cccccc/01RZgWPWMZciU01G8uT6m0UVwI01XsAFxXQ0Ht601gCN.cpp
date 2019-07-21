@@ -1,609 +1,459 @@
 
         
         
-    {}  // namespace atom
-    
-    #include <memory>
-#include <string>
-#include <vector>
-    
-    #include 'atom/common/api/api_messages.h'
-#include 'atom/common/native_mate_converters/string16_converter.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'native_mate/object_template_builder.h'
-    
-    
-    {}  // namespace atom
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
-    }
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-    URLRequestAboutJob::~URLRequestAboutJob() {}
-    
-    
-    {private:
-    Ui::OpenURIDialog *ui;
-};
-    
-    public:
-    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
-    ~SignVerifyMessageDialog();
-    
-    /**
- * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
- */
-template<typename Lock>
-class reverse_lock
-{
-public:
-    }
-    
-    #define TEGRA_BINARYOP(type, op, src1, sz1, src2, sz2, dst, sz, w, h) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    parallel_for_(Range(0, h), \
-    TegraGenOp_##op##_Invoker<const type, type>(src1, sz1, src2, sz2, dst, sz, w, h), \
-    (w * h) / static_cast<double>(1<<16)), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    void absDiff(const Size2D &size,
-             const s8 *src0Base, ptrdiff_t src0Stride,
-             const s8 *src1Base, ptrdiff_t src1Stride,
-             s8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s8>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    #ifndef __ANDROID__
-        for (; dj < roiw32; sj += 96, dj += 32)
-        {
-            internal::prefetch(src + sj);
-    }
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * srcy = internal::getRowPtr(srcyBase, srcyStride, i);
-        const u8 * srcu = internal::getRowPtr(srcuBase, srcuStride, i);
-        const u8 * srcv = internal::getRowPtr(srcvBase, srcvStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t syj = 0u, sj = 0u, dj = 0u;
-    }
-    
-    
-    {
-    {         vst1q_s16(_dst + i, vcombine_s16(vline1_s16, vline2_s16));
-     }
-})
-#endif
-    
-    f64 dotProduct(const Size2D &_size,
-               const s8 * src0Base, ptrdiff_t src0Stride,
-               const s8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-    #include 'common.hpp'
-    
-    #endif
+    {} // namespace nwapi
 
     
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+    
+    {}  // namespace nw
+    
+    // Popup menus may get squished if they open up too close to the bottom of the
+// screen. This function takes the size of the screen, the size of the menu,
+// an optional widget, the Y position of the mouse click, and adjusts the popup
+// menu's Y position to make it fit if it's possible to do so.
+// Returns the new Y position of the popup menu.
+int CalculateMenuYPosition(const GdkRectangle* screen_rect,
+                           const GtkRequisition* menu_req,
+                           GtkWidget* widget, const int y) {
+  CHECK(screen_rect);
+  CHECK(menu_req);
+  // If the menu would run off the bottom of the screen, and there is enough
+  // screen space upwards to accommodate the menu, then pop upwards. If there
+  // is a widget, then also move the anchor point to the top of the widget
+  // rather than the bottom.
+  const int screen_top = screen_rect->y;
+  const int screen_bottom = screen_rect->y + screen_rect->height;
+  const int menu_bottom = y + menu_req->height;
+  int alternate_y = y - menu_req->height;
+  if (widget) {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    alternate_y -= allocation.height;
   }
+  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
+    return alternate_y;
+  return y;
 }
     
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
+      // Ignore first non-switch arg if it's not a standalone package.
+  bool ignore_arg = !package->self_extract();
+  for (unsigned i = 1; i < argv.size(); ++i) {
+    if (ignore_arg && args.size() && argv[i] == args[0]) {
+      ignore_arg = false;
+      continue;
     }
     }
     
+    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppGetDataPathFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
-    if (src.size <= maxsize) {
-      this->CopyFrom(src); return;
-    }
-    const RType begin = src.data[0].rmax;
-    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
-    const size_t n = maxsize - 1;
-    data[0] = src.data[0];
-    this->size = 1;
-    // lastidx is used to avoid duplicated records
-    size_t i = 1, lastidx = 0;
-    for (size_t k = 1; k < n; ++k) {
-      RType dx2 =  2 * ((k * range) / n + begin);
-      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
-      while (i < src.size - 1
-             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
-      CHECK(i != src.size - 1);
-      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
-        if (i != lastidx) {
-          data[size++] = src.data[i]; lastidx = i;
-        }
-      } else {
-        if (i + 1 != lastidx) {
-          data[size++] = src.data[i + 1]; lastidx = i + 1;
-        }
-      }
-    }
-    if (lastidx != src.size - 1) {
-      data[size++] = src.data[src.size - 1];
-    }
-  }
-  /*!
-   * \brief set current summary to be merged summary of sa and sb
-   * \param sa first input summary to be merged
-   * \param sb second input summary to be merged
-   */
-  inline void SetCombine(const WQSummary &sa,
-                         const WQSummary &sb) {
-    if (sa.size == 0) {
-      this->CopyFrom(sb); return;
-    }
-    if (sb.size == 0) {
-      this->CopyFrom(sa); return;
-    }
-    CHECK(sa.size > 0 && sb.size > 0);
-    const Entry *a = sa.data, *a_end = sa.data + sa.size;
-    const Entry *b = sb.data, *b_end = sb.data + sb.size;
-    // extended rmin value
-    RType aprev_rmin = 0, bprev_rmin = 0;
-    Entry *dst = this->data;
-    while (a != a_end && b != b_end) {
-      // duplicated value entry
-      if (a->value == b->value) {
-        *dst = Entry(a->rmin + b->rmin,
-                     a->rmax + b->rmax,
-                     a->wmin + b->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        bprev_rmin = b->RMinNext();
-        ++dst; ++a; ++b;
-      } else if (a->value < b->value) {
-        *dst = Entry(a->rmin + bprev_rmin,
-                     a->rmax + b->RMaxPrev(),
-                     a->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        ++dst; ++a;
-      } else {
-        *dst = Entry(b->rmin + aprev_rmin,
-                     b->rmax + a->RMaxPrev(),
-                     b->wmin, b->value);
-        bprev_rmin = b->RMinNext();
-        ++dst; ++b;
-      }
-    }
-    if (a != a_end) {
-      RType brmax = (b_end - 1)->rmax;
-      do {
-        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
-        ++dst; ++a;
-      } while (a != a_end);
-    }
-    if (b != b_end) {
-      RType armax = (a_end - 1)->rmax;
-      do {
-        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
-        ++dst; ++b;
-      } while (b != b_end);
-    }
-    this->size = dst - data;
-    const RType tol = 10;
-    RType err_mingap, err_maxgap, err_wgap;
-    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
-    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
-      LOG(INFO) << 'mingap=' << err_mingap
-                << ', maxgap=' << err_maxgap
-                << ', wgap=' << err_wgap;
-    }
-    CHECK(size <= sa.size + sb.size) << 'bug in combine';
-  }
-  // helper function to print the current content of sketch
-  inline void Print() const {
-    for (size_t i = 0; i < this->size; ++i) {
-      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
-                   << ', rmax=' << data[i].rmax
-                   << ', wmin=' << data[i].wmin
-                   << ', v=' << data[i].value;
-    }
-  }
-  // try to fix rounding error
-  // and re-establish invariance
-  inline void FixError(RType *err_mingap,
-                       RType *err_maxgap,
-                       RType *err_wgap) const {
-    *err_mingap = 0;
-    *err_maxgap = 0;
-    *err_wgap = 0;
-    RType prev_rmin = 0, prev_rmax = 0;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin < prev_rmin) {
-        data[i].rmin = prev_rmin;
-        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
-      } else {
-        prev_rmin = data[i].rmin;
-      }
-      if (data[i].rmax < prev_rmax) {
-        data[i].rmax = prev_rmax;
-        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
-      }
-      RType rmin_next = data[i].RMinNext();
-      if (data[i].rmax < rmin_next) {
-        data[i].rmax = rmin_next;
-        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
-      }
-      prev_rmax = data[i].rmax;
-    }
-  }
-  // check consistency of the summary
-  inline bool Check(const char *msg) const {
-    const float tol = 10.0f;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
-          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
-        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
-        this->Print();
-        return false;
-      }
-    }
-    return true;
-  }
+ protected:
+  ~NwAppGetDataPathFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
 };
     
-    TEST(Span, FromNullPtr) {
-  // dynamic extent
+    namespace extensions {
+    }
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+    // Returns the box file name corresponding to the given image_filename.
+STRING BoxFileName(const STRING& image_filename);
+    
+    #include 'ocrpara.h'
+#include 'host.h'  // For NearlyEqual()
+    
+    
+    {}  // namespace tesseract.
+    
+    
+    {}  // namespace tesseract.
+    
+    // If filename is a leveldb file, store the type of the file in *type.
+// The number encoded in the filename is stored in *number.  If the
+// filename was successfully parsed, returns true.  Else return false.
+bool ParseFileName(const std::string& filename, uint64_t* number,
+                   FileType* type);
+    
+      // Release a mapping returned by a previous Lookup().
+  // REQUIRES: handle must not have been released yet.
+  // REQUIRES: handle must have been returned by a method on *this.
+  virtual void Release(Handle* handle) = 0;
+    
+    namespace {
+    }
+    
+    #ifndef STORAGE_LEVELDB_TABLE_MERGER_H_
+#define STORAGE_LEVELDB_TABLE_MERGER_H_
+    
+    static void DeleteBlock(void* arg, void* ignored) {
+  delete reinterpret_cast<Block*>(arg);
+}
+    
+    void first(void) {
+  printf('first\n');  // prints
+  emscripten_sleep(1);
+  longjmp(buf, 1);  // jumps back to where setjmp was called - making setjmp now
+                    // return 1
+}
+    
+    void PSOutputDev::setupType3Font(GfxFont *font, GooString *psName,
+				 Dict *parentResDict) {
+  Dict *resDict;
+  Dict *charProcs;
+  Object charProc;
+  Gfx *gfx;
+  PDFRectangle box;
+  double *m;
+  GooString *buf;
+  int i;
+    }
+    
+      //----- update text state
+  virtual void updateFont(GfxState *state);
+  virtual void updateTextMat(GfxState *state);
+  virtual void updateCharSpace(GfxState *state);
+  virtual void updateRender(GfxState *state);
+  virtual void updateRise(GfxState *state);
+  virtual void updateWordSpace(GfxState *state);
+  virtual void updateHorizScaling(GfxState *state);
+  virtual void updateTextPos(GfxState *state);
+  virtual void updateTextShift(GfxState *state, double shift);
+    
+      // Reserve room for terminating '\0'
+  size--;
+    
+    
+    {  delete gfx;
+}
+    
+    private:
+  void parse(Object *tree);
+    
+    PageTransition::PageTransition (Object *trans) {
+  Object obj;
+  Dict *dict;
+    }
+    
+      // skip over stream data
+  if (Lexer::LOOK_VALUE_NOT_CACHED != lexer->lookCharLastValueCached) {
+      // take into account the fact that we've cached one value
+      pos = pos - 1;
+      lexer->lookCharLastValueCached = Lexer::LOOK_VALUE_NOT_CACHED;
+  }
+  lexer->setPos(pos + length);
+    
+    
+    {  private:
+    XRef *xref;
+    PopplerCache *cache;
+};
+    
+    #ifdef USE_GCC_PRAGMAS
+#pragma implementation
+#endif
+    
+      // if it's embedded
+  Stream* embeddedStream;
+    
+      if (!(*xsh->newDoc)(xsh->handlerData, (XpdfDoc)docA,
+		      (XpdfObject)encryptDictA, &docData)) {
+    return;
+  }
+    
+      size_t Size(unsigned node_id) {
+    return elem_of_each_node_[node_id].Size();
+  }
+    
+    /*! \brief core statistics used for tree construction */
+struct  GradStats {
+  typedef double GradType;
+  /*! \brief sum gradient statistics */
+  GradType sum_grad;
+  /*! \brief sum hessian statistics */
+  GradType sum_hess;
+    }
+    
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixCreateFromCSREx
+ * Signature: ([J[J[F)J
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixCreateFromCSREx
+  (JNIEnv *jenv, jclass jcls, jlongArray jindptr, jintArray jindices, jfloatArray jdata, jint jcol, jlongArray jout) {
+  DMatrixHandle result;
+  jlong* indptr = jenv->GetLongArrayElements(jindptr, 0);
+  jint* indices = jenv->GetIntArrayElements(jindices, 0);
+  jfloat* data = jenv->GetFloatArrayElements(jdata, 0);
+  bst_ulong nindptr = (bst_ulong)jenv->GetArrayLength(jindptr);
+  bst_ulong nelem = (bst_ulong)jenv->GetArrayLength(jdata);
+  jint ret = (jint) XGDMatrixCreateFromCSREx((size_t const *)indptr, (unsigned int const *)indices, (float const *)data, nindptr, nelem, jcol, &result);
+  setHandle(jenv, jout, result);
+  //Release
+  jenv->ReleaseLongArrayElements(jindptr, indptr, 0);
+  jenv->ReleaseIntArrayElements(jindices, indices, 0);
+  jenv->ReleaseFloatArrayElements(jdata, data, 0);
+  return ret;
+}
+    
+    TEST(SparsePageDMatrix, MetaInfo) {
+  dmlc::TemporaryDirectory tempdir;
+  const std::string tmp_file = tempdir.path + '/simple.libsvm';
+  CreateSimpleTestData(tmp_file);
+  xgboost::DMatrix * dmat = xgboost::DMatrix::Load(
+    tmp_file + '#' + tmp_file + '.cache', false, false);
+  std::cout << tmp_file << std::endl;
+  EXPECT_TRUE(FileExists(tmp_file + '.cache'));
+    }
+    
+      for (size_t i = 0; i < n_rows; ++i) {
+    // Make sure that all cols are slotted in the first few rows; randomly distribute the
+    // rest
+    std::stringstream row_data;
+    fo << i;
+    size_t j = 0;
+    if (rem_cols > 0) {
+       for (; j < std::min(static_cast<size_t>(rem_cols), cols_per_row); ++j) {
+         row_data << ' ' << (col_idx+j) << ':' << (col_idx+j+1)*10;
+       }
+       rem_cols -= cols_per_row;
+    } else {
+       // Take some random number of colums in [1, n_cols] and slot them here
+       size_t ncols = dis(*gen);
+       for (; j < ncols; ++j) {
+         size_t fid = (col_idx+j) % n_cols;
+         row_data << ' ' << fid << ':' << (fid+1)*10;
+       }
+    }
+    col_idx += j;
+    }
+    
+    TEST(ConfigParser, NormalizeConfigEOL) {
+  // Test whether strings with NL are loaded correctly.
+  dmlc::TemporaryDirectory tempdir;
+  const std::string tmp_file = tempdir.path + '/my.conf';
+  /* Old Mac OS uses \r for line ending */
   {
-    Span<float> s {nullptr, static_cast<Span<float>::index_type>(0)};
-    ASSERT_EQ(s.size(), 0);
-    ASSERT_EQ(s.data(), nullptr);
+    std::string const input = 'foo\rbar\rdog\r';
+    std::string const output = 'foo\nbar\ndog\n';
+    {
+      std::ofstream fp(
+          tmp_file,
+          std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+      fp << input;
     }
-    }
-    
-    #include 'DHTAbstractMessage.h'
-#include 'A2STR.h'
-#include 'ValueBase.h'
-    
-      std::vector<std::shared_ptr<DHTNode>> nodes;
-  // nodes
-  const int compactlen = bittorrent::getCompactLength(family_);
-  for (size_t i = 0; i < numNodes; ++i) {
-    // 1byte compact peer info length
-    uint8_t peerInfoLen;
-    READ_CHECK(fp, &peerInfoLen, sizeof(peerInfoLen));
-    if (peerInfoLen != compactlen) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 7 + 48);
-      continue;
-    }
-    // 7bytes reserved
-    readBytes(fp, buf, buf.size(), 7);
-    // compactlen bytes compact peer info
-    readBytes(fp, buf, buf.size(), compactlen);
-    if (memcmp(zero, buf, compactlen) == 0) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 48 - compactlen);
-      continue;
-    }
-    std::pair<std::string, uint16_t> peer =
-        bittorrent::unpackcompact(buf, family_);
-    if (peer.first.empty()) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 48 - compactlen);
-      continue;
-    }
-    // 24-compactlen bytes reserved
-    readBytes(fp, buf, buf.size(), 24 - compactlen);
-    // node ID
-    readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-    }
-    
-        dispatcher->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
+    {
+      ConfigParser parser(tmp_file);
+      auto content = parser.LoadConfigFile(tmp_file);
+      content = parser.NormalizeConfigEOL(content);
+      ASSERT_EQ(content, output);
     }
   }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
-}
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
-{
-  immediateTaskQueue_.addTask(task);
-}
-    
-    #endif // D_DHT_TASK_QUEUE_IMPL_H
-
-    
-    const std::string& DNSCache::find(const std::string& hostname,
-                                  uint16_t port) const
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i == entries_.end()) {
-    return A2STR::NIL;
-  }
-  else {
-    return (*i)->getGoodAddr();
+  /* Windows uses \r\n for line ending */
+  {
+    std::string const input = 'foo\r\nbar\r\ndog\r\n';
+    std::string const output = 'foo\n\nbar\n\ndog\n\n';
+    {
+      std::ofstream fp(tmp_file,
+                       std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+      fp << input;
+    }
+    {
+      ConfigParser parser(tmp_file);
+      auto content = parser.LoadConfigFile(tmp_file);
+      content = parser.NormalizeConfigEOL(content);
+      ASSERT_EQ(content, output);
+    }
   }
 }
     
-    void printLinkedList(ListNode* head){
+    // Define a customized logistic regression objective in C++.
+// Implement the interface.
+class MyLogistic : public ObjFunction {
+ public:
+  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+  }
+  void GetGradient(const HostDeviceVector<bst_float> &preds,
+                   const MetaInfo &info,
+                   int iter,
+                   HostDeviceVector<GradientPair> *out_gpair) override {
+    out_gpair->Resize(preds.Size());
+    const std::vector<bst_float>& preds_h = preds.HostVector();
+    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
+    const std::vector<bst_float>& labels_h = info.labels_.HostVector();
+    for (size_t i = 0; i < preds_h.size(); ++i) {
+      bst_float w = info.GetWeight(i);
+      // scale the negative examples!
+      if (labels_h[i] == 0.0f) w *= param_.scale_neg_weight;
+      // logistic transformation
+      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
+      // this is the gradient
+      bst_float grad = (p - labels_h[i]) * w;
+      // this is the second order gradient
+      bst_float hess = p * (1.0f - p) * w;
+      out_gpair_h.at(i) = GradientPair(grad, hess);
+    }
+  }
+  const char* DefaultEvalMetric() const override {
+    return 'error';
+  }
+  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
+    // transform margin value to probability.
+    std::vector<bst_float> &preds = io_preds->HostVector();
+    for (size_t i = 0; i < preds.size(); ++i) {
+      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
+    }
+  }
+  bst_float ProbToMargin(bst_float base_score) const override {
+    // transform probability to margin value
+    return -std::log(1.0f / base_score - 1.0f);
+  }
+    }
+    
+    private:
+    /**
+     * Maintains the batch execution statistics when a response is received.
+     */
+    void _incBatchStats(const BatchedCommandResponse& response);
+    
+    TEST(CurrentOpExhaustCursorTest, CanSeeEachExhaustCursorPseudoGetMoreInCurrentOpOutput) {
+    const NamespaceString testNSS{'exhaust_cursor_currentop.exhaust_cursor_currentop'};
+    auto conn = connect('curop_exhaust_cursor_test');
     }
     
     
-    {private:
-    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
-        for( ; p < nums.size() ; p ++ )
-            if( nums[p] != nums[p - 1] )
-                break;
-        return p;
-    }
+    {    mutable SimpleMutex _lock;
+    OperationLatencyHistogram _globalHistogramStats;
+    UsageMap _usage;
+    std::set<std::string> _collDropNs;
 };
     
+    using namespace mongo;
     
+    // Visual Studio warnings
+#ifdef _MSC_VER
+#pragma warning (disable: 4127) // condition expression is constant
+#endif
+    
+    
+    {    return true;
+}
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2019-05-11: Inputs: Don't filter value from WM_CHAR before calling AddInputCharacter().
+//  2019-01-17: Misc: Using GetForegroundWindow()+IsChild() instead of GetActiveWindow() to be compatible with windows created in a different thread or parent.
+//  2019-01-17: Inputs: Added support for mouse buttons 4 and 5 via WM_XBUTTON* messages.
+//  2019-01-15: Inputs: Added support for XInput gamepads (if ImGuiConfigFlags_NavEnableGamepad is set by user application).
+//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
+//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
+//  2018-06-10: Inputs: Fixed handling of mouse wheel messages to support fine position messages (typically sent by track-pads).
+//  2018-06-08: Misc: Extracted imgui_impl_win32.cpp/.h away from the old combined DX9/DX10/DX11/DX12 examples.
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+//  2018-02-06: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
+//  2018-01-08: Inputs: Added mapping for ImGuiKey_Insert.
+//  2018-01-05: Inputs: Added WM_LBUTTONDBLCLK double-click handlers for window classes with the CS_DBLCLKS flag.
+//  2017-10-23: Inputs: Added WM_SYSKEYDOWN / WM_SYSKEYUP handlers so e.g. the VK_MENU key can be read.
+//  2017-10-23: Inputs: Using Win32 ::SetCapture/::GetCapture() to retrieve mouse positions outside the client area when dragging.
+//  2016-11-12: Inputs: Only call Win32 ::SetCursor(NULL) when io.MouseDrawCursor is set.
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    
+        // Initialize OpenGL loader
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+    bool err = gl3wInit() != 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+    bool err = glewInit() != GLEW_OK;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+    bool err = gladLoadGL() == 0;
+#else
+    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
+#endif
+    if (err)
     {
-    {
-    {            if(command.s == 'print')
-                res.push_back(command.node->val);
-            else{
-                assert(command.s == 'go');
-                if(command.node->right)
-                    stack.push(Command('go',command.node->right));
-                stack.push(Command('print', command.node));
-                if(command.node->left)
-                    stack.push(Command('go',command.node->left));
-            }
+        fprintf(stderr, 'Failed to initialize OpenGL loader!\n');
+        return 1;
+    }
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+    }
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
         }
-        return res;
+    
+    
+    {        // Create texture view
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        ZeroMemory(&srvDesc, sizeof(srvDesc));
+        srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels = desc.MipLevels;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, &g_pFontTextureView);
+        pTexture->Release();
     }
+    
+    TEST_F(DBTestCompactionFilter, SkipUntil) {
+  Options options = CurrentOptions();
+  options.compaction_filter_factory = std::make_shared<SkipEvenFilterFactory>();
+  options.disable_auto_compactions = true;
+  options.create_if_missing = true;
+  DestroyAndReopen(options);
+    }
+    
+      // Make sure unique_lock doesn't unlock mutex when it destructs
+  lock.release();
+    
+      // Commit.  Since the snapshot was advanced, the write done outside of the
+  // transaction does not prevent this transaction from Committing.
+  s = txn->Commit();
+  assert(s.ok());
+  delete txn;
+  // Clear snapshot from read options since it is no longer valid
+  read_options.snapshot = nullptr;
+    
+    #pragma once
+    
+    
+    {  virtual std::string GetPrintableOptions() const = 0;
 };
-    
-    
-    {
-    {
-    {        }
-        return res;
-    }
-};
-    
-                TreeNode* node = q.front().first;
-            int level = q.front().second;
-            q.pop();
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    #include <iostream>
-#include <vector>
