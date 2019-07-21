@@ -1,203 +1,222 @@
 
         
-        
-    {};
+          // This needs to be set before interceptors are run
+  void SetCall(Call* call) { call_ = call; }
     
-    		inline unsigned int GetSourceH(void)
-		{
-			return m_uiSourceH;
-		}
+    using grpc::lb::v1::LoadBalanceRequest;
+using grpc::lb::v1::LoadBalanceResponse;
+using grpc::lb::v1::LoadBalancer;
     
-    	// ----------------------------------------------------------------------------------------------------
-	// try version 3 of the degenerate search
-	// degenerate encodings use basecolor movement and a subset of the selectors to find useful encodings
-	// each subsequent version of the degenerate search uses more basecolor movement and is less likely to
-	//		be successfull
-	//
-	void Block4x4Encoding_ETC1::TryDegenerates3(void)
-	{
-    }
-    
-    #endif
-
-    
-    static OPUS_INLINE opus_val16 SIG2WORD16_generic(celt_sig x)
-{
-   x = PSHR32(x, SIG_SHIFT);
-   x = MAX32(x, -32768);
-   x = MIN32(x, 32767);
-   return EXTRACT16(x);
-}
-#define SIG2WORD16(x) (SIG2WORD16_generic(x))
-    
-    #if !defined(_mfrngcode_H)
-# define _mfrngcode_H (1)
-# include 'entcode.h'
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file caffe_data_iter.cc
- * \brief register mnist iterator
-*/
-#include <sys/time.h>
-#include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <atomic>
-    
-    
-    {  if (has('dist')) {
-#if MXNET_USE_DIST_KVSTORE
-    kv = new kvstore::KVStoreDist(use_device_comm);
-    if (!has('_async') && kv->IsWorkerNode() && kv->get_rank() == 0) {
-      // configure the server to be the sync mode
-      kv->SendCommandToServers(static_cast<int>(kvstore::CommandType::kSyncMode), '');
-    }
-#else
-    LOG(FATAL) << 'compile with USE_DIST_KVSTORE=1 to use ' << tname;
-    return nullptr;
-#endif  // MXNET_USE_DIST_KVSTORE
-  } else {
-    if (has('nccl')) {
-#if MXNET_USE_NCCL
-      kv = new kvstore::KVStoreNCCL();
-#else
-      LOG(FATAL) << 'compile with USE_NCCL=1 to use ' << tname;
-      return nullptr;
-#endif
-    } else {
-      kv =  new kvstore::KVStoreLocal(use_device_comm);
-    }
+      void SendRequest() {
+    EchoRequest request;
+    EchoResponse response;
+    request.set_message('Hello');
+    ClientContext context;
+    GPR_ASSERT(!shutdown_);
+    Status s = stub_->Echo(&context, request, &response);
+    GPR_ASSERT(shutdown_);
   }
-  kv->type_ = tname;
-  return kv;
+    
+      gpr_mu_lock(&winsocket->state_mu);
+  if (winsocket->shutdown_called) {
+    gpr_mu_unlock(&winsocket->state_mu);
+    return;
+  }
+  winsocket->shutdown_called = true;
+  gpr_mu_unlock(&winsocket->state_mu);
+    
+    bool GlobalConfigEnvBool::Get() {
+  UniquePtr<char> str = GetValue();
+  if (str == nullptr) {
+    return default_value_;
+  }
+  // parsing given value string.
+  bool result = false;
+  if (!gpr_parse_bool_value(str.get(), &result)) {
+    LogParsingError(GetName(), str.get());
+    result = default_value_;
+  }
+  return result;
 }
     
-      void Init(const TVMArgs& args,
-            const std::vector<int>& const_loc,
-            std::vector<Engine::VarHandle>* const_vars,
-            std::vector<Engine::VarHandle>* mutate_vars) {
-    values_.clear();
-    type_codes_.clear();
-    values_.insert(values_.end(), args.values, args.values + args.size());
-    type_codes_.insert(
-        type_codes_.end(), args.type_codes, args.type_codes + args.size());
+    #ifndef GRPC_CORE_LIB_IOMGR_COMBINER_H
+#define GRPC_CORE_LIB_IOMGR_COMBINER_H
+    
+    namespace grpc {
     }
     
-    /*!
- *  Copyright (c) 2018 by Contributors
- * \file transformer.cc
- * \brief CPU implementation of the operators used in Transformer
- */
-#include <mxnet/base.h>
-#include './transformer-inl.h'
-#include '../tensor/elemwise_unary_op.h'
-    
-      virtual void Backward(const OpContext &ctx,
-                        const std::vector<TBlob> &out_grad,
-                        const std::vector<TBlob> &in_data,
-                        const std::vector<TBlob> &out_data,
-                        const std::vector<OpReqType> &req,
-                        const std::vector<TBlob> &in_grad,
-                        const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    CHECK_NE(req[bs::kData], kWriteInplace);
-    CHECK_NE(req[bs::kGrid], kWriteInplace);
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    CHECK_EQ(out_grad.size(), 1U);
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> gdata = in_grad[bs::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> ggrid = in_grad[bs::kGrid].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grad = out_grad[bs::kOut].get<gpu, 4, DType>(s);
+    namespace grpc {
     }
     
-    const char *
-RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode)) {
-        return NULL;
-    }
-    const Locale *result;
-    switch(type) {
-    case ULOC_ACTUAL_LOCALE:
-        result = actualLocaleIsSameAsValid ? &validLocale : &tailoring->actualLocale;
-        break;
-    case ULOC_VALID_LOCALE:
-        result = &validLocale;
-        break;
-    case ULOC_REQUESTED_LOCALE:
-    default:
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-    if(result->isBogus()) { return NULL; }
-    const char *id = result->getName();
-    return id[0] == 0 ? 'root' : id;
-}
+      request.set_message('I'm going to kill you');
+  EXPECT_TRUE(stream->Write(request));
     
-    U_NAMESPACE_BEGIN
+      void ResetStub() {
+    string target = 'dns:localhost:' + to_string(port_);
+    channel_ = grpc::CreateChannel(target, InsecureChannelCredentials());
+    stub_ = grpc::testing::EchoTestService::NewStub(channel_);
+  }
     
-    U_NAMESPACE_END
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
+    struct SquaredLogError {
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float label) {
+    return label > -1;
+  }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = fmaxf(predt, -1 + 1e-6);  // ensure correct value for log1p
+    return (std::log1p(predt) - std::log1p(label)) / (predt + 1);
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    predt = fmaxf(predt, -1 + 1e-6);
+    float res = (-std::log1p(predt) + std::log1p(label) + 1) /
+                std::pow(predt + 1, 2);
+    res = fmaxf(res, 1e-6f);
+    return res;
+  }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() {
+    return 'label must be greater than -1 for rmsle so that log(label + 1) can be valid.';
+  }
+  static const char* DefaultEvalMetric() { return 'rmsle'; }
 };
     
-    #include 'unicode/utypes.h'
-    
-        /**
-     * Limit offset, in the match text, of the <em>rightmost</em>
-     * match.
-     */
-    int32_t matchLimit;
-    
-    
-    {        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      ExtensionManager_registerExtension_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-    
-      void deregisterExtension(ExtensionStatus& _return, const ExtensionRouteUUID uuid) {
-    // Your implementation goes here
-    printf('deregisterExtension\n');
+      GpuIdType const n_devices_visible = AllVisible().Size();
+  CHECK_LE(n_gpus, n_devices_visible);
+  if (n_devices_visible == 0 || n_gpus == 0 || n_rows == 0) {
+    LOG(DEBUG) << 'Runing on CPU.';
+    return Empty();
   }
     
-    
-    {};
-    
-      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
+    template <typename T>
+struct TestTransformRange {
+  void XGBOOST_DEVICE operator()(size_t _idx,
+                                 Span<bst_float> _out, Span<const bst_float> _in) {
+    _out[_idx] = _in[_idx];
   }
+};
     
-    #pragma once
+    class PairwiseRankObj: public LambdaRankObj{
+ protected:
+  void GetLambdaWeight(const std::vector<ListEntry> &sorted_list,
+                       std::vector<LambdaPair> *io_pairs) override {}
+};
     
-    #include <osquery/tests/integration/tables/helper.h>
+    BatchSet SimpleDMatrix::GetColumnBatches() {
+  // column page doesn't exist, generate it
+  if (!column_page_) {
+    auto page = dynamic_cast<SimpleCSRSource*>(source_.get())->page_;
+    column_page_.reset(
+        new SparsePage(page.GetTranspose(source_->info.num_col_)));
+  }
+  auto begin_iter =
+      BatchIterator(new SimpleBatchIteratorImpl(column_page_.get()));
+  return BatchSet(begin_iter);
+}
+    
+        // Remove the assertion on batch.index, which can be null in the case that the data in this
+    // batch is entirely sparse. Although it's true that this indicates a likely issue with the
+    // user's data workflows, passing XGBoost entirely sparse data should not cause it to fail.
+    // See https://github.com/dmlc/xgboost/issues/1827 for complete detail.
+    // CHECK(batch.index != nullptr);
+    
+    class Carver : public InternalRunnable {
+ public:
+  Carver(const std::set<std::string>& paths,
+         const std::string& guid,
+         const std::string& requestId);
+    }
+    
+    TEST_F(CarverTests, test_compression_decompression) {
+  auto const test_data_file = getWorkingDir() / 'test.data';
+  writeTextFile(test_data_file, R'raw_text(
+2TItVMSvAY8OFlbYnx1O1NSsuehfNhNiV4Qw4IPP6exA47HVzAlEXZI3blanlAd2
+JSxCUr+3boxWMwsgW2jJPzypSKvfXB9EDbFKiDjVueniBfiAepwta57pZ9tQDnJA
+uRioApcqYSWL14OJrnPQFHel5FpXylmVdIkiz()cT82JsOPZmh56vDn62Kk/mU7V
+RltGAYEpKmi8e71fuB8d/S6Lau{}AmL1153X7E+4d1G1UfiQa7Q02uVjxLLE5FEj
+JTDjVqIQNhi50Pt4J4RVopYzy1AZGwPHLhwFVIPH0s/LmzVW+xbT8/V2UMSzK4XB
+oqADd9Ckcdtplx3k7bcLU[U04j8WWUtUccmB+4e2KS]i3x7WDKviPY/sWy9xFapv
+)raw_text');
+  {
+    auto s = osquery::compress(test_data_file,
+                               getWorkingDir() / fs::path('test.zst'));
+    ASSERT_TRUE(s.ok()) << s.what();
+  }
+  {
+    auto s =
+        osquery::decompress(getWorkingDir() / fs::path('test.zst'),
+                            getWorkingDir() / fs::path('test.data.extract'));
+    ASSERT_TRUE(s.ok()) << s.what();
+  }
+    }
+    
+    TEST_F(PacksTests, test_restriction_population) {
+  // Require that all potential restrictions are populated before being checked.
+  auto doc = getExamplePacksConfig();
+  const auto& packs = doc.doc()['packs'];
+  Pack fpack('fake_pack', packs['restricted_pack']);
+    }
+    
+    ExpectedSuccess<DatabaseError> InMemoryDatabase::putStringsUnsafe(
+    const std::string& domain,
+    const std::vector<std::pair<std::string, std::string>>& data) {
+  debug_only::verifyTrue(is_open_, 'database is not open');
+  auto storage_iter = storage_.find(domain);
+  if (storage_iter == storage_.end()) {
+    return domainNotFoundError(domain);
+  }
+  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
+  for (const auto& pair : data) {
+    storage_iter->second->put(pair.first, pair.second);
+  }
+  return Success();
+}
     
     
-    {
-    {} // namespace table_tests
-} // namespace osquery
+    {//-------------------------------------------------------------------------------
+}
 
     
-    // Sanity check integration test for keychain_items
-// Spec file: specs/darwin/keychain_items.table
+        //udp ipv4
+    if (req->info.type == SW_EVENT_UDP)
+    {
+        inet_ntop(AF_INET6, &packet->info.addr.inet_v4.sin_addr, clientInfo.address, sizeof(clientInfo.address));
+        clientInfo.port = ntohs(packet->info.addr.inet_v4.sin_port);
+    }
+    //udp ipv6
+    else if (req->info.type == SW_EVENT_UDP6)
+    {
+        inet_ntop(AF_INET6, &packet->info.addr.inet_v6.sin6_addr, clientInfo.address, sizeof(clientInfo.address));
+        clientInfo.port = ntohs(packet->info.addr.inet_v6.sin6_port);
+    }
+    //unix dgram
+    else if (req->info.type == SW_EVENT_UNIX_DGRAM)
+    {
+        strcpy(clientInfo.address, packet->info.addr.un.sun_path);
+    }
+    else
+    {
+        abort();
+        return SW_ERR;
+    }
+    
+    	return setsockopt(sock->get_fd(), level,
+			join ? MCAST_JOIN_GROUP : MCAST_LEAVE_GROUP, (char*)&greq,
+			sizeof(greq));
+#else
+	if (sock->sock_type == AF_INET) {
+		struct ip_mreq mreq = {{0}};
+		struct in_addr addr;
+    }
+    
+    
+    {            ASSERT_EQ(addr1, addr3);
+            ASSERT_EQ(addr2, addr4);
+        }
+    
+        ctx_.uc_stack.ss_sp = stack_;
+    ctx_.uc_stack.ss_size = stack_size;
+    ctx_.uc_link = NULL;
+    
+        void yield(enum opcode type);
+    
+      QSharedPointer<RedisClient::Connection> getConnection();
