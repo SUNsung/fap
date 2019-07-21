@@ -1,135 +1,121 @@
 
         
-            def save(self, must_create=False):
         '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
+requests.exceptions
+~~~~~~~~~~~~~~~~~~~
+    
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
+    
+    
+class FlaskyStyle(Style):
+    background_color = '#f8f8f8'
+    default_style = ''
+    
+        def add_headers(self, request, **kwargs):
+        '''Add any headers needed by the connection. As of v2.0 this does
+        nothing by default, but is left for overriding by users that subclass
+        the :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+    
+    This module provides the capabilities for the Requests hooks system.
+    
+            # Verify the client didn't respond with auth.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert request_content == b''
+    
+            with server as (host, port):
+            server_url = 'http://{}:{}'.format(host, port)
+            for _ in range(requests_to_handle):
+                r = requests.get(server_url)
+                assert r.status_code == 200
+    
+            :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises ValueError: If the response body does not contain valid json.
         '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+    from homeassistant.core import HomeAssistant, Context, callback
+from homeassistant.const import CONF_CONDITION, CONF_TIMEOUT
+from homeassistant import exceptions
+from homeassistant.helpers import (
+    service, condition, template as template,
+    config_validation as cv)
+from homeassistant.helpers.event import (
+    async_track_point_in_utc_time, async_track_template)
+from homeassistant.helpers.typing import ConfigType
+import homeassistant.util.dt as date_util
+from homeassistant.util.async_ import (
+    run_coroutine_threadsafe, run_callback_threadsafe)
+    
+        __tablename__ = 'states'
+    state_id = Column(Integer, primary_key=True)
+    domain = Column(String(64))
+    entity_id = Column(String(255), index=True)
+    state = Column(String(255))
+    attributes = Column(Text)
+    event_id = Column(Integer, ForeignKey('events.event_id'), index=True)
+    last_changed = Column(DateTime(timezone=True), default=datetime.utcnow)
+    last_updated = Column(DateTime(timezone=True), default=datetime.utcnow,
+                          index=True)
+    created = Column(DateTime(timezone=True), default=datetime.utcnow)
+    context_id = Column(String(36), index=True)
+    context_user_id = Column(String(36), index=True)
+    # context_parent_id = Column(String(36), index=True)
     
     
-def x_robots_tag(func):
-    @wraps(func)
-    def inner(request, *args, **kwargs):
-        response = func(request, *args, **kwargs)
-        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
-        return response
-    return inner
+async def test_if_fires_on_zone_disappear(hass, calls):
+    '''Test for firing if entity disappears from zone.'''
+    hass.states.async_set('geo_location.entity', 'hello', {
+        'latitude': 32.880586,
+        'longitude': -117.237564,
+        'source': 'test_source'
+    })
+    await hass.async_block_till_done()
     
-            tokens_b = []
-        # Random next
-        is_random_next = False
-        if len(current_chunk) == 1 or rng.random() < 0.5:
-          is_random_next = True
-          target_b_length = target_seq_length - len(tokens_a)
+        assert await async_setup_component(hass, automation.DOMAIN, {
+        automation.DOMAIN: {
+            'trigger': {
+                'platform': 'zone',
+                'entity_id': 'test.entity',
+                'zone': 'zone.test',
+                'event': 'enter',
+            },
+            'action': {
+                'service': 'test.automation',
+                'data_template': {
+                    'some': '{{ trigger.%s }}' % '}} - {{ trigger.'.join((
+                        'platform', 'entity_id',
+                        'from_state.state', 'to_state.state',
+                        'zone.name'))
+                },
+    }
+    }
+    }
     
-      # It is recommended that you use this optimizer for fine tuning, since this
-  # is how the model was trained (note that the Adam m/v variables are NOT
-  # loaded from init_checkpoint.)
-  optimizer = AdamWeightDecayOptimizer(
-      learning_rate=learning_rate,
-      weight_decay_rate=0.01,
-      beta_1=0.9,
-      beta_2=0.999,
-      epsilon=1e-6,
-      exclude_from_weight_decay=['LayerNorm', 'layer_norm', 'bias'])
+        assert mock_discover.called
+    assert mock_discover.call_count == 1
+    assert not mock_platform.called
+    mock_discover.assert_called_with(
+        hass, SERVICE_NO_PLATFORM, SERVICE_INFO,
+        SERVICE_NO_PLATFORM_COMPONENT, BASE_CONFIG)
     
-        per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
-    loss = tf.reduce_mean(per_example_loss)
+    from time import time
     
-      def testSetParseFnsDefaultsFromFire(self):
-    # Fire should use the decorator to know how to parse string arguments.
-    self.assertEqual(core.Fire(WithDefaults, command=['example1']), (10, int))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '10']),
-                     (10, float))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '13']),
-                     (13, float))
-    self.assertEqual(core.Fire(WithDefaults, command=['example1', '14.0']),
-                     (14, float))
+            for platform, project_id in queryset:
+            platform = platform.lower()
+            if platform not in VALID_PLATFORMS:
+                continue
+            ProjectPlatform.objects.create_or_update(
+                project_id=project_id,
+                platform=platform,
+                values={
+                    'last_seen': now,
+                },
+            )
+        min_project_id += step
     
-    '''Tests importing the fire module.'''
     
-      def testFireTraceGetResult(self):
-    t = trace.FireTrace('start')
-    self.assertEqual(t.GetResult(), 'start')
-    t.AddAccessedProperty('t', 'final', None, 'example.py', 10)
-    self.assertEqual(t.GetResult(), 't')
-    
-    '''Tests for fire docstrings module.'''
-    
-        Returns:
-      The terminal (x,y) size for fd or None on error.
+def parse_link_header(instr):
     '''
-    try:
-      # This magic incantation converts a struct from ioctl(2) containing two
-      # binary shorts to a (rows, columns) int tuple.
-      rc = struct.unpack(b'hh', fcntl.ioctl(fd, termios.TIOCGWINSZ, 'junk'))
-      return (rc[1], rc[0]) if rc else None
-    except:  # pylint: disable=bare-except
-      return None
-    
-            # Parse the command.
-        if c in (None,    # EOF.
-                 'q',     # Quit.
-                 'Q',     # Quit.
-                 '\x03',  # ^C  (unix & windows terminal interrupt)
-                 '\x1b',  # ESC.
-                ):
-          # Quit.
-          return
-        elif c in ('/', '?'):
-          c = self._GetSearchCommand(c)
-        elif c.isdigit():
-          # Collect digits for operation count.
-          digits += c
-          continue
-    
-        # 根据分辨率查找配置文件
-    if os.path.exists(config_file):
-        with open(config_file, 'r') as f:
-            print('正在从 {} 加载配置文件'.format(config_file))
-            return json.load(f)
-    else:
-        with open('{}/config/default.json'.format(sys.path[0]), 'r') as f:
-            print('Load default config')
-            return json.load(f)
-    
-    
-def computing_error(last_press_time, target_board_x, target_board_y, last_piece_x, last_piece_y, temp_piece_x,
-                    temp_piece_y):
-    '''
-    计算跳跃实际误差
-    '''
-    target_distance = math.sqrt(
-        (target_board_x - last_piece_x) ** 2 + (target_board_y - last_piece_y) ** 2)  # 上一轮目标跳跃距离
-    actual_distance = math.sqrt((temp_piece_x - last_piece_x) ** 2 + (temp_piece_y - last_piece_y) ** 2)  # 上一轮实际跳跃距离
-    jump_error_value = math.sqrt((target_board_x - temp_piece_x) ** 2 + (target_board_y - temp_piece_y) ** 2)  # 跳跃误差
-    
-    
-def jump(distance):
-    press_time = distance * 1.35
-    press_time = int(press_time)
-    cmd = 'adb shell input swipe 320 410 320 410 ' + str(press_time)
-    print(cmd)
-    os.system(cmd)
+    Given a link-value (i.e., after separating the header-value on commas),
+    return a dictionary whose keys are link URLs and values are dictionaries
+    of the parameters for their associated links.
