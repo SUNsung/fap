@@ -1,169 +1,78 @@
 
         
-            Rational result{ prat };
-    destroyrat(prat);
-    
-    
-    {
-    {    private:
-        int32_t m_sign;
-        int32_t m_exp;
-        std::vector<uint32_t> m_mantissa;
-    };
-}
-
-    
-    #include 'Rational.h'
-    
-        for (unsigned int i = 0; i < nCommands; i++)
-    {
-        m_commands->GetAt(i, &nOpCode);
-        if (nOpCode == IDC_PNT)
-        {
-            m_token.append(wstring{ decimalSymbol });
-        }
-        else if (nOpCode == IDC_EXP)
-        {
-            m_token.append(&chExp);
-            int nextOpCode;
-            m_commands->GetAt(i + 1, &nextOpCode);
-            if (nextOpCode != IDC_SIGN)
-            {
-                m_token.append(&chPlus);
-            }
-        }
-        else if (nOpCode == IDC_SIGN)
-        {
-            m_token.append(&chNegate);
-        }
-        else
-        {
-            wstring num = to_wstring(nOpCode - IDC_0);
-            m_token.append(num);
-        }
+        static void create_sockets(SOCKET sv[2]) {
+  SOCKET svr_sock = INVALID_SOCKET;
+  SOCKET lst_sock = INVALID_SOCKET;
+  SOCKET cli_sock = INVALID_SOCKET;
+  SOCKADDR_IN addr;
+  int addr_len = sizeof(addr);
     }
     
-    void NarratorNotifier::RegisterDependencyProperties()
-{
-    s_announcementProperty = DependencyProperty::Register(
-        L'Announcement',              // The name of the dependency property.
-        NarratorAnnouncement::typeid, // The type of the dependency property.
-        NarratorNotifier::typeid,     // The owner of the dependency property.
-        ref new PropertyMetadata(
-            nullptr, // Default value of the dependency property.
-            ref new PropertyChangedCallback(OnAnnouncementChanged)));
-}
+    static void iomgr_platform_shutdown_background_closure(void) {}
     
-    CC_CONSTRUCTOR_ACCESS:
-    Ripple3D() {}
-    virtual ~Ripple3D() {}
-    
-    protected:
-    float _to;
-    float _from;
-    
-    #endif /* __CCACTIONTWEEN_H__ */
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCAnimationCache.h'
-#include '2d/CCSpriteFrameCache.h'
-#include 'platform/CCFileUtils.h'
-    
-    bool ConnectionsManager::importConnections(const QString& path) {
-  if (loadConnectionsConfigFromFile(path, true)) {
-    return true;
-  }
-  return false;
-}
+      LOG_TEST_NAME('test_ltoa');
     
     
-    { private:
-  QString m_configPath;
-  QList<QSharedPointer<RedisClient::Connection>> m_connections;
-  QHash<QSharedPointer<RedisClient::Connection>,
-        QSharedPointer<ConnectionsTree::TreeItem>>
-      m_connectionMapping;
-  QSharedPointer<Events> m_events;
-};
-
+    {}  // namespace grpc
     
-    #ifdef LINUX_SIGNALS
-#include <sigwatch.h>
-#endif
+    #include <grpcpp/security/credentials.h>
     
-    SortFilterProxyModel::SortFilterProxyModel(QObject *parent) : QSortFilterProxyModel(parent), m_complete(false)
-{
-}
-    
-      Q_INVOKABLE virtual void init();
-    
-    
-    {
-    {
-    {            QString replace = QString('\\x%1%2').arg(num.size() == 1 ? '0': '').arg(num);
-            val.replace(index, 1, replace);
-            index += replace.size();
-        }
+      void CompareService(const grpc::string& service) {
+    const protobuf::ServiceDescriptor* service_desc =
+        desc_pool_->FindServiceByName(service);
+    const protobuf::ServiceDescriptor* ref_service_desc =
+        ref_desc_pool_->FindServiceByName(service);
+    EXPECT_TRUE(service_desc != nullptr);
+    EXPECT_TRUE(ref_service_desc != nullptr);
+    EXPECT_EQ(service_desc->DebugString(), ref_service_desc->DebugString());
     }
-    return val;
+    
+    #include <grpc/grpc.h>
+#include <grpcpp/channel.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
+#include <grpcpp/impl/server_builder_option.h>
+#include <grpcpp/impl/server_builder_plugin.h>
+#include <grpcpp/impl/server_initializer.h>
+#include <grpcpp/security/credentials.h>
+#include <grpcpp/security/server_credentials.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/server_context.h>
+    
+    namespace swoole
+{
+void event_init(void)
+{
+//        SwooleG.main_reactor->setHandle(SwooleG.main_reactor, SW_FD_USER | SW_EVENT_READ, php_swoole_event_onRead);
+//        SwooleG.main_reactor->setHandle(SwooleG.main_reactor, SW_FD_USER | SW_EVENT_WRITE, php_swoole_event_onWrite);
+//        SwooleG.main_reactor->setHandle(SwooleG.main_reactor, SW_FD_USER | SW_EVENT_ERROR, php_swoole_event_onError);
 }
+    }
     
-    #include <QtCore/QObject>
-#include <QtNetwork/QNetworkAccessManager>
+            std::string addr1 = System::gethostbyname('www.baidu.com', AF_INET);
+        ASSERT_NE(addr1, '');
     
+            make_pair([](void *arg)
+        {
+            auto chan = (Channel *) arg;
+            int i = 1;
+            bool ret;
+    }
     
-    {}  // namespace
-
+        inline void* pop_data()
+    {
+        if (data_queue.size() == 0)
+        {
+            return nullptr;
+        }
+        void *data = data_queue.front();
+        data_queue.pop();
+        return data;
+    }
     
-    #ifdef _MSC_VER
-# pragma warning(pop)
-#endif
-    
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
-    
-      // EXPECT_EQ() evaluates its arguments exactly once, so they
-  // can have side effects.
-    
-    template<typename... ARGS>
-inline void logw(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_WARN, tag, msg, args...);
-}
-    
-    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
-    
-    
-    {}
-
-    
-    template<typename Target>
-inline ElementProxy<Target>::ElementProxy::operator const local_ref<T> () const {
-  return target_->getElement(idx_);
-}
-    
-    template<typename T>
-inline void JStaticField<T>::set(jclass jcls, T value) noexcept {
-  internal::getEnv()->SetStaticObjectField(jcls, field_id_, value);
-}
-    
-      JNativeRunnable(std::function<void()>&& runnable) : runnable_(std::move(runnable)) {}
-    
-    /// Allocator that handles weak global references
-class FBEXPORT WeakGlobalReferenceAllocator {
- public:
-  jobject newReference(jobject original) const;
-  void deleteReference(jobject reference) const noexcept;
-  bool verifyReference(jobject reference) const noexcept;
-};
+        void copy(void *_data, size_t _length)
+    {
+        alloc(_length);
+        memcpy(buffer, _data, _length);
+    }
