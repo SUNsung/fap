@@ -1,124 +1,60 @@
 
         
-        module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
+              spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-            # Attempt to find a user by its email. If a record is found, send new
-        # password instructions to it. If user is not found, returns a new user
-        # with an email not found error.
-        # Attributes must contain the user's email
-        def send_reset_password_instructions(attributes={})
-          recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
-          recoverable.send_reset_password_instructions if recoverable.persisted?
-          recoverable
-        end
-    
-    def reverse_each_name_with_prefix_optional(pat, prefix_pat)
-  reverse_each_name(pat) {|n|
-    yield n, n
-  }
-  if prefix_pat
-    reverse_each_name(pat) {|n|
-      next if prefix_pat !~ n
-      yield n, $'
-    }
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
   end
 end
+
     
-      #
-  # Scanner Events
-  #
+      # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
     
-      def test_to_a
-    assert_equal([], @cls[].to_a)
-    assert_equal([[1,2]], @cls[ 1=>2 ].to_a)
-    a = @cls[ 1=>2, 3=>4, 5=>6 ].to_a
-    assert_equal([1,2], a.delete([1,2]))
-    assert_equal([3,4], a.delete([3,4]))
-    assert_equal([5,6], a.delete([5,6]))
-    assert_equal(0, a.length)
-    
-      def test_set_encoding_invalid
-    pipe(proc do |w|
-           w << '\x80'
-           w.close
-         end,
-         proc do |r|
-           r.set_encoding('utf-8:euc-jp', :invalid=>:replace)
-           assert_equal('?', r.read)
-         end)
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
+  config.static_cache_control = 'public, max-age=3600'
     
-            opts.on '--ruby VAL', 'Path to ruby which is used at -j option' do |a|
-          options[:ruby] = a.split(/ /).reject(&:empty?)
-        end
-      end
+        def load_available_plugins
+      require 'logstash/plugins/builtin'
     
-      def test_read_command
-    assert_equal('foo\n', IO.read('|echo foo'))
-    assert_raise(Errno::ENOENT, Errno::EINVAL) do
-      File.read('|#{EnvUtil.rubybin} -e puts')
-    end
-    assert_raise(Errno::ENOENT, Errno::EINVAL) do
-      File.binread('|#{EnvUtil.rubybin} -e puts')
-    end
-    assert_raise(Errno::ENOENT, Errno::EINVAL) do
-      Class.new(IO).read('|#{EnvUtil.rubybin} -e puts')
-    end
-    assert_raise(Errno::ENOENT, Errno::EINVAL) do
-      Class.new(IO).binread('|#{EnvUtil.rubybin} -e puts')
-    end
-  end
+      # Pipeline settings
+  option ['--pipeline.id'], 'ID',
+    I18n.t('logstash.runner.flag.pipeline-id'),
+    :attribute_name => 'pipeline.id',
+    :default => LogStash::SETTINGS.get_default('pipeline.id')
     
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
     
-  config.vm.define 'centos6' do |centos6|
-    centos6.vm.box = 'puppetlabs/centos-6.6-64-puppet'
-  end
+    require 'fpm'
+require 'tmpdir'
+require 'fpm/package/pleaserun'
     
-            # If the instance variable @{attr} is defined, then
-        # it means the flag was given on the command line.
-        flag_given = instance_variable_defined?('@#{attr}')
-        input.attributes['#{attr}_given?'.to_sym] = flag_given
-        attr = '#{attr}?' if !respond_to?(attr) # handle boolean :flag cases
-        input.attributes[attr.to_sym] = send(attr) if respond_to?(attr)
-        logger.debug('Setting attribute', attr.to_sym => send(attr))
+      # Default specfile generator just makes one specfile, whatever that is for
+  # this package.
+  def generate_specfile(builddir)
+    paths = []
+    logger.info('PWD: #{File.join(builddir, unpack_data_to)}')
+    fileroot = File.join(builddir, unpack_data_to)
+    Dir.chdir(fileroot) do
+      Find.find('.') do |p|
+        next if p == '.'
+        paths << p
       end
     end
-    
-            until(data.length == record_length)
-          data << file.read(TAR_CHUNK_SIZE)
-        end
-    
-        logger.info('Installing pear package', :package => input_package,
-                  :directory => staging_path)
-    ::Dir.chdir(staging_path) do
-      safesystem('pear', '-c', config, 'install', '-n', '-f', input_package)
-    end
-    
-      # Input a package.
-  #
-  # The 'package' can be any of:
-  #
-  # * A name of a package on pypi (ie; easy_install some-package)
-  # * The path to a directory containing setup.py
-  # * The path to a setup.py
-  def input(package)
-    path_to_package = download_if_necessary(package, version)
-    
-      # Input a zipfile.
-  def input(input_path)
-    # use part of the filename as the package name
-    self.name = File.extname(input_path)[1..-1]
+    logger.info(paths[-1])
+    manifests = %w{package.pp package/remove.pp}
