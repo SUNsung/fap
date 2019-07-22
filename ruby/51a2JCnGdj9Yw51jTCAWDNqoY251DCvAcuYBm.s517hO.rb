@@ -1,87 +1,117 @@
 
         
-          def report
-    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
-      'blocked-uri',
-      'disposition',
-      'document-uri',
-      'effective-directive',
-      'original-policy',
-      'referrer',
-      'script-sample',
-      'status-code',
-      'violated-directive',
-      'line-number',
-      'source-file'
-    )
-  end
+        require 'benchmark/ips'
+require 'jekyll'
+require 'json'
     
+    # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
+    
+    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+    
+            a_length = a_split.length
+        b_length = b_split.length
+    
+        def base_url
+      context[:base_url]
     end
     
-        def extendable?(directive)
-      EXTENDABLE_DIRECTIVES.include?(directive)
+        def push(*names)
+      @filters.push *filter_const(names)
     end
     
-        langs.sort
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
+    end
+    
+        def to_json
+      JSON.generate(as_json)
+    end
   end
-    
-          response.headers['Last-Modified'] = 10.years.ago.httpdate
-      response.headers['Content-Length'] = svg_sprite.bytesize.to_s
-      immutable_for 1.year
-    
-    # == Schema Information
-#
-# Table name: user_stats
-#
-#  user_id                  :integer          not null, primary key
-#  topics_entered           :integer          default(0), not null
-#  time_read                :integer          default(0), not null
-#  days_visited             :integer          default(0), not null
-#  posts_read_count         :integer          default(0), not null
-#  likes_given              :integer          default(0), not null
-#  likes_received           :integer          default(0), not null
-#  topic_reply_count        :integer          default(0), not null
-#  new_since                :datetime         not null
-#  read_faq                 :datetime
-#  first_post_created_at    :datetime
-#  post_count               :integer          default(0), not null
-#  topic_count              :integer          default(0), not null
-#  bounce_score             :float            default(0.0), not null
-#  reset_bounce_score_after :datetime
-#  flags_agreed             :integer          default(0), not null
-#  flags_disagreed          :integer          default(0), not null
-#  flags_ignored            :integer          default(0), not null
-#  first_unread_at          :datetime         not null
-#
+end
 
     
-        context '(de)activating users' do
-      it 'does not show deactivation buttons for the current user' do
-        visit admin_users_path
-        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+      def send_reset_password_instructions
+    Workers::ResetPassword.perform_async(self.id)
+  end
+    
+    require_relative '../config/bundler_helper'
+require 'etc'
+    
+      rescue_from ActiveRecord::RecordNotFound do
+    head :not_found
+  end
+    
+      def create
+    like = like_service.create(params[:post_id])
+  rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid
+    render plain: I18n.t('likes.create.error'), status: 422
+  else
+    respond_to do |format|
+      format.html { head :created }
+      format.mobile { redirect_to post_path(like.post_id) }
+      format.json { render json: like.as_api_response(:backbone), status: 201 }
+    end
+  end
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
       end
     
-        it 'sends escape characters correctly to the backend' do
-      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
-      formatting_agent.sources << emitter
-      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
-      formatting_agent.save!
-    
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+      it 'denies post requests with wrong X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => bad_token)
+    expect(last_response).not_to be_ok
   end
     
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
   end
     
-        it 'is able to apply a ransack filter by clicking a quickfilter icon', js: true do
-      label_pending = page.find '.badge-pending'
-      parent_td = label_pending.find(:xpath, '..')
+        it 'denies requests with sneaky encoded session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
     
-          @@shipment_attributes = [:id, :tracking, :number, :cost, :shipped_at, :state]
+          it 'returns false for `#{source}`' do
+        expect(node.recursive_literal?).to be(false)
+      end
+    end
+    
+          it { expect(class_node.parent_class.const_type?).to be(true) }
+    end
+    
+            def correct(processed_source, node)
+          return if %i[kwarg kwoptarg].include?(node.type)
+    
+            expect(new_source).to eq(<<~RUBY)
+          some_method #{open}
+    
+        it 'is aware that this creates a new scope' do
+      expect_no_offenses(<<~RUBY)
+        module SomeModule
+          extend ActiveSupport::Concern
+          class_methods do
+            def some_public_class_method
+            end
+            private
+            def some_private_class_method
+            end
+          end
+          def some_public_instance_method
+          end
+          private
+          def some_private_instance_method
+          end
+        end
+      RUBY
+    end
+  end
