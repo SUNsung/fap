@@ -1,85 +1,164 @@
-      def test_missing_helper_error_has_the_right_path
-        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
-        assert_equal 'helpers/missing_helper.rb', e.path
+
+        
+        def native_relative
+  DOC_PATH.sub('#{COL_PATH}/', '')
+end
+    
+        attr_reader :filters
+    
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
+    end
+    
+              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
+          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
+          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
+          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
+          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
+          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
+    
+            css('a[id]:empty').each do |node|
+          node.next_element['id'] = node['id'] if node.next_element
+        end
+    
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
+        end
+    
+              if formula_tap == 'homebrew-core' && (depends_on?('veclibfort') || depends_on?('lapack'))
+            problem 'Formulae should use OpenBLAS as the default serial linear algebra library.'
+          end
+    
+        it 'unless conditional dependency with build.without?' do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          desc 'foo'
+          url 'https://brew.sh/foo-1.0.tgz'
+          depends_on :foo unless build.without? 'foo'
+          ^^^^^^^^^^^^^^^ Replace depends_on :foo unless build.without? 'foo' with depends_on :foo => :recommended
+        end
+      RUBY
+    end
+    
+        it 'when veclibfort is used instead of OpenBLAS' do
+      expect_offense(<<~RUBY, '/homebrew-core/')
+        class Foo < Formula
+          url 'https://brew.sh/foo-1.0.tgz'
+          homepage 'https://brew.sh'
+          depends_on 'veclibfort'
+          ^^^^^^^^^^^^^^^^^^^^^^^ Formulae should use OpenBLAS as the default serial linear algebra library.
+        end
+      RUBY
+    end
+    
+        return false if args[:before] && OS::Mac.version >= args[:before]
+    
+      def recursive_requirements
+    Requirement.expand(self)
+  end
+    
+        def prerelease?
+      version > latest_stable_version
+    end
+    
+          def update_instructions
+        if MacOS.version >= '10.14'
+          <<~EOS
+            Update them from Software Update in System Preferences.
+          EOS
+        else
+          <<~EOS
+            Update them from Software Update in the App Store.
+          EOS
+        end
+      end
+    
+          if @quarantine
+        Quarantine.cask!(cask: @cask, download_path: @downloaded_path)
+      else
+        Quarantine.release!(download_path: @downloaded_path)
       end
     end
   end
 end
 
     
-      include CachedCounting
-    
-      def report
-    @report ||= JSON.parse(request.body.read)['csp-report'].slice(
-      'blocked-uri',
-      'disposition',
-      'document-uri',
-      'effective-directive',
-      'original-policy',
-      'referrer',
-      'script-sample',
-      'status-code',
-      'violated-directive',
-      'line-number',
-      'source-file'
-    )
-  end
-    
-    end
-
-    
-        user_id = opts[:user].id
-    offset = (opts[:offset] || 0).to_i
-    limit = (opts[:limit] || 30).to_i
-    
-          script_srcs = parse(policy)['script-src']
-      expect(script_srcs).to include('https://www.google-analytics.com/analytics.js')
-      expect(script_srcs).to include('https://www.googletagmanager.com/gtm.js')
-    end
-    
-    
-end
-end
-end
-
-    
-                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
-    
-      describe '#update' do
-    context 'on a post you can see' do
-      before do
-        sign_in(bob, scope: :user)
+          def initialize(*args)
+        super
+        @comparison_cache = {}
       end
     
-    describe StreamsController, :type => :controller do
-  include_context :gon
+        def detect_command_and_arguments(*args)
+      command = args.find do |arg|
+        if self.class.commands.include?(arg)
+          true
+        else
+          break unless arg.start_with?('-')
+        end
+      end
+    
+          def self.help
+        'upgrades all outdated casks'
+      end
+    end
+  end
+end
+
+    
+    # Resource is the fundamental representation of an external resource. The
+# primary formula download, along with other declared resources, are instances
+# of this class.
+class Resource
+  include FileUtils
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
+        end
+      end
+    end
+  end
+    
+        desc 'Check directories of files to be linked exist in shared'
+    task :make_linked_dirs do
+      next unless any? :linked_files
+      on release_roles :all do |_host|
+        execute :mkdir, '-p', linked_file_dirs(shared_path)
+      end
+    end
+    
+    Given(/^a custom task that will simulate a failure$/) do
+  safely_remove_file(TestApp.shared_path.join('failed'))
+  TestApp.copy_task_to_test_app('spec/support/tasks/fail.rake')
+end
+    
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
+    end
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
+        end
+      end
+    
+          def roles_array
+        roles.to_a
+      end
