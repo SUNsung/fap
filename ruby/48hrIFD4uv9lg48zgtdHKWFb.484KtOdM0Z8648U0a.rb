@@ -1,108 +1,117 @@
 
         
-          # localization is fast, but this allows us to avoid
-  # calling it in a loop which adds up
-  def self.translations
-    {
-      original_poster: I18n.t(:original_poster),
-      most_recent_poster: I18n.t(:most_recent_poster),
-      frequent_poster: I18n.t(:frequent_poster)
-    }
+          # if rss_url already in existing opml file, use that; otherwise, do a lookup
+  rss_url = nil
+  if File.exist?(OUTPUT_FILENAME)
+    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
+    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
+    if existing_blog
+      rss_url = existing_blog.attr('xmlUrl')
+      puts '#{name}: ALREADY HAVE'
+    end
   end
     
-      def list_private_messages_tag(user)
-    list = private_messages_for(user, :all)
-    list = list.joins('JOIN topic_tags tt ON tt.topic_id = topics.id
-                      JOIN tags t ON t.id = tt.tag_id AND t.name = '#{@options[:tags][0]}'')
-    create_list(:private_messages, {}, list)
-  end
+    module Admin
+  class PodsController < AdminController
+    respond_to :html, :json, :mobile
     
-          request.env['DISCOURSE_RATE_LIMITERS'] = [limiter10, limiter60]
-      request.env['DISCOURSE_ASSET_RATE_LIMITERS'] = [limiter_assets10]
+          def redirect_prompt_error_display(error, error_description)
+        redirect_params_hash = {error: error, error_description: error_description, state: params[:state]}
+        redirect_fragment = redirect_params_hash.compact.map {|key, value| key.to_s + '=' + value }.join('&')
+        redirect_to params[:redirect_uri] + '?' + redirect_fragment
+      end
     
-        return can_not_modify_automatic if group.automatic
+      respond_to :json
     
-            css('pre').each do |node|
-          node['data-language'] = 'js'
-          node['data-language'] = node['class'][/language-(\w+)/, 1] if node['class']
-          node.content = node.content
+        @invalid_emails = html_safe_string_from_session_array(:invalid_email_invites)
+    @valid_emails   = html_safe_string_from_session_array(:valid_email_invites)
+    
+        def line_item_description_text(description_text)
+      if description_text.present?
+        truncate(strip_tags(description_text.gsub('&nbsp;', ' ').squish), length: 100)
+      else
+        Spree.t(:product_has_no_description)
+      end
+    end
+    
+          def discount
+        order.promo_total * exchange_multiplier
+      end
+    
+            if payment_method&.source_required?
+          if source
+            unless processing?
+              if payment_method.supports?(source) || token_based?
+                yield
+              else
+                invalidate!
+                raise Core::GatewayError, Spree.t(:payment_method_not_supported)
+              end
+            end
+          else
+            raise Core::GatewayError, Spree.t(:payment_processing_failed)
+          end
         end
+      end
     
-        def normalized_path
-      path == '' ? '/' : path
-    end
-    
-            at_css('#module-header').tap do |node|
-          heading = at_css('.caption')
-          heading.name = 'h1'
-          node.before(heading)
-          node.before(node.children).remove
-        end
-    
-      describe 'regressions should not occur', :if => program_exists?('rpmbuild') do
-    before :each do
-      @tempfile_handle =
-      @target = Stud::Temporary.pathname
-      subject.name = 'name'
-      subject.version = '1.23'
-    end
-    
-      describe '#description' do
-    it_behaves_like :Default, description.gsub(/^#/, '').to_sym, 'no description given'
-    it_behaves_like :Mutator, description.gsub(/^#/, '').to_sym
-  end
-    
-        if @attributes.include?(:prefix)
-      installdir = staging_path(@attributes[:prefix])
-    else
-      installdir = staging_path
-    end
-    
-      # Take a flat package as input
-  def input(input_path)
-    # TODO: Fail if it's a Distribution pkg or old-fashioned
-    expand_dir = File.join(build_path, 'expand')
-    # expand_dir must not already exist for pkgutil --expand
-    safesystem('pkgutil --expand #{input_path} #{expand_dir}')
-    
-        # Make one file. The installscript can unpack itself.
-    `cat #{install_script} #{payload} > #{output_path}`
-    FileUtils.chmod('+x', output_path)
-  end
-    
-    When /^I turn off class caching$/ do
-  cd('.') do
-    file = 'config/environments/test.rb'
-    config = IO.read(file)
-    config.gsub!(%r{^\s*config.cache_classes.*$},
-                 'config.cache_classes = false')
-    File.open(file, 'w'){|f| f.write(config) }
-  end
-end
-    
-        # Returns the width and height in a format suitable to be passed to Geometry.parse
-    def to_s
-      s = ''
-      s << width.to_i.to_s if width > 0
-      s << 'x#{height.to_i}' if height > 0
-      s << modifier.to_s
-      s
-    end
-    
-              it 'raise an integrity error' do
-            is_expected.to raise_error(CarrierWave::IntegrityError)
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
           end
         end
     
-    Given /^the class has a method called 'reverse' that reverses the contents of a file$/ do
-  @klass.class_eval do
-    def reverse
-      text = File.read(current_path)
-      File.open(current_path, 'w') { |f| f.write(text.reverse) }
-    end
-  end
+    have_cpanm = program_exists?('cpanm')
+if !have_cpanm
+  Cabin::Channel.get('rspec') \
+    .warn('Skipping CPAN#input tests because 'cpanm' isn't in your PATH')
 end
     
-          included do
-        before :cache, :check_content_type_blacklist!
+        context 'when :python_fix_name? is false' do
+      before :each do
+        subject.attributes[:python_fix_name?] = false
       end
+    
+          it 'should have the correct version' do
+        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
+        insist { input.version } == original.version
+      end
+    
+        puts 'successfully created #{output}'
+  end
+ensure
+  # defer cleanup until the end
+  output_packages.each {|p| p.cleanup}
+end
+
+    
+        input.conflicts += conflicts
+    input.dependencies += dependencies
+    input.provides += provides
+    input.replaces += replaces
+    input.config_files += config_files
+    input.directories += directories
+    
+        # Apply the options for this package on the clamp command
+    #
+    # Package flags become attributes '{type}-flag'
+    #
+    # So if you have:
+    #
+    #     class Foo < FPM::Package
+    #       option '--bar-baz' ...
+    #     end
+    #
+    # The attribute value for --foo-bar-baz will be :foo_bar_baz'
+    def apply_options(clampcommand)
+      @options ||= []
+      @options.each do |args|
+        flag, param, help, options, block = args
+        clampcommand.option(flag, param, help, options, &block)
+      end
+    end # def apply_options
+    
+    	    safesystem('pkgdepend', 'resolve',  '-m', build_path('#{name}.p5m.3'))
+      safesystem('cp', build_path('#{name}.p5m.3.res'), manifest_fn)
+    end
