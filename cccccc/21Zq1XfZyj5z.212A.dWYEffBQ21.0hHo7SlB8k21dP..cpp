@@ -1,155 +1,127 @@
 
         
-          //----- update graphics state
-  virtual void updateCTM(GfxState *state, double m11, double m12,
-			 double m21, double m22, double m31, double m32);
-  virtual void updateLineDash(GfxState *state);
-  virtual void updateFlatness(GfxState *state);
-  virtual void updateLineJoin(GfxState *state);
-  virtual void updateLineCap(GfxState *state);
-  virtual void updateMiterLimit(GfxState *state);
-  virtual void updateLineWidth(GfxState *state);
-  virtual void updateFillColorSpace(GfxState *state);
-  virtual void updateStrokeColorSpace(GfxState *state);
-  virtual void updateFillColor(GfxState *state);
-  virtual void updateStrokeColor(GfxState *state);
-  virtual void updateFillOverprint(GfxState *state);
-  virtual void updateStrokeOverprint(GfxState *state);
-  virtual void updateTransfer(GfxState *state);
+                        for (; i < length; ++i)
+                {
+                    wchar_t ch = localizedString[i];
+                    if (!IsEnUsDigit(ch))
+                    {
+                        for (int j = 0; j < 10; ++j)
+                        {
+                            if (ch == m_digitSymbols[j])
+                            {
+                                ch = j.ToString()->Data()[0];
+                                break;
+                                // ch = val - L'0';
+                            }
+                        }
+                    }
+                    if (ch == m_decimalSeparator)
+                    {
+                        ch = L'.';
+                    }
+                    englishString[i] = ch;
+                }
+                englishString[i] = '\0';
+    
+    /// <summary>
+/// Invoked when application execution is being suspended. Application state is saved
+/// without knowing whether the application will be terminated or resumed with the contents
+/// of memory still intact.
+/// </summary>
+/// <param name='sender'>The source of the suspend request.</param>
+/// <param name='e'>Details about the suspend request.</param>
+void App::OnSuspending(Object ^ sender, SuspendingEventArgs ^ e)
+{
+    (void)sender; // Unused parameter
+    (void)e;      // Unused parameter
+    }
     
     
-    {  int (*getCharFunc)(void *);
-  void *data;
-  int charBuf;
+    {    float posX = 0;
+    auto lastChild = Children->GetAt(Children->Size - 1);
+    float lastChildWidth = 0;
+    if (Children->Size > 2 && ShouldPrioritizeLastItem())
+    {
+        lastChildWidth = lastChild->DesiredSize.Width;
+    }
+    for (auto item : Children)
+    {
+        auto widthAvailable = finalSize.Width - posX;
+        if (item != lastChild)
+        {
+            widthAvailable -= lastChildWidth;
+        }
+        float itemWidth = item->DesiredSize.Width;
+        if (widthAvailable > 0 && itemWidth <= widthAvailable)
+        {
+            // stack the items horizontally (left to right)
+            item->Arrange(Rect(posX, 0, itemWidth, finalSize.Height));
+            AutomationProperties::SetAccessibilityView(item, ::AccessibilityView::Content);
+            posX += item->RenderSize.Width;
+        }
+        else
+        {
+            // Not display the item
+            item->Arrange(Rect(0, 0, 0, 0));
+            AutomationProperties::SetAccessibilityView(item, ::AccessibilityView::Raw);
+        }
+    }
+    return finalSize;
+}
+
+    
+    #include 'CCommand.h'
+#include 'EngineStrings.h'
+#include '../Command.h'
+#include '../CalculatorVector.h'
+#include '../ExpressionCommand.h'
+#include 'RadixType.h'
+#include 'History.h' // for History Collector
+#include 'CalcInput.h'
+#include 'CalcUtils.h'
+#include 'ICalcDisplay.h'
+#include 'Rational.h'
+#include 'RationalMath.h'
+    
+            class CurrencyDataLoader : public UCM::IConverterDataLoader, public UCM::ICurrencyConverterDataLoader
+        {
+        public:
+            CurrencyDataLoader(_In_ std::unique_ptr<CalculatorApp::DataLoaders::ICurrencyHttpClient> client, const wchar_t* overrideLanguage = nullptr);
+            ~CurrencyDataLoader();
+    }
+    
+        // to be changed when pszexp is back
+    tokens->GetString(&generatedExpression);
+    // Prefixing and suffixing the special Unicode markers to ensure that the expression
+    // in the history doesn't get broken for RTL languages
+    spHistoryItem->historyItemVector.expression = L'\u202d' + generatedExpression + L'\u202c';
+    spHistoryItem->historyItemVector.result = wstring(result);
+    addedIndex = AddItem(spHistoryItem);
+    
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
+    }
+    
+    #include <rocksdb/compaction_filter.h>
+#include <rocksdb/db.h>
+#include <rocksdb/merge_operator.h>
+#include <rocksdb/options.h>
+    
+    struct UndumpOptions {
+  // Database that we will load the dumped file into
+  std::string db_path;
+  // File location of the dumped file that will be loaded
+  std::string dump_location;
+  // Compact the db after loading the dumped file
+  bool compact_db = false;
 };
     
-    PageLabelInfo::Interval::Interval(Object *dict, int baseA) {
-  Object obj;
+    // PersistentCache
+//
+// Persistent cache interface for caching IO pages on a persistent medium. The
+// cache interface is specifically designed for persistent read cache.
+class PersistentCache {
+ public:
+  typedef std::vector<std::map<std::string, double>> StatsType;
     }
-    
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006, 2010 Albert Astals Cid <aacid@kde.org>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
-    
-    PopplerCacheItem *PopplerCache::lookup(const PopplerCacheKey &key)
-{
-  if (lastValidCacheIndex < 0)
-    return 0;
-    }
-    
-    void PreScanOutputDev::stroke(GfxState *state) {
-  double *dash;
-  int dashLen;
-  double dashStart;
-    }
-    
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
-    
-      Sound *copy();
-    
-    GBool StdinPDFDocBuilder::supports(const GooString &uri)
-{
-  if (uri.cmpN('fd://0', 6) == 0) {
-    return gTrue;
-  } else {
-    return gFalse;
-  }
-}
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'ALLEGRO_BITMAP*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Platform: Clipboard support (from Allegro 5.1.12)
-//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-// Issues:
-//  [ ] Renderer: The renderer is suboptimal as we need to unindex our buffers and convert vertices manually.
-//  [ ] Platform: Missing gamepad support.
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-        // Compress
-    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
-    char* compressed = use_compression ? new char[maxlen] : data;
-    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
-    if (use_compression)
-		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
-    
-    void my_display_code()
-{
-    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-    }
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-    // Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-    
-    #include 'swoole.h'
-#include 'coroutine.h'
-    
-            void cleanup() {
-            delRead();
-            delWrite();
-        }
-    
-    #endif /* !__HIREDIS_EXAMPLE_QT_H */
-
-    
-        for (int i = 0; i < 1000; ++i)
-    {
-        auto ret = swAio_dispatch2(&event);
-        ASSERT_EQ(ret->object, event.object);
-        ASSERT_NE(ret->task_id, event.task_id);
-    }
-    
-        bzero(&un1,sizeof(struct sockaddr_un));
-    bzero(&un2,sizeof(struct sockaddr_un));
-    
-        virtual void onStart();
-    virtual void onShutdown() {};
-    virtual void onWorkerStart(int worker_id);
-    virtual void onWorkerStop(int worker_id) {}
-    virtual void onPipeMessage(int src_worker_id, const DataBuffer &) {}
-    virtual void onReceive(int fd, const DataBuffer &data);
-    virtual void onConnect(int fd);
-    virtual void onClose(int fd);
-    virtual void onPacket(const DataBuffer &data, ClientInfo &clientInfo);
