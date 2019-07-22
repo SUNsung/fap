@@ -1,172 +1,179 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
+            process_font_assets
+    process_stylesheet_assets
+    process_javascript_assets
+    store_version
   end
     
-    Devise.setup do |config|
-  require 'devise/orm/active_record'
-  config.secret_key = 'secret_key_base'
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
+    end
+    
+    Given /^I attach :attachment$/ do
+  attach_attachment('attachment')
 end
     
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def headers_for(action, opts)
-        headers = {
-          subject: subject_for(action),
-          to: resource.email,
-          from: mailer_sender(devise_mapping),
-          reply_to: mailer_reply_to(devise_mapping),
-          template_path: template_paths,
-          template_name: action
-        }.merge(opts)
-    
-          def rememberable_value
-        if respond_to?(:remember_token)
-          remember_token
-        elsif respond_to?(:authenticatable_salt) && (salt = authenticatable_salt.presence)
-          salt
-        else
-          raise 'authenticatable_salt returned nil for the #{self.class.name} model. ' \
-            'In order to use rememberable, you must ensure a password is always set ' \
-            'or have a remember_token column in your model or implement your own ' \
-            'rememberable_value in the model with custom logic.'
-        end
-      end
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
-    
-            # This returns all the registered configuration classes that were
-        # marked as 'upgrade safe.'
-        #
-        # @return [Hash]
-        def config_upgrade_safe
-          result = {}
-    
-              results
-        end
-    
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
-    
-        AIR_APPLICATION_INSTALLER =
-      '/Applications/Utilities/Adobe AIR Application Installer.app/Contents/MacOS/Adobe AIR Application Installer'
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
   end
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+    # This stuff needs to be run after Paperclip is defined.
+require 'paperclip/io_adapters/registry'
+require 'paperclip/io_adapters/abstract_adapter'
+require 'paperclip/io_adapters/empty_string_adapter'
+require 'paperclip/io_adapters/identity_adapter'
+require 'paperclip/io_adapters/file_adapter'
+require 'paperclip/io_adapters/stringio_adapter'
+require 'paperclip/io_adapters/data_uri_adapter'
+require 'paperclip/io_adapters/nil_adapter'
+require 'paperclip/io_adapters/attachment_adapter'
+require 'paperclip/io_adapters/uploaded_file_adapter'
+require 'paperclip/io_adapters/uri_adapter'
+require 'paperclip/io_adapters/http_url_proxy_adapter'
+
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+    require 'active_admin/helpers/i18n'
+    
+        # Returns true of false depending on if the user is authorized to perform
+    # the action on the subject.
+    #
+    # @param [Symbol] action The name of the action to perform. Usually this will be
+    #        one of the `ActiveAdmin::Auth::*` symbols.
+    #
+    # @param [any] subject The subject the action is being performed on usually this
+    #        is a model object. Note, that this is NOT always in instance, it can be
+    #        the class of the subject also. For example, Active Admin uses the class
+    #        of the resource to decide if the resource should be displayed in the
+    #        global navigation. To deal with this nicely in a case statement, take
+    #        a look at `#normalized(klass)`
+    #
+    # @return [Boolean]
+    def authorized?(action, subject = nil)
+      true
+    end
+    
+        def authorized?(action, subject = nil)
+      cancan_ability.can?(action, subject)
+    end
+    
+        def evaluate(_context)
+      true
+    end
   end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+end
+
+    
+          str << ': '
+      str
+    end
+  end
+    
+    class Hash # :nodoc:
+  def to_liquid
+    self
   end
 end
     
-          it 'doesn't post' do
-        expect(alice).not_to receive(:like!)
-        post :create, params: like_hash
-        expect(response.code).to eq('422')
+        def index0
+      @index
+    end
+    
+        def increment!
+      @index += 1
+    
+        # Public: Is the blob empty?
+    #
+    # Return true or false
+    def empty?
+      data.nil? || data == ''
+    end
+    
+        # Public: Build Classifier from all samples.
+    #
+    # Returns trained Classifier.
+    def self.data
+      db = {}
+      db['extnames'] = {}
+      db['interpreters'] = {}
+      db['filenames'] = {}
+    
+        assert_interpreter 'Rscript', '#!/usr/bin/env Rscript\n# example R script\n#\n'
+    assert_interpreter 'crystal', '#!/usr/bin/env bin/crystal'
+    assert_interpreter 'ruby', '#!/usr/bin/env ruby\n# baz'
+    
+      def teardown
+    silence_warnings do
+      Encoding.default_external = @original_external
+    end
+  end
+    
+    source = Licensed::Source::Filesystem.new(module_path || '#{File.expand_path('../', File.dirname(__FILE__))}/vendor/grammars/*/')
+config = Licensed::Configuration.load_from(File.expand_path('../vendor/licenses/config.yml', File.dirname(__FILE__)))
+config.sources << source
+    
+        # Public: Return an array of the file extensions
+    #
+    #     >> Linguist::Blob.new('app/views/things/index.html.erb').extensions
+    #     => ['.html.erb', '.erb']
+    #
+    # Returns an Array
+    def extensions
+      _, *segments = name.downcase.split('.', -1)
+    
+                    it 'includes an indication that the variable was too large' do
+                  html = error_page.do_variables('index' => 0)[:html]
+                  expect(html).to_not include(content)
+                  expect(html).to include('Object too large')
+                end
+              end
+            end
+    
+    def with_each_gemfile
+  gemfiles.each do |gemfile|
+    Bundler.with_clean_env do
+      puts '\n=========== Using gemfile: #{gemfile}'
+      ENV['BUNDLE_GEMFILE'] = gemfile
+      yield
+    end
+  end
+end
+    
+        def highlighted_lines
+      CodeRay.scan(context_lines.join, coderay_scanner).div(wrap: nil).lines
+    end
+    
+        describe CodeFormatter::HTML do
+      it 'highlights the erroring line' do
+        formatter = CodeFormatter::HTML.new(filename, 8)
+        expect(formatter.output).to match(/highlight.*eight/)
       end
-    end
     
-        it 'should redirect back in the html version if it has > 0 notifications' do
-      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
-      get :read_all, params: {type: 'liked'}, format: :html
-      expect(response).to redirect_to(notifications_path)
-    end
+            expect(status).to eq(404)
+      end
     
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
+          it 'has the right filename and line number in the backtrace' do
+        expect(subject.backtrace.first.filename).to eq('app/assets/javascripts/files/index.coffee')
+        expect(subject.backtrace.first.line).to eq(11)
       end
     end
   end
+end
+
+    
+          iv - BetterErrors.ignored_instance_variables
+    end
