@@ -1,229 +1,162 @@
 
         
-            if instance_id:
-        try:
-            volumes = ec2.get_all_volumes(filters={'attachment.instance-id': instance_id, 'attachment.device': device_name})
-        except boto.exception.BotoServerError as e:
-            module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
-    
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
-    
-        vca = vca_login(module)
-    
-        return changed, client.dnszone_find(zone_name)
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(type='str', required=True),
-            state=dict(type='str', choices=['present', 'absent'], default='present')
-        ),
-        supports_check_mode=True
-    )
-    
-    
-class PollErrorTest(unittest.TestCase):
-    '''Tests for acme.errors.PollError.'''
-    
-            '''
-        self.revert_temporary_config()
-        self.aug.load()
-    
-    HSTS_ARGS = ['always', 'set', 'Strict-Transport-Security',
-             '\'max-age=31536000\'']
-'''Apache header arguments for HSTS'''
-    
-        @certbot_util.patch_get_utility()
-    def test_multiple_names(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 5)
-    
-    
-# -- Options for Texinfo output -------------------------------------------
-    
-        def test_backslash_continuation(self):
-        # Backslash means line continuation, except for comments
-        self.check_roundtrip('x=1+\\\n'
-                             '1\n'
-                             '# This is a comment\\\n'
-                             '# This also\n')
-        self.check_roundtrip('# Comment \\\n'
-                             'x = 0')
-    
-        def _generate_symbols(self, grammar_file, target_symbol_py_file):
-        proc = subprocess.Popen([sys.executable,
-                                 GEN_SYMBOL_FILE,
-                                 grammar_file,
-                                 target_symbol_py_file], stderr=subprocess.PIPE)
-        stderr = proc.communicate()[1]
-        return proc.returncode, stderr
-    
-        If the resulting string contains path separators, an exception is raised.
-    '''
-    parent, file_name = os.path.split(path)
-    if parent:
-        raise ValueError('{!r} must be only a file name'.format(path))
-    else:
-        return file_name
-    
-    # register the Foo class; make `f()` and `g()` accessible via proxy
-MyManager.register('Foo1', Foo)
-    
-    class Point:
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-    
-    # Optional dataset entry keys
-_IM_PREFIX = 'image_prefix'
-_DEVKIT_DIR = 'devkit_directory'
-_RAW_DIR = 'raw_dir'
-    
-    
-def compute_bbox_regression_targets(entry):
-    '''Compute bounding-box regression targets for an image.'''
-    # Indices of ground-truth ROIs
-    rois = entry['boxes']
-    overlaps = entry['max_overlaps']
-    labels = entry['max_classes']
-    gt_inds = np.where((entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-    # Targets has format (class, tx, ty, tw, th)
-    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
-    if len(gt_inds) == 0:
-        # Bail if the image has no ground-truth ROIs
-        return targets
-    
-    import logging
-import numpy as np
-import os
-import shutil
-import uuid
-    
-    
-def add_residual_block(
-    model,
-    prefix,
-    blob_in,
-    dim_in,
-    dim_out,
-    dim_inner,
-    dilation,
-    stride_init=2,
-    inplace_sum=False
-):
-    '''Add a residual block to the model.'''
-    # prefix = res<stage>_<sub_stage>, e.g., res2_3
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-        if len(data.shape) == 1:
-        ret = np.empty((count, ), dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds] = data
-    else:
-        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds, :] = data
-    return ret
-    
-    '''Construct minibatches for Detectron networks.'''
-    
-            # data for select_smooth_l1 loss
-        num_classes = cfg.MODEL.NUM_CLASSES - 1
-        inds_4d = np.where(_labels > 0)
-        M = len(inds_4d)
-        _roi_bbox_targets = np.zeros((0, 4))
-        _roi_fg_bbox_locs = np.zeros((0, 4))
-        if M > 0:
-            im_inds, y, x = inds_4d[0], inds_4d[2], inds_4d[3]
-            _roi_bbox_targets = np.zeros((len(im_inds), 4))
-            _roi_fg_bbox_locs = np.zeros((len(im_inds), 4))
-            lbls = _labels[im_inds, :, y, x]
-            for i, lbl in enumerate(lbls):
-                l = lbl[0] - 1
-                if not cfg.RETINANET.CLASS_SPECIFIC_BBOX:
-                    l = 0
-                assert l >= 0 and l < num_classes, 'label out of the range'
-                _roi_bbox_targets[i, :] = _bbox_targets[:, :, y[i], x[i]]
-                _roi_fg_bbox_locs[i, :] = np.array([[0, l, y[i], x[i]]])
-        blobs_out.append(
-            dict(
-                retnet_cls_labels=_labels[:, :, 0:h, 0:w].astype(np.int32),
-                retnet_roi_bbox_targets=_roi_bbox_targets.astype(np.float32),
-                retnet_roi_fg_bbox_locs=_roi_fg_bbox_locs.astype(np.float32),
-            ))
-    out_num_fg = np.array([num_fg + 1.0], dtype=np.float32)
-    out_num_bg = (
-        np.array([num_bg + 1.0]) * (cfg.MODEL.NUM_CLASSES - 1) +
-        out_num_fg * (cfg.MODEL.NUM_CLASSES - 2))
-    return blobs_out, out_num_fg, out_num_bg
+        
+if __name__ == '__main__':
+    main()
 
     
-    
-class ExtraData(ValueError):
-    
-        dest = pathlib.Path('dist')
-    dest.mkdir(exist_ok=True)
-    
-    ax = fig.add_axes((0.45, 0.1, 0.16, 0.8))
-bar_data = [2.1, -00.8, 1.1, 2.5, -2.1, -0.5, -2.0, 1.5]
-ax.set_ylim(-3, 3)
-ax.set_xticks([])
-ax.set_yticks([])
-ax.bar(np.arange(len(bar_data)), bar_data)
+            webpage = self._download_webpage(url, display_id)
     
     
-@pytest.fixture()
-def series():
-    df = pd.DataFrame({'outer': ['a', 'a', 'a', 'b', 'b', 'b'],
-                       'inner': [1, 2, 3, 1, 2, 3],
-                       'A': np.arange(6),
-                       'B': ['one', 'one', 'two', 'two', 'one', 'one']})
-    s = df.set_index(['outer', 'inner', 'B'])['A']
+class CBSBaseIE(ThePlatformFeedIE):
+    def _parse_smil_subtitles(self, smil, namespace=None, subtitles_lang='en'):
+        subtitles = {}
+        for k, ext in [('sMPTE-TTCCURL', 'tt'), ('ClosedCaptionURL', 'ttml'), ('webVTTCaptionURL', 'vtt')]:
+            cc_e = find_xpath_attr(smil, self._xpath_ns('.//param', namespace), 'name', k)
+            if cc_e is not None:
+                cc_url = cc_e.get('value')
+                if cc_url:
+                    subtitles.setdefault(subtitles_lang, []).append({
+                        'ext': ext,
+                        'url': cc_url,
+                    })
+        return subtitles
+    
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    **Data download**
+    
+        # Generate empty target sequence of length 1.
+    target_seq = np.zeros((1, 1, num_decoder_tokens))
+    # Populate the first character of target sequence with the start character.
+    target_seq[0, 0, target_token_index['\t']] = 1.
     
     
-def test_read_map_header():
-    unpacker = Unpacker()
-    unpacker.feed(packb({'a': 'A'}))
-    assert unpacker.read_map_header() == 1
-    assert unpacker.unpack() == B'a'
-    assert unpacker.unpack() == B'A'
-    try:
-        unpacker.unpack()
-        assert 0, 'should raise exception'
-    except OutOfData:
-        assert 1, 'okay'
+'''Process:
     
-    import modeling
-import tokenization
-import tensorflow as tf
+        Example: adding bi-gram
+    >>> sequences = [[1, 3, 4, 5], [1, 3, 7, 9, 2]]
+    >>> token_indice = {(1, 3): 1337, (9, 2): 42, (4, 5): 2017}
+    >>> add_ngram(sequences, token_indice, ngram_range=2)
+    [[1, 3, 4, 5, 1337, 2017], [1, 3, 7, 9, 2, 1337, 42]]
     
-      def _clean_text(self, text):
-    '''Performs invalid character removal and whitespace cleanup on text.'''
-    output = []
-    for char in text:
-      cp = ord(char)
-      if cp == 0 or cp == 0xfffd or _is_control(char):
-        continue
-      if _is_whitespace(char):
-        output.append(' ')
-      else:
-        output.append(char)
-    return ''.join(output)
+        with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(None, 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple([2, 3, 4], 2, 'kernel_size')
+    with pytest.raises(ValueError):
+        conv_utils.normalize_tuple(['str', 'impossible'], 2, 'kernel_size')
+    
+        # - Produce data on 1 worker thread, consume on main thread:
+    #   - Worker thread is the only thread running the generator
+    model.fit_generator(custom_generator(True),
+                        steps_per_epoch=STEPS_PER_EPOCH,
+                        validation_data=(arr_data[:10],
+                                         arr_labels[:10],
+                                         arr_weights[:10]),
+                        validation_steps=1,
+                        max_queue_size=10,
+                        workers=1,
+                        use_multiprocessing=False)
+    
+    
+def sparse_top_k_categorical_accuracy(y_true, y_pred, k=5):
+    # If the shape of y_true is (num_samples, 1), flatten to (num_samples,)
+    return K.cast(K.in_top_k(y_pred, K.cast(K.flatten(y_true), 'int32'), k),
+                  K.floatx())
+    
+    
+def parametric_relu(x, channel_shared=False, alpha_init=constant(0.), name='parametric_relu', reuse=None):
+    '''参数化 ReLU
+    
+    from ..utils import get_wb, permute
+from ..activations import softmax
+    
+    
+def get_shape(x):
+    '''
+    References:
+        tflearn.utils.get_incoming_shape
+    '''
+    if isinstance(x, (tf.Tensor, tf.SparseTensor)):
+        return x.get_shape().as_list()
+    elif type(x) in [np.array, np.ndarray, list, tuple]:
+        return list(np.shape(x))
+    else:
+        raise Exception('Invalid `x`.')
+    
+        References:
+        K.permute_dimensions()
+    '''
+    return tf.transpose(x, perm)
+    
+    
+  def Start( self ):
+    self._response_future = self.PostDataToHandlerAsync( self.request_data,
+                                                         'completions' )
+    
+      for diagnostic_range in diagnostic[ 'ranges' ]:
+    patterns.append( vimsupport.GetDiagnosticMatchPattern(
+      diagnostic_range[ 'start' ][ 'line_num' ],
+      diagnostic_range[ 'start' ][ 'column_num' ],
+      diagnostic_range[ 'end' ][ 'line_num' ],
+      diagnostic_range[ 'end' ][ 'column_num' ] ) )
+    
+        return False
+    
+    
+def LevelErrors_test():
+  opts = _JavaFilter( { 'level' : 'error' } )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
+    
+            # 均分  +  人-人-距离(943, 943)*人-电影-评分diff(943, 1682)=结果-人-电影（每个人对同一电影的综合得分）(943, 1682)  再除以  个人与其他人总的距离 = 人-电影综合得分
+        pred = mean_user_rating[:, np.newaxis] + similarity.dot(
+            rating_diff) / np.array([np.abs(similarity).sum(axis=1)]).T
+    elif type == 'item':
+        # 综合打分： 人-电影-评分(943, 1682)*电影-电影-距离(1682, 1682)=结果-人-电影(各个电影对同一电影的综合得分)(943, 1682)  ／  再除以  电影与其他电影总的距离 = 人-电影综合得分
+        pred = rating.dot(similarity) / np.array(
+            [np.abs(similarity).sum(axis=1)])
+    return pred
+    
+        def predict(self, sample):
+        '''
+        使用神经网络实现预测
+        sample: 输入样本
+        '''
+        output = sample
+        for layer in self.layers:
+            layer.forward(output)
+            output = layer.output
+        return output
+    
+        def calc_gradient_t(self, t):
+        '''
+        计算每个时刻t权重的梯度
+        '''
+        h_prev = self.h_list[t-1].transpose()
+        Wfh_grad = np.dot(self.delta_f_list[t], h_prev)
+        bf_grad = self.delta_f_list[t]
+        Wih_grad = np.dot(self.delta_i_list[t], h_prev)
+        bi_grad = self.delta_f_list[t]
+        Woh_grad = np.dot(self.delta_o_list[t], h_prev)
+        bo_grad = self.delta_f_list[t]
+        Wch_grad = np.dot(self.delta_ct_list[t], h_prev)
+        bc_grad = self.delta_ct_list[t]
+        return Wfh_grad, bf_grad, Wih_grad, bi_grad, \
+               Woh_grad, bo_grad, Wch_grad, bc_grad
+    
+        # 利用PCA对半导体制造数据降维
+    dataMat = replaceNanWithMean()
+    print(shape(dataMat))
+    # 分析数据
+    analyse_data(dataMat)
+    # lowDmat, reconMat = pca(dataMat, 20)
+    # print shape(lowDmat)
+    # show_picture(dataMat, reconMat)
