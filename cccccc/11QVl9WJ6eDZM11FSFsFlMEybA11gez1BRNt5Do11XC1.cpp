@@ -1,211 +1,225 @@
 
         
-        #undef cv_hal_split8u
-#define cv_hal_split8u TEGRA_SPLIT
-#undef cv_hal_split16u
-#define cv_hal_split16u TEGRA_SPLIT
-#undef cv_hal_split32s
-#define cv_hal_split32s TEGRA_SPLIT
-#undef cv_hal_split64s
-#define cv_hal_split64s(src, dst, len, cn) TEGRA_SPLIT64S(CAROTENE_NS::s64, src, dst, len, cn)
+        #ifndef BITCOIN_REVERSELOCK_H
+#define BITCOIN_REVERSELOCK_H
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
-        v_dst = internal::vqsubq(v_max, v_min);
+    
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
+    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
+    secp256k1_scalar_set_b32(&m, msg32, NULL);
+    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
+        secp256k1_pubkey_save(pubkey, &q);
+        return 1;
+    } else {
+        memset(pubkey, 0, sizeof(*pubkey));
+        return 0;
     }
-    
-        size_t maxsize = std::max<size_t>( 1u << 10, size.width * size.height / 10 );
-    std::vector<u8*> stack( maxsize );
-    u8 **stack_top = &stack[0];
-    u8 **stack_bottom = &stack[0];
-    
-    
-    {
-    {        for (; dj < size.width; sj += 4, ++dj)
-        {
-            dst[dj] = src[sj + coi];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)coi;
-#endif
 }
     
-                uint8x16x2_t v_y = vld2q_u8(srcy + syj);
-            uint8x16x4_t v_dst;
-            v_dst.val[0] = v_y.val[0];
-            v_dst.val[1] = vld1q_u8(srcu + sj);
-            v_dst.val[2] = v_y.val[1];
-            v_dst.val[3] = vld1q_u8(srcv + sj);
-            vst4q_u8(dst + dj, v_dst);
+        std::string vStr('zippy');
+    BOOST_CHECK(arr.push_back(vStr));
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(u8, f32, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vmovl.u8 q1, d0                                       \n\t'
-             'vmovl.u8 q2, d1                                       \n\t'
-             'vmovl.u16 q3, d2                                      \n\t'
-             'vmovl.u16 q4, d3                                      \n\t'
-             'vmovl.u16 q5, d4                                      \n\t'
-             'vmovl.u16 q6, d5                                      \n\t'
-             'vcvt.f32.u32 q7, q3                                   \n\t'
-             'vcvt.f32.u32 q8, q4                                   \n\t'
-             'vcvt.f32.u32 q9, q5                                   \n\t'
-             'vcvt.f32.u32 q10, q6                                  \n\t'
-             'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
-             'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
-             'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
-             'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 4),
-               [dst3] 'r' (_dst + i + 8),
-               [dst4] 'r' (_dst + i + 12)
-             : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
-         );
-     }
-})
-#else
-CVT_FUNC(u8, f32, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         uint8x16_t vline_u8 = vld1q_u8(_src + i);
-    }
+    static void TestKey(const std::string& key,
+                    uint64_t seq,
+                    ValueType vt) {
+  std::string encoded = IKey(key, seq, vt);
     }
     
+      void WritableFileClosed(const FileState& state);
+  Status DropUnsyncedFileData();
+  Status DeleteFilesCreatedAfterLastDirSync();
+  void DirWasSynced();
+  bool IsFileCreatedSinceLastDirSync(const std::string& filename);
+  void ResetState();
+  void UntrackFile(const std::string& f);
+  // Setting the filesystem to inactive is the test equivalent to simulating a
+  // system reset. Setting to inactive will freeze our saved filesystem state so
+  // that it will stop being recorded. It can then be reset back to the state at
+  // the time of the reset.
+  bool IsFilesystemActive() const { return filesystem_active_; }
+  void SetFilesystemActive(bool active) { filesystem_active_ = active; }
     
-    {
-    {
-    {                for (; j < size.width; j++)
-                {
-                    dst[j] = src[j] >= 0 ? 0 : 255;
-                }
-            }
-        }
-        else
-        {
-            for (size_t i = 0; i < size.height; ++i)
+                for (int i=0; i<nr_gain_filtering_iterations_; ++i)
+                sepFilter2D(gain_map, gain_map, CV_32F, ker, ker);
+    
+                for (size_t i = 0; i < dsize.height; ++i)
             {
-                u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-                std::memset(dst, 0, sizeof(u8) * size.width);
-            }
-        }
-        return;
+                const u8 * src0_row = internal::getRowPtr(srcBase, srcStride, i << 2);
+                const u8 * src1_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 1);
+                const u8 * src2_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 2);
+                const u8 * src3_row = internal::getRowPtr(srcBase, srcStride, (i << 2) + 3);
+                u8 * dst_row = internal::getRowPtr(dstBase, dstStride, i);
+                size_t sj = 0, dj = 0;
     }
     
-    template <typename T>
-inline void inRangeCheck(const Size2D &_size,
-                         const T * srcBase, ptrdiff_t srcStride,
-                         const T * rng1Base, ptrdiff_t rng1Stride,
-                         const T * rng2Base, ptrdiff_t rng2Stride,
-                         u8 * dstBase, ptrdiff_t dstStride)
-{
-    typedef typename internal::VecTraits<T>::vec128 vec128;
-    typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-    }
+        cv::GMatP in;
+    auto out = GResize3p3p::on(in, out_sz, interp);
+    cv::GComputation c(cv::GIn(in), cv::GOut(out));
     
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    #include 'caffe/layers/deconv_layer.hpp'
-    
-    namespace caffe {
-    }
-    
-    
-//--------------------------------------------------------------------------
-//
-//   Clone
-//
-//--------------------------------------------------------------------------
-RegexPattern  *RegexPattern::clone() const {
-    RegexPattern  *copy = new RegexPattern(*this);
-    return copy;
+    TEST(ByteSinkTest, Flush) {
+  string str;
+  FlushingByteSink f_sink(&str);
+  WriteAndFlush(&f_sink);
+  EXPECT_STREQ('abcz', str.c_str());
 }
     
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        DecimalFormat *fmtToAdopt, Style *styleToAdopt, UErrorCode &status)
-        : fPreExponent(),
-          fDecimalFormat(fmtToAdopt),
-          fStyle(styleToAdopt),
-          fStaticSets(NULL) {
-    if (U_FAILURE(status)) {
-        return;
+    namespace google {
+namespace protobuf {
+namespace internal {
+namespace {
     }
-    if (fDecimalFormat == NULL || fStyle == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
     }
-    const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
-    if (sym == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
     }
-    getPreExponent(*sym, fPreExponent);
-    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
-}
+    }
     
-    UBool SearchIterator::operator==(const SearchIterator &that) const
-{
-    if (this == &that) {
-        return TRUE;
-    }
-    return (m_breakiterator_            == that.m_breakiterator_ &&
-            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
-            m_search_->isOverlap        == that.m_search_->isOverlap &&
-            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
-            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
-            m_search_->matchedLength    == that.m_search_->matchedLength &&
-            m_search_->textLength       == that.m_search_->textLength &&
-            getOffset() == that.getOffset() &&
-            (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(UChar)) == 0));
-}
-    
-    //eof
+    #endif  // PROTOBUF_BENCHMARKS_UTIL_DATA_PROTO2_TO_PROTO3_UTIL_H_
 
     
+        if (dataset.message_name() == 'benchmarks.proto3.GoogleMessage1') {
+      message = new benchmarks::proto3::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage1') {
+      message = new benchmarks::proto2::GoogleMessage1;
+    } else if (dataset.message_name() == 'benchmarks.proto2.GoogleMessage2') {
+      message = new benchmarks::proto2::GoogleMessage2;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message3.GoogleMessage3') {
+      message = new benchmarks::google_message3::GoogleMessage3;
+    } else if (dataset.message_name() ==
+        'benchmarks.google_message4.GoogleMessage4') {
+      message = new benchmarks::google_message4::GoogleMessage4;
+    } else {
+      std::cerr << 'Unknown message type: ' << dataset.message_name();
+      exit(1);
+    }
     
-    {    /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+    
+    {
+    {
+    {}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+      // Optional:  Delete all global objects allocated by libprotobuf.
+  google::protobuf::ShutdownProtobufLibrary();
+    
+      if (!InitDescriptorMappingTypes())
+    return false;
+    
+    std::string TempFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'dbtmp');
+}
+    
+    
+    {}  // namespace leveldb
+    
+    TEST(VersionEditTest, EncodeDecode) {
+  static const uint64_t kBig = 1ull << 50;
+    }
+    
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(), contents.size() - 1));
+  ASSERT_EQ(
+      'Put(foo, bar)@200'
+      'ParseError()',
+      PrintContents(&batch));
+}
+    
+    // See doc/table_format.md for an explanation of the filter block format.
+    
+    
+    {}  // namespace leveldb
+
+    
+    struct ReadOptions;
+    
+        /**
+     * Targets one or more of the next write ops in this batch op using a NSTargeter.  The
+     * resulting TargetedWrites are aggregated together in the returned TargetedWriteBatches.
      *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
+     * If 'recordTargetErrors' is false, any targeting error will abort all current batches and
+     * the method will return the targeting error.  No targetedBatches will be returned on
+     * error.
+     *
+     * Otherwise, if 'recordTargetErrors' is true, targeting errors will be recorded for each
+     * write op that fails to target, and the method will return OK.
+     *
+     * (The idea here is that if we are sure our NSTargeter is up-to-date we should record
+     * targeting errors, but if not we should refresh once first.)
+     *
+     * Returned TargetedWriteBatches are owned by the caller.
      */
-    static int32_t indexFromString(const UnicodeString &keyword, UErrorCode &errorCode);
-};
+    Status targetBatch(const NSTargeter& targeter,
+                       bool recordTargetErrors,
+                       std::map<ShardId, TargetedWriteBatch*>* targetedBatches);
     
-     private:
+    /**
+ * Provides the minimal api for a simple out of line executor that can run non-cancellable
+ * callbacks.
+ *
+ * The contract for scheduling work on an executor is that it never blocks the caller.  It doesn't
+ * necessarily need to offer forward progress guarantees, but actual calls to schedule() should not
+ * deadlock.
+ *
+ * If you manage the lifetime of your executor using a shared_ptr, you can begin a chain of
+ * execution like this:
+ *      ExecutorFuture(myExec)
+ *          .then([] { return doThing1(); })
+ *          .then([] { return doThing2(); })
+ *          ...
+ */
+class OutOfLineExecutor {
+public:
+    using Task = unique_function<void(Status)>;
+    }
+    
+        if (auto skip = cmd.getSkip()) {
+        BSONObjBuilder skipBuilder(pipelineBuilder.subobjStart());
+        skipBuilder.append('$skip', skip.get());
+        skipBuilder.doneFast();
+    }
+    
+    void PopNode::validateUpdate(mutablebson::ConstElement updatedElement,
+                             mutablebson::ConstElement leftSibling,
+                             mutablebson::ConstElement rightSibling,
+                             std::uint32_t recursionLevel,
+                             ModifyResult modifyResult) const {
+    invariant(modifyResult == ModifyResult::kNormalUpdate);
+    }
+    
+    void PushNode::setValueForNewElement(mutablebson::Element* element) const {
+    BSONObj emptyArray;
+    invariant(element->setValueArray(emptyArray));
+    (void)performPush(element, nullptr);
+}
+    
+    namespace mongo {
+    }
+    
+        void _incrementHistogram(OperationContext* opCtx,
+                             long long latency,
+                             OperationLatencyHistogram* histogram,
+                             Command::ReadWriteType readWriteType);
+    
+        BSONObj keyPattern = BSON('a' << 1 << 'b' << 1);
+    createIndex(collection,
+                BSON('name'
+                     << 'a_1_b_1'
+                     << 'ns'
+                     << _nss.ns()
+                     << 'key'
+                     << keyPattern
+                     << 'v'
+                     << static_cast<int>(kIndexVersion)))
+        .transitional_ignore();
+    
+    
+int32_t RegexMatcher::start(int32_t group, UErrorCode &status) const {
+    return (int32_t)start64(group, status);
+}
