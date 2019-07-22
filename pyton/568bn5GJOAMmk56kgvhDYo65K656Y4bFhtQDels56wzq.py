@@ -1,127 +1,96 @@
 
         
-        # choose a random port to avoid colliding with TIME_WAIT sockets left over
-# from previous runs.
-define('min_port', type=int, default=8000)
-define('max_port', type=int, default=9000)
-    
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
-    
-    
-def main():
-    parse_command_line()
-    if options.dump:
-        print(tmpl.code)
-        sys.exit(0)
-    t = Timer(render)
-    results = t.timeit(options.num) / options.num
-    print('%0.3f ms per iteration' % (results * 1000))
-    
-        def _sock_state_cb(self, fd: int, readable: bool, writable: bool) -> None:
-        state = (IOLoop.READ if readable else 0) | (IOLoop.WRITE if writable else 0)
-        if not state:
-            self.io_loop.remove_handler(fd)
-            del self.fds[fd]
-        elif fd in self.fds:
-            self.io_loop.update_handler(fd, state)
-            self.fds[fd] = state
+        
+class Fieldline:
+    def __init__(self, form, field, readonly_fields=None, model_admin=None):
+        self.form = form  # A django.forms.Form instance
+        if not hasattr(field, '__iter__') or isinstance(field, str):
+            self.fields = [field]
         else:
-            self.io_loop.add_handler(fd, self._handle_events, state)
-            self.fds[fd] = state
-    
-        def tearDown(self):
-        asyncio.set_event_loop_policy(self.orig_policy)
-        self.executor.shutdown()
-    
-        def test_json_decode(self):
-        # json_decode accepts both bytes and unicode, but strings it returns
-        # are always unicode.
-        self.assertEqual(json_decode(b''foo''), u'foo')
-        self.assertEqual(json_decode(u''foo''), u'foo')
-    
-            print('Empty input')
-        assert_equal(merge_sort.sort([]), [])
-    
-    
-if __name__ == '__main__':
-    main()
-    
-    		while current is not None and current.data is not data:
-			parent = current
-			if data < current.data:
-				current = current.leftChild
-				isLeft = True 
-			else:
-				current = current.rightChild
-				isLeft = False
-    
-            self.simple_event = self.autopatch(g.stats, 'simple_event')
-    
-        def test_del_msg_failure_with_sender(self):
-        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
-        message = MagicMock(spec=Message)
-        message.name = 'msg_3'
-        message.to_id = self.id + 1
-        message.del_on_recipient = False
-    
-        def test_nosigning_login(self):
-        res = self.do_login(
-            headers={
-                signing.SIGNATURE_UA_HEADER: None,
-                signing.SIGNATURE_BODY_HEADER: None,
-            },
-            expect_errors=True,
+            self.fields = field
+        self.has_visible_field = not all(
+            field in self.form.fields and self.form.fields[field].widget.is_hidden
+            for field in self.fields
         )
-        self.assert_403_response(res, 'signing.ua.invalid.invalid_format')
+        self.model_admin = model_admin
+        if readonly_fields is None:
+            readonly_fields = ()
+        self.readonly_fields = readonly_fields
     
-            # Only controls chosen in the no-variant case.
-        for variant, percentage in FeatureState.DEFAULT_CONTROL_GROUPS.items():
-            count = counters['no_variants'][variant]
-            # The variant percentage is expressed as a part of 100, so we need
-            # to calculate the fraction-of-1 percentage and scale it
-            # accordingly.
-            scaled_percentage = float(count) / (FeatureState.NUM_BUCKETS / 100)
-            self.assertEqual(scaled_percentage, percentage)
-        for variant, percentage in three_variants.items():
-            count = counters['three_variants'][variant]
-            scaled_percentage = float(count) / (FeatureState.NUM_BUCKETS / 100)
-            self.assertEqual(scaled_percentage, percentage)
-        for variant, percentage in three_variants_more.items():
-            count = counters['three_variants_more'][variant]
-            scaled_percentage = float(count) / (FeatureState.NUM_BUCKETS / 100)
-            self.assertEqual(scaled_percentage, percentage)
     
-            # Scenario: call is successful; pass customer_ip
-        return_value = create_authorization_hold(self.customer_id,
-                                                 self.payment_profile_id,
-                                                 self.amount, 12345,
-                                                 '127.0.0.1')
-        self.assertTrue(CreateRequest.called)
-        args, kwargs = CreateRequest.call_args
-        self.assertEqual(kwargs['extraOptions'], {'x_customer_ip': '127.0.0.1'})
-        self.assertEqual(return_value, self.transaction_id)
+class InnerInline2(admin.StackedInline):
+    model = Inner2
     
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'https://example.com/a.jpg')
+        def test_inline_hidden_field_no_column(self):
+        '''#18263 -- Make sure hidden fields don't get a column in tabular inlines'''
+        parent = SomeParentModel.objects.create(name='a')
+        SomeChildModel.objects.create(name='b', position='0', parent=parent)
+        SomeChildModel.objects.create(name='c', position='1', parent=parent)
+        response = self.client.get(reverse('admin:admin_inlines_someparentmodel_change', args=(parent.pk,)))
+        self.assertNotContains(response, '<td class='field-position'>')
+        self.assertInHTML(
+            '<input id='id_somechildmodel_set-1-position' '
+            'name='somechildmodel_set-1-position' type='hidden' value='1'>',
+            response.rendered_content,
+        )
     
-        def _assert_validity(self, body, header, success, error, **expected):
-        request = MagicMock(body=body, headers={})
-        if header:
-            request.headers[signing.SIGNATURE_BODY_HEADER] = header
-        signature = signing.valid_post_signature(request)
-        self.assertEqual(signature.is_valid(), bool(success))
-        if error:
-            self.assertIn(error.code, [code for code, _ in signature.errors])
-        else:
-            self.assertEqual(len(signature.errors), 0)
-        has_mac = expected.pop('has_mac', False)
-        for k, v in expected.iteritems():
-            got = getattr(signature, k)
-            self.assertEqual(got, v, 'signature.%s: %s != %s' % (k, got, v))
+    
+class EmptyDefaultDatabaseTest(unittest.TestCase):
+    def test_empty_default_database(self):
+        '''
+        An empty default database in settings does not raise an ImproperlyConfigured
+        error when running a unit test that does not use a database.
+        '''
+        testcases.connections = db.ConnectionHandler({'default': {}})
+        connection = testcases.connections[db.utils.DEFAULT_DB_ALIAS]
+        self.assertEqual(connection.settings_dict['ENGINE'], 'django.db.backends.dummy')
+        connections_support_transactions()
+    
+    
+class NamedExpressionScopeTest(unittest.TestCase):
+    
+        def test_script_autotest(self):
+        # Lib/test/autotest.py
+        script = os.path.join(self.testdir, 'autotest.py')
+        args = [*self.python_args, script, *self.regrtest_args, *self.tests]
+        self.run_tests(args)
+    
+            Return value is a string giving a filename extension,
+        including the leading dot ('.').  The extension is not
+        guaranteed to have been associated with any particular data
+        stream, but would be mapped to the MIME type `type' by
+        guess_type().  If no extension can be guessed for `type', None
+        is returned.
+    
+        def test_returns_pid(self):
+        pidfile = support.TESTFN
+        self.addCleanup(support.unlink, pidfile)
+        script = f'''if 1:
+            import os
+            with open({pidfile!r}, 'w') as pidfile:
+                pidfile.write(str(os.getpid()))
+            '''
+        args = self.python_args('-c', script)
+        pid = self.spawn_func(args[0], args, os.environ)
+        self.assertEqual(os.waitpid(pid, 0), (pid, 0))
+        with open(pidfile) as f:
+            self.assertEqual(f.read(), str(pid))
+    
+    import socket
+import io
+import re
+import email.utils
+import email.message
+import email.generator
+import base64
+import hmac
+import copy
+import datetime
+import sys
+from email.base64mime import body_encode as encode_base64
+    
+    
+async def test_humidity_sensor_read_state(hass, utcnow):
+    '''Test reading the state of a HomeKit humidity sensor accessory.'''
+    sensor = create_humidity_sensor_service()
+    helper = await setup_test_component(hass, [sensor], suffix='humidity')
