@@ -1,348 +1,184 @@
 
         
-            @staticmethod
-    def _define_module_argument_spec():
-        '''
-        Define the argument spec for the ansible module
-        :return: argument spec dictionary
-        '''
-        argument_spec = dict(
-            server_ids=dict(type='list', required=True),
-            state=dict(default='present', choices=['present', 'absent']),
-            cpu=dict(),
-            memory=dict(),
-            anti_affinity_policy_id=dict(),
-            anti_affinity_policy_name=dict(),
-            alert_policy_id=dict(),
-            alert_policy_name=dict(),
-            wait=dict(type='bool', default=True)
-        )
-        mutually_exclusive = [
-            ['anti_affinity_policy_id', 'anti_affinity_policy_name'],
-            ['alert_policy_id', 'alert_policy_name']
-        ]
-        return {'argument_spec': argument_spec,
-                'mutually_exclusive': mutually_exclusive}
-    
-    EXAMPLES = '''
-- name: Create a new Linode.
-  linode_v4:
-    label: new-linode
-    type: g6-nanode-1
-    region: eu-west
-    image: linode/debian9
-    root_pass: passw0rd
-    authorized_keys:
-      - 'ssh-rsa ...'
-    state: present
-    
-        if not module.check_mode:
-        if not size and not vsize:
-            pool = system.pools.create(name=name, physical_capacity=Capacity('1TB'), virtual_capacity=Capacity('1TB'))
-        elif size and not vsize:
-            pool = system.pools.create(name=name, physical_capacity=Capacity(size), virtual_capacity=Capacity(size))
-        elif not size and vsize:
-            pool = system.pools.create(name=name, physical_capacity=Capacity('1TB'), virtual_capacity=Capacity(vsize))
-        else:
-            pool = system.pools.create(name=name, physical_capacity=Capacity(size), virtual_capacity=Capacity(vsize))
-        # Default value of ssd_cache is True. Disable ssd chacing if False
-        if not ssd_cache:
-            pool.update_ssd_enabled(ssd_cache)
-    
-    
+        
 def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            config=dict(required=False),
-            name=dict(required=True),
-            password=dict(required=False, no_log=True),
-            state=dict(required=False, choices=['present', 'absent'], default='present'),
-            enabled=dict(required=False, type='bool'),
-            token=dict(required=False, no_log=True),
-            url=dict(required=False, default='http://localhost:8080'),
-            user=dict(required=False)
-        ),
-        mutually_exclusive=[
-            ['password', 'token'],
-            ['config', 'enabled'],
-        ],
-        supports_check_mode=True,
-    )
+    if len(sys.argv) < 2:
+        print('No file passed (file should contain Markdown table syntax)')
+        sys.exit(1)
+    check_format(sys.argv[1])
+    if len(errors) > 0:
+        for err in errors:
+            print(err)
+        sys.exit(1)
     
-        merged_items = collections.OrderedDict()
-    
-                if isinstance(value, list):
-                attrs[name] = list(map(to_bytes, value))
-            else:
-                attrs[name].append(to_bytes(value))
-    
-        if any(lib_arg is not None for lib_arg in sendgrid_lib_args) and not HAS_SENDGRID:
-        reason = 'when using any of the following arguments: ' \
-                 'api_key, bcc, cc, headers, from_name, html_body, attachments'
-        module.fail_json(msg=missing_required_lib('sendgrid', reason=reason),
-                         exception=SENDGRID_IMP_ERR)
-    
-          <!-- Power cycle server -->
-      <configConfMo><inConfig>
-        <computeRackUnit dn='sys/rack-unit-1' adminPower='cycle-immediate'/>
-      </inConfig></configConfMo>
-  delegate_to: localhost
+    def _init():
+    for code, titles in _codes.items():
+        for title in titles:
+            setattr(codes, title, code)
+            if not title.startswith(('\\', '/')):
+                setattr(codes, title.upper(), code)
     
     
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(required=True),
-            port=dict(default=623, type='int'),
-            state=dict(required=True, choices=['on', 'off', 'shutdown', 'reset', 'boot']),
-            user=dict(required=True, no_log=True),
-            password=dict(required=True, no_log=True),
-            timeout=dict(default=300, type='int'),
-        ),
-        supports_check_mode=True,
-    )
+class InvalidURL(RequestException, ValueError):
+    '''The URL provided was somehow invalid.'''
     
-        XXX: This function assumes that archives contain a toplevel directory
-    that is has the same name as the basename of the archive. This is
-    safe enough for almost anything we use.  Unfortunately, it does not
-    work for current Tcl and Tk source releases where the basename of
-    the archive ends with '-src' but the uncompressed directory does not.
-    For now, just special case Tcl and Tk tar.gz downloads.
-    '''
-    curdir = os.getcwd()
-    try:
-        os.chdir(builddir)
-        if archiveName.endswith('.tar.gz'):
-            retval = os.path.basename(archiveName[:-7])
-            if ((retval.startswith('tcl') or retval.startswith('tk'))
-                    and retval.endswith('-src')):
-                retval = retval[:-4]
-            if os.path.exists(retval):
-                shutil.rmtree(retval)
-            fp = os.popen('tar zxf %s 2>&1'%(shellQuote(archiveName),), 'r')
+        def test_repr(self):
+        assert repr(self.lookup_dict) == '<lookup 'test'>'
     
-        def test_expressions(self):
-        self.check_expr('foo(1)')
-        self.check_expr('[1, 2, 3]')
-        self.check_expr('[x**3 for x in range(20)]')
-        self.check_expr('[x**3 for x in range(20) if x % 3]')
-        self.check_expr('[x**3 for x in range(20) if x % 2 if x % 3]')
-        self.check_expr('list(x**3 for x in range(20))')
-        self.check_expr('list(x**3 for x in range(20) if x % 3)')
-        self.check_expr('list(x**3 for x in range(20) if x % 2 if x % 3)')
-        self.check_expr('foo(*args)')
-        self.check_expr('foo(*args, **kw)')
-        self.check_expr('foo(**kw)')
-        self.check_expr('foo(key=value)')
-        self.check_expr('foo(key=value, *args)')
-        self.check_expr('foo(key=value, *args, **kw)')
-        self.check_expr('foo(key=value, **kw)')
-        self.check_expr('foo(a, b, c, *args)')
-        self.check_expr('foo(a, b, c, *args, **kw)')
-        self.check_expr('foo(a, b, c, **kw)')
-        self.check_expr('foo(a, *args, keyword=23)')
-        self.check_expr('foo + bar')
-        self.check_expr('foo - bar')
-        self.check_expr('foo * bar')
-        self.check_expr('foo / bar')
-        self.check_expr('foo // bar')
-        self.check_expr('(foo := 1)')
-        self.check_expr('lambda: 0')
-        self.check_expr('lambda x: 0')
-        self.check_expr('lambda *y: 0')
-        self.check_expr('lambda *y, **z: 0')
-        self.check_expr('lambda **z: 0')
-        self.check_expr('lambda x, y: 0')
-        self.check_expr('lambda foo=bar: 0')
-        self.check_expr('lambda foo=bar, spaz=nifty+spit: 0')
-        self.check_expr('lambda foo=bar, **z: 0')
-        self.check_expr('lambda foo=bar, blaz=blat+2, **z: 0')
-        self.check_expr('lambda foo=bar, blaz=blat+2, *y, **z: 0')
-        self.check_expr('lambda x, *y, **z: 0')
-        self.check_expr('(x for x in range(10))')
-        self.check_expr('foo(x for x in range(10))')
-        self.check_expr('...')
-        self.check_expr('a[...]')
+                if isinstance(e.reason, ResponseError):
+                raise RetryError(e, request=request)
     
-        if default is not MISSING and default_factory is not MISSING:
-        raise ValueError('cannot specify both default and default_factory')
-    return Field(default, default_factory, init, repr, hash, compare,
-                 metadata)
+        if cookie_dict is not None:
+        names_from_jar = [cookie.name for cookie in cookiejar]
+        for name in cookie_dict:
+            if overwrite or (name not in names_from_jar):
+                cookiejar.set_cookie(create_cookie(name, cookie_dict[name]))
+    
+        def test_server_closes(self):
+        '''the server closes when leaving the context manager'''
+        with Server.basic_response_server() as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
     
     
-if __name__ == '__main__':
-    unittest.main()
+logger = logging.getLogger(__name__)
+    
+    
+class ResourceTest(unittest.TestCase):
+    '''Tests for acme.fields.Resource.'''
+    
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
+'''
+import josepy as jose
+    
+        def test_nonce_decoder(self):
+        from acme.jws import Header
+        nonce_field = Header._fields['nonce']
+    
+    logger = logging.getLogger(__name__)
+    
+    import dns.flags
+import dns.rcode
+import dns.tsig
+import mock
+    
+        def certbot(self, args, force_renew=True):
+        '''
+        Execute certbot with given args, not renewing certificates by default.
+        :param args: args to pass to certbot
+        :param force_renew: set to False to not renew by default
+        :return: output of certbot execution
+        '''
+        command = ['--authenticator', 'standalone', '--installer', 'null']
+        command.extend(args)
+        return certbot_call.certbot_test(
+            command, self.directory_url, self.http_01_port, self.tls_alpn_01_port,
+            self.config_dir, self.workspace, force_renew=force_renew)
+    
+    
 
     
-        @unittest.skipUnless(hasattr(posix, 'preadv'), 'test needs posix.preadv()')
-    @unittest.skipUnless(hasattr(posix, 'RWF_HIPRI'), 'test needs posix.RWF_HIPRI')
-    def test_preadv_flags(self):
-        fd = os.open(support.TESTFN, os.O_RDWR | os.O_CREAT)
-        try:
-            os.write(fd, b'test1tt2t3t5t6t6t8')
-            buf = [bytearray(i) for i in [5, 3, 2]]
-            self.assertEqual(posix.preadv(fd, buf, 3, os.RWF_HIPRI), 10)
-            self.assertEqual([b't1tt2', b't3t', b'5t'], list(buf))
-        except NotImplementedError:
-            self.skipTest('preadv2 not available')
-        except OSError as inst:
-            # Is possible that the macro RWF_HIPRI was defined at compilation time
-            # but the option is not supported by the kernel or the runtime libc shared
-            # library.
-            if inst.errno in {errno.EINVAL, errno.ENOTSUP}:
-                raise unittest.SkipTest('RWF_HIPRI is not supported by the current system')
-            else:
-                raise
-        finally:
-            os.close(fd)
-    
-            def abort(self):
-            # overridden as we can't pass MSG_OOB flag to sendall()
-            line = b'ABOR' + B_CRLF
-            self.sock.sendall(line)
-            resp = self.getmultiline()
-            if resp[:3] not in {'426', '225', '226'}:
-                raise error_proto(resp)
-            return resp
-    
-            # Command completion response?
-    
-                def run():
-                with ready_cond:
-                    ready.append(None)
-                    ready_cond.notify()
-                with start_cond:
-                    while not started:
-                        start_cond.wait()
-                loop(start_time, duration * 1.5, end_event, do_yield=False)
-    
-        This pure Python implementation is not reentrant.
-    '''
-    # Note: while this pure Python version provides fairness
-    # (by using a threading.Semaphore which is itself fair, being based
-    #  on threading.Condition), fairness is not part of the API contract.
-    # This allows the C version to use a different implementation.
-    
-        '''
-    if iter(data) is data:
-        data = list(data)
-    n = len(data)
-    if n < 1:
-        raise StatisticsError('pvariance requires at least one data point')
-    T, ss = _ss(data, mu)
-    return _convert(ss/n, T)
-    
-        await common.async_turn_off(hass)
-    await hass.async_block_till_done()
+        return x
     
     
-    {
-    {
-    {            }
-        }
-    })
+def attention_flow_self(h, u, T=None, J=None, d=None, name=None, reuse=None):
+    '''Attention Flow Self Match Layer
+    Input shape:
+        h: [N, T, d]  # 原文中的 shape 为 [N, T, 2d], 因为经过了 bi-LSTM, 维度扩了一倍
+        u: [N, J, d]
+    Output shape:
+        [N, T, 4d]
     
-            # assert temperature estimation
-        esttemp = moldind.attributes.get(ATTR_CRITICAL_TEMP)
-        assert esttemp
-        assert esttemp > 14.9
-        assert esttemp < 15.1
+    print(word_vec)
+print(model.wv['aam'])
+'''
+[ 0.02210762 -0.10488641  0.05512805  0.09150169  0.00725085]
+[ 0.02210762 -0.10488641  0.05512805  0.09150169  0.00725085]
+'''
     
-        assert mock_discover.called
-    assert mock_discover.call_count == 1
-    assert not mock_platform.called
-    mock_discover.assert_called_with(
-        hass, SERVICE_NO_PLATFORM, SERVICE_INFO,
-        SERVICE_NO_PLATFORM_COMPONENT, BASE_CONFIG)
     
-                msg = DIFFERENT_FREQ.format(
-                cls=type(self).__name__, own_freq=self.freqstr, other_freq=other.freqstr
-            )
-            raise IncompatibleFrequency(msg)
-        elif is_integer(other):
-            # integer is passed to .shift via
-            # _add_datetimelike_methods basically
-            # but ufunc may pass integer to _add_delta
-            return other
+def test_iloc_nonunique():
+    s = Series([0, 1, 2], index=[0, 1, 0])
+    assert s.iloc[2] == 2
+
     
-        def test_use_net_from_service(self):
-        container_name = 'test_aaa_1'
-        self.mock_client.containers.return_value = [
-            {
-                'Name': container_name,
-                'Names': [container_name],
-                'Id': container_name,
-                'Image': 'busybox:latest'
-            }
-        ]
-        project = Project.from_config(
-            name='test',
-            client=self.mock_client,
-            config_data=Config(
-                version=V2_0,
-                services=[
-                    {
-                        'name': 'aaa',
-                        'image': 'busybox:latest'
-                    },
-                    {
-                        'name': 'test',
-                        'image': 'busybox:latest',
-                        'network_mode': 'service:aaa'
-                    },
-                ],
-                networks=None,
-                volumes=None,
-                secrets=None,
-                configs=None,
-            ),
+            df = DataFrame(
+            {'a': [1, np.nan, np.nan, np.nan, 2, np.nan], 'b': [3, np.nan, 4, 4, 4, 4]}
         )
-    
-    from .errors import StreamParseError
-from .timeparse import MULTIPLIERS
-from .timeparse import timeparse
-    
-        def test_project_name_with_empty_environment_var(self):
-        base_dir = 'tests/fixtures/simple-composefile'
-        with mock.patch.dict(os.environ):
-            os.environ['COMPOSE_PROJECT_NAME'] = ''
-            project_name = get_project_name(base_dir)
-        assert 'simple-composefile' == project_name
+        actual = pd.crosstab(df.a, df.b, margins=True, dropna=True)
+        expected = pd.DataFrame([[1, 0, 1], [0, 1, 1], [1, 1, 2]])
+        expected.index = Index([1.0, 2.0, 'All'], name='a')
+        expected.columns = Index([3.0, 4.0, 'All'], name='b')
+        tm.assert_frame_equal(actual, expected)
     
     
-@ddt
-class EnvironmentTest(DockerClientTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super(EnvironmentTest, cls).setUpClass()
-        cls.compose_file = tempfile.NamedTemporaryFile(mode='w+b')
-        cls.compose_file.write(bytes('''version: '3.2'
-services:
-  svc:
-    image: busybox:latest
-    environment:
-      TEST_VARIABLE: ${TEST_VARIABLE}''', encoding='utf-8'))
-        cls.compose_file.flush()
+def _FilterToMatchingCompletions( completed_item, completions ):
+  '''Filter to completions matching the item Vim said was completed'''
+  match_keys = [ 'word', 'abbr', 'menu', 'info' ]
+  matched_completions = []
+  for index, completion in enumerate( completions ):
+    item = _ConvertCompletionDataToVimData( index, completion )
     
     
-def build_no_log_generator(container, log_args):
-    '''Return a generator that prints a warning about logs and waits for
-    container to exit.
-    '''
-    yield 'WARNING: no logs are available with the '{}' log driver\n'.format(
-        container.log_driver)
+  def _HandleBasicResponse( self ):
+    vimsupport.PostVimMessage( self._response, warning = False )
     
-        for name, service in data.items():
-        warn_for_links(name, service)
-        warn_for_external_links(name, service)
-        rewrite_net(service, service_names)
-        rewrite_build(service)
-        rewrite_logging(service)
-        rewrite_volumes_from(service, service_names)
     
-            assert not mock_log.warn.called
-        assert (
-            [mount['Destination'] for mount in new_container.get('Mounts')] ==
-            ['/data']
-        )
-        assert new_container.get_mount('/data')['Source'] != host_path
+@contextlib.contextmanager
+def UserOptions( options ):
+  old_vim_options = test_utils.VIM_OPTIONS.copy()
+  test_utils.VIM_OPTIONS.update( DEFAULT_CLIENT_OPTIONS )
+  test_utils.VIM_OPTIONS.update( options )
+  try:
+    yield
+  finally:
+    test_utils.VIM_OPTIONS = old_vim_options
+    
+        with patch( 'ycm.youcompleteme.SendCommandRequest' ) as send_request:
+      ycm.SendCommandRequest( [ 'ft=ycm:ident', 'GoTo' ], '', False, 1, 1 )
+      send_request.assert_called_once_with( *expected_args )
+    
+    
+  def UpdateWithNewDiagnostics( self, diags ):
+    self._diagnostics = [ _NormalizeDiagnostic( x ) for x in
+                            self._ApplyDiagnosticFilter( diags ) ]
+    self._ConvertDiagListToDict()
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
+    
+          BaseRequest().GetDataFromHandler( 'healthy', display_message = False )
+
+    
+    
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
+    
+    from ycm.client.messages_request import _HandlePollResponse
+from ycm.tests.test_utils import ExtendedMock
+    
+      # We don't want the requests to actually be sent to the server, just have it
+  # return success.
+  with patch( 'ycm.client.completer_available_request.'
+              'CompleterAvailableRequest.PostDataToHandler',
+              return_value = True ):
+    with patch( 'ycm.client.completion_request.CompletionRequest.'
+                'PostDataToHandlerAsync',
+                return_value = MagicMock( return_value=True ) ):
