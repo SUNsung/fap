@@ -1,325 +1,343 @@
 
         
-        EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+          // Get the normal conformance. If we don't have one, this is a self
+  // conformance, which we can ignore.
+  auto normal = dyn_cast<NormalProtocolConformance>(
+      conformance->getRootConformance());
+  if (normal == nullptr)
+    return;
+    
+    
+    {    return tryDevirtualizeClassMethod(FAS, Instance, CD, ORE);
   }
+    
+      /// Return whether this function has a foreign implementation which can
+  /// be emitted on demand.
+  bool hasForeignBody() const;
+    
+      ClusteredBitVector emptyVec;
+  vec.append(emptyVec);
+    
+    enum class KeyPathComponentKindEncoding : uint8_t {
+  StoredProperty,
+  TupleElement,
+  GettableProperty,
+  SettableProperty,
+  OptionalChain,
+  OptionalForce,
+  OptionalWrap,
+  Trivial,
+};
+enum class KeyPathComputedComponentIdKindEncoding : uint8_t {
+  Property,
+  Function,
+  DeclRef,
+};
+    
+    /// Knows how to make a deep copy of a debug scope.
+class ScopeCloner {
+  llvm::SmallDenseMap<const SILDebugScope *,
+                      const SILDebugScope *> ClonedScopeCache;
+  SILFunction &NewFn;
+public:
+  /// ScopeCloner expects NewFn to be a clone of the original
+  /// function, with all debug scopes and locations still pointing to
+  /// the original function.
+  ScopeCloner(SILFunction &NewFn);
+  /// Return a (cached) deep copy of a scope.
+  const SILDebugScope *getOrCreateClonedScope(const SILDebugScope *OrigScope);
+};
+    
+      StringRef getFieldName(uintptr_t Offset, uintptr_t Low,
+                         uintptr_t High) const {
+    uintptr_t nameAddr = (uintptr_t)FieldName.get() + Offset;
+    if (nameAddr < Low || nameAddr > High)
+      return '';
+    return (const char *)nameAddr;
+  }
+    
+          return CaptureAddress;
+    }
+    case MetadataSourceKind::GenericArgument: {
+      auto *GAMS = cast<GenericArgumentMetadataSource>(MS);
+      auto Base = readMetadataSource(Context, GAMS->getSource(), Builder);
+      if (!Base)
+        break;
+    
+    
+    {
+    {}} // namespace
+
+    
+    template <> IMF_EXPORT const char *EnvmapAttribute::staticTypeName ();
+    
+        #else
+    
+    
+    {    for (int i = 0; i < n; ++i)
+       Xdr::read <StreamIO> (is, _value[i]);
 }
     
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
+    typedef TypedAttribute<OPENEXR_IMF_INTERNAL_NAMESPACE::FloatVector>
+    FloatVectorAttribute;
     
-    namespace {
+    ////////////////////////////////////////////////////////////////////
+//
+// Forward declarations for OpenEXR - correctly declares namespace
+//
+////////////////////////////////////////////////////////////////////
+    
+    	    if (i.channel().xSampling < 1)
+	    {
+		THROW (IEX_NAMESPACE::ArgExc, 'The x subsampling factor for the '
+				    '\'' << i.name() << '\' channel '
+				    'is invalid.');
+	    }
+    
+    
+    //--------------------------------------------------------------------
+    // Constructor -- the data window is specified explicitly; the display
+    // window is set to Box2i (V2i (0, 0), V2i (width-1, height-1).
+    //--------------------------------------------------------------------
+    
+    
+//
+// Struct InputFile::Data stores things that will be
+// needed between calls to readPixels
+//
+    
+    
+    //-------------------------------------------------------------
+    // A constructor that attaches the new InputFile object to a
+    // file that has already been opened.  Destroying the InputFile
+    // object will not close the file.
+    //
+    // numThreads determines the number of threads that will be
+    // used to read the file (see ImfThreading.h).
+    //-------------------------------------------------------------
+    
+    
+OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_EXIT 
+
+    
+      case BInitPrim:
+  case BPrim:
+  case BInitUnc:
+  case BUnc:
+  case BInitCell:
+  case BInitGen:
+  case BCell:
+  case BGen:
+  case BTop:
+    return false;
+    
+      // When a file is loaded inside of a request context we perform a consistency
+  // check to ensure that all files loaded within the request use the same
+  // options.
+  void onLoadWithOptions(const char* f, const RepoOptions& options);
+    
+    void ActRec::setJitReturn(void* retAddr) {
+  FTRACE(1, 'Replace m_savedRip in fp {}, {:#x} -> {}, func {}\n',
+         this, m_savedRip, retAddr, func()->fullName()->data());
+  m_savedRip = reinterpret_cast<uintptr_t>(retAddr);
+}
+    
+      /*
+   * Determine whether p is a Class* or an ObjectData* based
+   * on kHasClassBit.
+   *
+   * @requires: p != nullptr
+   */
+  static bool checkThis(void* p);
+    
+      Variant d = data.toDouble();
+  String sd = d.toString();
+  xmlNodeSetContentLen(ret, BAD_CAST(sd.data()), sd.size());
+    
+    
+    {  if (m_slabManager && m_hugeBytes < RuntimeOption::RequestHugeMaxBytes) {
+    if (auto slab = m_slabManager->tryAlloc()) {
+      stats.mmap_volume += kSlabSize;
+      stats.mmap_cap += kSlabSize;
+      stats.peakCap = std::max(stats.peakCap, stats.capacity());
+      m_pooled_slabs.emplace_back(slab.ptr(), kSlabSize, slab.tag());
+      m_bigs.insert((HeapObject*)slab.ptr(), kSlabSize);
+      m_hugeBytes += kSlabSize;
+      return finish(slab.ptr());
     }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    #endif
-    
-            int16x8_t l02 = vaddq_s16(line0x, line2x);
-        int16x8_t l1x2 = vshlq_n_s16(line1x, 1);
-        int16x8_t dy = vsubq_s16(line2y, line0y);
-        int16x8_t dx = vaddq_s16(l1x2, l02);
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
-    
-    #endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s32, f32, 8,
-,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
-             'vcvt.f32.s32 q1, q0                                    \n\t'
-             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst] 'r' (_dst + i)
-             : 'd0','d1','d2','d3'//,'d4','d5'
-         );
-         __asm__ (
-             'vld1.32 {d0-d1}, [%[src]]                              \n\t'
-             'vcvt.f32.s32 q1, q0                                    \n\t'
-             'vst1.32 {d2-d3}, [%[dst]]                              \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i + 4),
-               [dst] 'r' (_dst + i + 4)
-             : 'd0','d1','d2','d3'//,'d4','d5'
-         );
-     }
-})
+  }
+#ifdef USE_JEMALLOC
+  auto const flags = MALLOCX_ALIGN(kSlabAlign) |
+    (RuntimeOption::EvalBigAllocUseLocalArena ? local_arena_flags : 0);
+  auto slab = mallocx(kSlabSize, flags);
 #else
-CVT_FUNC(s32, f32, 8,
-,
+  auto slab = safe_aligned_alloc(kSlabAlign, kSlabSize);
+#endif
+  m_bigs.insert((HeapObject*)slab, kSlabSize);
+  stats.malloc_cap += kSlabSize;
+  stats.peakCap = std::max(stats.peakCap, stats.capacity());
+  return finish(slab);
+}
+    
+          // For use with loading xml
+      HHVM_RC_INT(LIBXML_NOENT, XML_PARSE_NOENT);
+      HHVM_RC_INT(LIBXML_DTDLOAD, XML_PARSE_DTDLOAD);
+      HHVM_RC_INT(LIBXML_DTDATTR, XML_PARSE_DTDATTR);
+      HHVM_RC_INT(LIBXML_DTDVALID, XML_PARSE_DTDVALID);
+      HHVM_RC_INT(LIBXML_NOERROR, XML_PARSE_NOERROR);
+      HHVM_RC_INT(LIBXML_NOWARNING, XML_PARSE_NOWARNING);
+      HHVM_RC_INT(LIBXML_NOBLANKS, XML_PARSE_NOBLANKS);
+      HHVM_RC_INT(LIBXML_XINCLUDE, XML_PARSE_XINCLUDE);
+      HHVM_RC_INT(LIBXML_NSCLEAN, XML_PARSE_NSCLEAN);
+      HHVM_RC_INT(LIBXML_NOCDATA, XML_PARSE_NOCDATA);
+      HHVM_RC_INT(LIBXML_NONET, XML_PARSE_NONET);
+      HHVM_RC_INT(LIBXML_PEDANTIC, XML_PARSE_PEDANTIC);
+      HHVM_RC_INT(LIBXML_COMPACT, XML_PARSE_COMPACT);
+      HHVM_RC_INT(LIBXML_NOXMLDECL, XML_SAVE_NO_DECL);
+      HHVM_RC_INT(LIBXML_PARSEHUGE, XML_PARSE_HUGE);
+      HHVM_RC_INT(LIBXML_NOEMPTYTAG, LIBXML_SAVE_NOEMPTYTAG);
+    
+    namespace ImGuiFreeType
 {
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         int32x4_t vline_s32 = vld1q_s32(_src + i);
-         float32x4_t vline_f32 = vcvtq_f32_s32(vline_s32);
-         vst1q_f32(_dst + i, vline_f32);
-    }
+    // Hinting greatly impacts visuals (and glyph sizes).
+    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
+    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
+    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
     }
     
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
+    
+    {        ImGui::Render();
     }
     
-    f64 dotProduct(const Size2D &_size,
-               const f32 * src0Base, ptrdiff_t src0Stride,
-               const f32 * src1Base, ptrdiff_t src1Stride)
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    static bool ImGui_ImplDX9_CreateFontsTexture()
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width * sizeof(f32)))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height, bytes_per_pixel;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
     }
     
-    #ifdef CAROTENE_NEON
     
+    // ===========
+    // array types
+    // ===========
     
-    {            prev = vaddw_u16(prev, vdup_lane_u16(el4h, 3));
-        }
-    
-            s16 prevx = 0, currx = 0, nextx = 0;
-        ptrdiff_t x = 0;
-        const ptrdiff_t bwidth = y + 2 < height ? width : (width - 8);
-    
-    namespace leveldb {
+      size_t sizeGuess() const {
+    size_t total_size = 0;
+    for (auto& q : queues_) {
+      // MPMCQueue can have a negative size if there are pending readers.
+      // Since we don't expose a blocking interface this shouldn't happen,
+      // But just in case we put a floor at 0
+      total_size += std::max<ssize_t>(0, q.sizeGuess());
     }
-    
-    #include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/log_reader.h'
-#include 'db/version_edit.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'leveldb/options.h'
-#include 'leveldb/status.h'
-#include 'leveldb/table.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
+    return total_size;
   }
     
-      bool empty() const { return head_.next_ == &head_; }
-  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
-  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
+    TEST_F(ScopedEventBaseThreadTest, custom_manager) {
+  EventBaseManager ebm;
+  ScopedEventBaseThread sebt(&ebm);
+  auto sebt_eb = sebt.getEventBase();
+  auto ebm_eb = static_cast<EventBase*>(nullptr);
+  sebt_eb->runInEventBaseThreadAndWait([&] { ebm_eb = ebm.getEventBase(); });
+  EXPECT_EQ(uintptr_t(sebt_eb), uintptr_t(ebm_eb));
+}
     
-      if (msg == nullptr && !input.empty()) {
-    msg = 'invalid tag';
+      size_t idx = 0;
+  while (idx < ioQueue->size()) {
+    int numIovecs = 0;
+    while (numIovecs < kNumIovecs && idx < ioQueue->size()) {
+      const auto& str = (*ioQueue)[idx];
+      iovecs[numIovecs].iov_base = const_cast<char*>(str.data());
+      iovecs[numIovecs].iov_len = str.size();
+      ++numIovecs;
+      ++idx;
+    }
+    }
+    
+    using folly::File;
+using folly::StringPiece;
+    
+    template <
+    typename Key,
+    typename Mapped,
+    typename Hasher = f14::DefaultHasher<Key>,
+    typename KeyEqual = f14::DefaultKeyEqual<Key>>
+using F14VectorMap = folly::F14VectorMap<
+    Key,
+    Mapped,
+    Hasher,
+    KeyEqual,
+    folly::detail::std_pmr::polymorphic_allocator<
+        std::pair<Key const, Mapped>>>;
+    
+      template <typename... Args>
+  std::pair<iterator, bool> try_emplace(key_type&& key, Args&&... args) {
+    auto rv = table_.tryEmplaceValue(
+        key,
+        std::piecewise_construct,
+        std::forward_as_tuple(std::move(key)),
+        std::forward_as_tuple(std::forward<Args>(args)...));
+    return std::make_pair(table_.makeIter(rv.first), rv.second);
   }
     
-    // WriteBatchInternal provides static methods for manipulating a
-// WriteBatch that we don't want in the public WriteBatch interface.
-class WriteBatchInternal {
- public:
-  // Return the number of entries in the batch.
-  static int Count(const WriteBatch* batch);
+    #if FOLLY_HAS_MEMORY_RESOURCE
+namespace pmr {
+template <
+    typename Key,
+    typename Hasher = f14::DefaultHasher<Key>,
+    typename KeyEqual = f14::DefaultKeyEqual<Key>>
+using F14NodeSet = folly::F14NodeSet<
+    Key,
+    Hasher,
+    KeyEqual,
+    folly::detail::std_pmr::polymorphic_allocator<Key>>;
     }
     
     
-    {  SrcPos start;
-  SrcPos past;
-};
-    
-      char* comma = (char*)memchr(data, ',', data_len);
-  if (comma == nullptr) {
-    raise_warning('rfc2397: missing comma');
-    return nullptr;
+    {  // Nuke 'em all
+  for (const auto& item : allocatedItems) {
+    arena.deallocate(item, 0 /* unused */);
   }
-    
-    #endif // incl_HPHP_DEBUGGABLE_H_
-
-    
-    
-    {}
-
-    
-        class Rational
-    {
-    public:
-        Rational() noexcept;
-        Rational(Number const& n) noexcept;
-        Rational(Number const& p, Number const& q) noexcept;
-        Rational(int32_t i);
-        Rational(uint32_t ui);
-        Rational(uint64_t ui);
-    }
-    
-            static property Windows::UI::Xaml::DependencyProperty^ AnnouncementProperty
-        {
-            Windows::UI::Xaml::DependencyProperty^ get()
-            {
-                return s_announcementProperty;
-            }
-        }
-    
-            static std::unordered_map<std::wstring, std::wstring> GetTokenToReadableNameMap();
-    
-    static constexpr auto sc_MetadataUriLocalizeFor = L'https://go.microsoft.com/fwlink/?linkid=2041093&localizeFor=';
-static constexpr auto sc_RatiosUriRelativeTo = L'https://go.microsoft.com/fwlink/?linkid=2041339&localCurrency=';
-    
-      static bool isInitialized6() { return data6_.initialized; }
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-    void DHTRoutingTable::showBuckets() const
-{
-  /*
-    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
-    buckets_.begin(); itr != buckets_.end(); ++itr) {
-    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
-    << 'nodes = ' << (*itr)->countNode() << endl;
-    }
-  */
+  // The total size should be the same
+  EXPECT_TRUE(arena.totalSize() >= minimum_size);
+  EXPECT_TRUE(arena.totalSize() <= maximum_size);
+  VLOG(4) << minimum_size << ' < ' << arena.totalSize() << ' < '
+          << maximum_size;
 }
     
-      ~DHTRoutingTable();
-    
-    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
-
-    
-    
-    {  void serialize(const std::string& filename);
-};
-    
-    #include <memory>
-    
-    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
-{
-  memcpy(secret_[0], initialSecret, SECRET_SIZE);
-  memcpy(secret_[1], initialSecret, SECRET_SIZE);
-}
-    
-    std::vector<DNSCache::AddrEntry>::const_iterator
-DNSCache::CacheEntry::find(const std::string& addr) const
-{
-  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return i;
-    }
-  }
-  return addrEntries_.end();
-}
-    
-    #include 'gtest/gtest.h'
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-    
-    
-    {  Byte t1(bytes + 6);
-  uint32_t t = t1.get_byte(5, 3);
-  x <<= 3;
-  x |= t;
-  double ret = x * CLUSTER_VREL_RES + CLUSTER_VREL_LAT_MIN;
-  return ret;
-}
-    
-    void Spline1dSeg::SetParams(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
-#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
-#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
-#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
-#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
-#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
-#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
-    
-      Byte t3(bytes + 7);
-  t = t3.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-      Byte t1(bytes + 1);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    #include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
-    
-    // config detail: {'name': 'output_value', 'enum': {0: 'OUTPUT_VALUE_OFF', 1:
-// 'OUTPUT_VALUE_ON'}, 'precision': 1.0, 'len': 8, 'is_signed_var': False,
-// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 23, 'type': 'enum', 'order':
-// 'motorola', 'physical_unit': ''}
-Horn_rpt_79::Output_valueType Hornrpt79::output_value(const std::uint8_t* bytes,
-                                                      int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
+      auto collectObserver = makeObserver([observer, observerA, &observerB]() {
+    auto value = **observer;
+    auto valueA = **observerA;
+    auto valueB = ***observerB;
     }
