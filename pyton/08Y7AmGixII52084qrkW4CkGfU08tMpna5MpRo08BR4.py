@@ -1,80 +1,131 @@
 
         
-        usage:
+            def __init__(self):
+        self.bitrate = None
+        self.definition = None
+        self.size = None
+        self.height = None
+        self.width = None
+        self.type = None
+        self.url = None
     
-        def long_desc(self):
-        '''A long description of the command. Return short description when not
-        available. It cannot contain newlines, since contents will be formatted
-        by optparser which removes newlines and wraps text.
-        '''
-        return self.short_desc()
-    
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
-    
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
     
     
-# XXX: move it to w3lib?
-_ajax_crawlable_re = re.compile(six.u(r'<meta\s+name=['\']fragment['\']\s+content=['\']!['\']/?>'))
-def _has_ajaxcrawlable_meta(text):
-    '''
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment'  content='!'/></head><body></body></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment' content='!'></head></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><!--<meta name='fragment'  content='!'/>--></head><body></body></html>')
-    False
-    >>> _has_ajaxcrawlable_meta('<html></html>')
-    False
-    '''
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
     
-        long_description = README,
-    
-    site_info = 'baomihua.com'
-download = baomihua_download
-download_playlist = playlist_not_supported('baomihua')
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
 
     
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
+    import urllib.request, urllib.parse
+from ..common import *
+    
+                with open('htmlout.html', 'w') as out:
+                out.write(header)
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+    
+_DEFAULTS = {
+    'type': {
+        'default': 'normalized',
+        'info': 'The type of blending to use:'
+                '\n\t gaussian: Blend with Gaussian filter. Slower, but often better than '
+                'Normalized'
+                '\n\t normalized: Blend with Normalized box filter. Faster than Gaussian'
+                '\n\t none: Don't perform blending',
+        'datatype': str,
+        'rounding': None,
+        'min_max': None,
+        'choices': ['gaussian', 'normalized', 'none'],
+        'gui_radio': True,
+        'fixed': True,
+    },
+    'radius': {
+        'default': 3.0,
+        'info': 'Radius dictates how much blending should occur.\nThis figure is set as a '
+                'percentage of the mask diameter to give the radius in pixels. Eg: for a mask '
+                'with diameter 200px, a percentage of 6% would give a final radius of 3px.\n'
+                'Higher percentage means more blending.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (0.1, 25.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'passes': {
+        'default': 4,
+        'info': 'The number of passes to perform. Additional passes of the blending algorithm '
+                'can improve smoothing at a time cost. This is more useful for 'box' type '
+                'blending.\nAdditional passes have exponentially less effect so it's not '
+                'worth setting this too high.',
+        'datatype': int,
+        'rounding': 1,
+        'min_max': (1, 8),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+    'erosion': {
+        'default': 0.0,
+        'info': 'Erosion kernel size as a percentage of the mask radius area.\nPositive '
+                'values apply erosion which reduces the size of the swapped area.\nNegative '
+                'values apply dilation which increases the swapped area.',
+        'datatype': float,
+        'rounding': 1,
+        'min_max': (-100.0, 100.0),
+        'choices': [],
+        'gui_radio': False,
+        'fixed': True,
+    },
+}
 
     
-        title = match1(html, r'&title=([^&]+)')
+        def close(self):
+        ''' Close the ffmpeg writer and mux the audio '''
+        self.writer.close()
+
     
-                    mapping = KBaseMapping(base=int(base))
-                sym_to_name = {}
-                for no in range(int(size), 0, -1):
-                    no_in_base = mapping.mapping(no)
-                    val = names[no] if no < len(names) and names[no] else no_in_base
-                    sym_to_name[no_in_base] = val
-    
-        def del_queue(self, name):
-        ''' remove a queue from the manager '''
-        logger.debug('QueueManager deleting: '%s'', name)
-        del self.queues[name]
-        logger.debug('QueueManager deleted: '%s'', name)
-    
-                self.add_item(section=section,
-                          title='option_1',
-                          datatype=bool,
-                          default=False,
-                          info='sect_1 option_1 information')
-        '''
-        raise NotImplementedError
+        def load_module(self, filename, module_path, plugin_type):
+        ''' Load the defaults module and add defaults '''
+        logger.debug('Adding defaults: (filename: %s, module_path: %s, plugin_type: %s',
+                     filename, module_path, plugin_type)
+        module = os.path.splitext(filename)[0]
+        section = '.'.join((plugin_type, module.replace('_defaults', '')))
+        logger.debug('Importing defaults module: %s.%s', module_path, module)
+        mod = import_module('{}.{}'.format(module_path, module))
+        self.add_section(title=section, info=mod._HELPTEXT)  # pylint:disable=protected-access
+        for key, val in mod._DEFAULTS.items():  # pylint:disable=protected-access
+            self.add_item(section=section, title=key, **val)
+        logger.debug('Added defaults: %s', section)
+
     
         The following keys are expected for the _DEFAULTS <metadata> dict:
         datatype:  [required] A python type class. This limits the type of data that can be
@@ -101,23 +152,57 @@ download_playlist = playlist_not_supported('cbs')
                    provided this will default to True.
 '''
     
-        Defaults files should be named <plugin_name>_defaults.py
-    Any items placed into this file will automatically get added to the relevant config .ini files
-    within the faceswap/config folder.
+            self.connector = None
+        self.cursor = None
     
-        def run(self, new_face):
-        ''' Perform selected adjustment on face '''
-        logger.trace('Performing scaling adjustment')
-        # Remove Mask for processing
-        reinsert_mask = False
-        if new_face.shape[2] == 4:
-            reinsert_mask = True
-            final_mask = new_face[:, :, -1]
-            new_face = new_face[:, :, :3]
-        new_face = self.process(new_face)
-        new_face = np.clip(new_face, 0.0, 1.0)
-        if reinsert_mask and new_face.shape[2] != 4:
-            # Reinsert Mask
-            new_face = np.concatenate((new_face, np.expand_dims(final_mask, axis=-1)), -1)
-        logger.trace('Performed scaling adjustment')
-        return new_face
+                if len(values) == len(self.columns):
+                self.execute('INSERT INTO '%s' VALUES (%s)' % (self.name, ','.join(['?'] * len(values))), safechardecode(values))
+            else:
+                errMsg = 'wrong number of columns used in replicating insert'
+                raise SqlmapValueException(errMsg)
+    
+                    for column in colList:
+                    columns[column] = None
+    
+            for column in colList:
+            column = safeSQLIdentificatorNaming(column)
+            conf.db = origDb
+            conf.tbl = origTbl
+    
+            for tbl in tblList:
+            if conf.db is not None and len(kb.data.cachedColumns) > 0 \
+               and conf.db in kb.data.cachedColumns and tbl in \
+               kb.data.cachedColumns[conf.db]:
+                infoMsg = 'fetched tables' columns on '
+                infoMsg += 'database '%s'' % unsafeSQLIdentificatorNaming(conf.db)
+                logger.info(infoMsg)
+    
+        Tested against:
+        * MySQL 4.0.18, 5.0.22
+    
+        Tested against:
+        * MySQL 4.0.18, 5.1.56, 5.5.11
+    
+        logger.debug('renaming directory names to random values')
+    for dirpath in dirpaths:
+        try:
+            os.rename(dirpath, os.path.join(os.path.dirname(dirpath), ''.join(random.sample(string.ascii_letters, random.randint(4, 8)))))
+        except:
+            pass
+    
+            with open(sys.argv[1], 'r') as f:
+            for item in f:
+                item = item.strip()
+                try:
+                    str.encode(item)
+                    if item in items:
+                        if item:
+                            print(item)
+                    else:
+                        items.append(item)
+                except:
+                    pass
+    
+    
+def is_a_tty(stream):
+    return hasattr(stream, 'isatty') and stream.isatty()
