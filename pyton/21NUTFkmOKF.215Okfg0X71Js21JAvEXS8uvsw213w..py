@@ -1,160 +1,99 @@
 
         
-            try:
-        citext_oids = get_citext_oids(connection.alias)
-        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
-        psycopg2.extensions.register_type(array_type, None)
-    except ProgrammingError:
-        # citext is not available on the database.
-        #
-        # The same comments in the except block of the above call to
-        # register_hstore() also apply here.
-        pass
+                if match[0]:
+            name = 'Barack Obama'
+    
+        def test_command_line_interface_tolerance(self):
+        target_string = 'obama.jpg,obama'
+        runner = CliRunner()
+        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+    
+        # Start to show video
+    last_num = 1
+    fps_list = []
+    tmp_time = time.time()
+    while not Global.is_exit:
+        while Global.write_num != last_num:
+            last_num = int(Global.write_num)
+    
+    app = Flask(__name__)
+    
+        @property
+    def kwarg_requirements(self):
+        ''' Return a dict of function name to a list of required kwargs '''
+        return dict(gaussian=['ksize', 'sigmaX'],
+                    normalized=['ksize'])
+    
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
+    
+    
+class Writer(Output):
+    ''' Images output writer using cv2 '''
+    def __init__(self, output_folder, **kwargs):
+        super().__init__(output_folder, **kwargs)
+        self.check_transparency_format()
+        # Correct format namings for writing to byte stream
+        self.format_dict = dict(jpg='JPEG', jp2='JPEG 2000', tif='TIFF')
+        self.kwargs = self.get_save_kwargs()
+    
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
+'''
+    
+    def resolve_filename(f):
+    try:
+        return f.name
+    except AttributeError:
+        return repr(f)
 
     
+    print('-'*40)
+print(' 搜索模式')
+print('-'*40)
     
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
+    USAGE = 'usage:    python extract_tags.py [file name] -k [top k]'
     
-        def get_decoded(self):
-        session_store_class = self.get_session_store_class()
-        return session_store_class().decode(self.session_data)
-
-    
-        for node in doctree.traverse(is_setting_index):
-        targetnode = get_setting_target(node)
-        assert isinstance(targetnode, nodes.target), 'Next node is not a target'
-    
-        def __init__(self, *a, **kw):
-        super(QPSSpider, self).__init__(*a, **kw)
-        if self.qps is not None:
-            self.qps = float(self.qps)
-            self.download_delay = 1 / self.qps
-        elif self.download_delay is not None:
-            self.download_delay = float(self.download_delay)
-    
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
-    
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-        filename = args[0]
-        if not os.path.exists(filename):
-            raise UsageError('File not found: %s\n' % filename)
-        try:
-            module = _import_file(filename)
-        except (ImportError, ValueError) as e:
-            raise UsageError('Unable to load %r: %s\n' % (filename, e))
-        spclasses = list(iter_spider_classes(module))
-        if not spclasses:
-            raise UsageError('No spider found in file: %s\n' % filename)
-        spidercls = spclasses.pop()
-    
-        @classmethod
-    def threshold(cls, severity):
-        threshold = cls.SEVERITY_LEVELS[severity]
-    
-            backlogged, size = None, 0
-        from sentry.monitoring.queues import backend
-        if backend is not None:
-            size = backend.get_size('default')
-            backlogged = size > 0
+    if opt.withWeight is None:
+    withWeight = False
+else:
+    if int(opt.withWeight) is 1:
+        withWeight = True
+    else:
+        withWeight = False
     
     
-class TagKeyNotFound(Exception):
-    pass
-    
-    from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-    
-        # Flag to indicate if this migration is too risky
-    # to run online and needs to be coordinated for offline
-    is_dangerous = True
-    
-            # Adding unique constraint on 'EventTag', fields ['event_id', 'key', 'value']
-        db.create_unique(u'tagstore_eventtag', ['event_id', 'key_id', 'value_id'])
-    
-        models = {
-        'tagstore.eventtag': {
-            'Meta': {'unique_together': '(('project_id', 'event_id', 'key', 'value'),)', 'object_name': 'EventTag', 'index_together': '(('project_id', 'key', 'value'), ('group_id', 'key', 'value'))'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
-            'event_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {}),
-            'value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''})
-        },
-        'tagstore.grouptagkey': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key'),)', 'object_name': 'GroupTagKey'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.grouptagvalue': {
-            'Meta': {'unique_together': '(('project_id', 'group_id', '_key', '_value'),)', 'object_name': 'GroupTagValue', 'index_together': '(('project_id', '_key', '_value', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            '_value': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagValue']', 'db_column': ''value_id''}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'group_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagkey': {
-            'Meta': {'unique_together': '(('project_id', 'environment_id', 'key'),)', 'object_name': 'TagKey'},
-            'environment_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'null': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'key': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'status': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'values_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'})
-        },
-        'tagstore.tagvalue': {
-            'Meta': {'unique_together': '(('project_id', '_key', 'value'),)', 'object_name': 'TagValue', 'index_together': '(('project_id', '_key', 'last_seen'),)'},
-            '_key': ('sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {'to': 'orm['tagstore.TagKey']', 'db_column': ''key_id''}),
-            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {'null': 'True', 'blank': 'True'}),
-            'first_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'id': ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {'primary_key': 'True'}),
-            'last_seen': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'db_index': 'True'}),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {'db_index': 'True'}),
-            'times_seen': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {'default': '0'}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-    
-        project_id = BoundedBigIntegerField()
-    group_id = BoundedBigIntegerField()
-    event_id = BoundedBigIntegerField()
-    key = FlexibleForeignKey('tagstore.TagKey', db_column='key_id')
-    value = FlexibleForeignKey('tagstore.TagValue', db_column='value_id')
-    date_added = models.DateTimeField(default=timezone.now, db_index=True)
