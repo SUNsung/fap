@@ -1,179 +1,115 @@
 
         
-            process_font_assets
-    process_stylesheet_assets
-    process_javascript_assets
-    store_version
-  end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
+            it 'should return the right path' do
+      optimized = Fabricate.build(:optimized_image, upload: upload, version: 1)
+      expect(FileStore::BaseStore.new.get_path_for_optimized_image(optimized)).to eq(optimized_path)
     end
     
-    Given /^I attach :attachment$/ do
-  attach_attachment('attachment')
-end
+        before do
+      RateLimiter.enable
+      RateLimiter.clear_all_global!
     
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
-  end
-    
-    # This stuff needs to be run after Paperclip is defined.
-require 'paperclip/io_adapters/registry'
-require 'paperclip/io_adapters/abstract_adapter'
-require 'paperclip/io_adapters/empty_string_adapter'
-require 'paperclip/io_adapters/identity_adapter'
-require 'paperclip/io_adapters/file_adapter'
-require 'paperclip/io_adapters/stringio_adapter'
-require 'paperclip/io_adapters/data_uri_adapter'
-require 'paperclip/io_adapters/nil_adapter'
-require 'paperclip/io_adapters/attachment_adapter'
-require 'paperclip/io_adapters/uploaded_file_adapter'
-require 'paperclip/io_adapters/uri_adapter'
-require 'paperclip/io_adapters/http_url_proxy_adapter'
-
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-    require 'active_admin/helpers/i18n'
-    
-        # Returns true of false depending on if the user is authorized to perform
-    # the action on the subject.
-    #
-    # @param [Symbol] action The name of the action to perform. Usually this will be
-    #        one of the `ActiveAdmin::Auth::*` symbols.
-    #
-    # @param [any] subject The subject the action is being performed on usually this
-    #        is a model object. Note, that this is NOT always in instance, it can be
-    #        the class of the subject also. For example, Active Admin uses the class
-    #        of the resource to decide if the resource should be displayed in the
-    #        global navigation. To deal with this nicely in a case statement, take
-    #        a look at `#normalized(klass)`
-    #
-    # @return [Boolean]
-    def authorized?(action, subject = nil)
-      true
-    end
-    
-        def authorized?(action, subject = nil)
-      cancan_ability.can?(action, subject)
-    end
-    
-        def evaluate(_context)
-      true
-    end
-  end
-end
-
-    
-          str << ': '
-      str
+          json = ::JSON.parse(response.body)
+      expect(json['message']).to eq('2 users have been added to the group.')
+      expect(json['users_not_added'][0]).to eq('doesnt_exist')
     end
   end
     
-    class Hash # :nodoc:
-  def to_liquid
-    self
-  end
-end
+        if SiteSetting.tags_listed_by_group
+      ungrouped_tags = Tag.where('tags.id NOT IN (SELECT tag_id FROM tag_group_memberships)')
+      ungrouped_tags = ungrouped_tags.where('tags.topic_count > 0') unless show_all_tags
     
-        def index0
-      @index
-    end
-    
-        def increment!
-      @index += 1
-    
-        # Public: Is the blob empty?
-    #
-    # Return true or false
-    def empty?
-      data.nil? || data == ''
-    end
-    
-        # Public: Build Classifier from all samples.
-    #
-    # Returns trained Classifier.
-    def self.data
-      db = {}
-      db['extnames'] = {}
-      db['interpreters'] = {}
-      db['filenames'] = {}
-    
-        assert_interpreter 'Rscript', '#!/usr/bin/env Rscript\n# example R script\n#\n'
-    assert_interpreter 'crystal', '#!/usr/bin/env bin/crystal'
-    assert_interpreter 'ruby', '#!/usr/bin/env ruby\n# baz'
-    
-      def teardown
-    silence_warnings do
-      Encoding.default_external = @original_external
-    end
+      def s3_client
+    @s3_client ||= Aws::S3::Client.new(@s3_options)
   end
     
-    source = Licensed::Source::Filesystem.new(module_path || '#{File.expand_path('../', File.dirname(__FILE__))}/vendor/grammars/*/')
-config = Licensed::Configuration.load_from(File.expand_path('../vendor/licenses/config.yml', File.dirname(__FILE__)))
-config.sources << source
-    
-        # Public: Return an array of the file extensions
-    #
-    #     >> Linguist::Blob.new('app/views/things/index.html.erb').extensions
-    #     => ['.html.erb', '.erb']
-    #
-    # Returns an Array
-    def extensions
-      _, *segments = name.downcase.split('.', -1)
-    
-                    it 'includes an indication that the variable was too large' do
-                  html = error_page.do_variables('index' => 0)[:html]
-                  expect(html).to_not include(content)
-                  expect(html).to include('Object too large')
-                end
+              @machine.communicate.tap do |comm|
+            paths.each do |path|
+              if windows?
+                comm.sudo('mkdir ''#{path}'' -f')
+              else
+                comm.sudo('mkdir -p #{path}')
+                comm.sudo('chown -h #{@machine.ssh_info[:username]} #{path}')
               end
             end
+          end
+        end
     
-    def with_each_gemfile
-  gemfiles.each do |gemfile|
-    Bundler.with_clean_env do
-      puts '\n=========== Using gemfile: #{gemfile}'
-      ENV['BUNDLE_GEMFILE'] = gemfile
-      yield
-    end
+      let(:iso_env) do
+    # We have to create a Vagrantfile so there is a root path
+    env = isolated_environment
+    env.vagrantfile('')
+    env.create_vagrant_env
   end
-end
     
-        def highlighted_lines
-      CodeRay.scan(context_lines.join, coderay_scanner).div(wrap: nil).lines
+    # Create a temporary directory where test vagrant will run. The reason we save
+# this to a constant is so we can clean it up later.
+VAGRANT_TEST_CWD = Dir.mktmpdir('vagrant-test-cwd')
+    
+      describe '.usable?' do
+    it 'returns true if usable' do
+      allow(provider_config).to receive(:compose).and_return(false)
+      allow(subject.driver).to receive(:execute).with('docker', 'version').and_return(true)
+      expect(subject).to be_usable
     end
     
-        describe CodeFormatter::HTML do
-      it 'highlights the erroring line' do
-        formatter = CodeFormatter::HTML.new(filename, 8)
-        expect(formatter.output).to match(/highlight.*eight/)
+      describe 'comparison and ordering' do
+    it 'should be equal if the name, provider, version match' do
+      a = described_class.new('a', :foo, '1.0', directory)
+      b = described_class.new('a', :foo, '1.0', directory)
+    
+          # Check if this machine has a local box metadata file
+      # describing the existing guest. If so, load it and
+      # set the box name and version to allow the actual
+      # box in use to be discovered.
+      if data_path
+        meta_file = data_path.join('box_meta')
+        if meta_file.file?
+          box_meta = JSON.parse(meta_file.read)
+          config.vm.box = box_meta['name']
+          config.vm.box_version = box_meta['version']
+        end
       end
     
-            expect(status).to eq(404)
-      end
-    
-          it 'has the right filename and line number in the backtrace' do
-        expect(subject.backtrace.first.filename).to eq('app/assets/javascripts/files/index.coffee')
-        expect(subject.backtrace.first.line).to eq(11)
-      end
+        # @return [Pathname] The file to use to cache the search data.
+    #
+    def search_index_file
+      cache_root + 'search_index.json'
     end
+    
+    if profile_filename = ENV['COCOAPODS_PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
+else
+  Pod::Command.run(ARGV)
 end
 
     
-          iv - BetterErrors.ignored_instance_variables
-    end
+          # @return [Bool] whether this resolved specification is by non-library targets.
+      #
+      attr_reader :used_by_non_library_targets_only
+      alias used_by_non_library_targets_only? used_by_non_library_targets_only
+    
+          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
+      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
+    
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
+      end
