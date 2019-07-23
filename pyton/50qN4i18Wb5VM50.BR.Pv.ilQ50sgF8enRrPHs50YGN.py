@@ -1,148 +1,139 @@
 
         
-        
-def testFixnum():
-    check(b'\x92\x93\x00\x40\x7f\x93\xe0\xf0\xff', ((0,
-                                                     64,
-                                                     127, ),
-                                                    (-32,
-                                                     -16,
-                                                     -1, ), ))
+                    def __setitem__(self, k, v):
+                value[k] = v
     
-        for i, filename in enumerate(files, 1):
-        out = str(dest.joinpath(filename))
-        link = urllib.request.urljoin(base, filename)
-        urllib.request.urlretrieve(link, out)
-        print('Downloaded {link} to {out} [{i}/{N}]'.format(
-            link=link, out=out, i=i, N=N
-        ))
+    For example the `llc` program is in package `llvm` so this:
+    yay -S llc
+should be:
+    yay -S llvm
+'''
+    
+        @pytest.fixture(autouse=True)
+    def shell_aliases(self):
+        os.environ['TF_SHELL_ALIASES'] = (
+            'alias fuck=\'eval $(thefuck $(fc -ln -1))\'\n'
+            'alias l=\'ls -CF\'\n'
+            'alias la=\'ls -A\'\n'
+            'alias ll=\'ls -alF\'')
+    
+        def test_how_to_configure(self, shell):
+        assert shell.how_to_configure() is None
     
     
-@pytest.mark.parametrize('ties_method', [
-    'average', 'min', 'max', 'first', 'dense'])
-@pytest.mark.parametrize('ascending', [True, False])
-@pytest.mark.parametrize('na_option', ['keep', 'top', 'bottom'])
-@pytest.mark.parametrize('pct', [True, False])
-@pytest.mark.parametrize('vals', [
-    ['bar', 'bar', 'foo', 'bar', 'baz'],
-    ['bar', np.nan, 'foo', np.nan, 'baz']
+@pytest.mark.parametrize('script, pyenv_cmd', [
+    ('pyenv globe', 'globe'),
+    ('pyenv intall 3.8.0', 'intall'),
+    ('pyenv list', 'list'),
 ])
-def test_rank_object_raises(ties_method, ascending, na_option,
-                            pct, vals):
-    df = DataFrame({'key': ['foo'] * 5, 'val': vals})
-    
-    Libraries are expected to implement a few pytest fixtures to provide data
-for the tests. The fixtures may be located in either
-    
-        ('border-top-style: dotted',
-     {'border': {'top': {'style': 'mediumDashDotDot'}}}),
-    ('border-top-style: dotted; border-top-width: thin',
-     {'border': {'top': {'style': 'dotted'}}}),
-    ('border-top-style: dashed',
-     {'border': {'top': {'style': 'mediumDashed'}}}),
-    ('border-top-style: dashed; border-top-width: thin',
-     {'border': {'top': {'style': 'dashed'}}}),
-    ('border-top-style: double',
-     {'border': {'top': {'style': 'double'}}}),
-    # - color
-    ('border-style: solid; border-color: #0000ff',
-     {'border': {'top': {'style': 'medium', 'color': '0000FF'},
-                 'right': {'style': 'medium', 'color': '0000FF'},
-                 'bottom': {'style': 'medium', 'color': '0000FF'},
-                 'left': {'style': 'medium', 'color': '0000FF'}}}),
-    ('border-top-style: double; border-top-color: blue',
-     {'border': {'top': {'style': 'double', 'color': '0000FF'}}}),
-    ('border-top-style: solid; border-top-color: #06c',
-     {'border': {'top': {'style': 'medium', 'color': '0066CC'}}}),
-    # ALIGNMENT
-    # - horizontal
-    ('text-align: center',
-     {'alignment': {'horizontal': 'center'}}),
-    ('text-align: left',
-     {'alignment': {'horizontal': 'left'}}),
-    ('text-align: right',
-     {'alignment': {'horizontal': 'right'}}),
-    ('text-align: justify',
-     {'alignment': {'horizontal': 'justify'}}),
-    # - vertical
-    ('vertical-align: top',
-     {'alignment': {'vertical': 'top'}}),
-    ('vertical-align: text-top',
-     {'alignment': {'vertical': 'top'}}),
-    ('vertical-align: middle',
-     {'alignment': {'vertical': 'center'}}),
-    ('vertical-align: bottom',
-     {'alignment': {'vertical': 'bottom'}}),
-    ('vertical-align: text-bottom',
-     {'alignment': {'vertical': 'bottom'}}),
-    # - wrap_text
-    ('white-space: nowrap',
-     {'alignment': {'wrap_text': False}}),
-    ('white-space: pre',
-     {'alignment': {'wrap_text': False}}),
-    ('white-space: pre-line',
-     {'alignment': {'wrap_text': False}}),
-    ('white-space: normal',
-     {'alignment': {'wrap_text': True}}),
-    # NUMBER FORMAT
-    ('number-format: 0%',
-     {'number_format': {'format_code': '0%'}}),
-])
-def test_css_to_excel(css, expected):
-    convert = CSSToExcelConverter()
-    assert expected == convert(css)
+def test_match(script, pyenv_cmd, output):
+    assert match(Command(script, output=output))
     
     
-def test_bin16():
-    header = b'\xc5'
-    data = b'x' * 256
-    b = packb(data, use_bin_type=True)
-    assert len(b) == len(data) + 3
-    assert b[0:1] == header
-    assert b[1:3] == b'\x01\x00'
-    assert b[3:] == data
-    assert unpackb(b) == data
+@classmethod
+def get_args(cls, dist, header=None):
+    '''
+    Yield write_script() argument tuples for a distribution's
+    console_scripts and gui_scripts entry points.
+    '''
+    if header is None:
+        header = cls.get_header()
+    spec = str(dist.as_requirement())
+    for type_ in 'console', 'gui':
+        group = type_ + '_scripts'
+        for name, ep in dist.get_entry_map(group).items():
+            # ensure_safe_name
+            if re.search(r'[\\/]', name):
+                raise ValueError('Path separators not allowed in script names')
+            script_text = TEMPLATE.format(
+                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
+                          spec, group, name)
+            args = cls._get_script_args(type_, name, header, script_text)
+            for res in args:
+                yield res
+    
+        # If we have user_data in completions (8.0.1493 or later), then we would
+    # only ever return max. 1 completion here. However, if we had to guess, it
+    # is possible that we matched multiple completion items (e.g. for overloads,
+    # or similar classes in multiple packages). In any case, rather than
+    # prompting the user and disturbing her workflow, we just apply the first
+    # one. This might be wrong, but the solution is to use a (very) new version
+    # of Vim which supports user_data on completion items
+    fixit_completion = fixit_completions[ 0 ]
+    
+    # The default options which are required for a working YouCompleteMe object.
+DEFAULT_CLIENT_OPTIONS = {
+  # YCM options
+  'g:ycm_log_level': 'info',
+  'g:ycm_keep_logfiles': 0,
+  'g:ycm_extra_conf_vim_data': [],
+  'g:ycm_server_python_interpreter': '',
+  'g:ycm_show_diagnostics_ui': 1,
+  'g:ycm_enable_diagnostic_signs': 1,
+  'g:ycm_enable_diagnostic_highlighting': 0,
+  'g:ycm_echo_current_diagnostic': 1,
+  'g:ycm_filter_diagnostics': {},
+  'g:ycm_always_populate_location_list': 0,
+  'g:ycm_collect_identifiers_from_tags_files': 0,
+  'g:ycm_seed_identifiers_with_syntax': 0,
+  'g:ycm_goto_buffer_command': 'same-buffer',
+  # ycmd options
+  'g:ycm_auto_trigger': 1,
+  'g:ycm_min_num_of_chars_for_completion': 2,
+  'g:ycm_semantic_triggers': {},
+  'g:ycm_filetype_specific_completion_to_disable': { 'gitcommit': 1 },
+  'g:ycm_max_num_candidates': 50,
+  'g:ycm_max_diagnostics_to_display': 30
+}
     
     
-def test_incorrect_type_array():
-    unpacker = Unpacker()
-    unpacker.feed(packb(1))
-    try:
-        unpacker.read_array_header()
-        assert 0, 'should raise exception'
-    except UnexpectedTypeException:
-        assert 1, 'okay'
+  def _ConvertDiagListToDict( self ):
+    self._line_to_diags = defaultdict( list )
+    for diag in self._diagnostics:
+      location = diag[ 'location' ]
+      bufnr = vimsupport.GetBufferNumberForFilename( location[ 'filepath' ] )
+      if bufnr == self._bufnr:
+        line_number = location[ 'line_num' ]
+        self._line_to_diags[ line_number ].append( diag )
     
-        def __init__(self, image, alignments, original_roi=None):
-        logger.debug('Initializing %s: (alignments: %s, original_roi: %s)',
-                     self.__class__.__name__, alignments, original_roi)
-        self.image = image
-        self.alignments = alignments
-        self.roi = original_roi
-        self.colors = {1: (255, 0, 0),
-                       2: (0, 255, 0),
-                       3: (0, 0, 255),
-                       4: (255, 255, 0),
-                       5: (255, 0, 255),
-                       6: (0, 255, 255)}
-        logger.debug('Initialized %s', self.__class__.__name__)
     
-        new_shape = shape[:3] + [int(shape[3] / (scale ** 2))]
-    var_x = initializer(new_shape, dtype)
-    var_x = tf.transpose(var_x, perm=[2, 0, 1, 3])
-    var_x = tf.image.resize_nearest_neighbor(var_x, size=(shape[0] * scale, shape[1] * scale))
-    var_x = tf.space_to_depth(var_x, block_size=scale)
-    var_x = tf.transpose(var_x, perm=[1, 2, 0, 3])
-    return var_x
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_MultipleMessagesAndDiagnostics_test( post_vim_message ):
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
+    { 'message': 'On the first day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
+    { 'message': 'A test file in a Command-T' },
+    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
+    { 'message': 'On the second day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
+    { 'message': 'Two popup menus, and a test file in a Command-T' },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER1' ] ),
+    call( 'bar', [ 'PLACEHOLDER2' ] ),
+    call( 'baz', [ 'PLACEHOLDER3' ] ),
+    call( 'foo', [ 'PLACEHOLDER4' ] )
+  ] )
     
-            dest_format = self.get_dest_format()
-        if len(self.args.alignments_file) == 1:
-            retval = AlignmentData(self.args.alignments_file[0], dest_format)
-        else:
-            retval = [AlignmentData(a_file, dest_format) for a_file in self.args.alignments_file]
-        logger.debug('Alignments: %s', retval)
-        return retval
-    
-            logger.trace('Loaded aligned face: %s', {key: val
-                                                 for key, val in self.aligned.items()
-                                                 if key != 'face'})
+        def _start_queue_management_thread(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the queue management thread.
+        def weakref_cb(_, q=self._result_queue):
+            q.put(None)
+        if self._queue_management_thread is None:
+            self._queue_management_thread = threading.Thread(
+                    target=_queue_management_worker,
+                    args=(weakref.ref(self, weakref_cb),
+                          self._processes,
+                          self._pending_work_items,
+                          self._work_ids,
+                          self._call_queue,
+                          self._result_queue))
+            self._queue_management_thread.daemon = True
+            self._queue_management_thread.start()
+            _threads_queues[self._queue_management_thread] = self._result_queue
