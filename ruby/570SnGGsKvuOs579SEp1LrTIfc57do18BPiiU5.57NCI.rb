@@ -1,106 +1,127 @@
 
         
-            def destroy
-      authorize @email_domain_block, :destroy?
-      @email_domain_block.destroy!
-      log_action :destroy, @email_domain_block
-      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
-    end
-    
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
-        end
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+            assert_kind_of BigDecimal, m1.big_bank_balance
+    assert_equal BigDecimal('234000567.95'), m1.big_bank_balance
   end
     
-      def user_needs_sign_in_update?
-    user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
-  end
-end
-
+          def test_invert_remove_column
+        add = @recorder.inverse_of :remove_column, [:table, :column, :type, {}]
+        assert_equal [:add_column, [:table, :column, :type, {}], nil], add
+      end
     
-    # This example uses the API to create a package from local files
-# it also creates necessary init-scripts and systemd files so our executable can be used as a service
+      def build_post_stats
+    if PostCreator.track_post_stats
+      draft_key = @topic ? 'topic_#{@topic.id}' : 'new_topic'
     
-            until(data.length == record_length)
-          data << file.read(TAR_CHUNK_SIZE)
-        end
-    
-      option '--lint' , :flag, 'Check manifest with pkglint',
-    :default => true
-    
-        logger.info('Installing pear package', :package => input_package,
-                  :directory => staging_path)
-    ::Dir.chdir(staging_path) do
-      safesystem('pear', '-c', config, 'install', '-n', '-f', input_package)
-    end
-    
-        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
-    libs.each do |file|
-      base = staging_path(File.join(attributes[:prefix]))
-      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
-      File.chmod(0755, File.join(base, file))
-    end
-    
-    
-    # Convert the 'package directory' built above to a real solaris package.
-    safesystem('pkgtrans', '-s', build_path, output_path, name)
-    safesystem('cp', '#{build_path}/#{output_path}', output_path)
-  end # def output
-    
-      # Input a zipfile.
-  def input(input_path)
-    # use part of the filename as the package name
-    self.name = File.extname(input_path)[1..-1]
+        context 'with a category restriction' do
+      fab!(:category) { Fabricate(:category, read_restricted: true) }
+      let(:topic) { Fabricate(:topic, category: category) }
+      let(:post) { Fabricate(:post, topic: topic) }
+      fab!(:moderator) { Fabricate(:moderator) }
+      fab!(:admin) { Fabricate(:admin) }
     
       def destroy
-    @address_endpoint.destroy
-    redirect_to_with_json [organization, @server, :address_endpoints]
+    group = Group.find_by(id: params[:id])
+    raise Discourse::NotFound unless group
+    
+        def ensure_cors!
+      rule = {
+        allowed_headers: ['*'],
+        allowed_methods: ['PUT'],
+        allowed_origins: [Discourse.base_url_no_prefix],
+        max_age_seconds: 3000
+      }
+    
+      def update_tombstone_lifecycle(grace_period)
+    return if !SiteSetting.s3_configure_tombstone_policy
+    return if @tombstone_prefix.blank?
+    update_lifecycle('purge_tombstone', grace_period, prefix: @tombstone_prefix)
   end
     
-      def update
-    if @credential.update(params.require(:credential).permit(:name, :hold))
-      redirect_to_with_json [organization, @server, :credentials]
-    else
-      render_form_errors 'edit', @credential
+        @objects << { key: 'backups/second/multi-2.tar.gz', size: 19, last_modified: Time.parse('2018-11-27T03:16:54Z') }
+    @objects << { key: 'backups/second/multi-1.tar.gz', size: 22, last_modified: Time.parse('2018-11-26T03:17:09Z') }
+    @objects << { key: 'backups/second/subfolder/multi-3.tar.gz', size: 23, last_modified: Time.parse('2019-01-24T18:44:00Z') }
+  end
+    
+            # Timeout and datastore options need to be passed through to the client
+        opts = {
+          :datastore    => datastore,
+          :expiration   => datastore['SessionExpirationTimeout'].to_i,
+          :comm_timeout => datastore['SessionCommunicationTimeout'].to_i,
+          :retry_total  => datastore['SessionRetryTotal'].to_i,
+          :retry_wait   => datastore['SessionRetryWait'].to_i,
+          :udp_session  => true
+        }
+    
+      def self.handler_type_alias
+    'bind_tcp_rc4'
+  end
+    
+        # Handle user-specified seed values
+    if datastore['PayloadUUIDSeed'].to_s.length > 0
+      conf[:seed] = datastore['PayloadUUIDSeed'].to_s
     end
+    
+    begin
+  require 'bundler/setup'
+rescue LoadError => e
+  $stderr.puts '[*] Bundler failed to load and returned this error:'
+  $stderr.puts
+  $stderr.puts '   '#{e}''
+  $stderr.puts
+  $stderr.puts '[*] You may need to uninstall or upgrade bundler'
+  exit(1)
+end
+    
+        path = datastore['PATH'] || session.sys.config.getenv('USERPROFILE')
+    path.chomp!('\\')
+    
+        report_note(host: host,
+        type: 'host.persistance.cleanup',
+        data: {
+          local_id: session.sid,
+          stype: session.type,
+          desc: session.info,
+          platform: session.platform,
+          via_payload: session.via_payload,
+          via_exploit: session.via_exploit,
+          created_at: Time.now.utc,
+          commands: @clean_up_rc
+        })
   end
     
-              if qs[:msgid]
-            options[:where][:message_id] = qs[:msgid]
-            options[:where].delete(:spam)
-            options[:where].delete(:scope)
-          end
-          options[:where][:tag] = qs[:tag] if qs[:tag]
-          options[:where][:id] = qs[:id] if qs[:id]
-          options[:where][:spam] = true if qs[:spam] == 'yes' || qs[:spam] == 'y'
-          if qs[:before] || qs[:after]
-            options[:where][:timestamp] = {}
-            if qs[:before]
-              begin
-                options[:where][:timestamp][:less_than] = get_time_from_string(qs[:before]).to_f
-              rescue TimeUndetermined => e
-                flash.now[:alert] = 'Couldn't determine time for before from '#{qs[:before]}''
-              end
-            end
-    
-      def persist
-    auth_session.persist! if logged_in?
-    render :plain => 'OK'
+        register_options(
+      [
+        OptPath.new('SOURCE_FILE', [true, 'Path to source code']),
+        OptBool.new('RUN_BINARY', [false, 'Execute the generated binary', false]),
+        OptString.new('ASSEMBLIES', [false, 'Any assemblies outside the defaults', 'mscorlib.dll, System.dll, System.Xml.dll, System.Data.dll' ]),
+        OptString.new('OUTPUT_TARGET', [false, 'Name and path of the generated binary, default random, omit extension' ]),
+        OptString.new('COMPILER_OPTS', [false, 'Options to pass to compiler', '/optimize']),
+        OptString.new('CODE_PROVIDER', [true, 'Code provider to use', 'Microsoft.CSharp.CSharpCodeProvider'])
+      ], self.class
+    )
+    register_advanced_options(
+      [
+        OptString.new('NET_CLR_VER', [false, 'Minimum NET CLR version required to compile', '4.0'])
+      ], self.class
+    )
   end
     
+        class PluginRawContext
+      HOOK_FILE = 'logstash_registry.rb'
+      NAME_DELIMITER = '-'
+    
+    require 'bootstrap/environment'
+    
+          validate_plugins!
     end
-
     
-      context 'called with one color' do
-    it 'applies same color to all sides' do
-      rule = 'border-color: #f00'
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
-    end
+      it 'returns the sorted config parts' do
+    expect(subject.config_parts).to eq(ordered_config_parts)
   end
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
