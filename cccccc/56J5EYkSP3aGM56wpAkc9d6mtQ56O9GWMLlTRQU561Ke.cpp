@@ -1,411 +1,465 @@
 
         
-            void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
+        
     {
-        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
-        v_dst = internal::vqsub(v_max, v_min);
-    }
-    
-    
-    {        vs1 = vmla_f32(vget_low(vgamma), vs1, vget_low(valpha));
-        vs1 = vmla_f32(vs1, vs2, vget_low(vbeta));
-        v_dst = vcvt_u32_f32(vs1);
-    }
-    
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    SPLIT64(s, 2)
-SPLIT64(s, 3)
-SPLIT64(s, 4)
-    
-    namespace internal {
-    }
-    
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    /////////////// Custom NEON intrinsics ///////////////////
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-     protected:
-   /**
-   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
-   *
-   * @param n
-   *    The upperbound (exclusive) value of the random number.
-   * @return
-   *    A uniformly random integer value from ({0, 1, ..., n-1}).
-   */
-  virtual int Rand(int n);
-    
-    template <typename Dtype>
-class Layer;
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-    #include <vector>
-    
-    #include <vector>
-    
-    #include 'caffe/layers/deconv_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    // Creates a box file string from a unichar string, TBOX and page number.
-void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
-                    STRING* box_str);
-    
-    bool ParagraphModel::ValidBodyLine(int lmargin, int lindent,
-                                   int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + body_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
-    
-    
-    {  /* Accept modes which occur between the above rejection groups */
-  R_NN_ACCEPT,          // NN acceptance
-  R_HYPHEN_ACCEPT,      // Hyphen acceptance
-  R_MM_ACCEPT,          // Matrix match acceptance
-  R_QUALITY_ACCEPT,     // Accept word in good quality doc
-  R_MINIMAL_REJ_ACCEPT  // Accept EVERYTHING except tess failures
-};
-    
-    			if (!pImageData)
-			{
-				break;
-			}
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_R11
-	// Encoding bits for the R portion of R11
-	// ################################################################################
-    
-    					ptry->m_iRed = iRed;
-					ptry->m_iGreen = iGreen;
-					ptry->m_iBlue = iBlue;
-					ptry->m_fError = FLT_MAX;
-					ColorFloatRGBA frgbaColor = ColorFloatRGBA::ConvertFromRGB4((unsigned char)iRed, (unsigned char)iGreen, (unsigned char)iBlue);
-    
-    #endif /* FASTLZ_H */
+    {}  // namespace gpu
+}  // namespace xla
 
     
-    #if !defined(OPUS_HAVE_RTCD)
-#define OVERRIDE_OPUS_FFT (1)
+    #include 'tensorflow/compiler/xla/service/buffer_assignment.h'
+#include 'tensorflow/compiler/xla/service/gpu/buffer_allocations.h'
+#include 'tensorflow/compiler/xla/service/gpu/hlo_execution_profiler.h'
+#include 'tensorflow/compiler/xla/service/gpu/thunk.h'
+#include 'tensorflow/compiler/xla/service/hlo_instruction.h'
+#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
+#include 'tensorflow/core/platform/types.h'
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    /* Compute Normalized Line Spectral Frequencies (NLSFs) from whitening filter coefficients      */
-/* If not all roots are found, the a_Q16 coefficients are bandwidth expanded until convergence. */
-void silk_A2NLSF(
-    opus_int16                  *NLSF,              /* O    Normalized Line Spectral Frequencies in Q15 (0..2^15-1) [d] */
-    opus_int32                  *a_Q16,             /* I/O  Monic whitening filter coefficients in Q16 [d]              */
-    const opus_int              d                   /* I    Filter order (must be even)                                 */
+    Status MemzeroThunk::ExecuteOnStream(const ExecuteParams& params) {
+  se::DeviceMemoryBase dest_data =
+      params.buffer_allocations->GetDeviceAddress(dest_);
+  auto op_profiler =
+      params.profiler->MakeScopedInstructionProfiler(hlo_instruction());
+  params.stream->ThenMemZero(&dest_data, dest_data.size());
+  return Status::OK();
+}
+    
+    // Thunk that sets a given chunk of memory to a particular 32-bit value.  The
+// destination chunk must have size divisible by 32 bits.
+class Memset32BitValueThunk : public Thunk {
+ public:
+  explicit Memset32BitValueThunk(uint32 value,
+                                 const BufferAllocation::Slice& dest,
+                                 const HloInstruction* hlo)
+      : Thunk(Kind::kMemset32BitValue, hlo), value_(value), dest_(dest) {}
+    }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
+};
+    
+    
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
 );
-    
-        try
-    {
-        factrat(&prat, RATIONAL_BASE, RATIONAL_PRECISION);
-    }
-    catch (uint32_t error)
-    {
-        destroyrat(prat);
-        throw(error);
-    }
-    
-            MANTTYPE* ptrRet = ret->mant;
-        for (auto const& digit : this->Mantissa())
-        {
-            *ptrRet++ = digit;
-        }
-    
-    static constexpr wchar_t DEFAULT_DEC_SEPARATOR = L'.';
-static constexpr wchar_t DEFAULT_GRP_SEPARATOR = L',';
-static constexpr wstring_view DEFAULT_GRP_STR = L'3;0';
-static constexpr wstring_view DEFAULT_NUMBER_STR = L'0';
-    
-    void LiveRegionHost::Announce(NarratorAnnouncement ^ announcement)
-{
-    if (m_host == nullptr)
-    {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-    NarratorAnnouncement ^ CalculatorAnnouncement::GetNoRightParenthesisAddedAnnouncement(String ^ announcement)
-{
-    return ref new NarratorAnnouncement(
-        announcement,
-        CalculatorActivityIds::NoParenthesisAdded,
-        AutomationNotificationKind::ActionCompleted,
-        AutomationNotificationProcessing::ImportantMostRecent);
 }
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    TEST(Converter, Basic) {
+  using namespace caffe2::testing;
+  caffe2::NetDef net;
+  for (auto i = 0; i < 10; ++i) {
+    if (rand() % 2) {
+      NetMutator(&net)
+          .newOp('Conv', {'X', 'W' + c10::to_string(i)}, {'X'})
+          .addArgument('kernel', 3)
+          .addArgument('stride', 1)
+          .addArgument('pad', 0)
+          .addArgument('order', std::string('NCHW'))
+          .setDeviceOptionName('conv_runner');
+    } else {
+      NetMutator(&net)
+          .newOp('Relu', {'X'}, {'X'})
+          .setDeviceOptionName('relu_runner');
+    }
+  }
+  auto nn = caffe2::convertToNNModule(net);
+  auto new_netdef = caffe2::convertToCaffe2Proto(nn);
+}
+    
+    namespace caffe2 {
+    }
+    
+    </details>
+    
+    void parseOplogEntryForFindAndModify(OperationContext* opCtx,
+                                     const FindAndModifyRequest& request,
+                                     const repl::OplogEntry& oplogEntry,
+                                     BSONObjBuilder* builder) {
+    // Migrated op case.
+    if (oplogEntry.getOpType() == repl::OpTypeEnum::kNoop) {
+        parseOplogEntryForFindAndModify(
+            opCtx, request, getInnerNestedOplogEntry(oplogEntry), oplogEntry, builder);
+    } else {
+        parseOplogEntryForFindAndModify(opCtx, request, oplogEntry, oplogEntry, builder);
+    }
+}
+    
+        BSONObj doc = findResultSet.front();
+    auto locksTypeResult = LocksType::fromBSON(doc);
+    if (!locksTypeResult.isOK()) {
+        return {ErrorCodes::FailedToParse,
+                str::stream() << 'failed to parse: ' << doc << ' : '
+                              << locksTypeResult.getStatus().toString()};
+    }
+    
+    /** @return true if element is of a numeric type. */
+inline bool BSONElement::isNumber() const {
+    switch (type()) {
+        case NumberLong:
+        case NumberDouble:
+        case NumberDecimal:
+        case NumberInt:
+            return true;
+        default:
+            return false;
+    }
+}
+    
+    
+    {}  // namespace mongo
 
     
-                property AutomationNotificationKind Kind
-        {
-            AutomationNotificationKind get();
-        }
+            const auto explainCmd = ClusterExplain::wrapAsExplain(cmdObj, verbosity);
     
-        case CustomPeers::AutomationNotificationKind::ActionAborted:
-        return StandardPeers::AutomationNotificationKind::ActionAborted;
     
-    Transliterator* RemoveTransliterator::clone(void) const {
-    Transliterator* result = new RemoveTransliterator();
-    if (result != NULL && getFilter() != 0) {
-        result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
+    {
+    {
+    {        // Airlock the failpoint by releasing it only after we enable a post-getMore failpoint. This
+        // ensures that no subsequent getMores can run before we re-enable the original failpoint.
+        setWaitBeforeUnpinningOrDeletingCursorAfterGetMoreBatchFailpoint(conn.get(), true);
+        setWaitWithPinnedCursorDuringGetMoreBatchFailpoint(conn.get(), false);
+        // Confirm that the getMore completed its batch and hit the post-getMore failpoint.
+        ASSERT(confirmCurrentOpContents(
+            conn.get(),
+            BSON('command.getMore' << queryCursor->getCursorId() << 'msg'
+                                   << 'waitBeforeUnpinningOrDeletingCursorAfterGetMoreBatch'),
+            parallelWaitTimeoutMS));
+        // Re-enable the original failpoint to catch the next getMore, and release the current one.
+        setWaitWithPinnedCursorDuringGetMoreBatchFailpoint(conn.get(), true);
+        setWaitBeforeUnpinningOrDeletingCursorAfterGetMoreBatchFailpoint(conn.get(), false);
     }
-    return result;
 }
-    
-    //--------------------------------------------------------------------------
-//
-//    Assignment Operator
-//
-//--------------------------------------------------------------------------
-RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
-    if (this == &other) {
-        // Source and destination are the same.  Don't do anything.
-        return *this;
-    }
-    }
-    
-    int32_t
-RuleBasedCollator::getMaxExpansion(int32_t order) const {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    (void)initMaxExpansions(errorCode);
-    return CollationElementIterator::getMaxExpansion(tailoring->maxExpansions, order);
-}
-    
-    #include 'scriptset.h'
-#include 'uassert.h'
-#include 'cmemory.h'
-    
-    U_NAMESPACE_END
-    
-    #endif
+}  // namespace mongo
 
     
-    U_NAMESPACE_END
     
-    CollationKey::CollationKey(const CollationKey& other)
-    : UObject(other), fFlagAndLength(other.getLength()),
-      fHashCode(other.fHashCode)
-{
-    if (other.isBogus())
+    {}  // namespace mongo
+
+    
+    
     {
-        setToBogus();
-        return;
+    {        return ss.str();
     }
-    }
-    
-    #include 'strmatch.h'
-#include 'rbt_data.h'
-#include 'util.h'
-#include 'unicode/uniset.h'
-#include 'unicode/utf16.h'
-    
-    #include 'unicode/utypes.h'
-    
-            static const size_t s_serializationVersion = 0;
-    
-        public:
-        template <typename ElementType>
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
-            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
-            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
-    }
-    
-    
-    {private:
-    long long m_start;
-    long long m_end;
 };
     
-        for (i = 1; i < 1024; i++)
-    {
-        uint32_t key = (rand() % (20000 * 37));
-        if (key % 37 == 0)
-        {
-            continue;
-        }
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_EQ(ret, 0);
+            int numCounted = 0;
+        PlanStage::StageState countState;
+    
+    
+    {  const int clen = bittorrent::getCompactLength(family_);
+  // nodes
+  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
+                                                             eoi = nodes_.end();
+       i != eoi; ++i) {
+    const std::shared_ptr<DHTNode>& node = *i;
+    // Write IP address + port in Compact IP-address/port info form.
+    unsigned char compactPeer[COMPACT_LEN_IPV6];
+    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
+                                             node->getPort());
+    if (compactlen != clen) {
+      memset(compactPeer, 0, clen);
     }
-    
-        swListenPort *port = swServer_add_port(&serv, SW_SOCK_TCP, '127.0.0.1', 9501);
-    port->open_eof_check = 0;
-    //config
-    port->backlog = 128;
-    memcpy(port->protocol.package_eof, SW_STRL('\r\n\r\n'));  //开启eof检测，启用buffer区
-    
-    TEST(coroutine_base, get_current)
-{
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        auto co = Coroutine::get_current();
-        *(long *) arg = co->get_cid();
-    }, &_cid);
-    }
-    
-    
-    {
-    {        ASSERT_EQ(WEXITSTATUS(status), 0);
-    });
+    uint8_t clen1 = clen;
+    // 1byte compact peer format length
+    WRITE_CHECK(fp, &clen1, sizeof(clen1));
+    // 7bytes reserved
+    WRITE_CHECK(fp, zero, 7);
+    // clen bytes compact peer
+    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
+    // 24-clen bytes reserved
+    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
+    // 20bytes: node ID
+    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
+    // 4bytes reserved
+    WRITE_CHECK(fp, zero, 4);
+  }
+  if (fp.close() == EOF) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  if (!File(filenameTemp).renameTo(filename)) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  A2_LOG_INFO('DHT routing table was saved successfully');
 }
-
     
-    int main(int argc, char **argv)
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
 {
-    if (argc < 2)
-    {
-        swoole_timer_tick(1000, timer1, nullptr);
-        event_wait();
-    }
-    else
-    {
-        MyServer server('127.0.0.1', 9501, SW_MODE_BASE);
-        server.listen('127.0.0.1', 9502, SW_SOCK_UDP);
-        server.listen('::1', 9503, SW_SOCK_TCP6);
-        server.listen('::1', 9504, SW_SOCK_UDP6);
-        server.setEvents(EVENT_onStart|EVENT_onWorkerStart | EVENT_onReceive | EVENT_onPacket| EVENT_onClose | EVENT_onTask | EVENT_onFinish);
-        server.start();
-    }
-    return 0;
 }
-
-    
-        swoole_event_wait();
