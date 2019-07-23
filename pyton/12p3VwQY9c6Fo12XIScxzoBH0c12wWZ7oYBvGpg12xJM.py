@@ -1,57 +1,125 @@
 
         
-        match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
-'''
+        # Check imported dependencies for compatibility.
+try:
+    check_compatibility(urllib3.__version__, chardet.__version__)
+except (AssertionError, ValueError):
+    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
+                  'version!'.format(urllib3.__version__, chardet.__version__),
+                  RequestsDependencyWarning)
     
-        def decode(self, value):
-        if value != self.resource_type:
-            raise jose.DeserializationError(
-                'Wrong resource type: {0} instead of {1}'.format(
-                    value, self.resource_type))
-        return value
-
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-    from acme import test_util
-    
-        def test_eq(self):
-        self.assertTrue(self.vhost1b == self.vhost1)
-        self.assertFalse(self.vhost1 == self.vhost2)
-        self.assertEqual(str(self.vhost1b), str(self.vhost1))
-        self.assertFalse(self.vhost1b == 1234)
-    
-    # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
-    
-    .. caution::
-   You should protect these API credentials as you would the password to your
-   Cloudflare account. Users who can read this file can use these credentials
-   to issue arbitrary API calls on your behalf. Users who can cause Certbot to
-   run using these credentials can complete a ``dns-01`` challenge to acquire
-   new certificates or revoke existing certificates for associated domains,
-   even if those domains aren't being managed by this server.
+    class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
     
     
-Examples
---------
-    
-    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads Dailymotion videos by URL.
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
     '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-    def fetch_photo_url_list(url, size):
-    for pattern in url_patterns:
-        # FIXME: fix multiple matching since the match group is dropped
-        if match1(url, pattern[0]):
-            return fetch_photo_url_list_impl(url, size, *pattern[1:])
-    raise NotImplementedError('Flickr extractor is not supported for %s.' % url)
+        @property
+    def unverifiable(self):
+        return self.is_unverifiable()
+    
+        if implementation == 'CPython':
+        implementation_version = platform.python_version()
+    elif implementation == 'PyPy':
+        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
+                                               sys.pypy_version_info.minor,
+                                               sys.pypy_version_info.micro)
+        if sys.pypy_version_info.releaselevel != 'final':
+            implementation_version = ''.join([
+                implementation_version, sys.pypy_version_info.releaselevel
+            ])
+    elif implementation == 'Jython':
+        implementation_version = platform.python_version()  # Complete Guess
+    elif implementation == 'IronPython':
+        implementation_version = platform.python_version()  # Complete Guess
+    else:
+        implementation_version = 'Unknown'
+    
+    from requests.help import info
+    
+            assert len(server.handler_results) == 0
+    
+                if parents:
+                config = get_sublevel_config(config, module)
+            configobjs = candidate.difference(config, match=match, replace=replace)
+        else:
+            configobjs = candidate.items
+    
+        def test_find_bind_mounts_no_findmnts(self):
+        module = Mock()
+        module.get_bin_path = Mock(return_value=None)
+        lh = linux.LinuxHardware(module=module, load_on_init=False)
+        bind_mounts = lh._find_bind_mounts()
+    
+        def test_module_fail_when_required_args_missing(self):
+        ''' required arguments are reported as errors '''
+        with pytest.raises(AnsibleFailJson) as exc:
+            set_module_args({})
+            asup_module()
+        print('Info: %s' % exc.value.args[0]['msg'])
+    
+    RETURN = '''
+diff:
+  description: Configuration difference before and after applying change.
+  returned: when configuration is changed and diff option is enabled.
+  type: str
+  sample: >
+        [edit interfaces]
+        +   ge-0/0/1 {
+        +       description 'l2 interface configured by Ansible';
+        +       unit 0 {
+        +           family ethernet-switching {
+        +               interface-mode access;
+        +               vlan {
+        +                   members red;
+        +               }
+        +           }
+        +       }
+        +   }
+'''
+import collections
+    
+            validate_param_values(module, param_to_xpath_map, param=item)
+    
+            # Audio languages
+        if 'dvd' in self.api_data:
+            al = self.api_data['dvd'].get('audiolang')
+            if al:
+                self.audiolang = al
+                for i in self.audiolang:
+                    i['url'] = 'http://v.youku.com/v_show/id_{}'.format(i['vid'])
+    
+    
+class Funshion(VideoExtractor):
+    name = 'funshion'
+    stream_types = [
+        {'id': 'sdvd'},
+        {'id': 'sdvd_h265'},
+        {'id': 'hd'},
+        {'id': 'hd_h265'},
+        {'id': 'dvd'},
+        {'id': 'dvd_h265'},
+        {'id': 'tv'},
+        {'id': 'tv_h265'}
+    ]
+    a_mobile_url = 'http://m.fun.tv/implay/?mid=302555'
+    video_ep = 'http://pv.funshion.com/v7/video/play/?id={}&cl=mweb&uc=111'
+    media_ep = 'http://pm.funshion.com/v7/media/play/?id={}&cl=mweb&uc=111'
+    coeff = None
+    
+        if not info_only:
+        download_url_ffmpeg(m3u8_url, title, 'm3u8', None, output_dir=output_dir, merge=merge)
+    
+        def time_dtindex_from_index_with_series(self):
+        Index(self.s)
