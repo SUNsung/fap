@@ -1,180 +1,179 @@
 
         
-        		// Shifting the edge inward by b2_toiSlop should
-		// not cause the plane to pass the centroid.
-		if ((d.x < 0.0f)||(d.y < 0.0f)){
-			noError = false;
-			error = 6;
-		}
+        #include 'native_mate/dictionary.h'
     
-      Compression level can be specified in parameter level. At the moment,
-  only level 1 and level 2 are supported.
-  Level 1 is the fastest compression and generally useful for short data.
-  Level 2 is slightly slower but it gives better compression ratio.
-    
-    #ifdef FIXED_POINT
-/*#  define KISS_FFT_COS(phase)  TRIG_UPSCALE*floor(MIN(32767,MAX(-32767,.5+32768 * cos (phase))))
-#  define KISS_FFT_SIN(phase)  TRIG_UPSCALE*floor(MIN(32767,MAX(-32767,.5+32768 * sin (phase))))*/
-#  define KISS_FFT_COS(phase)  floor(.5+TWID_MAX*cos (phase))
-#  define KISS_FFT_SIN(phase)  floor(.5+TWID_MAX*sin (phase))
-#  define HALF_OF(x) ((x)>>1)
-#elif defined(USE_SIMD)
-#  define KISS_FFT_COS(phase) _mm_set1_ps( cos(phase) )
-#  define KISS_FFT_SIN(phase) _mm_set1_ps( sin(phase) )
-#  define HALF_OF(x) ((x)*_mm_set1_ps(.5f))
-#else
-#  define KISS_FFT_COS(phase) (kiss_fft_scalar) cos(phase)
-#  define KISS_FFT_SIN(phase) (kiss_fft_scalar) sin(phase)
-#  define HALF_OF(x) ((x)*.5f)
-#endif
-    
-    #define SHR16(a, shift) SHR16_(a, shift, __FILE__, __LINE__)
-static OPUS_INLINE short SHR16_(int a, int shift, char *file, int line)
-{
-   int res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(shift))
-   {
-      fprintf (stderr, 'SHR16: inputs are not short: %d >> %d in %s: line %d\n', a, shift, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a>>shift;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'SHR16: output is not short: %d in %s: line %d\n', res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips++;
-   return res;
-}
-#define SHL16(a, shift) SHL16_(a, shift, __FILE__, __LINE__)
-static OPUS_INLINE short SHL16_(int a, int shift, char *file, int line)
-{
-   int res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(shift))
-   {
-      fprintf (stderr, 'SHL16: inputs are not short: %d %d in %s: line %d\n', a, shift, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = a<<shift;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'SHL16: output is not short: %d in %s: line %d\n', res, file, line);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips++;
-   return res;
-}
-    
-    
-    {    // exception out_of_range.401
-    try
-    {
-        // try to write beyond the array limit
-        array.at(5) = 'sixth';
+    namespace {
     }
-    catch (json::out_of_range& e)
+    
+    
+    {}  // namespace mate
+    
+    
+    { private:
+  scoped_refptr<RefCountedPersistent<v8::Object>> handle_;
+};
+    
+    
+    {}  // namespace mate
+    
+    #if defined(OS_POSIX) && !defined(OS_ANDROID)
+#include 'base/files/scoped_temp_dir.h'
+#endif
+    
+    
     {
-        std::cout << e.what() << '\n';
+    {
+    {        // NB: Ensure that if the primary app gets started as elevated
+        // admin inadvertently, secondary windows running not as elevated
+        // will still be able to send messages
+        ::ChangeWindowMessageFilterEx(window_.hwnd(), WM_COPYDATA, MSGFLT_ALLOW,
+                                      NULL);
+        CHECK(result && window_.hwnd());
+      }
     }
+  }
+    
+    void AtomURLRequest::DoSetAuth(const base::string16& username,
+                               const base::string16& password) const {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::IO);
+  if (!request_) {
+    return;
+  }
+  request_->SetAuth(net::AuthCredentials(username, password));
 }
+    
+      status = napi_define_properties(
+      env, exports, sizeof(descriptors) / sizeof(*descriptors), descriptors);
+  if (status != napi_ok)
+    return NULL;
+    
+    TEST_F(ModulesTest, Linear2_CUDA) {
+  Linear model(5, 2);
+  model->to(torch::kCUDA);
+  model->to(torch::kCPU);
+  auto x = torch::randn({10, 5}, torch::requires_grad());
+  auto y = model(x);
+  torch::Tensor s = y.sum();
+    }
+    
+      /// Applies batch normalization on the `input` using the stored mean and
+  /// variance.
+  ///
+  /// The module must be constructed with `stateful = true` when calling this
+  /// method, as the module will otherwise not store running statistics. If you
+  /// want to supply the mean and variance yourself, use `pure_forward`.
+  Tensor forward(const Tensor& input);
+    
+    
+    {  // Create temporary file
+  auto fd = mkstemp(&tmp[0]);
+  if (fd == -1) {
+    throw std::system_error(errno, std::system_category());
+  }
+  close(fd);
+  return std::string(tmp.data(), tmp.size());
+}
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    class GetMergeSingleMapFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
+    }
+    }
+    
+    ```
+    
+    /*!
+ * \brief perform numerically safe logsum
+ * \param x left input operand
+ * \param y right input operand
+ * \return  log(exp(x) + exp(y))
+ */
+inline float LogSum(float x, float y) {
+  if (x < y) {
+    return y + std::log(std::exp(x - y) + 1.0f);
+  } else {
+    return x + std::log(std::exp(y - x) + 1.0f);
+  }
+}
+    
+    
+    {
+    {XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
+.describe('Raw binary data format.')
+.set_body([]() {
+    return new SparsePageRawFormat();
+  });
+}  // namespace data
+}  // namespace xgboost
 
     
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+      std::shared_ptr<DHTNode> getNode(const unsigned char* id,
+                                   const std::string& ipaddr,
+                                   uint16_t port) const;
     
+      DHTMessageFactory* factory_;
     
-    {  int ret = x;
-  return ret;
-}
-    
-    BaseMapMatrix::BaseMapMatrix() {}
-    
-        auto it_lower = std::lower_bound(
-        speed_limit_.speed_limit_points().begin(),
-        speed_limit_.speed_limit_points().end(), s,
-        [](const std::pair<double, double>& point, const double curr_s) {
-          return point.first < curr_s;
-        });
-    
-      MatrixXd mat_golden(20, 10);
-  // clang-format off
-  mat_golden <<
-   -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    0, -1,  0,  0,  0,  0,  0,  0,  0,  0,
-    0,  1,  0,  0,  0,  0,  0,  0,  0,  0,
-    0,  0, -1,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  1,  0,  0,  0,  0,  0,  0,  0,
-    0,  0,  0, -1,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  1,  0,  0,  0,  0,  0,  0,
-    0,  0,  0,  0, -1,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  1,  0,  0,  0,  0,  0,
-    0,  0,  0,  0,  0, -1,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  1,  0,  0,  0,  0,
-    0,  0,  0,  0,  0,  0, -1,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  1,  0,  0,  0,
-    0,  0,  0,  0,  0,  0,  0, -1,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  1,  0,  0,
-    0,  0,  0,  0,  0,  0,  0,  0, -1,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
-    0,  0,  0,  0,  0,  0,  0,  0,  0, -1,
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
-    
-    #include 'modules/planning/math/smoothing_spline/spline_1d_seg.h'
-    
-    GemMessageManager::GemMessageManager() {
-  // Control Messages
-  AddSendProtocolData<Accelcmd67, true>();
-  AddSendProtocolData<Brakecmd6b, true>();
-  AddSendProtocolData<Globalcmd69, true>();
-  AddSendProtocolData<Headlightcmd76, true>();
-  AddSendProtocolData<Horncmd78, true>();
-  AddSendProtocolData<Shiftcmd65, true>();
-  AddSendProtocolData<Steeringcmd6d, true>();
-  AddSendProtocolData<Turncmd63, true>();
-  AddSendProtocolData<Wipercmd90, true>();
-    }
-    
-    void Brakemotorrpt170::Parse(const std::uint8_t* bytes, int32_t length,
-                             ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_motor_current(
-      motor_current(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_1_70()->set_shaft_position(
-      shaft_position(bytes, length));
+    void DHTTokenUpdateCommand::setTokenTracker(DHTTokenTracker* tokenTracker)
+{
+  tokenTracker_ = tokenTracker;
 }
     
     
-    {  double ret = x * 0.001000;
-  return ret;
+    {  void setTokenTracker(DHTTokenTracker* tokenTracker);
+};
+    
+    #include 'DHTMessage.h'
+    
+      typedef std::set<std::shared_ptr<CacheEntry>,
+                   DerefLess<std::shared_ptr<CacheEntry>>>
+      CacheEntrySet;
+  CacheEntrySet entries_;
+    
+    const SliceTransform* NewFixedPrefixTransform(size_t prefix_len) {
+  return new FixedPrefixTransform(prefix_len);
 }
     
-    #include 'gtest/gtest.h'
-    
-    // config detail: {'name': 'override_status', 'enum': {0:
-// 'OVERRIDE_STATUS_NOT_OVERRIDDEN', 1: 'OVERRIDE_STATUS_OVERRIDDEN'},
-// 'precision': 1.0, 'len': 1, 'is_signed_var': False, 'offset': 0.0,
-// 'physical_range': '[0|1]', 'bit': 1, 'type': 'enum', 'order': 'motorola',
-// 'physical_unit': ''}
-Global_rpt_6a::Override_statusType Globalrpt6a::override_status(
-    const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(1, 1);
+    // An environment that measures function call times for filesystem
+// operations, reporting results to variables in PerfContext.
+class TimedEnv : public EnvWrapper {
+ public:
+  explicit TimedEnv(Env* base_env) : EnvWrapper(base_env) {}
     }
     
-    // config detail: {'name': 'latitude_seconds', 'offset': 0.0, 'precision': 1.0,
-// 'len': 8, 'is_signed_var': True, 'physical_range': '[-128|127]', 'bit': 23,
-// 'type': 'int', 'order': 'motorola', 'physical_unit': 'sec'}
-int Latlonheadingrpt82::latitude_seconds(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
-    }
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    #endif  // !defined(ROCKSDB_LITE) && !defined(OS_WIN)
+
+    
+      // put and get from non-default column family
+  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+  assert(s.ok());
+  std::string value;
+  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
+  assert(s.ok());
+    
+      // verify the values are still there
+  std::string value;
+  for (int i = 1000; i < 99999; ++i) {
+    db->Get(ReadOptions(), std::to_string(i),
+                           &value);
+    assert(value == std::string(500, 'a' + (i % 26)));
+  }
+    
+      // initialize column families options
+  std::unique_ptr<CompactionFilter> compaction_filter;
+  compaction_filter.reset(new DummyCompactionFilter());
+  cf_descs[0].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
+  cf_descs[0].options.compaction_filter = compaction_filter.get();
+  cf_descs[1].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
+    
+    #ifdef LUA
+#include <string>
+#include <vector>
