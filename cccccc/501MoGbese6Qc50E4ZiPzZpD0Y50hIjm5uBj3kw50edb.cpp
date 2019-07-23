@@ -1,246 +1,339 @@
 
         
-          /// Retrieve the array of replacement types, which line up with the
-  /// generic parameters.
-  ///
-  /// Note that the types may be null, for cases where the generic parameter
-  /// is concrete but hasn't been queried yet.
-  ArrayRef<Type> getReplacementTypes() const {
-    return llvm::makeArrayRef(getTrailingObjects<Type>(),
-                              getNumReplacementTypes());
-  }
+          uint8_t* result = allocator.AllocateMemory(768, 1);
+  TF_LITE_MICRO_EXPECT_NE(nullptr, result);
     
-      DCache.CBs.valueRetainCB(Value, nullptr);
-  DCache.Entries[CKey] = Value;
+    TfLiteRegistration* Register_RFFT2D();
     
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
-    
-    #include 'llvm/ADT/STLExtras.h'
-#include 'llvm/Support/ErrorHandling.h'
-    
-      std::string getTargetForLinker() const override;
-    
-      if (enforceFilelistExclusion())
-    return None;
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
+    bool TfLiteDriver::Expectation::TypedCheckString(bool verbose,
+                                                 const TfLiteTensor& tensor) {
+  if (tensor.data.raw == nullptr) {
+    if (verbose) {
+      std::cerr << '  got empty string' << std::endl;
     }
-    
-    #include 'genericvector.h'
-#include 'kdpair.h'
-#include 'points.h'
-    
-    static const int kUnigramAmbigsBufferSize = 1000;
-static const char kAmbigNgramSeparator[] = { ' ', '\0' };
-static const char kAmbigDelimiters[] = '\t ';
-static const char kIllegalMsg[] =
-  'Illegal ambiguity specification on line %d\n';
-static const char kIllegalUnicharMsg[] =
-  'Illegal unichar %s in ambiguity specification\n';
-    
-    #include 'errcode.h'
-    
-    // A useful base class to facilitate the common operation of sorting a vector
-// of owned pointer data using a separate key. This class owns its data pointer,
-// deleting it when it has finished with it, and providing copy constructor and
-// operator= that have move semantics so that the data does not get copied and
-// only a single instance of KDPtrPair holds a specific data pointer.
-template <typename Key, typename Data>
-class KDPtrPair {
- public:
-  KDPtrPair() : data_(nullptr) {}
-  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
-  // Copy constructor steals the pointer from src and nulls it in src, thereby
-  // moving the (single) ownership of the data.
-  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
-    src.data_ = nullptr;
+    return false;
   }
-  // Destructor deletes data, assuming it is the sole owner.
-  ~KDPtrPair() {
-    delete this->data_;
-    this->data_ = nullptr;
+  int expected_num_strings = GetStringCount(data_.raw);
+  int returned_num_strings = GetStringCount(tensor.data.raw);
+  if (expected_num_strings != returned_num_strings) {
+    if (verbose) {
+      std::cerr << '  string count differ: got ' << returned_num_strings
+                << ', but expected ' << expected_num_strings << std::endl;
+    }
+    return false;
   }
-  // Operator= steals the pointer from src and nulls it in src, thereby
-  // moving the (single) ownership of the data.
-  void operator=(KDPtrPair& src) {
-    delete this->data_;
-    this->data_ = src.data_;
-    src.data_ = nullptr;
-    this->key_ = src.key_;
+  for (int i = 0; i < returned_num_strings; ++i) {
+    auto expected_ref = GetString(data_.raw, i);
+    auto returned_ref = GetString(tensor.data.raw, i);
+    if (expected_ref.len != returned_ref.len) {
+      if (verbose) {
+        std::cerr << '  index ' << i << ': got string of size '
+                  << returned_ref.len << ', but expected size '
+                  << expected_ref.len << std::endl;
+      }
+      return false;
+    }
+    if (strncmp(expected_ref.str, returned_ref.str, returned_ref.len) != 0) {
+      if (verbose) {
+        std::cerr << '  index ' << i << ': strings are different' << std::endl;
+      }
+      return false;
+    }
   }
     }
     
+    template <typename Scalar>
+__global__ void MatrixBandPartKernel(const int num_threads,
+                                     const int batch_size, const int m,
+                                     const int n, const int num_lower_diags,
+                                     const int num_upper_diags,
+                                     const Scalar* input_ptr,
+                                     Scalar* output_ptr) {
+  GPU_1D_KERNEL_LOOP(index, num_threads) {
+    const int col = index % n;
+    const int row = (index / n) % m;
+    const int band_start = (num_lower_diags < 0 ? 0 : row - num_lower_diags);
+    const int band_end = (num_upper_diags < 0 ? n : row + num_upper_diags + 1);
+    if (col < band_start || col >= band_end) {
+      output_ptr[index] = Scalar(0);
+    } else {
+      output_ptr[index] = input_ptr[index];
+    }
+  }
+}
     
-    {}  // namespace grpc
+    template struct EyeFunctor<GPUDevice, float>;
+template struct EyeFunctor<GPUDevice, double>;
+template struct EyeFunctor<GPUDevice, complex64>;
+template struct EyeFunctor<GPUDevice, complex128>;
+    
+    TEST(TfliteInferenceStage, CustomDelegate) {
+  // Create stage.
+  EvaluationStageConfig config = GetTfliteInferenceStageConfig();
+  TfliteInferenceStage stage(config);
+    }
+    
+    
+    {    error_stats_.emplace_back();
+  }
+    
+    #undef DECLARE_GPU_SPECS
+#undef DECLARE_GPU_SPECS_INDEX
+    
+    // Gets a DebugOptions proto that reflects the defaults as if no flags were set.
+DebugOptions DefaultDebugOptionsIgnoringFlags();
+    
+          const T plusFactor = (normMin < T(0)) ? T(0) : T(normMin * normMin);
+    
+    
+    {    void KeyChord::Vkey(int32_t value)
+    {
+        _vkey = value;
+    }
+}
 
     
-      // Serializes rpc server stats into the provided buffer.  It returns the
-  // number of bytes written to the buffer. If the buffer is smaller than
-  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
-  // performance reasons.
-  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
-    if (buf_size < kRpcServerStatsSize) {
-      return kEncodeDecodeFailure;
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
     }
-    }
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  host_cpu_load_info_data_t cpuinfo;
-  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
-  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
-                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
-    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
-    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
   }
-  return std::make_pair(busy, total);
-}
     
     
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator &other)
-        : Collator(other),
-          data(other.data),
-          settings(other.settings),
-          tailoring(other.tailoring),
-          cacheEntry(other.cacheEntry),
-          validLocale(other.validLocale),
-          explicitlySetAttributes(other.explicitlySetAttributes),
-          actualLocaleIsSameAsValid(other.actualLocaleIsSameAsValid) {
-    settings->addRef();
-    cacheEntry->addRef();
-}
-    
-    UnicodeString &ScientificNumberFormatter::format(
-        const Formattable &number,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    UnicodeString original;
-    FieldPositionIterator fpi;
-    fDecimalFormat->format(number, original, &fpi, status);
-    return fStyle->format(
-            original,
-            fpi,
-            fPreExponent,
-            *fStaticSets,
-            appendTo,
-            status);
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+#endif  // TESSERACT_CCSTRUCT_LINLSQ_H_
 
     
-    U_NAMESPACE_END
+    class UnicharAmbigs {
+ public:
+  UnicharAmbigs() = default;
+  ~UnicharAmbigs() {
+    replace_ambigs_.delete_data_pointers();
+    dang_ambigs_.delete_data_pointers();
+    one_to_one_definite_ambigs_.delete_data_pointers();
+  }
+    }
+    
+      // Get the value of the top (smallest, defined by operator< ) element.
+  const Pair& PeekTop() const {
+    return heap_[0];
+  }
+  // Get the value of the worst (largest, defined by operator< ) element.
+  const Pair& PeekWorst() const { return heap_[IndexOfWorst()]; }
+    
+      // Accumulates the errors from the classifier results on a single sample.
+  // Returns true if debug is true and a CT_UNICHAR_TOPN_ERR error occurred.
+  // boosting_mode selects the type of error to be used for boosting and the
+  // is_error_ member of sample is set according to whether the required type
+  // of error occurred. The font_table provides access to font properties
+  // for error counting and shape_table is used to understand the relationship
+  // between unichar_ids and shape_ids in the results
+  bool AccumulateErrors(bool debug, CountTypes boosting_mode,
+                        const FontInfoTable& font_table,
+                        const GenericVector<UnicharRating>& results,
+                        TrainingSample* sample);
+    
+    // Compute the distance between the given feature vector and the last
+// Set feature vector.
+double IntFeatureDist::FeatureDistance(
+    const GenericVector<int>& features) const {
+  const int num_test_features = features.size();
+  const double denominator = total_feature_weight_ + num_test_features;
+  double misses = denominator;
+  for (int i = 0; i < num_test_features; ++i) {
+    const int index = features[i];
+    const double weight = 1.0;
+    if (features_[index]) {
+      // A perfect match.
+      misses -= 2.0 * weight;
+    } else if (features_delta_one_[index]) {
+      misses -= 1.5 * weight;
+    } else if (features_delta_two_[index]) {
+      // A near miss.
+      misses -= 1.0 * weight;
+    }
+  }
+  return misses / denominator;
+}
+    
+    DEFINE_ALIGN_TABLE(AlignImpl::s_table);
+    
+      ALWAYS_INLINE
+  void xedInstrRR(xed_iclass_enum_t instr, const RegXMM& r1, const RegXMM& r2) {
+    xedEmit(instr, toXedOperand(r1), toXedOperand(r2));
+  }
+    
+      constexpr bool operator==(Reg64 o) const { return rn == o.rn; }
+  constexpr bool operator!=(Reg64 o) const { return rn != o.rn; }
+    
+    int64_t MemFile::tell() {
+  assertx(m_len != -1);
+  return getPosition();
+}
     
     
+    {  return m_innerFile->open(filename, mode) &&
+    (m_bzFile = BZ2_bzdopen(dup(m_innerFile->fd()), mode.data()));
+}
     
-        /**
-     * Returns TRUE if this class can format positiveValue using
-     * the given range of digit counts.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UBool canFormat(
-            int32_t positiveValue, const IntDigitCountRange &range);
     
-    UBool
-CollationKey::operator==(const CollationKey& source) const
+    {  m_innerFile = File::Open(filename, mode);
+  if (isa<MemFile>(m_innerFile)) {
+    // We need an FD for the correct zlib APIs; MemFiles don't have an FD
+    if (strchr(mode.c_str(), 'w')) {
+      raise_warning('Cannot write to this stream type');
+      return false;
+    }
+    auto file = req::make<TempFile>();
+    while (!m_innerFile->eof()) {
+      file->write(m_innerFile->read(file->getChunkSize()));
+    }
+    file->rewind();
+    m_tempFile = file;
+    return (m_gzFile = gzdopen(dup(file->fd()), mode.data()));
+  }
+  if(m_innerFile) {
+    m_tempFile.reset();
+    return (m_gzFile = gzdopen(dup(m_innerFile->fd()), mode.data()));
+  }
+  return false;
+}
+    
+    
+    {  EXPECT_FALSE(sval(s_test.get()).couldBe(sval(s_A.get())));
+  EXPECT_TRUE(sval(s_test.get()).couldBe(sval(s_test.get())));
+  EXPECT_FALSE(
+    sval_nonstatic(s_test.get()).couldBe(sval_nonstatic(s_A.get()))
+  );
+  EXPECT_TRUE(
+    sval_nonstatic(s_test.get()).couldBe(sval_nonstatic(s_test.get()))
+  );
+  EXPECT_TRUE(sval(s_test.get()).couldBe(sval_nonstatic(s_test.get())));
+  EXPECT_TRUE(sval_nonstatic(s_test.get()).couldBe(sval(s_test.get())));
+  EXPECT_FALSE(sval(s_test.get()).couldBe(sval_nonstatic(s_A.get())));
+  EXPECT_FALSE(sval_nonstatic(s_test.get()).couldBe(sval(s_A.get())));
+}
+    
+    bool Scanner::tryParseTypeList(TokenStore::iterator& pos) {
+  for (int parsed = 0;; parsed++) {
+    if (pos->t == '+' || pos->t == '-') {
+      nextLookahead(pos);
+    }
+    auto cpPos = pos;
+    if (!tryParseNSType(cpPos)) {
+      if (parsed > 0) {
+        pos = cpPos;
+        return true;
+      } else {
+        return false;
+      }
+    }
+    pos = cpPos;
+    }
+    }
+    
+    #include 'DHTNode.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'DlAbortEx.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'fmt.h'
+#include 'util.h'
+#include 'array_fun.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    
+    {  void serialize(const std::string& filename);
+};
+    
+    #endif // D_DHT_TASK_FACTORY_IMPL_H
+
+    
+    void DHTTaskQueueImpl::executeTask()
 {
-    return getLength() == source.getLength() &&
-            (this == &source ||
-             uprv_memcmp(getBytes(), source.getBytes(), getLength()) == 0);
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
     
-        for (int32_t i=0; i<output.length(); ++i) {
-        if (hasCursor && i == cursor) {
-            ICU_Utility::appendToRule(rule, (UChar)0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        UChar c = output.charAt(i); // Ok to use 16-bits here
+    class DHTTaskQueueImpl : public DHTTaskQueue {
+private:
+  DHTTaskExecutor periodicTaskQueue1_;
     }
     
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    using apollo::drivers::canbus::Byte;
-    
-      x <<= 2;
-  x |= t;
-    
-    int ObjectQualityInfo60C::meas_state(const std::uint8_t* bytes,
-                                     int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(2, 3);
+    namespace aria2 {
     }
     
+    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+
     
-    {  for (int i = 0; i < 10; ++i) {
-    EXPECT_DOUBLE_EQ(offset(i, 0), offset_golden(i, 0));
+    JSON getExamplePacksConfig() {
+  std::string content;
+  auto const filepath = getTestConfigDirectory() / 'test_inline_pack.conf';
+  auto status = readFile(filepath, content);
+  EXPECT_TRUE(status.ok())
+      << 'Could not read file: ' << boost::io::quoted(filepath.string())
+      << ', because: ' << status.what();
+  JSON doc = JSON::newObject();
+  doc.fromString(content);
+  return doc;
+}
+    
+    
+    { private:
+  std::unordered_map<std::string, StorageType> storage_;
+  std::mutex mutex_;
+};
+    
+      // This function should be used only as optimization
+  // This write operation will not use neither sync or WAL, so date lose
+  // may happen in case of failure, but opertaion itself is still atomic
+  ExpectedSuccess<DatabaseError> putStringsUnsafe(
+      const std::string& domain,
+      const std::vector<std::pair<std::string, std::string>>& data) override;
+    
+    namespace {
+    }
+    
+    GTEST_TEST(InMemoryDatabaseTest, test_keys_search) {
+  auto db = std::make_unique<InMemoryDatabase>('test');
+  ASSERT_FALSE(db->open().isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_1', 1).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_2', 2).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'key_3', 3).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_1', 4).isError());
+  ASSERT_FALSE(db->putInt32(kPersistentSettings, 'kEy_2', 5).isError());
+  auto result_all = db->getKeys(kPersistentSettings);
+  EXPECT_TRUE(result_all);
+  EXPECT_EQ((*result_all).size(), 5);
+  auto result_some = db->getKeys(kPersistentSettings, 'key');
+  EXPECT_TRUE(result_some);
+  EXPECT_EQ((*result_some).size(), 3);
+}
+    
+    
+    {  virtual void TearDown() {
+    boost::filesystem::remove_all(path_);
   }
-}
-    
-    void Spline1dSeg::SetParams(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    Eigen::MatrixXd SplineSegKernel::NthDerivativeKernel(
-    const uint32_t n, const uint32_t num_params, const double accumulated_x) {
-  if (n == 1) {
-    return DerivativeKernel(num_params, accumulated_x);
-  } else if (n == 2) {
-    return SecondOrderDerivativeKernel(num_params, accumulated_x);
-  } else if (n == 3) {
-    return ThirdOrderDerivativeKernel(num_params, accumulated_x);
-  } else {
-    return Eigen::MatrixXd::Zero(num_params, num_params);
-  }
-}
-    
-    #include 'glog/logging.h'
-    
-    
-    {  auto &brakerpt = chassis_detail.gem().brake_rpt_6c();
-  EXPECT_DOUBLE_EQ(brakerpt.manual_input(), 0.258);
-  EXPECT_DOUBLE_EQ(brakerpt.commanded_value(), 0.772);
-  EXPECT_DOUBLE_EQ(brakerpt.output_value(), 4.37);
-  EXPECT_EQ(brakerpt.brake_on_off(), Brake_rpt_6c::BRAKE_ON_OFF_ON);
-}
-    
-    
-    {
-    {
-    {
-    {  int ret = x;
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+};
