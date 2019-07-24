@@ -1,114 +1,174 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
+        #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
     
-    
-    {    Lock& lock;
-    Lock templock;
+    enum FileType {
+  kLogFile,
+  kDBLockFile,
+  kTableFile,
+  kDescriptorFile,
+  kCurrentFile,
+  kTempFile,
+  kInfoLogFile  // Either the current one, or an old one
 };
     
-      auto* message1_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
-  TestUtil::SetAllFields(message1_on_arena);
-  const auto* nested = &message1_on_arena->optional_nested_message();
+    class Slice;
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+      // Return a pointer to the beginning of the referenced data
+  const char* data() const { return data_; }
+    
+    #include 'leveldb/db.h'
+#include 'util/testharness.h'
+    
+    
+    {  dst.clear();
+  PutFixed64(&dst, 0x0807060504030201ull);
+  ASSERT_EQ(8, dst.size());
+  ASSERT_EQ(0x01, static_cast<int>(dst[0]));
+  ASSERT_EQ(0x02, static_cast<int>(dst[1]));
+  ASSERT_EQ(0x03, static_cast<int>(dst[2]));
+  ASSERT_EQ(0x04, static_cast<int>(dst[3]));
+  ASSERT_EQ(0x05, static_cast<int>(dst[4]));
+  ASSERT_EQ(0x06, static_cast<int>(dst[5]));
+  ASSERT_EQ(0x07, static_cast<int>(dst[6]));
+  ASSERT_EQ(0x08, static_cast<int>(dst[7]));
 }
     
-    using google::protobuf::util::Proto3DataStripper;
-    
-    #define WRITE_CHECK(fp, ptr, count)                                            \
-  if (fp.write((ptr), (count)) != (count)) {                                   \
-    throw DL_ABORT_EX(                                                         \
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
-  }
-    
-      std::shared_ptr<DHTNode> localNode_;
-    
-        peerAnnounceStorage->setTaskQueue(taskQueue.get());
-    peerAnnounceStorage->setTaskFactory(taskFactory.get());
-    
-    namespace {
-const size_t NUM_CONCURRENT_TASK = 15;
-} // namespace
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    DNSCache::CacheEntry::~CacheEntry() = default;
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
-};
-    
-      void set_max_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
+        // if we are in integer mode, within the base, and we're on the last digit then
+    // there are special cases where we can actually add one more digit.
+    if (isIntegerMode && pNumSec->value.size() == maxCount && !m_hasExponent)
+    {
+        bool allowExtraDigit = false;
     }
-    max_delayed_write_rate_ = write_rate;
-    // update delayed_write_rate_ as well
-    delayed_write_rate_ = write_rate;
-  }
     
-      // Write a key OUTSIDE of this transaction.
-  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
-  // here, the transaction would fail to commit.
-  s = db->Put(write_options, 'xyz', 'zzz');
+    using namespace CalcEngine;
+using namespace CalcEngine::RationalMath;
+using namespace std;
     
-    std::string kDBPath = '/tmp/rocksdb_options_file_example';
+                void OnModeChanged();
     
-    #include 'rocksdb/db.h'
-#include 'rocksdb/status.h'
+            static int Initialize();
+        static void RegisterHosts();
+        static INarratorAnnouncementHost ^ GetHostProducer();
+    
+    NcclComm::~NcclComm()
+{
+    if (m_stream != nullptr)
+        cudaStreamDestroy(m_stream);
+    if (m_ncclComm != nullptr)
+        ncclCommDestroy(m_ncclComm);
+}
+    
+    
+    {            return tokenEnd; // done with the macro now
+        }
+    
+    
+    {        // We don't use CreateFromFile() here since the user might specify OutputNodeNames in the config.
+        // By not compiling the network before patching, we avoid double log output for validation.
+        net = make_shared<ComputationNetwork>(deviceId);
+        net->SetTraceLevel(config(L'traceLevel', 0));
+        net->Read<ElemType>(modelPath);
+        if (outputNodeNames.size() > 0)
+            PatchOutputNodes(net, outputNodeNames, outputNodeNamesVector);
+        net->CompileNetwork();
+    }
     
     
     {
-    {
-    {  lua_State* lua_state_;
-};
-}  // namespace lua
-}  // namespace rocksdb
-#endif  // LUA
+    {                    if (tokenStart >= totalLength)
+                    {
+                        // if nothing left, we are done
+                        break;
+                    }
+                }
+            }
+            // token has been determined to range from tokenStart to tokenEnd
+    
+                // 4. third, allocate space for accumulated gradient
+            for (auto& n : m_LearnableNodePtr)
+            {
+                auto node = n.second;
+                if (node->IsParameterUpdateRequired())
+                {
+                    wstring nodeName = node->GetName();
+                    shared_ptr<ComputationNode<ElemType>> pLearnableNode = node; // TODO: what's this for?
+                    const auto& funvalue = pLearnableNode->Value(); // gradient may not be allocated when this function is first called
+                    size_t nrow = funvalue.GetNumRows();
+                    size_t ncol = funvalue.GetNumCols();
+                    if (m_cachedGradient.find(nodeName) == m_cachedGradient.end())
+                    {
+                        // not allocated yet
+                        auto matrixp = make_shared<Matrix<ElemType>>(nrow, ncol, funvalue.GetDeviceId());
+                        matrixp->SetValue(0);
+                        m_cachedGradient.AddInput(nodeName, matrixp, pLearnableNode->GetMBLayout()/*null*/, pLearnableNode->GetSampleLayout());
+                    }
+                }
+            }
+            // 5. for stateful node
+            for (auto x : m_netStatefulNodes)
+            {
+                wstring name = x.first;
+                if (m_netStates[name].empty())
+                {
+                    // this only happens in the first minibatch in an epoch
+                    m_netStates[name].resize(actualnumSubminibatches);
+                }
+            }
+    
+    // struct _Null {};
+// _Null Null;
+enum class Null {};
+    
+    char *string_html_decode(const char *input, int &len,
+                         bool decode_double_quote, bool decode_single_quote,
+                         const char *charset_hint, bool all,
+                         bool xhp /* = false */) {
+  assert(input);
+    }
+    
+    #endif
+#endif
 
     
-    // Returns the current memory usage of the specified DB instances.
-class MemoryUtil {
- public:
-  enum UsageType : int {
-    // Memory usage of all the mem-tables.
-    kMemTableTotal = 0,
-    // Memory usage of those un-flushed mem-tables.
-    kMemTableUnFlushed = 1,
-    // Memory usage of all the table readers.
-    kTableReadersTotal = 2,
-    // Memory usage by Cache.
-    kCacheTotal = 3,
-    kNumUsageTypes = 4
-  };
-    }
+    #include <folly/Singleton.h>
+#include <folly/system/ThreadName.h>
     
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    disposeInternal
- * Signature: (J)V
- */
-void Java_org_rocksdb_BackupableDBOptions_disposeInternal(JNIEnv* /*env*/,
-                                                          jobject /*jopt*/,
-                                                          jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  assert(bopt != nullptr);
-  delete bopt;
+      static ReflectionTypeAliasHandle* Get(ObjectData* obj) {
+    return Native::data<ReflectionTypeAliasHandle>(obj);
+  }
+    
+    
+    {  struct stat st;
+  auto w = Stream::getWrapperFromURI(StrNR(cleanPath));
+  if (w && !dynamic_cast<FileStreamWrapper*>(w)) {
+    if (w->stat(cleanPath.c_str(), &st)) {
+      return;
+    }
+    if (S_ISDIR(st.st_mode)) {
+      return;
+    }
+    const auto f = w->open(StrNR(cleanPath), 'r', 0, nullptr);
+    if (!f) return;
+    auto str = f->read();
+    HackCFactsExtractor::parse_file_impl(cleanPath, allowHipHopSyntax,
+                                         str.slice(), res, state);
+  } else {
+    // It would be nice to have an atomic stat + open operation here but this
+    // doesn't seem to be possible with STL in a portable way.
+    if (stat(cleanPath.c_str(), &st)) {
+      return;
+    }
+    if (S_ISDIR(st.st_mode)) {
+      return;
+    }
+    HackCFactsExtractor::parse_file_impl(cleanPath, allowHipHopSyntax,
+                                         folly::StringPiece{''}, res, state);
+  }
 }
