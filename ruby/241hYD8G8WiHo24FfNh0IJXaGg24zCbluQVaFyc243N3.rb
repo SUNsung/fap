@@ -1,93 +1,143 @@
 
         
-        Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-          def question
-        if default.nil?
-          I18n.t(:question, key: key, scope: :capistrano)
-        else
-          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
-        end
-      end
-    
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
-      end
-    
-          # Calls the given block for each `when` node in the `case` statement.
-      # If no block is given, an `Enumerator` is returned.
+            should 'print a nice list of static files' do
+      time_regexp = '\\d+:\\d+'
       #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_when
-        return when_branches.to_enum(__method__) unless block_given?
+      # adding a pipe character at the beginning preserves formatting with newlines
+      expected_output = Regexp.new <<~OUTPUT
+        | - /css/screen.css last edited at #{time_regexp} with extname .css
+          - /pgp.key last edited at #{time_regexp} with extname .key
+          - /products.yml last edited at #{time_regexp} with extname .yml
+          - /symlink-test/symlinked-dir/screen.css last edited at #{time_regexp} with extname .css
+      OUTPUT
+      assert_match expected_output, File.read(dest_dir('static_files.html'))
+    end
+  end
     
-              body.nil?
+              @highlighter = begin
+            if @config.key?('enable_coderay') && @config['enable_coderay']
+              Jekyll::Deprecator.deprecation_message(
+                'You are using 'enable_coderay', ' \
+                'use syntax_highlighter: coderay in your configuration file.'
+              )
+    
+            warden.logout(scope)
+        warden.clear_strategies_cache!(scope: scope)
+        instance_variable_set(:'@current_#{scope}', nil)
+    
+          # Update password saving the record and clearing token. Returns true if
+      # the passwords are valid and the record was saved, false otherwise.
+      def reset_password(new_password, new_password_confirmation)
+        if new_password.present?
+          self.password = new_password
+          self.password_confirmation = new_password_confirmation
+          save
+        else
+          errors.add(:password, :blank)
+          false
+        end
+      end
+    
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
+    else
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
+    end
+  end
+end
+
+    
+        shared_examples 'on a visible post' do
+      it 'creates the participation' do
+        post :create, params: {post_id: @post.id}
+        expect(alice.participations.where(:target_id => @post.id)).to exist
+        expect(response.code).to eq('201')
+      end
+    end
+    
+    module VagrantHelpers
+  extend self
+    
+          attr_reader :key, :default, :options
+    
+      option ['--cloud.id'], 'CLOUD_ID',
+    I18n.t('logstash.runner.flag.cloud_id'),
+    :attribute_name => 'cloud.id'
+    
+    require 'bootstrap/environment'
+    
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+  end
+  cloned
+end
+    
+      teardown do
+    FileUtils.rm_rf(@path)
+  end
+end
+
+    
+        # Title is based on file name when h1_title is false.
+    actual = @view.title
+    assert_equal 'H1', title
+  end
+end
+
+    
+            def create
+          authorize! :create, Spree.user_class
+          @user = Spree.user_class.new(user_params)
+          if @user.save
+            respond_with(@user, status: 201, default_template: :show)
+          else
+            invalid_resource!(@user)
+          end
         end
     
-    # Now, add our init-scripts, systemd services, and so on:
-pleaserun = package.convert(FPM::Package::PleaseRun)
-pleaserun.input ['/usr/bin/my-executable', '--foo-from', 'bar']
-    
-      option '--source-date-epoch-default', 'SOURCE_DATE_EPOCH_DEFAULT',
-    'If no release date otherwise specified, use this value as timestamp on generated files to reduce nondeterminism. ' \
-    'Reproducible build environments such as dpkg-dev and rpmbuild set this via envionment variable SOURCE_DATE_EPOCH ' \
-    'variable to the integer unix timestamp to use in generated archives, ' \
-    'and expect tools like fpm to use it as a hint to avoid nondeterministic output. ' \
-    'This is a Unix timestamp, i.e. number of seconds since 1 Jan 1970 UTC. ' \
-    'See https://reproducible-builds.org/specs/source-date-epoch ',
-    :environment_variable => 'SOURCE_DATE_EPOCH'
-    
-        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
-    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
-    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
-    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
-    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
-    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
-    logger.debug('Package info', :name => self.name, :version => self.version,
-                  :description => self.description)
-    
-      option '--name', 'SERVICE_NAME', 'The name of the service you are creating'
-  option '--chdir', 'CHDIR', 'The working directory used by the service'
-    
-        # use dir to set stuff up properly, mainly so I don't have to reimplement
-    # the chdir/prefix stuff special for tar.
-    dir = convert(FPM::Package::Dir)
-    if attributes[:chdir]
-      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
-    else
-      dir.attributes[:chdir] = build_path
-    end
-    
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
-    
-      # wrapper around mknod ffi calls
-  def mknod_w(path, mode, dev)
-    rc = -1
-    case %x{uname -s}.chomp
-    when 'Linux'
-      # bits/stat.h #define _MKNOD_VER_LINUX  0
-      rc = xmknod(0, path, mode, FFI::MemoryPointer.new(dev))
-    else
-      rc = mknod(path, mode, dev)
-    end
-    rc
+    if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/test/'
+    add_filter '/myapp/'
   end
+end
+    
+          it 'displays the correct output' do
+        mock_stats = OpenStruct.new(
+          processed: 420710,
+          failed: 12,
+          workers_size: 34,
+          enqueued: 56,
+          retry_size: 78,
+          scheduled_size: 90,
+          dead_size: 666
+        )
+        Sidekiq::Stats.stub(:new, mock_stats) do
+          assert_includes output, 'Processed: 420,710'
+          assert_includes output, 'Failed: 12'
+          assert_includes output, 'Busy: 34'
+          assert_includes output, 'Enqueued: 56'
+          assert_includes output, 'Retries: 78'
+          assert_includes output, 'Scheduled: 90'
+          assert_includes output, 'Dead: 666'
+        end
+      end
+    end
+    
+            assert_equal 0, Sidekiq::Queue.new('queue_1').size
+        assert_equal 1, Sidekiq::Queue.new('queue_2').size
+        assert_equal 0, Sidekiq::Queue.new('queue_5').size
+        assert_equal 1, Sidekiq::Queue.new('queue_6').size
+      ensure
+        Sidekiq.client_middleware.remove MyStopper
+      end
+    end
