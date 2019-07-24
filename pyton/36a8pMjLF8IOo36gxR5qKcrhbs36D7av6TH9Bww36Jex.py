@@ -1,79 +1,151 @@
 
         
-        from setuptools import setup, find_packages
-setup(
-    name = proj_info['name'],
-    version = VERSION,
+            def message_user(self, friend_id, message):
+        pass
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+        def can_fit_in_spot(self, spot):
+        return spot.size in (VehicleSize.LARGE, VehicleSize.COMPACT)
     
-        def prepare(self, **kwargs):
-    
-    
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
-    
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
-    
-    	type, ext, size = url_info(url)
-	print_info(site_info, title, type, size)
-	
-	if not info_only:
-		download_urls([url], title, ext, size, output_dir, merge = merge)
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
     
     
-def get_m3u8_url(stream_id):
-    return 'http://live-ws.huomaotv.cn/live/%s/playlist.m3u8' % stream_id
+class UserGraphService(object):
     
-        filename = '%s.%s' % (title, ext)
-    filepath = os.path.join(output_dir, filename)
-    if not force and os.path.exists(filepath):
-        print('Skipping {}: file already exists\n'.format(filepath))
-        return
-    bar = SimpleProgressBar(total_size, 1)
-    print('Downloading %s ...' % tr(filename))
-    url_save_icourses(url, filepath, bar, total_size, headers=headers, **kwargs)
-    bar.done()
+    _StateKeys = v1._StateKeys  # pylint: disable=protected-access
     
-    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
-    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
-    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
-    xml = get_html(url, 'utf-8')
-    title = r1(r'Name='([^']+)'', xml)
-    title = unescape_html(title)
-    url = r1(r'VideoPlayUrl='([^']+)'', xml)
-    from random import randint
-    r = randint(10, 19)
-    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
-    type, ext, size = url_info(url)
+      Returns:
+    a MultipleGridAnchorGenerator
+  '''
+  if base_anchor_size is None:
+    base_anchor_size = [1.0, 1.0]
+  box_specs_list = []
+  if scales is None or not scales:
+    scales = [min_scale + (max_scale - min_scale) * i / (num_layers - 1)
+              for i in range(num_layers)] + [1.0]
+  else:
+    # Add 1.0 to the end, which will only be used in scale_next below and used
+    # for computing an interpolated scale for the largest scale in the list.
+    scales += [1.0]
     
-            elif re.search(r'i\.imgur\.com/', self.url):
-            # direct image
-            _, container, size = url_info(self.url)
-            self.streams = {
-                'original': {
-                    'src': [self.url],
-                    'size': size,
-                    'container': container
-                }
-            }
-            self.title = r1(r'i\.imgur\.com/([^./]*)', self.url)
+      if optimizer_type == 'momentum_optimizer':
+    config = optimizer_config.momentum_optimizer
+    learning_rate = _create_learning_rate(config.learning_rate,
+                                          global_step=global_step)
+    summary_vars.append(learning_rate)
+    optimizer = tf.train.MomentumOptimizer(
+        learning_rate,
+        momentum=config.momentum_optimizer_value)
+    
+        Args:
+      indicator: boolean tensor of shape [N] whose True entries can be sampled.
+      batch_size: desired batch size. If None, keeps all positive samples and
+        randomly selects negative samples so that the positive sample fraction
+        matches self._positive_fraction. It cannot be None is is_static is True.
+      labels: boolean tensor of shape [N] denoting positive(=True) and negative
+          (=False) examples.
+      scope: name scope.
+    
+    import tensorflow as tf
+from google.protobuf import text_format
+from object_detection import export_tflite_ssd_graph_lib
+from object_detection.protos import pipeline_pb2
+    
+        prediction_dict = {
+        'refined_box_encodings': refined_box_encodings,
+        'class_predictions_with_background':
+        class_predictions_with_background,
+        'num_proposals': num_proposals,
+        'proposal_boxes': absolute_proposal_boxes,
+        'box_classifier_features': box_classifier_features,
+        'proposal_boxes_normalized': proposal_boxes_normalized,
+    }
+    return prediction_dict
+    
+      ECE is a scalar summary statistic of calibration error. It is the
+  sample-weighted average of the difference between the predicted and true
+  probabilities of a positive detection across uniformly-spaced model
+  confidences [0, 1]. See referenced paper for a thorough explanation.
+    
+    
+# admin for #19425 and #18388
+class BinaryTreeAdmin(admin.TabularInline):
+    model = BinaryTree
+    
+        def test_version_dev_tuple(self):
+        expect = ('1.2.3dev', 1, 2, 3)
+        ops = FakePostGISOperations(expect[0])
+        actual = ops.postgis_version_tuple()
+        self.assertEqual(expect, actual)
+    
+        # Copy any attributes that a decorator adds to the function it decorates.
+    for dec in decorators:
+        _update_method_wrapper(_wrapper, dec)
+    # Preserve any existing attributes of 'method', including the name.
+    update_wrapper(_wrapper, method)
+    return _wrapper
+    
+        def __init__(self, layer_ptr, ds):
+        '''
+        Initialize on an OGR C pointer to the Layer and the `DataSource` object
+        that owns this layer.  The `DataSource` object is required so that a
+        reference to it is kept with this Layer.  This prevents garbage
+        collection of the `DataSource` while this Layer is still active.
+        '''
+        if not layer_ptr:
+            raise GDALException('Cannot create Layer, invalid pointer given')
+        self.ptr = layer_ptr
+        self._ds = ds
+        self._ldefn = capi.get_layer_defn(self._ptr)
+        # Does the Layer support random reading?
+        self._random_read = self.test_capability(b'RandomRead')
+    
+            setting_name, refid = get_setting_name_and_refid(node)
+    
+                    # Read the new file to memory
+                with open(_filename) as _file:
+                    _contents = _file.read()
+    
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
+    
+    
+class ScrapyCommand(object):
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
+    
+        def __init__(self, settings, aws_access_key_id=None, aws_secret_access_key=None, \
+            httpdownloadhandler=HTTPDownloadHandler, **kw):
+    
+    import six
+from w3lib import html
+    
+    try:
+    from cStringIO import StringIO as BytesIO
+except ImportError:
+    from io import BytesIO
