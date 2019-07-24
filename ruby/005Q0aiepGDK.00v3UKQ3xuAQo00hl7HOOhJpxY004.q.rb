@@ -1,100 +1,81 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
-    
-    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
-COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
-    
-        SiteSetting.traditional_markdown_linebreaks = true
-    SiteSetting.enable_markdown_typographer = false
-    
-        delegate :base_url, to: :ContentSecurityPolicy
-    
-        Extension.theme_extensions(theme_ids).each { |extension| builder << extension }
-    Extension.plugin_extensions.each { |extension| builder << extension }
-    builder << Extension.site_setting_extension
-    
-    class ContentSecurityPolicy
-  class Middleware
-    def initialize(app)
-      @app = app
-    end
-    
-      describe 'report-uri' do
-    it 'is enabled by SiteSetting' do
-      SiteSetting.content_security_policy_collect_reports = true
-      report_uri = parse(policy)['report-uri'].first
-      expect(report_uri).to eq('http://test.localhost/csp_reports')
-    
-          log(action: changed_rows == 0 ? 'seen wrong token' : 'seen token',
-          user_auth_token_id: user_token.id,
-          user_id: user_token.user_id,
-          auth_token: user_token.auth_token,
-          user_agent: opts && opts[:user_agent],
-          path: opts && opts[:path],
-          client_ip: opts && opts[:client_ip])
-    end
-    
-      end
-end
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
+              def test_invert_remove_foreign_key_with_primary_key_and_to_table_in_options
+        enable = @recorder.inverse_of :remove_foreign_key, [:dogs, to_table: :people, primary_key: 'uuid']
+        assert_equal [:add_foreign_key, [:dogs, :people, primary_key: 'uuid']], enable
       end
     
-        alias :name :singular
-    
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
-    
-        puts('Packaging plugins for offline usage')
-    
-            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
-      options = {:debug => ENV['LS_QA_DEBUG']}
-    
-              def serialized_current_order
-            serialize_order(spree_current_order)
-          end
+            def ==(type)
+          @symbol == type.to_sym unless type.blank?
         end
       end
+    
+          def destroy
+        authorization = Api::OpenidConnect::Authorization.find_by(id: params[:id])
+        if authorization
+          authorization.destroy
+        else
+          flash[:error] = I18n.t('api.openid_connect.authorizations.destroy.fail', id: params[:id])
+        end
+        redirect_to api_openid_connect_user_applications_url
+      end
+    
+      respond_to :html,
+             :js,
+             :json
+    
+      respond_to :html, :mobile, :json
+    
+        opts = params.require(:conversation).permit(:subject)
+    opts[:participant_ids] = person_ids
+    opts[:message] = { text: params[:conversation][:text] }
+    @conversation = current_user.build_conversation(opts)
+    
+      def create
+    emails = inviter_params[:emails].split(',').map(&:strip).uniq
+    
+      def test_file_exists(path)
+    exists?('f', path)
+  end
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+      # retrieve only the latest spec for all locally installed plugins
+  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
+  def find_latest_gem_specs
+    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
+      previous = result[spec.name.downcase]
+      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
+      result
     end
   end
 end
 
     
-            def line_items_attributes
-          { line_items_attributes: {
-            id: params[:id],
-            quantity: params[:line_item][:quantity],
-            options: line_item_params[:options] || {}
-          } }
-        end
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
+    end
     
-            def find_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-        end
+    require 'minitest/autorun'
     
-              def serialize_payment_methods(payment_methods)
-            payment_methods_serializer.new(payment_methods).serializable_hash
-          end
+        it 'wraps the inlined worker with middleware' do
+      Sidekiq::Testing.server_middleware do |chain|
+        chain.add AttributeMiddleware
+      end
     
-          @@address_attributes = [
-        :id, :firstname, :lastname, :full_name, :address1, :address2, :city,
-        :zipcode, :phone, :company, :alternative_phone, :country_id, :state_id,
-        :state_name, :state_text
-      ]
+      describe 'delay' do
+    require 'action_mailer'
+    class InlineFooMailer < ActionMailer::Base
+      def bar(str)
+        raise InlineError
+      end
+    end
+    
+    require_relative '../lib/sidekiq/cli'
+require_relative '../lib/sidekiq/launcher'
