@@ -1,91 +1,137 @@
 
         
-                      entry.author do |author|
-                author.name('DHH')
-              end
-            end
-          end
-        end
-    EOT
-  FEEDS['provide_builder'] = <<-'EOT'
-          # we pass in the new_xml to the helper so it doesn't
-          # call anything on the original builder
-          new_xml = Builder::XmlMarkup.new(:target=>''.dup)
-          atom_feed(:xml => new_xml) do |feed|
-            feed.title('My great blog!')
-            feed.updated(@scrolls.first.created_at)
+              @site.reader.read_directories('symlink-test')
+      refute_equal [], @site.pages
+      refute_equal [], @site.static_files
+    end
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+            private
+    
+              stats = diff_stats_collection&.find_by_path(diff.new_path)
+    
+          subject.diff_files
+    end
+    
+            def fetch_service_account_token
+          Clusters::Gcp::Kubernetes::FetchKubernetesTokenService.new(
+            platform.kubeclient,
+            kubernetes_namespace.token_name,
+            kubernetes_namespace.namespace
+          ).execute
         end
-        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-      describe '#status' do
-    it 'works for failed jobs' do
-      job.failed_at = Time.now
-      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
-    end
-    
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
   end
     
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
     end
     
-              errors = scenario_import.errors.full_messages.to_sentence
-          expect(errors).to match(/Name can't be blank/)
-          expect(errors).to match(/api_key is required/)
-          expect(errors).to match(/Schedule is not a valid schedule/)
-        end
-      end
+      describe '#sort_tuples!' do
+    let(:tuples) {
+      time = Time.now
+      [
+        [2, 'a', time - 1],  # 0
+        [2, 'b', time - 1],  # 1
+        [1, 'b', time - 1],  # 2
+        [1, 'b', time],      # 3
+        [1, 'a', time],      # 4
+        [2, 'a', time + 1],  # 5
+        [2, 'a', time],      # 6
+      ]
+    }
     
-      describe 'up' do
-    it 'should update extract and template options for an existing WebsiteAgent' do
-      expect(agent.options).to include('extract' => old_extract,
-                                       'template' => old_template)
-      ConvertWebsiteAgentTemplateForMerge.new.up
-      agent.reload
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
+      describe 'email' do
+    before do
+      ActionMailer::Base.deliveries.clear
+    
+        ActivityPub::DeliveryWorker.push_bulk(inboxes) do |inbox_url|
+      [signed_payload, @account.id, inbox_url]
     end
-  end
     
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
+      let(:user) { Fabricate(:user, filtered_languages: []) }
     
-      # retrieve only the latest spec for all locally installed plugins
-  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
-  def find_latest_gem_specs
-    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
-      previous = result[spec.name.downcase]
-      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
-      result
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
 end
+    
+        def log_http_get_file(url, cached = false)
+      s = '  #{'CACHED ' if cached}GET #{url}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
+end
 
     
+      describe 'predicates' do
+    context 'in root position' do
+      let(:pattern) { 'send_type?' }
+      let(:ruby) { '1.inc' }
     
-# This is a non obvious hack,
-# EllipticalCurve are not completely implemented in JRuby 9k and the new version of SSH from the standard library
-# use them.
-#
-# Details: https://github.com/jruby/jruby-openssl/issues/105
-Net::SSH::Transport::Algorithms::ALGORITHMS.values.each { |algs| algs.reject! { |a| a =~ /^ecd(sa|h)-sha2/ } }
-Net::SSH::KnownHosts::SUPPORTED_TYPE.reject! { |t| t =~ /^ecd(sa|h)-sha2/ }
+              #{close}
+        RUBY
+      end
+    
+      context 'when a variable is assigned ' \
+          'in main body of begin with rescue but unreferenced' do
+    it 'registers an offense' do
+      expect_offense(<<~RUBY)
+        begin
+          do_something
+          foo = true
+          ^^^ Useless assignment to variable - `foo`.
+        rescue
+          do_anything
+        end
+      RUBY
+    end
+  end
+    
+          def on_send(node)
+        rhs = extract_rhs(node)
+    
+        def self.cache_root(config_store)
+      root = config_store.for('.').for_all_cops['CacheRootDirectory']
+      root ||= if ENV.key?('XDG_CACHE_HOME')
+                 # Include user ID in the path to make sure the user has write
+                 # access.
+                 File.join(ENV['XDG_CACHE_HOME'], Process.uid.to_s)
+               else
+                 File.join(ENV['HOME'], '.cache')
+               end
+      File.join(root, 'rubocop_cache')
+    end
+    
+          # Checks whether this `block` literal belongs to a lambda.
+      #
+      # @return [Boolean] whether the `block` literal belongs to a lambda
+      def lambda?
+        send_node.method?(:lambda)
+      end
