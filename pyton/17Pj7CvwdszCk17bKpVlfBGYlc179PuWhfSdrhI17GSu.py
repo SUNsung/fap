@@ -1,208 +1,153 @@
 
         
-        
-class GroupChat(Chat):
-    
-        def mapper_sort(self, key, value):
-        '''Construct key to ensure proper sorting.
-    
-      # Generating more data on train set.
-  if FLAGS.sample_mode == SAMPLE_TRAIN:
-    data_set = train_data
-  elif FLAGS.sample_mode == SAMPLE_VALIDATION:
-    data_set = valid_data
-  else:
-    raise NotImplementedError
-    
-      Returns:
-    loss:  Scalar tf.float32 loss.
-    
-        batch_of_metrics.append(metrics)
-  return batch_of_metrics
-    
-        baselines = []
-    for t in xrange(FLAGS.sequence_length):
-      # Calculate baseline only for missing tokens.
-      num_missing = tf.reduce_sum(baseline_missing_list[t])
+            def escalate_call(self):
+        self.call.level = Rank.DIRECTOR
+        self._escalate_call()
     
     
-def create_dis_pretrain_op(hparams, dis_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
-    dis_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
-    ]
-    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
-      shared_embedding = [
-          v for v in tf.trainable_variables()
-          if v.op.name == 'gen/decoder/rnn/embedding'
-      ][0]
-      dis_vars.append(shared_embedding)
-    dis_grads = tf.gradients(dis_loss, dis_vars)
-    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
-                                                  FLAGS.grad_clipping)
-    dis_pretrain_op = optimizer.apply_gradients(
-        zip(dis_grads_clipped, dis_vars), global_step=global_step)
-    return dis_pretrain_op
+try:
+    if int(pkg_resources.get_distribution('pip').version.split('.')[0]) < 6:
+        print('pip older than 6.0 not supported, please upgrade pip with:\n\n'
+              '    pip install -U pip')
+        sys.exit(-1)
+except pkg_resources.DistributionNotFound:
+    pass
     
-    from six.moves import xrange
+        def test_get_aliases(self, shell):
+        assert shell.get_aliases() == {'fish_config': 'fish_config',
+                                       'fuck': 'fuck',
+                                       'funced': 'funced',
+                                       'funcsave': 'funcsave',
+                                       'history': 'history',
+                                       'll': 'll',
+                                       'math': 'math',
+                                       'popd': 'popd',
+                                       'pushd': 'pushd',
+                                       'ruby': 'ruby',
+                                       'g': 'git',
+                                       'fish_key_reader': '/usr/bin/fish_key_reader',
+                                       'alias_with_equal_sign': 'echo'}
+        assert shell.get_aliases() == {'func1': 'func1', 'func2': 'func2'}
     
-            flash(error)
+        def test_get_history(self, history_lines, shell):
+        history_lines(['ls', 'rm'])
+        # We don't know what to do in generic shell with history lines,
+        # so just ignore them:
+        assert list(shell.get_history()) == []
     
-        rv = parse_changelog()
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
-
-    
-    Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
-    
-    This module provides the capabilities for the Requests hooks system.
+        @memoize
+    def get_aliases(self):
+        raw_aliases = os.environ.get('TF_SHELL_ALIASES', '').split('\n')
+        return dict(self._parse_alias(alias)
+                    for alias in raw_aliases if alias and '=' in alias)
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
+@pytest.fixture(autouse=True)
+def Popen(mocker):
+    mock = mocker.patch('thefuck.rules.pyenv_no_such_command.Popen')
+    mock.return_value.stdout.readlines.return_value = (
+        b'--version\nactivate\ncommands\ncompletions\ndeactivate\nexec_\n'
+        b'global\nhelp\nhooks\ninit\ninstall\nlocal\nprefix_\n'
+        b'realpath.dylib\nrehash\nroot\nshell\nshims\nuninstall\nversion_\n'
+        b'version-file\nversion-file-read\nversion-file-write\nversion-name_\n'
+        b'version-origin\nversions\nvirtualenv\nvirtualenv-delete_\n'
+        b'virtualenv-init\nvirtualenv-prefix\nvirtualenvs_\n'
+        b'virtualenvwrapper\nvirtualenvwrapper_lazy\nwhence\nwhich_\n'
+    ).split()
+    return mock
+    
+    
+def _get_operations(app):
+    proc = subprocess.Popen([app, '--help'],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    lines = proc.stdout.readlines()
+    
+    
+class BalancerMember(object):
+    ''' Apache 2.4 mod_proxy LB balancer member.
+    attributes:
+        read-only:
+            host -> member host (string),
+            management_url -> member management url (string),
+            protocol -> member protocol (string)
+            port -> member port (string),
+            path -> member location (string),
+            balancer_url -> url of this member's parent balancer (string),
+            attributes -> whole member attributes (dictionary)
+            module -> ansible module instance (AnsibleModule object).
+        writable:
+            status -> status of the member (dictionary)
     '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
     
-        Usage::
+    import traceback
     
-        def prepare_request(self, request):
-        '''Constructs a :class:`PreparedRequest <PreparedRequest>` for
-        transmission and returns it. The :class:`PreparedRequest` has settings
-        merged from the :class:`Request <Request>` instance and those of the
-        :class:`Session`.
-    
-        mod_params = {}
-    mod_params['state'] = module.params.get('state')
-    mod_params['topic'] = module.params.get('topic')
-    mod_params['view'] = module.params.get('view')
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-                    _remove_firewall_server(module,
-                                        oneandone_conn,
-                                        firewall_policy['id'],
-                                        server_ip_id)
-            _check_mode(module, chk_changed)
-            firewall_policy = get_firewall_policy(oneandone_conn, firewall_policy['id'], True)
-            changed = True
-    
-    
-def protocol_to_string(protocol):
-    protocol = protocol_to_tuple(protocol)
-    if protocol[0] is True:
-        return 'Tcp'
-    elif protocol[1] is True:
-        return 'Udp'
-    elif protocol[2] is True:
-        return 'Icmp'
-    elif protocol[3] is True:
-        return 'Other'
-    elif protocol[4] is True:
-        return 'Any'
-    
-    # add noise
-y += 0.01 * np.random.normal((n_samples,))
-    
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
-    
-        output_file.close()
-
-    
-    Demonstrate how model complexity influences both prediction accuracy and
-computational performance.
-    
-    import numpy as np
-from matplotlib import pyplot as plt
-    
-    for connectivity in (None, knn_graph):
-    for n_clusters in (30, 3):
-        plt.figure(figsize=(10, 4))
-        for index, linkage in enumerate(('average',
-                                         'complete',
-                                         'ward',
-                                         'single')):
-            plt.subplot(1, 4, index + 1)
-            model = AgglomerativeClustering(linkage=linkage,
-                                            connectivity=connectivity,
-                                            n_clusters=n_clusters)
-            t0 = time.time()
-            model.fit(X)
-            elapsed_time = time.time() - t0
-            plt.scatter(X[:, 0], X[:, 1], c=model.labels_,
-                        cmap=plt.cm.nipy_spectral)
-            plt.title('linkage=%s\n(time %.2fs)' % (linkage, elapsed_time),
-                      fontdict=dict(verticalalignment='top'))
-            plt.axis('equal')
-            plt.axis('off')
-    
-    plt.legend(loc='best')
-    
-    cases = [
-    (KMeans, 'k-means++', {}),
-    (KMeans, 'random', {}),
-    (MiniBatchKMeans, 'k-means++', {'max_no_improvement': 3}),
-    (MiniBatchKMeans, 'random', {'max_no_improvement': 3, 'init_size': 500}),
-]
-    
-    from sklearn.cluster import MiniBatchKMeans, KMeans
-from sklearn.metrics.pairwise import pairwise_distances_argmin
-from sklearn.datasets.samples_generator import make_blobs
-    
-        def test_pool_behavior_with_single_object_inside(self):
-        sample_queue = queue.Queue()
-        sample_queue.put('yam')
-        with ObjectPool(sample_queue) as obj:
-            # print('Inside with: {}'.format(obj))
-            self.assertEqual(obj, 'yam')
-        self.assertFalse(sample_queue.empty())
-        self.assertTrue(sample_queue.get() == 'yam')
-        self.assertTrue(sample_queue.empty())
-    
-    
-class BaseRegisteredClass(object):
+        :raises ModuleError
     '''
-    Any class that will inherits from BaseRegisteredClass will be included
-    inside the dict RegistryHolder.REGISTRY, the key being the name of the
-    class and the associated value, the class itself.
-    '''
-    __metaclass__ = RegistryHolder
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
+    layman = init_layman()
     
     
-class Card2(metaclass=FlyweightMeta):
-    def __init__(self, *args, **kwargs):
-        # print('Init {}: {}'.format(self.__class__, (args, kwargs)))
-        pass
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
     
-        @staticmethod
-    def check_range(request):
-        if 0 <= request < 10:
-            print('request {} handled in handler 0'.format(request))
-            return True
+        if command is None:
+        module.fail_json(msg=missing_required_lib('pyghmi'), exception=PYGHMI_IMP_ERR)
+    
+    
+DOCUMENTATION = '''
+---
+module: github_release
+short_description: Interact with GitHub Releases
+description:
+    - Fetch metadata about GitHub Releases
+version_added: 2.2
+options:
+    token:
+        description:
+            - GitHub Personal Access Token for authenticating. Mutually exclusive with C(password).
+    user:
+        description:
+            - The GitHub account that owns the repository
+        required: true
+    password:
+        description:
+            - The GitHub account password for the user. Mutually exclusive with C(token).
+        version_added: '2.4'
+    repo:
+        description:
+            - Repository name
+        required: true
+    action:
+        description:
+            - Action to perform
+        required: true
+        choices: [ 'latest_release', 'create_release' ]
+    tag:
+        description:
+            - Tag name when creating a release. Required when using action is set to C(create_release).
+        version_added: 2.4
+    target:
+        description:
+            - Target of release when creating a release
+        version_added: 2.4
+    name:
+        description:
+            - Name of release when creating a release
+        version_added: 2.4
+    body:
+        description:
+            - Description of the release when creating a release
+        version_added: 2.4
+    draft:
+        description:
+            - Sets if the release is a draft or not. (boolean)
+        type: 'bool'
+        default: 'no'
+        version_added: 2.4
+    prerelease:
+        description:
+            - Sets if the release is a prerelease or not. (boolean)
+        type: bool
+        default: 'no'
+        version_added: 2.4
