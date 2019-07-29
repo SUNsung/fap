@@ -1,131 +1,121 @@
 
         
-            def __init__(self, name):
-        self.name = name
+        else:
+    text_type = str
+    string_types = (str,)
+    xrange = range
     
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
-    
-        def value(self):
-        '''
-        Return the value for this BoundField, using the initial value if
-        the form is not bound or the data otherwise.
-        '''
-        data = self.initial
-        if self.form.is_bound:
-            data = self.field.bound_data(self.data, data)
-        return self.field.prepare_value(data)
-    
-    
-class DjangoTemplates(EngineMixin, BaseRenderer):
-    '''
-    Load Django templates from the built-in widget templates in
-    django/forms/templates and from apps' 'templates' directory.
-    '''
-    backend = DjangoTemplates
-    
-    from .compat import is_py2, builtin_str, str
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+            if withWeight:
+            tags = sorted(freq.items(), key=itemgetter(1), reverse=True)
+        else:
+            tags = sorted(freq, key=freq.__getitem__, reverse=True)
+        if topK:
+            return tags[:topK]
+        else:
+            return tags
 
     
-        def _create_socket_and_bind(self):
-        sock = socket.socket()
-        sock.bind((self.host, self.port))
-        sock.listen(0)
-        return sock
+        def __lt__(self, other):
+        return self.word < other.word
     
-                        resp = HTTPResponse.from_httplib(
-                        r,
-                        pool=conn,
-                        connection=low_conn,
-                        preload_content=False,
-                        decode_content=False
-                    )
-                except:
-                    # If we hit any problems here, clean up the connection.
-                    # Then, reraise so that we can handle the actual exception.
-                    low_conn.close()
-                    raise
+    tags = jieba.analyse.extract_tags(content, topK=topK)
     
-    import pytest
+        return True
     
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
-        @pytest.mark.parametrize('scheme', ('http://', 'HTTP://', 'hTTp://', 'HttP://'))
-    def test_mixed_case_scheme_acceptable(self, httpbin, scheme):
-        s = requests.Session()
-        s.proxies = getproxies()
-        parts = urlparse(httpbin('get'))
-        url = scheme + parts.netloc + parts.path
-        r = requests.Request('GET', url)
-        r = s.send(r.prepare())
-        assert r.status_code == 200, 'failed for scheme {}'.format(scheme)
+def _FormatYcmdDebugInfo( ycmd ):
+  python = ycmd[ 'python' ]
+  clang = ycmd[ 'clang' ]
+  message = ( 'Server Python interpreter: {0}\n'
+              'Server Python version: {1}\n'
+              'Server has Clang support compiled in: {2}\n'
+              'Clang version: {3}\n'.format( python[ 'executable' ],
+                                             python[ 'version' ],
+                                             clang[ 'has_support' ],
+                                             clang[ 'version' ] ) )
+  extra_conf = ycmd[ 'extra_conf' ]
+  extra_conf_path = extra_conf[ 'path' ]
+  if not extra_conf_path:
+    message += 'No extra configuration file found\n'
+  elif not extra_conf[ 'is_loaded' ]:
+    message += ( 'Extra configuration file found but not loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  else:
+    message += ( 'Extra configuration file found and loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  return message
     
-    from ..common import *
-from hashlib import md5
-from urllib.parse import urlparse
-import re
-    
-    def get_url_of_largest(info, api_key, size):
-    if info['media'] == 'photo':
-        sizes = size_suffixes
-        if size in sizes:
-            sizes = sizes[sizes.index(size):]
-        for suffix in sizes:
-            if 'url_' + suffix in info:
-                return info['url_' + suffix].replace('\\', '')
-        return None
-    else:
-        return get_orig_video_source(api_key, info['id'], info['secret'])
-    
-    def giphy_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    
-    def ifeng_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-# old pattern /uuid.shtml
-# now it could be #uuid
-    id = r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', url)
-    if id:
-        return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
-    
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
-    
-    :copyright: (c) 2010-2017 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
 from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        complete_apps = ['tagstore']
-
     
-    print(','.join(tags))
-
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_MultipleMessagesAndDiagnostics_test( post_vim_message ):
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
+    { 'message': 'On the first day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
+    { 'message': 'A test file in a Command-T' },
+    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
+    { 'message': 'On the second day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
+    { 'message': 'Two popup menus, and a test file in a Command-T' },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER1' ] ),
+    call( 'bar', [ 'PLACEHOLDER2' ] ),
+    call( 'baz', [ 'PLACEHOLDER3' ] ),
+    call( 'foo', [ 'PLACEHOLDER4' ] )
+  ] )
     
-    while True:
-    line = sys.stdin.readline()
-    if line=='':
-        break
-    line = line.strip()
-    for word in jieba.cut(line):
-        print(word)
+    
+def RegexNotFiltered_test():
+  opts = _JavaFilter( { 'regex' : 'taco' } )
+  f = _CreateFilterForTypes( opts, [ 'cs' ] )
+    
+      def _adjust_thread_count( self ):
+    # When the executor gets lost, the weakref callback will wake up
+    # the worker threads.
+    def weakref_cb( _, q=self._work_queue ):
+      q.put( None )
+    # TODO(bquinlan): Should avoid creating new threads if there are more
+    # idle threads than items in the work queue.
+    if len( self._threads ) < self._max_workers:
+      t = threading.Thread( target=_worker,
+                            args=( weakref.ref( self, weakref_cb ),
+                                   self._work_queue ) )
+      t.daemon = True
+      t.start()
+      self._threads.add( t )
+    
+            Args:
+            fn: A callable that will be called with this future as its only
+                argument when the future completes or is cancelled. The callable
+                will always be called by a thread in the same process in which
+                it was added. If the future has already completed or been
+                cancelled then the callable will be called immediately. These
+                callables are called in the order that they were added.
+        '''
+        with self._condition:
+            if self._state not in [CANCELLED, CANCELLED_AND_NOTIFIED, FINISHED]:
+                self._done_callbacks.append(fn)
+                return
+        fn(self)
+    
+    
+def Bold(text):
+  return termcolor.colored(text, attrs=['bold'])
+    
+    import fire
+    
+      def testCollectorGetsWantedWidgets(self):
+    col = collector.Collector()
+    self.assertEqual(len(col.collect_widgets()), 10)
