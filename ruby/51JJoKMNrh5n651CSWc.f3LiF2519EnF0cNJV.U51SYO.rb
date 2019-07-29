@@ -1,152 +1,112 @@
 
         
-              # Adds a value to a set.
+          def connect_person_to_aspect(aspecting_person_id)
+    @person = Person.find(aspecting_person_id)
+    if @contact = current_user.contact_for(@person)
+      @contact.aspect_memberships.create(aspect: @aspect)
+    else
+      @contact = current_user.share_with(@person, @aspect)
+      @contact.aspect_memberships.first
+    end
+  end
+    
+    class ContactsController < ApplicationController
+  before_action :authenticate_user!
+    
+        respond_to do |format|
+      format.html do
+        render 'invitations/new', layout: false
+      end
+    end
+  end
+    
+          it 'should have the custom version' do
+        pending('Ruby 1.x and 2.0.x are unsupported for Snap because it lacks Psych::safe_load') if is_old_ruby
+        insist { input.version } == 'custom-version'
+      end
+    
+    # Add a script to run after install (should be in the current directory):
+package.scripts[:after_install] = 'my_after_install_script.sh'
+    
+        # Reference
+    # http://www.debian.org/doc/manuals/maint-guide/first.en.html
+    # http://wiki.debian.org/DeveloperConfiguration
+    # https://github.com/jordansissel/fpm/issues/37
+    if ENV.include?('DEBEMAIL') and ENV.include?('DEBFULLNAME')
+      # Use DEBEMAIL and DEBFULLNAME as the default maintainer if available.
+      @maintainer = '#{ENV['DEBFULLNAME']} <#{ENV['DEBEMAIL']}>'
+    else
+      # TODO(sissel): Maybe support using 'git config' for a default as well?
+      # git config --get user.name, etc can be useful.
       #
-      # raw_key - The key of the set to add the value to.
-      # value - The value to add to the set.
-      # timeout - The new timeout of the key.
-      def self.set_add(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
+      # Otherwise default to user@currenthost
+      @maintainer = '<#{ENV['USER']}@#{Socket.gethostname}>'
+    end
     
-              waiter.jobs_remaining += 1
-        end
+        pkginfo = ''
     
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
+        safesystem(*install_args)
     
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+        # Evaluate dependencies.
+    if !attributes[:no_auto_depends?]
+	    pkgdepend_gen = safesystemout('pkgdepend', 'generate',  '-md', '#{staging_path}',  manifest_fn)
+      File.write(build_path('#{name}.p5m.3'), pkgdepend_gen)
     
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
+        File.write(build_path('packlist'), files.sort.join('\n'))
+    
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
+  end
+    
+    Capybara.javascript_driver = :javascript_test
+    
+        expect(addresses[0]['street']).to eq('CDG')
+    expect(addresses[0]['city']).to eq('Paris')
+    expect(addresses[0]['country']).to eq('France')
+    
+      it 'should find the ancestor element using the given locator' do
+    el = @session.find(:css, '#first_image')
+    expect(el.ancestor('//p')).to have_text('Lorem ipsum dolor')
+    expect(el.ancestor('//a')[:'aria-label']).to eq('Go to simple')
+  end
+    
+        it 'raises if passed an invalid value' do
+      expect { @session.find_link(download: 37) }.to raise_error ArgumentError
     end
   end
 end
 
     
-        context 'on my own post' do
-      before do
-        aspect_to_post = alice.aspects.where(:name => 'generic').first
-        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
-      end
-    
-          it 'federates' do
-        allow_any_instance_of(Participation::Generator).to receive(:create!)
-        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
-        post_request!
-      end
-    
-          it 'it calls toggle_hidden_shareable' do
-        expect(@controller.current_user).to receive(:toggle_hidden_shareable).with(an_instance_of(StatusMessage))
-        put :update, params: {id: 42, post_id: @status.id}, format: :js
-      end
-    end
-    
-    __END__
-    
-      <script type='text/javascript'>
-  //<!--
-  function toggle(id) {
-    var pre  = document.getElementById('pre-' + id);
-    var post = document.getElementById('post-' + id);
-    var context = document.getElementById('context-' + id);
-    }
-    
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
-        end
-      end
-    
-      it 'accepts post requests with correct X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
-    expect(last_response).to be_ok
-  end
-    
-      it 'should allow changing report only' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::ContentSecurityPolicy, :report_uri => '/my_amazing_csp_report_parser', :report_only => true
-      run DummyApp
-    end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-        def URIEncodeOctets(octets, result, index)
-      if (@@hexCharCodeArray == 0)
-        @@hexCharCodeArray = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
-                              65, 66, 67, 68, 69, 70];
-      end
-      index = URIAddEncodedOctetToBuffer(octets[0], result, index);
-      if (octets[1]);
-        index = URIAddEncodedOctetToBuffer(octets[1], result, index)
-      end
-      if (octets[2]);
-        index = URIAddEncodedOctetToBuffer(octets[2], result, index)
-      end
-      if (octets[3]);
-        index = URIAddEncodedOctetToBuffer(octets[3], result, index)
-      end
-      return index;
-    end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-    # Disable the metadata feature
-$METADATA = false
-    
-      test 'frontend links for editing blocked' do
-    Precious::App.set(:wiki_options, { allow_editing: false })
-    get '/A'
-    
-    # Read command line options into `options` hash
-begin
-  opts.parse!
-rescue OptionParser::InvalidOption
-  puts 'gollum: #{$!.message}'
-  puts 'gollum: try 'gollum --help' for more information'
-  exit
-end
-    
-            def product_params
-          params.require(:product).permit(permitted_product_attributes)
-        end
-    
-          def variant_attributes
-        if @current_user_roles&.include?('admin')
-          @@variant_attributes + [:cost_price]
+        def install_path
+      @install_path ||= if options[:path]
+          Pathname.new(File.join(options[:path], 'bourbon'))
         else
-          @@variant_attributes
+          Pathname.new('bourbon')
         end
-      end
+    end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-width: 11px; ' +
+                'border-right-width: 12px; ' +
+                'border-left-width: 13px;'
+      bad_rule = 'border-bottom-width: null;'
+    
+          expect('.all-text-inputs-active').to have_ruleset(ruleset)
     end
   end
-end
+    
+            def success?
+          @errors.nil? || @errors.empty?
+        end
+    
+        sv.send(:install_main_process_signal_handlers)
+    Net::HTTP.get URI.parse('http://0.0.0.0:24447/api/plugins.flushBuffers')
+    info_msg = '[info]: force flushing buffered events' + '\n'
+    
+    module Fluent
+  module Plugin
+    class SyslogParser < Parser
+      Plugin.register_parser('syslog', self)
+    
+          @opt_parser.banner = 'Usage: fluent-binlog-reader #{self.class.to_s.split('::').last.downcase} [options] file'
