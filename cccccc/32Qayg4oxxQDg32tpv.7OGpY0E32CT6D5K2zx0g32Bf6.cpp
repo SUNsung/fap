@@ -1,66 +1,433 @@
 
         
-          rotate += getRotate();
-  if (rotate >= 360) {
-    rotate -= 360;
-  } else if (rotate < 0) {
-    rotate += 360;
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_LITE_KERNELS_CUSTOM_OPS_REGISTER_H_
+#define TENSORFLOW_LITE_KERNELS_CUSTOM_OPS_REGISTER_H_
+    
+    bool TfLiteDriver::Expectation::TypedCheckString(bool verbose,
+                                                 const TfLiteTensor& tensor) {
+  if (tensor.data.raw == nullptr) {
+    if (verbose) {
+      std::cerr << '  got empty string' << std::endl;
+    }
+    return false;
   }
+  int expected_num_strings = GetStringCount(data_.raw);
+  int returned_num_strings = GetStringCount(tensor.data.raw);
+  if (expected_num_strings != returned_num_strings) {
+    if (verbose) {
+      std::cerr << '  string count differ: got ' << returned_num_strings
+                << ', but expected ' << expected_num_strings << std::endl;
+    }
+    return false;
+  }
+  for (int i = 0; i < returned_num_strings; ++i) {
+    auto expected_ref = GetString(data_.raw, i);
+    auto returned_ref = GetString(tensor.data.raw, i);
+    if (expected_ref.len != returned_ref.len) {
+      if (verbose) {
+        std::cerr << '  index ' << i << ': got string of size '
+                  << returned_ref.len << ', but expected size '
+                  << expected_ref.len << std::endl;
+      }
+      return false;
+    }
+    if (strncmp(expected_ref.str, returned_ref.str, returned_ref.len) != 0) {
+      if (verbose) {
+        std::cerr << '  index ' << i << ': strings are different' << std::endl;
+      }
+      return false;
+    }
+  }
+    }
     
-      // Was the Page Transition created successfully?
-  GBool isOk() { return ok; }
-    
-    //========================================================================
-//
-// Modified under the Poppler project - http://poppler.freedesktop.org
-//
-// All changes made under the Poppler project to this file are licensed
-// under GPL version 2 or later
-//
-// Copyright (C) 2006, 2010 Albert Astals Cid <aacid@kde.org>
-//
-// To see a description of the changes please see the Changelog file that
-// came with your tarball or type make ChangeLog if you are building from git
-//
-//========================================================================
-    
-    
-    {    int num, gen;
+    template <typename Scalar>
+struct EyeFunctor<GPUDevice, Scalar> {
+  void operator()(const GPUDevice& device,
+                  typename TTypes<Scalar, 3>::Tensor matrix_batch) {
+    const int batch_size = matrix_batch.dimension(0);
+    const int m = matrix_batch.dimension(1);
+    const int n = matrix_batch.dimension(2);
+    GpuLaunchConfig config = GetGpuLaunchConfig(batch_size * m * n, device);
+    TF_CHECK_OK(GpuLaunchKernel(EyeKernel<Scalar>, config.block_count,
+                                config.thread_per_block, 0, device.stream(),
+                                config.virtual_thread_count, batch_size, m, n,
+                                matrix_batch.data()));
+  }
 };
     
-      //----- text drawing
-  virtual void beginStringOp(GfxState *state);
-  virtual void endStringOp(GfxState *state);
-  virtual GBool beginType3Char(GfxState *state, double x, double y,
-			       double dx, double dy,
-			       CharCode code, Unicode *u, int uLen);
-  virtual void endType3Char(GfxState *state);
     
-      // Constructor.
-  ProfileData ();
+    {  tensorflow::Stat<int64_t> latency_stats_;
+};
     
-      if (obj->dictLookup('C', &tmp)->isBool()) {
-    showControls = tmp.getBool();
+    #define REGISTER_MATRIX_DIAG(type)                                           \
+  REGISTER_KERNEL_BUILDER(                                                   \
+      Name('MatrixDiag').Device(DEVICE_CPU).TypeConstraint<type>('T'),       \
+      MatrixDiagOp<CPUDevice, type>);                                        \
+  REGISTER_KERNEL_BUILDER(                                                   \
+      Name('MatrixDiagV2').Device(DEVICE_CPU).TypeConstraint<type>('T'),     \
+      MatrixDiagOp<CPUDevice, type>);                                        \
+  REGISTER_KERNEL_BUILDER(                                                   \
+      Name('MatrixDiagPart').Device(DEVICE_CPU).TypeConstraint<type>('T'),   \
+      MatrixDiagPartOp<CPUDevice, type>);                                    \
+  REGISTER_KERNEL_BUILDER(                                                   \
+      Name('MatrixDiagPartV2').Device(DEVICE_CPU).TypeConstraint<type>('T'), \
+      MatrixDiagPartOp<CPUDevice, type>);
+TF_CALL_POD_TYPES(REGISTER_MATRIX_DIAG);
+#undef REGISTER_MATRIX_DIAG
+    
+      // Calculate the total size in bytes of the all
+  // the outputs of specified TensorFlow op.
+  int64 CalculateOutputSize(const OpInfo& op_info,
+                            bool* found_unknown_shapes) const;
+    
+    
+    {
+    {        const auto u = dist(&gen);
+        remaining_samples -= gen.kResultElementCount;
+        UNROLL for (int i = 0; i < kDistSize; i++) {
+          bool accept = u[i] <= Eigen::numext::exp(g[i]);
+          if (accept) {
+            // Accept the sample z.
+            data[offset] = z[i] * stddev + mean;
+            // Break out of the nested loop by updating numIterations.
+            numIterations = kMaxIterations;
+            break;
+          } else if (numIterations + 1 >= kMaxIterations) {
+            data[offset] = quietNaN;
+            numIterations = kMaxIterations;
+            break;
+          } else {
+            numIterations++;
+          }
+        }
+      }
+    } else {
+      // Sample from an exponential distribution with alpha maximizing
+      // acceptance probability, offset by normMin from the origin.
+      // Accept only if less than normMax.
+      const T alpha =
+          (normMin + Eigen::numext::sqrt((normMin * normMin) + T(4))) / T(2);
+      int numIterations = 0;
+      while (numIterations < kMaxIterations) {
+        auto rand = dist(&gen);
+        remaining_samples -= gen.kResultElementCount;
+        UNROLL for (int i = 0; i < kDistSize; i += 2) {
+          const T z = -Eigen::numext::log(rand[i]) / alpha + normMin;
+          const T x = normMin < alpha ? alpha - z : normMin - alpha;
+          const T g = Eigen::numext::exp(-x * x / two);
+          const T u = rand[i + 1];
+          bool accept = (u <= g && z < normMax);
+          if (accept) {
+            data[offset] = z * stddev + mean;
+            // Break out of the nested loop by updating numIterations.
+            numIterations = kMaxIterations;
+            break;
+          } else if (numIterations + 1 >= kMaxIterations) {
+            data[offset] = quietNaN;
+            numIterations = kMaxIterations;
+            break;
+          } else {
+            numIterations++;
+          }
+        }
+      }
+    }
+    
+    #endif  // NATIVE_MATE_NATIVE_MATE_FUNCTION_TEMPLATE_H_
+
+    
+      v8::Isolate* isolate() const { return isolate_; }
+    
+    template <typename T>
+class Wrappable : public WrappableBase {
+ public:
+  Wrappable() {}
+    }
+    
+    #include 'shell/browser/net/url_request_fetch_job.h'
+    
+    content::WebContents* InspectableWebContentsImpl::GetWebContents() const {
+  return web_contents_.get();
+}
+    
+    #include 'base/bind.h'
+#include 'base/debug/leak_annotations.h'
+#include 'base/logging.h'
+#include 'content/public/browser/browser_thread.h'
+#include 'shell/browser/ui/views/global_menu_bar_x11.h'
+    
+    /* Error handling
+ *
+ * There are several ways to report errors in RethinkDB:
+ *  fail_due_to_user_error(msg, ...)    fail and report line number/stack trace. Should only be used when the user
+ *                                      is at fault (e.g. provided wrong database file name) and it is reasonable to
+ *                                      fail instead of handling the problem more gracefully.
+ *
+ *  The following macros are used only for the cases of programmer error checking. For the time being they are also used
+ *  for system error checking (especially the *_err variants).
+ *
+ *  crash(msg, ...)                 always fails and reports line number and such. Never returns.
+ *  crash_or_trap(msg, ...)         same as above, but traps into debugger if it is present instead of terminating.
+ *                                  That means that it possibly can return, and one can continue stepping through the code in the debugger.
+ *                                  All off the rassert/guarantee functions use crash_or_trap.
+ *  rassert(cond)                   makes sure cond is true and is a no-op in release mode
+ *  rassert(cond, msg, ...)         ditto, with additional message and possibly some arguments used for formatting
+ *  rassert_err(cond)               same as rassert(cond), but also print errno error description
+ *  rassert_err(cond, msg, ...)     same as rassert(cond, msg, ...), but also print errno error description
+ *  guarantee(cond)                 same as rassert(cond), but the check is still done in release mode. Do not use for expensive checks!
+ *  guarantee(cond, msg, ...)       same as rassert(cond, msg, ...), but the check is still done in release mode. Do not use for expensive checks!
+ *  guarantee_err(cond)             same as guarantee(cond), but also print errno error description
+ *  guarantee_err(cond, msg, ...)   same as guarantee(cond, msg, ...), but also print errno error description
+ *  guarantee_xerr(cond, err, msg, ...) same as guarantee_err(cond, msg, ...), but also allows to specify errno as err argument
+ *                                  (useful for async io functions, which return negated errno)
+ *
+ * The names rassert* are used instead of assert* because /usr/include/assert.h undefines assert macro and redefines it with its own version
+ * every single time it gets included.
+ */
+    
+    
+    {            changefeed_stamp_response_t r = do_stamp(
+                *geo_read.stamp,
+                geo_read.region,
+                read_left);
+            if (r.stamp_infos) {
+                res->stamp_response.set(r);
+            } else {
+                res->result = ql::exc_t(
+                    ql::base_exc_t::OP_FAILED,
+                    'Feed aborted before initial values were read.',
+                    ql::backtrace_id_t::empty());
+                return;
+            }
+        }
+    
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
+
+    
+      virtual ParamIteratorInterface<ParamType>* Begin() const {
+    return new Iterator(this, g1_, g1_.begin(), g2_, g2_.begin(), g3_,
+        g3_.begin(), g4_, g4_.begin());
   }
-  tmp.free();
-    
-      MediaParameters();
-  ~MediaParameters();
-    
-    StandardSecurityHandler::~StandardSecurityHandler() {
-  if (fileID) {
-    delete fileID;
+  virtual ParamIteratorInterface<ParamType>* End() const {
+    return new Iterator(this, g1_, g1_.end(), g2_, g2_.end(), g3_, g3_.end(),
+        g4_, g4_.end());
   }
-  if (ownerKey) {
-    delete ownerKey;
+    
+    template <GTEST_10_TYPENAMES_(T)>
+struct TupleElement<true, 7, GTEST_10_TUPLE_(T) > {
+  typedef T7 type;
+};
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
+    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41, GTEST_TEMPLATE_ T42,
+    GTEST_TEMPLATE_ T43, GTEST_TEMPLATE_ T44, GTEST_TEMPLATE_ T45,
+    GTEST_TEMPLATE_ T46, GTEST_TEMPLATE_ T47, GTEST_TEMPLATE_ T48>
+struct Templates48 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates47<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
+      T43, T44, T45, T46, T47, T48> Tail;
+};
+    
+    // Note: a second call to this will add in front the result of the first call.
+// An example is calling this on a copy of ChannelArguments which already has a
+// prefix. The user can build up a prefix string by calling this multiple times,
+// each with more significant identifier.
+void ChannelArguments::SetUserAgentPrefix(
+    const grpc::string& user_agent_prefix) {
+  if (user_agent_prefix.empty()) {
+    return;
   }
-  if (userKey) {
-    delete userKey;
+  bool replaced = false;
+  auto strings_it = strings_.begin();
+  for (auto it = args_.begin(); it != args_.end(); ++it) {
+    const grpc_arg& arg = *it;
+    ++strings_it;
+    if (arg.type == GRPC_ARG_STRING) {
+      if (grpc::string(arg.key) == GRPC_ARG_PRIMARY_USER_AGENT_STRING) {
+        GPR_ASSERT(arg.value.string == strings_it->c_str());
+        *(strings_it) = user_agent_prefix + ' ' + arg.value.string;
+        it->value.string = const_cast<char*>(strings_it->c_str());
+        replaced = true;
+        break;
+      }
+      ++strings_it;
+    }
+  }
+  if (!replaced) {
+    SetString(GRPC_ARG_PRIMARY_USER_AGENT_STRING, user_agent_prefix);
   }
 }
     
-    struct T3GlyphStack {
-  Gushort code;			// character code
+    
+    {
+    {
+    {}  // namespace
+}  // namespace testing
+}  // namespace grpc
+    
+      // shutdown should trigger cancellation causing everything to shutdown
+  auto deadline =
+      std::chrono::system_clock::now() + std::chrono::microseconds(100);
+  server_->Shutdown(deadline);
+  EXPECT_GE(std::chrono::system_clock::now(), deadline);
+    
+    void grpc_socket_become_ready(grpc_winsocket* socket,
+                              grpc_winsocket_callback_info* info) {
+  GPR_ASSERT(!info->has_pending_iocp);
+  gpr_mu_lock(&socket->state_mu);
+  if (info->closure) {
+    GRPC_CLOSURE_SCHED(info->closure, GRPC_ERROR_NONE);
+    info->closure = NULL;
+  } else {
+    info->has_pending_iocp = 1;
+  }
+  bool should_destroy = check_destroyable(socket);
+  gpr_mu_unlock(&socket->state_mu);
+  if (should_destroy) destroy(socket);
+}
+    
+      if (error == GRPC_ERROR_NONE) {
+    if (socket != NULL) {
+      DWORD transfered_bytes = 0;
+      DWORD flags;
+      BOOL wsa_success =
+          WSAGetOverlappedResult(socket->socket, &socket->write_info.overlapped,
+                                 &transfered_bytes, FALSE, &flags);
+      GPR_ASSERT(transfered_bytes == 0);
+      if (!wsa_success) {
+        error = GRPC_WSA_ERROR(WSAGetLastError(), 'ConnectEx');
+        closesocket(socket->socket);
+      } else {
+        *ep = grpc_tcp_create(socket, ac->channel_args, ac->addr_name);
+        socket = NULL;
+      }
+    } else {
+      error = GRPC_ERROR_CREATE_FROM_STATIC_STRING('socket is null');
+    }
+  }
+    
+    #define GPR_GLOBAL_CONFIG_DEFINE_INT32(name, default_value, help)         \
+  static char g_env_str_##name[] = #name;                                 \
+  static ::grpc_core::GlobalConfigEnvInt32 g_env_##name(g_env_str_##name, \
+                                                        default_value);   \
+  int32_t gpr_global_config_get_##name() { return g_env_##name.Get(); }   \
+  void gpr_global_config_set_##name(int32_t value) { g_env_##name.Set(value); }
+    
+        class Rational
+    {
+    public:
+        Rational() noexcept;
+        Rational(Number const& n) noexcept;
+        Rational(Number const& p, Number const& q) noexcept;
+        Rational(int32_t i);
+        Rational(uint32_t ui);
+        Rational(uint64_t ui);
+    }
+    
+    /// <summary>
+/// Invoked when Navigation to a certain page fails
+/// </summary>
+/// <param name='sender'>The Frame which failed navigation</param>
+/// <param name='e'>Details about the navigation failure</param>
+void App::OnNavigationFailed(Platform::Object ^ sender, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs ^ e)
+{
+    throw ref new FailureException('Failed to load Page ' + e->SourcePageType.Name);
+}
+
+    
+            if (ullOperand <= UINT32_MAX)
+        {
+            *pulResult = (uint32_t)ullOperand;
+            hr = S_OK;
+        }
+    
+                bool TryParseWebResponses(
+                _In_ Platform::String ^ staticDataJson,
+                _In_ Platform::String ^ allRatiosJson,
+                _Inout_ std::vector<UCM::CurrencyStaticData>& staticData,
+                _Inout_ CurrencyRatioMap& allRatiosData);
+            bool TryParseStaticData(_In_ Platform::String ^ rawJson, _Inout_ std::vector<UCM::CurrencyStaticData>& staticData);
+            bool TryParseAllRatiosData(_In_ Platform::String ^ rawJson, _Inout_ CurrencyRatioMap& allRatiosData);
+            concurrency::task<void> FinalizeUnits(_In_ const std::vector<UCM::CurrencyStaticData>& staticData, _In_ const CurrencyRatioMap& ratioMap);
+            void GuaranteeSelectedUnits();
+    
+    /* StringName */
+#define GLU_VERSION                        100800
+#define GLU_EXTENSIONS                     100801
+    
+    #if OPI_SUPPORT
+  //----- OPI functions
+  virtual void opiBegin(GfxState *state, Dict *opiDict);
+  virtual void opiEnd(GfxState *state, Dict *opiDict);
+#endif
+    
+      // thumb
+  pageDict->lookupNF('Thumb', &thumb);
+  if (!(thumb.isStream() || thumb.isNull() || thumb.isRef())) {
+      error(-1, 'Page thumb object (page %d) is wrong type (%s)',
+            num, thumb.getTypeName());
+      thumb.initNull(); 
+  }
+    
+      // get direction
+  if (dict->lookup('M', &obj)->isName()) {
+    const char *m = obj.getName();
+    
+    if (strcmp('I', m) == 0)
+      direction = transitionInward;
+    else if (strcmp('O', m) == 0)
+      direction = transitionOutward;
+  }
+  obj.free();
+    
+      // indirect reference or integer
+  } else if (buf1.isInt()) {
+    num = buf1.getInt();
+    shift();
+    if (buf1.isInt() && buf2.isCmd('R')) {
+      obj->initRef(num, buf1.getInt());
+      shift();
+      shift();
+    } else {
+      obj->initInt(num);
+    }
+    
+      // Get stream.
+  Stream *getStream() { return lexer->getStream(); }
+    
+    class PopplerCacheKey
+{
+  public:
+    virtual ~PopplerCacheKey();
+    virtual bool operator==(const PopplerCacheKey &key) const = 0;
+};
+    
+    #endif
+
+    
+    MediaRendition::MediaRendition(Object* obj) {
+  Object tmp, tmp2;
+  GBool hasClip = gFalse;
     }
     
     //========================================================================
@@ -70,271 +437,189 @@
 // All changes made under the Poppler project to this file are licensed
 // under GPL version 2 or later
 //
-// Copyright (C) 2005 Takashi Iwai <tiwai@suse.de>
-// Copyright (C) 2009, 2010 Thomas Freitag <Thomas.Freitag@alfa.de>
-// Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright (C) 2010 Christian Feuersänger <cfeuersaenger@googlemail.com>
+// Copyright (C) 2010 Albert Astals Cid <aacid@kde.org>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
 //
 //========================================================================
     
-    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
-            const Locale &locale, UErrorCode &status) {
-    return createInstance(
-            static_cast<DecimalFormat *>(
-                    DecimalFormat::createScientificInstance(locale, status)),
-            new SuperscriptStyle(),
-            status);
-}
     
-    ScriptSet &ScriptSet::reset(UScriptCode script, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return *this;
+    {  if (readAttrs)
+  {
+    Object tmp;
+    Dict *dict = streamObj->getStream()->getDict();
+    dict->lookup('F', &tmp);
+    if (!tmp.isNull()) {
+      Object obj1;
+      // valid 'F' key -> external file
+      kind = soundExternal;
+      if (getFileSpecNameForPlatform (&tmp, &obj1)) {
+        fileName = obj1.getString()->copy();
+        obj1.free();
+      }
+    } else {
+      // no file specification, then the sound data have to be
+      // extracted from the stream
+      kind = soundEmbedded;
     }
-    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return *this;
+    tmp.free();
+    // sampling rate
+    dict->lookup('R', &tmp);
+    if (tmp.isNum()) {
+      samplingRate = tmp.getNum();
     }
-    uint32_t index = script / 32;
-    uint32_t bit   = 1 << (script & 31);
-    bits[index] &= ~bit;
-    return *this;
-}
-    
-    void SearchIterator::setAttribute(USearchAttribute       attribute,
-                                  USearchAttributeValue  value,
-                                  UErrorCode            &status)
-{
-    if (U_SUCCESS(status)) {
-        switch (attribute)
-        {
-        case USEARCH_OVERLAP :
-            m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_CANONICAL_MATCH :
-            m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
-            break;
-        case USEARCH_ELEMENT_COMPARISON :
-            if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
-                m_search_->elementComparisonType = (int16_t)value;
-            } else {
-                m_search_->elementComparisonType = 0;
-            }
-            break;
-        default:
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+    tmp.free();
+    // sound channels
+    dict->lookup('C', &tmp);
+    if (tmp.isInt()) {
+      channels = tmp.getInt();
     }
-    if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    tmp.free();
+    // bits per sample
+    dict->lookup('B', &tmp);
+    if (tmp.isInt()) {
+      bitsPerSample = tmp.getInt();
     }
-}
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    U_NAMESPACE_END
-    
-    #endif  // __SIGNIFICANTDIGITINTERVAL_H__
-
-    
-    #include 'unicode/uniset.h'
-#include 'unicode/udat.h'
-#include 'cmemory.h'
-#include 'uassert.h'
-#include 'ucln_in.h'
-#include 'umutex.h'
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    /**
- * UnicodeReplacer API
- */
-UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
-                                                UBool /*escapeUnprintable*/) const {
-    // assert(segmentNumber > 0);
-    rule.truncate(0);
-    rule.append((UChar)0x0024 /*$*/);
-    ICU_Utility::appendNumber(rule, segmentNumber, 10, 1);
-    return rule;
-}
-    
-    bool WriteController::IsStopped() const {
-  return total_stopped_.load(std::memory_order_relaxed) > 0;
-}
-// This is inside DB mutex, so we can't sleep and need to minimize
-// frequency to get time.
-// If it turns out to be a performance issue, we can redesign the thread
-// synchronization model here.
-// The function trust caller will sleep micros returned.
-uint64_t WriteController::GetDelay(Env* env, uint64_t num_bytes) {
-  if (total_stopped_.load(std::memory_order_relaxed) > 0) {
-    return 0;
-  }
-  if (total_delayed_.load(std::memory_order_relaxed) == 0) {
-    return 0;
-  }
-    }
-    
-      // atomic write
-  WriteBatch batch;
-  batch.Put(handles[0], Slice('key2'), Slice('value2'));
-  batch.Put(handles[1], Slice('key3'), Slice('value3'));
-  batch.Delete(handles[0], Slice('key'));
-  s = db->Write(WriteOptions(), &batch);
-  assert(s.ok());
-    
-    
-    {  return 0;
-}
-
-    
-      // Comparator used to define the order of keys in the table.
-  // Default: a comparator that uses lexicographic byte-wise ordering
-  //
-  // REQUIRES: The client must ensure that the comparator supplied
-  // here has the same name and orders keys *exactly* the same as the
-  // comparator provided to previous open calls on the same DB.
-  const Comparator* comparator;
-    
-    #include <string>
-#include <vector>
-    
-    /*
- * Class:     org_rocksdb_BackupableDBOptions
- * Method:    sync
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_BackupableDBOptions_sync(JNIEnv* /*env*/,
-                                                   jobject /*jobj*/,
-                                                   jlong jhandle) {
-  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return bopt->sync;
-}
-    
-        serv.onStart = my_onStart;
-    serv.onShutdown = my_onShutdown;
-    serv.onConnect = my_onConnect;
-    serv.onReceive = my_onReceive;
-    serv.onPacket = my_onPacket;
-    serv.onClose = my_onClose;
-    serv.onWorkerStart = my_onWorkerStart;
-    serv.onWorkerStop = my_onWorkerStop;
-    
-    #endif /* !__HIREDIS_EXAMPLE_QT_H */
-
-    
-        int i;
-    for (i = 0; i < WRITE_N; i++)
+    tmp.free();
+    // encoding format
+    dict->lookup('E', &tmp);
+    if (tmp.isName())
     {
-        size = 10000 + rand() % 90000;
-    }
-    
-        un1.sun_family = AF_UNIX;
-    un2.sun_family = AF_UNIX;
-    
-        ret = p.write(&p, (void*) SW_STRS('hello world1'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world2'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world3'));
-    ASSERT_GT(ret, 0);
-    
-    namespace folly {
-    }
-    
-      // no permutations in locality index mapping
-  for (size_t cpu = 0; cpu < numCpus; ++cpu) {
-    rv.localityIndexByCpu.push_back(cpu);
-  }
-    
-    /**
- * This class creates core-local caches for a given shared_ptr, to
- * mitigate contention when acquiring/releasing it.
- *
- * It has the same thread-safety guarantees as shared_ptr: it is safe
- * to concurrently call get(), but reset()s must be synchronized with
- * reads and other resets().
- *
- * @author Giuseppe Ottaviano <ott@fb.com>
- */
-template <class T, size_t kNumSlots = 64>
-class CoreCachedSharedPtr {
- public:
-  explicit CoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
-    reset(p);
-  }
-    }
-    
-    
-    {} // namespace
-    
-      static void prepare() noexcept {
-    instance().tasksLock.lock();
-    while (true) {
-      auto& tasks = instance().tasks;
-      auto task = tasks.rbegin();
-      for (; task != tasks.rend(); ++task) {
-        if (!task->prepare()) {
-          break;
-        }
-      }
-      if (task == tasks.rend()) {
-        return;
-      }
-      for (auto untask = tasks.rbegin(); untask != task; ++untask) {
-        untask->parent();
+      const char *enc = tmp.getName();
+      if (strcmp('Raw', enc) == 0) {
+        encoding = soundRaw;
+      } else if (strcmp('Signed', enc) == 0) {
+        encoding = soundSigned;
+      } else if (strcmp('muLaw', enc) == 0) {
+        encoding = soundMuLaw;
+      } else if (strcmp('ALaw', enc) == 0) {
+        encoding = soundALaw;
       }
     }
+    tmp.free();
   }
+}
     
-      template <std::size_t N>
-  static std::pair<std::array<uint8_t, N>, uint8_t> longestCommonPrefix(
-      const std::array<uint8_t, N>& one,
-      uint8_t oneMask,
-      const std::array<uint8_t, N>& two,
-      uint8_t twoMask) {
-    static constexpr auto kBitCount = N * 8;
-    static constexpr std::array<uint8_t, 8> kMasks{{
-        0x80, // /1
-        0xc0, // /2
-        0xe0, // /3
-        0xf0, // /4
-        0xf8, // /5
-        0xfc, // /6
-        0xfe, // /7
-        0xff // /8
-    }};
-    if (oneMask > kBitCount || twoMask > kBitCount) {
-      throw std::invalid_argument(sformat(
-          'Invalid mask length: {}. Mask length must be <= {}',
-          std::max(oneMask, twoMask),
-          kBitCount));
+    BSONObj getErrorLabels(const OperationSessionInfoFromClient& sessionOptions,
+                       const std::string& commandName,
+                       ErrorCodes::Error code,
+                       bool hasWriteConcernError) {
+    BSONArrayBuilder labelArray;
     }
+    
+    using TargetedBatchMap = std::map<const ShardEndpoint*, TargetedWriteBatch*, EndpointComp>;
+    
+    namespace mongo {
     }
+    
+    void TemporaryKVRecordStore::deleteTemporaryTable(OperationContext* opCtx) {
+    // Need at least Global IS before calling into the storage engine, to protect against it being
+    // destructed while we're using it.
+    invariant(opCtx->lockState()->isReadLocked());
+    }
+    
+    #include 'mongo/db/client.h'
+#include 'mongo/db/db_raii.h'
+#include 'mongo/db/json.h'
+#include 'mongo/db/matcher/expression_text.h'
+#include 'mongo/db/matcher/extensions_callback_real.h'
+#include 'mongo/db/namespace_string.h'
+#include 'mongo/dbtests/dbtests.h'
+#include 'mongo/unittest/unittest.h'
+    
+            // Set up count stage
+        auto params = makeCountScanParams(&_opCtx, getIndex(ctx.db(), BSON('a' << 1)));
+        params.startKey = BSON('' << 2);
+        params.startKeyInclusive = false;
+        params.endKey = BSON('' << 6);
+        params.endKeyInclusive = true;
+    
+    #include 'unicode/utypes.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
+};
+    
+            // parameters at the last model aggregation point
+        std::map<std::wstring, std::shared_ptr<Matrix<ElemType>>> m_prevParameters;
+        std::map<std::wstring, std::shared_ptr<Matrix<ElemType>>> m_blockLevelSmoothedGradient;
+    
+            output = builder.Times(w, input);
+    
+        TrainingCriterion m_trainCriterion;
+    EvalCriterion m_evalCriterion;
+    
+        shared_ptr<DataReader> cvDataReader;
+    ConfigParameters cvReaderConfig(config(L'cvReader', L''));
+    
+            // comment the following argument for current stringargvector need to be empty.[v-xieche]
+        // if (toks.empty()) RuntimeError ('argvector: arg must not be empty');
+        foreach_index (i, toks)
+        {
+            // split off repeat factor
+            std::vector<std::wstring> toks2 = msra::strfun::split(toks[i], L'*');
+    }
+    
+        std::shared_ptr<IDistGradAggregator<ElemType>> m_distGradAgg;
+    std::shared_ptr<struct DistGradHeader> m_gradHeader;
+    
+    #include 'Basics.h'
+#include 'MPIWrapper.h'
+#include 'Matrix.h'
+#include 'SimpleDistGradAggregatorHelper.h'
+#include 'DistGradHeader.h'
+#include 'IDistGradAggregator.h'
+#include 'SimpleDistGradAggregator.h'
+#include 'V2SimpleDistGradAggregator.h'
+    
+        // Prepare header.
+    const size_t c_evalNodes = 1;
+    if (gradHeader == nullptr)
+        gradHeader.reset(DistGradHeader::Create(c_evalNodes),
+                         [](DistGradHeader* ptr) { DistGradHeader::Destroy(ptr); });
+    gradHeader->numEvalNode = c_evalNodes;
+    gradHeader->numSamples = sampleCount;
+    gradHeader->numSamplesWithLabel = sampleCount;
+    gradHeader->criterion = 0.0; // (not used here)
+    for (size_t i = 0; i < c_evalNodes; i++)
+        // Not used here, but at least one is required by aggregation.
+        gradHeader->evalErrors[i] = std::make_pair<double, size_t>(0.0, 0);
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+    
+    {    // out_of_range.404
+    try
+    {
+        // try to use a JSON pointer that cannot be resolved
+        json::reference ref = j.at('/number/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
