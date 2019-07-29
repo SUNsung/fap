@@ -1,164 +1,62 @@
 
         
-        
-class Hand(object):
+            def handle_budget_notifications(self, key, total):
+        '''Call notification API if nearing or exceeded budget.'''
+        ...
     
-        def __init__(self):
-        self.lookup = {}  # key: person_id, value: person_server
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
     
-        proc.sendline(u'ehco test')
+        def insert_crawled_link(self, url, signature):
+        '''Add the given link to `crawled_links`.'''
+        pass
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        def test_immutable_content_type(self):
+        '''Regression for #9362
+        The problem depends only on InlineAdminForm and its 'original'
+        argument, so we can safely set the other arguments to None/{}. We just
+        need to check that the content_type argument of Child isn't altered by
+        the internals of the inline form.'''
     
-        assert get_new_command(Command('brew install aa',
-                                   brew_no_available_formula))\
-        != 'brew install aha'
-
+        def set_password(self, raw_password):
+        raise NotImplementedError('Django doesn't provide a DB representation for AnonymousUser.')
     
-        name = 'qps'
-    benchurl = 'http://localhost:8880/'
-    
-        requires_project = True
-    
-            sfile = sys.modules[spidercls.__module__].__file__
-        sfile = sfile.replace('.pyc', '.py')
-        self.exitcode = os.system('%s '%s'' % (editor, sfile))
-
-    
-        def short_desc(self):
-        return 'Run a self-contained spider (without creating a project)'
-    
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
-        else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
-
-    
-        def _is_tar(self, response):
-        archive = BytesIO(response.body)
-        try:
-            tar_file = tarfile.open(name=mktemp(), fileobj=archive)
-        except tarfile.ReadError:
-            return
-    
-            self.assertEqual(list(suite), [MyTestCase('test')])
-    
-    def adapt_point(point):
-    return ('%f;%f' % (point.x, point.y)).encode('ascii')
+        def test_version_dev_tuple(self):
+        expect = ('1.2.3dev', 1, 2, 3)
+        ops = FakePostGISOperations(expect[0])
+        actual = ops.postgis_version_tuple()
+        self.assertEqual(expect, actual)
     
     
-class GroupTagValueNotFound(Exception):
+class OFTInteger64List(Field):
     pass
-
     
-            # Changing field 'GroupTagValue.project_id'
-        db.alter_column(u'tagstore_grouptagvalue', 'project_id', self.gf(
-            'sentry.db.models.fields.bounded.BoundedPositiveIntegerField')())
+        def __init__(self, layer_ptr, ds):
+        '''
+        Initialize on an OGR C pointer to the Layer and the `DataSource` object
+        that owns this layer.  The `DataSource` object is required so that a
+        reference to it is kept with this Layer.  This prevents garbage
+        collection of the `DataSource` while this Layer is still active.
+        '''
+        if not layer_ptr:
+            raise GDALException('Cannot create Layer, invalid pointer given')
+        self.ptr = layer_ptr
+        self._ds = ds
+        self._ldefn = capi.get_layer_defn(self._ptr)
+        # Does the Layer support random reading?
+        self._random_read = self.test_capability(b'RandomRead')
     
-        This is currenlty only used for ``in_next_release`` resolutions.
-    '''
-    try:
-        release = Release.objects.get_from_cache(
-            id=release_id,
-        )
-    except Release.DoesNotExist:
-        return
+            self.obj = Foo()
     
-    :copyright: (c) 2010-2014 by the Sentry Team, see AUTHORS for more details.
-:license: BSD, see LICENSE for more details.
-'''
-from __future__ import absolute_import
-    
-    from sentry import options
-from sentry.tasks.base import instrumented_task
-    
-    
-def add_bbox_regression_targets(roidb):
-    '''Add information needed to train bounding-box regressors.'''
-    for entry in roidb:
-        entry['bbox_targets'] = compute_bbox_regression_targets(entry)
-    
-        dim_bottleneck = cfg.RESNETS.NUM_GROUPS * cfg.RESNETS.WIDTH_PER_GROUP
-    (n1, n2, n3) = block_counts[:3]
-    s, dim_in = add_stage(model, 'res2', p, n1, dim_in, 256, dim_bottleneck, 1)
-    if freeze_at == 2:
-        model.StopGradient(s, s)
-    s, dim_in = add_stage(
-        model, 'res3', s, n2, dim_in, 512, dim_bottleneck * 2, 1
-    )
-    if freeze_at == 3:
-        model.StopGradient(s, s)
-    s, dim_in = add_stage(
-        model, 'res4', s, n3, dim_in, 1024, dim_bottleneck * 4, 1
-    )
-    if freeze_at == 4:
-        model.StopGradient(s, s)
-    if len(block_counts) == 4:
-        n4 = block_counts[3]
-        s, dim_in = add_stage(
-            model, 'res5', s, n4, dim_in, 2048, dim_bottleneck * 8,
-            cfg.RESNETS.RES5_DILATION
-        )
-        if freeze_at == 5:
-            model.StopGradient(s, s)
-        return s, dim_in, 1. / 32. * cfg.RESNETS.RES5_DILATION
-    else:
-        return s, dim_in, 1. / 16.
+        # Generators get exhausted on use, so run setup before every call
+    number = 1
+    repeat = (3, 250, 10)
     
     
-def _scale_enum(anchor, scales):
-    '''Enumerate a set of anchors for each scale wrt an anchor.'''
-    w, h, x_ctr, y_ctr = _whctrs(anchor)
-    ws = w * scales
-    hs = h * scales
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
-
-    
-    
-class GenerateProposalLabelsOp(object):
-    
-    '''Construct minibatches for Mask R-CNN training. Handles the minibatch blobs
-that are specific to Mask R-CNN. Other blobs that are generic to RPN or
-Fast/er R-CNN are handled by their respecitive roi_data modules.
-'''
-    
-            if check_grad:
-            gc = gradient_checker.GradientChecker(
-                stepsize=0.1,
-                threshold=0.001,
-                device_option=core.DeviceOption(caffe2_pb2.CUDA, 0)
-            )
+from .pandas_vb_common import setup  # noqa: F401
