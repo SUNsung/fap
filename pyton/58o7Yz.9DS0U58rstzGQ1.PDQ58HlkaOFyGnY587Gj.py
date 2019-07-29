@@ -1,145 +1,113 @@
 
         
-                task = self.dv_switch.ReconfigureDVPort_Task(port_spec)
-        try:
-            wait_for_task(task)
-        except Exception:
-            self.restore_original_state()
-            self.module.fail_json(msg=task.info.error.msg)
+            return True
     
     
-DOCUMENTATION = '''
----
-module: ldap_passwd
-short_description: Set passwords in LDAP.
-description:
-  - Set a password for an LDAP entry.  This module only asserts that
-    a given password is valid for a given entry.  To assert the
-    existence of an entry, see M(ldap_entry).
-notes:
-  - The default authentication settings will attempt to use a SASL EXTERNAL
-    bind over a UNIX domain socket. This works well with the default Ubuntu
-    install for example, which includes a cn=peercred,cn=external,cn=auth ACL
-    rule allowing root to modify the server configuration. If you need to use
-    a simple bind to access your server, pass the credentials in I(bind_dn)
-    and I(bind_pw).
-version_added: '2.6'
-author:
-  - Keller Fuchs (@KellerFuchs)
-requirements:
-  - python-ldap
-options:
-  passwd:
-    required: true
-    description:
-      - The (plaintext) password to be set for I(dn).
-extends_documentation_fragment: ldap.documentation
+def get_running_config(module, config=None):
+    contents = module.params['running_config']
+    if not contents:
+        if config:
+            contents = config
+        else:
+            contents = get_config(module)
+    return NetworkConfig(indent=1, contents=contents)
+    
+        @pytest.mark.parametrize('args_dict, msg', INVALID_MULTIPLE_ACTIONS)
+    def test_multiple_actions(self, args_dict, msg):
+        m = ModuleArgsParser(args_dict)
+        with pytest.raises(AnsibleParserError) as err:
+            m.parse()
+    
+    
+# These Exceptions are temporary, using them as flow control until we can get a better solution.
+# DO NOT USE as they will probably be removed soon.
+# We will port the action modules in our tree to use a context manager instead.
+class AnsibleAction(AnsibleRuntimeError):
+    ''' Base Exception for Action plugin flow control '''
+    
+        def test_nios_network_ipv6_dhcp_update(self):
+        self.module.params = {'provider': None, 'state': 'present', 'ipv6network': 'fe80::/64',
+                              'comment': 'updated comment', 'extattrs': None}
+    
+    Finally, note that parameters of the models have been here handpicked but
+that in practice they need to be adjusted. In the absence of labelled data,
+the problem is completely unsupervised so model selection can be a challenge.
 '''
     
-        except Exception as ex:
-        module.fail_json(msg=ex.message)
+    # Plot also the training points
+plt.scatter(X[:, 0], X[:, 1], c=Y, edgecolors='k', cmap=plt.cm.Paired)
+plt.xlabel('Sepal length')
+plt.ylabel('Sepal width')
     
-    - name: Send matrix notification with user_id and password
-  matrix:
-    msg_plain: '**hello world**'
-    msg_html: '<b>hello world</b>'
-    room_id: '!12345678:server.tld'
-    hs_url: 'https://matrix.org'
-    user_id: 'ansible_notification_bot'
-    password: '{{ matrix_auth_password }}'
+    
+def plot_feature_times(all_times, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_times['pca'], label='PCA')
+    plot_results(all_components, all_times['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='upper left')
+    plt.suptitle('Algorithm runtime vs. n_components\n \
+                 LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Time (seconds)')
+    
+        def flush_queue(self, q_name):
+        ''' Empty out a specific queue '''
+        logger.debug('QueueManager flushing: '%s'', q_name)
+        queue = self.queues[q_name]
+        while not queue.empty():
+            queue.get(True, 1)
+    
+            self.axis = to_list(axis)
+        self.gamma_init = initializers.get(gamma_init)
+        self.beta_init = initializers.get(beta_init)
+        self.gamma_regularizer = regularizers.get(gamma_regularizer)
+        self.beta_regularizer = regularizers.get(beta_regularizer)
+        self.epsilon = epsilon
+        self.group = group
+        self.data_format = K.normalize_data_format(data_format)
+    
+        def set_defaults(self):
+        ''' Set the default values for config '''
+        logger.debug('Setting defaults')
+        current_dir = os.path.dirname(__file__)
+        for dirpath, _, filenames in os.walk(current_dir):
+            default_files = [fname for fname in filenames if fname.endswith('_defaults.py')]
+            if not default_files:
+                continue
+            base_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+            import_path = '.'.join(full_path_split(dirpath.replace(base_path, ''))[1:])
+            plugin_type = import_path.split('.')[-1]
+            for filename in default_files:
+                self.load_module(filename, import_path, plugin_type)
+    
+        The following keys are expected for the _DEFAULTS <metadata> dict:
+        datatype:  [required] A python type class. This limits the type of data that can be
+                   provided in the .ini file and ensures that the value is returned in the
+                   correct type to faceswap. Valid datatypes are: <class 'int'>, <class 'float'>,
+                   <class 'str'>, <class 'bool'>.
+        default:   [required] The default value for this option.
+        info:      [required] A string describing what this option does.
+        choices:   [optional] If this option's datatype is of <class 'str'> then valid
+                   selections can be defined here. This validates the option and also enables
+                   a combobox / radio option in the GUI.
+        gui_radio: [optional] If <choices> are defined, this indicates that the GUI should use
+                   radio buttons rather than a combobox to display this option.
+        min_max:   [partial] For <class 'int'> and <class 'float'> datatypes this is required
+                   otherwise it is ignored. Should be a tuple of min and max accepted values.
+                   This is used for controlling the GUI slider range. Values are not enforced.
+        rounding:  [partial] For <class 'int'> and <class 'float'> datatypes this is
+                   required otherwise it is ignored. Used for the GUI slider. For floats, this
+                   is the number of decimal places to display. For ints this is the step size.
+        fixed:     [optional] [train only]. Training configurations are fixed when the model is
+                   created, and then reloaded from the state file. Marking an item as fixed=False
+                   indicates that this value can be changed for existing models, and will override
+                   the value saved in the state file with the updated value in config. If not
+                   provided this will default to True.
 '''
     
-                    # Read the new file to memory
-                with open(_filename) as _file:
-                    _contents = _file.read()
-    
-    from scrapy.spiders import Spider
-from scrapy.http import Request
-    
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-    class Command(ScrapyCommand):
-    
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
-    
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
-    
-        # Stripping scripts and comments is slow (about 20x slower than
-    # just checking if a string is in text); this is a quick fail-fast
-    # path that should work for most pages.
-    if 'fragment' not in text:
-        return False
-    if 'content' not in text:
-        return False
-    
-        def reset(self):
-        self.s = categorical_sample(self.isd, self.np_random)
-        self.lastaction = None
-        return self.s
-    
-    def warn(msg, *args):
-    if MIN_LEVEL <= WARN:
-        warnings.warn(colorize('%s: %s'%('WARN', msg % args), 'yellow'))
-    
-        def __repr__(self):
-        return 'MultiBinary({})'.format(self.n)
-    
-        def close(self):
-        self.proc.stdin.close()
-        ret = self.proc.wait()
-        if ret != 0:
-            logger.error('VideoRecorder encoder exited with status {}'.format(ret))
-
-    
-            self.moon = self.world.CreateStaticBody( shapes=edgeShape(vertices=[(0, 0), (W, 0)]) )
-        self.sky_polys = []
-        for i in range(CHUNKS-1):
-            p1 = (chunk_x[i],   smooth_y[i])
-            p2 = (chunk_x[i+1], smooth_y[i+1])
-            self.moon.CreateEdgeFixture(
-                vertices=[p1,p2],
-                density=0,
-                friction=0.1)
-            self.sky_polys.append( [p1, p2, (p2[0],H), (p1[0],H)] )
-    
-    class FrictionDetector(contactListener):
-    def __init__(self, env):
-        contactListener.__init__(self)
-        self.env = env
-    def BeginContact(self, contact):
-        self._contact(contact, True)
-    def EndContact(self, contact):
-        self._contact(contact, False)
-    def _contact(self, contact, begin):
-        tile = None
-        obj = None
-        u1 = contact.fixtureA.body.userData
-        u2 = contact.fixtureB.body.userData
-        if u1 and 'road_friction' in u1.__dict__:
-            tile = u1
-            obj  = u2
-        if u2 and 'road_friction' in u2.__dict__:
-            tile = u2
-            obj  = u1
-        if not tile:
-            return
+        The following variables should be defined:
+        _HELPTEXT: A string describing what this plugin does
+        _DEFAULTS: A dictionary containing the options, defaults and meta information. The
+                   dictionary should be defined as:
+                       {<option_name>: {<metadata>}}
