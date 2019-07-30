@@ -1,227 +1,142 @@
 
         
-            req_types.each do |req_type, _|
-      val = get_and_reset(redis_key(req_type, date))
-    
-        @omniauth.before_request_phase do |env|
-      # If the user is trying to reconnect to an existing account, store in session
-      request = ActionDispatch::Request.new(env)
-      request.session[:auth_reconnect] = !!request.params['reconnect']
-    end
-  end
-    
-        # remove old drafts
-    delete_drafts_older_than_n_days = SiteSetting.delete_drafts_older_than_n_days.days.ago
-    Draft.where('updated_at < ?', delete_drafts_older_than_n_days).destroy_all
-  end
-    
-        SCRIPT_ASSET_DIRECTORIES = [
-      # [dir, can_use_s3_cdn, can_use_cdn]
-      ['/assets/',             true, true],
-      ['/brotli_asset/',       true, true],
-      ['/extra-locales/',      false, false],
-      ['/highlight-js/',       false, true],
-      ['/javascripts/',        false, true],
-      ['/plugins/',            false, true],
-      ['/theme-javascripts/',  false, true],
-      ['/svg-sprite/',         false, true],
-    ]
-    
-          response
+            should 'include a post with a abbreviated dates' do
+      refute_nil(
+        @site.posts.index do |post|
+          post.relative_path == '_posts/2017-2-5-i-dont-like-zeroes.md'
+        end
+      )
+      assert_exist dest_dir('2017', '02', '05', 'i-dont-like-zeroes.html')
     end
     
-        plugin.activate!
-    Discourse.plugins << plugin
-    
-          open_dry_run_modal(formatting_agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('Line 1\nLine 2\nLine 3')
+          def collections
+        @site_collections ||= @obj.collections.values.sort_by(&:label).map(&:to_liquid)
       end
-      click_on('Dry Run')
-      expect(page).to have_text('Line 1,Line 2,Line 3')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
-  end
     
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
+    Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
+ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur
+tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
+Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
+aliquet. Sed ultrices placerat ultricies.
+TEXT
+    
+          def build_rsync_chown(opts)
+        guest_path = Shellwords.escape(opts[:guestpath])
+        if(opts[:exclude] && !Array(opts[:exclude]).empty?)
+          exclude_base = Pathname.new(opts[:guestpath])
+          exclusions = Array(opts[:exclude]).map do |ex_path|
+            ex_path = ex_path.slice(1, ex_path.size) if ex_path.start_with?(File::SEPARATOR)
+            '-path #{Shellwords.escape(exclude_base.join(ex_path))} -prune'
+          end.join(' -o ') + ' -o '
+        end
+        'find #{guest_path} #{exclusions}' \
+          ''!' -type l -a ' \
+          ''(' ! -user #{opts[:owner]} -or ! -group #{opts[:group]} ')' -exec ' \
+          'chown #{opts[:owner]}:#{opts[:group]} '{}' +'
       end
-    end
-  end
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-        it 'should revert extract and template options for an updated WebsiteAgent' do
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-      ConvertWebsiteAgentTemplateForMerge.new.down
-      agent.reload
-      expect(agent.options).to include('extract' => reverted_extract,
-                                       'template' => reverted_template)
     end
   end
 end
 
     
-    describe AgentLog do
-  describe 'validations' do
-    before do
-      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
-      expect(@log).to be_valid
-    end
+    module VagrantPlugins
+  module Chef
+    module Provisioner
+      # This class is a base class where the common functionality shared between
+      # chef-solo and chef-client provisioning are stored. This is **not an actual
+      # provisioner**. Instead, {ChefSolo} or {ChefServer} should be used.
+      class Base < Vagrant.plugin('2', :provisioner)
+        include Vagrant::Util
+        include Vagrant::Util::Presence
     
-        def root_page?
-      subpath.blank? || subpath == '/' || subpath == root_path
-    end
+          # Add the sub-machine configuration to the loader and keys
+      vm_config_key = '#{object_id}_machine_#{name}'
+      @loader.set(vm_config_key, sub_machine.config_procs)
+      keys << vm_config_key
     
-        def to_a
-      @filters.dup
-    end
+              opts = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant box update [options]'
+            o.separator ''
+            o.separator 'Updates the box that is in use in the current Vagrant environment,'
+            o.separator 'if there any updates available. This does not destroy/recreate the'
+            o.separator 'machine, so you'll have to do that to see changes.'
+            o.separator ''
+            o.separator 'To update a specific box (not tied to a Vagrant environment), use the'
+            o.separator '--box flag.'
+            o.separator ''
+            o.separator 'Options:'
+            o.separator ''
     
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
-    end
-  end
-end
-
+      if ARGV.include? '--no-ansi'
+    STDERR.puts <<-DOC
+    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
     
-    module Docs
-  class Subscriber < ActiveSupport::Subscriber
-    cattr_accessor :namespace
-    
-          private
-    
-            css('pre > code').each do |node|
-          node['class'] ||= ''
-          lang = if node['class'].include?('lang-html') || node.content =~ /\A</
-            'html'
-          elsif node['class'].include?('lang-css')
-            'css'
-          elsif node['class'].include?('lang-js') || node['class'].include?('lang-javascript')
-            'javascript'
-          end
-          node.parent['data-language'] = lang if lang
-    
-      def hub_topic_domain
-    hub_topic_uri.host + (hub_topic_uri.port ? ':#{hub_topic_uri.port}' : '')
-  end
-    
-      private
-    
-      private
-    
-        if @account.nil?
-      render :error
-    else
-      render :success
-    end
-  rescue ActiveRecord::RecordNotFound, Mastodon::NotPermittedError
-    render :error
-  end
-    
-              # Encodes the components field
-          #
-          # @return [String]
-          def encode_components
-            encoded = ''
-    
-                seq.to_der
-          end
-    
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              # Decrypts the cipher with etype encryption schema
-          #
-          # @param key [String] the key to decrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the decrypted `cipher`
-          # @raise [RuntimeError] if decryption doesn't succeed
-          # @raise [NotImplementedError] if encryption isn't supported
-          def decrypt(key, msg_type)
-            if cipher.nil? || cipher.empty?
-              return ''
-            end
-    
-              # Decodes the susec field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_susec(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-              # Decodes a Rex::Proto::Kerberos::Model::PreAuthData from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type  = decode_asn1_type(seq_values[0])
-            self.value = decode_asn1_value(seq_values[1])
-          end
-    
-        shared_examples 'on a visible post' do
-      it 'creates the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).to exist
-        expect(response.code).to eq('201')
+          # @return [Array<Pathname>] the files of the specification to preserve.
+      #
+      def preserve_paths
+        paths_for_attribute(:preserve_paths, true)
       end
-    end
     
-      describe '#create' do
-    it 'redirects to /stream for a non-mobile user' do
-      post :create, params: {user: {remember_me: '0', username: @user.username, password: 'evankorth'}}
-      expect(response).to be_redirect
-      expect(response.location).to match /^#{stream_url}\??$/
-    end
+              # @!group Private helpers
+          #-------------------------------------------------------------------#
     
-    describe ShareVisibilitiesController, :type => :controller do
-  before do
-    @status = alice.post(:status_message, :text => 'hello', :to => alice.aspects.first)
+      describe 'GET blocks index' do
+    it 'renders proper blocks index' do
+      create(:block, user_id: user.id, input_css: '.blue { color: blue;}')
+      get '/blocks'
+      expect(response.body).to include('color: blue')
+    end
   end
     
-    run SinatraStaticServer
-
+        it 'denies chat channel invitation to non-authorized user' do
+      expect do
+        post '/chat_channel_memberships', params: {
+          chat_channel_membership: {
+            user_id: second_user.id, chat_channel_id: chat_channel.id
+          }
+        }
+      end.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
     
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
+      context 'when redirected routes' do
+    include RSpec::Rails::RequestExampleGroup
+    
+      def self.upbuff!(buffer_update_id, admin_id, body_text, status)
+    buffer_update = BufferUpdate.find(buffer_update_id)
+    if status == 'confirmed'
+      buffer_response = send_to_buffer(body_text, buffer_update.buffer_profile_id_code)
+      buffer_update.update!(buffer_response: buffer_response, status: status, approver_user_id: admin_id, body_text: body_text)
     else
-      input
+      buffer_update.update!(status: status, approver_user_id: admin_id)
     end
   end
+    
+        def layout
+      yaml['layout'] ? yaml['layout'].shellescape : nil
+    end
+    
+      before do
+    allow(project).to receive(:name).and_return 'foo'
+    allow(project).to receive(:base_index).and_return 0
+    allow(project).to receive(:pane_base_index).and_return 1
+    
+            it 'still gets the correct pre_window command' do
+          expect(project.pre_window).to eq 'rvm use ruby-2.0.0-p247'
+        end
+      end
+    
+      match do
+    result = is_pane
+    
+    describe Tmuxinator::Cli do
+  shared_context :local_project_setup do
+    let(:local_project_config) { '.tmuxinator.yml' }
+    let(:content_fixture) { '../../fixtures/sample.yml' }
+    let(:content_relpath) { File.join(File.dirname(__FILE__), content_fixture) }
+    let(:content_path) { File.expand_path(content_relpath) }
+    let(:content) { File.read(content_path) }
+    let(:working_dir) { FileUtils.pwd }
+    let(:local_project_relpath) { File.join(working_dir, local_project_config) }
+    let(:local_project_path) { File.expand_path(local_project_relpath) }
